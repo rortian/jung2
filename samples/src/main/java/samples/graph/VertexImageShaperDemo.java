@@ -137,7 +137,7 @@ public class VertexImageShaperDemo extends JApplet {
         // a Map for the Icons
         Map iconMap = new HashMap();
         for(int i=0; i<vertices.length; i++) {
-            String name = "/topic"+iconNames[i]+".gif";
+            String name = "/images/topic"+iconNames[i]+".gif";
             try {
                 Icon icon = 
                     new LayeredIcon(new ImageIcon(VertexImageShaperDemo.class.getResource(name)).getImage());
