@@ -1,3 +1,7 @@
+             Quick intro to building jung2 jars with maven2
+
+
+
 Download and install maven2 from maven.apache.org
 
 set MAVEN_HOME to point to it
@@ -16,9 +20,9 @@ neither does any maven repository)
 Go get collections-generic from sourceforge:
 http://sourceforge.net/project/showfiles.php?group_id=139125&package_id=153011
 
-Inflate the archive someplace, then install collections-generic-4.0.jar
+Inflate the archive someplace, then install 'collections-generic-4.0.jar'
 in your local maven2 repository ($HOME/.m2/repository) like this one-line
-command (assuming the file is in /usr/local...):
+command (assuming you inflated the archive in '/usr/local/'...):
 
 mvn install:install-file
 -Dfile=/usr/local/collections-generic-4.0/collections-generic-4.0.jar
@@ -38,8 +42,16 @@ following command:
 mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo 
 
 
-You can now add each subproject (api, graph-impl, etc) as a top-level
-project in eclipse, each with its own classpath dependencies.
+You can now add each subproject (api, graph-impl, visualization, algorithms, 
+samples) as a top-level project in eclipse, each with its own classpath 
+dependencies. If you like, (and you will) you can modify each project's 
+properties in eclipse to depend on other subprojects instead of the 
+compiled jars. Use the eclipse project properties dialog to do so.
+
+You do not want to use jung2 (the parent project) as the eclipse project,
+as each eclipse project can have only one classpath, and you would then
+have difficulty maintaining the correct dependencies between the
+sub-projects.
 
 
 
