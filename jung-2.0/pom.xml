@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>jung.app</groupId>
+  <artifactId>app</artifactId>
+  <packaging>pom</packaging>
+  <version>2.0</version>
+
+  <repositories>
+    <repository>
+      <id>local-repository</id>
+      <name>raba-051</name>
+      <url>http://raba-051.raba.com/pkg/maven2</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>local-repository</id>
+      <name>raba-051</name>
+      <url>http://raba-051.raba.com/pkg/maven2</url>
+      <layout>default</layout>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+  <build>
+     <plugins>
+      	<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+		  	<artifactId>maven-compiler-plugin</artifactId>
+		  	<version>2.0</version>
+		  	<configuration>
+				<source>1.5</source>
+				<target>1.5</target>
+		  	</configuration>
+      	</plugin>
+  	  </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>api</module>
+    <module>graph-impl</module>
+    <module>samples</module>
+    <module>visualization</module>
+    <module>algorithms</module>
+  </modules>
+</project>
