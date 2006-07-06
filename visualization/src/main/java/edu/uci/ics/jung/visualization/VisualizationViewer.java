@@ -1127,7 +1127,7 @@ public class VisualizationViewer<V, E extends Edge<V>> extends JPanel
         }
         this.pickedVertexState = pickedVertexState;
         if(renderer != null) {
-//            renderer.setPickedKey(pickedState);
+            renderer.setPickedVertexState(pickedVertexState);
         }
         if(pickEventListener == null) {
             pickEventListener = new ItemListener() {
