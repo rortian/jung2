@@ -75,7 +75,7 @@ public class GradientEdgePaintFunction<V, E extends Edge<V>> extends AbstractEdg
      * this method to enable more complex behavior (e.g., for
      * picked edges).
      */
-    protected Color getColor1(Edge e)
+    protected Color getColor1(E e)
     {
         return c1;
     }
@@ -85,7 +85,7 @@ public class GradientEdgePaintFunction<V, E extends Edge<V>> extends AbstractEdg
      * this method to enable more complex behavior (e.g., for
      * picked edges).
      */
-    protected Color getColor2(Edge e)
+    protected Color getColor2(E e)
     {
         return c2;
     }
