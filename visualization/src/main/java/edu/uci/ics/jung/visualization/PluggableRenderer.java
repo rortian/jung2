@@ -226,7 +226,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
     /**
      * @return Returns the edgeArrowPredicate.
      */
-    public Predicate<DirectedEdge> getEdgeArrowPredicate() {
+    public Predicate<Edge> getEdgeArrowPredicate() {
         return edgeArrowPredicate;
     }
 
@@ -390,7 +390,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
      * <br>Default: only directed edges have arrows (<code>Graph.DIRECTED_EDGE</code> instance)
      * @see EdgeArrowFunction
      */
-    public void setEdgeArrowPredicate(Predicate<DirectedEdge> p)
+    public void setEdgeArrowPredicate(Predicate<Edge> p)
     {
         this.edgeArrowPredicate = p;
     }
