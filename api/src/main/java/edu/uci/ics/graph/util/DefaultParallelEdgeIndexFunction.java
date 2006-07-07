@@ -50,13 +50,13 @@ public class DefaultParallelEdgeIndexFunction<V,E extends Edge<V>> implements Pa
     public int getIndex(Graph<V,E> graph, E e)
     {
         Integer index = edge_index.get(e);
-        if(index == null) 
-            index = getIndex_internal(graph, e);
+        if(index == null) {
+        	index = getIndexInternal(graph, e);
+        }
         return index.intValue();
     }
 
-    protected Integer getIndex_internal(Graph<V,E> graph, E e)
-    {
+    protected Integer getIndexInternal(Graph<V,E> graph, E e) {
         Pair<V> endpoints = e.getEndpoints();
         V u = endpoints.getFirst();
         V v = endpoints.getSecond();
@@ -64,13 +64,14 @@ public class DefaultParallelEdgeIndexFunction<V,E extends Edge<V>> implements Pa
         commonEdgeSet.retainAll(graph.getIncidentEdges(v));
         int count = 0;
         for(E other : commonEdgeSet) {
-            if (e.equals(other) == false) {
+            if (e.equals(other) == false && 
+            			other.getEndpoints().getFirst().equals(u)) {
                 edge_index.put(other, new Integer(count));
                 count++;
             }
         }
         Integer index = new Integer(count);
-        edge_index.put(e, index);
+        edge_index.put((E)e, index);
         
         return index;
     }
@@ -83,7 +84,7 @@ public class DefaultParallelEdgeIndexFunction<V,E extends Edge<V>> implements Pa
      */
     public void reset(Graph<V,E> graph, E e)
     {
-        getIndex_internal(graph, e);
+        getIndexInternal(graph, e);
     }
     
     /**
