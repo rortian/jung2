@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>jung</groupId>
-  <artifactId>visualization</artifactId>
+  <artifactId>jung-visualization</artifactId>
   <packaging>jar</packaging>
   <version>2.0</version>
   <name>Maven Quick Start Archetype</name>
@@ -18,14 +18,14 @@
 
 	<dependency>
 		<groupId>jung</groupId>
-		<artifactId>api</artifactId>
+		<artifactId>jung-api</artifactId>
 		<version>2.0</version>
 		<scope>compile</scope>
 	</dependency>
 	
 	<dependency>
 		<groupId>jung</groupId>
-		<artifactId>algorithms</artifactId>
+		<artifactId>jung-algorithms</artifactId>
 		<version>2.0</version>
 		<scope>compile</scope>
 	</dependency>
