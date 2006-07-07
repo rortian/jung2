@@ -13,6 +13,8 @@ package edu.uci.ics.jung.visualization.decorators;
 
 
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.uci.ics.graph.Edge;
 
@@ -24,10 +26,11 @@ import edu.uci.ics.graph.Edge;
  */
 public class NumberEdgeValueStringer<E extends Edge> implements EdgeStringer<E>
 {
-    protected NumberEdgeValue<E> nev;
+//    protected NumberEdgeValue<E> nev;
+    protected Map<E,Number> nev = new HashMap<E,Number>();
     protected final static NumberFormat nf = NumberFormat.getInstance();
     
-    public NumberEdgeValueStringer(NumberEdgeValue<E> nev)
+    public NumberEdgeValueStringer(Map<E,Number> nev)
     {
         this.nev = nev;
     }
@@ -37,7 +40,7 @@ public class NumberEdgeValueStringer<E extends Edge> implements EdgeStringer<E>
      */
     public String getLabel(E e)
     {
-        return nf.format(nev.getNumber(e));
+        return nf.format(nev.get(e));
     }
 
 }

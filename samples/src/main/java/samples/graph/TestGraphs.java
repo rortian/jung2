@@ -14,6 +14,7 @@ package samples.graph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.DirectedEdge;
@@ -301,7 +302,7 @@ public class TestGraphs {
 	/**
 	 * Equivalent to <code>generateMixedRandomGraph(edge_weight, num_vertices, true)</code>.
 	 */
-	public static Graph generateMixedRandomGraph(NumberEdgeValue edge_weight, int num_vertices)
+	public static Graph<Integer, Edge<Integer>> generateMixedRandomGraph(Map<Edge, Number> edge_weight, int num_vertices)
 	{
 		return generateMixedRandomGraph(edge_weight, num_vertices, true);
 	}
@@ -313,7 +314,7 @@ public class TestGraphs {
      * Then takes the resultant graph, replaces random undirected edges with directed
      * edges, and assigns random weights to each edge.
      */
-    public static Graph generateMixedRandomGraph(NumberEdgeValue edge_weights, int num_vertices, boolean parallel)
+    public static Graph<Integer, Edge<Integer>> generateMixedRandomGraph(Map<Edge,Number> edge_weights, int num_vertices, boolean parallel)
     {
         int seed = (int)(Math.random() * 10000);
         BarabasiAlbertGenerator bag = new BarabasiAlbertGenerator(4, 3, false, parallel, seed);
@@ -352,7 +353,7 @@ public class TestGraphs {
             else
                 me = new UndirectedSparseEdge<Integer>(v1, v2);
             g.addEdge(me);
-//            edge_weights.setNumber(me, new Double(Math.random()));
+            edge_weights.put(me, new Double(Math.random()));
         }
         
         return g;

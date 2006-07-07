@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
@@ -24,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
@@ -31,7 +33,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.UserDatumNumberEdgeValue;
 import edu.uci.ics.jung.visualization.layout.CircleLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
@@ -118,7 +119,7 @@ public class ShowLayouts extends JApplet {
     {
         g_array = new Graph[graph_names.length];
         g_array[0] = TestGraphs.createTestGraph(false);
-        g_array[1] = TestGraphs.generateMixedRandomGraph(new UserDatumNumberEdgeValue(), 20, true);
+        g_array[1] = TestGraphs.generateMixedRandomGraph(new HashMap<Edge,Number>(), 20, true);
         g_array[2] = TestGraphs.getDemoGraph();
         g_array[3] = TestGraphs.createDirectedAcyclicGraph(4, 4, 0.3);
         g_array[4] = TestGraphs.getOneComponentGraph();

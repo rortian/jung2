@@ -12,6 +12,7 @@
 package edu.uci.ics.jung.visualization.decorators;
 
 import java.text.NumberFormat;
+import java.util.Map;
 
 /**
  * Returns the values specified by a <code>NumberVertexValue</code>
@@ -21,10 +22,10 @@ import java.text.NumberFormat;
  */
 public class NumberVertexValueStringer<V> implements VertexStringer<V>
 {
-    protected NumberVertexValue<V> nvv;
+    protected Map<V,String> nvv;
     protected final static NumberFormat nf = NumberFormat.getInstance();
     
-    public NumberVertexValueStringer(NumberVertexValue<V> nev)
+    public NumberVertexValueStringer(Map<V,String> nev)
     {
         this.nvv = nev;
     }
@@ -34,6 +35,6 @@ public class NumberVertexValueStringer<V> implements VertexStringer<V>
      */
     public String getLabel(V v)
     {
-        return nf.format(nvv.getNumber(v));
+        return nf.format(nvv.get(v));
     }
 }
