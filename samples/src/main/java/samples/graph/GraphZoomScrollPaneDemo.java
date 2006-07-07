@@ -77,7 +77,7 @@ public class GraphZoomScrollPaneDemo {
         createEdges(v);
         
         ImageIcon sandstoneIcon = null;
-        String imageLocation = "/samples/images/Sandstone.jpg";
+        String imageLocation = "/images/Sandstone.jpg";
         try {
             	sandstoneIcon = 
             	    new ImageIcon(getClass().getResource(imageLocation));
