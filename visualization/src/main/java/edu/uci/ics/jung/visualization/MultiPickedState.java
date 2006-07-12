@@ -12,6 +12,7 @@ package edu.uci.ics.jung.visualization;
 
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -93,7 +94,12 @@ public class MultiPickedState<T> extends AbstractPickedState<T> implements Picke
      */
     public void clear() 
     {
+        Collection<T> unpicks = new ArrayList(picked);
+        for(T v : unpicks) {
+            pick(v, false);
+        }
         picked.clear();
+
 //        Collection iterable_set = new LinkedList(pickedVertices);
 //        for (Iterator it = iterable_set.iterator(); it.hasNext(); )
 //            pick((ArchetypeVertex)it.next(), false);
@@ -165,25 +171,4 @@ public class MultiPickedState<T> extends AbstractPickedState<T> implements Picke
         return (T[])list.toArray();
     }
     
-//    protected void firePickEvent(Object object, boolean picked) {
-//        Object[] listeners = listenerList.getListenerList();
-//        for ( int i = listeners.length-2; i>=0; i-=2 ) {
-//            if ( listeners[i]==PickEventListener.class ) {
-//                if(object instanceof Vertex) {
-//                    if(picked) {
-//                        ((PickEventListener)listeners[i+1]).vertexPicked((Vertex)object);
-//                    } else {
-//                        ((PickEventListener)listeners[i+1]).vertexUnpicked((Vertex)object);
-//                    }
-//                } else {
-//                    if(picked) {
-//                        ((PickEventListener)listeners[i+1]).edgePicked((Edge)object);
-//                    } else {
-//                        ((PickEventListener)listeners[i+1]).edgeUnpicked((Edge)object);
-//                    }
-//                    
-//                }
-//            }
-//        }
-//    }
 }
