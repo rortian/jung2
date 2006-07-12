@@ -52,6 +52,8 @@ public interface Layout<V, E extends Edge<V>> extends VertexLocationFunction<V> 
 	 * the iterations begin.
 	 */
 	void initialize( Dimension currentSize);
+    
+    void setGraph(Graph<V,E> graph);
 
 	/**
 	 * Returns the x coordinate of vertex v at this stage in the

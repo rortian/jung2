@@ -225,4 +225,10 @@ public abstract class LayoutDecorator<V, E extends Edge<V>> implements Layout<V,
     public void fireStateChanged() {
         changeSupport.fireStateChanged();
     }
+    
+    public void setGraph(Graph<V, E> graph) {
+        delegate.setGraph(graph);
+        
+    }
+
 }

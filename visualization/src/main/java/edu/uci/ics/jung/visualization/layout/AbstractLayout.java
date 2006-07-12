@@ -73,6 +73,11 @@ abstract public class AbstractLayout<V, E extends Edge<V>> implements Layout<V,E
 		this.dontmove = new HashSet<V>();
 	}
     
+    public void setGraph(Graph<V,E> graph) {
+        this.graph = graph;
+        initialize(getCurrentSize(), this);
+    }
+    
     /**
      * The set of vertices that have been locked. When running layout, it is
      * important to check

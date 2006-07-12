@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.uci.ics.graph.Edge;
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
@@ -237,4 +238,5 @@ public class PersistentLayoutImpl<V, E extends Edge<V>> extends LayoutDecorator<
         return getGraph().getVertices();
         
     }
+
 }
