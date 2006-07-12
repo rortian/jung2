@@ -25,7 +25,7 @@ import edu.uci.ics.jung.visualization.PickedInfo;
  * @author Joshua O'Madadhain
  * 
  */
-public class PickableEdgePaintFunction<E extends Edge> extends AbstractEdgePaintFunction<E> {
+public class PickableEdgePaintFunction<V,E extends Edge<V>> extends AbstractEdgePaintFunction<E> {
     protected PickedInfo<E> pi;
     protected Paint draw_paint;
     protected Paint picked_paint;
