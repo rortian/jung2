@@ -29,7 +29,6 @@ import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseEdge;
-import edu.uci.ics.jung.visualization.decorators.NumberEdgeValue;
 
 
 
@@ -69,7 +68,7 @@ public class TestGraphs {
 	 *            Is the graph directed?
 	 * @return a graph consisting of eight edges and ten nodes.
 	 */
-	public static Graph createTestGraph(boolean isDirected) {
+	public static Graph<String, ? extends Edge<String>> createTestGraph(boolean isDirected) {
 
 		if (isDirected) {
 			SimpleDirectedSparseGraph<String, DirectedEdge<String>> g = 
@@ -102,7 +101,7 @@ public class TestGraphs {
      * Returns a graph consisting of a chain of <code>vertex_count - 1</code> vertices
      * plus one isolated vertex.
      */
-    public static Graph createChainPlusIsolates(int chain_length, int isolate_count)
+    public static Graph<String,UndirectedEdge<String>> createChainPlusIsolates(int chain_length, int isolate_count)
     {
         Graph<String, UndirectedEdge<String>> g = 
             new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
@@ -218,7 +217,7 @@ public class TestGraphs {
 	 * 
 	 * @return the testgraph
 	 */
-	public static Graph getOneComponentGraph() {
+	public static Graph<String,UndirectedEdge<String>> getOneComponentGraph() {
 		SimpleUndirectedSparseGraph<String, UndirectedEdge<String>> g = 
 			new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
 //		StringLabeller sl = StringLabeller.getLabeller(g);
@@ -266,7 +265,7 @@ public class TestGraphs {
 	 * @return a demonstration graph of type <tt>UndirectedSparseGraph</tt>
 	 *         with 28 vertices.
 	 */
-	public static Graph getDemoGraph() {
+	public static Graph<String, UndirectedEdge<String>> getDemoGraph() {
 		UndirectedGraph<String, UndirectedEdge<String>> g = 
             new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
 //		StringLabeller sl = StringLabeller.getLabeller(g);
@@ -357,6 +356,26 @@ public class TestGraphs {
         }
         
         return g;
+    }
+    
+    public static Graph<Integer, Edge<Integer>> getSmallGraph() {
+        Graph<Integer, Edge<Integer>> graph = 
+            new SimpleSparseGraph<Integer, Edge<Integer>>();
+        Integer[] v = new Integer[3];
+        for (int i = 0; i < 3; i++) {
+            v[i] = new Integer(i);
+            graph.addVertex(v[i]);
+        }
+        graph.addEdge(new DirectedSparseEdge<Integer>(v[0], v[1]));
+        graph.addEdge(new DirectedSparseEdge<Integer>(v[0], v[1]));
+        graph.addEdge(new DirectedSparseEdge<Integer>(v[0], v[1]));
+        graph.addEdge(new DirectedSparseEdge<Integer>(v[1], v[0]));
+        graph.addEdge(new DirectedSparseEdge<Integer>(v[1], v[0]));
+        graph.addEdge(new UndirectedSparseEdge<Integer>(v[1], v[2]));
+        graph.addEdge(new UndirectedSparseEdge<Integer>(v[1], v[2]));
+
+        return graph;
+
     }
 
     
