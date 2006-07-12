@@ -6,6 +6,7 @@
  * or http://jung.sourceforge.net/license.txt for a description.
  */
 package samples.graph;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -50,7 +51,7 @@ import edu.uci.ics.jung.visualization.layout.SpringLayout;
  * @author Joshua O'Madadhain
  */
 public class ShowLayouts extends JApplet {
-    protected static Graph[] g_array;
+    protected static Graph<? extends Object, ? extends Edge<? extends Object>>[] g_array;
     protected static int graph_index;
     protected static String[] graph_names = {"Two component graph", 
         "Random mixed-mode graph", "Miscellaneous multicomponent graph", 
@@ -117,7 +118,12 @@ public class ShowLayouts extends JApplet {
 
     private static JPanel getGraphPanel()
     {
-        g_array = new Graph[graph_names.length];
+        g_array = //(Graph<Object, ? extends Edge<Object>>)
+            (Graph<? extends Object,? extends Edge<? extends Object>>[])
+            new Graph<?,?>[graph_names.length];
+//        java.lang.reflect.Array.
+//        newInstance(g_array.getClass().getComponentType(), graph_names.length);
+            
         g_array[0] = TestGraphs.createTestGraph(false);
         g_array[1] = TestGraphs.generateMixedRandomGraph(new HashMap<Edge,Number>(), 20, true);
         g_array[2] = TestGraphs.getDemoGraph();
@@ -126,7 +132,7 @@ public class ShowLayouts extends JApplet {
         g_array[5] = TestGraphs.createChainPlusIsolates(18, 5);
         g_array[6] = TestGraphs.createChainPlusIsolates(0, 20);
 
-        Graph g = g_array[4]; // initial graph
+        Graph<? extends Object, ? extends Edge<? extends Object>> g = g_array[4]; // initial graph
         
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g),
                 new PluggableRenderer());

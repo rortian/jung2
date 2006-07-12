@@ -36,6 +36,7 @@ import javax.swing.ToolTipManager;
 
 import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
@@ -106,31 +107,33 @@ public class SatelliteViewDemo<V, E extends Edge<V>> extends JApplet {
     public SatelliteViewDemo() {
         
         // create a simple graph for the demo
-        Graph<V,E> graph = TestGraphs.getOneComponentGraph();
+        Graph<String,UndirectedEdge<String>> graph = TestGraphs.getOneComponentGraph();
         
         // need separate renderers for each view
-        PluggableRenderer<V,E> pr1 = new PluggableRenderer<V,E>();
-        PluggableRenderer<V,E> pr2 = new PluggableRenderer<V,E>();
+        PluggableRenderer<String,UndirectedEdge<String>> pr1 = new PluggableRenderer<String,UndirectedEdge<String>>();
+        PluggableRenderer<String,UndirectedEdge<String>> pr2 = new PluggableRenderer<String,UndirectedEdge<String>>();
         
         // the preferred sizes for the two views
         Dimension preferredSize1 = new Dimension(600,600);
         Dimension preferredSize2 = new Dimension(300, 300);
         
         // create one layout for the graph
-        FRLayout<V,E> layout = new FRLayout<V,E>(graph);
+        FRLayout<String,UndirectedEdge<String>> layout = new FRLayout<String,UndirectedEdge<String>>(graph);
         layout.setMaxIterations(500);
         layout.initialize(new Dimension(600,600));
         
         // create one model that both views will share
-        VisualizationModel<V,E> vm =
-            new DefaultVisualizationModel<V,E>(layout, preferredSize1);
+        VisualizationModel<String,UndirectedEdge<String>> vm =
+            new DefaultVisualizationModel<String,UndirectedEdge<String>>(layout, preferredSize1);
  
         // create 2 views that share the same model
-        final VisualizationViewer<V,E> vv1 = new VisualizationViewer<V,E>(vm, pr1, preferredSize1);
-        final SatelliteVisualizationViewer<V,E> vv2 = new SatelliteVisualizationViewer<V,E>(vv1, vm, pr2, preferredSize2);
+        final VisualizationViewer<String,UndirectedEdge<String>> vv1 = 
+            new VisualizationViewer<String,UndirectedEdge<String>>(vm, pr1, preferredSize1);
+        final SatelliteVisualizationViewer<String,UndirectedEdge<String>> vv2 = 
+            new SatelliteVisualizationViewer<String,UndirectedEdge<String>>(vv1, vm, pr2, preferredSize2);
         
         vv1.setBackground(Color.white);
-        vv1.setPickSupport(new ShapePickSupport());
+        vv1.setPickSupport(new ShapePickSupport<String,UndirectedEdge<String>>());
         
         viewGrid = new ViewGrid(vv2, vv1);
 
@@ -280,7 +283,7 @@ public class SatelliteViewDemo<V, E extends Edge<V>> extends JApplet {
     public static void main(String[] args) {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(new SatelliteViewDemo<String,Edge<String>>());
+        f.getContentPane().add(new SatelliteViewDemo());
         f.pack();
         f.setVisible(true);
     }

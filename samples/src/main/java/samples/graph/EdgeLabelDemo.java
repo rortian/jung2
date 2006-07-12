@@ -17,6 +17,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -35,9 +39,11 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import sun.security.provider.certpath.Vertex;
+import edu.uci.ics.graph.DirectedEdge;
 import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.UndirectedEdge;
+import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseEdge;
@@ -72,14 +78,14 @@ public class EdgeLabelDemo extends JApplet {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<Integer,Edge<Integer>> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer vv;
+    VisualizationViewer<Integer,Edge<Integer>> vv;
     
-    PluggableRenderer pr;
+    PluggableRenderer<Integer,Edge<Integer>> pr;
     
     /**
      */
@@ -95,20 +101,20 @@ public class EdgeLabelDemo extends JApplet {
     public EdgeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleSparseGraph();
+        graph = new SimpleSparseGraph<Integer,Edge<Integer>>();
         Integer[] v = createVertices(3);
         createEdges(v);
         
-        pr = new PluggableRenderer();
-        Layout layout = new CircleLayout(graph);
-        vv =  new VisualizationViewer(layout, pr, new Dimension(600,400));
-        vv.setPickSupport(new ShapePickSupport());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        pr = new PluggableRenderer<Integer,Edge<Integer>>();
+        Layout<Integer,Edge<Integer>> layout = new CircleLayout<Integer,Edge<Integer>>(graph);
+        vv =  new VisualizationViewer<Integer,Edge<Integer>>(layout, pr, new Dimension(600,400));
+        vv.setPickSupport(new ShapePickSupport<Integer,Edge<Integer>>());
+        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Edge<Integer>>());
         vv.setBackground(Color.white);
 
         graphLabelRenderer = pr.getGraphLabelRenderer();
         
-        EdgeStringer stringer = new EdgeStringer(){
+        EdgeStringer<Edge<Integer>> stringer = new EdgeStringer<Edge<Integer>>(){
             public String getLabel(Edge e) {
                 return "Edge:"+e.getEndpoints().toString();
             }

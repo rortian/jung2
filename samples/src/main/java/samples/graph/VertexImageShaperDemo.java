@@ -46,8 +46,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.DirectedEdge;
+import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultGraphLabelRenderer;
@@ -93,7 +93,7 @@ public class VertexImageShaperDemo extends JApplet {
     /**
      * the graph
      */
-    SimpleDirectedSparseGraph<String, DirectedEdge<String>> graph;
+    SimpleDirectedSparseGraph<Number, DirectedEdge<Number>> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -125,17 +125,17 @@ public class VertexImageShaperDemo extends JApplet {
     public VertexImageShaperDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph();
-        String[] vertices = createVertices(11);
+        graph = new SimpleDirectedSparseGraph<Number,DirectedEdge<Number>>();
+        Number[] vertices = createVertices(11);
         
         // a Map for the labels
-        Map map = new HashMap();
+        Map<Number,String> map = new HashMap<Number,String>();
         for(int i=0; i<vertices.length; i++) {
             map.put(vertices[i], iconNames[i%iconNames.length]);
         }
         
         // a Map for the Icons
-        Map iconMap = new HashMap();
+        Map<Number,Icon> iconMap = new HashMap<Number,Icon>();
         for(int i=0; i<vertices.length; i++) {
             String name = "/images/topic"+iconNames[i]+".gif";
             try {
@@ -151,14 +151,16 @@ public class VertexImageShaperDemo extends JApplet {
         
         // This demo uses a special renderer to turn outlines on and off.
         // you do not need to do this in a real application. Just use a PluggableRender
-        final PluggableRenderer pr = new DemoRenderer();
-        final VertexStringerImpl vertexStringerImpl = 
-            new VertexStringerImpl(map);
+        final PluggableRenderer<Number,DirectedEdge<Number>> pr = 
+            new DemoRenderer<Number,DirectedEdge<Number>>();
+        final VertexStringer<Number> vertexStringerImpl = 
+            new VertexStringerImpl<Number>(map);
         pr.setVertexStringer(vertexStringerImpl);
-        VertexPaintFunction vpf = new PickableVertexPaintFunction(pr, Color.black, Color.white, Color.yellow);
+        VertexPaintFunction<Number> vpf = 
+            new PickableVertexPaintFunction<Number>(pr, Color.black, Color.white, Color.yellow);
         pr.setVertexPaintFunction(vpf);
         pr.setEdgePaintFunction(new PickableEdgePaintFunction(pr, Color.black, Color.cyan));
-        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer(Color.cyan, Color.cyan));
+        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer<Number, DirectedEdge<Number>>(Color.cyan, Color.cyan));
         
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconAndShapeFunction instead.
@@ -302,17 +304,17 @@ public class VertexImageShaperDemo extends JApplet {
         }
         
         public void itemStateChanged(ItemEvent e) {
-            if(e.getItem() instanceof Vertex) {
-                Vertex v = (Vertex)e.getItem();
-                Icon icon = imager.getIcon(v);
-                if(icon instanceof LayeredIcon) {
+//            if(e.getItem() instanceof V) {
+//                Vertex v = (Vertex)e.getItem();
+                Icon icon = imager.getIcon(e.getItem());
+                if(icon != null && icon instanceof LayeredIcon) {
                     if(e.getStateChange() == ItemEvent.SELECTED) {
                        ((LayeredIcon)icon).add(checked);
                     } else {
                         ((LayeredIcon)icon).remove(checked);
                     }
                 }
-            }
+//            }
         }
     }
     /**
@@ -364,10 +366,10 @@ public class VertexImageShaperDemo extends JApplet {
      * @param count how many to create
      * @return the Vertices in an array
      */
-    private String[] createVertices(int count) {
-        String[] v = new String[count];
+    private Number[] createVertices(int count) {
+        Number[] v = new Number[count];
         for (int i = 0; i < count; i++) {
-            v[i] = "V"+i;
+            v[i] = new Integer(i);
             graph.addVertex(v[i]);
         }
         return v;
@@ -377,26 +379,26 @@ public class VertexImageShaperDemo extends JApplet {
      * create edges for this demo graph
      * @param v an array of Vertices to connect
      */
-    void createEdges(String[] v) {
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[3], v[0]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[4]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[4], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[5], v[3]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[2], v[1]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[4], v[1]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[8], v[2]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[3], v[8]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[6], v[7]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[7], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[9]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[9], v[8]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[7], v[6]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[6], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[4], v[2]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[5], v[4]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[4], v[10]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[10], v[4]));
+    void createEdges(Number[] v) {
+        graph.addEdge(new DirectedSparseEdge<Number>(v[0], v[1]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[3], v[0]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[0], v[4]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[5]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[5], v[3]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[2], v[1]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[1]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[8], v[2]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[3], v[8]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[6], v[7]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[7], v[5]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[0], v[9]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[9], v[8]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[7], v[6]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[6], v[5]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[2]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[5], v[4]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[10]));
+        graph.addEdge(new DirectedSparseEdge<Number>(v[10], v[4]));
     }
 
     /** 
@@ -494,8 +496,8 @@ public class VertexImageShaperDemo extends JApplet {
      * @author Tom Nelson - RABA Technologies
      *
      */
-    class DemoRenderer extends PluggableRenderer {
-        public void paintIconForVertex(Graphics g, Vertex v, int x, int y) {
+    class DemoRenderer<V, E extends Edge<V>> extends PluggableRenderer<V,E> {
+        public void paintIconForVertex(Graphics g, V v, int x, int y) {
             boolean outlineImages = false;
             if(vertexIconFunction instanceof DemoVertexImageShapeFunction) {
                 outlineImages = ((DemoVertexImageShapeFunction)vertexIconFunction).isOutlineImages();
