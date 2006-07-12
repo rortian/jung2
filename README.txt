@@ -32,8 +32,7 @@ mvn install:install-file
 cd jung2
 mvn install
 mvn eclipse:eclipse
-
-the above mvn commands should succeed....
+to generate the .classpath and .project files for eclipse.
 
 Eclipse needs to know the path to the local maven repository. 
 Therefore the classpath variable M2_REPO has to be set. Execute the 
