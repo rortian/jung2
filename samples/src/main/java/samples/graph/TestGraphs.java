@@ -14,21 +14,15 @@ package samples.graph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.DirectedEdge;
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.BarabasiAlbertGenerator;
-import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseEdge;
 
 
 
@@ -68,19 +62,19 @@ public class TestGraphs {
 	 *            Is the graph directed?
 	 * @return a graph consisting of eight edges and ten nodes.
 	 */
-	public static Graph<String, ? extends Edge<String>> createTestGraph(boolean isDirected) {
+	public static Graph<String, Number> createTestGraph(boolean isDirected) {
 
 		if (isDirected) {
-			SimpleDirectedSparseGraph<String, DirectedEdge<String>> g = 
-				new SimpleDirectedSparseGraph<String, DirectedEdge<String>>();
+			SimpleDirectedSparseGraph<String, Number> g = 
+				new SimpleDirectedSparseGraph<String, Number>();
 			for (int i = 0; i < pairs.length; i++) {
 				String[] pair = pairs[i];
 				createDirectedEdge(g, pair[0], pair[1], Integer.parseInt(pair[2]));
 			}
 			return g;
 		} else {
-			SimpleUndirectedSparseGraph<String, UndirectedEdge<String>> g = 
-				new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
+			SimpleUndirectedSparseGraph<String, Number> g = 
+				new SimpleUndirectedSparseGraph<String, Number>();
 			for (int i = 0; i < pairs.length; i++) {
 				String[] pair = pairs[i];
 				createUndirectedEdge(g, pair[0], pair[1], Integer.parseInt(pair[2]));
@@ -101,10 +95,10 @@ public class TestGraphs {
      * Returns a graph consisting of a chain of <code>vertex_count - 1</code> vertices
      * plus one isolated vertex.
      */
-    public static Graph<String,UndirectedEdge<String>> createChainPlusIsolates(int chain_length, int isolate_count)
+    public static Graph<String,Number> createChainPlusIsolates(int chain_length, int isolate_count)
     {
-        Graph<String, UndirectedEdge<String>> g = 
-            new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
+        Graph<String, Number> g = 
+            new SimpleUndirectedSparseGraph<String, Number>();
         if (chain_length > 0)
         {
             String[] v = new String[chain_length];
@@ -114,7 +108,7 @@ public class TestGraphs {
             {
                 v[i] = "v"+i;
                 g.addVertex(v[i]);
-                g.addEdge(new UndirectedSparseEdge<String>(v[i], v[i-1]));
+                g.addEdge(new Double(Math.random()), v[i], v[i-1]);
             }
         }
         for (int i = 0; i < isolate_count; i++) {
@@ -132,12 +126,12 @@ public class TestGraphs {
 	 * 
 	 * @return the created graph
 	 */
-	public static Graph<String,DirectedEdge<String>> createDirectedAcyclicGraph(
+	public static Graph<String,Number> createDirectedAcyclicGraph(
 		int layers,
 		int maxNodesPerLayer,
 		double linkprob) {
-		DirectedGraph<String,DirectedEdge<String>> dag = 
-            new SimpleDirectedSparseGraph<String,DirectedEdge<String>>();
+		DirectedGraph<String,Number> dag = 
+            new SimpleDirectedSparseGraph<String,Number>();
 //		StringLabeller sl = StringLabeller.getLabeller(dag);
 		Set<String> previousLayers = new HashSet<String>();
 		Set<String> inThisLayer = new HashSet<String>();
@@ -159,8 +153,8 @@ public class TestGraphs {
 //					) {
 //					Vertex v2 = (Vertex) iter.next();
 					if (Math.random() < linkprob) {
-                        DirectedEdge<String> de = new DirectedSparseEdge<String>(v,v2);
-						dag.addEdge(de);
+                        Double de = new Double(Math.random());
+						dag.addEdge(de, v, v2);
 					}
 				}
 			}
@@ -171,25 +165,25 @@ public class TestGraphs {
 		return dag;
 	}
 	private static void createUndirectedEdge(
-			final UndirectedGraph<String, UndirectedEdge<String>> g,
+			final UndirectedGraph<String, Number> g,
 //			StringLabeller sl,
 //			EdgeWeightLabeller el,
 			String v1Label,
 			String v2Label,
 			int weight) {
 			
-			g.addEdge(new UndirectedSparseEdge<String>(v1Label, v2Label));
+			g.addEdge(new Double(Math.random()), v1Label, v2Label);
 	}
 	
 	private static void createDirectedEdge(
-		final DirectedGraph<String, DirectedEdge<String>> g,
+		final DirectedGraph<String, Number> g,
 //		StringLabeller sl,
 //		EdgeWeightLabeller el,
 		String v1Label,
 		String v2Label,
 		int weight) {
 		
-		g.addEdge(new DirectedSparseEdge<String>(v1Label, v2Label));
+		g.addDirectedEdge(new Double(Math.random()), v1Label, v2Label);
 
 //		try {
 //			Vertex v1 = sl.getVertex(v1Label);
@@ -217,9 +211,9 @@ public class TestGraphs {
 	 * 
 	 * @return the testgraph
 	 */
-	public static Graph<String,UndirectedEdge<String>> getOneComponentGraph() {
-		SimpleUndirectedSparseGraph<String, UndirectedEdge<String>> g = 
-			new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
+	public static Graph<String,Number> getOneComponentGraph() {
+		SimpleUndirectedSparseGraph<String, Number> g = 
+			new SimpleUndirectedSparseGraph<String, Number>();
 //		StringLabeller sl = StringLabeller.getLabeller(g);
 //		EdgeWeightLabeller el = EdgeWeightLabeller.getLabeller(g);
 
@@ -249,7 +243,7 @@ public class TestGraphs {
 //		Indexer ind = Indexer.getIndexer(g);
 		for (int i = 0; i < index.size() - 1; i++) {
 			try {
-				g.addEdge(new UndirectedSparseEdge<String>(index.get(i), index.get(i+1)));
+				g.addEdge(new Integer(i), index.get(i), index.get(i+1));
 //				GraphUtils.addEdge(g, (Vertex)ind.getVertex(i), (Vertex) ind.getVertex(i + 1));
 			} catch (IllegalArgumentException fe) {
 			}
@@ -265,9 +259,9 @@ public class TestGraphs {
 	 * @return a demonstration graph of type <tt>UndirectedSparseGraph</tt>
 	 *         with 28 vertices.
 	 */
-	public static Graph<String, UndirectedEdge<String>> getDemoGraph() {
-		UndirectedGraph<String, UndirectedEdge<String>> g = 
-            new SimpleUndirectedSparseGraph<String, UndirectedEdge<String>>();
+	public static Graph<String, Number> getDemoGraph() {
+		UndirectedGraph<String, Number> g = 
+            new SimpleUndirectedSparseGraph<String, Number>();
 //		StringLabeller sl = StringLabeller.getLabeller(g);
 //		EdgeWeightLabeller el = EdgeWeightLabeller.getLabeller(g);
 
@@ -301,7 +295,7 @@ public class TestGraphs {
 	/**
 	 * Equivalent to <code>generateMixedRandomGraph(edge_weight, num_vertices, true)</code>.
 	 */
-	public static Graph<Integer, Edge<Integer>> generateMixedRandomGraph(Map<Edge, Number> edge_weight, int num_vertices)
+	public static Graph<Integer, Number> generateMixedRandomGraph(Set<Number> edge_weight, int num_vertices)
 	{
 		return generateMixedRandomGraph(edge_weight, num_vertices, true);
 	}
@@ -313,17 +307,17 @@ public class TestGraphs {
      * Then takes the resultant graph, replaces random undirected edges with directed
      * edges, and assigns random weights to each edge.
      */
-    public static Graph<Integer, Edge<Integer>> generateMixedRandomGraph(Map<Edge,Number> edge_weights, int num_vertices, boolean parallel)
+    public static Graph<Integer, Number> generateMixedRandomGraph(Set<Number> edge_weights, int num_vertices, boolean parallel)
     {
         int seed = (int)(Math.random() * 10000);
         BarabasiAlbertGenerator bag = new BarabasiAlbertGenerator(4, 3, false, parallel, seed);
         bag.evolveGraph(num_vertices - 4);
-        Graph<Integer, Edge<Integer>> ug = bag.generateGraph();
+        Graph<Integer, Number> ug = bag.generateGraph();
 //        SettableVertexMapper svm = new HashSettableVertexMapper();
 //        Map<Integer,Integer> svm = new HashMap<Integer,Integer>();
 
         // create a SparseGraph version of g
-        Graph<Integer, Edge<Integer>> g = new SimpleSparseGraph<Integer, Edge<Integer>>();
+        Graph<Integer, Number> g = new SimpleSparseGraph<Integer, Number>();
         for(Integer v : ug.getVertices()) {
         	g.addVertex(v);
         }
@@ -342,37 +336,39 @@ public class TestGraphs {
         // randomly replace some of the edges by directed edges to 
         // get a mixed-mode graph, add random weights
         
-        for(Edge<Integer> e : ug.getEdges()) {
-            Integer v1 = e.getEndpoints().getFirst();
-            Integer v2 = e.getEndpoints().getSecond();
+        for(Number e : ug.getEdges()) {
+            Integer v1 = ug.getEndpoints(e).getFirst();
+            Integer v2 = ug.getEndpoints(e).getSecond();
 
-            Edge<Integer> me;
+            Number me = new Double(Math.random());
             if (Math.random() < 0.5)
-                me = new DirectedSparseEdge<Integer>(v1, v2);
+                g.addDirectedEdge(me, v1, v2);
+//                me = new DirectedSparseEdge<Integer>(v1, v2);
             else
-                me = new UndirectedSparseEdge<Integer>(v1, v2);
-            g.addEdge(me);
-            edge_weights.put(me, new Double(Math.random()));
+                g.addEdge(me, v1, v2);
+//                me = new UndirectedSparseEdge<Integer>(v1, v2);
+//            g.addEdge(me);
+//            edge_weights.put(me, new Double(Math.random()));
         }
         
         return g;
     }
     
-    public static Graph<Integer, Edge<Integer>> getSmallGraph() {
-        Graph<Integer, Edge<Integer>> graph = 
-            new SimpleSparseGraph<Integer, Edge<Integer>>();
+    public static Graph<Integer, Number> getSmallGraph() {
+        Graph<Integer, Number> graph = 
+            new SimpleSparseGraph<Integer, Number>();
         Integer[] v = new Integer[3];
         for (int i = 0; i < 3; i++) {
             v[i] = new Integer(i);
             graph.addVertex(v[i]);
         }
-        graph.addEdge(new DirectedSparseEdge<Integer>(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge<Integer>(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge<Integer>(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge<Integer>(v[1], v[0]));
-        graph.addEdge(new DirectedSparseEdge<Integer>(v[1], v[0]));
-        graph.addEdge(new UndirectedSparseEdge<Integer>(v[1], v[2]));
-        graph.addEdge(new UndirectedSparseEdge<Integer>(v[1], v[2]));
+        graph.addDirectedEdge(new Double(0), v[0], v[1]);
+        graph.addDirectedEdge(new Double(.1), v[0], v[1]);
+        graph.addDirectedEdge(new Double(.2), v[0], v[1]);
+        graph.addDirectedEdge(new Double(.3), v[1], v[0]);
+        graph.addDirectedEdge(new Double(.4), v[1], v[0]);
+        graph.addEdge(new Double(.5), v[1], v[2]);
+        graph.addEdge(new Double(.6), v[1], v[2]);
 
         return graph;
 

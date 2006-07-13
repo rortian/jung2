@@ -31,9 +31,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultSettableVertexLocationFunction;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;

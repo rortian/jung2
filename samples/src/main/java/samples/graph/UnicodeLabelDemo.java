@@ -26,9 +26,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.visualization.DefaultGraphLabelRenderer;
+import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
@@ -85,7 +85,8 @@ public class UnicodeLabelDemo {
         PluggableRenderer pr = new PluggableRenderer();
         pr.setVertexStringer(new UnicodeVertexStringer(v));
         pr.setVertexPaintFunction(new PickableVertexPaintFunction(pr, Color.lightGray, Color.white,  Color.yellow));
-        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer(Color.cyan, Color.cyan));
+        pr.setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
+        pr.setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
         VertexIconAndShapeFunction dvisf =
             new VertexIconAndShapeFunction(new EllipseVertexShapeFunction());
         pr.setVertexShapeFunction(dvisf);
@@ -201,23 +202,23 @@ public class UnicodeLabelDemo {
      * @param v an array of Vertices to connect
      */
     void createEdges(Integer[] v) {
-        graph.addEdge(new DirectedSparseEdge(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge(v[0], v[3]));
-        graph.addEdge(new DirectedSparseEdge(v[0], v[4]));
-        graph.addEdge(new DirectedSparseEdge(v[4], v[5]));
-        graph.addEdge(new DirectedSparseEdge(v[3], v[5]));
-        graph.addEdge(new DirectedSparseEdge(v[1], v[2]));
-        graph.addEdge(new DirectedSparseEdge(v[1], v[4]));
-        graph.addEdge(new DirectedSparseEdge(v[8], v[2]));
-        graph.addEdge(new DirectedSparseEdge(v[3], v[8]));
-        graph.addEdge(new DirectedSparseEdge(v[6], v[7]));
-        graph.addEdge(new DirectedSparseEdge(v[7], v[5]));
-        graph.addEdge(new DirectedSparseEdge(v[0], v[9]));
-        graph.addEdge(new DirectedSparseEdge(v[9], v[8]));
-        graph.addEdge(new DirectedSparseEdge(v[7], v[6]));
-        graph.addEdge(new DirectedSparseEdge(v[6], v[5]));
-        graph.addEdge(new DirectedSparseEdge(v[4], v[2]));
-        graph.addEdge(new DirectedSparseEdge(v[5], v[4]));
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[3]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[4]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[3], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[1], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[1], v[4]);
+        graph.addDirectedEdge(new Double(Math.random()), v[8], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[3], v[8]);
+        graph.addDirectedEdge(new Double(Math.random()), v[6], v[7]);
+        graph.addDirectedEdge(new Double(Math.random()), v[7], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[9]);
+        graph.addDirectedEdge(new Double(Math.random()), v[9], v[8]);
+        graph.addDirectedEdge(new Double(Math.random()), v[7], v[6]);
+        graph.addDirectedEdge(new Double(Math.random()), v[6], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[5], v[4]);
     }
 
     /**

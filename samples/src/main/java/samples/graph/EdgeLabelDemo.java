@@ -17,10 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -39,18 +35,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedEdge;
-import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseEdge;
-import edu.uci.ics.jung.visualization.GraphLabelRenderer;
+import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
+import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -78,18 +69,19 @@ public class EdgeLabelDemo extends JApplet {
     /**
      * the graph
      */
-    Graph<Integer,Edge<Integer>> graph;
+    Graph<Integer,Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<Integer,Edge<Integer>> vv;
+    VisualizationViewer<Integer,Number> vv;
     
-    PluggableRenderer<Integer,Edge<Integer>> pr;
+    PluggableRenderer<Integer,Number> pr;
     
     /**
      */
-    GraphLabelRenderer graphLabelRenderer;
+    VertexLabelRenderer vertexLabelRenderer;
+    EdgeLabelRenderer edgeLabelRenderer;
     
     ScalingControl scaler = new CrossoverScalingControl();
     
@@ -101,22 +93,23 @@ public class EdgeLabelDemo extends JApplet {
     public EdgeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleSparseGraph<Integer,Edge<Integer>>();
+        graph = new SimpleSparseGraph<Integer,Number>();
         Integer[] v = createVertices(3);
         createEdges(v);
         
-        pr = new PluggableRenderer<Integer,Edge<Integer>>();
-        Layout<Integer,Edge<Integer>> layout = new CircleLayout<Integer,Edge<Integer>>(graph);
-        vv =  new VisualizationViewer<Integer,Edge<Integer>>(layout, pr, new Dimension(600,400));
-        vv.setPickSupport(new ShapePickSupport<Integer,Edge<Integer>>());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Edge<Integer>>());
+        pr = new PluggableRenderer<Integer,Number>();
+        Layout<Integer,Number> layout = new CircleLayout<Integer,Number>(graph);
+        vv =  new VisualizationViewer<Integer,Number>(layout, pr, new Dimension(600,400));
+        vv.setPickSupport(new ShapePickSupport<Integer,Number>());
+        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Number>());
         vv.setBackground(Color.white);
 
-        graphLabelRenderer = pr.getGraphLabelRenderer();
+        vertexLabelRenderer = pr.getVertexLabelRenderer();
+        edgeLabelRenderer = pr.getEdgeLabelRenderer();
         
-        EdgeStringer<Edge<Integer>> stringer = new EdgeStringer<Edge<Integer>>(){
-            public String getLabel(Edge e) {
-                return "Edge:"+e.getEndpoints().toString();
+        EdgeStringer<Number> stringer = new EdgeStringer<Number>(){
+            public String getLabel(Number e) {
+                return "Edge:"+graph.getEndpoints(e).toString();
             }
         };
         pr.setEdgeStringer(stringer);
@@ -186,7 +179,7 @@ public class EdgeLabelDemo extends JApplet {
         rotate.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 AbstractButton b = (AbstractButton)e.getSource();
-                graphLabelRenderer.setRotateEdgeLabels(b.isSelected());
+                edgeLabelRenderer.setRotateEdgeLabels(b.isSelected());
                 vv.repaint();
             }
         });
@@ -334,13 +327,13 @@ public class EdgeLabelDemo extends JApplet {
      * @param v an array of Vertices to connect
      */
     void createEdges(Integer[] v) {
-        graph.addEdge(new DirectedSparseEdge(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge(v[1], v[0]));
-        graph.addEdge(new DirectedSparseEdge(v[1], v[0]));
-        graph.addEdge(new UndirectedSparseEdge(v[1], v[2]));
-        graph.addEdge(new UndirectedSparseEdge(v[1], v[2]));
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[1], v[0]);
+        graph.addDirectedEdge(new Double(Math.random()), v[1], v[0]);
+        graph.addEdge(new Double(Math.random()), v[1], v[2]);
+        graph.addEdge(new Double(Math.random()), v[1], v[2]);
     }
 
     /**

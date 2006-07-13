@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
@@ -26,7 +26,6 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
@@ -51,7 +50,7 @@ import edu.uci.ics.jung.visualization.layout.SpringLayout;
  * @author Joshua O'Madadhain
  */
 public class ShowLayouts extends JApplet {
-    protected static Graph<? extends Object, ? extends Edge<? extends Object>>[] g_array;
+    protected static Graph<? extends Object, ? extends Object>[] g_array;
     protected static int graph_index;
     protected static String[] graph_names = {"Two component graph", 
         "Random mixed-mode graph", "Miscellaneous multicomponent graph", 
@@ -119,20 +118,20 @@ public class ShowLayouts extends JApplet {
     private static JPanel getGraphPanel()
     {
         g_array = //(Graph<Object, ? extends Edge<Object>>)
-            (Graph<? extends Object,? extends Edge<? extends Object>>[])
+            (Graph<? extends Object,? extends Object>[])
             new Graph<?,?>[graph_names.length];
 //        java.lang.reflect.Array.
 //        newInstance(g_array.getClass().getComponentType(), graph_names.length);
             
         g_array[0] = TestGraphs.createTestGraph(false);
-        g_array[1] = TestGraphs.generateMixedRandomGraph(new HashMap<Edge,Number>(), 20, true);
+        g_array[1] = TestGraphs.generateMixedRandomGraph(new HashSet(), 20, true);
         g_array[2] = TestGraphs.getDemoGraph();
         g_array[3] = TestGraphs.createDirectedAcyclicGraph(4, 4, 0.3);
         g_array[4] = TestGraphs.getOneComponentGraph();
         g_array[5] = TestGraphs.createChainPlusIsolates(18, 5);
         g_array[6] = TestGraphs.createChainPlusIsolates(0, 20);
 
-        Graph<? extends Object, ? extends Edge<? extends Object>> g = g_array[4]; // initial graph
+        Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
         
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g),
                 new PluggableRenderer());

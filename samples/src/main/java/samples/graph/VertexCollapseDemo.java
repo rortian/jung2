@@ -29,14 +29,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseEdge;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PickedState;
@@ -257,31 +252,31 @@ public class VertexCollapseDemo extends JApplet {
 
             //add all edges from the delegate, unless both endpoints of
             // the edge are in the vertices that are to be collapsed
-            for(Edge e : (Collection<Edge>)inGraph.getEdges()) {
-                Pair endpoints = e.getEndpoints();
+            for(Object e : (Collection<?>)inGraph.getEdges()) {
+                Pair endpoints = inGraph.getEndpoints(e);
                 // don't add edges whose endpoints are both in the cluster
                 if(cluster.containsAll(endpoints) == false) {
 
                     if(cluster.contains(endpoints.getFirst())) {
-                        Edge edge = null;
-                        if(e instanceof UndirectedEdge) {
-                            edge = new UndirectedSparseEdge(cluster,endpoints.getSecond());
-                            graph.addEdge(edge);
-                        } else if(e instanceof DirectedEdge) {
-                            edge = new DirectedSparseEdge(cluster,endpoints.getSecond());
-                            graph.addEdge(edge);
+//                        Edge edge = null;
+                        if(inGraph.isDirected(e)) {
+//                            edge = new UndirectedSparseEdge(cluster,endpoints.getSecond());
+                            graph.addDirectedEdge(e, cluster, endpoints.getSecond());
+                        } else { //if(e instanceof DirectedEdge) {
+//                            edge = new DirectedSparseEdge(cluster,endpoints.getSecond());
+                            graph.addEdge(e, cluster, endpoints.getSecond());
                         }
                     } else if(cluster.contains(endpoints.getSecond())) {
-                        Edge edge = null;
-                        if(e instanceof UndirectedEdge) {
-                            edge = new UndirectedSparseEdge<Object>(endpoints.getFirst(), cluster);
-                            graph.addEdge(edge);
-                        } else if(e instanceof DirectedEdge) {
-                            edge = new DirectedSparseEdge<Object>(endpoints.getFirst(), cluster);
-                            graph.addEdge(edge);
+//                        Edge edge = null;
+                        if(inGraph.isDirected(e)) {
+//                            edge = new UndirectedSparseEdge<Object>(endpoints.getFirst(), cluster);
+                            graph.addDirectedEdge(e, endpoints.getFirst(), cluster);
+                        } else { //if(e instanceof DirectedEdge) {
+//                            edge = new DirectedSparseEdge<Object>(endpoints.getFirst(), cluster);
+                            graph.addEdge(e, endpoints.getFirst(), cluster);
                         }
                     } else {
-                        graph.addEdge(e);
+                        graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond());
                     }
                 }
             }

@@ -24,8 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -57,12 +55,12 @@ public class GraphZoomScrollPaneDemo {
     /**
      * the graph
      */
-    SimpleDirectedSparseGraph<String, DirectedEdge<String>> graph;
+    SimpleDirectedSparseGraph<String, Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String, DirectedEdge<String>> vv;
+    VisualizationViewer<String, Number> vv;
     
     /**
      * create an instance of a simple graph with controls to
@@ -72,7 +70,7 @@ public class GraphZoomScrollPaneDemo {
     public GraphZoomScrollPaneDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph<String, DirectedEdge<String>>();
+        graph = new SimpleDirectedSparseGraph<String, Number>();
         String[] v = createVertices(10);
         createEdges(v);
         
@@ -87,9 +85,9 @@ public class GraphZoomScrollPaneDemo {
         final ImageIcon icon = sandstoneIcon;
         PluggableRenderer pr = new PluggableRenderer();
 
-        vv =  new VisualizationViewer<String,DirectedEdge<String>>(new FRLayout<String,DirectedEdge<String>>(graph), pr);
-        vv.setPickSupport(new ShapePickSupport<String,DirectedEdge<String>>());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<String,DirectedEdge<String>>());
+        vv =  new VisualizationViewer<String,Number>(new FRLayout<String,Number>(graph), pr);
+        vv.setPickSupport(new ShapePickSupport<String,Number>());
+        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
         
         if(icon != null) {
             vv.addPreRenderPaintable(new VisualizationViewer.Paintable(){
@@ -187,23 +185,23 @@ public class GraphZoomScrollPaneDemo {
      * @param v an array of Vertices to connect
      */
     void createEdges(String[] v) {
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[3]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[4]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[4], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[3], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[1], v[2]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[1], v[4]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[8], v[2]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[3], v[8]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[6], v[7]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[7], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[0], v[9]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[9], v[8]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[7], v[6]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[6], v[5]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[4], v[2]));
-        graph.addEdge(new DirectedSparseEdge<String>(v[5], v[4]));
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[3]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[4]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[3], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[1], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[1], v[4]);
+        graph.addDirectedEdge(new Double(Math.random()), v[8], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[3], v[8]);
+        graph.addDirectedEdge(new Double(Math.random()), v[6], v[7]);
+        graph.addDirectedEdge(new Double(Math.random()), v[7], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[9]);
+        graph.addDirectedEdge(new Double(Math.random()), v[9], v[8]);
+        graph.addDirectedEdge(new Double(Math.random()), v[7], v[6]);
+        graph.addDirectedEdge(new Double(Math.random()), v[6], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[5], v[4]);
     }
 
     /**

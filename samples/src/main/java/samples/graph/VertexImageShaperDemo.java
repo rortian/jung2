@@ -46,11 +46,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
-import edu.uci.ics.jung.graph.DirectedSparseEdge;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.visualization.DefaultGraphLabelRenderer;
+import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.FourPassImageShaper;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PickedState;
@@ -93,7 +91,7 @@ public class VertexImageShaperDemo extends JApplet {
     /**
      * the graph
      */
-    SimpleDirectedSparseGraph<Number, DirectedEdge<Number>> graph;
+    SimpleDirectedSparseGraph<Number, Number> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -125,7 +123,7 @@ public class VertexImageShaperDemo extends JApplet {
     public VertexImageShaperDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph<Number,DirectedEdge<Number>>();
+        graph = new SimpleDirectedSparseGraph<Number,Number>();
         Number[] vertices = createVertices(11);
         
         // a Map for the labels
@@ -151,8 +149,8 @@ public class VertexImageShaperDemo extends JApplet {
         
         // This demo uses a special renderer to turn outlines on and off.
         // you do not need to do this in a real application. Just use a PluggableRender
-        final PluggableRenderer<Number,DirectedEdge<Number>> pr = 
-            new DemoRenderer<Number,DirectedEdge<Number>>();
+        final PluggableRenderer<Number,Number> pr = 
+            new DemoRenderer<Number,Number>();
         final VertexStringer<Number> vertexStringerImpl = 
             new VertexStringerImpl<Number>(map);
         pr.setVertexStringer(vertexStringerImpl);
@@ -160,7 +158,10 @@ public class VertexImageShaperDemo extends JApplet {
             new PickableVertexPaintFunction<Number>(pr, Color.black, Color.white, Color.yellow);
         pr.setVertexPaintFunction(vpf);
         pr.setEdgePaintFunction(new PickableEdgePaintFunction(pr, Color.black, Color.cyan));
-        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer<Number, DirectedEdge<Number>>(Color.cyan, Color.cyan));
+//        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer<Number, Number>(Color.cyan, Color.cyan));
+        pr.setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
+        pr.setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
+        
         
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconAndShapeFunction instead.
@@ -380,25 +381,25 @@ public class VertexImageShaperDemo extends JApplet {
      * @param v an array of Vertices to connect
      */
     void createEdges(Number[] v) {
-        graph.addEdge(new DirectedSparseEdge<Number>(v[0], v[1]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[3], v[0]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[0], v[4]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[5]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[5], v[3]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[2], v[1]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[1]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[8], v[2]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[3], v[8]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[6], v[7]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[7], v[5]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[0], v[9]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[9], v[8]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[7], v[6]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[6], v[5]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[2]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[5], v[4]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[4], v[10]));
-        graph.addEdge(new DirectedSparseEdge<Number>(v[10], v[4]));
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[3], v[0]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[4]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[5], v[3]);
+        graph.addDirectedEdge(new Double(Math.random()), v[2], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[1]);
+        graph.addDirectedEdge(new Double(Math.random()), v[8], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[3], v[8]);
+        graph.addDirectedEdge(new Double(Math.random()), v[6], v[7]);
+        graph.addDirectedEdge(new Double(Math.random()), v[7], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[0], v[9]);
+        graph.addDirectedEdge(new Double(Math.random()), v[9], v[8]);
+        graph.addDirectedEdge(new Double(Math.random()), v[7], v[6]);
+        graph.addDirectedEdge(new Double(Math.random()), v[6], v[5]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[2]);
+        graph.addDirectedEdge(new Double(Math.random()), v[5], v[4]);
+        graph.addDirectedEdge(new Double(Math.random()), v[4], v[10]);
+        graph.addDirectedEdge(new Double(Math.random()), v[10], v[4]);
     }
 
     /** 
@@ -496,7 +497,7 @@ public class VertexImageShaperDemo extends JApplet {
      * @author Tom Nelson - RABA Technologies
      *
      */
-    class DemoRenderer<V, E extends Edge<V>> extends PluggableRenderer<V,E> {
+    class DemoRenderer<V, E> extends PluggableRenderer<V,E> {
         public void paintIconForVertex(Graphics g, V v, int x, int y) {
             boolean outlineImages = false;
             if(vertexIconFunction instanceof DemoVertexImageShapeFunction) {

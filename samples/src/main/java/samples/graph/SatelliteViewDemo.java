@@ -34,9 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
@@ -64,7 +62,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  * @author Tom Nelson - RABA Technologies
  * 
  */
-public class SatelliteViewDemo<V, E extends Edge<V>> extends JApplet {
+public class SatelliteViewDemo<V, E> extends JApplet {
 
     static final String instructions = 
         "<html>"+
@@ -107,33 +105,33 @@ public class SatelliteViewDemo<V, E extends Edge<V>> extends JApplet {
     public SatelliteViewDemo() {
         
         // create a simple graph for the demo
-        Graph<String,UndirectedEdge<String>> graph = TestGraphs.getOneComponentGraph();
+        Graph<String, Number> graph = TestGraphs.getOneComponentGraph();
         
         // need separate renderers for each view
-        PluggableRenderer<String,UndirectedEdge<String>> pr1 = new PluggableRenderer<String,UndirectedEdge<String>>();
-        PluggableRenderer<String,UndirectedEdge<String>> pr2 = new PluggableRenderer<String,UndirectedEdge<String>>();
+        PluggableRenderer<String,Number> pr1 = new PluggableRenderer<String,Number>();
+        PluggableRenderer<String,Number> pr2 = new PluggableRenderer<String,Number>();
         
         // the preferred sizes for the two views
         Dimension preferredSize1 = new Dimension(600,600);
         Dimension preferredSize2 = new Dimension(300, 300);
         
         // create one layout for the graph
-        FRLayout<String,UndirectedEdge<String>> layout = new FRLayout<String,UndirectedEdge<String>>(graph);
+        FRLayout<String,Number> layout = new FRLayout<String,Number>(graph);
         layout.setMaxIterations(500);
         layout.initialize(new Dimension(600,600));
         
         // create one model that both views will share
-        VisualizationModel<String,UndirectedEdge<String>> vm =
-            new DefaultVisualizationModel<String,UndirectedEdge<String>>(layout, preferredSize1);
+        VisualizationModel<String,Number> vm =
+            new DefaultVisualizationModel<String,Number>(layout, preferredSize1);
  
         // create 2 views that share the same model
-        final VisualizationViewer<String,UndirectedEdge<String>> vv1 = 
-            new VisualizationViewer<String,UndirectedEdge<String>>(vm, pr1, preferredSize1);
-        final SatelliteVisualizationViewer<String,UndirectedEdge<String>> vv2 = 
-            new SatelliteVisualizationViewer<String,UndirectedEdge<String>>(vv1, vm, pr2, preferredSize2);
+        final VisualizationViewer<String,Number> vv1 = 
+            new VisualizationViewer<String,Number>(vm, pr1, preferredSize1);
+        final SatelliteVisualizationViewer<String,Number> vv2 = 
+            new SatelliteVisualizationViewer<String,Number>(vv1, vm, pr2, preferredSize2);
         
         vv1.setBackground(Color.white);
-        vv1.setPickSupport(new ShapePickSupport<String,UndirectedEdge<String>>());
+        vv1.setPickSupport(new ShapePickSupport<String,Number>());
         
         viewGrid = new ViewGrid(vv2, vv1);
 
