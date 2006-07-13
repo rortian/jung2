@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 
@@ -22,7 +21,7 @@ import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
  * 
  * @author Scott White
  */
-public class UnweightedShortestPath<V, E extends Edge<V>> 
+public class UnweightedShortestPath<V, E> 
     implements ShortestPath<V,E>, Distance<V>
 {
 	private Map<V,Map<V,Number>> mDistanceMap;

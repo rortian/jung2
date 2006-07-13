@@ -13,7 +13,6 @@ package edu.uci.ics.jung.visualization.layout;
 import java.io.IOException;
 import java.io.Serializable;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
 
@@ -24,7 +23,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public interface PersistentLayout<V, E extends Edge<V>> extends Layout<V,E>, ChangeEventSupport {
+public interface PersistentLayout<V, E> extends Layout<V,E>, ChangeEventSupport {
     
     void persist(String fileName) throws IOException;
 

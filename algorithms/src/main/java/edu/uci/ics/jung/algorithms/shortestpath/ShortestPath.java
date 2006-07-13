@@ -13,14 +13,12 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
-
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public interface ShortestPath<V, E extends Edge<V>>
+public interface ShortestPath<V, E>
 {
     /**
      * <p>Returns a <code>LinkedHashMap</code> which maps each vertex 

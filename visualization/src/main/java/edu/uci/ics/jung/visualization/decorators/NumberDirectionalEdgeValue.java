@@ -13,6 +13,8 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
+import edu.uci.ics.graph.Graph;
+
 
 
 /**
@@ -23,17 +25,11 @@ package edu.uci.ics.jung.visualization.decorators;
  * 
  * @author Joshua O'Madadhain
  */
-public interface NumberEdgeValue<E> {
+public interface NumberDirectionalEdgeValue<V,E>  {
     /**
      * @param e     the edge to examine
      * @return      the Number associated with this edge
      */
-    public Number getNumber(E e);
+    public Number getNumber(Graph<V,E> graph, E e);
     
-    /**
-     * 
-     * @param e     the edge whose value we're setting
-     * @param n     the Number to which we're setting the edge
-     */
-    public void setNumber(E e, Number n);
 }

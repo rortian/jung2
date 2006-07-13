@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
 public class ShortestPathUtils
@@ -25,7 +25,7 @@ public class ShortestPathUtils
      * <code>source</code> to <code>target</code>, in order of their
      * occurrence on this path.  
      */
-    public static <V, E extends Edge<V>> List getPath(ShortestPath<V,E> sp, V source, V target)
+    public static <V, E> List getPath(Graph<V,E> graph, ShortestPath<V,E> sp, V source, V target)
     {
         LinkedList<E> path = new LinkedList<E>();
         
@@ -38,7 +38,7 @@ public class ShortestPathUtils
         {
             E incoming = incomingEdges.get(current);
             path.addFirst(incoming);
-            Pair<V> endpoints = incoming.getEndpoints();
+            Pair<V> endpoints = graph.getEndpoints(incoming);
             if(endpoints.getFirst().equals(current)) {	
             	current = endpoints.getSecond();
             } else {

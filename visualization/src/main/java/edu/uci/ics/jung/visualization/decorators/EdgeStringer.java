@@ -13,7 +13,6 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
-import edu.uci.ics.graph.Edge;
 
 /**
  *
@@ -22,7 +21,7 @@ import edu.uci.ics.graph.Edge;
  * @author danyelf
  *
  */
-public interface EdgeStringer<E extends Edge> {
+public interface EdgeStringer<E> {
 
     public String getLabel(E e);
 }

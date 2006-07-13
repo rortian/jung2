@@ -11,7 +11,6 @@ package edu.uci.ics.jung.algorithms;
 import java.util.Collection;
 
 import edu.uci.ics.graph.ArchetypeGraph;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
@@ -152,7 +151,7 @@ public class GraphStatistics
      * will be the the maximum shortest path length over all pairs of <b>connected</b> 
      * vertices; otherwise it will be <code>Double.POSITIVE_INFINITY</code>.
      */
-    public static <V, E extends Edge<V>> double diameter(Graph<V,E> g, Distance<V> d, boolean use_max)
+    public static <V, E> double diameter(Graph<V,E> g, Distance<V> d, boolean use_max)
     {
         double diameter = 0;
         Collection<V> vertices = g.getVertices();
@@ -189,7 +188,7 @@ public class GraphStatistics
      * if any of these distances do not exist.
      * @see #diameter(ArchetypeGraph, Distance, boolean)
      */
-    public static <V, E extends Edge<V>> double diameter(Graph<V,E> g, Distance<V> d)
+    public static <V, E> double diameter(Graph<V,E> g, Distance<V> d)
     {
         return diameter(g, d, false);
     }
@@ -198,7 +197,7 @@ public class GraphStatistics
      * Returns the diameter of <code>g</code>, ignoring edge weights.
      * @see #diameter(ArchetypeGraph, Distance, boolean)
      */
-    public static <V, E extends Edge<V>> double diameter(Graph<V,E> g)
+    public static <V, E> double diameter(Graph<V,E> g)
     {
         return diameter(g, new UnweightedShortestPath<V,E>(g));
     }

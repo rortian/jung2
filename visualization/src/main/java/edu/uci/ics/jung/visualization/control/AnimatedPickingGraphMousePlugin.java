@@ -20,7 +20,6 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.PickSupport;
 import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -35,7 +34,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * 
  * @author Tom Nelson
  */
-public class AnimatedPickingGraphMousePlugin<V, E extends Edge<V>> extends AbstractGraphMousePlugin
+public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     implements MouseListener, MouseMotionListener {
 
 	/**
@@ -66,7 +65,7 @@ public class AnimatedPickingGraphMousePlugin<V, E extends Edge<V>> extends Abstr
 	 */
     public void mousePressed(MouseEvent e) {
 		if (e.getModifiers() == modifiers) {
-			VisualizationViewer vv = (VisualizationViewer) e.getSource();
+			VisualizationViewer<V,E> vv = (VisualizationViewer) e.getSource();
 			PickSupport<V, E> pickSupport = vv.getPickSupport();
 			PickedState<V> pickedVertexState = vv.getPickedVertexState();
 			if (pickSupport != null && pickedVertexState != null) {

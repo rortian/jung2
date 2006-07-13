@@ -1,7 +1,7 @@
 /*
- * Created on Mar 30, 2006
+ * Created on Oct 30, 2004
  *
- * Copyright (c) 2006, the JUNG Project and the Regents of the University 
+ * Copyright (c) 2004, the JUNG Project and the Regents of the University 
  * of California
  * All rights reserved.
  *
@@ -9,11 +9,15 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.graph;
+package edu.uci.ics.jung.visualization.decorators;
+
+import java.awt.Font;
+
 
 /**
- * A tagging interface for edges which have no direction
  * 
  * @author Joshua O'Madadhain
  */
-public interface UndirectedEdge<V> extends Edge<V> {}
+public interface FontFunction<T> {
+    public Font getFont(T e);
+}

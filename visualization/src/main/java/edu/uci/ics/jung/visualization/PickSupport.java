@@ -10,7 +10,6 @@
  */
 package edu.uci.ics.jung.visualization;
 
-import edu.uci.ics.graph.Edge;
 
 
 
@@ -20,6 +19,6 @@ import edu.uci.ics.graph.Edge;
  * to their display component
  * @author Tom Nelson
  */
-public interface PickSupport<V, E extends Edge<V>> extends GraphElementAccessor<V, E> {
+public interface PickSupport<V, E> extends GraphElementAccessor<V, E> {
     void setHasGraphLayout(HasGraphLayout<V, E> vv);
 }

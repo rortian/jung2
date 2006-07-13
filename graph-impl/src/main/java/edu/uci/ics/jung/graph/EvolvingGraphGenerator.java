@@ -9,7 +9,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 
@@ -17,7 +16,7 @@ import edu.uci.ics.graph.Graph;
  * An interface for algorithms that generate graphs that evolve over time
  * @author Scott White
  */
-public interface EvolvingGraphGenerator<V, E extends Edge<V>> extends GraphGenerator<V,E> {
+public interface EvolvingGraphGenerator<V, E> extends GraphGenerator<V,E> {
 
     /**
      * Instructs the algorithm to evolve the graph N time steps and return
@@ -37,7 +36,7 @@ public interface EvolvingGraphGenerator<V, E extends Edge<V>> extends GraphGener
      * Returns a copy of the evolved graph in its current state
      * @return new instance of the evolved graph
      */
-    public Graph<V,? extends E> generateGraph();
+    public Graph<V,E> generateGraph();
 
     /**
      * Resets the random graph to the state that it had after the

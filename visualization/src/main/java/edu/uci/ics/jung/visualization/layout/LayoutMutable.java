@@ -12,7 +12,6 @@
  */
 package edu.uci.ics.jung.visualization.layout;
 
-import edu.uci.ics.graph.Edge;
 
 /**
  * An extended interface for signalling a layout that the
@@ -32,7 +31,7 @@ import edu.uci.ics.graph.Edge;
  * 
  * @author winterf@sourceforge.net
  */
-public interface LayoutMutable<V, E extends Edge<V>> extends Layout<V, E> {
+public interface LayoutMutable<V, E> extends Layout<V, E> {
 
 		void update();
 }

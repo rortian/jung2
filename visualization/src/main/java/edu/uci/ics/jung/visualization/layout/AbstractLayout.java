@@ -23,7 +23,6 @@ import java.util.Set;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 import edu.uci.ics.jung.visualization.VertexLocationFunction;
@@ -39,7 +38,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * @author Danyel Fisher, Scott White
  * @param <V>
  */
-abstract public class AbstractLayout<V, E extends Edge<V>> implements Layout<V,E>, ChangeEventSupport {
+abstract public class AbstractLayout<V, E> implements Layout<V,E>, ChangeEventSupport {
 
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);

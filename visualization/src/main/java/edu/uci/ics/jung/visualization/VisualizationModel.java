@@ -14,7 +14,6 @@ import java.awt.Dimension;
 
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
@@ -24,7 +23,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public interface VisualizationModel<V, E extends Edge<V>> extends ChangeEventSupport {
+public interface VisualizationModel<V, E> extends ChangeEventSupport {
 
     /**
      * 

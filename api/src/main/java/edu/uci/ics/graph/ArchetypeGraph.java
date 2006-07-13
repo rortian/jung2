@@ -13,7 +13,7 @@ package edu.uci.ics.graph;
 
 import java.util.Collection;
 
-public interface ArchetypeGraph<V, E extends Edge>
+public interface ArchetypeGraph<V, E>
 {
     public Collection<E> getEdges();
     
@@ -31,7 +31,9 @@ public interface ArchetypeGraph<V, E extends Edge>
     
     boolean removeVertex(V vertex);
     
-    void addEdge(E e);
+    void addEdge(E e, V v1, V v2);
+    
+    void addDirectedEdge(E e, V v1, V v2);
     
     boolean removeEdge(E edge);
     

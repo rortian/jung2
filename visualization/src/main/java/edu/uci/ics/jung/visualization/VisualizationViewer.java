@@ -39,7 +39,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.decorators.ToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.ToolTipFunctionAdapter;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -59,7 +58,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * @author Tom Nelson
  * @author Danyel Fisher
  */
-public class VisualizationViewer<V, E extends Edge<V>> extends JPanel 
+public class VisualizationViewer<V, E> extends JPanel 
                 implements Transformer, LayoutTransformer, ViewTransformer, 
                 HasGraphLayout<V,E>, ChangeListener, ChangeEventSupport{
 
@@ -776,8 +775,8 @@ public class VisualizationViewer<V, E extends Edge<V>> extends JPanel
 //		iter.hasNext();
 //		) {
 //		    E e = iter.next();
-		    V v1 = e.getEndpoints().getFirst();
-		    V v2 = e.getEndpoints().getSecond();
+		    V v1 = layout.getGraph().getEndpoints(e).getFirst();
+		    V v2 = layout.getGraph().getEndpoints(e).getSecond();
             
             Point2D p = (Point2D) locationMap.get(v1);
             if(p == null) {

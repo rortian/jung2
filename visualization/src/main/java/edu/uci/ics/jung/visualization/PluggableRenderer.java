@@ -31,15 +31,10 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.functors.InstanceofPredicate;
 import org.apache.commons.collections15.functors.TruePredicate;
 
 import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.predicates.EdgePredicate;
-import edu.uci.ics.graph.predicates.SelfLoopEdgePredicate;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
@@ -62,7 +57,7 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeStringer;
 import edu.uci.ics.jung.visualization.decorators.EdgeStrokeFunction;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.NumberEdgeValue;
+import edu.uci.ics.jung.visualization.decorators.NumberDirectionalEdgeValue;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexFontFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
@@ -124,7 +119,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * @author Joshua O'Madadhain
  * @author Tom Nelson
  */
-public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V, E>
+public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
        implements PickedInfo<V>, HasShapeFunctions
 {
     
@@ -171,14 +166,14 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
         new ConstantEdgeStringer<E>(null);
     protected EdgeStrokeFunction<E> edgeStrokeFunction = 
         new ConstantEdgeStrokeFunction<E>(1.0f);
-    protected EdgeArrowFunction<E> edgeArrowFunction = 
-        new DirectionalEdgeArrowFunction<E>(10, 8, 4);    
-    protected Predicate edgeArrowPredicate = InstanceofPredicate.getInstance(DirectedEdge.class);
+    protected EdgeArrowFunction<V,E> edgeArrowFunction = 
+        new DirectionalEdgeArrowFunction<V,E>(10, 8, 4);    
+//    protected Predicate edgeArrowPredicate = InstanceofPredicate.getInstance(DirectedEdge.class);
     protected Predicate<E> edgeIncludePredicate = TruePredicate.getInstance();
     protected EdgeFontFunction<E> edgeFontFunction =
         new ConstantEdgeFontFunction<E>(new Font("Helvetica", Font.PLAIN, 12));
-    protected NumberEdgeValue<E> edgeLabelClosenessFunction = 
-        new ConstantDirectionalEdgeValue<E>(0.5, 0.65);
+    protected NumberDirectionalEdgeValue<V,E> edgeLabelClosenessFunction = 
+        new ConstantDirectionalEdgeValue<V,E>(0.5, 0.65);
     protected EdgeShapeFunction<V,E> edgeShapeFunction = 
         new EdgeShape.QuadCurve<V,E>();
     protected EdgePaintFunction<E> edgePaintFunction =
@@ -206,10 +201,12 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
      * A default GraphLabelRenderer - picked Vertex labels are
      * blue, picked edge labels are cyan
      */
-    protected GraphLabelRenderer<V, E> graphLabelRenderer = 
-        new DefaultGraphLabelRenderer<V, E>(Color.blue, Color.cyan);
+    protected VertexLabelRenderer vertexLabelRenderer = 
+        new DefaultVertexLabelRenderer(Color.blue);
     
-    protected final static EdgePredicate self_loop = SelfLoopEdgePredicate.getInstance();
+    protected EdgeLabelRenderer edgeLabelRenderer = new DefaultEdgeLabelRenderer(Color.cyan);
+    
+//    protected final static EdgePredicate self_loop = SelfLoopEdgePredicate.getInstance();
     
     public PluggableRenderer() 
     {
@@ -219,16 +216,16 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
     /**
      * @return Returns the edgeArrowFunction.
      */
-    public EdgeArrowFunction<E> getEdgeArrowFunction() {
+    public EdgeArrowFunction<V,E> getEdgeArrowFunction() {
         return edgeArrowFunction;
     }
 
     /**
      * @return Returns the edgeArrowPredicate.
      */
-    public Predicate<Edge> getEdgeArrowPredicate() {
-        return edgeArrowPredicate;
-    }
+//    public Predicate<Edge> getEdgeArrowPredicate() {
+//        return edgeArrowPredicate;
+//    }
 
     /**
      * @return Returns the edgeFontFunction.
@@ -247,7 +244,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
     /**
      * @return Returns the edgeLabelClosenessFunction.
      */
-    public NumberEdgeValue<E> getEdgeLabelClosenessFunction() {
+    public NumberDirectionalEdgeValue<V,E> getEdgeLabelClosenessFunction() {
         return edgeLabelClosenessFunction;
     }
 
@@ -365,7 +362,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
      * @see edu.uci.ics.jung.decorators.EdgeArrowFunction
      * @see ArrowFactory
      */
-    public void setEdgeArrowFunction(EdgeArrowFunction<E> eaf)
+    public void setEdgeArrowFunction(EdgeArrowFunction<V,E> eaf)
     {
         this.edgeArrowFunction = eaf;
     }
@@ -373,14 +370,27 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
     /**
      * @return Returns the graphLabelRenderer.
      */
-    public GraphLabelRenderer<V,E> getGraphLabelRenderer() {
-        return graphLabelRenderer;
+    public VertexLabelRenderer getVertexLabelRenderer() {
+        return vertexLabelRenderer;
     }
     /**
      * @param graphLabelRenderer The graphLabelRenderer to set.
      */
-    public void setGraphLabelRenderer(GraphLabelRenderer<V, E> graphLabelRenderer) {
-        this.graphLabelRenderer = graphLabelRenderer;
+    public void setVertexLabelRenderer(VertexLabelRenderer vertexLabelRenderer) {
+        this.vertexLabelRenderer = vertexLabelRenderer;
+    }
+
+    /**
+     * @return Returns the graphLabelRenderer.
+     */
+    public EdgeLabelRenderer getEdgeLabelRenderer() {
+        return edgeLabelRenderer;
+    }
+    /**
+     * @param graphLabelRenderer The graphLabelRenderer to set.
+     */
+    public void setEdgeLabelRenderer(EdgeLabelRenderer edgeLabelRenderer) {
+        this.edgeLabelRenderer = edgeLabelRenderer;
     }
     /**
      * Sets the <code>EdgeArrowPredicate</code> that specifies whether
@@ -390,10 +400,10 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
      * <br>Default: only directed edges have arrows (<code>Graph.DIRECTED_EDGE</code> instance)
      * @see EdgeArrowFunction
      */
-    public void setEdgeArrowPredicate(Predicate<Edge> p)
-    {
-        this.edgeArrowPredicate = p;
-    }
+//    public void setEdgeArrowPredicate(Predicate<Edge> p)
+//    {
+//        this.edgeArrowPredicate = p;
+//    }
 
     /**
      * Sets the <code>EdgeColorFunction</code> that specifies the paint to
@@ -448,7 +458,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
      * (<code>ConstantDirectionalEdgeValue</code>)
      * @see edu.uci.ics.jung.graph.decorators.NumberEdgeValue
      */
-    public void setEdgeLabelClosenessFunction(NumberEdgeValue<E> nev)
+    public void setEdgeLabelClosenessFunction(NumberDirectionalEdgeValue<V,E> nev)
     {
         this.edgeLabelClosenessFunction = nev;
     }
@@ -648,7 +658,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
             return;
         
         // don't draw edge if either incident vertex is not drawn
-        Pair<V> endpoints = e.getEndpoints();
+        Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         if (!vertexIncludePredicate.evaluate(v1) || 
@@ -680,7 +690,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
     protected void drawSimpleEdge(Graphics2D g, Graph<V,E> graph, E e, 
     		int x1, int y1, int x2, int y2)
     {
-        Pair<V> endpoints = e.getEndpoints();
+        Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         boolean isLoop = v1.equals(v2);
@@ -747,10 +757,10 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
             // see if arrows are too small to bother drawing
             if(scalex < .3 || scaley < .3) return;
             
-            if (edgeArrowPredicate.evaluate(e)) {
+            if (graph.isDirected(e)) {
                 
                 Shape destVertexShape = 
-                    vertexShapeFunction.getShape(e.getEndpoints().getSecond());
+                    vertexShapeFunction.getShape(graph.getEndpoints(e).getSecond());
                 AffineTransform xf = AffineTransform.getTranslateInstance(x2, y2);
                 destVertexShape = xf.createTransformedShape(destVertexShape);
                 
@@ -760,14 +770,14 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
                     AffineTransform at = 
                         getArrowTransform((GeneralPath)edgeShape, destVertexShape);
                     if(at == null) return;
-                    Shape arrow = edgeArrowFunction.getArrow(e);
+                    Shape arrow = edgeArrowFunction.getArrow(graph, e);
                     arrow = at.createTransformedShape(arrow);
                     // note that arrows implicitly use the edge's draw paint
                     g.fill(arrow);
                 }
-                if (e instanceof DirectedEdge == false) {
+                if (graph.isDirected(e) == false) {
                     Shape vertexShape = 
-                        vertexShapeFunction.getShape(e.getEndpoints().getFirst());
+                        vertexShapeFunction.getShape(graph.getEndpoints(e).getFirst());
                     xf = AffineTransform.getTranslateInstance(x1, y1);
                     vertexShape = xf.createTransformedShape(vertexShape);
                     
@@ -776,7 +786,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
                     if(arrowHit) {
                         AffineTransform at = getReverseArrowTransform((GeneralPath)edgeShape, vertexShape, !isLoop);
                         if(at == null) return;
-                        Shape arrow = edgeArrowFunction.getArrow(e);
+                        Shape arrow = edgeArrowFunction.getArrow(graph, e);
                         arrow = at.createTransformedShape(arrow);
                         g.fill(arrow);
                     }
@@ -1010,15 +1020,15 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
         }
     }
 
-   public Component prepareRenderer(GraphLabelRenderer<V,E> graphLabelRenderer, Object value, 
+   public Component prepareRenderer(VertexLabelRenderer graphLabelRenderer, Object value, 
            boolean isSelected, V vertex) {
-       return graphLabelRenderer.getGraphLabelRendererComponent(screenDevice, value, 
+       return vertexLabelRenderer.<V>getGraphLabelRendererComponent(screenDevice, value, 
                vertexFontFunction.getFont(vertex), isSelected, vertex);
    }
 
-   public Component prepareRenderer(GraphLabelRenderer<V,E> renderer, Object value, 
+   public Component prepareRenderer(EdgeLabelRenderer renderer, Object value, 
            boolean isSelected, E edge) {
-       return graphLabelRenderer.getGraphLabelRendererComponent(screenDevice, value, 
+       return edgeLabelRenderer.<E>getGraphLabelRendererComponent(screenDevice, value, 
                edgeFontFunction.getFont(edge), isSelected, edge);
    }
 
@@ -1036,7 +1046,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
         int distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
 
-        double closeness = edgeLabelClosenessFunction.getNumber(e).doubleValue();
+        double closeness = edgeLabelClosenessFunction.getNumber(graph, e).doubleValue();
 
         int posX = (int) (x1 + (closeness) * distX);
         int posY = (int) (y1 + (closeness) * distY);
@@ -1044,7 +1054,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
         int xDisplacement = (int) (LABEL_OFFSET * (distY / totalLength));
         int yDisplacement = (int) (LABEL_OFFSET * (-distX / totalLength));
         
-        Component component = prepareRenderer(graphLabelRenderer, label, isEdgePicked(e), e);
+        Component component = prepareRenderer(edgeLabelRenderer, label, isEdgePicked(e), e);
         
         Dimension d = component.getPreferredSize();
 
@@ -1066,7 +1076,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
         xform.translate(posX+xDisplacement, posY+yDisplacement);
         double dx = x2 - x1;
         double dy = y2 - y1;
-        if(graphLabelRenderer.isRotateEdgeLabels()) {
+        if(edgeLabelRenderer.isRotateEdgeLabels()) {
             double theta = Math.atan2(dy, dx);
             if(dx < 0) {
                 theta += Math.PI;
@@ -1185,7 +1195,7 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
      */
     protected void labelVertex(Graphics g, V v, String label, int x, int y)
     {
-        Component component = prepareRenderer(graphLabelRenderer, label, isPicked(v), v);
+        Component component = prepareRenderer(vertexLabelRenderer, label, isPicked(v), v);
 
         Dimension d = component.getPreferredSize();
         
@@ -1246,12 +1256,12 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
         this.rendererPane = rendererPane;
     }
 
-    public ParallelEdgeIndexFunction getParallelEdgeIndexFunction() {
+    public ParallelEdgeIndexFunction<V,E> getParallelEdgeIndexFunction() {
         return parallelEdgeIndexFunction;
     }
 
     public void setParallelEdgeIndexFunction(
-            ParallelEdgeIndexFunction parallelEdgeIndexFunction) {
+            ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
         this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
     }
 
@@ -1272,4 +1282,15 @@ public class PluggableRenderer<V, E extends Edge<V>> extends AbstractRenderer<V,
 	public void setPickedVertexState(PickedState<V> pickedState) {
 		this.pickedVertexState = pickedState;
 	}
+    
+    public static interface EdgePredicate<V,E> {
+        boolean evaluate(Graph<V,E> graph, E edge);
+    }
+    
+    public static class DirectedEdgePredicate<V,E> implements EdgePredicate<V,E> {
+
+        public boolean evaluate(Graph<V, E> graph, E edge) {
+            return graph.isDirected(edge);
+        }
+    }
 }

@@ -16,8 +16,6 @@ package edu.uci.ics.jung.visualization.decorators;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * 
  * A EdgeWeightLabeller applies a label to the edges of a Graph. 
@@ -35,7 +33,7 @@ import edu.uci.ics.graph.Edge;
  * per-Graph.
  *
  */
-public class EdgeWeightLabeller<E extends Edge> implements NumberEdgeValue<E> {
+public class EdgeWeightLabeller<E> implements NumberEdgeValue<E> {
 
 	/**
 	 * Gets the weight of a particualr edge. Throws an exception if

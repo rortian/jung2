@@ -13,7 +13,6 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
 import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.VertexLocationFunction;
 
@@ -44,7 +43,7 @@ import edu.uci.ics.jung.visualization.VertexLocationFunction;
  * 
  * @author danyelf
  */
-public interface Layout<V, E extends Edge<V>> extends VertexLocationFunction<V> {
+public interface Layout<V, E> extends VertexLocationFunction<V> {
     
 	/**
 	 * Initializes fields in the node that may not have

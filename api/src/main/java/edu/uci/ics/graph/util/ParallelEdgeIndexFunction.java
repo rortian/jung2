@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.graph.util;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 
@@ -25,7 +24,7 @@ import edu.uci.ics.graph.Graph;
  * @author Tom Nelson - RABA Technologies
  *
  */
-public interface ParallelEdgeIndexFunction<V,E extends Edge<V>> {
+public interface ParallelEdgeIndexFunction<V,E> {
     
     int getIndex(Graph<V,E> graph, E e);
 

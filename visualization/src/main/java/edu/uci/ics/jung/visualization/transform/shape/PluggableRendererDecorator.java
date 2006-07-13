@@ -23,23 +23,22 @@ import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Predicate;
 
-import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
-import edu.uci.ics.jung.visualization.GraphLabelRenderer;
+import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.HasShapeFunctions;
 import edu.uci.ics.jung.visualization.PickedInfo;
 import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.Renderer;
+import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.decorators.EdgeArrowFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeFontFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeStringer;
 import edu.uci.ics.jung.visualization.decorators.EdgeStrokeFunction;
-import edu.uci.ics.jung.visualization.decorators.NumberEdgeValue;
+import edu.uci.ics.jung.visualization.decorators.NumberDirectionalEdgeValue;
 import edu.uci.ics.jung.visualization.decorators.VertexFontFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexPaintFunction;
@@ -54,7 +53,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * @author Tom Nelson - RABA Technologies
  *
  */
-public abstract class PluggableRendererDecorator<V, E extends Edge<V>> 
+public abstract class PluggableRendererDecorator<V,E> 
     implements Renderer<V,E>, PickedInfo<V>, HasShapeFunctions {
 
     protected PluggableRenderer<V,E> delegate;
@@ -66,35 +65,35 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#getEdgeArrowFunction()
      */
-    public EdgeArrowFunction<E> getEdgeArrowFunction() {
+    public EdgeArrowFunction<V,E> getEdgeArrowFunction() {
         return delegate.getEdgeArrowFunction();
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#getEdgeArrowPredicate()
      */
-    public Predicate getEdgeArrowPredicate() {
-        return delegate.getEdgeArrowPredicate();
-    }
+//    public Predicate getEdgeArrowPredicate() {
+//        return delegate.getEdgeArrowPredicate();
+//    }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#getEdgeFontFunction()
      */
-    public EdgeFontFunction getEdgeFontFunction() {
+    public EdgeFontFunction<E> getEdgeFontFunction() {
         return delegate.getEdgeFontFunction();
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#getEdgeIncludePredicate()
      */
-    public Predicate getEdgeIncludePredicate() {
+    public Predicate<E> getEdgeIncludePredicate() {
         return delegate.getEdgeIncludePredicate();
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#getEdgeLabelClosenessFunction()
      */
-    public NumberEdgeValue<E> getEdgeLabelClosenessFunction() {
+    public NumberDirectionalEdgeValue<V,E> getEdgeLabelClosenessFunction() {
         return delegate.getEdgeLabelClosenessFunction();
     }
 
@@ -186,7 +185,7 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /**
      * @param delegate The delegate to set.
      */
-    public void setDelegate(PluggableRenderer delegate) {
+    public void setDelegate(PluggableRenderer<V,E> delegate) {
         this.delegate = delegate;
     }
 
@@ -208,8 +207,12 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#getGraphLabelRenderer()
      */
-    public GraphLabelRenderer<V,E> getGraphLabelRenderer() {
-        return delegate.getGraphLabelRenderer();
+    public VertexLabelRenderer getVertexLabelRenderer() {
+        return delegate.getVertexLabelRenderer();
+    }
+    
+    public EdgeLabelRenderer getEdgeLabelRenderer() {
+        return delegate.getEdgeLabelRenderer();
     }
 
     /* (non-Javadoc)
@@ -275,14 +278,14 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#prepareRenderer(edu.uci.ics.jung.visualization.GraphLabelRenderer, java.lang.Object, boolean, edu.uci.ics.jung.graph.Edge)
      */
-    public Component prepareRenderer(GraphLabelRenderer<V,E> renderer, Object value, boolean isSelected, E edge) {
+    public Component prepareRenderer(EdgeLabelRenderer renderer, Object value, boolean isSelected, E edge) {
         return delegate.prepareRenderer(renderer, value, isSelected, edge);
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#prepareRenderer(edu.uci.ics.jung.visualization.GraphLabelRenderer, java.lang.Object, boolean, edu.uci.ics.jung.graph.Vertex)
      */
-    public Component prepareRenderer(GraphLabelRenderer<V,E> graphLabelRenderer, Object value, boolean isSelected, V vertex) {
+    public Component prepareRenderer(VertexLabelRenderer graphLabelRenderer, Object value, boolean isSelected, V vertex) {
         return delegate.prepareRenderer(graphLabelRenderer, value, isSelected, vertex);
     }
 
@@ -296,16 +299,16 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeArrowFunction(edu.uci.ics.jung.graph.decorators.EdgeArrowFunction)
      */
-    public void setEdgeArrowFunction(EdgeArrowFunction<E> eaf) {
+    public void setEdgeArrowFunction(EdgeArrowFunction<V,E> eaf) {
         delegate.setEdgeArrowFunction(eaf);
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeArrowPredicate(org.apache.commons.collections.Predicate)
      */
-    public void setEdgeArrowPredicate(Predicate p) {
-        delegate.setEdgeArrowPredicate(p);
-    }
+//    public void setEdgeArrowPredicate(Predicate p) {
+//        delegate.setEdgeArrowPredicate(p);
+//    }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeColorFunction(edu.uci.ics.jung.graph.decorators.EdgeColorFunction)
@@ -331,7 +334,7 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeLabelClosenessFunction(edu.uci.ics.jung.graph.decorators.NumberEdgeValue)
      */
-    public void setEdgeLabelClosenessFunction(NumberEdgeValue<E> nev) {
+    public void setEdgeLabelClosenessFunction(NumberDirectionalEdgeValue<V,E> nev) {
         delegate.setEdgeLabelClosenessFunction(nev);
     }
 
@@ -345,29 +348,33 @@ public abstract class PluggableRendererDecorator<V, E extends Edge<V>>
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeShapeFunction(edu.uci.ics.jung.graph.decorators.EdgeShapeFunction)
      */
-    public void setEdgeShapeFunction(EdgeShapeFunction impl) {
+    public void setEdgeShapeFunction(EdgeShapeFunction<V,E> impl) {
         delegate.setEdgeShapeFunction(impl);
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeStringer(edu.uci.ics.jung.graph.decorators.EdgeStringer)
      */
-    public void setEdgeStringer(EdgeStringer es) {
+    public void setEdgeStringer(EdgeStringer<E> es) {
         delegate.setEdgeStringer(es);
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setEdgeStrokeFunction(edu.uci.ics.jung.graph.decorators.EdgeStrokeFunction)
      */
-    public void setEdgeStrokeFunction(EdgeStrokeFunction esf) {
+    public void setEdgeStrokeFunction(EdgeStrokeFunction<E> esf) {
         delegate.setEdgeStrokeFunction(esf);
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.PluggableRenderer#setGraphLabelRenderer(edu.uci.ics.jung.visualization.GraphLabelRenderer)
      */
-    public void setGraphLabelRenderer(GraphLabelRenderer graphLabelRenderer) {
-        delegate.setGraphLabelRenderer(graphLabelRenderer);
+    public void setVertexLabelRenderer(VertexLabelRenderer vertexLabelRenderer) {
+        delegate.setVertexLabelRenderer(vertexLabelRenderer);
+    }
+
+    public void setEdgeLabelRenderer(EdgeLabelRenderer edgeLabelRenderer) {
+        delegate.setEdgeLabelRenderer(edgeLabelRenderer);
     }
 
     /* (non-Javadoc)

@@ -18,7 +18,6 @@ import java.awt.geom.Point2D;
 
 import javax.swing.SwingUtilities;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
@@ -34,7 +33,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  *
  * 
  */
-public class SimpleGraphMouse<V, E extends Edge<V>> extends MouseAdapter
+public class SimpleGraphMouse<V, E> extends MouseAdapter
 	implements VisualizationViewer.GraphMouse {
 	
 	/**
@@ -62,7 +61,7 @@ public class SimpleGraphMouse<V, E extends Edge<V>> extends MouseAdapter
 	 * create an instance for the passed VisualizationViewer
 	 * @param vv
 	 */
-	public SimpleGraphMouse(VisualizationViewer vv) {
+	public SimpleGraphMouse(VisualizationViewer<V,E> vv) {
 	    this.vv = vv;
 	}
 
@@ -145,7 +144,7 @@ public class SimpleGraphMouse<V, E extends Edge<V>> extends MouseAdapter
 	public void mouseDragged(MouseEvent e) {
 		if (vertexToDrag != null) {
 		    Point2D p = vv.inverseTransform(e.getPoint());
-	        Layout layout = vv.getGraphLayout();
+	        Layout<V,E> layout = vv.getGraphLayout();
 	        layout.forceMove(vertexToDrag, p.getX()-offsetx, p.getY()-offsety);
 	        vv.repaint();
 		}

@@ -13,15 +13,13 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Paint;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * Provides the same <code>Paint</code> for any specified edge.
  * 
  * @author Tom Nelson - RABA Technologies
  * @author Joshua O'Madadhain
  */
-public class ConstantEdgePaintFunction<E extends Edge> implements EdgePaintFunction<E> {
+public class ConstantEdgePaintFunction<E> implements EdgePaintFunction<E> {
 
     protected Paint draw_paint;
     protected Paint fill_paint;

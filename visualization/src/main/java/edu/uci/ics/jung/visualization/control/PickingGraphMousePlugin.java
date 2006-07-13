@@ -26,7 +26,6 @@ import java.util.ConcurrentModificationException;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.PickSupport;
 import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -43,7 +42,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * 
  * @author Tom Nelson
  */
-public class PickingGraphMousePlugin<V, E extends Edge<V>> extends AbstractGraphMousePlugin
+public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     implements MouseListener, MouseMotionListener {
 
 	/**

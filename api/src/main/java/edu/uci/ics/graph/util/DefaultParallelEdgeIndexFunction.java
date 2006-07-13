@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -32,14 +31,14 @@ import edu.uci.ics.graph.Graph;
  * @author Tom Nelson
  *
  */
-public class DefaultParallelEdgeIndexFunction<V,E extends Edge<V>> implements ParallelEdgeIndexFunction<V,E>
+public class DefaultParallelEdgeIndexFunction<V,E> implements ParallelEdgeIndexFunction<V,E>
 {
     protected Map<E, Integer> edge_index = new HashMap<E, Integer>();
     
     private DefaultParallelEdgeIndexFunction() {
     }
     
-    public static <V,E extends Edge<V>> DefaultParallelEdgeIndexFunction<V,E> getInstance() {
+    public static <V,E> DefaultParallelEdgeIndexFunction<V,E> getInstance() {
         return new DefaultParallelEdgeIndexFunction<V,E>();
     }
     /**
@@ -57,7 +56,7 @@ public class DefaultParallelEdgeIndexFunction<V,E extends Edge<V>> implements Pa
     }
 
     protected Integer getIndexInternal(Graph<V,E> graph, E e) {
-        Pair<V> endpoints = e.getEndpoints();
+        Pair<V> endpoints = graph.getEndpoints(e);
         V u = endpoints.getFirst();
         V v = endpoints.getSecond();
         Collection<E> commonEdgeSet = new HashSet<E>(graph.getIncidentEdges(u));
@@ -65,7 +64,7 @@ public class DefaultParallelEdgeIndexFunction<V,E extends Edge<V>> implements Pa
         int count = 0;
         for(E other : commonEdgeSet) {
             if (e.equals(other) == false && 
-            			other.getEndpoints().getFirst().equals(u)) {
+            			graph.getEndpoints(other).getFirst().equals(u)) {
                 edge_index.put(other, new Integer(count));
                 count++;
             }

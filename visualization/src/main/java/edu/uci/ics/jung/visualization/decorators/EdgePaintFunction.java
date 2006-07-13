@@ -15,8 +15,6 @@ package edu.uci.ics.jung.visualization.decorators;
 import java.awt.Color;
 import java.awt.Paint;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * This class replaces EdgeColorFunction. (All COLORs are PAINTs, so this is a
  * direct drop-in replacement.) Use EdgeColorToEdgePaintConvertor if you
@@ -40,7 +38,7 @@ import edu.uci.ics.graph.Edge;
  * @author Tom Nelson - RABA Technologies
  * @author Joshua O'Madadhain
  */
-public interface EdgePaintFunction<E extends Edge>  {
+public interface EdgePaintFunction<E>  {
     
     public Paint getDrawPaint(E e);
 

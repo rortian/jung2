@@ -16,14 +16,9 @@ package edu.uci.ics.jung.algorithms.importance;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
-import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 
@@ -54,7 +49,7 @@ import edu.uci.ics.graph.Graph;
  * 
  * @author Joshua O'Madadhain
  */
-public class VoltageRanker<V, E extends Edge<V>>
+public class VoltageRanker<V, E>
 {
 //    protected NumberEdgeValue edge_weights;
     protected Map<E,Number> edge_weights = new HashMap<E,Number>();

@@ -18,21 +18,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
-public class SimpleSparseGraph<V,E extends Edge<V>> 
+public class SimpleSparseGraph<V,E> 
     extends SimpleAbstractSparseGraph<V,E>
     implements Graph<V,E>
 {
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
+    protected Set<E> directedEdges;
 
     public SimpleSparseGraph()
     {
         vertices = new HashMap<V, Set<E>>();
         edges = new HashMap<E, Pair<V>>();
+        directedEdges = new HashSet<E>();
     }
 
     public Collection<E> getEdges()
@@ -68,9 +69,15 @@ public class SimpleSparseGraph<V,E extends Edge<V>>
         return true;
     }
     
-    public void addEdge(E edge) {
-    	addEdge(edge, edge.getEndpoints().getFirst(), edge.getEndpoints().getSecond());
+    public void addDirectedEdge(E edge, V v1, V v2) {
+        directedEdges.add(edge);
+        addEdge(edge, v1, v2);
     }
+    
+    public void addUndirectedEdge(E e, V v1, V v2) {
+        addEdge(e, v1, v2);
+    }
+    
     public void addEdge(E edge, V v1, V v2)
     {
         if (edges.containsKey(edge))
@@ -188,5 +195,9 @@ public class SimpleSparseGraph<V,E extends Edge<V>>
     public boolean isDest(V vertex, E edge)
     {
         return vertex.equals(this.getEndpoints(edge).getSecond());
+    }
+
+    public boolean isDirected(E edge) {
+        return directedEdges.contains(edge);
     }
 }

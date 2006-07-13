@@ -11,14 +11,13 @@
 */
 package edu.uci.ics.graph.predicates;
 
-import edu.uci.ics.graph.Edge;
 
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public abstract class EdgePredicate extends GPredicate<Edge>
+public abstract class EdgePredicate<T> extends GPredicate<T>
 //implements Predicate
 {
     /**

@@ -19,7 +19,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ConcurrentModificationException;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
@@ -31,10 +30,10 @@ import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
  * @author Tom Nelson - RABA Technologies
  *
  */
-public class ShapePickSupport<V, E extends Edge<V>> implements PickSupport<V,E> {
+public class ShapePickSupport<V, E> implements PickSupport<V,E> {
 
-    protected HasGraphLayout hasGraphLayout;
-    protected HasShapeFunctions hasShapeFunctions;
+    protected HasGraphLayout<V,E> hasGraphLayout;
+    protected HasShapeFunctions<V,E> hasShapeFunctions;
     protected float pickSize;
     protected LayoutTransformer layoutTransformer;
     
@@ -47,8 +46,8 @@ public class ShapePickSupport<V, E extends Edge<V>> implements PickSupport<V,E> 
      * @param hasShapeFunctions source of Vertex and Edge shapes.
      * @param pickSize how large to make the pick footprint for line edges
      */
-    public ShapePickSupport(HasGraphLayout hasGraphLayout, 
-            LayoutTransformer layoutTransformer, HasShapeFunctions hasShapeFunctions, 
+    public ShapePickSupport(HasGraphLayout<V,E> hasGraphLayout, 
+            LayoutTransformer layoutTransformer, HasShapeFunctions<V,E> hasShapeFunctions, 
             float pickSize) {
         this.hasGraphLayout = hasGraphLayout;
         this.hasShapeFunctions = hasShapeFunctions;
@@ -75,14 +74,14 @@ public class ShapePickSupport<V, E extends Edge<V>> implements PickSupport<V,E> 
      * always get the current Layout and the current Renderer
      * from thecomponent it supports picking on.
      */
-    public void setHasGraphLayout(HasGraphLayout hasGraphLayout) {
+    public void setHasGraphLayout(HasGraphLayout<V,E> hasGraphLayout) {
         this.hasGraphLayout = hasGraphLayout;
     }
 
     /**
      * @param hasShapes The hasShapes to set.
      */
-    public void setHasShapes(HasShapeFunctions hasShapes) {
+    public void setHasShapes(HasShapeFunctions<V,E> hasShapes) {
         this.hasShapeFunctions = hasShapes;
     }
     /**
@@ -169,7 +168,7 @@ public class ShapePickSupport<V, E extends Edge<V>> implements PickSupport<V,E> 
 		            
 		            if(hasShapeFunctions != null) {
 //		                E e = iter.next();
-		                Pair<V> pair = e.getEndpoints();
+		                Pair<V> pair = layout.getGraph().getEndpoints(e);
 		                V v1 = pair.getFirst();
 		                V v2 = pair.getSecond();
 		                boolean isLoop = v1.equals(v2);

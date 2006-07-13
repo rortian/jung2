@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
@@ -68,10 +67,10 @@ import edu.uci.ics.graph.util.Pair;
  * @author Scott White
  * @author Joshua O'Madadhain
  */
-public class BarabasiAlbertGenerator 
-	implements EvolvingGraphGenerator<Integer,Edge<Integer>>
+public class BarabasiAlbertGenerator
+	implements EvolvingGraphGenerator<Integer,Number>
 {
-    private Graph<Integer, Edge<Integer>> mGraph = null;
+    private Graph<Integer, Number> mGraph = null;
     private int mNumEdgesToAttachPerStep;
     private int mElapsedTimeSteps;
     private Random mRandom;
@@ -143,7 +142,7 @@ public class BarabasiAlbertGenerator
 //        if (directed)
 //            mGraph = new SimpleDirectedSparseGraph<Integer, DirectedEdge<Integer>>();
 //        else
-            mGraph = new SimpleSparseGraph<Integer, Edge<Integer>>();
+            mGraph = new SimpleSparseGraph<Integer, Number>();
 //        if (parallel)
 //            mGraph.getEdgeConstraints().remove(Graph.NOT_PARALLEL_EDGE);
         vertex_index = new Vector<Integer>(2*init_vertices);
@@ -160,8 +159,8 @@ public class BarabasiAlbertGenerator
         mElapsedTimeSteps = 0;
     }
 
-    private Edge<Integer> createRandomEdge(Collection<Integer> preexistingNodes,
-    		Integer newVertex, Set<Pair<Integer>> added_pairs) 
+    private Number createRandomEdge(Collection<Integer> preexistingNodes,
+    		Integer newVertex, Map<Number,Pair<Integer>> added_pairs) 
     {
         Integer attach_point;
         boolean created_edge = false;
@@ -175,7 +174,7 @@ public class BarabasiAlbertGenerator
             // if parallel edges are not allowed, skip attach_point if <newVertex, attach_point>
             // already exists; note that because of the way edges are added, we only need to check
             // the list of candidate edges for duplicates.
-            if (!parallel && added_pairs.contains(endpoints))
+            if (!parallel && added_pairs.containsValue(endpoints))
                 continue;
             
             double degree = directed ? 
@@ -192,18 +191,12 @@ public class BarabasiAlbertGenerator
         }
         while (!created_edge);
 
-        Edge<Integer> to_add;
+        Number to_add = new Double(Math.random());
+        added_pairs.put(to_add, endpoints);
         
-        if (directed)
-        {
-            to_add = new DirectedSparseEdge<Integer>(newVertex, attach_point);
-            added_pairs.add(endpoints);
-        }
-        else
-        {
-            to_add = new UndirectedSparseEdge<Integer>(newVertex, attach_point);
-            added_pairs.add(endpoints);
-            added_pairs.add(new Pair<Integer>(attach_point, newVertex));
+        if (directed == false) {
+
+            added_pairs.put(to_add, new Pair<Integer>(attach_point, newVertex));
         }
         
         return to_add;
@@ -230,14 +223,18 @@ public class BarabasiAlbertGenerator
         // generate and store the new edges; don't add them to the graph
         // yet because we don't want to bias the degree calculations
         // (all new edges in a timestep should be added in parallel)
-        List<Edge<Integer>> edges = new LinkedList<Edge<Integer>>();
-        HashSet<Pair<Integer>> added_pairs = new HashSet<Pair<Integer>>(mNumEdgesToAttachPerStep*3);
+        List<Number> edges = new LinkedList<Number>();
+        HashMap<Number, Pair<Integer>> added_pairs = 
+            new HashMap<Number, Pair<Integer>>(mNumEdgesToAttachPerStep*3);
         for (int i = 0; i < mNumEdgesToAttachPerStep; i++) 
             edges.add(createRandomEdge(preexistingNodes, newVertex, added_pairs));
         
         // add edges to graph, now that we have them all
-        for(Edge<Integer> edge : edges) {
-            mGraph.addEdge(edge);
+        for(Number edge : edges) {
+            if(directed) {
+                mGraph.addDirectedEdge(edge, added_pairs.get(edge).getFirst(), added_pairs.get(edge).getSecond());
+            }
+            mGraph.addEdge(edge, added_pairs.get(edge).getFirst(), added_pairs.get(edge).getSecond());
         }
         // now that we're done attaching edges to this new vertex, 
         // add it to the index
@@ -254,7 +251,7 @@ public class BarabasiAlbertGenerator
         return mElapsedTimeSteps;
     }
 
-    public Graph<Integer, Edge<Integer>> generateGraph() {
+    public Graph<Integer, Number> generateGraph() {
         return mGraph;
     }
 

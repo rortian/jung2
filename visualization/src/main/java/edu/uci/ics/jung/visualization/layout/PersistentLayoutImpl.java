@@ -26,8 +26,6 @@ import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.graph.Edge;
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
@@ -42,7 +40,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * 
  *  
  */
-public class PersistentLayoutImpl<V, E extends Edge<V>> extends LayoutDecorator<V,E>
+public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
     implements PersistentLayout<V,E> {
 
     protected DefaultChangeEventSupport changeSupport =

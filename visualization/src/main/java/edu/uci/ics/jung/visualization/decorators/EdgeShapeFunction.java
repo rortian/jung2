@@ -11,7 +11,6 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Shape;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -20,7 +19,7 @@ import edu.uci.ics.graph.Graph;
  *  
  * @author Tom Nelson
  */
-public interface EdgeShapeFunction<V,E extends Edge<V>> {
+public interface EdgeShapeFunction<V,E> {
 
     /**
      * Returns the <code>Shape</code> associated with <code>e</code>.

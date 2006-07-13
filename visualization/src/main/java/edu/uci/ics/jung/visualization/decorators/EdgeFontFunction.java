@@ -13,13 +13,11 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Font;
 
-import edu.uci.ics.graph.Edge;
-
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public interface EdgeFontFunction<E extends Edge> {
+public interface EdgeFontFunction<E> {
     public Font getFont(E e);
 }

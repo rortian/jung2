@@ -13,7 +13,6 @@
  */
 package edu.uci.ics.jung.visualization;
 
-import edu.uci.ics.graph.Edge;
 
 
 /**
@@ -25,7 +24,7 @@ import edu.uci.ics.graph.Edge;
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
-public class RadiusPickSupport<V, E extends Edge<V>> 
+public class RadiusPickSupport<V, E> 
     extends RadiusGraphElementAccessor<V, E> implements PickSupport<V,E> {
     
     protected HasGraphLayout<V, E> hasGraphLayout;

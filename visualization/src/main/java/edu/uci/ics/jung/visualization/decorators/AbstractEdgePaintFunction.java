@@ -13,8 +13,6 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Paint;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * An implementation of <code>EdgePaintFunction</code> that is appropriate for 
  * edge shapes that are not filled, such as lines or curves.
@@ -23,7 +21,7 @@ import edu.uci.ics.graph.Edge;
  * 
  * @author Joshua O'Madadhain
  */
-public abstract class AbstractEdgePaintFunction<E extends Edge> implements EdgePaintFunction<E>
+public abstract class AbstractEdgePaintFunction<E> implements EdgePaintFunction<E>
 {
     /**
      * @see edu.uci.ics.jung.graph.decorators.EdgePaintFunction#getFillPaint(edu.uci.ics.jung.graph.Edge)

@@ -14,7 +14,6 @@ import java.util.Map;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -22,7 +21,7 @@ import edu.uci.ics.graph.Graph;
  * 
  * @author Scott White, Yan-Biao Boey, Danyel Fisher
  */
-public class FRLayout<V, E extends Edge<V>> extends AbstractLayout<V, E> implements LayoutMutable<V, E> {
+public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutable<V, E> {
 
 //    private static final Object FR_KEY = "edu.uci.ics.jung.FR_Visualization_Key";
 

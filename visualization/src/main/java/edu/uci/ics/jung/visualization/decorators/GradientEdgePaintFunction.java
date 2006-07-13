@@ -16,8 +16,6 @@ import java.awt.GradientPaint;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.HasGraphLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -33,15 +31,15 @@ import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
  * 
  * @author Joshua O'Madadhain
  */
-public class GradientEdgePaintFunction<V, E extends Edge<V>> extends AbstractEdgePaintFunction<E>
+public class GradientEdgePaintFunction<V, E> extends AbstractEdgePaintFunction<E>
 {
     protected Color c1;
     protected Color c2;
-    HasGraphLayout vv;
+    HasGraphLayout<V,E> vv;
     LayoutTransformer transformer;
     
     public GradientEdgePaintFunction(Color c1, Color c2, 
-            HasGraphLayout vv, LayoutTransformer transformer)
+            HasGraphLayout<V,E> vv, LayoutTransformer transformer)
     {
         this.c1 = c1;
         this.c2 = c2;
@@ -52,7 +50,7 @@ public class GradientEdgePaintFunction<V, E extends Edge<V>> extends AbstractEdg
     public Paint getDrawPaint(E e)
     {
         Layout<V, E> layout = vv.getGraphLayout();
-        Pair<V> p = e.getEndpoints();
+        Pair<V> p = layout.getGraph().getEndpoints(e);
         V b = p.getFirst();
         V f = p.getSecond();
         Point2D pb = transformer.layoutTransform(layout.getLocation(b));
@@ -61,7 +59,7 @@ public class GradientEdgePaintFunction<V, E extends Edge<V>> extends AbstractEdg
         float yB = (float) pb.getY();
         float xF = (float) pf.getX();
         float yF = (float) pf.getY();
-        if ((e instanceof DirectedEdge) == false) 
+        if ((layout.getGraph().isDirected(e)) == false) 
         {
             xF = (xF + xB) / 2;
             yF = (yF + yB) / 2;

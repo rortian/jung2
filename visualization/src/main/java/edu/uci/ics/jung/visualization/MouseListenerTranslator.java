@@ -16,14 +16,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * This class translates mouse clicks into vertex clicks
  * 
  * @author danyelf
  */
-public class MouseListenerTranslator<V, E extends Edge<V>> extends MouseAdapter {
+public class MouseListenerTranslator<V, E> extends MouseAdapter {
 
 	private VisualizationViewer<V,E> vv;
 	private GraphMouseListener<V> gel;

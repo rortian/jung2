@@ -14,8 +14,6 @@ import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import edu.uci.ics.graph.Edge;
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
 
@@ -28,7 +26,7 @@ import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
  *
  *
  */
-public class SubLayoutDecorator<V, E extends Edge<V>> extends LayoutDecorator<V,E> {
+public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
 
     final protected Collection<SubLayout<V>> subLayouts = 
         new LinkedHashSet<SubLayout<V>>();

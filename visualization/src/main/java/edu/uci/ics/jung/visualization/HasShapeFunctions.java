@@ -19,10 +19,10 @@ import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public interface HasShapeFunctions {
+public interface HasShapeFunctions<V,E> {
     
-    VertexShapeFunction getVertexShapeFunction();
+    VertexShapeFunction<V> getVertexShapeFunction();
     
-    EdgeShapeFunction getEdgeShapeFunction();
+    EdgeShapeFunction<V,E> getEdgeShapeFunction();
 
 }

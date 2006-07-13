@@ -1,8 +1,7 @@
 package edu.uci.ics.jung.visualization.util;
 
-import edu.uci.ics.graph.Edge;
 
-public interface GraphElementFactory<V, E extends Edge<V>> {
+public interface GraphElementFactory<V, E> {
     
     E createDirectedEdge(V v, V u);
     E createUndirectedEdge(V v, V u);

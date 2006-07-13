@@ -12,15 +12,13 @@ package edu.uci.ics.jung.visualization.decorators;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * An implementation of <code>NumberEdgeValue</code> that stores the values
  * in the UserData repository.
  *  
  * @author Joshua O'Madadhain
  */
-public class UserDatumNumberEdgeValue<E extends Edge> implements NumberEdgeValue<E> {
+public class UserDatumNumberEdgeValue<E> implements NumberEdgeValue<E> {
     
     private Map<E, Number> map = new HashMap<E, Number>();
     /**

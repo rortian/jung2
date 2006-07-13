@@ -14,7 +14,6 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -26,7 +25,7 @@ import edu.uci.ics.graph.Graph;
  * @author Danyel Fisher
  * @author Joshua O'Madadhain
  */
-public class SpringLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> implements LayoutMutable<V,E> {
+public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMutable<V,E> {
 
 //    private static final Object SPRING_KEY = "temp_edu.uci.ics.jung.Spring_Visualization_Key";
     protected double stretch = 0.70;
@@ -369,16 +368,16 @@ public class SpringLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> impl
      * 
      * @author Danyel Fisher
      */
-    public static interface LengthFunction {
+    public static interface LengthFunction<E> {
 
-        public double getLength(Edge e);
+        public double getLength(E e);
     }
 
     /**
      * Returns all edges as the same length: the input value
      * @author danyelf
      */
-    public static final class UnitLengthFunction implements LengthFunction {
+    public static final class UnitLengthFunction<E> implements LengthFunction<E> {
 
         int length;
 
@@ -386,7 +385,7 @@ public class SpringLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> impl
             this.length = length;
         }
 
-        public double getLength(Edge e) {
+        public double getLength(E e) {
             return length;
         }
     }
@@ -416,7 +415,7 @@ public class SpringLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> impl
         public double dy;
     }
 
-    protected static class SpringEdgeData<E extends Edge> {
+    protected static class SpringEdgeData<E> {
 
         public double f;
 
@@ -424,7 +423,7 @@ public class SpringLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> impl
             this.e = e;
         }
 
-        Edge e;
+        E e;
 
         double length;
     }

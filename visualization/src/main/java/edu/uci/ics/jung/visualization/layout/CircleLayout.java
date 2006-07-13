@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 
@@ -42,7 +41,7 @@ import edu.uci.ics.graph.Graph;
  *
  * @author Masanori Harada
  */
-public class CircleLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> {
+public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 //	private static final Object CIRCLE_KEY =
 //	"jung.Circle_Visualization_Key";
 //	private Pair key;

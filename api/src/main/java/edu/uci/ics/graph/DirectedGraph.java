@@ -11,9 +11,8 @@
  */
 package edu.uci.ics.graph;
 
-public interface DirectedGraph<V,E extends DirectedEdge<V>> extends Graph<V,E>
+public interface DirectedGraph<V,E> extends Graph<V,E>
 {
-    void addEdge(E e);
     void addEdge(E edge, V source, V dest);
     
     V getSource(E directed_edge);

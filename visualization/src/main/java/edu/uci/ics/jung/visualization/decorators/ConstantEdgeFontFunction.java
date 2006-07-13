@@ -13,13 +13,11 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Font;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public class ConstantEdgeFontFunction<E extends Edge> implements EdgeFontFunction<E>
+public class ConstantEdgeFontFunction<E> implements EdgeFontFunction<E>
 {
     protected Font font;
     

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -28,7 +27,7 @@ import edu.uci.ics.graph.Graph;
  * Running time is: O(m)
  * @author Scott White
  */
-public class BFSDistanceLabeler<V, E extends Edge<V>> {
+public class BFSDistanceLabeler<V, E> {
 	public static final String DEFAULT_DISTANCE_KEY = "algorithms.connectivity.BFSDiststanceLabeler.DISTANCE_KEY";
 //    private NumericDecorator mDistanceDecorator;
     private Map<V, Number> distanceDecorator = new HashMap<V,Number>();

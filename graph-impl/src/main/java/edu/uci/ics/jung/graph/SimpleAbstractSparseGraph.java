@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
 
-public abstract class SimpleAbstractSparseGraph<V, E extends Edge<V>> implements Graph<V,E>
+public abstract class SimpleAbstractSparseGraph<V, E> implements Graph<V,E>
 {
     public int inDegree(V vertex)
     {

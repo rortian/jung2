@@ -16,7 +16,6 @@ import java.awt.geom.Point2D;
 import javax.swing.event.ChangeListener;
 
 import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
@@ -29,7 +28,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  *
  *
  */
-public abstract class LayoutDecorator<V, E extends Edge<V>> implements Layout<V, E>, ChangeEventSupport {
+public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport {
     
     protected Layout<V, E> delegate;
     protected ChangeEventSupport changeSupport =

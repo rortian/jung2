@@ -17,7 +17,6 @@ package edu.uci.ics.jung.visualization;
 
 import java.awt.Graphics;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -27,7 +26,7 @@ import edu.uci.ics.graph.Graph;
  * 
  * @author danyelf
  */
-public abstract class AbstractRenderer<V, E extends Edge<V>> implements Renderer<V, E> {
+public abstract class AbstractRenderer<V, E> implements Renderer<V, E> {
 
 //	private PickedState pickedState;
 

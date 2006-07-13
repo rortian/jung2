@@ -18,11 +18,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
 
-public class SimpleUndirectedSparseGraph<V,E extends UndirectedEdge<V>> 
+public class SimpleUndirectedSparseGraph<V,E> 
     extends SimpleAbstractSparseGraph<V,E>
     implements UndirectedGraph<V,E>
 {
@@ -68,9 +67,6 @@ public class SimpleUndirectedSparseGraph<V,E extends UndirectedEdge<V>>
         return true;
     }
     
-    public void addEdge(E edge) {
-    	addEdge(edge, edge.getEndpoints().getFirst(), edge.getEndpoints().getSecond());
-    }
     public void addEdge(E edge, V v1, V v2)
     {
         if (edges.containsKey(edge))
@@ -168,5 +164,13 @@ public class SimpleUndirectedSparseGraph<V,E extends UndirectedEdge<V>>
     public Pair<V> getEndpoints(E edge)
     {
         return edges.get(edge);
+    }
+
+    public boolean isDirected(E edge) {
+        return false;
+    }
+
+    public void addDirectedEdge(E e, V v1, V v2) {
+        throw new UnsupportedOperationException("Cannot add a directed edge to an undirected graph");
     }
 }

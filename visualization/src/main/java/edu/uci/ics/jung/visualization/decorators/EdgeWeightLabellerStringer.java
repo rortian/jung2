@@ -15,8 +15,6 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.text.NumberFormat;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  *
  * An EdgeStringer provides a string Label for any edge: the
@@ -26,7 +24,7 @@ import edu.uci.ics.graph.Edge;
  * @author danyelf
  *
  */
-public class EdgeWeightLabellerStringer<E extends Edge> implements EdgeStringer<E> {
+public class EdgeWeightLabellerStringer<E> implements EdgeStringer<E> {
 
     protected EdgeWeightLabeller<E> ewl;
     protected NumberFormat numberFormat;

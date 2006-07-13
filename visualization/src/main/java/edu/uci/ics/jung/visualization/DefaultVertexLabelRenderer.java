@@ -21,8 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * DefaultGraphLabelRenderer is similar to the cell renderers
  * used by the JTable and JTree jfc classes.
@@ -31,45 +29,26 @@ import edu.uci.ics.graph.Edge;
  *
  * 
  */
-public class DefaultGraphLabelRenderer<V, E extends Edge> extends JLabel implements
-        GraphLabelRenderer<V, E>, Serializable {
+public class DefaultVertexLabelRenderer extends JLabel implements
+        VertexLabelRenderer, Serializable {
 
      protected static Border noFocusBorder = new EmptyBorder(0,0,0,0); 
     
      protected Color pickedVertexLabelColor = Color.black;
-     protected Color pickedEdgeLabelColor = Color.black;
-     protected boolean rotateEdgeLabels;
+//     protected Color pickedEdgeLabelColor = Color.black;
+//     protected boolean rotateEdgeLabels;
 
      
-     public DefaultGraphLabelRenderer(Color pickedVertexLabelColor,
-             Color pickedEdgeLabelColor) {
-         this(pickedVertexLabelColor, pickedEdgeLabelColor, true);
-     }
     /**
      * Creates a default table cell renderer.
      */
-    public DefaultGraphLabelRenderer(Color pickedVertexLabelColor,
-            Color pickedEdgeLabelColor, boolean rotateEdgeLabels) {
+    public DefaultVertexLabelRenderer(Color pickedVertexLabelColor) {
         super();
         this.pickedVertexLabelColor = pickedVertexLabelColor;
-        this.pickedEdgeLabelColor = pickedEdgeLabelColor;
-        this.rotateEdgeLabels = rotateEdgeLabels;
         setOpaque(true);
         setBorder(noFocusBorder);
     }
 
-    /**
-     * @return Returns the rotateEdgeLabels.
-     */
-    public boolean isRotateEdgeLabels() {
-        return rotateEdgeLabels;
-    }
-    /**
-     * @param rotateEdgeLabels The rotateEdgeLabels to set.
-     */
-    public void setRotateEdgeLabels(boolean rotateEdgeLabels) {
-        this.rotateEdgeLabels = rotateEdgeLabels;
-    }
     /**
      * Overrides <code>JComponent.setForeground</code> to assign
      * the unselected-foreground color to the specified color.
@@ -114,41 +93,12 @@ public class DefaultGraphLabelRenderer<V, E extends Edge> extends JLabel impleme
      * @param vertex  the <code>Vertex</code>
      * @return the default label renderer
      */
-    public Component getGraphLabelRendererComponent(JComponent vv, Object value,
+    public <V> Component getGraphLabelRendererComponent(JComponent vv, Object value,
             Font font, boolean isSelected, V vertex) {
         
         super.setForeground(vv.getForeground());
         if(isSelected) setForeground(pickedVertexLabelColor);
         super.setBackground(vv.getBackground());
-        if(font != null) {
-//            setFont(vv.getFont());
-            setFont(font);
-        } else {
-            setFont(vv.getFont());
-        }
-        setIcon(null);
-        setBorder(noFocusBorder);
-        setValue(value); 
-        return this;
-    }
-    
-    /**
-    *
-    * Returns the default label renderer for an Edge
-    *
-    * @param vv  the <code>VisualizationViewer</code> to render on
-    * @param value  the value to assign to the label for
-    *			<code>Edge</code>
-    * @param edge  the <code>Edge</code>
-    * @return the default label renderer
-    */
-    public Component getGraphLabelRendererComponent(JComponent vv, Object value,
-            Font font, boolean isSelected, E edge) {
-        
-        super.setForeground(vv.getForeground());
-        if(isSelected) setForeground(pickedEdgeLabelColor);
-        super.setBackground(vv.getBackground());
-        
         if(font != null) {
 //            setFont(vv.getFont());
             setFont(font);

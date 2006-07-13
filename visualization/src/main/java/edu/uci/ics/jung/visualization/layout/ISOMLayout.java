@@ -18,9 +18,7 @@ import java.util.Vector;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.visualization.Coordinates;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 
@@ -30,7 +28,7 @@ import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
  * 
  * @author Yan Biao Boey
  */
-public class ISOMLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> {
+public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 
 //	private static final Object ISOM_KEY =
 //		"edu.uci.ics.jung.ISOM_Visualization_Key";
@@ -142,16 +140,18 @@ public class ISOMLayout<V, E extends Edge<V>> extends AbstractLayout<V,E> {
 	}
 
 	ISOMVertexData tempISOM;
-	Coordinates tempXYD;
+	Point2D tempXYD;
 
 	private synchronized void adjust() {
 		//Generate random position in graph space
 		tempISOM = new ISOMVertexData();
-		tempXYD = new Coordinates();
+		tempXYD = new Point2D.Double();
 
 		// creates a new XY data location
-		tempXYD.setX(10 + Math.random() * getCurrentSize().getWidth());
-		tempXYD.setY(10 + Math.random() * getCurrentSize().getHeight());
+//		tempXYD.setX(10 + Math.random() * getCurrentSize().getWidth());
+//		tempXYD.setY(10 + Math.random() * getCurrentSize().getHeight());
+        tempXYD.setLocation(10 + Math.random() * getCurrentSize().getWidth(),
+                10 + Math.random() * getCurrentSize().getHeight());
 
 		//Get closest vertex to random position
 		V winner = elementAccessor.getVertex(tempXYD.getX(), tempXYD.getY());

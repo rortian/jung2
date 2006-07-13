@@ -13,12 +13,10 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Stroke;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public interface EdgeStrokeFunction<E extends Edge> {
+public interface EdgeStrokeFunction<E> {
     public Stroke getStroke(E e);
 }

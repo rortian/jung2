@@ -27,10 +27,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import sun.security.provider.certpath.Vertex;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedEdge;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
@@ -44,7 +41,7 @@ import edu.uci.ics.jung.visualization.transform.Transformer;
  *
  *
  */
-public class TransformingPluggableRenderer<V, E extends Edge<V>> 
+public class TransformingPluggableRenderer<V, E> 
     extends PluggableRendererDecorator<V,E> {
     
     /**
@@ -109,7 +106,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
                 flatness = .05f;
             }
         }
-        Pair<V> endpoints = e.getEndpoints();
+        Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         boolean isLoop = v1.equals(v2);
@@ -173,10 +170,10 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
             // see if arrows are too small to bother drawing
             if(scalex < .3 || scaley < .3) return;
             
-            if (getEdgeArrowPredicate().evaluate(e)) {
+            if (graph.isDirected(e)) {
                 
                 Shape destVertexShape = 
-                    getVertexShapeFunction().getShape(e.getEndpoints().getSecond());
+                    getVertexShapeFunction().getShape(graph.getEndpoints(e).getSecond());
                 AffineTransform xf = AffineTransform.getTranslateInstance(x2, y2);
                 destVertexShape = xf.createTransformedShape(destVertexShape);
 
@@ -187,13 +184,13 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
                     AffineTransform at = 
                         getArrowTransform((GeneralPath)edgeShape, destVertexShape);
                     if(at == null) return;
-                    Shape arrow = getEdgeArrowFunction().getArrow(e);
+                    Shape arrow = getEdgeArrowFunction().getArrow(graph,e);
                     arrow = at.createTransformedShape(arrow);
                     // note that arrows implicitly use the edge's draw paint
                     g.fill(arrow);
-                    if (e instanceof UndirectedEdge) {
+                    if (graph.isDirected(e) == false) {
                         Shape vertexShape = 
-                            getVertexShapeFunction().getShape(e.getEndpoints().getFirst());
+                            getVertexShapeFunction().getShape(graph.getEndpoints(e).getFirst());
                         xf = AffineTransform.getTranslateInstance(x1, y1);
                         vertexShape = xf.createTransformedShape(vertexShape);
 
@@ -201,7 +198,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
                         if(arrowHit) {
                             at = getReverseArrowTransform((GeneralPath)edgeShape, vertexShape, !isLoop);
                             if(at == null) return;
-                            arrow = getEdgeArrowFunction().getArrow(e);
+                            arrow = getEdgeArrowFunction().getArrow(graph,e);
                             arrow = at.createTransformedShape(arrow);
                             g.fill(arrow);
                         }
@@ -254,7 +251,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
         int distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
 
-        double closeness = getEdgeLabelClosenessFunction().getNumber(e).doubleValue();
+        double closeness = getEdgeLabelClosenessFunction().getNumber(graph, e).doubleValue();
 
         int posX = (int) (x1 + (closeness) * distX);
         int posY = (int) (y1 + (closeness) * distY);
@@ -262,7 +259,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
         int xDisplacement = (int) (PluggableRenderer.LABEL_OFFSET * (distY / totalLength));
         int yDisplacement = (int) (PluggableRenderer.LABEL_OFFSET * (-distX / totalLength));
         
-        Component component = prepareRenderer(getGraphLabelRenderer(), label, isEdgePicked(e), e);
+        Component component = prepareRenderer(getEdgeLabelRenderer(), label, isEdgePicked(e), e);
         Dimension d = component.getPreferredSize();
         
         Font font = getEdgeFontFunction().getFont(e);
@@ -284,7 +281,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
         AffineTransform old = g2d.getTransform();
         AffineTransform xform = new AffineTransform(old);
         xform.translate(posX+xDisplacement, posY+yDisplacement);
-        if(getGraphLabelRenderer().isRotateEdgeLabels()) {
+        if(getEdgeLabelRenderer().isRotateEdgeLabels()) {
             // float thetaRadians = (float) Math.atan2(dy, dx);
             double dx = x2 - x1;
             double dy = y2 - y1;
@@ -321,7 +318,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
      * @param y
      */
     protected void labelVertex(TransformingGraphics g, V v, String label, int x, int y) {
-        Component component = prepareRenderer(getGraphLabelRenderer(), label, isPicked(v), v);
+        Component component = prepareRenderer(getVertexLabelRenderer(), label, isPicked(v), v);
         Font font = getVertexFontFunction().getFont(v);
         if (font != null)
             component.setFont(font);
@@ -374,7 +371,7 @@ public class TransformingPluggableRenderer<V, E extends Edge<V>>
             return;
         
         // don't draw edge if either incident vertex is not drawn
-        Pair<V> endpoints = e.getEndpoints();
+        Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         if (!getVertexIncludePredicate().evaluate(v1) || 

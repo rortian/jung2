@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -43,7 +42,7 @@ import edu.uci.ics.graph.Graph;
  * FORCE_CONSTANT, LengthFunction, SpringVertexData, and SpringEdgeData were
  * all made "protected".
  */
-public class DAGLayout<V, E extends Edge<V>> extends SpringLayout<V,E> {
+public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
 	private Map<V,Number> minLevels = new HashMap<V,Number>();
 	// Simpler than the "pair" technique.

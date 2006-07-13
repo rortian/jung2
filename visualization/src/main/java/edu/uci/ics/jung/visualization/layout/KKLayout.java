@@ -17,7 +17,6 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.GraphStatistics;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
@@ -32,7 +31,7 @@ import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
  *
  * @author Masanori Harada
  */
-public class KKLayout<V,E extends Edge<V>> extends AbstractLayout<V,E> {
+public class KKLayout<V,E> extends AbstractLayout<V,E> {
 
 	private double EPSILON = 0.1d;
 

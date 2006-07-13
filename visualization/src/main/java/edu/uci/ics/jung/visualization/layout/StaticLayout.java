@@ -11,13 +11,12 @@
  */
 package edu.uci.ics.jung.visualization.layout;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 
 
 
-public class StaticLayout<V, E extends Edge<V>> extends AbstractLayout<V,E>
+public class StaticLayout<V, E> extends AbstractLayout<V,E>
 {
     public StaticLayout(Graph<V,E> g)
     {

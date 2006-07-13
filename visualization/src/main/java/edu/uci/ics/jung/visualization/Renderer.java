@@ -11,7 +11,6 @@ package edu.uci.ics.jung.visualization;
 
 import java.awt.Graphics;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -32,7 +31,7 @@ import edu.uci.ics.graph.Graph;
  * 
  * @author danyelf
  */
-public interface Renderer<V, E extends Edge<V>> {
+public interface Renderer<V, E> {
 
 	void paintVertex(Graphics g, V v, int x, int y);
 	void paintEdge(Graphics g, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2);

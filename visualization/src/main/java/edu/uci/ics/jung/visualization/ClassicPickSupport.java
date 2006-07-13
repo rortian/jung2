@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.visualization;
 
-import edu.uci.ics.graph.Edge;
 
 /**
  * <code>PickSupport</code> implementation that emulates the picking behavior
@@ -24,7 +23,7 @@ import edu.uci.ics.graph.Edge;
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
-class ClassicPickSupport extends RadiusPickSupport implements PickSupport {
+class ClassicPickSupport<V,E> extends RadiusPickSupport<V,E> implements PickSupport<V,E> {
     
     public ClassicPickSupport()
     {
@@ -34,7 +33,7 @@ class ClassicPickSupport extends RadiusPickSupport implements PickSupport {
     /** 
      * @return null ClassicPickSupport does not do edges
      */
-    public Edge getEdge(double x, double y) {
+    public E getEdge(double x, double y) {
         return null;
     }
 }

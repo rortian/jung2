@@ -15,14 +15,12 @@ import java.awt.Font;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * @author Tom Nelson - RABA Technologies
  *
  * 
  */
-public interface GraphLabelRenderer<V, E extends Edge> {
+public interface EdgeLabelRenderer {
     /**
      *  Returns the component used for drawing the label.  This method is
      *  used to configure the renderer appropriately before drawing.
@@ -39,8 +37,8 @@ public interface GraphLabelRenderer<V, E extends Edge> {
      *				valid value
      * @param	vertex  the vertex for the label being drawn.
      */
-    Component getGraphLabelRendererComponent(JComponent vv, Object value,
-					   Font font, boolean isSelected, V vertex);
+    <T> Component getGraphLabelRendererComponent(JComponent vv, Object value,
+					   Font font, boolean isSelected, T vertexOrEdge);
     /**
      *  Returns the component used for drawing the label.  This method is
      *  used to configure the renderer appropriately before drawing.
@@ -58,8 +56,8 @@ public interface GraphLabelRenderer<V, E extends Edge> {
      * @param	edge  the edgefor the label being drawn.
      */
 
-    Component getGraphLabelRendererComponent(JComponent vv, Object value,
-            Font font, boolean isSelected, E edge);
+//    <E> Component getGraphLabelRendererComponent(JComponent vv, Object value,
+//            Font font, boolean isSelected, E edge);
     
     boolean isRotateEdgeLabels();
     

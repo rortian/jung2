@@ -15,7 +15,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
@@ -28,7 +27,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * 
  * @author Tom Nelson
  */
-public class DefaultVisualizationModel<V, E extends Edge<V>> implements VisualizationModel<V,E>, ChangeEventSupport {
+public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>, ChangeEventSupport {
     
     ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);

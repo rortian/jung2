@@ -17,7 +17,6 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
@@ -39,7 +38,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  *
  * 
  */
-public class SatelliteVisualizationViewer<V, E extends Edge<V>> 
+public class SatelliteVisualizationViewer<V, E> 
 	extends VisualizationViewer<V,E> {
     
     /**
@@ -126,7 +125,7 @@ public class SatelliteVisualizationViewer<V, E extends Edge<V>>
      *
      *
      */
-    static class ViewLens<V,E extends Edge<V>> implements Paintable {
+    static class ViewLens<V,E> implements Paintable {
 
         VisualizationViewer<V,E> master;
         VisualizationViewer<V,E> vv;

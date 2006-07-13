@@ -9,7 +9,6 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
-import edu.uci.ics.graph.Edge;
 
 
 
@@ -19,7 +18,7 @@ import edu.uci.ics.graph.Edge;
  *  
  * @author Tom Nelson
  */
-public abstract class AbstractEdgeShapeFunction<V,E extends Edge<V>> implements EdgeShapeFunction<V,E> {
+public abstract class AbstractEdgeShapeFunction<V,E> implements EdgeShapeFunction<V,E> {
 
     /**
      * Specifies how far apart to place the control points for edges being

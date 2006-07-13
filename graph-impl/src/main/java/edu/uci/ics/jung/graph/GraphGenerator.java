@@ -9,18 +9,17 @@
 */
 package edu.uci.ics.jung.graph;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 
 /**
  * An interface for algorithms that generate graphs
  * @author Scott White
  */
-public interface GraphGenerator<V, E extends Edge<V>> {
+public interface GraphGenerator<V, E> {
 
     /**
      * Instructs the algorithm to generate the graph
      * @return the generated graph
      */
-    public Graph<V,? extends E> generateGraph();
+    public Graph<V,E> generateGraph();
 }

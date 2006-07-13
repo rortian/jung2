@@ -17,11 +17,8 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.QuadCurve2D;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.predicates.EdgePredicate;
-import edu.uci.ics.graph.predicates.SelfLoopEdgePredicate;
+import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
@@ -37,7 +34,7 @@ import edu.uci.ics.jung.visualization.ArrowFactory;
  * @author Tom Nelson
  * @param <Edge>
  */
-public class EdgeShape<V,E extends Edge<V>>  {
+public class EdgeShape<V,E>  {
     
     /**
      * a convenience instance for other edge shapes to use
@@ -45,7 +42,6 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * overlay each other.
      */
     protected static Loop loop = new Loop();
-    protected static EdgePredicate is_self_loop = SelfLoopEdgePredicate.getInstance();
     
     /**
      * a convenience instance for other edge shapes to use
@@ -53,16 +49,12 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * other
      */
     protected static SimpleLoop simpleLoop = new SimpleLoop();
-    
-//    public static <E extends Edge> SimpleLoop<E> getSimpleLoop() {
-//    	return simpleLoop;
-//    }
 
     /**
      * An edge shape that renders as a straight line between
      * the vertex endpoints.
      */
-    public static class Line<V,E extends Edge<V>> extends AbstractEdgeShapeFunction<V,E> {
+    public static class Line<V,E> extends AbstractEdgeShapeFunction<V,E> {
 
         /**
          * Singleton instance of the Line2D edge shape
@@ -75,7 +67,9 @@ public class EdgeShape<V,E extends Edge<V>>  {
          */
         public Shape getShape(Graph<V,E> graph, E e) {
             
-            if (is_self_loop.evaluate(e))
+            Pair<V> endpoints = graph.getEndpoints(e);
+            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            if (isLoop)
                 return simpleLoop.getShape(graph, e);
 
             return instance;
@@ -86,7 +80,7 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * An edge shape that renders as a bent-line between the
      * vertex endpoints.
      */
-    public static class BentLine<V,E extends Edge<V>> 
+    public static class BentLine<V,E> 
              extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
         
         /**
@@ -107,7 +101,9 @@ public class EdgeShape<V,E extends Edge<V>>  {
          * Loop shared instance.
          */
         public Shape getShape(Graph<V,E> graph, E e) {
-            if (is_self_loop.evaluate(e))
+            Pair<V> endpoints = graph.getEndpoints(e);
+            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            if (isLoop)
                 return loop.getShape(graph, e);
             int index = 1;
             if(parallelEdgeIndexFunction != null) {
@@ -127,7 +123,7 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * An edge shape that renders as a QuadCurve between vertex
      * endpoints.
      */
-    public static class QuadCurve<V,E extends Edge<V>> 
+    public static class QuadCurve<V,E>
            extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
         
         /**
@@ -148,7 +144,9 @@ public class EdgeShape<V,E extends Edge<V>>  {
          * Loop shared instance.
          */
         public Shape getShape(Graph<V,E> graph, E e) {
-            if (is_self_loop.evaluate(e))
+            Pair<V> endpoints = graph.getEndpoints(e);
+            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            if (isLoop)
                 return loop.getShape(graph, e);
             
             int index = 1;
@@ -169,7 +167,7 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * (1/3*length, 2*controlY) and (2/3*length, controlY)
      * giving a 'spiral' effect.
      */
-    public static class CubicCurve<V,E extends Edge<V>> 
+    public static class CubicCurve<V,E> 
          extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
         
         /**
@@ -190,7 +188,9 @@ public class EdgeShape<V,E extends Edge<V>>  {
          * Loop shared instance.
          */
        public Shape getShape(Graph<V,E> graph, E e) {
-           if (is_self_loop.evaluate(e))
+           Pair<V> endpoints = graph.getEndpoints(e);
+           boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+           if (isLoop)
                 return loop.getShape(graph, e);
            
            int index = 1;
@@ -212,7 +212,7 @@ public class EdgeShape<V,E extends Edge<V>>  {
 	 * 
      * @author Tom Nelson - RABA Technologies
      */
-    public static class SimpleLoop<V,E extends Edge<V>> extends AbstractEdgeShapeFunction<V,E> {
+    public static class SimpleLoop<V,E> extends AbstractEdgeShapeFunction<V,E> {
         
         /**
          * singleton instance of the SimpleLoop shape
@@ -232,7 +232,7 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * An edge shape that renders as a loop with its nadir at the
      * center of the vertex. Parallel instances will not overlap.
      */
-    public static class Loop<V,E extends Edge<V>> 
+    public static class Loop<V,E>
            extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
         
         /**
@@ -274,7 +274,7 @@ public class EdgeShape<V,E extends Edge<V>>  {
      * and as a "bowtie" shape for undirected edges.
      * @author Joshua O'Madadhain
      */
-    public static class Wedge<V,E extends Edge<V>> extends AbstractEdgeShapeFunction<V,E>
+    public static class Wedge<V,E> extends AbstractEdgeShapeFunction<V,E>
     {
         private static GeneralPath triangle;
         private static GeneralPath bowtie;
@@ -293,16 +293,18 @@ public class EdgeShape<V,E extends Edge<V>>  {
         
         public Shape getShape(Graph<V,E> graph, E e)
         {
-            if (is_self_loop.evaluate(e))
+            Pair<V> endpoints = graph.getEndpoints(e);
+            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            if (isLoop)
                 return Loop.instance;
-            else if (e instanceof DirectedEdge)
+            else if (graph.isDirected(e))
                 return triangle;
             else
                 return bowtie;
         }
     }
     
-    public static interface ParallelRendering<V,E extends Edge<V>> {
+    public static interface ParallelRendering<V,E> {
         void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> peif);
     }
     

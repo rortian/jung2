@@ -10,7 +10,6 @@
 
 package edu.uci.ics.jung.visualization;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
@@ -22,7 +21,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public interface HasGraphLayout<V, E extends Edge<V>> {
+public interface HasGraphLayout<V, E> {
     
     Layout<V, E> getGraphLayout();
 

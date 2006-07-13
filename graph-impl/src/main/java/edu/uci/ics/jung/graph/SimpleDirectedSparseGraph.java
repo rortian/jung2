@@ -18,13 +18,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.DirectedEdge;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.util.Pair;
 
 
 
-public class SimpleDirectedSparseGraph<V,E extends DirectedEdge<V>> 
+public class SimpleDirectedSparseGraph<V,E> 
     extends SimpleAbstractSparseGraph<V,E>
     implements DirectedGraph<V,E>
 {
@@ -149,16 +148,15 @@ public class SimpleDirectedSparseGraph<V,E extends DirectedEdge<V>>
 //    public void addEdge(E e) {
 //        
 //    }
-
+    public void addDirectedEdge(E edge, V source, V dest) {
+        addEdge(edge, source, dest);
+    }
     /**
      * Adds <code>edge</code> to the graph.  Also adds 
      * <code>source</code> and <code>dest</code> to the graph if they
      * are not already present.  Returns <code>false</code> if 
      * the specified edge is 
      */
-    public void addEdge(E edge) {
-    	addEdge(edge, edge.getEndpoints().getFirst(), edge.getEndpoints().getSecond());
-    }
     public void addEdge(E edge, V source, V dest)
     {
         if (edges.containsKey(edge))
@@ -209,5 +207,9 @@ public class SimpleDirectedSparseGraph<V,E extends DirectedEdge<V>>
     public Pair<V> getEndpoints(E edge)
     {
         return edges.get(edge);
+    }
+
+    public boolean isDirected(E edge) {
+        return true;
     }
 }

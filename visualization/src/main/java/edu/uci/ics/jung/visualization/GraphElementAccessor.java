@@ -10,7 +10,6 @@
  */
 package edu.uci.ics.jung.visualization;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
 
@@ -19,7 +18,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
-public interface GraphElementAccessor<V, E extends Edge<V>>
+public interface GraphElementAccessor<V, E>
 {
     /**
      * Returns a <code>Vertex</code> which is associated with the 

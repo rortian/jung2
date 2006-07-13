@@ -11,15 +11,15 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
-import edu.uci.ics.graph.DirectedEdge;
-import edu.uci.ics.graph.Edge;
+import edu.uci.ics.graph.Graph;
+
 
 /**
  * Returns the constructor-specified value for each edge type.
  * 
  * @author Joshua O'Madadhain
  */
-public class ConstantDirectionalEdgeValue<E extends Edge> implements NumberEdgeValue<E>
+public class ConstantDirectionalEdgeValue<V,E> implements NumberDirectionalEdgeValue<V,E>
 {
     protected Double undirected_closeness;
     protected Double directed_closeness;
@@ -38,20 +38,11 @@ public class ConstantDirectionalEdgeValue<E extends Edge> implements NumberEdgeV
     /**
      * @see edu.uci.ics.jung.graph.decorators.NumberEdgeValue#getNumber(ArchetypeEdge)
      */
-    public Number getNumber(E e)
+    public Number getNumber(Graph<V,E> graph, E e)
     {
-        if (e instanceof DirectedEdge)
+        if (graph.isDirected(e))
             return directed_closeness;
         else 
             return undirected_closeness;
     }
-
-    /**
-     * @see edu.uci.ics.jung.graph.decorators.NumberEdgeValue#setNumber(edu.uci.ics.jung.graph.ArchetypeEdge, java.lang.Number)
-     */
-    public void setNumber(E e, Number n)
-    {
-        throw new UnsupportedOperationException();
-    }
-
 }

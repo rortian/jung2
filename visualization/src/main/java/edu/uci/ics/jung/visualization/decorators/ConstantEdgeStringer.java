@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
-import edu.uci.ics.graph.Edge;
 
 /**
  * Returns the specified label for all edges.  Useful for
@@ -19,7 +18,7 @@ import edu.uci.ics.graph.Edge;
  * 
  * @author Joshua O'Madadhain
  */
-public class ConstantEdgeStringer<E extends Edge> implements EdgeStringer<E>
+public class ConstantEdgeStringer<E> implements EdgeStringer<E>
 {
     protected String label;
     

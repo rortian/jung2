@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
-import edu.uci.ics.graph.Edge;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -29,7 +28,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
-public class RadiusGraphElementAccessor<V, E extends Edge<V>> implements GraphElementAccessor<V, E> {
+public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V, E> {
     
     protected Layout<V, E> layout;
     protected double maxDistance;

@@ -14,13 +14,11 @@ package edu.uci.ics.jung.visualization.decorators;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import edu.uci.ics.graph.Edge;
-
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public class ConstantEdgeStrokeFunction<E extends Edge> implements EdgeStrokeFunction<E>
+public class ConstantEdgeStrokeFunction<E> implements EdgeStrokeFunction<E>
 {
     protected Stroke stroke;
     

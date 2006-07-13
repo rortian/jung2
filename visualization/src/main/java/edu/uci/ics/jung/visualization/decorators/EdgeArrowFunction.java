@@ -13,13 +13,13 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Shape;
 
-import edu.uci.ics.graph.Edge;
+import edu.uci.ics.graph.Graph;
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public interface EdgeArrowFunction<E extends Edge> {
+public interface EdgeArrowFunction<V,E> {
     
-    public Shape getArrow(E e);
+    public Shape getArrow(Graph<V,E> graph, E e);
 }
