@@ -84,7 +84,7 @@ public class UnicodeLabelDemo {
         
         PluggableRenderer pr = new PluggableRenderer();
         pr.setVertexStringer(new UnicodeVertexStringer(v));
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(pr, Color.lightGray, Color.white,  Color.yellow));
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(pr.getPickedEdgeState(), Color.lightGray, Color.white,  Color.yellow));
         pr.setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         pr.setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
         VertexIconAndShapeFunction dvisf =

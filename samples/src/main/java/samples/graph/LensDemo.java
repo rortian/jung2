@@ -142,7 +142,8 @@ public class LensDemo extends JApplet {
         vv.setPickSupport(new ShapePickSupport());
         pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         PickedState ps = vv.getPickedVertexState();
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
+        PickedState pes = vv.getPickedEdgeState();
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
         vv.setBackground(Color.white);
         
         final VertexShapeFunction ovals = pr.getVertexShapeFunction();

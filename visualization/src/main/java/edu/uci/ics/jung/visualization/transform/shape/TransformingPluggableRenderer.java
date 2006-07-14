@@ -259,7 +259,8 @@ public class TransformingPluggableRenderer<V, E>
         int xDisplacement = (int) (PluggableRenderer.LABEL_OFFSET * (distY / totalLength));
         int yDisplacement = (int) (PluggableRenderer.LABEL_OFFSET * (-distX / totalLength));
         
-        Component component = prepareRenderer(getEdgeLabelRenderer(), label, isEdgePicked(e), e);
+        Component component = prepareRenderer(getEdgeLabelRenderer(), label, 
+                delegate.getPickedEdgeState().isPicked(e), e);
         Dimension d = component.getPreferredSize();
         
         Font font = getEdgeFontFunction().getFont(e);
@@ -318,7 +319,8 @@ public class TransformingPluggableRenderer<V, E>
      * @param y
      */
     protected void labelVertex(TransformingGraphics g, V v, String label, int x, int y) {
-        Component component = prepareRenderer(getVertexLabelRenderer(), label, isPicked(v), v);
+        Component component = prepareRenderer(getVertexLabelRenderer(), label, 
+                delegate.getPickedVertexState().isPicked(v), v);
         Font font = getVertexFontFunction().getFont(v);
         if (font != null)
             component.setFont(font);

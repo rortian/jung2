@@ -54,7 +54,9 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  *
  */
 public abstract class PluggableRendererDecorator<V,E> 
-    implements Renderer<V,E>, PickedInfo<V>, HasShapeFunctions {
+    implements Renderer<V,E>, 
+//    PickedInfo<V>, 
+    HasShapeFunctions {
 
     protected PluggableRenderer<V,E> delegate;
     
@@ -513,14 +515,6 @@ public abstract class PluggableRendererDecorator<V,E>
 
     public void setViewTransformer(MutableTransformer viewTransformer) {
         delegate.setViewTransformer(viewTransformer);
-    }
-
-    public boolean isEdgePicked(E object) {
-        return delegate.isEdgePicked(object);
-    }
-
-    public boolean isPicked(V object) {
-        return delegate.isPicked(object);
     }
 
     public void setPickedEdgeState(PickedState<E> pickedState) {

@@ -113,7 +113,7 @@ public class EdgeLabelDemo extends JApplet {
             }
         };
         pr.setEdgeStringer(stringer);
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pr, Color.black, Color.cyan));
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
         
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());

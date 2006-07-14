@@ -33,7 +33,6 @@ import javax.swing.JComponent;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.TruePredicate;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
 import edu.uci.ics.graph.util.Pair;
@@ -45,6 +44,7 @@ import edu.uci.ics.jung.visualization.decorators.ConstantEdgeStringer;
 import edu.uci.ics.jung.visualization.decorators.ConstantEdgeStrokeFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexAspectRatioFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexFontFunction;
+import edu.uci.ics.jung.visualization.decorators.ConstantVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexSizeFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexStringer;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexStrokeFunction;
@@ -58,7 +58,6 @@ import edu.uci.ics.jung.visualization.decorators.EdgeStringer;
 import edu.uci.ics.jung.visualization.decorators.EdgeStrokeFunction;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.NumberDirectionalEdgeValue;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexFontFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexPaintFunction;
@@ -120,7 +119,9 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * @author Tom Nelson
  */
 public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
-       implements PickedInfo<V>, HasShapeFunctions
+       implements 
+//       PickedInfo<V>, 
+       HasShapeFunctions
 {
     
 	protected float arrow_placement_tolerance = 1;
@@ -160,7 +161,8 @@ public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
     protected boolean centerVertexLabel = false;
     
     protected VertexPaintFunction<V> vertexPaintFunction =
-        new PickableVertexPaintFunction<V>(this, Color.BLACK, Color.RED, Color.ORANGE);
+        new ConstantVertexPaintFunction<V>(Color.BLACK, Color.RED);
+//        new PickableVertexPaintFunction<V>(pickedVertexState, Color.BLACK, Color.RED, Color.ORANGE);
     
     protected EdgeStringer<E> edgeStringer = 
         new ConstantEdgeStringer<E>(null);
@@ -1054,7 +1056,7 @@ public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
         int xDisplacement = (int) (LABEL_OFFSET * (distY / totalLength));
         int yDisplacement = (int) (LABEL_OFFSET * (-distX / totalLength));
         
-        Component component = prepareRenderer(edgeLabelRenderer, label, isEdgePicked(e), e);
+        Component component = prepareRenderer(edgeLabelRenderer, label, pickedEdgeState.isPicked(e), e);
         
         Dimension d = component.getPreferredSize();
 
@@ -1195,7 +1197,7 @@ public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
      */
     protected void labelVertex(Graphics g, V v, String label, int x, int y)
     {
-        Component component = prepareRenderer(vertexLabelRenderer, label, isPicked(v), v);
+        Component component = prepareRenderer(vertexLabelRenderer, label, pickedVertexState.isPicked(v), v);
 
         Dimension d = component.getPreferredSize();
         
@@ -1224,14 +1226,14 @@ public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
      * 
      * which relies on the Renderer to supply an instance.
      */
-    public boolean isPicked(V object) {
-    	
-        return pickedVertexState.isPicked(object);
-    }
-    public boolean isEdgePicked(E object) {
-    	
-        return pickedEdgeState.isPicked(object);
-    }
+//    public boolean isPicked(V object) {
+//    	
+//        return pickedVertexState.isPicked(object);
+//    }
+//    public boolean isEdgePicked(E object) {
+//    	
+//        return pickedEdgeState.isPicked(object);
+//    }
 //    
 //    /**
 //     * @see AbstractRenderer#isPicked(Edge)
@@ -1292,5 +1294,13 @@ public class PluggableRenderer<V, E> extends AbstractRenderer<V, E>
         public boolean evaluate(Graph<V, E> graph, E edge) {
             return graph.isDirected(edge);
         }
+    }
+
+    public PickedState<E> getPickedEdgeState() {
+        return pickedEdgeState;
+    }
+
+    public PickedState<V> getPickedVertexState() {
+        return pickedVertexState;
     }
 }

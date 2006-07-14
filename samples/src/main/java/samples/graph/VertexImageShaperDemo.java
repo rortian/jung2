@@ -155,9 +155,9 @@ public class VertexImageShaperDemo extends JApplet {
             new VertexStringerImpl<Number>(map);
         pr.setVertexStringer(vertexStringerImpl);
         VertexPaintFunction<Number> vpf = 
-            new PickableVertexPaintFunction<Number>(pr, Color.black, Color.white, Color.yellow);
+            new PickableVertexPaintFunction<Number>(pr.getPickedVertexState(), Color.black, Color.white, Color.yellow);
         pr.setVertexPaintFunction(vpf);
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pr, Color.black, Color.cyan));
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pr.getPickedEdgeState(), Color.black, Color.cyan));
 //        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer<Number, Number>(Color.cyan, Color.cyan));
         pr.setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         pr.setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));

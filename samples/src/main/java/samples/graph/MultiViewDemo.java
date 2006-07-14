@@ -138,7 +138,7 @@ public class MultiViewDemo extends JApplet {
         });
         pr2.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         
-        pr3.setVertexPaintFunction(new PickableVertexPaintFunction(pr3, 
+        pr3.setVertexPaintFunction(new PickableVertexPaintFunction(pr3.getPickedEdgeState(), 
                 Color.black, Color.decode("0xe6e8fa"), Color.decode("0xcd7f32")));
         pr3.setEdgeShapeFunction(new EdgeShape.CubicCurve());
 

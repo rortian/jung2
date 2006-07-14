@@ -1145,7 +1145,7 @@ public class VisualizationViewer<V, E> extends JPanel
         }
         this.pickedEdgeState = pickedEdgeState;
         if(renderer != null) {
-//            renderer.setPickedKey(pickedState);
+            renderer.setPickedEdgeState(pickedEdgeState);
         }
         if(pickEventListener == null) {
             pickEventListener = new ItemListener() {
