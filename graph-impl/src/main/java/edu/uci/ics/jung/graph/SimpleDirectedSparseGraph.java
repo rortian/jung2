@@ -59,7 +59,13 @@ public class SimpleDirectedSparseGraph<V,E>
 
     public boolean removeVertex(V vertex)
     {
-        Pair<Set<E>> adj_set = vertices.remove(vertex);
+        // copy to avoid concurrent modification in removeEdge
+        Pair<Set<E>> i_adj_set = vertices.get(vertex);
+        Pair<Set<E>> adj_set = new Pair<Set<E>>(new HashSet<E>(i_adj_set.getFirst()), 
+                new HashSet<E>(i_adj_set.getSecond()));
+        
+
+//        Pair<Set<E>> adj_set = vertices.get(vertex);
         if (adj_set == null)
             return false;
         
@@ -67,6 +73,8 @@ public class SimpleDirectedSparseGraph<V,E>
             removeEdge(edge);
         for (E edge : adj_set.getSecond())
             removeEdge(edge);
+        
+        vertices.remove(vertex);
         
         return true;
     }
@@ -145,9 +153,6 @@ public class SimpleDirectedSparseGraph<V,E>
         return null;
     }
     
-//    public void addEdge(E e) {
-//        
-//    }
     public void addDirectedEdge(E edge, V source, V dest) {
         addEdge(edge, source, dest);
     }

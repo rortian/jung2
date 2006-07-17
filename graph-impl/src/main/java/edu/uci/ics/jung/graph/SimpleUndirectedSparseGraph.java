@@ -55,15 +55,17 @@ public class SimpleUndirectedSparseGraph<V,E>
 //            return false;
     }
 
-    public boolean removeVertex(V vertex)
-    {
-        Set<E> adj_set = vertices.remove(vertex);
+    public boolean removeVertex(V vertex) {
+        
+        // copy to avoid concurrent modification in removeEdge
+        Set<E> adj_set = new HashSet<E>(vertices.get(vertex));
         if (adj_set == null)
             return false;
         
         for (E edge : adj_set)
             removeEdge(edge);
         
+        vertices.remove(vertex);
         return true;
     }
     
@@ -80,9 +82,8 @@ public class SimpleUndirectedSparseGraph<V,E>
 
         Pair<V> endpoints = new Pair<V>(v1, v2);
         edges.put(edge, endpoints);
-        vertices.get(v1).add(edge);        
+        vertices.get(v1).add(edge);
         vertices.get(v2).add(edge);        
-        
 //        return true;
     }
 
@@ -98,7 +99,7 @@ public class SimpleUndirectedSparseGraph<V,E>
         // remove edge from incident vertices' adjacency sets
         vertices.get(v1).remove(edge);
         vertices.get(v2).remove(edge);
-        
+
         edges.remove(edge);
         return true;
     }
