@@ -59,13 +59,15 @@ public class SimpleSparseGraph<V,E>
 
     public boolean removeVertex(V vertex)
     {
-        Set<E> adj_set = vertices.remove(vertex);
+        Set<E> adj_set = new HashSet<E>(vertices.get(vertex));
         if (adj_set == null)
             return false;
         
         for (E edge : adj_set)
             removeEdge(edge);
         
+        vertices.remove(vertex);
+
         return true;
     }
     
