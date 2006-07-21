@@ -33,6 +33,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.CircleLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
@@ -120,8 +121,6 @@ public class ShowLayouts extends JApplet {
         g_array = //(Graph<Object, ? extends Edge<Object>>)
             (Graph<? extends Object,? extends Object>[])
             new Graph<?,?>[graph_names.length];
-//        java.lang.reflect.Array.
-//        newInstance(g_array.getClass().getComponentType(), graph_names.length);
             
         g_array[0] = TestGraphs.createTestGraph(false);
         g_array[1] = TestGraphs.generateMixedRandomGraph(new HashSet(), 20, true);
@@ -132,9 +131,11 @@ public class ShowLayouts extends JApplet {
         g_array[6] = TestGraphs.createChainPlusIsolates(0, 20);
 
         Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
-        
+        PluggableRenderer pr = new PluggableRenderer();
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g),
-                new PluggableRenderer());
+                pr);
+        
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);

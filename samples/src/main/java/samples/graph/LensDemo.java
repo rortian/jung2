@@ -50,6 +50,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
@@ -143,7 +144,8 @@ public class LensDemo extends JApplet {
         pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         PickedState ps = vv.getPickedVertexState();
         PickedState pes = vv.getPickedEdgeState();
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(ps, Color.black, Color.red, Color.yellow));
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
         final VertexShapeFunction ovals = pr.getVertexShapeFunction();

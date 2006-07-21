@@ -9,6 +9,7 @@
 package samples.graph;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -33,6 +34,8 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -98,8 +101,12 @@ public class InternalFrameSatelliteViewDemo {
         Layout layout = new ISOMLayout(graph);
 
         PluggableRenderer pr = new PluggableRenderer();
+        PluggableRenderer prs = new PluggableRenderer();
         
         vv = new VisualizationViewer(layout, pr, new Dimension(600,600));
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         final ModalGraphMouse graphMouse = new DefaultModalGraphMouse();
@@ -108,8 +115,10 @@ public class InternalFrameSatelliteViewDemo {
 
         satellite =
             new SatelliteVisualizationViewer(vv, layout, 
-                    new PluggableRenderer(), new Dimension(200,200));
-        
+                    prs, new Dimension(200,200));
+        prs.setEdgePaintFunction(new PickableEdgePaintFunction(satellite.getPickedEdgeState(), Color.black, Color.cyan));
+        prs.setVertexPaintFunction(new PickableVertexPaintFunction(satellite.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+
         JFrame frame = new JFrame();
         desktop = new JDesktopPane();
         Container content = frame.getContentPane();

@@ -47,6 +47,8 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
@@ -132,6 +134,12 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         
         vv1.setBackground(Color.white);
         vv1.setPickSupport(new ShapePickSupport<String,Number>());
+        
+        pr1.setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.cyan));
+        pr1.setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        pr2.setEdgePaintFunction(new PickableEdgePaintFunction(vv2.getPickedEdgeState(), Color.black, Color.cyan));
+        pr2.setVertexPaintFunction(new PickableVertexPaintFunction(vv2.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+
         
         viewGrid = new ViewGrid(vv2, vv1);
 

@@ -42,6 +42,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.subLayout.CircularSubLayout;
 import edu.uci.ics.jung.visualization.subLayout.SubLayout;
@@ -109,6 +110,8 @@ public class SubLayoutDemo extends JApplet {
         vv.setPickedVertexState(new ClusterListener(clusteringLayout));
         ps = vv.getPickedVertexState();
         pr.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
+                Color.black, Color.red, Color.yellow));
         vv.setBackground(Color.white);
         
         // add a listener for ToolTips

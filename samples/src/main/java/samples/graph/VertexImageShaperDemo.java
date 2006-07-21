@@ -154,10 +154,6 @@ public class VertexImageShaperDemo extends JApplet {
         final VertexStringer<Number> vertexStringerImpl = 
             new VertexStringerImpl<Number>(map);
         pr.setVertexStringer(vertexStringerImpl);
-        VertexPaintFunction<Number> vpf = 
-            new PickableVertexPaintFunction<Number>(pr.getPickedVertexState(), Color.black, Color.white, Color.yellow);
-        pr.setVertexPaintFunction(vpf);
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pr.getPickedEdgeState(), Color.black, Color.cyan));
 //        pr.setGraphLabelRenderer(new DefaultGraphLabelRenderer<Number, Number>(Color.cyan, Color.cyan));
         pr.setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         pr.setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
@@ -176,6 +172,11 @@ public class VertexImageShaperDemo extends JApplet {
         vv =  new VisualizationViewer(layout, pr, new Dimension(400,400));
         vv.setPickSupport(new ShapePickSupport());
         pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        VertexPaintFunction<Number> vpf = 
+            new PickableVertexPaintFunction<Number>(vv.getPickedVertexState(), Color.black, Color.white, Color.yellow);
+        pr.setVertexPaintFunction(vpf);
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
+
         vv.setBackground(Color.white);
         
         // Get the pickedState and add a listener that will decorate the

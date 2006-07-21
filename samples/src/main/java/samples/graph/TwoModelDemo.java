@@ -37,6 +37,7 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -119,10 +120,14 @@ public class TwoModelDemo extends JApplet {
         PickedState ps = new MultiPickedState();
         vv1.setPickedVertexState(ps);
         vv2.setPickedVertexState(ps);
+        PickedState pes = new MultiPickedState();
+        vv1.setPickedEdgeState(pes);
+        vv2.setPickedEdgeState(pes);
         
         // set an edge paint function that will show picking for edges
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
-
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.red));
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(),
+                Color.black, Color.red, Color.yellow));
         // add default listeners for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());
         vv2.setToolTipFunction(new DefaultToolTipFunction());

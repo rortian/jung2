@@ -40,6 +40,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexIconAndShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexStringer;
@@ -84,7 +85,6 @@ public class UnicodeLabelDemo {
         
         PluggableRenderer pr = new PluggableRenderer();
         pr.setVertexStringer(new UnicodeVertexStringer(v));
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(pr.getPickedEdgeState(), Color.lightGray, Color.white,  Color.yellow));
         pr.setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         pr.setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
         VertexIconAndShapeFunction dvisf =
@@ -95,6 +95,9 @@ public class UnicodeLabelDemo {
         vv =  new VisualizationViewer(new FRLayout(graph), pr);
         vv.setPickSupport(new ShapePickSupport());
         pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.lightGray, Color.white,  Color.yellow));
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+
         vv.setBackground(Color.white);
 
         // add my listener for ToolTips

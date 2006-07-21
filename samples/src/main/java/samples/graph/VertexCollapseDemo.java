@@ -34,7 +34,6 @@ import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -49,6 +48,7 @@ import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -79,7 +79,7 @@ public class VertexCollapseDemo extends JApplet {
      */
     VisualizationViewer vv;
     
-    PickedState ps;
+//    PickedState ps;
     
     Layout layout;
     
@@ -108,8 +108,11 @@ public class VertexCollapseDemo extends JApplet {
         ((AbstractVertexShapeFunction)pr.getVertexShapeFunction()).setSizeFunction(new ClusterVertexSizeFunction(20));
         
 //        vv.setPickedVertexState(new ClusterListener(layout));
-        ps = vv.getPickedVertexState();
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
+//        ps = vv.getPickedVertexState();
+        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
+                Color.black, Color.red, Color.yellow));
+        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), 
+                Color.black, Color.red));
         vv.setBackground(Color.white);
         
         // add a listener for ToolTips
@@ -150,12 +153,57 @@ public class VertexCollapseDemo extends JApplet {
 
             public void actionPerformed(ActionEvent e) {
                 Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
+//                Map pickedMap = new HashMap();
+//                for(Object v : picked) {
+//                    pickedMap.put(v, layout.getGraph().getIncidentEdges(v));
+//                }
                 if(picked.size() > 1) {
-                    Graph g = collapser.collapse(layout.getGraph(), picked);
+                    Graph inGraph = layout.getGraph();
+                    Graph clusterGraph = new SimpleSparseGraph();
+                    
+                    for(Object v : picked) {
+                      Collection edges = inGraph.getIncidentEdges(v);
+                      for(Object edge : edges) {
+                          Pair endpoints = inGraph.getEndpoints(edge);
+                          Object v1 = endpoints.getFirst();
+                          Object v2 = endpoints.getSecond();
+                          if(picked.containsAll(endpoints)) {
+                          if(inGraph.isDirected(edge)) {
+                              clusterGraph.addDirectedEdge(edge, v1, v2);
+                          } else {
+                              clusterGraph.addEdge(edge, v1, v2);
+                          }
+                          }
+                      }
+                  }
+
+                    Graph g = collapser.collapse(layout.getGraph(), clusterGraph);
                     Point2D p = layout.getLocation(picked.iterator().next());
+                    System.err.println("location for "+clusterGraph+" will be "+p);
                     vv.stop();
                     layout.setGraph(g);
-                    layout.forceMove(picked, p.getX(), p.getY());
+                    layout.forceMove(clusterGraph, p.getX(), p.getY());
+                }
+            }});
+        
+        JButton expand = new JButton("Expand");
+        expand.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                Collection picked = vv.getPickedVertexState().getPicked();
+                for(Object v : picked) {
+                    if(v instanceof Graph) {
+                        
+                        Graph g = collapser.expand(layout.getGraph(), (Graph)v);
+                        
+                        vv.stop();
+                        layout.setGraph(g);
+
+                        
+                        // remove v from the graph and add its components instead
+//                        Graph g = layout.getGraph();
+                    }
+                    vv.repaint();
                 }
             }});
         
@@ -181,9 +229,10 @@ public class VertexCollapseDemo extends JApplet {
         zoomControls.add(plus);
         zoomControls.add(minus);
         controls.add(zoomControls);
-        JPanel collapseControls = new JPanel(new GridLayout(2,1));
+        JPanel collapseControls = new JPanel(new GridLayout(3,1));
         collapseControls.setBorder(BorderFactory.createTitledBorder("Picked"));
         collapseControls.add(collapse);
+        collapseControls.add(expand);
         collapseControls.add(reset);
         controls.add(collapseControls);
         controls.add(modeBox);
@@ -195,8 +244,8 @@ public class VertexCollapseDemo extends JApplet {
 
         @Override
         public Shape getShape(Object v) {
-            if(v instanceof Collection) {
-                int size = ((Collection)v).size();
+            if(v instanceof Graph) {
+                int size = ((Graph)v).getVertices().size();
                 if (size < 5) {   
                     int sides = Math.max(size, 3);
                     return factory.getRegularPolygon(v, sides);
@@ -220,7 +269,7 @@ public class VertexCollapseDemo extends JApplet {
 
         @Override
         public int getSize(Object v) {
-            if(v instanceof Collection) {
+            if(v instanceof Graph) {
                 return 30;
             }
             return super.getSize(v);
@@ -236,20 +285,23 @@ public class VertexCollapseDemo extends JApplet {
             this.originalGraph = originalGraph;
         }
         
-        public Graph collapse(Graph inGraph, Collection cluster) {
-            Graph graph = new SimpleSparseGraph();
+        public Graph collapse(Graph inGraph, Graph clusterGraph) {
             
-            if(cluster.size() < 2) return inGraph;
+            if(clusterGraph.getVertices().size() < 2) return inGraph;
+
+            Graph graph = new SimpleSparseGraph();
+            Collection cluster = clusterGraph.getVertices();
+            
             // add all vertices in the delegate, unless the vertex is in the
             // cluster.
             for(Object v : inGraph.getVertices()) {
                 if(cluster.contains(v) == false) {
-                        graph.addVertex(v);
+                    graph.addVertex(v);
                 }
             }
-            // add the cluster as a vertex
-            graph.addVertex(cluster);
-
+            // add the clusterGraph as a vertex
+            graph.addVertex(clusterGraph);
+            
             //add all edges from the delegate, unless both endpoints of
             // the edge are in the vertices that are to be collapsed
             for(Object e : (Collection<?>)inGraph.getEdges()) {
@@ -258,25 +310,77 @@ public class VertexCollapseDemo extends JApplet {
                 if(cluster.containsAll(endpoints) == false) {
 
                     if(cluster.contains(endpoints.getFirst())) {
-//                        Edge edge = null;
                         if(inGraph.isDirected(e)) {
-//                            edge = new UndirectedSparseEdge(cluster,endpoints.getSecond());
-                            graph.addDirectedEdge(e, cluster, endpoints.getSecond());
-                        } else { //if(e instanceof DirectedEdge) {
-//                            edge = new DirectedSparseEdge(cluster,endpoints.getSecond());
-                            graph.addEdge(e, cluster, endpoints.getSecond());
+                            graph.addDirectedEdge(e, clusterGraph, endpoints.getSecond());
+                        } else {
+                            graph.addEdge(e, clusterGraph, endpoints.getSecond());
                         }
                     } else if(cluster.contains(endpoints.getSecond())) {
-//                        Edge edge = null;
                         if(inGraph.isDirected(e)) {
-//                            edge = new UndirectedSparseEdge<Object>(endpoints.getFirst(), cluster);
-                            graph.addDirectedEdge(e, endpoints.getFirst(), cluster);
-                        } else { //if(e instanceof DirectedEdge) {
-//                            edge = new DirectedSparseEdge<Object>(endpoints.getFirst(), cluster);
-                            graph.addEdge(e, endpoints.getFirst(), cluster);
+                            graph.addDirectedEdge(e, endpoints.getFirst(), clusterGraph);
+                        } else {
+                            graph.addEdge(e, endpoints.getFirst(), clusterGraph);
                         }
                     } else {
                         graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond());
+                    }
+                }
+            }
+            return graph;
+        }
+        
+        public Graph expand(Graph inGraph, Graph clusterGraph) {
+            Graph graph = new SimpleSparseGraph();
+            Collection cluster = clusterGraph.getVertices();
+            System.err.println("cluster is "+cluster);
+
+            // put all clusterGraph vertices and edges into the new Graph
+            for(Object v : cluster) {
+                graph.addVertex(v);
+                for(Object edge : clusterGraph.getIncidentEdges(v)) {
+                    Pair endpoints = clusterGraph.getEndpoints(edge);
+                    if(clusterGraph.isDirected(edge)) {
+                        graph.addDirectedEdge(edge, endpoints.getFirst(), endpoints.getSecond());
+                    } else {
+                        graph.addEdge(edge, endpoints.getFirst(), endpoints.getSecond());
+                    }
+                }
+            }
+            System.err.println("cluster done");
+            // add all the vertices from the current graph except for
+            // the cluster we are expanding
+            for(Object v : inGraph.getVertices()) {
+                if(v.equals(clusterGraph) == false) {
+                    graph.addVertex(v);
+                    for(Object edge : inGraph.getIncidentEdges(v)) {
+                        Pair endpoints = inGraph.getEndpoints(edge);
+                        System.err.println("endpoints are "+endpoints);
+                        Object v1 = endpoints.getFirst();
+                        Object v2 = endpoints.getSecond();
+                         if(cluster.containsAll(endpoints) == false) {
+                            if(clusterGraph.equals(v1)) {
+                                System.err.println("contains v1");
+                                if(inGraph.isDirected(edge)) {
+                                    graph.addDirectedEdge(edge, originalGraph.getEndpoints(edge).getFirst(), v2);
+                                } else {
+                                    graph.addEdge(edge, originalGraph.getEndpoints(edge).getFirst(), v2);
+                                }
+                            } else if(clusterGraph.equals(v2)) {
+                                System.err.println("contains v2");
+                                if(inGraph.isDirected(edge)) {
+                                    graph.addDirectedEdge(edge, v1, originalGraph.getEndpoints(edge).getSecond());
+                                } else {
+                                    graph.addEdge(edge, v1, originalGraph.getEndpoints(edge).getSecond());
+                                }
+                            } else {
+                                System.err.println("contains neither");
+                                if(inGraph.isDirected(edge)) {
+                                    graph.addDirectedEdge(edge, v1, v2);
+                                } else {
+                                    graph.addEdge(edge, v1, v2);
+                                }
+                            }
+                        }
                     }
                 }
             }

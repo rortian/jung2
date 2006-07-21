@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -138,8 +137,6 @@ public class MultiViewDemo extends JApplet {
         });
         pr2.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         
-        pr3.setVertexPaintFunction(new PickableVertexPaintFunction(pr3.getPickedEdgeState(), 
-                Color.black, Color.decode("0xe6e8fa"), Color.decode("0xcd7f32")));
         pr3.setEdgeShapeFunction(new EdgeShape.CubicCurve());
 
         transformer = vv1.getLayoutTransformer();
@@ -160,16 +157,23 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickSupport(pickSupport);
 
         // create one picked state for all 3 views to share
-        PickedState ps = new MultiPickedState();
-        vv1.setPickedVertexState(ps);
-        vv2.setPickedVertexState(ps);
-        vv3.setPickedVertexState(ps);
+        PickedState pes = new MultiPickedState();
+        PickedState pvs = new MultiPickedState();
+        vv1.setPickedVertexState(pvs);
+        vv2.setPickedVertexState(pvs);
+        vv3.setPickedVertexState(pvs);
+        vv1.setPickedEdgeState(pes);
+        vv2.setPickedEdgeState(pes);
+        vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        pr1.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
-        pr2.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
-        pr3.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
-
+        pr1.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        pr2.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        pr3.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        pr1.setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        pr2.setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        pr3.setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        
         // add default listener for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());
         vv2.setToolTipFunction(new DefaultToolTipFunction());
