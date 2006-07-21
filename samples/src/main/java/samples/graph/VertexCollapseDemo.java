@@ -30,8 +30,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
@@ -51,6 +49,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 
 
 /**
@@ -159,27 +158,33 @@ public class VertexCollapseDemo extends JApplet {
 //                }
                 if(picked.size() > 1) {
                     Graph inGraph = layout.getGraph();
-                    Graph clusterGraph = new SimpleSparseGraph();
-                    
-                    for(Object v : picked) {
-                      Collection edges = inGraph.getIncidentEdges(v);
-                      for(Object edge : edges) {
-                          Pair endpoints = inGraph.getEndpoints(edge);
-                          Object v1 = endpoints.getFirst();
-                          Object v2 = endpoints.getSecond();
-                          if(picked.containsAll(endpoints)) {
-                          if(inGraph.isDirected(edge)) {
-                              clusterGraph.addDirectedEdge(edge, v1, v2);
-                          } else {
-                              clusterGraph.addEdge(edge, v1, v2);
-                          }
-                          }
-                      }
-                  }
+                    Graph clusterGraph = collapser.getClusterGraph(inGraph, picked);
+//                    try {
+//                        clusterGraph = (Graph)inGraph.getClass().newInstance();
+//                    } catch (Exception e1) {
+//                        // TODO Auto-generated catch block
+//                        e1.printStackTrace();
+//                        return;
+//                    }
+//                    for(Object v : picked) {
+//                      Collection edges = inGraph.getIncidentEdges(v);
+//                      for(Object edge : edges) {
+//                          Pair endpoints = inGraph.getEndpoints(edge);
+//                          Object v1 = endpoints.getFirst();
+//                          Object v2 = endpoints.getSecond();
+//                          if(picked.containsAll(endpoints)) {
+//                          if(inGraph.isDirected(edge)) {
+//                              clusterGraph.addDirectedEdge(edge, v1, v2);
+//                          } else {
+//                              clusterGraph.addEdge(edge, v1, v2);
+//                          }
+//                          }
+//                      }
+//                  }
 
                     Graph g = collapser.collapse(layout.getGraph(), clusterGraph);
                     Point2D p = layout.getLocation(picked.iterator().next());
-                    System.err.println("location for "+clusterGraph+" will be "+p);
+//                    System.err.("location for "+clusterGraph+" will be "+p);
                     vv.stop();
                     layout.setGraph(g);
                     layout.forceMove(clusterGraph, p.getX(), p.getY());
@@ -275,117 +280,6 @@ public class VertexCollapseDemo extends JApplet {
             return super.getSize(v);
         }
         
-    }
-    
-    public static class GraphCollapser  {
-        
-        private Graph originalGraph;
-        
-        public GraphCollapser(Graph originalGraph) {
-            this.originalGraph = originalGraph;
-        }
-        
-        public Graph collapse(Graph inGraph, Graph clusterGraph) {
-            
-            if(clusterGraph.getVertices().size() < 2) return inGraph;
-
-            Graph graph = new SimpleSparseGraph();
-            Collection cluster = clusterGraph.getVertices();
-            
-            // add all vertices in the delegate, unless the vertex is in the
-            // cluster.
-            for(Object v : inGraph.getVertices()) {
-                if(cluster.contains(v) == false) {
-                    graph.addVertex(v);
-                }
-            }
-            // add the clusterGraph as a vertex
-            graph.addVertex(clusterGraph);
-            
-            //add all edges from the delegate, unless both endpoints of
-            // the edge are in the vertices that are to be collapsed
-            for(Object e : (Collection<?>)inGraph.getEdges()) {
-                Pair endpoints = inGraph.getEndpoints(e);
-                // don't add edges whose endpoints are both in the cluster
-                if(cluster.containsAll(endpoints) == false) {
-
-                    if(cluster.contains(endpoints.getFirst())) {
-                        if(inGraph.isDirected(e)) {
-                            graph.addDirectedEdge(e, clusterGraph, endpoints.getSecond());
-                        } else {
-                            graph.addEdge(e, clusterGraph, endpoints.getSecond());
-                        }
-                    } else if(cluster.contains(endpoints.getSecond())) {
-                        if(inGraph.isDirected(e)) {
-                            graph.addDirectedEdge(e, endpoints.getFirst(), clusterGraph);
-                        } else {
-                            graph.addEdge(e, endpoints.getFirst(), clusterGraph);
-                        }
-                    } else {
-                        graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond());
-                    }
-                }
-            }
-            return graph;
-        }
-        
-        public Graph expand(Graph inGraph, Graph clusterGraph) {
-            Graph graph = new SimpleSparseGraph();
-            Collection cluster = clusterGraph.getVertices();
-            System.err.println("cluster is "+cluster);
-
-            // put all clusterGraph vertices and edges into the new Graph
-            for(Object v : cluster) {
-                graph.addVertex(v);
-                for(Object edge : clusterGraph.getIncidentEdges(v)) {
-                    Pair endpoints = clusterGraph.getEndpoints(edge);
-                    if(clusterGraph.isDirected(edge)) {
-                        graph.addDirectedEdge(edge, endpoints.getFirst(), endpoints.getSecond());
-                    } else {
-                        graph.addEdge(edge, endpoints.getFirst(), endpoints.getSecond());
-                    }
-                }
-            }
-            System.err.println("cluster done");
-            // add all the vertices from the current graph except for
-            // the cluster we are expanding
-            for(Object v : inGraph.getVertices()) {
-                if(v.equals(clusterGraph) == false) {
-                    graph.addVertex(v);
-                    for(Object edge : inGraph.getIncidentEdges(v)) {
-                        Pair endpoints = inGraph.getEndpoints(edge);
-                        System.err.println("endpoints are "+endpoints);
-                        Object v1 = endpoints.getFirst();
-                        Object v2 = endpoints.getSecond();
-                         if(cluster.containsAll(endpoints) == false) {
-                            if(clusterGraph.equals(v1)) {
-                                System.err.println("contains v1");
-                                if(inGraph.isDirected(edge)) {
-                                    graph.addDirectedEdge(edge, originalGraph.getEndpoints(edge).getFirst(), v2);
-                                } else {
-                                    graph.addEdge(edge, originalGraph.getEndpoints(edge).getFirst(), v2);
-                                }
-                            } else if(clusterGraph.equals(v2)) {
-                                System.err.println("contains v2");
-                                if(inGraph.isDirected(edge)) {
-                                    graph.addDirectedEdge(edge, v1, originalGraph.getEndpoints(edge).getSecond());
-                                } else {
-                                    graph.addEdge(edge, v1, originalGraph.getEndpoints(edge).getSecond());
-                                }
-                            } else {
-                                System.err.println("contains neither");
-                                if(inGraph.isDirected(edge)) {
-                                    graph.addDirectedEdge(edge, v1, v2);
-                                } else {
-                                    graph.addEdge(edge, v1, v2);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return graph;
-        }
     }
 
     /**
