@@ -61,7 +61,11 @@ public class GraphCollapser  {
                         graph.addEdge(e, endpoints.getFirst(), clusterGraph);
                     }
                 } else {
-                    graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond());
+                    if(inGraph.isDirected(e)) {
+                        graph.addDirectedEdge(e, endpoints.getFirst(), endpoints.getSecond());
+                    } else {
+                        graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond());
+                    }
                 }
             }
         }
