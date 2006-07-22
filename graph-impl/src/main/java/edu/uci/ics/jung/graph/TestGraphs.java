@@ -9,7 +9,7 @@
  * Created on Jul 2, 2003
  *  
  */
-package samples.graph;
+package edu.uci.ics.jung.graph;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,10 +19,6 @@ import java.util.Set;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.BarabasiAlbertGenerator;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
 
 
 
