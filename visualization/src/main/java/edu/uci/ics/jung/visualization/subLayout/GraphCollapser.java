@@ -176,6 +176,7 @@ public class GraphCollapser  {
             return null;
         }
         for(Object v : picked) {
+        	clusterGraph.addVertex(v);
             Collection edges = inGraph.getIncidentEdges(v);
             for(Object edge : edges) {
                 Pair endpoints = inGraph.getEndpoints(edge);
