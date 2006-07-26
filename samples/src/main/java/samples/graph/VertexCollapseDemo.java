@@ -93,8 +93,7 @@ public class VertexCollapseDemo extends JApplet {
     public VertexCollapseDemo() {
         
         // create a simple graph for the demo
-        graph = TestGraphs.createDirectedAcyclicGraph(5, 10, .5);
-        //getOneComponentGraph();
+        graph = TestGraphs.getOneComponentGraph();
         collapser = new GraphCollapser(graph);
         
         PluggableRenderer pr = new PluggableRenderer();
@@ -158,10 +157,17 @@ public class VertexCollapseDemo extends JApplet {
                     Graph clusterGraph = collapser.getClusterGraph(inGraph, picked);
 
                     Graph g = collapser.collapse(layout.getGraph(), clusterGraph);
-                    Point2D p = layout.getLocation(picked.iterator().next());
+                    double sumx = 0;
+                    double sumy = 0;
+                    for(Object v : picked) {
+                    	Point2D p = layout.getLocation(v);
+                    	sumx += p.getX();
+                    	sumy += p.getY();
+                    }
+                    Point2D cp = new Point2D.Double(sumx/picked.size(), sumy/picked.size());
                     vv.stop();
                     layout.setGraph(g);
-                    layout.forceMove(clusterGraph, p.getX(), p.getY());
+                    layout.forceMove(clusterGraph, cp.getX(), cp.getY());
                 }
             }});
         
