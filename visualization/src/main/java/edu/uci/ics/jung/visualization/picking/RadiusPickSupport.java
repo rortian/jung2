@@ -11,7 +11,10 @@
  * Created on Mar 19, 2005
  *
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.picking;
+
+import edu.uci.ics.jung.visualization.HasGraphLayout;
+import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 
 
 

@@ -13,7 +13,7 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import javax.swing.Icon;
 
-import edu.uci.ics.jung.visualization.PickedInfo;
+import edu.uci.ics.jung.visualization.picking.PickedInfo;
 
 /**
  * Supplies an Icon for each vertex according to the <code>Icon</code>

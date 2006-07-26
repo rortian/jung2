@@ -13,7 +13,7 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Paint;
 
-import edu.uci.ics.jung.visualization.PickedInfo;
+import edu.uci.ics.jung.visualization.picking.PickedInfo;
 
 /**
  * Paints each vertex according to the <code>Paint</code>

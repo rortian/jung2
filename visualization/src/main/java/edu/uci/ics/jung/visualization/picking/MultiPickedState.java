@@ -8,7 +8,7 @@
  *
  * Created on Mar 28, 2005
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.picking;
 
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public class MultiPickedState<T> extends AbstractPickedState<T> implements Picke
 //    }
 
     /**
-     * @see edu.uci.ics.jung.visualization.PickedState#clearPickedVertices()
+     * @see edu.uci.ics.jung.visualization.picking.PickedState#clearPickedVertices()
      */
     public void clear() 
     {
@@ -117,14 +117,14 @@ public class MultiPickedState<T> extends AbstractPickedState<T> implements Picke
 //    }
     
     /**
-     * @see edu.uci.ics.jung.visualization.PickedState#getPickedEdges()
+     * @see edu.uci.ics.jung.visualization.picking.PickedState#getPickedEdges()
      */
     public Set<T> getPicked() {
         return Collections.unmodifiableSet(picked);
     }
     
     /**
-     * @see edu.uci.ics.jung.visualization.PickedState#isPicked(ArchetypeEdge)
+     * @see edu.uci.ics.jung.visualization.picking.PickedState#isPicked(ArchetypeEdge)
      */
     public boolean isPicked(T e) {
         return picked.contains(e);

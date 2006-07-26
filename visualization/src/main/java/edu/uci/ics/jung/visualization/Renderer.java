@@ -12,6 +12,7 @@ package edu.uci.ics.jung.visualization;
 import java.awt.Graphics;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Draws individual vertices and

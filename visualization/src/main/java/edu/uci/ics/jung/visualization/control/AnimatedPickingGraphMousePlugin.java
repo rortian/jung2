@@ -20,10 +20,10 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.jung.visualization.PickSupport;
-import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.picking.PickSupport;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
  * AnimatedPickingGraphMousePlugin supports the picking of one Graph

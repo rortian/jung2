@@ -16,14 +16,14 @@ import java.util.Collection;
 
 /**
  * An interface for classes that return a location for
- * an <code>ArchetypeVertex</code>.
+ * a vertex.
  * 
  * @author Joshua O'Madadhain
  */
 public interface VertexLocationFunction<V> {
+    
     public Point2D getLocation(V v);
     
     Collection<V> getVertices();
-    
-//    public Iterator getVertexIterator();
+
 }

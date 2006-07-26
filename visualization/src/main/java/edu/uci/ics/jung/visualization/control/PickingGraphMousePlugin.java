@@ -26,11 +26,11 @@ import java.util.ConcurrentModificationException;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.jung.visualization.PickSupport;
-import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationViewer.Paintable;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.picking.PickSupport;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
  * PickingGraphMousePlugin supports the picking of graph elements

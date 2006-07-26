@@ -16,6 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.picking.PickSupport;
+
 /**
  * This class translates mouse clicks into vertex clicks
  * 

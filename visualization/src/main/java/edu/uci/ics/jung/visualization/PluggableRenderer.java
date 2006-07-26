@@ -64,6 +64,7 @@ import edu.uci.ics.jung.visualization.decorators.VertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexStringer;
 import edu.uci.ics.jung.visualization.decorators.VertexStrokeFunction;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 

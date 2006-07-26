@@ -8,7 +8,7 @@
  *
  * Created on Apr 2, 2005
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.picking;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;

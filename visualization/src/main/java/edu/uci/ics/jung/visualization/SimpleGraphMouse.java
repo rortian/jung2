@@ -19,6 +19,8 @@ import java.awt.geom.Point2D;
 import javax.swing.SwingUtilities;
 
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.picking.PickSupport;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * SimpleGraphMouse is the original GraphMouse class that was

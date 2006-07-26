@@ -7,19 +7,17 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.picking;
 
 
 
 /**
  * An interface for classes that return information regarding whether a 
- * given vertex or edge has been selected.
+ * given graph element (vertex or edge) has been selected.
  * 
  * @author danyelf
  */
 public interface PickedInfo<T> {
 
 	public boolean isPicked(T t);
-//	public boolean isPicked(E e);
-
 }

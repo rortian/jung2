@@ -27,8 +27,6 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.HasShapeFunctions;
-import edu.uci.ics.jung.visualization.PickedInfo;
-import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
@@ -45,6 +43,8 @@ import edu.uci.ics.jung.visualization.decorators.VertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexStringer;
 import edu.uci.ics.jung.visualization.decorators.VertexStrokeFunction;
+import edu.uci.ics.jung.visualization.picking.PickedInfo;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**

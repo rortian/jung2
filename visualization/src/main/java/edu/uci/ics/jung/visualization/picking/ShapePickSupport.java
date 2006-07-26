@@ -9,7 +9,7 @@
  * Created on Mar 11, 2005
  *
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.picking;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -20,6 +20,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.ConcurrentModificationException;
 
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.visualization.HasGraphLayout;
+import edu.uci.ics.jung.visualization.HasShapeFunctions;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
 
@@ -106,7 +108,7 @@ public class ShapePickSupport<V, E> implements PickSupport<V,E> {
      * Iterates over Vertices, checking to see if x,y is contained in the
      * Vertex's Shape. If (x,y) is contained in more than one vertex, use
      * the vertex whose center is closest to the pick point.
-     * @see edu.uci.ics.jung.visualization.PickSupport#getVertex(double, double)
+     * @see edu.uci.ics.jung.visualization.picking.PickSupport#getVertex(double, double)
      */
     public V getVertex(double x, double y) {
         Layout<V, E> layout = hasGraphLayout.getGraphLayout();
@@ -242,7 +244,7 @@ public class ShapePickSupport<V, E> implements PickSupport<V,E> {
     /**
      * <code>ShapePickSupport</code> gets its layout from its VisualizationViewer, so this
      * method currently does nothing.
-     * @see edu.uci.ics.jung.visualization.PickSupport#setLayout(edu.uci.ics.jung.visualization.layout.Layout)
+     * @see edu.uci.ics.jung.visualization.picking.PickSupport#setLayout(edu.uci.ics.jung.visualization.layout.Layout)
      */
     public void setLayout(Layout layout) {}
 }
