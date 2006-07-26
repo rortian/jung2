@@ -153,13 +153,25 @@ public class GraphCollapser  {
         for(Object v : vertices) {
             if(v instanceof Graph) {
                 Graph g = (Graph)v;
-                Collection graphVertices = g.getVertices();
-                if(graphVertices.contains(vertex)) {
+//                Collection graphVertices = g.getVertices();
+//                if(graphVertices.contains(vertex)) {
+                if(contains(g, vertex)) {
                     return v;
                 }
             }
         }
         return null;
+    }
+    
+    private boolean contains(Graph inGraph, Object vertex) {
+    	boolean contained = false;
+    	if(inGraph.getVertices().contains(vertex)) return true;
+    	for(Object v : inGraph.getVertices()) {
+    		if(v instanceof Graph) {
+    			contained |= contains((Graph)v, vertex);
+    		}
+    	}
+    	return contained;
     }
     
     public Graph getClusterGraph(Graph inGraph, Collection picked) {
