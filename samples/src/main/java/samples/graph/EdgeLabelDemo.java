@@ -40,7 +40,6 @@ import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
-import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -56,6 +55,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.CircleLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 
 /**
  * Demonstrates jung support for drawing edge labels that

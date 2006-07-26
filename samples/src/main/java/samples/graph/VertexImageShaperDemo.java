@@ -51,9 +51,7 @@ import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.FourPassImageShaper;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PickedState;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
-import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -69,6 +67,8 @@ import edu.uci.ics.jung.visualization.decorators.VertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexStringer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
+import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 
 /**
  * Demonstrates the use of images to represent graph vertices.

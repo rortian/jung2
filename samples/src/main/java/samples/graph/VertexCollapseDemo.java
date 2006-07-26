@@ -34,7 +34,6 @@ import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
-import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -50,6 +49,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 
 
@@ -66,6 +66,9 @@ public class VertexCollapseDemo extends JApplet {
         "<p>on multiple vertices."+
         "<p>After you select vertices, use the Collapse button"+
         "<p>to combine them into a single vertex."+
+        "<p>Select a 'collapsed' vertex and use the Expand button"+
+        "<p>to restore the collapsed vertices."+
+        "<p>The Restore button will restore the original graph."+
         "<p>You can drag the vertices with the mouse." +
         "<p>Use the 'Picking'/'Transforming' combo-box to switch"+
         "<p>between picking and transforming mode.</html>";
@@ -79,8 +82,6 @@ public class VertexCollapseDemo extends JApplet {
      */
     VisualizationViewer vv;
     
-//    PickedState ps;
-    
     Layout layout;
     
     GraphCollapser collapser;
@@ -92,7 +93,8 @@ public class VertexCollapseDemo extends JApplet {
     public VertexCollapseDemo() {
         
         // create a simple graph for the demo
-        graph = TestGraphs.getOneComponentGraph();
+        graph = TestGraphs.createDirectedAcyclicGraph(5, 10, .5);
+        //getOneComponentGraph();
         collapser = new GraphCollapser(graph);
         
         PluggableRenderer pr = new PluggableRenderer();
@@ -107,8 +109,6 @@ public class VertexCollapseDemo extends JApplet {
         pr.setVertexShapeFunction(new ClusterVertexShapeFunction());
         ((AbstractVertexShapeFunction)pr.getVertexShapeFunction()).setSizeFunction(new ClusterVertexSizeFunction(20));
         
-//        vv.setPickedVertexState(new ClusterListener(layout));
-//        ps = vv.getPickedVertexState();
         pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
                 Color.black, Color.red, Color.yellow));
         pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), 
@@ -153,39 +153,12 @@ public class VertexCollapseDemo extends JApplet {
 
             public void actionPerformed(ActionEvent e) {
                 Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
-//                Map pickedMap = new HashMap();
-//                for(Object v : picked) {
-//                    pickedMap.put(v, layout.getGraph().getIncidentEdges(v));
-//                }
                 if(picked.size() > 1) {
                     Graph inGraph = layout.getGraph();
                     Graph clusterGraph = collapser.getClusterGraph(inGraph, picked);
-//                    try {
-//                        clusterGraph = (Graph)inGraph.getClass().newInstance();
-//                    } catch (Exception e1) {
-//                        // TODO Auto-generated catch block
-//                        e1.printStackTrace();
-//                        return;
-//                    }
-//                    for(Object v : picked) {
-//                      Collection edges = inGraph.getIncidentEdges(v);
-//                      for(Object edge : edges) {
-//                          Pair endpoints = inGraph.getEndpoints(edge);
-//                          Object v1 = endpoints.getFirst();
-//                          Object v2 = endpoints.getSecond();
-//                          if(picked.containsAll(endpoints)) {
-//                          if(inGraph.isDirected(edge)) {
-//                              clusterGraph.addDirectedEdge(edge, v1, v2);
-//                          } else {
-//                              clusterGraph.addEdge(edge, v1, v2);
-//                          }
-//                          }
-//                      }
-//                  }
 
                     Graph g = collapser.collapse(layout.getGraph(), clusterGraph);
                     Point2D p = layout.getLocation(picked.iterator().next());
-//                    System.err.("location for "+clusterGraph+" will be "+p);
                     vv.stop();
                     layout.setGraph(g);
                     layout.forceMove(clusterGraph, p.getX(), p.getY());
@@ -204,10 +177,6 @@ public class VertexCollapseDemo extends JApplet {
                         
                         vv.stop();
                         layout.setGraph(g);
-
-                        
-                        // remove v from the graph and add its components instead
-//                        Graph g = layout.getGraph();
                     }
                     vv.repaint();
                 }
@@ -252,25 +221,22 @@ public class VertexCollapseDemo extends JApplet {
         public Shape getShape(Object v) {
             if(v instanceof Graph) {
                 int size = ((Graph)v).getVertices().size();
-                if (size < 5) {   
+                if (size < 8) {   
                     int sides = Math.max(size, 3);
                     return factory.getRegularPolygon(v, sides);
                 }
-                else
+                else {
                     return factory.getRegularStar(v, size);
-
-//                return factory.getRegularStar(v, ((Collection)v).size());
+                }
             }
             return super.getShape(v);
         }
-        
     }
     
     class ClusterVertexSizeFunction extends ConstantVertexSizeFunction {
 
         public ClusterVertexSizeFunction(int size) {
             super(size);
-            // TODO Auto-generated constructor stub
         }
 
         @Override
@@ -280,7 +246,6 @@ public class VertexCollapseDemo extends JApplet {
             }
             return super.getSize(v);
         }
-        
     }
 
     /**
