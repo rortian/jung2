@@ -99,6 +99,7 @@ public class VertexCollapseDemo extends JApplet {
             new DefaultVisualizationModel(layout, preferredSize);
         vv =  new VisualizationViewer(visualizationModel, preferredSize);
         
+        vv.getRenderContext().setVertexShapeFunction(new ClusterVertexShapeFunction());
         vv.getRenderContext().setVertexStringer(new ToStringLabeller() {
 
             @Override
@@ -221,6 +222,9 @@ public class VertexCollapseDemo extends JApplet {
     
     class ClusterVertexShapeFunction extends EllipseVertexShapeFunction {
 
+        ClusterVertexShapeFunction() {
+            setSizeFunction(new ClusterVertexSizeFunction(20));
+        }
         @Override
         public Shape getShape(Object v) {
             if(v instanceof Graph) {
