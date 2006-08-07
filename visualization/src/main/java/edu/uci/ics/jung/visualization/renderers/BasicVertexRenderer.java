@@ -57,9 +57,6 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         		paintShapeForVertex(rc, v, shape);
         	}
     		labelVertex(rc, v, rc.getVertexStringer().getLabel(v), x, y);
-        } else {
-            JComponent vv = rc.getScreenDevice();
-            System.err.println("vertexHit false for "+v+" in "+vv);
         }
     }
     
@@ -76,11 +73,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
                     0,0,
                     d.width,d.height);
         }
-        boolean hit = rc.getViewTransformer().transform(s).intersects(deviceRectangle);
-        if(hit == false) {
-            System.err.println("hit false for "+s.getBounds()+" and "+deviceRectangle+" and viewTransformer = "+rc.getViewTransformer());
-        }
-        return hit;
+        return rc.getViewTransformer().transform(s).intersects(deviceRectangle);
     }
 
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {
