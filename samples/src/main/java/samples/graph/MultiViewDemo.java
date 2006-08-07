@@ -112,10 +112,6 @@ public class MultiViewDemo extends JApplet {
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
         
-//        PluggableRenderer pr1 = new PluggableRenderer();
-//        PluggableRenderer pr2 = new PluggableRenderer();
-//        PluggableRenderer pr3 = new PluggableRenderer();
-        
         // create one layout for the graph
         FRLayout layout = new FRLayout(graph);
         layout.setMaxIterations(1000);
@@ -225,7 +221,7 @@ public class MultiViewDemo extends JApplet {
                 shearingPlugin = new ShearingGraphMousePlugin();
 
                 add(scalingPlugin);
-                setTransformingMode();
+                setMode(Mode.TRANSFORMING);
             }
         };
 
@@ -234,12 +230,12 @@ public class MultiViewDemo extends JApplet {
                 pickingPlugin = new PickingGraphMousePlugin();
                 animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
                 translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
-                scalingPlugin = new ScalingGraphMousePlugin(new ViewScalingControl(), InputEvent.CTRL_MASK);
+                scalingPlugin = new ScalingGraphMousePlugin(new ViewScalingControl(), 0);
                 rotatingPlugin = new RotatingGraphMousePlugin();
                 shearingPlugin = new ShearingGraphMousePlugin();
 
                 add(scalingPlugin);
-                setTransformingMode();
+                setMode(Mode.TRANSFORMING);
             }
        	
         };
