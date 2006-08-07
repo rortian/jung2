@@ -129,7 +129,7 @@ public abstract class AbstractModalGraphMouse extends PluggableGraphMouse
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#setPickingMode()
      */
-    private void setPickingMode() {
+    protected void setPickingMode() {
         remove(translatingPlugin);
         remove(rotatingPlugin);
         remove(shearingPlugin);
@@ -140,7 +140,7 @@ public abstract class AbstractModalGraphMouse extends PluggableGraphMouse
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#setTransformingMode()
      */
-    private void setTransformingMode() {
+    protected void setTransformingMode() {
         remove(pickingPlugin);
         remove(animatedPickingPlugin);
         add(translatingPlugin);
