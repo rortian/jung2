@@ -378,6 +378,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setScreenDevice(JComponent screenDevice) {
         this.screenDevice = screenDevice;
+        screenDevice.add(rendererPane);
     }
 
     /* (non-Javadoc)
