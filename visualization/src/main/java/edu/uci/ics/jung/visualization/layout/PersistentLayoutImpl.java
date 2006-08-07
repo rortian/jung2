@@ -81,7 +81,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
         super(layout);
         this.map = new HashMap<Integer,Point>();
         this.dontmove = new HashSet<V>();
-        this.elementAccessor = new RadiusGraphElementAccessor<V,E>(layout);
+        this.elementAccessor = new RadiusGraphElementAccessor<V,E>();
         if(layout instanceof ChangeEventSupport) {
             ((ChangeEventSupport)layout).addChangeListener(new ChangeListener() {
                 public void stateChanged(ChangeEvent e) {

@@ -30,16 +30,16 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  */
 public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V, E> {
     
-    protected Layout<V, E> layout;
+//    protected Layout<V, E> layout;
     protected double maxDistance;
     
-    public RadiusGraphElementAccessor(Layout<V, E> l) {
-        this(l, Math.sqrt(Double.MAX_VALUE - 1000));
+    public RadiusGraphElementAccessor() {
+        this(Math.sqrt(Double.MAX_VALUE - 1000));
     }
     
-    public RadiusGraphElementAccessor(Layout<V, E> l, double maxDistance) {
+    public RadiusGraphElementAccessor(double maxDistance) {
         this.maxDistance = maxDistance;
-        this.layout = l;
+//        this.layout = l;
     }
     
 	/**
@@ -48,8 +48,8 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 	 * visible vertices and checks their distance from the click. Override this
 	 * method to provde a more efficient implementation.
 	 */
-	public V getVertex(double x, double y) {
-	    return getVertex(x, y, this.maxDistance);
+	public V getVertex(Layout<V,E> layout, double x, double y) {
+	    return getVertex(layout, x, y, this.maxDistance);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 	 * @param y
 	 * @param maxDistance temporarily overrides member maxDistance
 	 */
-	public V getVertex(double x, double y, double maxDistance) {
+	public V getVertex(Layout<V,E> layout, double x, double y, double maxDistance) {
 		double minDistance = maxDistance * maxDistance;
         V closest = null;
 		while(true) {
@@ -90,8 +90,8 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 	 * Gets the edge nearest to the location of the (x,y) location selected.
 	 * Calls the longer form of the call.
 	 */
-	public E getEdge(double x, double y) {
-	    return getEdge(x, y, this.maxDistance);
+	public E getEdge(Layout<V,E> layout, double x, double y) {
+	    return getEdge(layout, x, y, this.maxDistance);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 	 * @param maxDistance temporarily overrides member maxDistance
 	 * @return Edge closest to the click.
 	 */
-	public E getEdge(double x, double y, double maxDistance) {
+	public E getEdge(Layout<V,E> layout, double x, double y, double maxDistance) {
 		double minDistance = maxDistance * maxDistance;
 		E closest = null;
 		while(true) {
@@ -159,7 +159,7 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 		return closest;
 	}
 
-    public void setLayout(Layout<V, E> l) {
-        this.layout = l;
-    }
+//    public void setLayout(Layout<V, E> l) {
+//        this.layout = l;
+//    }
 }

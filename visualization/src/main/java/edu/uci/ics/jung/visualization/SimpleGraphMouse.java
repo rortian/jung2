@@ -84,7 +84,7 @@ public class SimpleGraphMouse<V, E> extends MouseAdapter
 	            // transform it to graph coordinates:
 	            Point2D gp = vv.inverseTransform(p);
 
-	            V v = pickSupport.getVertex(gp.getX(), gp.getY());
+	            V v = pickSupport.getVertex(layout, gp.getX(), gp.getY());
 	            if(v != null) {
 	                pickedVertexState.clear();
 	                pickedVertexState.pick(v, true);
@@ -97,7 +97,7 @@ public class SimpleGraphMouse<V, E> extends MouseAdapter
 	                offsetx = (float) (gp.getX()-gq.getX());
 	                offsety = (float) (gp.getY()-gq.getY());
 	            } else {
-	                E edge = pickSupport.getEdge(gp.getX(), gp.getY());
+	                E edge = pickSupport.getEdge(layout, gp.getX(), gp.getY());
 	                if(edge != null && pickedEdgeState != null) {
 	                    pickedEdgeState.clear();
 	                    pickedEdgeState.pick(edge, true);
@@ -107,7 +107,7 @@ public class SimpleGraphMouse<V, E> extends MouseAdapter
 	            
 	        } else if(SwingUtilities.isMiddleMouseButton(e)) {
 	            Point2D p = vv.inverseTransform(e.getPoint());
-	            V v = pickSupport.getVertex(p.getX(), p.getY());
+	            V v = pickSupport.getVertex(layout, p.getX(), p.getY());
 	            if(v != null) {
                     boolean wasThere = pickedVertexState.pick(v, !pickedVertexState.isPicked(v));
 	                if(wasThere) {
@@ -120,7 +120,7 @@ public class SimpleGraphMouse<V, E> extends MouseAdapter
 //	                    }
 	                }
 	            } else {
-	                E edge = pickSupport.getEdge(p.getX(), p.getY());
+	                E edge = pickSupport.getEdge(layout, p.getX(), p.getY());
 	                if(edge != null) {
 	                    pickedEdgeState.pick(edge, !pickedEdgeState.isPicked(edge));
 	                }

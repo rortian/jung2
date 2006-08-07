@@ -26,7 +26,7 @@ public interface GraphElementAccessor<V, E>
      * with respect to the <code>Vertex</code>'s location as specified
      * by a <code>Layout</code>.
      */
-    V getVertex(double x, double y);
+    V getVertex(Layout<V,E> layout, double x, double y);
 
     /**
      * Returns an <code>Edge</code> which is associated with the 
@@ -34,11 +34,11 @@ public interface GraphElementAccessor<V, E>
      * with respect to the <code>Edge</code>'s location as specified
      * by a Layout.
      */
-    E getEdge(double x, double y);
+    E getEdge(Layout<V,E> layout, double x, double y);
     
-    /**
-     * Sets the <code>Layout</code> that is used to specify the locations
-     * of vertices and edges in this instance to <code>layout</code>.
-     */
-    void setLayout(Layout<V, E> layout); 
+//    /**
+//     * Sets the <code>Layout</code> that is used to specify the locations
+//     * of vertices and edges in this instance to <code>layout</code>.
+//     */
+//    void setLayout(Layout<V, E> layout); 
 }

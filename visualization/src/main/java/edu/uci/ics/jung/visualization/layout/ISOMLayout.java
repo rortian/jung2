@@ -79,7 +79,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 
 	public ISOMLayout(Graph<V,E> g) {
 		super(g);
-        elementAccessor = new RadiusGraphElementAccessor<V,E>(this);
+        elementAccessor = new RadiusGraphElementAccessor<V,E>();
 		queue = new Vector<V>();
 //		trace = false;
 	}
@@ -154,7 +154,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
                 10 + Math.random() * getCurrentSize().getHeight());
 
 		//Get closest vertex to random position
-		V winner = elementAccessor.getVertex(tempXYD.getX(), tempXYD.getY());
+		V winner = elementAccessor.getVertex(this, tempXYD.getX(), tempXYD.getY());
 
 		while(true) {
 		    try {

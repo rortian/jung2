@@ -10,8 +10,7 @@ package edu.uci.ics.jung.visualization.transform.shape;
 
 import java.awt.Dimension;
 
-import edu.uci.ics.jung.visualization.PluggableRenderer;
-import edu.uci.ics.jung.visualization.Renderer;
+import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
@@ -30,9 +29,11 @@ import edu.uci.ics.jung.visualization.transform.LensTransformer;
 public class ViewLensSupport extends AbstractLensSupport
     implements LensSupport {
     
-    protected PluggableRenderer pluggableRenderer;
-    protected TransformingPluggableRenderer transformingPluggableRenderer;
-    protected Renderer renderer;
+//    protected RenderContext pluggableRenderContext;
+//    protected TransformingPluggableRenderContext transformingPluggableRenderContext;
+    protected RenderContext renderContext;
+    GraphicsDecorator lensGraphicsDecorator;
+    GraphicsDecorator savedGraphicsDecorator;
     
     public ViewLensSupport(VisualizationViewer vv) {
         this(vv, new HyperbolicShapeTransformer(vv),
@@ -41,19 +42,21 @@ public class ViewLensSupport extends AbstractLensSupport
     public ViewLensSupport(VisualizationViewer vv, LensTransformer lensTransformer,
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
-        this.renderer = vv.getRenderer();
+        this.renderContext = vv.getRenderContext();
+        this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensTransformer = lensTransformer;
         Dimension d = vv.getSize();
         if(d.width == 0 || d.height == 0) {
             d = vv.getPreferredSize();
         }
         lensTransformer.setViewRadius(d.width/5);
+        this.lensGraphicsDecorator = new TransformingGraphics(lensTransformer);
 
-        if(renderer instanceof PluggableRenderer) {
-            this.pluggableRenderer = (PluggableRenderer)renderer;
-        } else {
-            this.pluggableRenderer = new PluggableRenderer();
-        }
+//        if(renderContext instanceof PluggableRenderContext) {
+//            this.pluggableRenderContext = renderContext;
+//        } else {
+//            this.pluggableRenderContext = new PluggableRenderContext();
+//        }
     }
     public void activate() {
         if(lens == null) {
@@ -63,12 +66,13 @@ public class ViewLensSupport extends AbstractLensSupport
             lensControls = new LensControls(lensTransformer);
         }
         vv.setViewTransformer(lensTransformer);
-        if(transformingPluggableRenderer == null) {   
-            transformingPluggableRenderer = 
-            		new TransformingPluggableRenderer(pluggableRenderer);
-        }
-        transformingPluggableRenderer.setTransformer(lensTransformer);
-        vv.setRenderer(transformingPluggableRenderer);
+//        if(transformingPluggableRenderContext == null) {   
+//            transformingPluggableRenderContext = 
+//            		new TransformingPluggableRenderContext(pluggableRenderContext);
+//        }
+//        transformingPluggableRenderContext.setTransformer(lensTransformer);
+//        vv.setRenderContext(transformingPluggableRenderContext);
+        this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
@@ -80,7 +84,8 @@ public class ViewLensSupport extends AbstractLensSupport
         vv.setViewTransformer(savedViewTransformer);
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
-        vv.setRenderer(renderer);
+        this.renderContext.setGraphicsContext(savedGraphicsDecorator);
+        vv.setRenderContext(renderContext);
         vv.setToolTipText(defaultToolTipText);
         vv.setGraphMouse(graphMouse);
         vv.repaint();

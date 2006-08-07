@@ -11,7 +11,6 @@
 package edu.uci.ics.jung.visualization.picking;
 
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
-import edu.uci.ics.jung.visualization.HasGraphLayout;
 
 
 
@@ -23,5 +22,5 @@ import edu.uci.ics.jung.visualization.HasGraphLayout;
  * @author Tom Nelson
  */
 public interface PickSupport<V, E> extends GraphElementAccessor<V, E> {
-    void setHasGraphLayout(HasGraphLayout<V, E> vv);
+//    void setHasGraphLayout(HasGraphLayout<V, E> vv);
 }

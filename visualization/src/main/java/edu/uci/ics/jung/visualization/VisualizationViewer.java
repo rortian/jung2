@@ -9,6 +9,7 @@
 */
 package edu.uci.ics.jung.visualization;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,11 +18,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -39,6 +38,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.ToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.ToolTipFunctionAdapter;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -51,6 +52,7 @@ import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.Transformer;
 import edu.uci.ics.jung.visualization.transform.ViewTransformer;
+import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -64,10 +66,12 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  */
 public class VisualizationViewer<V, E> extends JPanel 
                 implements Transformer, LayoutTransformer, ViewTransformer, 
-                HasGraphLayout<V,E>, ChangeListener, ChangeEventSupport{
+                ChangeListener, ChangeEventSupport{
 
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
+    
+    protected Map<V,Point2D> locationMap = new HashMap<V,Point2D>();
 
     /**
      * holds the state of this View
@@ -77,7 +81,7 @@ public class VisualizationViewer<V, E> extends JPanel
 	/**
 	 * handles the actual drawing of graph elements
 	 */
-	protected Renderer<V,E> renderer;
+	protected Renderer<V,E> renderer = new BasicRenderer<V,E>();
 	
 	/** should be set to user-defined class to provide
 	 * tooltips on the graph elements
@@ -156,22 +160,16 @@ public class VisualizationViewer<V, E> extends JPanel
      */
     protected GraphMouse graphMouse;
     
-    /**
-     * if true, then when the View is resized, the current Layout
-     * is resized to the same size.
-     */
-//    protected boolean lockLayoutToViewSize;
+    protected RenderContext<V,E> renderContext = new PluggableRenderContext<V,E>();
     
-    protected Map<V,Point2D> locationMap = new HashMap<V,Point2D>();
-
     /**
      * Create an instance with passed parameters.
      * 
      * @param layout		The Layout to apply, with its associated Graph
      * @param renderer		The Renderer to draw it with
      */
-	public VisualizationViewer(Layout<V,E> layout, Renderer<V,E> renderer) {
-	    this(new DefaultVisualizationModel<V,E>(layout), renderer);
+	public VisualizationViewer(Layout<V,E> layout) {
+	    this(new DefaultVisualizationModel<V,E>(layout));
 	}
 	
     /**
@@ -181,8 +179,8 @@ public class VisualizationViewer<V, E> extends JPanel
      * @param renderer		The Renderer to draw it with
      * @param preferredSize the preferred size of this View
      */
-	public VisualizationViewer(Layout<V,E> layout, Renderer<V,E> renderer, Dimension preferredSize) {
-	    this(new DefaultVisualizationModel<V,E>(layout, preferredSize), renderer, preferredSize);
+	public VisualizationViewer(Layout<V,E> layout, Dimension preferredSize) {
+	    this(new DefaultVisualizationModel<V,E>(layout, preferredSize), preferredSize);
 	}
 	
 	/**
@@ -191,8 +189,8 @@ public class VisualizationViewer<V, E> extends JPanel
 	 * @param model
 	 * @param renderer
 	 */
-	public VisualizationViewer(VisualizationModel<V,E> model, Renderer<V,E> renderer) {
-	    this(model, renderer, new Dimension(600,600));
+	public VisualizationViewer(VisualizationModel<V,E> model) {
+	    this(model, new Dimension(600,600));
 	}
 	/**
 	 * Create an instance with passed parameters.
@@ -201,22 +199,27 @@ public class VisualizationViewer<V, E> extends JPanel
 	 * @param renderer
 	 * @param preferredSize initial preferred size of the view
 	 */
-	public VisualizationViewer(VisualizationModel<V,E> model, Renderer<V,E> renderer, 
+	public VisualizationViewer(VisualizationModel<V,E> model,
 	        Dimension preferredSize) {
 	    this.model = model;
+//        renderContext.setScreenDevice(this);
 	    model.addChangeListener(this);
 	    setDoubleBuffered(false);
 		this.addComponentListener(new VisualizationListener(this));
 
-		setPickSupport(new ShapePickSupport<V,E>());
+		setPickSupport(new ShapePickSupport<V,E>(this));
 		setPickedVertexState(new MultiPickedState<V>());
 		setPickedEdgeState(new MultiPickedState<E>());
-		setRenderer(renderer);
-//		renderer.setPickedKey(pickedState);
+        
+        renderContext.setEdgePaintFunction(new PickableEdgePaintFunction(getPickedEdgeState(), Color.black, Color.cyan));
+        renderContext.setVertexPaintFunction(new PickableVertexPaintFunction(getPickedVertexState(), 
+                Color.black, Color.red, Color.yellow));
+        renderContext.setViewTransformer(viewTransformer);
+
+//		setRenderer(renderer);
 		
 		setPreferredSize(preferredSize);
 		renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		initMouseClicker();
         scaleToLayout(model.getGraphLayout().getCurrentSize());
         this.layoutTransformer.addChangeListener(this);
         this.viewTransformer.addChangeListener(this);
@@ -276,16 +279,6 @@ public class VisualizationViewer<V, E> extends JPanel
 	}
 	
 	/**
-	 * Creates a default mouseClicker behavior: a default.
-	 * @see GraphMouseImpl
-     * @deprecated replaced by setGraphMouse()
-	 */
-//	protected void initMouseClicker() {
-//	    // GraphMouseImpl will give original behavior
-//	    setGraphMouse(new GraphMouseImpl()	);
-//	}
-	
-	/**
 	 * convenience pass-thru to model
 	 * @param scb
 	 */
@@ -340,18 +333,6 @@ public class VisualizationViewer<V, E> extends JPanel
 	 */
 	public void setRenderer(Renderer<V,E> r) {
 	    this.renderer = r;
-	    if(renderer instanceof PluggableRenderer) {
-            PluggableRenderer pr = (PluggableRenderer)renderer;
-	        pr.setScreenDevice(this);
-            pr.setViewTransformer(getViewTransformer());
-	        
-	        if(pickSupport instanceof ShapePickSupport) {
-	            ((ShapePickSupport)pickSupport).setHasShapes((HasShapeFunctions)renderer);
-	        }
-	    }
-	    
-	    r.setPickedVertexState(pickedVertexState);
-	    r.setPickedEdgeState(pickedEdgeState);
 	    repaint();
 	}
 	
@@ -474,28 +455,6 @@ public class VisualizationViewer<V, E> extends JPanel
 	    model.unsuspend();
 	}
 
-	/**
-     * @deprecated Use <code>getPickedState.isPicked(e)</code>.
-	 */
-//	public boolean isPicked(Vertex v) {
-//        return pickedState.isPicked(v);
-//	}
-//	
-//	/**
-//	 * @deprecated Use <code>getPickedState.isPicked(e)</code>.
-//	 */
-//	public boolean isPicked(Edge e) {
-//        return pickedState.isPicked(e);
-//	}
-	
-	/**
-	 * @deprecated Use <code>getPickedState.pick(picked, b)</code>.
-	 */
-//	protected void pick(Vertex picked, boolean b) 
-//    {
-//        pickedState.pick(picked, b);
-//	}
-
 	long[] relaxTimes = new long[5];
 	long[] paintTimes = new long[5];
 	int relaxIndex = 0;
@@ -510,140 +469,6 @@ public class VisualizationViewer<V, E> extends JPanel
 	    return model.isVisRunnerRunning();
 	}
 
-	/**
-	 * setter for the scale
-	 * fires a PropertyChangeEvent with the AffineTransforms representing
-	 * the previous and new values for scale and offset
-     * @deprecated access via getViewTransformer method
-	 * @param scalex
-	 * @param scaley
-	 */
-	public void scale(double scalex, double scaley) {
-	    scale(scalex, scaley, null);
-	}
-	/**
-	 * have the model scale the graph with the passed parameters.
-	 * If 'from' is null, use the center of this View as the
-	 * center to scale from
-     * @deprecated access via getViewTransformer method
-	 * @param scalex
-	 * @param scaley
-	 * @param from
-	 */
-	public void scale(double scalex, double scaley, Point2D from) {
-        if(from == null) {
-            from = getCenter();
-        }
-        viewTransformer.scale(scalex, scaley, from);
-	}
-	
-	/**
-	 * have the model replace the transform scale values with the
-	 * passed parameters
-     * @deprecated access via getViewTransformer method
-	 * @param scalex
-	 * @param scaley
-	 */
-	public void setScale(double scalex, double scaley) {
-	    setScale(scalex, scaley, null);
-	}
-	
-	/**
-	 * Have the model replace the transform scale values with the
-	 * passed parameters. If 'from' is null, use this View's center
-	 * as the center to scale from.
-     * @deprecated access via getViewTransformer method
-	 * @param scalex
-	 * @param scaley
-	 */
-	public void setScale(double scalex, double scaley, Point2D from) {
-        viewTransformer.setScale(scalex, scaley, from);
-	}
-	
-	/**
-	 * getter for scalex
-     * @deprecated access via getViewTransformer method
-	 * @return scalex
-	 */
-	public double getScaleX() {
-	    return viewTransformer.getScaleX();	
-	}
-	
-	/**
-	 * getter for scaley
-     * @deprecated access via getViewTransformer method
-	 */
-	public double getScaleY() {
-	    return viewTransformer.getScaleY();
-	}
-	
-	/**
-	 * getter for offsetx
-     * @deprecated use getTranslateX
-	 */
-	public double getOffsetX() {
-	    return getTranslateX();
-	}
-	/**
-	 * gets the translateX from the model
-     * @deprecated access via getViewTransformer method
-	 * @return the translateX
-	 */
-	public double getTranslateX() {
-	    return viewTransformer.getTranslateX();
-	}
-	
-	/**
-	 * getter for offsety
-	 * @deprecated use getTranslateY()
-	 */
-	public double getOffsetY() {
-	    return getTranslateY();
-	}
-	
-	/**
-	 * gets the translateY from the model
-     * @deprecated access via getViewTransformer method
-	 * @return the translateY
-	 */
-	public double getTranslateY() {
-	    return viewTransformer.getTranslateY();
-	}
-	
-	/**
-	 * set the offset values that will be used in the
-	 * translation component of the graph rendering transform.
-	 * Changes the transform to the identity transform, then
-	 * sets the translation conponents to the passed values
-	 * Fires a PropertyChangeEvent with the AffineTransforms representing
-	 * the previous and new values for the transform
-	 * @deprecated use setTranslate(double, offset, double offset)
-	 * @param offsetx
-	 * @param offsety
-	 */
-	public void setOffset(double offsetx, double offsety) {
-	    setTranslate(offsetx, offsety);
-	}
-	
-	/**
-	 * sets the translate x,y in the model
-	 * previous translate values are lost
-     * @deprecated access via getViewTransformer method
-	 * @param tx
-	 * @param ty
-	 */
-	public void setTranslate(double tx, double ty) {
-        viewTransformer.setTranslate(tx, ty);
-	}
-	
-	/**
-	 * Translates the model's current transform by tX and ty.
-     * @deprecated access via getViewTransformer method
-	 */
-	public void translate(double tx, double ty) {
-	    viewTransformer.translate(tx, ty);
-	}
-	
 	/**
 	 * Transform the mouse point with the inverse transform
 	 * of the VisualizationViewer. This maps from screen coordinates
@@ -690,9 +515,10 @@ public class VisualizationViewer<V, E> extends JPanel
         this.viewTransformer.removeChangeListener(this);
         this.viewTransformer = transformer;
         this.viewTransformer.addChangeListener(this);
-        if(renderer instanceof PluggableRenderer) {
-            ((PluggableRenderer)renderer).setViewTransformer(transformer);
-        }
+        renderContext.setViewTransformer(transformer);
+//        if(renderer instanceof PluggableRenderer) {
+//            ((PluggableRenderer)renderer).setViewTransformer(transformer);
+//        }
     }
 
     public void setLayoutTransformer(MutableTransformer transformer) {
@@ -738,7 +564,12 @@ public class VisualizationViewer<V, E> extends JPanel
 	}
 	
 	protected void renderGraph(Graphics2D g2d) {
-
+	    if(renderContext.getGraphicsContext() == null) {
+	        renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
+        } else {
+        renderContext.getGraphicsContext().setDelegate(g2d);
+        }
+        renderContext.setScreenDevice(this);
 	    Layout<V,E> layout = model.getGraphLayout();
 
 		g2d.setRenderingHints(renderingHints);
@@ -775,10 +606,7 @@ public class VisualizationViewer<V, E> extends JPanel
 		// paint all the edges
         try {
         	for(E e : layout.getGraph().getEdges()) {
-//		for (Iterator iter = layout.getGraph().getEdges().iterator();
-//		iter.hasNext();
-//		) {
-//		    E e = iter.next();
+
 		    V v1 = layout.getGraph().getEndpoints(e).getFirst();
 		    V v2 = layout.getGraph().getEndpoints(e).getSecond();
             
@@ -797,8 +625,9 @@ public class VisualizationViewer<V, E> extends JPanel
             }
 
 		    if(p != null && q != null) {
-		        renderer.paintEdge(
-		                g2d,
+//		        renderer.paintEdge(
+				        renderer.renderEdge(
+		                renderContext,
 		                layout.getGraph(),
 		                e,
 		                (int) p.getX(),
@@ -814,11 +643,7 @@ public class VisualizationViewer<V, E> extends JPanel
 		// paint all the vertices
         try {
         	for(V v : layout.getGraph().getVertices()) {
-//		for (Iterator iter = layout.getGraph().getVertices().iterator();
-//		iter.hasNext();
-//		) {
-//            
-//		    V v =  iter.next();
+
 		    Point2D p = (Point2D) locationMap.get(v);
             if(p == null) {
                 p = layout.getLocation(v);
@@ -826,8 +651,9 @@ public class VisualizationViewer<V, E> extends JPanel
                 locationMap.put(v, p);
             }
 		    if(p != null) {
-		        renderer.paintVertex(
-		                g2d,
+//		        renderer.paintVertex(
+		    	renderer.renderVertex(
+		                renderContext,
 		                v,
 		                (int) p.getX(),
 		                (int) p.getY());
@@ -931,12 +757,13 @@ public class VisualizationViewer<V, E> extends JPanel
             if(toolTipFunction instanceof ToolTipListenerWrapper) {
                 return toolTipFunction.getToolTipText(event);
             } 
+            Layout<V,E> layout = getGraphLayout();
             Point2D p = inverseViewTransform(event.getPoint());
-            Object vertex = pickSupport.getVertex(p.getX(), p.getY());
+            Object vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
             if(vertex != null) {
                 return toolTipFunction.getToolTipText(vertex);
             }
-            Object edge = pickSupport.getEdge(p.getX(), p.getY());
+            Object edge = pickSupport.getEdge(layout, p.getX(), p.getY());
             if(edge != null) {
                 return toolTipFunction.getToolTipText(edge);
             }
@@ -985,54 +812,6 @@ public class VisualizationViewer<V, E> extends JPanel
      */
     public interface GraphMouse extends MouseListener, MouseMotionListener, MouseWheelListener {}
     
-    /** 
-     * this is the original GraphMouse class, renamed to use GraphMouse as the interface name,
-     * and updated to correctly apply the vv transform to the point point
-     *
-     */
-    protected final class GraphMouseImpl 
-           extends MouseAdapter implements GraphMouse {
-        protected V picked;
-        
-        public void mousePressed(MouseEvent e) {
-            
-            Point2D p = inverseViewTransform(e.getPoint());
-
-            V v = pickSupport.getVertex(p.getX(), p.getY());
-            if (v == null) {
-                return;
-            }
-            picked = v;
-            pickedVertexState.pick(picked, true);
-            model.getGraphLayout().forceMove(picked, p.getX(), p.getY());
-            repaint();
-        }
-        public void mouseReleased(MouseEvent e) {
-            if (picked == null)
-                return;
-            pickedVertexState.pick(picked, false);
-            picked = null;
-            repaint();
-        }
-        public void mouseDragged(MouseEvent e) {
-            if (picked == null)
-                return;
-            Point2D p = inverseViewTransform(e.getPoint());
-
-            model.getGraphLayout().forceMove(picked, p.getX(), p.getY());
-            repaint();
-        }
-        
-        public void mouseMoved(MouseEvent e) {
-            return;
-        }
-        /**
-         * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
-         */
-        public void mouseWheelMoved(MouseWheelEvent e) {
-            return;
-        }
-    }
     
     /**
      * @param paintable The paintable to add.
@@ -1129,9 +908,10 @@ public class VisualizationViewer<V, E> extends JPanel
             this.pickedVertexState.removeItemListener(pickEventListener);
         }
         this.pickedVertexState = pickedVertexState;
-        if(renderer != null) {
-            renderer.setPickedVertexState(pickedVertexState);
-        }
+        this.renderContext.setPickedVertexState(pickedVertexState);
+//        if(renderer != null) {
+//            renderer.setPickedVertexState(pickedVertexState);
+//        }
         if(pickEventListener == null) {
             pickEventListener = new ItemListener() {
 
@@ -1148,9 +928,10 @@ public class VisualizationViewer<V, E> extends JPanel
             this.pickedEdgeState.removeItemListener(pickEventListener);
         }
         this.pickedEdgeState = pickedEdgeState;
-        if(renderer != null) {
-            renderer.setPickedEdgeState(pickedEdgeState);
-        }
+        this.renderContext.setPickedEdgeState(pickedEdgeState);
+//        if(renderer != null) {
+//            renderer.setPickedEdgeState(pickedEdgeState);
+//        }
         if(pickEventListener == null) {
             pickEventListener = new ItemListener() {
 
@@ -1173,15 +954,24 @@ public class VisualizationViewer<V, E> extends JPanel
      */
     public void setPickSupport(PickSupport<V,E> pickSupport) {
         this.pickSupport = pickSupport;
-        this.pickSupport.setHasGraphLayout(this);
-        if(pickSupport instanceof ShapePickSupport && renderer instanceof HasShapeFunctions) {
-            ((ShapePickSupport)pickSupport).setHasShapes((HasShapeFunctions)renderer);
-            ((ShapePickSupport)pickSupport).setLayoutTransformer(this);
-        }
+//        this.pickSupport.setHasGraphLayout(this);
+//        if(pickSupport instanceof ShapePickSupport && renderer instanceof HasShapeFunctions) {
+//            ((ShapePickSupport)pickSupport).setHasShapes((HasShapeFunctions)renderer);
+//            ((ShapePickSupport)pickSupport).setLayoutTransformer(this);
+//        }
     }
     
     public Point2D getCenter() {
         Dimension d = getSize();
         return new Point2D.Float(d.width/2, d.height/2);
+    }
+
+    public RenderContext<V,E> getRenderContext() {
+        return renderContext;
+    }
+
+    public void setRenderContext(RenderContext<V,E> renderContext) {
+        this.renderContext = renderContext;
+        renderContext.setViewTransformer(getViewTransformer());
     }
 }

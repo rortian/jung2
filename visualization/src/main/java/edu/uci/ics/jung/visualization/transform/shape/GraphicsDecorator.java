@@ -45,7 +45,7 @@ import java.util.Map;
  *
  *
  */
-public abstract class GraphicsDecorator {
+public class GraphicsDecorator {
     
     protected Graphics2D delegate;
     
