@@ -4,8 +4,8 @@
 
 Download and install maven2 from maven.apache.org
 
-set MAVEN_HOME to point to it
-add $MAVEN_HOME/bin to your PATH
+set M2_HOME to point to it
+add $M2_HOME/bin to your PATH
 
 Get the jung2 code from CVS:
 
@@ -21,7 +21,7 @@ Go get collections-generic from sourceforge:
 http://sourceforge.net/project/showfiles.php?group_id=139125&package_id=153011
 
 Inflate the archive someplace, then install 'collections-generic-4.0.jar'
-in your local maven2 repository ($HOME/.m2/repository) like this one-line
+in your local maven2 repository ($HOME/.m2/repository) using this one-line
 command (assuming you inflated the archive in '/usr/local/'...):
 
 mvn install:install-file
