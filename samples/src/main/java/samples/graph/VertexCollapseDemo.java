@@ -33,23 +33,18 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.AbstractVertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexSizeFunction;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 
 
@@ -93,25 +88,28 @@ public class VertexCollapseDemo extends JApplet {
     public VertexCollapseDemo() {
         
         // create a simple graph for the demo
-        graph = TestGraphs.getOneComponentGraph();
+        graph = 
+            TestGraphs.getOneComponentGraph();
         collapser = new GraphCollapser(graph);
         
-        PluggableRenderer pr = new PluggableRenderer();
         layout = new FRLayout(graph);
 
         Dimension preferredSize = new Dimension(400,400);
         final VisualizationModel visualizationModel = 
             new DefaultVisualizationModel(layout, preferredSize);
-        vv =  new VisualizationViewer(visualizationModel, pr, preferredSize);
-        vv.setPickSupport(new ShapePickSupport());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
-        pr.setVertexShapeFunction(new ClusterVertexShapeFunction());
-        ((AbstractVertexShapeFunction)pr.getVertexShapeFunction()).setSizeFunction(new ClusterVertexSizeFunction(20));
+        vv =  new VisualizationViewer(visualizationModel, preferredSize);
         
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
-                Color.black, Color.red, Color.yellow));
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), 
-                Color.black, Color.red));
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller() {
+
+            @Override
+            public String getLabel(Object v) {
+                if(v instanceof Graph) {
+                    return ((Graph)v).getVertices().toString();
+                } else {
+                    return super.getLabel(v);
+                }
+            }});
+
         vv.setBackground(Color.white);
         
         // add a listener for ToolTips

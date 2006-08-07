@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -40,7 +39,6 @@ import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.KKLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.SpringLayout;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 
 
 /**
@@ -132,11 +130,10 @@ public class ShowLayouts extends JApplet {
         g_array[6] = TestGraphs.createChainPlusIsolates(0, 20);
 
         Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
-        PluggableRenderer pr = new PluggableRenderer();
-        final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g),
-                pr);
+//        PluggableRenderer pr = new PluggableRenderer();
+        final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
         
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
@@ -159,7 +156,7 @@ public class ShowLayouts extends JApplet {
         JComboBox modeBox = graphMouse.getModeComboBox();
         modeBox.addItemListener(((DefaultModalGraphMouse)vv.getGraphMouse()).getModeListener());
 
-        vv.setPickSupport(new ShapePickSupport());
+//        vv.setPickSupport(new ShapePickSupport());
         JPanel jp = new JPanel();
         jp.setBackground(Color.WHITE);
         jp.setLayout(new BorderLayout());

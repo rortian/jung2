@@ -26,7 +26,6 @@ import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -38,7 +37,6 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 
 /**
  * 
@@ -101,24 +99,24 @@ public class InternalFrameSatelliteViewDemo {
 
         Layout layout = new ISOMLayout(graph);
 
-        PluggableRenderer pr = new PluggableRenderer();
-        PluggableRenderer prs = new PluggableRenderer();
+//        PluggableRenderer pr = new PluggableRenderer();
+//        PluggableRenderer prs = new PluggableRenderer();
         
-        vv = new VisualizationViewer(layout, pr, new Dimension(600,600));
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv = new VisualizationViewer(layout, new Dimension(600,600));
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
 
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         final ModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
-        vv.setPickSupport(new ShapePickSupport());
+//        vv.setPickSupport(new ShapePickSupport());
 
         satellite =
             new SatelliteVisualizationViewer(vv, layout, 
-                    prs, new Dimension(200,200));
-        prs.setEdgePaintFunction(new PickableEdgePaintFunction(satellite.getPickedEdgeState(), Color.black, Color.cyan));
-        prs.setVertexPaintFunction(new PickableVertexPaintFunction(satellite.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+                    new Dimension(200,200));
+        satellite.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(satellite.getPickedEdgeState(), Color.black, Color.cyan));
+        satellite.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(satellite.getPickedVertexState(), Color.black, Color.red, Color.yellow));
 
         JFrame frame = new JFrame();
         desktop = new JDesktopPane();

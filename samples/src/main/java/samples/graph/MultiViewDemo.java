@@ -34,7 +34,6 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AnimatedPickingGraphMousePlugin;
@@ -113,9 +112,9 @@ public class MultiViewDemo extends JApplet {
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
         
-        PluggableRenderer pr1 = new PluggableRenderer();
-        PluggableRenderer pr2 = new PluggableRenderer();
-        PluggableRenderer pr3 = new PluggableRenderer();
+//        PluggableRenderer pr1 = new PluggableRenderer();
+//        PluggableRenderer pr2 = new PluggableRenderer();
+//        PluggableRenderer pr3 = new PluggableRenderer();
         
         // create one layout for the graph
         FRLayout layout = new FRLayout(graph);
@@ -126,19 +125,19 @@ public class MultiViewDemo extends JApplet {
             new DefaultVisualizationModel(layout, preferredSize);
  
         // create 3 views that share the same model
-        vv1 = new VisualizationViewer(visualizationModel, pr1, preferredSize);
-        vv2 = new VisualizationViewer(visualizationModel, pr2, preferredSize);
-        vv3 = new VisualizationViewer(visualizationModel, pr3, preferredSize);
+        vv1 = new VisualizationViewer(visualizationModel, preferredSize);
+        vv2 = new VisualizationViewer(visualizationModel, preferredSize);
+        vv3 = new VisualizationViewer(visualizationModel, preferredSize);
         
-        pr1.setEdgeShapeFunction(new EdgeShape.Line());
-        pr2.setVertexShapeFunction(new VertexShapeFunction() {
+        vv1.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line());
+        vv2.getRenderContext().setVertexShapeFunction(new VertexShapeFunction() {
             public Shape getShape(Object v) {
                 return new Rectangle2D.Float(-6, -6, 12, 12);
             }
         });
-        pr2.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        vv2.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve());
         
-        pr3.setEdgeShapeFunction(new EdgeShape.CubicCurve());
+        vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve());
 
         transformer = vv1.getLayoutTransformer();
         vv2.setLayoutTransformer(transformer);
@@ -152,7 +151,7 @@ public class MultiViewDemo extends JApplet {
         vv3.setBackground(Color.white);
         
         // create one pick support for all 3 views to share
-        PickSupport pickSupport = new ShapePickSupport();
+        PickSupport pickSupport = new ShapePickSupport(vv1);
         vv1.setPickSupport(pickSupport);
         vv2.setPickSupport(pickSupport);
         vv3.setPickSupport(pickSupport);
@@ -168,12 +167,12 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        pr1.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
-        pr2.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
-        pr3.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
-        pr1.setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
-        pr2.setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
-        pr3.setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        vv3.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
+        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        vv3.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
         
         // add default listener for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());

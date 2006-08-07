@@ -30,7 +30,6 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -38,13 +37,11 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.subLayout.CircularSubLayout;
 import edu.uci.ics.jung.visualization.subLayout.SubLayout;
 import edu.uci.ics.jung.visualization.subLayout.SubLayoutDecorator;
@@ -94,7 +91,7 @@ public class SubLayoutDemo extends JApplet {
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
         
-        PluggableRenderer pr = new PluggableRenderer();
+//        PluggableRenderer pr = new PluggableRenderer();
         // ClusteringLayout is a decorator class that delegates
         // to another layout, but can also sepately manage the
         // layout of sub-sets of vertices in circular clusters.
@@ -104,14 +101,14 @@ public class SubLayoutDemo extends JApplet {
         Dimension preferredSize = new Dimension(400,400);
         final VisualizationModel visualizationModel = 
             new DefaultVisualizationModel(clusteringLayout, preferredSize);
-        vv =  new VisualizationViewer(visualizationModel, pr, preferredSize);
-        vv.setPickSupport(new ShapePickSupport());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        vv =  new VisualizationViewer(visualizationModel, preferredSize);
+//        vv.setPickSupport(new ShapePickSupport());
+//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         
         vv.setPickedVertexState(new ClusterListener(clusteringLayout));
         ps = vv.getPickedVertexState();
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
                 Color.black, Color.red, Color.yellow));
         vv.setBackground(Color.white);
         

@@ -37,7 +37,6 @@ import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultSettableVertexLocationFunction;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -47,7 +46,6 @@ import edu.uci.ics.jung.visualization.control.LensMagnificationGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
@@ -56,7 +54,6 @@ import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 import edu.uci.ics.jung.visualization.transform.LayoutLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
@@ -127,7 +124,7 @@ public class LensDemo extends JApplet {
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
         
-        final PluggableRenderer pr = new PluggableRenderer();
+//        final Renderer pr = new BasicRenderer();
         graphLayout = new FRLayout(graph);
         ((FRLayout)graphLayout).setMaxIterations(1000);
 
@@ -140,16 +137,16 @@ public class LensDemo extends JApplet {
         
         final VisualizationModel visualizationModel = 
             new DefaultVisualizationModel(graphLayout, preferredSize);
-        vv =  new VisualizationViewer(visualizationModel, pr, preferredSize);
-        vv.setPickSupport(new ShapePickSupport());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        vv =  new VisualizationViewer(visualizationModel, preferredSize);
+//        vv.setPickSupport(new ShapePickSupport());
+//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         PickedState ps = vv.getPickedVertexState();
         PickedState pes = vv.getPickedEdgeState();
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(ps, Color.black, Color.red, Color.yellow));
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.cyan));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(ps, Color.black, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
-        final VertexShapeFunction ovals = pr.getVertexShapeFunction();
+        final VertexShapeFunction ovals = vv.getRenderContext().getVertexShapeFunction();
         final VertexShapeFunction squares = 
         	new VertexShapeFunction() {
 
@@ -277,7 +274,7 @@ public class LensDemo extends JApplet {
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     visualizationModel.setGraphLayout(graphLayout);
-                    pr.setVertexShapeFunction(ovals);
+                    vv.getRenderContext().setVertexShapeFunction(ovals);
                     vv.repaint();
                 }
             }});
@@ -287,7 +284,7 @@ public class LensDemo extends JApplet {
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     visualizationModel.setGraphLayout(gridLayout);
-                    pr.setVertexShapeFunction(squares);
+                    vv.getRenderContext().setVertexShapeFunction(squares);
                     vv.repaint();
                 }
             }});

@@ -26,7 +26,6 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -39,9 +38,7 @@ import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
-import edu.uci.ics.jung.visualization.picking.PickSupport;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
@@ -83,7 +80,7 @@ public class TwoModelDemo extends JApplet {
         graph = TestGraphs.getOneComponentGraph();
         
         // both views will share the same renderer
-        PluggableRenderer pr = new PluggableRenderer();
+//        BasicRenderer pr = new BasicRenderer();
         
         // create two layouts for the one graph, one layout for each model
         Layout layout1 = new FRLayout(graph);
@@ -98,8 +95,10 @@ public class TwoModelDemo extends JApplet {
 
         // create the two views, one for each model
         // they share the same renderer
-        vv1 = new VisualizationViewer(vm1, pr, preferredSize);
-        vv2 = new VisualizationViewer(vm2, pr, preferredSize);
+        vv1 = new VisualizationViewer(vm1, preferredSize);
+        vv2 = new VisualizationViewer(vm2, preferredSize);
+        vv1.setRenderContext(vv2.getRenderContext());
+//        vv2.setRenderer(pr);
         
         // share the model transformer between the two models
         layoutTransformer = vv1.getLayoutTransformer();
@@ -112,10 +111,10 @@ public class TwoModelDemo extends JApplet {
         vv2.setBackground(Color.white);
         
         // create and set a separate pickSupport for each view
-        PickSupport pickSupport1 = new ShapePickSupport();
-        vv1.setPickSupport(pickSupport1);
-        PickSupport pickSupport2 = new ShapePickSupport();
-        vv2.setPickSupport(pickSupport2);
+//        PickSupport pickSupport1 = new ShapePickSupport();
+//        vv1.setPickSupport(pickSupport1);
+//        PickSupport pickSupport2 = new ShapePickSupport();
+//        vv2.setPickSupport(pickSupport2);
 
         // share one PickedState between the two views
         PickedState ps = new MultiPickedState();
@@ -126,8 +125,8 @@ public class TwoModelDemo extends JApplet {
         vv2.setPickedEdgeState(pes);
         
         // set an edge paint function that will show picking for edges
-        pr.setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.red));
-        pr.setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(),
+        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.red));
+        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(),
                 Color.black, Color.red, Color.yellow));
         // add default listeners for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());

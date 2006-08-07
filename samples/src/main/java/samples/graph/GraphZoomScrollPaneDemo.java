@@ -27,16 +27,13 @@ import javax.swing.JPanel;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationViewer.GraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 
 
 /**
@@ -83,11 +80,11 @@ public class GraphZoomScrollPaneDemo {
             System.err.println("Can't load \""+imageLocation+"\"");
         }
         final ImageIcon icon = sandstoneIcon;
-        PluggableRenderer pr = new PluggableRenderer();
+//        PluggableRenderer pr = new PluggableRenderer();
 
-        vv =  new VisualizationViewer<String,Number>(new FRLayout<String,Number>(graph), pr);
-        vv.setPickSupport(new ShapePickSupport<String,Number>());
-        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
+        vv =  new VisualizationViewer<String,Number>(new FRLayout<String,Number>(graph));
+//        vv.setPickSupport(new ShapePickSupport<String,Number>());
+//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
         
         if(icon != null) {
             vv.addPreRenderPaintable(new VisualizationViewer.Paintable(){

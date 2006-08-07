@@ -38,7 +38,6 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationViewer.Paintable;
@@ -50,7 +49,6 @@ import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
 /**
@@ -111,8 +109,8 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         Graph<String, Number> graph = TestGraphs.getOneComponentGraph();
         
         // need separate renderers for each view
-        PluggableRenderer<String,Number> pr1 = new PluggableRenderer<String,Number>();
-        PluggableRenderer<String,Number> pr2 = new PluggableRenderer<String,Number>();
+//        PluggableRenderer<String,Number> pr1 = new PluggableRenderer<String,Number>();
+//        PluggableRenderer<String,Number> pr2 = new PluggableRenderer<String,Number>();
         
         // the preferred sizes for the two views
         Dimension preferredSize1 = new Dimension(600,600);
@@ -129,17 +127,17 @@ public class SatelliteViewDemo<V, E> extends JApplet {
  
         // create 2 views that share the same model
         final VisualizationViewer<String,Number> vv1 = 
-            new VisualizationViewer<String,Number>(vm, pr1, preferredSize1);
+            new VisualizationViewer<String,Number>(vm, preferredSize1);
         final SatelliteVisualizationViewer<String,Number> vv2 = 
-            new SatelliteVisualizationViewer<String,Number>(vv1, vm, pr2, preferredSize2);
+            new SatelliteVisualizationViewer<String,Number>(vv1, vm, preferredSize2);
         
         vv1.setBackground(Color.white);
-        vv1.setPickSupport(new ShapePickSupport<String,Number>());
+//        vv1.setPickSupport(new ShapePickSupport<String,Number>());
         
-        pr1.setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.cyan));
-        pr1.setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(), Color.black, Color.red, Color.yellow));
-        pr2.setEdgePaintFunction(new PickableEdgePaintFunction(vv2.getPickedEdgeState(), Color.black, Color.cyan));
-        pr2.setVertexPaintFunction(new PickableVertexPaintFunction(vv2.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.cyan));
+        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv2.getPickedEdgeState(), Color.black, Color.cyan));
+        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv2.getPickedVertexState(), Color.black, Color.red, Color.yellow));
 
         
         viewGrid = new ViewGrid(vv2, vv1);
