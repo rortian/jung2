@@ -27,5 +27,6 @@ import edu.uci.ics.graph.Graph;
 public interface ParallelEdgeIndexFunction<V,E> {
     
     int getIndex(Graph<V,E> graph, E e);
-
+    void reset(Graph<V,E> g, E edge);
+    void reset();
 }
