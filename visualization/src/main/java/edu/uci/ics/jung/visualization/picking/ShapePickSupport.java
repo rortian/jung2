@@ -21,6 +21,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ConcurrentModificationException;
 
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -31,7 +32,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * @author Tom Nelson - RABA Technologies
  *
  */
-public class ShapePickSupport<V, E> implements PickSupport<V,E> {
+public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 
     protected float pickSize;
     protected VisualizationViewer<V,E> vv;

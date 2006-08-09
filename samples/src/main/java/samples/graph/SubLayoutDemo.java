@@ -70,16 +70,16 @@ public class SubLayoutDemo extends JApplet {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<String,Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer vv;
+    VisualizationViewer<String,Number> vv;
 
-    SubLayoutDecorator clusteringLayout;
+    SubLayoutDecorator<String,Number> clusteringLayout;
     
-    PickedState ps;
+    PickedState<String> ps;
     
     /**
      * create an instance of a simple graph with controls to
@@ -90,25 +90,21 @@ public class SubLayoutDemo extends JApplet {
         
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
-        
-//        PluggableRenderer pr = new PluggableRenderer();
+
         // ClusteringLayout is a decorator class that delegates
         // to another layout, but can also sepately manage the
         // layout of sub-sets of vertices in circular clusters.
-        clusteringLayout = new SubLayoutDecorator(new FRLayout(graph));
-       
+        clusteringLayout = new SubLayoutDecorator<String,Number>(new FRLayout<String,Number>(graph));
 
         Dimension preferredSize = new Dimension(400,400);
-        final VisualizationModel visualizationModel = 
-            new DefaultVisualizationModel(clusteringLayout, preferredSize);
-        vv =  new VisualizationViewer(visualizationModel, preferredSize);
-//        vv.setPickSupport(new ShapePickSupport());
-//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        final VisualizationModel<String,Number> visualizationModel = 
+            new DefaultVisualizationModel<String,Number>(clusteringLayout, preferredSize);
+        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
-        vv.setPickedVertexState(new ClusterListener(clusteringLayout));
+        vv.setPickedVertexState(new ClusterListener<String,Number>(clusteringLayout));
         ps = vv.getPickedVertexState();
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(ps, Color.black, Color.red));
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), 
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv.getPickedVertexState(), 
                 Color.black, Color.red, Color.yellow));
         vv.setBackground(Color.white);
         
@@ -163,14 +159,14 @@ public class SubLayoutDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
-    class ClusterListener extends MultiPickedState {
+    class ClusterListener<V,E> extends MultiPickedState<V> {
 
-        SubLayoutDecorator layout;
+        SubLayoutDecorator<V,E> layout;
         Point2D center;
         /* (non-Javadoc)
          * @see edu.uci.ics.jung.visualization.MultiPickedState#pick(edu.uci.ics.jung.graph.ArchetypeVertex, boolean)
          */
-        public boolean pick(Object v, boolean picked) {
+        public boolean pick(V v, boolean picked) {
             boolean result = super.pick(v, picked);
             if(picked) {
                 vertexPicked(v);
@@ -179,22 +175,22 @@ public class SubLayoutDemo extends JApplet {
             }
             return result;
         }
-        public ClusterListener(SubLayoutDecorator layout) {
+        public ClusterListener(SubLayoutDecorator<V,E> layout) {
             this.layout = layout;
         }
-        public void vertexPicked(Object v) {
+        public void vertexPicked(V v) {
             if(center == null) {
                 center = layout.getLocation(v);
             }
             layout.removeAllSubLayouts();
-            SubLayout subLayout = new CircularSubLayout(getPicked(), 20, center);
+            SubLayout<V> subLayout = new CircularSubLayout<V>(getPicked(), 20, center);
             layout.addSubLayout(subLayout);
         }
 
-        public void vertexUnpicked(Object v) {
+        public void vertexUnpicked(V v) {
             layout.removeAllSubLayouts();
             if(this.getPicked().isEmpty() == false) {
-                SubLayout subLayout = new CircularSubLayout(getPicked(), 20, center);
+                SubLayout<V> subLayout = new CircularSubLayout<V>(getPicked(), 20, center);
                 layout.addSubLayout(subLayout);
             } else {
                 center = null;
@@ -210,6 +206,6 @@ public class SubLayoutDemo extends JApplet {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.getContentPane().add(new SubLayoutDemo());
         f.pack();
-        f.show();
+        f.setVisible(true);
     }
 }

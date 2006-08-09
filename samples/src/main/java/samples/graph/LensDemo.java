@@ -78,21 +78,21 @@ public class LensDemo extends JApplet {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<String,Number> graph;
     
-    Layout graphLayout;
+    Layout<String,Number> graphLayout;
     
     /**
      * a grid shaped graph
      */
-    Graph grid;
+    Graph<String,Number> grid;
     
-    Layout gridLayout;
+    Layout<String,Number> gridLayout;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer vv;
+    VisualizationViewer<String,Number> vv;
 
     /**
      * provides a Hyperbolic lens for the view
@@ -124,33 +124,31 @@ public class LensDemo extends JApplet {
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
         
-//        final Renderer pr = new BasicRenderer();
-        graphLayout = new FRLayout(graph);
+        graphLayout = new FRLayout<String,Number>(graph);
         ((FRLayout)graphLayout).setMaxIterations(1000);
 
         Dimension preferredSize = new Dimension(400,400);
-        DefaultSettableVertexLocationFunction vlf =
-            new DefaultSettableVertexLocationFunction();
+        DefaultSettableVertexLocationFunction<String> vlf =
+            new DefaultSettableVertexLocationFunction<String>();
         grid = this.generateVertexGrid(vlf, preferredSize, 25);
-        gridLayout = new StaticLayout(grid);
-        ((AbstractLayout)gridLayout).initialize(preferredSize, vlf);
+        gridLayout = new StaticLayout<String,Number>(grid);
+        ((AbstractLayout<String,Number>)gridLayout).initialize(preferredSize, vlf);
         
-        final VisualizationModel visualizationModel = 
-            new DefaultVisualizationModel(graphLayout, preferredSize);
-        vv =  new VisualizationViewer(visualizationModel, preferredSize);
-//        vv.setPickSupport(new ShapePickSupport());
-//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
-        PickedState ps = vv.getPickedVertexState();
-        PickedState pes = vv.getPickedEdgeState();
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(ps, Color.black, Color.red, Color.yellow));
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.cyan));
+        final VisualizationModel<String,Number> visualizationModel = 
+            new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
+        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+
+        PickedState<String> ps = vv.getPickedVertexState();
+        PickedState<Number> pes = vv.getPickedEdgeState();
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(ps, Color.black, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
-        final VertexShapeFunction ovals = vv.getRenderContext().getVertexShapeFunction();
-        final VertexShapeFunction squares = 
-        	new VertexShapeFunction() {
+        final VertexShapeFunction<String> ovals = vv.getRenderContext().getVertexShapeFunction();
+        final VertexShapeFunction<String> squares = 
+        	new VertexShapeFunction<String>() {
 
-            public Shape getShape(Object v) {
+            public Shape getShape(String v) {
                 return new Rectangle2D.Float(-10,-10,20,20);
             }};
 
@@ -169,16 +167,16 @@ public class LensDemo extends JApplet {
         vv.setGraphMouse(graphMouse);
         
         hyperbolicViewSupport = 
-            new ViewLensSupport(vv, new HyperbolicShapeTransformer(vv), 
+            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv), 
                     new ModalLensGraphMouse());
         hyperbolicLayoutSupport = 
-            new LayoutLensSupport(vv, new HyperbolicTransformer(vv, vv.getLayoutTransformer()),
+            new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv, vv.getLayoutTransformer()),
                     new ModalLensGraphMouse());
         magnifyViewSupport = 
-            new ViewLensSupport(vv, new MagnifyShapeTransformer(vv),
+            new ViewLensSupport<String,Number>(vv, new MagnifyShapeTransformer(vv),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         magnifyLayoutSupport = 
-            new LayoutLensSupport(vv, new MagnifyTransformer(vv, vv.getLayoutTransformer()),
+            new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv, vv.getLayoutTransformer()),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         hyperbolicLayoutSupport.getLensTransformer().setEllipse(hyperbolicViewSupport.getLensTransformer().getEllipse());
         magnifyViewSupport.getLensTransformer().setEllipse(hyperbolicLayoutSupport.getLensTransformer().getEllipse());
@@ -324,11 +322,10 @@ public class LensDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
 
-    private Graph generateVertexGrid(DefaultSettableVertexLocationFunction vlf,
+    private Graph<String,Number> generateVertexGrid(DefaultSettableVertexLocationFunction<String> vlf,
             Dimension d, int interval) {
         int count = d.width/interval * d.height/interval;
-        Graph graph = new SimpleSparseGraph();
-        String[] v = new String[count];
+        Graph<String,Number> graph = new SimpleSparseGraph<String,Number>();
         for(int i=0; i<count; i++) {
             int x = interval*i;
             int y = x / d.width * interval;

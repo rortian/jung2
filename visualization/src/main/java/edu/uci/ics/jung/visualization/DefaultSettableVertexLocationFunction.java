@@ -25,42 +25,34 @@ import java.util.Map;
  * @author Joshua O'Madadhain
  */
 public class DefaultSettableVertexLocationFunction<V> implements
-        SettableVertexLocationFunction<V>
-{
+        SettableVertexLocationFunction<V> {
     protected Map<V, Point2D> v_locations;
     protected boolean normalized;
     
-    public DefaultSettableVertexLocationFunction()
-    {
+    public DefaultSettableVertexLocationFunction() {
         v_locations = new HashMap<V, Point2D>();
     }
     
     public DefaultSettableVertexLocationFunction(VertexLocationFunction<V> vlf) {
         v_locations = new HashMap<V, Point2D>();
         for(V v : vlf.getVertices()) {
-//        for(Iterator iterator=vlf.getVertexIterator(); iterator.hasNext(); ) {
-//            V v = (ArchetypeVertex)iterator.next();
             v_locations.put(v, vlf.getLocation(v));
         }
     }
     
-    public void setLocation(V v, Point2D location)
-    {
+    public void setLocation(V v, Point2D location) {
         v_locations.put(v, location);
     }
     
-    public Point2D getLocation(V v)
-    {
+    public Point2D getLocation(V v) {
         return (Point2D)v_locations.get(v);
     }
 
-    public void reset()
-    {
+    public void reset() {
         v_locations.clear();
     }
     
-    public Iterator getVertexIterator()
-    {
+    public Iterator getVertexIterator() {
         return v_locations.keySet().iterator();
     }
     

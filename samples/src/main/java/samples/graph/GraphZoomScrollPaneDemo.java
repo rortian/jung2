@@ -80,11 +80,7 @@ public class GraphZoomScrollPaneDemo {
             System.err.println("Can't load \""+imageLocation+"\"");
         }
         final ImageIcon icon = sandstoneIcon;
-//        PluggableRenderer pr = new PluggableRenderer();
-
         vv =  new VisualizationViewer<String,Number>(new FRLayout<String,Number>(graph));
-//        vv.setPickSupport(new ShapePickSupport<String,Number>());
-//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
         
         if(icon != null) {
             vv.addPreRenderPaintable(new VisualizationViewer.Paintable(){
@@ -125,7 +121,7 @@ public class GraphZoomScrollPaneDemo {
             }
         });
 
-        vv.addGraphMouseListener(new TestGraphMouseListener());
+        vv.addGraphMouseListener(new TestGraphMouseListener<String>());
         
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());

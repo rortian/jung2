@@ -28,19 +28,19 @@ public class DefaultVertexIconFunction<V> implements VertexIconFunction<V> {
     /**
      * icon storage
      */
-     protected Map iconMap = new HashMap();
+     protected Map<V,Icon> iconMap = new HashMap<V,Icon>();
 
      /**
       * Returns the icon storage as a <code>Map</code>.
       */
-    public Map getIconMap() {
+    public Map<V,Icon> getIconMap() {
 		return iconMap;
 	}
 
     /**
      * Sets the icon storage to the specified <code>Map</code>.
      */
-	public void setIconMap(Map iconMap) {
+	public void setIconMap(Map<V,Icon> iconMap) {
 		this.iconMap = iconMap;
 	}
 

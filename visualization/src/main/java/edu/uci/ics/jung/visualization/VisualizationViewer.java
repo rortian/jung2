@@ -44,7 +44,6 @@ import edu.uci.ics.jung.visualization.decorators.ToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.ToolTipFunctionAdapter;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
-import edu.uci.ics.jung.visualization.picking.PickSupport;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
@@ -99,7 +98,7 @@ public class VisualizationViewer<V, E> extends JPanel
 	 * finding them based on their coordinates. Typically
 	 * used in mouse events.
 	 */
-	protected PickSupport<V, E> pickSupport;
+	protected GraphElementAccessor<V, E> pickSupport;
 	
 	/**
 	 * holds the state of which elements of the graph are
@@ -276,14 +275,6 @@ public class VisualizationViewer<V, E> extends JPanel
 	public void stateChanged(ChangeEvent e) {
 	    repaint();
 	    fireStateChanged();
-	}
-	
-	/**
-	 * convenience pass-thru to model
-	 * @param scb
-	 */
-	public void setTextCallback(StatusCallback scb) {
-		model.setTextCallback(scb);
 	}
 	
 	/**
@@ -944,21 +935,16 @@ public class VisualizationViewer<V, E> extends JPanel
     }
     
     /**
-     * @return Returns the pickSupport.
+     * @return Returns the GraphElementAccessor.
      */
-    public PickSupport<V,E> getPickSupport() {
+    public GraphElementAccessor<V,E> getPickSupport() {
         return pickSupport;
     }
     /**
      * @param pickSupport The pickSupport to set.
      */
-    public void setPickSupport(PickSupport<V,E> pickSupport) {
+    public void setPickSupport(GraphElementAccessor<V,E> pickSupport) {
         this.pickSupport = pickSupport;
-//        this.pickSupport.setHasGraphLayout(this);
-//        if(pickSupport instanceof ShapePickSupport && renderer instanceof HasShapeFunctions) {
-//            ((ShapePickSupport)pickSupport).setHasShapes((HasShapeFunctions)renderer);
-//            ((ShapePickSupport)pickSupport).setLayoutTransformer(this);
-//        }
     }
     
     public Point2D getCenter() {

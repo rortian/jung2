@@ -90,7 +90,7 @@ public class SatelliteVisualizationViewer<V, E>
         setGraphMouse(gm);
         
         // this adds the Lens to the satellite view
-        addPreRenderPaintable(new ViewLens(this, master));
+        addPreRenderPaintable(new ViewLens<V,E>(this, master));
         
         // get a copy of the current layout transform
         // it may have been scaled to fit the graph
@@ -127,8 +127,6 @@ public class SatelliteVisualizationViewer<V, E>
         Layout<V,E> layout = model.getGraphLayout();
 
         g2d.setRenderingHints(renderingHints);
-        
-        long start = System.currentTimeMillis();
         
         // the size of the VisualizationViewer
         Dimension d = getSize();

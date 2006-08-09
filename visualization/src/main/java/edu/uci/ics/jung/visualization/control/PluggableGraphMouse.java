@@ -33,9 +33,9 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
     MouseListener[] mouseListeners;
     MouseMotionListener[] mouseMotionListeners;
     MouseWheelListener[] mouseWheelListeners;
-    Set mousePluginList = new LinkedHashSet();
-    Set mouseMotionPluginList = new LinkedHashSet();
-    Set mouseWheelPluginList = new LinkedHashSet();
+    Set<GraphMousePlugin> mousePluginList = new LinkedHashSet<GraphMousePlugin>();
+    Set<MouseMotionListener> mouseMotionPluginList = new LinkedHashSet<MouseMotionListener>();
+    Set<MouseWheelListener> mouseWheelPluginList = new LinkedHashSet<MouseWheelListener>();
 
     public void add(GraphMousePlugin plugin) {
         if(plugin instanceof MouseListener) {
@@ -43,11 +43,11 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseListeners = null;
         }
         if(plugin instanceof MouseMotionListener) {
-            mouseMotionPluginList.add(plugin);
+            mouseMotionPluginList.add((MouseMotionListener)plugin);
             mouseMotionListeners = null;
         }
         if(plugin instanceof MouseWheelListener) {
-            mouseWheelPluginList.add(plugin);
+            mouseWheelPluginList.add((MouseWheelListener)plugin);
             mouseWheelListeners = null;
         }
     }

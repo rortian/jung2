@@ -94,11 +94,8 @@ public class EdgeLabelDemo extends JApplet {
         Integer[] v = createVertices(3);
         createEdges(v);
         
-//        pr = new PluggableRenderer<Integer,Number>();
         Layout<Integer,Number> layout = new CircleLayout<Integer,Number>(graph);
         vv =  new VisualizationViewer<Integer,Number>(layout, new Dimension(600,400));
-//        vv.setPickSupport(new ShapePickSupport<Integer,Number>());
-//        pr.setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Number>());
         vv.setBackground(Color.white);
 
         vertexLabelRenderer = vv.getRenderContext().getVertexLabelRenderer();
@@ -110,8 +107,8 @@ public class EdgeLabelDemo extends JApplet {
             }
         };
         vv.getRenderContext().setEdgeStringer(stringer);
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         
@@ -141,7 +138,7 @@ public class EdgeLabelDemo extends JApplet {
         lineButton.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line());
+                    vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<Integer,Number>());
                     vv.repaint();
                 }
             }
@@ -151,7 +148,7 @@ public class EdgeLabelDemo extends JApplet {
         quadButton.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve());
+                    vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Number>());
                     vv.repaint();
                 }
             }
@@ -161,7 +158,7 @@ public class EdgeLabelDemo extends JApplet {
         cubicButton.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
-                    vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve());
+                    vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<Integer,Number>());
                     vv.repaint();
                 }
             }
@@ -268,7 +265,7 @@ public class EdgeLabelDemo extends JApplet {
      *
      *
      */
-    class MutableDirectionalEdgeValue extends ConstantDirectionalEdgeValue {
+    class MutableDirectionalEdgeValue extends ConstantDirectionalEdgeValue<Integer,Number> {
         BoundedRangeModel undirectedModel = new DefaultBoundedRangeModel(5,0,0,10);
         BoundedRangeModel directedModel = new DefaultBoundedRangeModel(7,0,0,10);
         

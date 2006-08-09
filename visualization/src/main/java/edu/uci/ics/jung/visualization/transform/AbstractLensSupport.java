@@ -28,9 +28,9 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
  *
  *
  */
-public abstract class AbstractLensSupport implements LensSupport {
+public abstract class AbstractLensSupport<V,E> implements LensSupport {
 
-    protected VisualizationViewer vv;
+    protected VisualizationViewer<V,E> vv;
     protected VisualizationViewer.GraphMouse graphMouse;
     protected MutableTransformer savedViewTransformer;
     protected LensTransformer lensTransformer;
@@ -49,7 +49,7 @@ public abstract class AbstractLensSupport implements LensSupport {
      * a custom GraphMouse
      * @param vv the VisualizationViewer to work on
      */
-    public AbstractLensSupport(VisualizationViewer vv, ModalGraphMouse lensGraphMouse) {
+    public AbstractLensSupport(VisualizationViewer<V,E> vv, ModalGraphMouse lensGraphMouse) {
         this.vv = vv;
         this.savedViewTransformer = vv.getViewTransformer();
         this.graphMouse = vv.getGraphMouse();

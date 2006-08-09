@@ -12,6 +12,13 @@ import edu.uci.ics.jung.visualization.renderers.BasicEdgeAndLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 
 /**
+ * The default implementation of the Renderer used by the
+ * VisualizationViewer. Default Vertex and Edge Renderers
+ * are supplied, or the user may set custom values. The
+ * Vertex and Edge renderers are used in the renderVertex
+ * and renderEdge methods, which are called in the render
+ * loop of the VisualizationViewer.
+ * 
  * @author Tom Nelson
  */
 public class BasicRenderer<V, E> implements Renderer<V, E> {

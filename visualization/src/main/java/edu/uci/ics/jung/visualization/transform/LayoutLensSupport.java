@@ -24,10 +24,10 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
  *
  *
  */
-public class LayoutLensSupport extends AbstractLensSupport 
+public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E> 
     implements LensSupport {
 
-    public LayoutLensSupport(VisualizationViewer vv) {
+    public LayoutLensSupport(VisualizationViewer<V,E> vv) {
         this(vv, new HyperbolicTransformer(vv, vv.getLayoutTransformer()),
                 new ModalLensGraphMouse());
     }
@@ -36,7 +36,7 @@ public class LayoutLensSupport extends AbstractLensSupport
      * a custom GraphMouse
      * @param vv the VisualizationViewer to work on
      */
-    public LayoutLensSupport(VisualizationViewer vv, LensTransformer lensTransformer,
+    public LayoutLensSupport(VisualizationViewer<V,E> vv, LensTransformer lensTransformer,
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.lensTransformer = lensTransformer;

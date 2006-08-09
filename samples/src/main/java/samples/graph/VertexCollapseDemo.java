@@ -42,7 +42,6 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ConstantVertexSizeFunction;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
@@ -100,16 +99,6 @@ public class VertexCollapseDemo extends JApplet {
         vv =  new VisualizationViewer(visualizationModel, preferredSize);
         
         vv.getRenderContext().setVertexShapeFunction(new ClusterVertexShapeFunction());
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller() {
-
-            @Override
-            public String getLabel(Object v) {
-                if(v instanceof Graph) {
-                    return ((Graph)v).getVertices().toString();
-                } else {
-                    return super.getLabel(v);
-                }
-            }});
 
         vv.setBackground(Color.white);
         
@@ -165,6 +154,7 @@ public class VertexCollapseDemo extends JApplet {
                     }
                     Point2D cp = new Point2D.Double(sumx/picked.size(), sumy/picked.size());
                     vv.stop();
+                    vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
                     layout.forceMove(clusterGraph, cp.getX(), cp.getY());
                 }
@@ -181,6 +171,7 @@ public class VertexCollapseDemo extends JApplet {
                         Graph g = collapser.expand(layout.getGraph(), (Graph)v);
                         
                         vv.stop();
+                        vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
                     vv.repaint();
@@ -220,13 +211,13 @@ public class VertexCollapseDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
-    class ClusterVertexShapeFunction extends EllipseVertexShapeFunction {
+    class ClusterVertexShapeFunction<V> extends EllipseVertexShapeFunction<V> {
 
         ClusterVertexShapeFunction() {
-            setSizeFunction(new ClusterVertexSizeFunction(20));
+            setSizeFunction(new ClusterVertexSizeFunction<V>(20));
         }
         @Override
-        public Shape getShape(Object v) {
+        public Shape getShape(V v) {
             if(v instanceof Graph) {
                 int size = ((Graph)v).getVertices().size();
                 if (size < 8) {   
@@ -241,14 +232,14 @@ public class VertexCollapseDemo extends JApplet {
         }
     }
     
-    class ClusterVertexSizeFunction extends ConstantVertexSizeFunction {
+    class ClusterVertexSizeFunction<V> extends ConstantVertexSizeFunction<V> {
 
         public ClusterVertexSizeFunction(int size) {
             super(size);
         }
 
         @Override
-        public int getSize(Object v) {
+        public int getSize(V v) {
             if(v instanceof Graph) {
                 return 30;
             }

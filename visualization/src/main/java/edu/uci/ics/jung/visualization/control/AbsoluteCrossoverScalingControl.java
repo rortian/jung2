@@ -17,7 +17,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * scales to the absolute value passed as an argument.
  * It first resets the scaling transformers, then uses
  * the relative CrossoverScalingControl to achieve the
- * abolute value.
+ * absolute value.
  * 
  * @author Tom Nelson - RABA Technologies
  *

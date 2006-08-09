@@ -130,7 +130,7 @@ public class ShowLayouts extends JApplet {
         g_array[6] = TestGraphs.createChainPlusIsolates(0, 20);
 
         Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
-//        PluggableRenderer pr = new PluggableRenderer();
+
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
         
         vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
@@ -156,7 +156,6 @@ public class ShowLayouts extends JApplet {
         JComboBox modeBox = graphMouse.getModeComboBox();
         modeBox.addItemListener(((DefaultModalGraphMouse)vv.getGraphMouse()).getModeListener());
 
-//        vv.setPickSupport(new ShapePickSupport());
         JPanel jp = new JPanel();
         jp.setBackground(Color.WHITE);
         jp.setLayout(new BorderLayout());

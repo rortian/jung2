@@ -25,7 +25,7 @@ public class PickableVertexPaintFunction<V> implements VertexPaintFunction<V> {
     protected Paint draw_paint;
     protected Paint fill_paint;
     protected Paint picked_paint;
-    protected PickedInfo pi;
+    protected PickedInfo<V> pi;
     
     /**
      * 
@@ -34,7 +34,7 @@ public class PickableVertexPaintFunction<V> implements VertexPaintFunction<V> {
      * @param fill_paint    <code>Paint</code> used to fill vertex shapes
      * @param picked_paint  <code>Paint</code> used to fill picked vertex shapes
      */
-    public PickableVertexPaintFunction(PickedInfo pi, Paint draw_paint, Paint fill_paint, Paint picked_paint)
+    public PickableVertexPaintFunction(PickedInfo<V> pi, Paint draw_paint, Paint fill_paint, Paint picked_paint)
     {
         if (pi == null)
             throw new IllegalArgumentException("PickedInfo instance must be non-null");

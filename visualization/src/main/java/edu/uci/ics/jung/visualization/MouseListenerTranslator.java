@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.layout.Layout;
-import edu.uci.ics.jung.visualization.picking.PickSupport;
 
 /**
  * This class translates mouse clicks into vertex clicks
@@ -48,7 +47,7 @@ public class MouseListenerTranslator<V, E> extends MouseAdapter {
 	private V getVertex(Point2D point) {
 	    // adjust for scale and offset in the VisualizationViewer
 	    Point2D p = vv.inverseViewTransform(point);
-	    PickSupport<V,E> pickSupport = vv.getPickSupport();
+	    GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
         Layout<V,E> layout = vv.getGraphLayout();
 	    V v = null;
 	    if(pickSupport != null) {

@@ -15,7 +15,6 @@ import java.awt.Dimension;
 import java.awt.ItemSelectable;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -83,16 +82,6 @@ public abstract class AbstractModalGraphMouse extends PluggableGraphMouse
      * listeners for mode changes
      */
     protected EventListenerList listenerList = new EventListenerList();
-
-    /*
-     * default mask override for Apple 
-     */
-    private static int scalingMask = MouseEvent.SHIFT_MASK;
-    static {
-        if(System.getProperty("os.name").startsWith("Mac")) {
-            scalingMask = MouseEvent.META_MASK;
-        }
-    }
 
     protected GraphMousePlugin pickingPlugin;
     protected GraphMousePlugin translatingPlugin;

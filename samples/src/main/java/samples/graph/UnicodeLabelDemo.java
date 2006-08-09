@@ -59,12 +59,12 @@ public class UnicodeLabelDemo {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<Integer,Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer vv;
+    VisualizationViewer<Integer,Number> vv;
     
     boolean showLabels;
     
@@ -76,21 +76,21 @@ public class UnicodeLabelDemo {
     public UnicodeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph();
+        graph = new SimpleDirectedSparseGraph<Integer,Number>();
         Integer[] v = createVertices(10);
         createEdges(v);
         
-        vv =  new VisualizationViewer(new FRLayout(graph));
-        vv.getRenderContext().setVertexStringer(new UnicodeVertexStringer(v));
+        vv =  new VisualizationViewer<Integer,Number>(new FRLayout<Integer,Number>(graph));
+        vv.getRenderContext().setVertexStringer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
-        VertexIconAndShapeFunction dvisf =
-            new VertexIconAndShapeFunction(new EllipseVertexShapeFunction());
+        VertexIconAndShapeFunction<Integer> dvisf =
+            new VertexIconAndShapeFunction<Integer>(new EllipseVertexShapeFunction<Integer>());
         vv.getRenderContext().setVertexShapeFunction(dvisf);
         vv.getRenderContext().setVertexIconFunction(dvisf);
         loadImages(v, dvisf.getIconMap());
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.lightGray, Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.lightGray, Color.white,  Color.yellow));
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 
@@ -143,10 +143,10 @@ public class UnicodeLabelDemo {
     }
     
     
-    class UnicodeVertexStringer implements VertexStringer {
+    class UnicodeVertexStringer<V> implements VertexStringer<V> {
 
-        Map map = new HashMap();
-        Map iconMap = new HashMap();
+        Map<V,String> map = new HashMap<V,String>();
+        Map<V,Icon> iconMap = new HashMap<V,Icon>();
         String[] labels = {
                 "\u0057\u0065\u006C\u0063\u006F\u006D\u0065\u0020\u0074\u006F\u0020Jung\u0021",               
                 "\u6B22\u8FCE\u4F7F\u7528\u0020\u0020Jung\u0021",
@@ -158,7 +158,7 @@ public class UnicodeLabelDemo {
                "\u0042\u0069\u0065\u006E\u0076\u0065\u006E\u0069\u0064\u0061\u0020\u0061\u0020Jung\u0021"
         };
         
-        public UnicodeVertexStringer(Object[] vertices) {
+        public UnicodeVertexStringer(V[] vertices) {
             for(int i=0; i<vertices.length; i++) {
                 map.put(vertices[i], labels[i%labels.length]);
             }
@@ -167,7 +167,7 @@ public class UnicodeLabelDemo {
         /* (non-Javadoc)
          * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
          */
-        public String getLabel(Object v) {
+        public String getLabel(V v) {
             if(showLabels) {
                 return (String)map.get(v);
             } else {
@@ -175,7 +175,7 @@ public class UnicodeLabelDemo {
             }
         }
         
-        public Icon getIcon(Object v) {
+        public Icon getIcon(V v) {
             return (Icon)iconMap.get(v);
         }
     }
@@ -222,7 +222,7 @@ public class UnicodeLabelDemo {
      * A nested class to demo ToolTips
      */
     
-    protected void loadImages(Object[] vertices, Map imageMap) {
+    protected void loadImages(Integer[] vertices, Map<Integer,Icon> imageMap) {
         
         ImageIcon[] icons = null;
         try {

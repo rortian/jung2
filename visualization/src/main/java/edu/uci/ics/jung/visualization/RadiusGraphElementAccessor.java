@@ -30,7 +30,6 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  */
 public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V, E> {
     
-//    protected Layout<V, E> layout;
     protected double maxDistance;
     
     public RadiusGraphElementAccessor() {
@@ -39,7 +38,6 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
     
     public RadiusGraphElementAccessor(double maxDistance) {
         this.maxDistance = maxDistance;
-//        this.layout = l;
     }
     
 	/**
@@ -67,10 +65,7 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 		while(true) {
 		    try {
                 for(V v : layout.getGraph().getVertices()) {
-//		        for (Iterator iter = layout.getGraph().getVertices().iterator();
-//		        iter.hasNext();
-//		        ) {
-//		            Vertex v = (Vertex) iter.next();
+
 		            Point2D p = layout.getLocation(v);
 		            double dx = p.getX() - x;
 		            double dy = p.getY() - y;
@@ -111,11 +106,7 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 		while(true) {
 		    try {
                 for(E e : layout.getGraph().getEdges()) {
-//		        for (Iterator iter = layout.getGraph().getEdges().iterator(); iter.hasNext();) {
-//		            Edge e = (Edge) iter.next();
-		            // if anyone uses a hyperedge, this is too complex.
-//		            if (e.numVertices() != 2)
-//		                continue;
+
 		            // Could replace all this set stuff with getFrom_internal() etc.
                     Graph<V, E> graph = layout.getGraph();
 		            Collection<V> vertices = graph.getIncidentVertices(e);
@@ -158,8 +149,4 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 		}
 		return closest;
 	}
-
-//    public void setLayout(Layout<V, E> l) {
-//        this.layout = l;
-//    }
 }

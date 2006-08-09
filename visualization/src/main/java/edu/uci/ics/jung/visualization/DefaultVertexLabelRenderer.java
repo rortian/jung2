@@ -22,7 +22,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 /**
- * DefaultGraphLabelRenderer is similar to the cell renderers
+ * DefaultVertexLabelRenderer is similar to the cell renderers
  * used by the JTable and JTree jfc classes.
  * 
  * @author Tom Nelson - RABA Technologies
@@ -35,9 +35,6 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      protected static Border noFocusBorder = new EmptyBorder(0,0,0,0); 
     
      protected Color pickedVertexLabelColor = Color.black;
-//     protected Color pickedEdgeLabelColor = Color.black;
-//     protected boolean rotateEdgeLabels;
-
      
     /**
      * Creates a default table cell renderer.
@@ -79,8 +76,8 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      */
     public void updateUI() {
         super.updateUI(); 
-	setForeground(null);
-	setBackground(null);
+        setForeground(null);
+        setBackground(null);
     }
     
     /**
@@ -93,14 +90,13 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      * @param vertex  the <code>Vertex</code>
      * @return the default label renderer
      */
-    public <V> Component getGraphLabelRendererComponent(JComponent vv, Object value,
+    public <V> Component getVertexLabelRendererComponent(JComponent vv, Object value,
             Font font, boolean isSelected, V vertex) {
         
         super.setForeground(vv.getForeground());
         if(isSelected) setForeground(pickedVertexLabelColor);
         super.setBackground(vv.getBackground());
         if(font != null) {
-//            setFont(vv.getFont());
             setFont(font);
         } else {
             setFont(vv.getFont());
@@ -182,7 +178,6 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      * for more information.
      */
     public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) { }
-
 
     /**
      * Sets the <code>String</code> object for the cell being rendered to

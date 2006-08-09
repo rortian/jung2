@@ -35,10 +35,5 @@ public interface GraphElementAccessor<V, E>
      * by a Layout.
      */
     E getEdge(Layout<V,E> layout, double x, double y);
-    
-//    /**
-//     * Sets the <code>Layout</code> that is used to specify the locations
-//     * of vertices and edges in this instance to <code>layout</code>.
-//     */
-//    void setLayout(Layout<V, E> layout); 
+
 }

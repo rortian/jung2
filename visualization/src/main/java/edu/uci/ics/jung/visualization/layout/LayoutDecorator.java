@@ -50,7 +50,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
      * setter for the delegate
      * @param delegate the new delegate
      */
-    public void setDelegate(Layout delegate) {
+    public void setDelegate(Layout<V,E> delegate) {
         this.delegate = delegate;
     }
 
@@ -64,7 +64,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#applyFilter(edu.uci.ics.jung.graph.Graph)
      */
-    public void applyFilter(Graph subgraph) {
+    public void applyFilter(Graph<V,E> subgraph) {
         delegate.applyFilter(subgraph);
     }
 

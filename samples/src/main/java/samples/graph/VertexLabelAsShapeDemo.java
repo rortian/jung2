@@ -25,9 +25,9 @@ import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
+import edu.uci.ics.jung.visualization.BasicRenderer;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.BasicRenderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -38,9 +38,6 @@ import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
-import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
-import edu.uci.ics.jung.visualization.renderers.BasicVertexShapeRenderer;
-import edu.uci.ics.jung.visualization.renderers.BasicEdgeAndLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 
 
@@ -54,14 +51,14 @@ public class VertexLabelAsShapeDemo extends JApplet {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<String,Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer vv;
+    VisualizationViewer<String,Number> vv;
     
-    Layout layout;
+    Layout<String,Number> layout;
     
     /**
      * create an instance of a simple graph with controls to
@@ -74,18 +71,18 @@ public class VertexLabelAsShapeDemo extends JApplet {
         graph = 
         TestGraphs.getOneComponentGraph();
         
-        BasicRenderer pr = new BasicRenderer();
-        layout = new FRLayout(graph);
+        BasicRenderer<String,Number> pr = new BasicRenderer<String,Number>();
+        layout = new FRLayout<String,Number>(graph);
 
         Dimension preferredSize = new Dimension(400,400);
-        final VisualizationModel visualizationModel = 
-            new DefaultVisualizationModel(layout, preferredSize);
-        vv =  new VisualizationViewer(visualizationModel, preferredSize);
+        final VisualizationModel<String,Number> visualizationModel = 
+            new DefaultVisualizationModel<String,Number>(layout, preferredSize);
+        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
-        VertexLabelAsShapeRenderer vlasr = new VertexLabelAsShapeRenderer();
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller() {
+        VertexLabelAsShapeRenderer<String,Number> vlasr = new VertexLabelAsShapeRenderer<String,Number>();
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller<String>() {
             @Override
-            public String getLabel(Object v) {
+            public String getLabel(String v) {
                 return "<html><center>Vertex<p>"+super.getLabel(v);
             }});
         vv.getRenderContext().setVertexShapeFunction(vlasr);
@@ -93,9 +90,6 @@ public class VertexLabelAsShapeDemo extends JApplet {
         pr.setVertexRenderer(vlasr);
         vv.setRenderer(pr);
 
-//        pr.setEdgeRenderer(new BasicEdgeAndLabelRenderer());
-        
-//        vv.setPickSupport(new ShapePickSupport(vv,2));
         vv.setBackground(Color.white);
         
         // add a listener for ToolTips

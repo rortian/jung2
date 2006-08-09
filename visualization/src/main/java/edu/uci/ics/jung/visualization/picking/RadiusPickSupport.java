@@ -13,6 +13,7 @@
  */
 package edu.uci.ics.jung.visualization.picking;
 
+import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -28,7 +29,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * @author Joshua O'Madadhain
  */
 public class RadiusPickSupport<V, E> 
-    extends RadiusGraphElementAccessor<V, E> implements PickSupport<V,E> {
+    extends RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,E> {
     
     public RadiusPickSupport() {
         this(Math.sqrt(Double.MAX_VALUE - 1000));

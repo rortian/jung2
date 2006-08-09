@@ -28,7 +28,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * @see AnimatedPickingGraphMousePlugin
  * @author Tom Nelson
  */
-public class SatelliteAnimatedPickingGraphMousePlugin extends AnimatedPickingGraphMousePlugin
+public class SatelliteAnimatedPickingGraphMousePlugin<V,E> extends AnimatedPickingGraphMousePlugin<V,E>
     implements MouseListener, MouseMotionListener {
 
     /**
@@ -48,15 +48,16 @@ public class SatelliteAnimatedPickingGraphMousePlugin extends AnimatedPickingGra
      * of this satellite view
      * 
      */
+    @SuppressWarnings("unchecked")
     public void mouseReleased(MouseEvent e) {
     		if (e.getModifiers() == modifiers) {
-			final VisualizationViewer vv = (VisualizationViewer) e.getSource();
+			final VisualizationViewer<V,E> vv = (VisualizationViewer) e.getSource();
 			if (vv instanceof SatelliteVisualizationViewer) {
-				final VisualizationViewer vvMaster = 
+				final VisualizationViewer<V,E> vvMaster = 
 					((SatelliteVisualizationViewer) vv).getMaster();
 
 				if (vertex != null) {
-					Layout layout = vvMaster.getGraphLayout();
+					Layout<V,E> layout = vvMaster.getGraphLayout();
 					Point2D q = layout.getLocation(vertex);
 					Point2D lvc = 
 						vvMaster.inverseLayoutTransform(vvMaster.getCenter());

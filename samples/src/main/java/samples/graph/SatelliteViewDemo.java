@@ -108,10 +108,6 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         // create a simple graph for the demo
         Graph<String, Number> graph = TestGraphs.getOneComponentGraph();
         
-        // need separate renderers for each view
-//        PluggableRenderer<String,Number> pr1 = new PluggableRenderer<String,Number>();
-//        PluggableRenderer<String,Number> pr2 = new PluggableRenderer<String,Number>();
-        
         // the preferred sizes for the two views
         Dimension preferredSize1 = new Dimension(600,600);
         Dimension preferredSize2 = new Dimension(300, 300);
@@ -132,12 +128,11 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             new SatelliteVisualizationViewer<String,Number>(vv1, vm, preferredSize2);
         
         vv1.setBackground(Color.white);
-//        vv1.setPickSupport(new ShapePickSupport<String,Number>());
         
-        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv1.getPickedEdgeState(), Color.black, Color.cyan));
-        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv1.getPickedVertexState(), Color.black, Color.red, Color.yellow));
-        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv2.getPickedEdgeState(), Color.black, Color.cyan));
-        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv2.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
+        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
+        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv2.getPickedVertexState(), Color.black, Color.red, Color.yellow));
 
         
         viewGrid = new ViewGrid(vv2, vv1);

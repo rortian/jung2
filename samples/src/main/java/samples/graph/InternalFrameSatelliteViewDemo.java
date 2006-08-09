@@ -75,13 +75,13 @@ public class InternalFrameSatelliteViewDemo {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<String,Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer vv;
-    VisualizationViewer satellite;
+    VisualizationViewer<String,Number> vv;
+    VisualizationViewer<String,Number> satellite;
     
     JInternalFrame dialog;
     
@@ -97,26 +97,22 @@ public class InternalFrameSatelliteViewDemo {
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
 
-        Layout layout = new ISOMLayout(graph);
+        Layout<String,Number> layout = new ISOMLayout<String,Number>(graph);
 
-//        PluggableRenderer pr = new PluggableRenderer();
-//        PluggableRenderer prs = new PluggableRenderer();
-        
-        vv = new VisualizationViewer(layout, new Dimension(600,600));
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv = new VisualizationViewer<String,Number>(layout, new Dimension(600,600));
+        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
 
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         final ModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
-//        vv.setPickSupport(new ShapePickSupport());
 
         satellite =
-            new SatelliteVisualizationViewer(vv, layout, 
+            new SatelliteVisualizationViewer<String,Number>(vv, layout, 
                     new Dimension(200,200));
-        satellite.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(satellite.getPickedEdgeState(), Color.black, Color.cyan));
-        satellite.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(satellite.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        satellite.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
+        satellite.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(satellite.getPickedVertexState(), Color.black, Color.red, Color.yellow));
 
         JFrame frame = new JFrame();
         desktop = new JDesktopPane();

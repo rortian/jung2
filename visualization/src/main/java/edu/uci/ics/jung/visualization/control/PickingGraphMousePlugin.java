@@ -26,10 +26,10 @@ import java.util.ConcurrentModificationException;
 
 import javax.swing.JComponent;
 
+import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationViewer.Paintable;
 import edu.uci.ics.jung.visualization.layout.Layout;
-import edu.uci.ics.jung.visualization.picking.PickSupport;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
@@ -161,10 +161,11 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * 
 	 * @param e the event
 	 */
+    @SuppressWarnings("unchecked")
     public void mousePressed(MouseEvent e) {
         down = e.getPoint();
         VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-        PickSupport<V,E> pickSupport = vv.getPickSupport();
+        GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
         PickedState<V> pickedVertexState = vv.getPickedVertexState();
         PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
         if(pickSupport != null && pickedVertexState != null) {
@@ -236,8 +237,9 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * 
 	 * clean up settings from mousePressed
 	 */
+    @SuppressWarnings("unchecked")
     public void mouseReleased(MouseEvent e) {
-        VisualizationViewer vv = (VisualizationViewer)e.getSource();
+        VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
         if(e.getModifiers() == modifiers) {
             if(down != null) {
                 Point2D out = e.getPoint();
@@ -267,6 +269,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * to select multiple Vertices
 	 * 
 	 */
+    @SuppressWarnings("unchecked")
     public void mouseDragged(MouseEvent e) {
         if(locked == false) {
             VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
@@ -316,10 +319,10 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
      * pick the vertices inside the rectangle
      *
      */
-    protected void pickContainedVertices(VisualizationViewer vv, boolean clear) {
+    protected void pickContainedVertices(VisualizationViewer<V,E> vv, boolean clear) {
         
         Layout<V,E> layout = vv.getGraphLayout();
-        PickedState pickedVertexState = vv.getPickedVertexState();
+        PickedState<V> pickedVertexState = vv.getPickedVertexState();
         if(pickedVertexState != null) {
             if(clear) {
             	pickedVertexState.clear();

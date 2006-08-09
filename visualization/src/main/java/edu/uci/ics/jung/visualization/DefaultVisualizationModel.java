@@ -29,13 +29,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  */
 public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>, ChangeEventSupport {
     
-    ChangeEventSupport changeSupport =
-        new DefaultChangeEventSupport(this);
-
-    /**
-     * a callback called during relaxer iteration
-     */
-	protected StatusCallback statusCallback;
+    ChangeEventSupport changeSupport = new DefaultChangeEventSupport(this);
 
     /**
 	 * the thread that applies the current layout algorithm
@@ -282,14 +276,6 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
 		            if (stop)
 		                return;
 		            
-		            String status = layout.getStatus();
-		            if (statusCallback != null && status != null) {
-		                statusCallback.callBack(status);
-		            }
-		            
-		            if (stop)
-		                return;
-		            
 		            relaxTimes[relaxIndex++] = delta;
 		            relaxIndex = relaxIndex % relaxTimes.length;
 		            relaxfps = average(relaxTimes);
@@ -332,13 +318,6 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
 			l += paintTimes[i];
 		}
 		return l / paintTimes.length;
-	}
-
-	/**
-	 * @param scb
-	 */
-	public void setTextCallback(StatusCallback scb) {
-		this.statusCallback = scb;
 	}
 
 	/**

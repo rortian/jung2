@@ -178,6 +178,7 @@ public class GraphZoomScrollPane extends JPanel {
         scrollBarsMayControlAdjusting = true;
     }
     
+    @SuppressWarnings("unchecked")
     protected void setScrollBarValues(Rectangle rectangle, 
             Point2D h0, Point2D h1, 
             Point2D v0, Point2D v1) {

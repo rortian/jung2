@@ -410,6 +410,7 @@ public class GraphicsDecorator {
     /* (non-Javadoc)
      * @see java.awt.Graphics#getClipRect()
      */
+    @SuppressWarnings("deprecation")
     public Rectangle getClipRect() {
         return delegate.getClipRect();
     }

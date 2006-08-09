@@ -11,6 +11,8 @@
  */
 package edu.uci.ics.jung.visualization.picking;
 
+import edu.uci.ics.jung.visualization.GraphElementAccessor;
+
 
 /**
  * <code>PickSupport</code> implementation that emulates the picking behavior
@@ -23,7 +25,7 @@ package edu.uci.ics.jung.visualization.picking;
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
-class ClassicPickSupport<V,E> extends RadiusPickSupport<V,E> implements PickSupport<V,E> {
+class ClassicPickSupport<V,E> extends RadiusPickSupport<V,E> implements GraphElementAccessor<V,E> {
     
     public ClassicPickSupport()
     {

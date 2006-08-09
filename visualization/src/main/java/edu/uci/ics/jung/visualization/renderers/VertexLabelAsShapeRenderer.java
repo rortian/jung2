@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2005, the JUNG Project and the Regents of the University of
+ * California All rights reserved.
+ *
+ * This software is open-source under the BSD license; see either "license.txt"
+ * or http://jung.sourceforge.net/license.txt for a description.
+ *
+ * Created on Aug 23, 2005
+ */
 package edu.uci.ics.jung.visualization.renderers;
 
 import java.awt.Color;
@@ -28,7 +37,7 @@ public class VertexLabelAsShapeRenderer<V,E> implements Renderer.Vertex<V,E>, Ve
 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
-		return rc.getVertexLabelRenderer().<V>getGraphLabelRendererComponent(rc.getScreenDevice(), value, 
+		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
 				rc.getVertexFontFunction().getFont(vertex), isSelected, vertex);
 	}
 

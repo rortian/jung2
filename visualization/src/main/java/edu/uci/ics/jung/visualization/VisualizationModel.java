@@ -32,12 +32,6 @@ public interface VisualizationModel<V, E> extends ChangeEventSupport {
     long getRelaxerThreadSleepTime();
     
     /**
-     * set a callback to be called during the relaxer iteration
-     * @param scb
-     */
-	void setTextCallback(StatusCallback scb);
-
-    /**
      * restart the layout
      */
     void restart();

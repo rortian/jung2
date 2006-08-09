@@ -26,20 +26,18 @@ import edu.uci.ics.jung.visualization.transform.LensTransformer;
  *
  *
  */
-public class ViewLensSupport extends AbstractLensSupport
+public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     implements LensSupport {
     
-//    protected RenderContext pluggableRenderContext;
-//    protected TransformingPluggableRenderContext transformingPluggableRenderContext;
-    protected RenderContext renderContext;
+    protected RenderContext<V,E> renderContext;
     GraphicsDecorator lensGraphicsDecorator;
     GraphicsDecorator savedGraphicsDecorator;
     
-    public ViewLensSupport(VisualizationViewer vv) {
+    public ViewLensSupport(VisualizationViewer<V,E> vv) {
         this(vv, new HyperbolicShapeTransformer(vv),
                 new ModalLensGraphMouse());
     }
-    public ViewLensSupport(VisualizationViewer vv, LensTransformer lensTransformer,
+    public ViewLensSupport(VisualizationViewer<V,E> vv, LensTransformer lensTransformer,
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.renderContext = vv.getRenderContext();
@@ -52,11 +50,6 @@ public class ViewLensSupport extends AbstractLensSupport
         lensTransformer.setViewRadius(d.width/5);
         this.lensGraphicsDecorator = new TransformingGraphics(lensTransformer);
 
-//        if(renderContext instanceof PluggableRenderContext) {
-//            this.pluggableRenderContext = renderContext;
-//        } else {
-//            this.pluggableRenderContext = new PluggableRenderContext();
-//        }
     }
     public void activate() {
         if(lens == null) {
@@ -66,12 +59,6 @@ public class ViewLensSupport extends AbstractLensSupport
             lensControls = new LensControls(lensTransformer);
         }
         vv.setViewTransformer(lensTransformer);
-//        if(transformingPluggableRenderContext == null) {   
-//            transformingPluggableRenderContext = 
-//            		new TransformingPluggableRenderContext(pluggableRenderContext);
-//        }
-//        transformingPluggableRenderContext.setTransformer(lensTransformer);
-//        vv.setRenderContext(transformingPluggableRenderContext);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);

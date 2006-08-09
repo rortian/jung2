@@ -33,6 +33,7 @@ import javax.swing.JTextArea;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -52,7 +53,6 @@ import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
-import edu.uci.ics.jung.visualization.picking.PickSupport;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -69,14 +69,14 @@ public class MultiViewDemo extends JApplet {
     /**
      * the graph
      */
-    Graph graph;
+    Graph<String,Number> graph;
 
     /**
      * the visual components and renderers for the graph
      */
-    VisualizationViewer vv1;
-    VisualizationViewer vv2;
-    VisualizationViewer vv3;
+    VisualizationViewer<String,Number> vv1;
+    VisualizationViewer<String,Number> vv2;
+    VisualizationViewer<String,Number> vv3;
     
     /**
      * the normal transformer
@@ -113,27 +113,27 @@ public class MultiViewDemo extends JApplet {
         graph = TestGraphs.getOneComponentGraph();
         
         // create one layout for the graph
-        FRLayout layout = new FRLayout(graph);
+        FRLayout<String,Number> layout = new FRLayout<String,Number>(graph);
         layout.setMaxIterations(1000);
         
         // create one model that all 3 views will share
-        VisualizationModel visualizationModel =
-            new DefaultVisualizationModel(layout, preferredSize);
+        VisualizationModel<String,Number> visualizationModel =
+            new DefaultVisualizationModel<String,Number>(layout, preferredSize);
  
         // create 3 views that share the same model
-        vv1 = new VisualizationViewer(visualizationModel, preferredSize);
-        vv2 = new VisualizationViewer(visualizationModel, preferredSize);
-        vv3 = new VisualizationViewer(visualizationModel, preferredSize);
+        vv1 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        vv2 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        vv3 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
-        vv1.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line());
-        vv2.getRenderContext().setVertexShapeFunction(new VertexShapeFunction() {
-            public Shape getShape(Object v) {
+        vv1.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<String,Number>());
+        vv2.getRenderContext().setVertexShapeFunction(new VertexShapeFunction<String>() {
+            public Shape getShape(String v) {
                 return new Rectangle2D.Float(-6, -6, 12, 12);
             }
         });
-        vv2.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve());
+        vv2.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
         
-        vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve());
+        vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<String,Number>());
 
         transformer = vv1.getLayoutTransformer();
         vv2.setLayoutTransformer(transformer);
@@ -147,14 +147,14 @@ public class MultiViewDemo extends JApplet {
         vv3.setBackground(Color.white);
         
         // create one pick support for all 3 views to share
-        PickSupport pickSupport = new ShapePickSupport(vv1);
+        GraphElementAccessor<String,Number> pickSupport = new ShapePickSupport<String,Number>(vv1);
         vv1.setPickSupport(pickSupport);
         vv2.setPickSupport(pickSupport);
         vv3.setPickSupport(pickSupport);
 
         // create one picked state for all 3 views to share
-        PickedState pes = new MultiPickedState();
-        PickedState pvs = new MultiPickedState();
+        PickedState<Number> pes = new MultiPickedState<Number>();
+        PickedState<String> pvs = new MultiPickedState<String>();
         vv1.setPickedVertexState(pvs);
         vv2.setPickedVertexState(pvs);
         vv3.setPickedVertexState(pvs);
@@ -163,12 +163,12 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
-        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
-        vv3.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction(pes, Color.black, Color.red));
-        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
-        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
-        vv3.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(pvs, Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
+        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
+        vv3.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
+        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.black, Color.red, Color.yellow));
+        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.black, Color.red, Color.yellow));
+        vv3.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.black, Color.red, Color.yellow));
         
         // add default listener for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());
