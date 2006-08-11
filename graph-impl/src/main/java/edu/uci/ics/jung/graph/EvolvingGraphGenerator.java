@@ -9,6 +9,8 @@
  */
 package edu.uci.ics.jung.graph;
 
+import java.util.Set;
+
 import edu.uci.ics.graph.Graph;
 
 
@@ -42,5 +44,5 @@ public interface EvolvingGraphGenerator<V, E> extends GraphGenerator<V,E> {
      * Resets the random graph to the state that it had after the
      * constructor returned.
      */
-    public void reset();
+    public void reset(Set<V> seedVertices);
 }

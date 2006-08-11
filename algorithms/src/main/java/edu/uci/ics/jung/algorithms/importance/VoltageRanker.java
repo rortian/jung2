@@ -16,8 +16,12 @@ package edu.uci.ics.jung.algorithms.importance;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
 import edu.uci.ics.graph.Graph;
 
@@ -51,11 +55,9 @@ import edu.uci.ics.graph.Graph;
  */
 public class VoltageRanker<V, E>
 {
-//    protected NumberEdgeValue edge_weights;
     protected Map<E,Number> edge_weights = new HashMap<E,Number>();
-//    protected NumberVertexValue voltages;
     protected Map<V,Number> voltages = new HashMap<V,Number>();
-    protected Map<V, Number> indexer = new HashMap<V,Number>();
+    protected BidiMap<V, Number> indexer = new DualHashBidiMap<V,Number>();
     protected int max_iterations;
     protected double convergence_threshold;
     
@@ -67,11 +69,8 @@ public class VoltageRanker<V, E>
     public VoltageRanker(Map<E,Number> edge_weights, Map<V,Number> voltages,
         int num_iterations, double convergence_threshold)
     {
-        if (num_iterations < 1)
-            throw new IllegalArgumentException("num_iterations must be >= 1");
-        
-        if (convergence_threshold < 0)
-            throw new IllegalArgumentException("convergence_threshold must be >= 0");
+        assert num_iterations > 0 : "num_iterations must be > 0";
+        assert convergence_threshold >= 0 : "convergence_threshold must be >= 0";
 
         this.edge_weights = edge_weights;
         this.voltages = voltages;
@@ -99,7 +98,7 @@ public class VoltageRanker<V, E>
      */
     public void calculateVoltages(Graph<V,E> g, Set<V> sources, Set<V> sinks)
     {
-        if (sources == null || sources.isEmpty() || 
+        if(sources == null || sources.isEmpty() || 
             sinks == null || sinks.isEmpty())
             throw new IllegalArgumentException("at least one source and one " +
                     "sink must exist");
@@ -112,8 +111,6 @@ public class VoltageRanker<V, E>
         for(V v : sources) {
         	unit_sources.put(v, new Double(1.0));
         }
-//        for (Iterator iter = sources.iterator(); iter.hasNext(); )
-//            unit_sources.put(iter.next(), new Double(1.0));
         
         calculateVoltages(g, unit_sources, sinks);
     }
@@ -126,7 +123,7 @@ public class VoltageRanker<V, E>
      * @param source_voltages   a map from vertices to source voltage values
      * @param sinks             a set of vertices to tie to 0 V
      */
-    public void calculateVoltages(Graph<V,E> g, Map source_voltages, Set sinks)
+    public void calculateVoltages(Graph<V,E> g, Map<V,Number> source_voltages, Set<V> sinks)
     {
         if (source_voltages == null || source_voltages.isEmpty() || 
             sinks == null || sinks.isEmpty())
@@ -137,21 +134,21 @@ public class VoltageRanker<V, E>
             throw new IllegalArgumentException("either sources and sinks overlap " + 
                 "or sources and sinks contain vertices not in g");
 
-        Set sources = source_voltages.keySet();
+        Set<V> sources = source_voltages.keySet();
         
         // set up initial voltages
-//        Indexer id = Indexer.getIndexer(g);
+        int cnt = 0;
+        for(V v : g.getVertices()) {
+            indexer.put(v, cnt++);
+        }
         Collection<V> vertices = g.getVertices();
         double[] volt_array = new double[vertices.size()];
-        int i=0;
-        for(V v : vertices) {
-        	indexer.put(v, i);
-//        for (int i = 0; i < volt_array.length; i++)
-//        {
-//            Vertex v = (Vertex)id.getVertex(i);
+        for (int i = 0; i < volt_array.length; i++)
+        {
+            V v = indexer.inverseBidiMap().get(i);
             if (sources.contains(v))
             {
-                Number voltage = (Number)source_voltages.get(v);
+                Number voltage = source_voltages.get(v);
                 volt_array[i] = voltage.doubleValue();
                 voltages.put(v, voltage);
             }
@@ -160,7 +157,6 @@ public class VoltageRanker<V, E>
                 volt_array[i] = 0;
                 voltages.put(v, new Double(0));
             }
-            i++;
         }
         
         // update voltages of each vertex to the (weighted) average of its 
@@ -173,21 +169,14 @@ public class VoltageRanker<V, E>
         {
             max_change = 0;
             for(V v : vertices) {
-//            for (Iterator iter = vertices.iterator(); iter.hasNext(); )
-//            {
-//                Vertex v = (Vertex)iter.next();
+
                 if (sources.contains(v) || sinks.contains(v))
                     continue;
                 Collection<E> edges = g.getInEdges(v);
-                	//v.getInEdges();
                 double voltage_sum = 0;
                 double weight_sum = 0;
                 for(E e : edges) {
-//                for (Iterator e_iter = edges.iterator(); e_iter.hasNext(); )
-//                {
-//                    Edge e = (Edge)e_iter.next();
                 	V w = g.getOpposite(v, e);
-//                    Vertex w = e.getOpposite(v);
                     double weight = edge_weights.get(e).doubleValue();
                     voltage_sum += volt_array[indexer.get(w).intValue()] * weight;
                     weight_sum += weight;
@@ -204,10 +193,8 @@ public class VoltageRanker<V, E>
             }
             
             // set up volt_array for next iteration
-            int j=0;
-            for(V v : g.getVertices()) {
-//            for (int j = 0; j < volt_array.length; j++)
-                volt_array[j++] = voltages.get(v).doubleValue();
+            for (int j = 0; j < volt_array.length; j++) {
+                volt_array[j++] = voltages.get(indexer.inverseBidiMap().get(j)).doubleValue();
             }
         }
     }
@@ -222,14 +209,14 @@ public class VoltageRanker<V, E>
      * @param source            the vertex whose voltage is tied to 1 V
      * @param target            the vertex whose voltage is tied to 0 V
      */
-//    public void calculateVoltages(V source, V target)
-//    {
-//        Set<V> sources = new HashSet<V>();
-//        Set<V> sinks = new HashSet<V>();
-//        sources.add(source);
-//        sinks.add(target);
-//        calculateVoltages(g, sources, sinks);
-//    }
+    public void calculateVoltages(Graph<V,E> g, V source, V target)
+    {
+        Set<V> sources = new HashSet<V>();
+        Set<V> sinks = new HashSet<V>();
+        sources.add(source);
+        sinks.add(target);
+        calculateVoltages(g, sources, sinks);
+    }
     
     static class ConstantMap<K,V> implements Map<K,V> {
 

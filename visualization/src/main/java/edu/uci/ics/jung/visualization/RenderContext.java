@@ -66,6 +66,10 @@ public interface RenderContext<V, E> {
 
     void setEdgeArrowFunction(EdgeArrowFunction<V, E> edgeArrowFunction);
 
+    Predicate<E> getEdgeArrowPredicate() ;
+
+    void setEdgeArrowPredicate(Predicate<E> edgeArrowPredicate);
+
     EdgeFontFunction<E> getEdgeFontFunction();
 
     void setEdgeFontFunction(EdgeFontFunction<E> edgeFontFunction);

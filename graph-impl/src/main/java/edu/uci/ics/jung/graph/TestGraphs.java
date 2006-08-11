@@ -14,6 +14,7 @@ package edu.uci.ics.jung.graph;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.DirectedGraph;
@@ -291,9 +292,9 @@ public class TestGraphs {
 	/**
 	 * Equivalent to <code>generateMixedRandomGraph(edge_weight, num_vertices, true)</code>.
 	 */
-	public static Graph<Integer, Number> generateMixedRandomGraph(Set<Number> edge_weight, int num_vertices)
+	public static Graph<Integer, Number> generateMixedRandomGraph(Map<Number,Number> edge_weight, int num_vertices, Set<Integer> seedVertices)
 	{
-		return generateMixedRandomGraph(edge_weight, num_vertices, true);
+		return generateMixedRandomGraph(edge_weight, num_vertices, true, seedVertices);
 	}
 
     /**
@@ -303,10 +304,12 @@ public class TestGraphs {
      * Then takes the resultant graph, replaces random undirected edges with directed
      * edges, and assigns random weights to each edge.
      */
-    public static Graph<Integer, Number> generateMixedRandomGraph(Set<Number> edge_weights, int num_vertices, boolean parallel)
+    public static Graph<Integer, Number> generateMixedRandomGraph(Map<Number,Number> edge_weights, 
+            int num_vertices, boolean parallel, Set<Integer> seedVertices)
     {
         int seed = (int)(Math.random() * 10000);
-        BarabasiAlbertGenerator bag = new BarabasiAlbertGenerator(4, 3, false, parallel, seed);
+        BarabasiAlbertGenerator bag = 
+            new BarabasiAlbertGenerator(4, 3, false, parallel, seed, seedVertices);
         bag.evolveGraph(num_vertices - 4);
         Graph<Integer, Number> ug = bag.generateGraph();
 //        SettableVertexMapper svm = new HashSettableVertexMapper();
@@ -336,7 +339,7 @@ public class TestGraphs {
             Integer v1 = ug.getEndpoints(e).getFirst();
             Integer v2 = ug.getEndpoints(e).getSecond();
 
-            Number me = new Double(Math.random());
+            Double me = new Double(Math.random());
             if (Math.random() < 0.5)
                 g.addDirectedEdge(me, v1, v2);
 //                me = new DirectedSparseEdge<Integer>(v1, v2);
@@ -344,7 +347,7 @@ public class TestGraphs {
                 g.addEdge(me, v1, v2);
 //                me = new UndirectedSparseEdge<Integer>(v1, v2);
 //            g.addEdge(me);
-//            edge_weights.put(me, new Double(Math.random()));
+            edge_weights.put(me, me);
         }
         
         return g;

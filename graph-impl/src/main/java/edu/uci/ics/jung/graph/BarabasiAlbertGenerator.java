@@ -11,7 +11,6 @@ package edu.uci.ics.jung.graph;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -94,16 +93,15 @@ public class BarabasiAlbertGenerator
      * @param parallel  specifies whether the algorithm permits parallel edges
      * @param seed  random number seed
      */
-    public BarabasiAlbertGenerator(int init_vertices, int numEdgesToAttach, boolean directed, boolean parallel, int seed)
+    public BarabasiAlbertGenerator(int init_vertices, int numEdgesToAttach, 
+            boolean directed, boolean parallel, int seed, Set<Integer> seedVertices)
     {
-        if (init_vertices <= 0)
-            throw new IllegalArgumentException("Number of initial unconnected 'seed' vertices " + 
-                    "must be positive");
-        if (numEdgesToAttach <= 0) 
-            throw new IllegalArgumentException("Number of edges to attach " +
-                    "at each time step must be positive");
+        assert init_vertices > 0 : "Number of initial unconnected 'seed' vertices " + 
+                    "must be positive";
+        assert numEdgesToAttach > 0 : "Number of edges to attach " +
+                    "at each time step must be positive";
         
-        if (!parallel && init_vertices < numEdgesToAttach)
+        if(!parallel && init_vertices < numEdgesToAttach)
             throw new IllegalArgumentException("If parallel edges disallowed, initial" +
                     "number of vertices must be >= number of edges to attach at each time step");
         mNumEdgesToAttachPerStep = numEdgesToAttach;
@@ -111,7 +109,7 @@ public class BarabasiAlbertGenerator
         this.init_vertices = init_vertices;
         this.directed = directed;
         this.parallel = parallel;
-        initialize();
+        initialize(seedVertices);
     }
     
     /**
@@ -121,9 +119,10 @@ public class BarabasiAlbertGenerator
      * new vertex to pre-existing vertices at each time step
      * @param seed  random number seed
      */
-    public BarabasiAlbertGenerator(int init_vertices, int numEdgesToAttach, int seed) 
+    public BarabasiAlbertGenerator(int init_vertices, int numEdgesToAttach, int seed, 
+            Set<Integer> seedVertices) 
     {
-        this(init_vertices, numEdgesToAttach, false, false, seed);
+        this(init_vertices, numEdgesToAttach, false, false, seed, seedVertices);
     }
 
     /**
@@ -133,18 +132,14 @@ public class BarabasiAlbertGenerator
      * @param numEdgesToAttach the number of edges that should be attached from the
      * new vertex to pre-existing vertices at each time step
      */
-    public BarabasiAlbertGenerator(int init_vertices, int numEdgesToAttach) {
-        this(init_vertices, numEdgesToAttach, (int) System.currentTimeMillis());
+    public BarabasiAlbertGenerator(int init_vertices, int numEdgesToAttach, Set<Integer> seedVertices) {
+        this(init_vertices, numEdgesToAttach, (int) System.currentTimeMillis(), seedVertices);
     }
     
-    private void initialize() 
+    private void initialize(Set<Integer> seedVertices) 
     {
-//        if (directed)
-//            mGraph = new SimpleDirectedSparseGraph<Integer, DirectedEdge<Integer>>();
-//        else
-            mGraph = new SimpleSparseGraph<Integer, Number>();
-//        if (parallel)
-//            mGraph.getEdgeConstraints().remove(Graph.NOT_PARALLEL_EDGE);
+        mGraph = new SimpleSparseGraph<Integer, Number>();
+
         vertex_index = new Vector<Integer>(2*init_vertices);
         index_vertex = new HashMap<Integer, Integer>(2*init_vertices);
         for (int i = 0; i < init_vertices; i++)
@@ -153,14 +148,14 @@ public class BarabasiAlbertGenerator
             mGraph.addVertex(v);
             vertex_index.add(v);
             index_vertex.put(v, new Integer(i));
-//            v.addUserDatum(SEED, SEED, UserData.REMOVE);
+            seedVertices.add(v);
         }
             
         mElapsedTimeSteps = 0;
     }
 
     private Number createRandomEdge(Collection<Integer> preexistingNodes,
-    		Integer newVertex, Map<Number,Pair<Integer>> added_pairs) 
+    		Integer newVertex, Map<Number, Pair<Integer>> added_pairs) 
     {
         Integer attach_point;
         boolean created_edge = false;
@@ -213,11 +208,8 @@ public class BarabasiAlbertGenerator
     private void evolveGraph() 
     {
         Collection<Integer> preexistingNodes = mGraph.getVertices();
-        Integer newVertex;
-//        if (directed)
-            newVertex = new Integer(mGraph.getVertices().size());
-//        else
-//            newVertex = new Integer();
+        Integer newVertex = new Integer(mGraph.getVertices().size());
+
         mGraph.addVertex(newVertex);
 
         // generate and store the new edges; don't add them to the graph
@@ -255,7 +247,7 @@ public class BarabasiAlbertGenerator
         return mGraph;
     }
 
-    public void reset() {
-        initialize();
+    public void reset(Set<Integer> seedVertices) {
+        initialize(seedVertices);
     }
 }

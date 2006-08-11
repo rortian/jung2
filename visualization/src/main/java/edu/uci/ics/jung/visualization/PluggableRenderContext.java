@@ -79,7 +79,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         new ConstantEdgeStrokeFunction<E>(1.0f);
     protected EdgeArrowFunction<V,E> edgeArrowFunction = 
         new DirectionalEdgeArrowFunction<V,E>(10, 8, 4);    
-//    protected Predicate edgeArrowPredicate = InstanceofPredicate.getInstance(DirectedEdge.class);
+    protected Predicate<E> edgeArrowPredicate = TruePredicate.getInstance();
     protected Predicate<E> edgeIncludePredicate = TruePredicate.getInstance();
     protected EdgeFontFunction<E> edgeFontFunction =
         new ConstantEdgeFontFunction<E>(new Font("Helvetica", Font.PLAIN, 12));
@@ -175,6 +175,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setEdgeArrowFunction(EdgeArrowFunction<V, E> edgeArrowFunction) {
         this.edgeArrowFunction = edgeArrowFunction;
+    }
+
+    public Predicate<E> getEdgeArrowPredicate() {
+        return edgeArrowPredicate;
+    }
+
+    public void setEdgeArrowPredicate(Predicate<E> edgeArrowPredicate) {
+        this.edgeArrowPredicate = edgeArrowPredicate;
     }
 
     /* (non-Javadoc)

@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -122,7 +123,7 @@ public class ShowLayouts extends JApplet {
             new Graph<?,?>[graph_names.length];
             
         g_array[0] = TestGraphs.createTestGraph(false);
-        g_array[1] = TestGraphs.generateMixedRandomGraph(new HashSet(), 20, true);
+        g_array[1] = TestGraphs.generateMixedRandomGraph(new HashMap(), 20, true, new HashSet());
         g_array[2] = TestGraphs.getDemoGraph();
         g_array[3] = TestGraphs.createDirectedAcyclicGraph(4, 4, 0.3);
         g_array[4] = TestGraphs.getOneComponentGraph();

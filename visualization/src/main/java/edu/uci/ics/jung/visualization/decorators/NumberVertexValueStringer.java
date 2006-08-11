@@ -22,10 +22,10 @@ import java.util.Map;
  */
 public class NumberVertexValueStringer<V> implements VertexStringer<V>
 {
-    protected Map<V,String> nvv;
+    protected Map<V,Number> nvv;
     protected final static NumberFormat nf = NumberFormat.getInstance();
     
-    public NumberVertexValueStringer(Map<V,String> nev)
+    public NumberVertexValueStringer(Map<V,Number> nev)
     {
         this.nvv = nev;
     }
