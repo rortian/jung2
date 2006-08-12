@@ -8,6 +8,9 @@ import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Predicate;
 
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
+import edu.uci.ics.graph.predicates.GraphPredicate;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeArrowFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeFontFunction;
@@ -66,17 +69,17 @@ public interface RenderContext<V, E> {
 
     void setEdgeArrowFunction(EdgeArrowFunction<V, E> edgeArrowFunction);
 
-    Predicate<E> getEdgeArrowPredicate() ;
+    GraphPredicate<V,E> getEdgeArrowPredicate() ;
 
-    void setEdgeArrowPredicate(Predicate<E> edgeArrowPredicate);
+    void setEdgeArrowPredicate(GraphPredicate<V,E> edgeArrowPredicate);
 
     EdgeFontFunction<E> getEdgeFontFunction();
 
     void setEdgeFontFunction(EdgeFontFunction<E> edgeFontFunction);
 
-    Predicate<E> getEdgeIncludePredicate();
+    GraphPredicate<V,E> getEdgeIncludePredicate();
 
-    void setEdgeIncludePredicate(Predicate<E> edgeIncludePredicate);
+    void setEdgeIncludePredicate(GraphPredicate<V,E> edgeIncludePredicate);
 
     NumberDirectionalEdgeValue<V, E> getEdgeLabelClosenessFunction();
 
@@ -163,5 +166,22 @@ public interface RenderContext<V, E> {
     MutableTransformer getViewTransformer();
 
     void setViewTransformer(MutableTransformer viewTransformer);
+    
+    class DirectedEdgeArrowPredicate<V,E> extends AbstractGraphPredicate<V,E> {
+
+        @Override
+        public boolean evaluateEdge(Graph<V, E> graph, E edge) {
+            return graph.isDirected(edge);
+        }
+        
+    }
+    
+    class UndirectedEdgeArrowPredicate<V,E> extends AbstractGraphPredicate<V,E> {
+        @Override
+        public boolean evaluateEdge(Graph<V, E> graph, E edge) {
+            return graph.isDirected(edge) == false;
+        }
+        
+    }
 
 }

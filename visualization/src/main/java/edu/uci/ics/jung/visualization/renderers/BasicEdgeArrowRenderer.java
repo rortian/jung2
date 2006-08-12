@@ -33,7 +33,7 @@ public class BasicEdgeArrowRenderer<V,E> extends BasicEdgeShapeRenderer<V,E>
 	implements Renderer.Edge<V,E> {
 	
     public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
-        if (!rc.getEdgeIncludePredicate().evaluate(e))
+        if (!rc.getEdgeIncludePredicate().evaluateEdge(graph,e))
             return;
         
         // don't draw edge if either incident vertex is not drawn

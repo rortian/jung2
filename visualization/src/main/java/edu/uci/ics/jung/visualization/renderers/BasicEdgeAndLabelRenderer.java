@@ -16,6 +16,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
@@ -43,6 +44,14 @@ public class BasicEdgeAndLabelRenderer<V,E>
      * by this instance's edge label closeness function.
      */
     protected void labelEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, String label, int x1, int x2, int y1, int y2) {
+        // don't draw edge if either incident vertex is not drawn
+        Pair<V> endpoints = graph.getEndpoints(e);
+        V v1 = endpoints.getFirst();
+        V v2 = endpoints.getSecond();
+        if (!rc.getVertexIncludePredicate().evaluate(v1) || 
+            !rc.getVertexIncludePredicate().evaluate(v2))
+            return;
+
         GraphicsDecorator g = rc.getGraphicsContext();
         int distX = x2 - x1;
         int distY = y2 - y1;

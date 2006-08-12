@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
@@ -97,9 +98,15 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         Paint drawPaint = rc.getVertexPaintFunction().getDrawPaint(v);
         if(drawPaint != null) {
             g.setPaint(drawPaint);
-            g.draw(shape);
-            g.setPaint(oldPaint);
         }
+        Stroke oldStroke = g.getStroke();
+        Stroke stroke = rc.getVertexStrokeFunction().getStroke(v);
+        if(stroke != null) {
+            g.setStroke(stroke);
+        }
+        g.draw(shape);
+        g.setPaint(oldPaint);
+        g.setStroke(oldStroke);
     }
 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 

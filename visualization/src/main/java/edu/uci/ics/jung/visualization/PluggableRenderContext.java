@@ -16,6 +16,8 @@ import javax.swing.JComponent;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.TruePredicate;
 
+import edu.uci.ics.graph.predicates.GraphPredicate;
+import edu.uci.ics.graph.predicates.TrueGraphPredicate;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValue;
@@ -79,8 +81,8 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         new ConstantEdgeStrokeFunction<E>(1.0f);
     protected EdgeArrowFunction<V,E> edgeArrowFunction = 
         new DirectionalEdgeArrowFunction<V,E>(10, 8, 4);    
-    protected Predicate<E> edgeArrowPredicate = TruePredicate.getInstance();
-    protected Predicate<E> edgeIncludePredicate = TruePredicate.getInstance();
+    protected GraphPredicate<V,E> edgeArrowPredicate = new DirectedEdgeArrowPredicate<V,E>();
+    protected GraphPredicate<V,E> edgeIncludePredicate = new TrueGraphPredicate<V,E>();
     protected EdgeFontFunction<E> edgeFontFunction =
         new ConstantEdgeFontFunction<E>(new Font("Helvetica", Font.PLAIN, 12));
     protected NumberDirectionalEdgeValue<V,E> edgeLabelClosenessFunction = 
@@ -177,11 +179,11 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.edgeArrowFunction = edgeArrowFunction;
     }
 
-    public Predicate<E> getEdgeArrowPredicate() {
+    public GraphPredicate<V,E> getEdgeArrowPredicate() {
         return edgeArrowPredicate;
     }
 
-    public void setEdgeArrowPredicate(Predicate<E> edgeArrowPredicate) {
+    public void setEdgeArrowPredicate(GraphPredicate<V,E> edgeArrowPredicate) {
         this.edgeArrowPredicate = edgeArrowPredicate;
     }
 
@@ -202,14 +204,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeIncludePredicate()
      */
-    public Predicate<E> getEdgeIncludePredicate() {
+    public GraphPredicate<V,E> getEdgeIncludePredicate() {
         return edgeIncludePredicate;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeIncludePredicate(org.apache.commons.collections15.Predicate)
      */
-    public void setEdgeIncludePredicate(Predicate<E> edgeIncludePredicate) {
+    public void setEdgeIncludePredicate(GraphPredicate<V,E> edgeIncludePredicate) {
         this.edgeIncludePredicate = edgeIncludePredicate;
     }
 
