@@ -9,15 +9,17 @@
  */
 package edu.uci.ics.graph.predicates;
 
-import org.apache.commons.collections15.Predicate;
+import edu.uci.ics.graph.Graph;
 
 
 
 /**
- * @author Joshua O'Madadhain
+ * @author Tom Nelson
  */
-public abstract class GPredicate<T> implements Predicate<T> {
+public interface GraphPredicate<V,E> {
 
-    public boolean isInitializationPredicate = false;
+    boolean evaluateEdge(Graph<V,E> graph, E edge);
+    
+    boolean evaluateVertex(Graph<V,E> graph, V vertex);
 
 }
