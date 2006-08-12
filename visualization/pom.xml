@@ -5,9 +5,9 @@
   <artifactId>jung-visualization</artifactId>
   <packaging>jar</packaging>
   <version>2.0</version>
-  <name>Maven Quick Start Archetype</name>
   <url>http://maven.apache.org</url>
-
+  <name>visualization</name>
+  
   <parent>
   	<groupId>jung.app</groupId>
     <artifactId>app</artifactId>

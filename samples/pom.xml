@@ -5,8 +5,8 @@
   <artifactId>jung-samples</artifactId>
   <packaging>jar</packaging>
   <version>2.0</version>
-  <name>Maven Quick Start Archetype</name>
   <url>http://maven.apache.org</url>
+  <name>samples</name>
   
   <parent>
     <groupId>jung.app</groupId>
