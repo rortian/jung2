@@ -15,13 +15,13 @@ import edu.uci.ics.graph.Graph;
  */
 public interface Renderer<V, E> {
 
-	void renderVertex(RenderContext<V,E> rc, V v, int x, int y);
+	void renderVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y);
 	void renderEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2);
     void setVertexRenderer(Renderer.Vertex<V,E> r);
     void setEdgeRenderer(Renderer.Edge<V,E> r);
 
 	interface Vertex<V,E> {
-		void paintVertex(RenderContext<V,E> rc, V v, int x, int y);
+		void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y);
 	}
     
 	interface Edge<V,E> {

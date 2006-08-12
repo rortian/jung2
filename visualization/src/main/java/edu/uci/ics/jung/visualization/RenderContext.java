@@ -6,8 +6,6 @@ import java.awt.Stroke;
 import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 
-import org.apache.commons.collections15.Predicate;
-
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.predicates.GraphPredicate;
@@ -139,9 +137,9 @@ public interface RenderContext<V, E> {
 
     void setVertexIconFunction(VertexIconFunction<V> vertexIconFunction);
 
-    Predicate<V> getVertexIncludePredicate();
+    GraphPredicate<V,E> getVertexIncludePredicate();
 
-    void setVertexIncludePredicate(Predicate<V> vertexIncludePredicate);
+    void setVertexIncludePredicate(GraphPredicate<V,E> vertexIncludePredicate);
 
     VertexLabelRenderer getVertexLabelRenderer();
 

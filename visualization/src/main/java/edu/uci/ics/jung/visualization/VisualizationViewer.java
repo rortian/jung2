@@ -645,6 +645,7 @@ public class VisualizationViewer<V, E> extends JPanel
 //		        renderer.paintVertex(
 		    	renderer.renderVertex(
 		                renderContext,
+                        layout.getGraph(),
 		                v,
 		                (int) p.getX(),
 		                (int) p.getY());

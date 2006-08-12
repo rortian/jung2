@@ -29,8 +29,8 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluate(v1) || 
-            !rc.getVertexIncludePredicate().evaluate(v2))
+        if (!rc.getVertexIncludePredicate().evaluateVertex(graph, v1) || 
+            !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
             return;
 
 		labelEdge(rc, graph, e, rc.getEdgeStringer().getLabel(e), x1, y1, x2, y2);

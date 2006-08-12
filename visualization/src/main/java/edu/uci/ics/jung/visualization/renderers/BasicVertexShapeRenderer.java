@@ -18,14 +18,15 @@ import java.awt.geom.AffineTransform;
 
 import javax.swing.JComponent;
 
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicVertexShapeRenderer<V,E> implements Renderer.Vertex<V,E> {
 	
-    public void paintVertex(RenderContext<V,E> rc, V v, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluate(v)) {
+    public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
+        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v)) {
         	paintShapeForVertex(rc, v, x, y);
         }
     }

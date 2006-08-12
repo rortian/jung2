@@ -206,6 +206,7 @@ public class SatelliteVisualizationViewer<V, E>
 //              renderer.paintVertex(
                 renderer.renderVertex(
                         renderContext,
+                        layout.getGraph(),
                         v,
                         (int) p.getX(),
                         (int) p.getY());

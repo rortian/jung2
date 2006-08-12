@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
@@ -31,7 +32,7 @@ public class VertexLabelAsShapeRenderer<V,E> implements Renderer.Vertex<V,E>, Ve
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
 	
-	public void paintVertex(RenderContext<V,E> rc, V v, int x, int y) {
+	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
 		labelVertex(rc, v, rc.getVertexStringer().getLabel(v), x, y);
 	}
 

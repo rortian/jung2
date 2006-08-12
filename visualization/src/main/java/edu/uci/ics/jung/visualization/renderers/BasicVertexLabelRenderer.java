@@ -13,6 +13,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.geom.Rectangle2D;
 
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
@@ -21,7 +22,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicVertexLabelRenderer<V,E> implements Renderer.Vertex<V,E> {
 
-	public void paintVertex(RenderContext<V,E> rc, V v, int x, int y) {
+	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
 		labelVertex(rc, v, rc.getVertexStringer().getLabel(v), x, y);
 	}
 

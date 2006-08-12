@@ -13,9 +13,6 @@ import java.awt.Font;
 import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 
-import org.apache.commons.collections15.Predicate;
-import org.apache.commons.collections15.functors.TruePredicate;
-
 import edu.uci.ics.graph.predicates.GraphPredicate;
 import edu.uci.ics.graph.predicates.TrueGraphPredicate;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
@@ -58,7 +55,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
 	protected float arrowPlacementTolerance = 1;
-    protected Predicate<V> vertexIncludePredicate = TruePredicate.getInstance();
+    protected GraphPredicate<V,E> vertexIncludePredicate = new TrueGraphPredicate<V,E>();
     protected VertexStrokeFunction<V> vertexStrokeFunction =
         new ConstantVertexStrokeFunction<V>(1.0f);
     protected VertexShapeFunction<V> vertexShapeFunction = 
@@ -422,14 +419,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexIncludePredicate()
      */
-    public Predicate<V> getVertexIncludePredicate() {
+    public GraphPredicate<V,E> getVertexIncludePredicate() {
         return vertexIncludePredicate;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIncludePredicate(org.apache.commons.collections15.Predicate)
      */
-    public void setVertexIncludePredicate(Predicate<V> vertexIncludePredicate) {
+    public void setVertexIncludePredicate(GraphPredicate<V,E> vertexIncludePredicate) {
         this.vertexIncludePredicate = vertexIncludePredicate;
     }
 

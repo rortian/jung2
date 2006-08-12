@@ -17,6 +17,7 @@ import java.awt.geom.AffineTransform;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
@@ -26,8 +27,8 @@ public class BasicVertexIconRenderer<V,E> extends BasicVertexShapeRenderer<V,E> 
 
 	VertexIconFunction<V> vertexIconFunction;
 	
-    public void paintVertex(RenderContext<V,E> rc, V v, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluate(v)) {
+    public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
+        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v)) {
         	paintIconForVertex(rc, v, x, y);
         }
     }

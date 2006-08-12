@@ -26,8 +26,8 @@ public class BasicRenderer<V, E> implements Renderer<V, E> {
     Renderer.Vertex<V,E> vertexRenderer = new BasicVertexRenderer<V,E>();
     Renderer.Edge<V, E> edgeRenderer = new BasicEdgeAndLabelRenderer<V,E>();
     
-    public void renderVertex(RenderContext<V,E> rc, V v, int x, int y) {
-        vertexRenderer.paintVertex(rc, v, x, y);
+    public void renderVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
+        vertexRenderer.paintVertex(rc, graph, v, x, y);
     }
     
     public void renderEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
