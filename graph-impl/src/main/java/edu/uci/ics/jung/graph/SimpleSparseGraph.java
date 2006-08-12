@@ -25,13 +25,13 @@ public class SimpleSparseGraph<V,E>
     extends SimpleAbstractSparseGraph<V,E>
     implements Graph<V,E>
 {
-    protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
-    protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
+    protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
+    protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
     protected Set<E> directedEdges;
 
     public SimpleSparseGraph()
     {
-        vertices = new HashMap<V, Set<E>>();
+        vertices = new HashMap<V, Pair<Set<E>>>();
         edges = new HashMap<E, Pair<V>>();
         directedEdges = new HashSet<E>();
     }
@@ -50,7 +50,7 @@ public class SimpleSparseGraph<V,E>
     {
         if (!vertices.containsKey(vertex))
         {
-            vertices.put(vertex, new HashSet<E>());
+            vertices.put(vertex, new Pair<Set<E>>(new HashSet<E>(), new HashSet<E>()));
 //            return true;
         }
 //        else
@@ -59,15 +59,23 @@ public class SimpleSparseGraph<V,E>
 
     public boolean removeVertex(V vertex)
     {
-        Set<E> adj_set = new HashSet<E>(vertices.get(vertex));
+        // copy to avoid concurrent modification in removeEdge
+        Pair<Set<E>> i_adj_set = vertices.get(vertex);
+        Pair<Set<E>> adj_set = new Pair<Set<E>>(new HashSet<E>(i_adj_set.getFirst()), 
+                new HashSet<E>(i_adj_set.getSecond()));
+        
+
+//        Pair<Set<E>> adj_set = vertices.get(vertex);
         if (adj_set == null)
             return false;
         
-        for (E edge : adj_set)
+        for (E edge : adj_set.getFirst())
+            removeEdge(edge);
+        for (E edge : adj_set.getSecond())
             removeEdge(edge);
         
         vertices.remove(vertex);
-
+        
         return true;
     }
     
@@ -83,18 +91,26 @@ public class SimpleSparseGraph<V,E>
     public void addEdge(E edge, V v1, V v2)
     {
         if (edges.containsKey(edge))
-            return;
+        {
+            Pair<V> endpoints = edges.get(edge);
+            Pair<V> new_endpoints = new Pair<V>(v1, v2);
+            if (!endpoints.equals(new_endpoints))
+                throw new IllegalArgumentException("Edge " + edge + 
+                        " exists in this graph with endpoints " + v1 + ", " + v2);
+//            else
+//                return false;
+        }
         
         if (!vertices.containsKey(v1))
             this.addVertex(v1);
         
         if (!vertices.containsKey(v2))
             this.addVertex(v2);
-
+        
         Pair<V> endpoints = new Pair<V>(v1, v2);
         edges.put(edge, endpoints);
-        vertices.get(v1).add(edge);        
-        vertices.get(v2).add(edge);        
+        vertices.get(v1).getSecond().add(edge);        
+        vertices.get(v2).getFirst().add(edge);        
         
 //        return true;
     }
@@ -113,63 +129,62 @@ public class SimpleSparseGraph<V,E>
         vertices.get(v2).remove(edge);
         
         edges.remove(edge);
+        directedEdges.remove(edge);
         return true;
     }
     
     public Collection<E> getInEdges(V vertex)
     {
-        return this.getIncidentEdges(vertex);
+        return Collections.unmodifiableCollection(vertices.get(vertex).getFirst());
     }
 
     public Collection<E> getOutEdges(V vertex)
     {
-        return this.getIncidentEdges(vertex);
+        return Collections.unmodifiableCollection(vertices.get(vertex).getSecond());
     }
 
     public Collection<V> getPredecessors(V vertex)
     {
-        return this.getNeighbors(vertex);
+        Set<E> incoming = vertices.get(vertex).getFirst();        
+        Set<V> preds = new HashSet<V>();
+        for (E edge : incoming)
+            preds.add(this.getSource(edge));
+        
+        return Collections.unmodifiableCollection(preds);
     }
 
     public Collection<V> getSuccessors(V vertex)
     {
-        return this.getNeighbors(vertex);
+        Set<E> outgoing = vertices.get(vertex).getSecond();        
+        Set<V> succs = new HashSet<V>();
+        for (E edge : outgoing)
+            succs.add(this.getDest(edge));
+        
+        return Collections.unmodifiableCollection(succs);
     }
 
     public Collection<V> getNeighbors(V vertex)
     {
-        Set<E> incident_edges = vertices.get(vertex);        
-        Set<V> neighbors = new HashSet<V>();
-        for (E edge : incident_edges)
-        {
-            Pair<V> endpoints = this.getEndpoints(edge);
-            V e_a = endpoints.getFirst();
-            V e_b = endpoints.getSecond();
-            if (vertex.equals(e_a))
-                neighbors.add(e_b);
-            else
-                neighbors.add(e_a);
-        }
-        
-        return Collections.unmodifiableCollection(neighbors);
+        Collection<V> out = new HashSet<V>();
+        out.addAll(this.getPredecessors(vertex));
+        out.addAll(this.getSuccessors(vertex));
+        return out;
     }
 
     public Collection<E> getIncidentEdges(V vertex)
     {
-        return Collections.unmodifiableCollection(vertices.get(vertex));
+        Collection<E> out = new HashSet<E>();
+        out.addAll(this.getInEdges(vertex));
+        out.addAll(this.getOutEdges(vertex));
+        return out;
     }
 
     public E findEdge(V v1, V v2)
     {
-        Set<E> incident_edges = vertices.get(v1);
-        for (E edge : incident_edges)
-        {
-            Pair<V> endpoints = this.getEndpoints(edge);
-            V e_a = endpoints.getFirst();
-            V e_b = endpoints.getSecond();
-            if ((v1.equals(e_a) && v2.equals(e_b)) || (v1.equals(e_b) && v2.equals(e_a)))
+        Set<E> outgoing = vertices.get(v1).getSecond();
+        for (E edge : outgoing)
+            if (this.getDest(edge).equals(v2))
                 return edge;
-        }
         
         return null;
     }
