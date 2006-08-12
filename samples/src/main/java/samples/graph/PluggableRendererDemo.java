@@ -206,19 +206,19 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 //	protected static final int GRADIENT_ABSOLUTE = 2;
 	protected static int gradient_level = GRADIENT_NONE;
 
-    protected SeedColor vcf;
+    protected SeedColor<Integer> vcf;
     protected EdgeWeightStrokeFunction<Number> ewcs;
-    protected VertexStrokeHighlight vsh;
+    protected VertexStrokeHighlight<Integer,Number> vsh;
     protected VertexStringer<Integer> vs;
     protected VertexStringer<Integer> vs_none;
-    protected EdgeStringer es;
-    protected EdgeStringer es_none;
+    protected EdgeStringer<Number> es;
+    protected EdgeStringer<Number> es_none;
     protected VertexFontHandler<Integer> vff;
     protected EdgeFontHandler<Number> eff;
     protected VertexShapeSizeAspect<Integer,Number> vssa;
-    protected DirectionDisplayPredicate show_edge;
-    protected DirectionDisplayPredicate show_arrow;
-    protected VertexDisplayPredicate show_vertex;
+    protected DirectionDisplayPredicate<Integer,Number> show_edge;
+    protected DirectionDisplayPredicate<Integer,Number> show_arrow;
+    protected VertexDisplayPredicate<Integer,Number> show_vertex;
     protected Predicate<Number> self_loop;
     protected GradientPickedEdgePaintFunction<Integer,Number> edgePaint;
     protected final static Object VOLTAGE_KEY = "voltages";
@@ -256,22 +256,22 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         vv = new VisualizationViewer<Integer,Number>(layout);
         // add Shape based pick support
         PickedState<Integer> picked_state = vv.getPickedVertexState();
-        PickedState<Number> pickedEdgeState = vv.getPickedEdgeState();
+
         affineTransformer = vv.getLayoutTransformer();
         self_loop = new SelfLoopEdgePredicate<Integer,Number>(g);
         // create decorators
-        vcf = new SeedColor(picked_state);
+        vcf = new SeedColor<Integer>(picked_state);
         ewcs = 
             new EdgeWeightStrokeFunction<Number>(edge_weight);
         vsh = new VertexStrokeHighlight<Integer,Number>(g, picked_state);
         vff = new VertexFontHandler<Integer>();
         eff = new EdgeFontHandler<Number>();
-        vs_none = new ConstantVertexStringer(null);
-        es_none = new ConstantEdgeStringer(null);
+        vs_none = new ConstantVertexStringer<Integer>(null);
+        es_none = new ConstantEdgeStringer<Number>(null);
         vssa = new VertexShapeSizeAspect<Integer,Number>(g, voltages);
         show_edge = new DirectionDisplayPredicate<Integer,Number>(true, true);
         show_arrow = new DirectionDisplayPredicate<Integer,Number>(true, false);
-        show_vertex = new VertexDisplayPredicate<Integer,Number>(g,false);
+        show_vertex = new VertexDisplayPredicate<Integer,Number>(false);
 
         // uses a gradient edge if unpicked, otherwise uses picked selection
         edgePaint = 
@@ -291,7 +291,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         vv.getRenderContext().setEdgeFontFunction(eff);
         vv.getRenderContext().setEdgeStrokeFunction(ewcs);
         vv.getRenderContext().setEdgeIncludePredicate(show_edge);
-        vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line());
+        vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<Integer,Number>());
         vv.getRenderContext().setEdgeArrowPredicate(show_arrow);
         JPanel jp = new JPanel();
         jp.setLayout(new BorderLayout());
@@ -619,14 +619,14 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         {
             if(source.isSelected())
             {
-                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve());
+                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Number>());
             }
         }
         else if (source == e_cubic) 
         {
             if(source.isSelected())
             {
-                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve());
+                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<Integer,Number>());
             }
         }
        else if (source == e_show_d)
@@ -668,12 +668,12 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     
     private final class SeedColor<V> implements VertexPaintFunction<V>
     {
-        protected PickedInfo pi;
+        protected PickedInfo<V> pi;
         protected final static float dark_value = 0.8f;
         protected final static float light_value = 0.2f;
         protected boolean seed_coloring;
         
-        public SeedColor(PickedInfo pi)
+        public SeedColor(PickedInfo<V> pi)
         {
             this.pi = pi;
             seed_coloring = false;
@@ -882,15 +882,13 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
     }
     
-    private final static class VertexDisplayPredicate<V, E> implements Predicate<V>
+    private final static class VertexDisplayPredicate<V, E> extends  AbstractGraphPredicate<V,E>
     {
         protected boolean filter_small;
         protected final static int MIN_DEGREE = 4;
-        protected Graph<V,E> graph;
         
-        public VertexDisplayPredicate(Graph<V,E> graph, boolean filter)
+        public VertexDisplayPredicate(boolean filter)
         {
-        	this.graph = graph;
             this.filter_small = filter;
         }
         
@@ -899,7 +897,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             filter_small = b;
         }
         
-        public boolean evaluate(V v)
+        public boolean evaluateVertex(Graph<V,E> graph, V v)
         {
 //            Vertex v = (Vertex)arg0;
             if (filter_small)
@@ -958,7 +956,6 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         public float getAspectRatio(V v)
         {
             if (stretch) {
-                System.err.println("for "+v+", id = "+graph.inDegree(v)+", od = "+graph.outDegree(v));
                 return (float)(graph.inDegree(v) + 1) / 
                 	(graph.outDegree(v) + 1);
             } else {
@@ -1004,6 +1001,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
          * attribute of this Vertex
          * @param e
          */
+        @SuppressWarnings("unchecked")
         protected void handlePopup(MouseEvent e) {
             final VisualizationViewer<Integer,Number> vv = 
                 (VisualizationViewer<Integer,Number>)e.getSource();
