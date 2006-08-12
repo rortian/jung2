@@ -49,6 +49,7 @@ import javax.swing.JRadioButton;
 import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.graph.TestGraphs;
@@ -268,8 +269,8 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         vs_none = new ConstantVertexStringer(null);
         es_none = new ConstantEdgeStringer(null);
         vssa = new VertexShapeSizeAspect<Integer,Number>(g, voltages);
-        show_edge = new DirectionDisplayPredicate<Integer,Number>(g,true, true);
-        show_arrow = new DirectionDisplayPredicate<Integer,Number>(g,true, false);
+        show_edge = new DirectionDisplayPredicate<Integer,Number>(true, true);
+        show_arrow = new DirectionDisplayPredicate<Integer,Number>(true, false);
         show_vertex = new VertexDisplayPredicate<Integer,Number>(g,false);
 
         // uses a gradient edge if unpicked, otherwise uses picked selection
@@ -324,17 +325,15 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         es = new NumberEdgeValueStringer<Number>(edge_weight);
         
         // collect the seeds used to define the random graph
-        Collection<Integer> seeds = g.getVertices();
-//        	PredicateUtils.getVertices(g, 
-//                new ContainsUserDataKeyVertexPredicate(BarabasiAlbertGenerator.SEED));
-        if (seeds.size() < 2)
+
+        if (seedVertices.size() < 2)
             System.out.println("need at least 2 seeds (one source, one sink)");
 //        
         // use these seeds as source and sink vertices, run VoltageRanker
         boolean source = true;
         Set<Integer> sources = new HashSet<Integer>();
         Set<Integer> sinks = new HashSet<Integer>();
-        for(Integer v : seeds)
+        for(Integer v : seedVertices)
         {
             if (source)
                 sources.add(v);
@@ -370,7 +369,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected void addBottomControls(final JPanel jp) 
     {
         final JPanel control_panel = new JPanel();
-        jp.add(control_panel, BorderLayout.SOUTH);
+        jp.add(control_panel, BorderLayout.EAST);
         control_panel.setLayout(new BorderLayout());
         final Box vertex_panel = Box.createVerticalBox();
         vertex_panel.setBorder(BorderFactory.createTitledBorder("Vertices"));
@@ -378,8 +377,8 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         edge_panel.setBorder(BorderFactory.createTitledBorder("Edges"));
         final Box both_panel = Box.createVerticalBox();
 
-        control_panel.add(vertex_panel, BorderLayout.WEST);
-        control_panel.add(edge_panel, BorderLayout.EAST);
+        control_panel.add(vertex_panel, BorderLayout.NORTH);
+        control_panel.add(edge_panel, BorderLayout.SOUTH);
         control_panel.add(both_panel, BorderLayout.CENTER);
         
         // set up vertex controls
@@ -512,7 +511,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             }
         });
 
-        Box zoomPanel = Box.createVerticalBox();
+        JPanel zoomPanel = new JPanel();
         zoomPanel.setBorder(BorderFactory.createTitledBorder("Zoom"));
         plus.setAlignmentX(Component.CENTER_ALIGNMENT);
         zoomPanel.add(plus);
@@ -521,13 +520,15 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         zoom_at_mouse.setAlignmentX(Component.CENTER_ALIGNMENT);
         zoomPanel.add(zoom_at_mouse);
         
+        JPanel fontPanel = new JPanel();
         // add font and zoom controls to center panel
         font = new JCheckBox("bold text");
         font.addActionListener(this);
         font.setAlignmentX(Component.CENTER_ALIGNMENT);
+        fontPanel.add(font);
         
         both_panel.add(zoomPanel);
-        both_panel.add(font);
+        both_panel.add(fontPanel);
         
         JComboBox modeBox = gm.getModeComboBox();
         modeBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -538,7 +539,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         };
         modePanel.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
         modePanel.add(modeBox);
-        both_panel.add(modePanel);
+        fontPanel.add(modePanel);
     }
     
     public void actionPerformed(ActionEvent e)
@@ -848,15 +849,13 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             return endpoints.getFirst().equals(endpoints.getSecond());
         }
     }
-    private final static class DirectionDisplayPredicate<V,E> implements Predicate<E>
+    private final static class DirectionDisplayPredicate<V,E> extends AbstractGraphPredicate<V,E>
     {
         protected boolean show_d;
         protected boolean show_u;
-        protected Graph<V,E> graph;
         
-        public DirectionDisplayPredicate(Graph<V,E> graph, boolean show_d, boolean show_u)
+        public DirectionDisplayPredicate(boolean show_d, boolean show_u)
         {
-            this.graph = graph;
             this.show_d = show_d;
             this.show_u = show_u;
         }
@@ -871,12 +870,14 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             show_u = b;
         }
         
-        public boolean evaluate(E e)
+        public boolean evaluateEdge(Graph<V,E> graph, E e)
         {
-            if (graph.isDirected(e) && show_d)
+            if (graph.isDirected(e) && show_d) {
                 return true;
-            if (graph.isDirected(e) == false && show_u)
+            }
+            if (graph.isDirected(e) == false && show_u) {
                 return true;
+            }
             return false;
         }
     }
