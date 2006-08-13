@@ -18,6 +18,7 @@ window.
 
 Get the jung2 code from CVS:
 
+export CVS_RSH=ssh
 cvs -z3 -d:ext:your-login@jung.cvs.sourceforge.net:/cvsroot/jung co -P jung2
 
 cd jung2
@@ -65,6 +66,13 @@ The most common way to proceed is as follows:
 Add each subproject (jung-api, jung-graph-impl, jung-visualization, 
 jung-algorithms, jung-samples) as a top-level project in eclipse, each 
 with its own classpath dependencies. 
+
+In the 'New Project' dialog, select 'Java Project', then
+'Create project from existing source'. Create the new project to point 
+to where you downloaded jung2 and its subprojects.
+For example, you would create a new project from the existing
+source in '/where/it/is/jung2/jung-api'
+and name that project 'jung-api'.
 
 If you previously ran mvn eclipse:eclipse at the jung2 directory
 level, then the projects will already reference the other
