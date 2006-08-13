@@ -4,8 +4,17 @@
 
 Download and install maven2 from maven.apache.org
 
-set M2_HOME to point to it
-add $M2_HOME/bin to your PATH
+http://maven.apache.org/download.html
+
+At time of writing, the latest version was maven-2.0.4
+
+Install the downloaded maven2 (there are installation instructions
+here: http://maven.apache.org/download.html#Installation)
+
+Follow the installation instructions and confirm a successful
+installation by typing 'mvn --version' in a command terminal
+window.
+
 
 Get the jung2 code from CVS:
 
@@ -14,34 +23,43 @@ cvs -z3 -d:ext:your-login@jung.cvs.sourceforge.net:/cvsroot/jung co -P jung2
 cd jung2
 mvn install
 
-(it will fail, as you do not have the collections-generic jar, and
-neither does any maven repository)
+This should build the sub-projects and run unit tests.
+During the build process, maven downloads code it needs
+from maven repositories. The code is cached in your
+local repository that maven creates in your home
+directory ($HOME/.m2/repository). If the download
+of something is interrupted, the build may fail.
+If so, just run it again (and again) and it should
+eventually succeed.
+Once all the files are cached in your local maven
+repository, the build process will be faster.
 
-Go get collections-generic from sourceforge:
-http://sourceforge.net/project/showfiles.php?group_id=139125&package_id=153011
+To prepare jung2 for eclipse, run the following maven
+command:
 
-Inflate the archive someplace, then install 'collections-generic-4.0.jar'
-in your local maven2 repository ($HOME/.m2/repository) using this one-line
-command (assuming you inflated the archive in '/usr/local/'...):
+    mvn eclipse:eclipse
 
-mvn install:install-file
--Dfile=/usr/local/collections-generic-4.0/collections-generic-4.0.jar
--DgroupId=collections-generic -DartifactId=collections-generic -Dpackaging=jar
--DgeneratePom=true -Dversion=4.0
+which will generate the .classpath and .project files for eclipse.
 
-cd jung2
-mvn install
-mvn eclipse:eclipse
-to generate the .classpath and .project files for eclipse.
+The .classpath file will make reference to a M2_REPO variable,
+which you must define in eclipse, so that M2_REPO points to
+your local repository. You can do that in eclipse by bringing
+up project properties and adding the variable M2_HOME, or you
+can run the following command to have maven set the variable
+for you:
 
-Eclipse needs to know the path to the local maven repository. 
-Therefore the classpath variable M2_REPO has to be set. Execute the 
-following command:
-
-mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo 
+    mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo 
 
 
-You can now add each subproject (api, graph-impl, visualization, algorithms, 
+To load jung2 in eclipse, you need to overcome an
+eclipse limitation: Eclipse projects cannot contain
+subprojects. (Jung2 contains 5 sub-projects).
+The common work-around is to make eclipse think that
+each sub-project is a top-level project.
+
+The most common way to proceed is as follows:
+
+Add each subproject (api, graph-impl, visualization, algorithms, 
 samples) as a top-level project in eclipse, each with its own classpath 
 dependencies. If you like, (and you will) you can modify each project's 
 properties in eclipse to depend on other subprojects instead of the 

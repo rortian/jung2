@@ -31,10 +31,10 @@
   </dependencies>
 
   <modules>
-    <module>api</module>
-    <module>graph-impl</module>
-    <module>samples</module>
-    <module>visualization</module>
-    <module>algorithms</module>
+    <module>jung-api</module>
+    <module>jung-graph-impl</module>
+    <module>jung-samples</module>
+    <module>jung-visualization</module>
+    <module>jung-algorithms</module>
   </modules>
 </project>
