@@ -104,10 +104,12 @@ public class PairTest extends TestCase {
     }
 
     public void testToArray() {
+        @SuppressWarnings("unused")
         Object[] arr = pair.toArray();
     }
 
     public void testToArraySArray() {
+        @SuppressWarnings("unused")
         Integer[] arr = pair.<Integer>toArray(new Integer[2]);
     }
 
