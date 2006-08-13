@@ -1,0 +1,16 @@
+<projectDescription>
+  <name>jung-algorithms</name>
+  <comment/>
+  <projects>
+    <project>jung-api</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+      <arguments/>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
