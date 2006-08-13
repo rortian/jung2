@@ -49,6 +49,9 @@ can run the following command to have maven set the variable
 for you:
 
     mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo 
+    
+If that does not work, you'll need to open one of the projects properties
+and use the 'add variables' button in the 'libraries' tab.
 
 
 To load jung2 in eclipse, you need to overcome an
@@ -59,11 +62,13 @@ each sub-project is a top-level project.
 
 The most common way to proceed is as follows:
 
-Add each subproject (api, graph-impl, visualization, algorithms, 
-samples) as a top-level project in eclipse, each with its own classpath 
-dependencies. If you like, (and you will) you can modify each project's 
-properties in eclipse to depend on other subprojects instead of the 
-compiled jars. Use the eclipse project properties dialog to do so.
+Add each subproject (jung-api, jung-graph-impl, jung-visualization, 
+jung-algorithms, jung-samples) as a top-level project in eclipse, each 
+with its own classpath dependencies. 
+
+If you previously ran mvn eclipse:eclipse at the jung2 directory
+level, then the projects will already reference the other
+projects they depend on (instead of the jar from those projects).
 
 You do not want to use jung2 (the parent project) as the eclipse project,
 as each eclipse project can have only one classpath, and you would then
