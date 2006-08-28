@@ -60,7 +60,7 @@ public class BFSDistanceLabeler<V, E> {
      * Returns the list of vertices visited in order of traversal
      * @return the list of vertices
      */
-    public List getVerticesInOrderVisited() {
+    public List<V> getVerticesInOrderVisited() {
         return mVerticesInOrderVisited;
     }
 
@@ -68,7 +68,7 @@ public class BFSDistanceLabeler<V, E> {
      * Returns the set of all vertices that were not visited
      * @return the list of unvisited vertices
      */
-    public Set getUnivistedVertices() {
+    public Set<V> getUnivistedVertices() {
         return mUnvisitedVertices;
     }
 

@@ -72,7 +72,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         initializeRankings(graph.getVertices(), new HashSet<V>());
     }
 
-    protected PageRank(DirectedGraph<V,E> graph, double bias, String edgeWeightKeyName, Pair<Collection<V>> reachables) {
+    protected PageRank(DirectedGraph<V,E> graph, double bias, String edgeWeightKeyName, Pair<Set<V>> reachables) {
         initialize(graph, bias, edgeWeightKeyName);
         initializeRankings(reachables.getFirst(), reachables.getSecond());
     }

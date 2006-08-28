@@ -64,7 +64,14 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
         mRankEdges = isEdgeRanker;
     }
     
-    protected Collection<V> getVertices() {
+    /**
+	 * @return the scoreMap
+	 */
+	public Map<Object, Number> getScoreMap() {
+		return scoreMap;
+	}
+
+	protected Collection<V> getVertices() {
         return mGraph.getVertices();
     }
 
