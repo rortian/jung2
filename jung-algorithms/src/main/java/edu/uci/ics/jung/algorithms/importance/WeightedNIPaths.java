@@ -99,7 +99,7 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
 
         V virtualNode = null;
 		try {
-			virtualNode = getGraph().getVertices().iterator().next().getClass().newInstance();
+			virtualNode = (V)getGraph().getVertices().iterator().next().getClass().newInstance();
 		} catch (InstantiationException e1) {
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
@@ -109,7 +109,7 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
         getGraph().addVertex(virtualNode);
         E virtualSinkEdge = null;
 		try {
-			virtualSinkEdge = getGraph().getEdges().iterator().next().getClass().newInstance();
+			virtualSinkEdge = (E)getGraph().getEdges().iterator().next().getClass().newInstance();
 		} catch (InstantiationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
