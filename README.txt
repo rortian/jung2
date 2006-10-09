@@ -88,4 +88,13 @@ sub-projects.
 
 
 
+Once you have built everything (preceding instructions), here is a straightforward
+way to run a demo from the command line:
+
+cd jung-samples
+mvn assembly:assembly -Ddescriptor=assembly.xml
+cd target
+tar xvf jung-samples-2.0-dependencies.tar
+java -cp jung-samples-2.0.jar samples.graph.VertexImageShaperDemo
+
 
