@@ -20,7 +20,7 @@ public class ConstantMap<K,V> implements Map<K,V> {
 	private Map<K,V> delegate;
 	
 	public ConstantMap(V value) {
-		delegate = Collections.singletonMap(null, value);
+		delegate = Collections.<K,V>unmodifiableMap(Collections.<K,V>singletonMap(null, value));
 	}
 	public V get(Object key) {
 		return delegate.get(null);
