@@ -40,6 +40,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  *
  * 
  */
+@SuppressWarnings("serial")
 public class SatelliteVisualizationViewer<V, E> 
 	extends VisualizationViewer<V,E> {
     

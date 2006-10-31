@@ -29,6 +29,7 @@ import javax.swing.border.EmptyBorder;
  *
  * 
  */
+@SuppressWarnings("serial")
 public class DefaultEdgeLabelRenderer extends JLabel implements
         EdgeLabelRenderer, Serializable {
 

@@ -45,7 +45,8 @@ public interface ModalGraphMouse extends GraphMouse {
      *  @version 1.0
      */
     
-    public class Mode implements Serializable {
+    @SuppressWarnings("serial")
+	public class Mode implements Serializable {
 
         private final String mode;
         

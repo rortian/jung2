@@ -29,6 +29,7 @@ import javax.swing.border.EmptyBorder;
  *
  * 
  */
+@SuppressWarnings("serial")
 public class DefaultVertexLabelRenderer extends JLabel implements
         VertexLabelRenderer, Serializable {
 

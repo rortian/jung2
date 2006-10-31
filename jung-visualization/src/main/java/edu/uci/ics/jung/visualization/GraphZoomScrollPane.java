@@ -54,6 +54,7 @@ import edu.uci.ics.jung.visualization.transform.shape.Intersector;
  *
  * 
  */
+@SuppressWarnings("serial")
 public class GraphZoomScrollPane extends JPanel {
     protected VisualizationViewer vv;
     protected JScrollBar horizontalScrollBar;
