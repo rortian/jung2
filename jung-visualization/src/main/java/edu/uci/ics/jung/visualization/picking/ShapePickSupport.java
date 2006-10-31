@@ -22,7 +22,8 @@ import java.util.ConcurrentModificationException;
 
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.VisualizationServer;
+import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
@@ -35,7 +36,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
 public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 
     protected float pickSize;
-    protected VisualizationViewer<V,E> vv;
+    protected VisualizationServer<V,E> vv;
     
     /**
      * Create an instance.
@@ -46,7 +47,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
      * @param hasShapeFunctions source of Vertex and Edge shapes.
      * @param pickSize how large to make the pick footprint for line edges
      */
-    public ShapePickSupport(VisualizationViewer<V,E> vv, float pickSize) {
+    public ShapePickSupport(VisualizationServer<V,E> vv, float pickSize) {
     	this.vv = vv;
         this.pickSize = pickSize;
     }
@@ -59,7 +60,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
      * Create an instance.
      * The pickSize footprint defaults to 2.
      */
-    public ShapePickSupport(VisualizationViewer<V,E> vv) {
+    public ShapePickSupport(VisualizationServer<V,E> vv) {
         this.vv = vv;
         this.pickSize = 2;
     }
@@ -86,7 +87,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
             try {
                 for(V v : layout.getGraph().getVertices()) {
 
-                    Shape shape = vv.getRenderContext().getVertexShapeFunction().getShape(v);
+                    Shape shape = vv.getRenderContext().getVertexShapeFunction().transform(v);
                     // transform the vertex location to screen coords
                     Point2D p = vv.layoutTransform(layout.getLocation(v));
                     if(p == null) continue;
@@ -145,10 +146,11 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
                     // translate the edge to the starting vertex
                     AffineTransform xform = AffineTransform.getTranslateInstance(x1, y1);
 
-                    Shape edgeShape = vv.getRenderContext().getEdgeShapeFunction().getShape(vv.getGraphLayout().getGraph(),e);
+                    Shape edgeShape = 
+                    	vv.getRenderContext().getEdgeShapeFunction().transform(new EdgeContext<V,E>(vv.getGraphLayout().getGraph(),e));
                     if(isLoop) {
                         // make the loops proportional to the size of the vertex
-                        Shape s2 = vv.getRenderContext().getVertexShapeFunction().getShape(v2);
+                        Shape s2 = vv.getRenderContext().getVertexShapeFunction().transform(v2);
                         Rectangle2D s2Bounds = s2.getBounds2D();
                         xform.scale(s2Bounds.getWidth(),s2Bounds.getHeight());
                         // move the loop so that the nadir is centered in the vertex
