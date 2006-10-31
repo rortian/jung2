@@ -12,7 +12,9 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
-import java.util.Set;
+import org.apache.commons.collections15.Transformer;
+
+
 
 /**
  * Labels vertices by their toString. This class functions as a drop-in
@@ -22,43 +24,13 @@ import java.util.Set;
  * 
  * @author danyelf
  */
-public class ToStringLabeller<V> extends StringLabeller<V> {
-
-	/**
-	 * This method is not meaningful; it throws an IllegalArgumentException
-	 */
-	public void assignDefaultLabels(Set vertices, int offset)
-    {
-		throw new IllegalArgumentException();
-	}
-	/**
-	 * This method is not meaningful; it throws an IllegalArgumentException
-	 */
-	public V removeLabel(String string) {
-		throw new IllegalArgumentException();
-	}
+public class ToStringLabeller<V> implements Transformer<V,String> {
 
     /**
      * Retunrs v.toString()
      */
-    public String getLabel(V v) {
+    public String transform(V v) {
         return v.toString();
     }
 
-    /**
-     * Always returns null: this impl doesn't keep a table, and so can't
-     * meaningfully address this.
-     */
-    public V getVertex(String label) {
-        return null;
-    }
-
-    /**
-     * This method always throws an IllegalArgument exception: you cannot
-     * externally set the setstring method.
-     */
-    public void setLabel(V v, String l) throws UniqueLabelException {
-        throw new IllegalArgumentException(
-                "Can't manually set labels on a ToString labeller");
-    }
-}
+ }

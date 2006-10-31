@@ -11,15 +11,19 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
+import java.awt.Shape;
+
+import org.apache.commons.collections15.Transformer;
+
 
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public interface SettableVertexShapeFunction<V> extends VertexShapeFunction<V>
+public interface SettableVertexShapeFunction<V> extends Transformer<V,Shape>
 {
-    public abstract void setSizeFunction(VertexSizeFunction<V> vsf);
+    public abstract void setSizeTransformer(Transformer<V,Integer> vsf);
 
-    public abstract void setAspectRatioFunction(VertexAspectRatioFunction<V> varf);
+    public abstract void setAspectRatioTransformer(Transformer<V,Float> varf);
 }

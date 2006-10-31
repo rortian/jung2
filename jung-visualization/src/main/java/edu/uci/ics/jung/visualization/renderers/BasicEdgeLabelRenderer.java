@@ -20,6 +20,7 @@ import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
+import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
@@ -33,13 +34,13 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
             !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
             return;
 
-		labelEdge(rc, graph, e, rc.getEdgeStringer().getLabel(e), x1, y1, x2, y2);
+		labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, y1, x2, y2);
 	}
 	
 	public Component prepareRenderer(RenderContext<V,E> rc, EdgeLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, E edge) {
 		return rc.getEdgeLabelRenderer().<E>getEdgeLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getEdgeFontFunction().getFont(edge), isSelected, edge);
+				rc.getEdgeFontFunction().transform(edge), isSelected, edge);
 	}
     
     /**
@@ -55,7 +56,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
         int distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
         GraphicsDecorator g2d = rc.getGraphicsContext();
-        double closeness = rc.getEdgeLabelClosenessFunction().getNumber(graph, e).doubleValue();
+        double closeness = rc.getEdgeLabelClosenessFunction().transform(new EdgeContext<V,E>(graph, e)).doubleValue();
 
         int posX = (int) (x1 + (closeness) * distX);
         int posY = (int) (y1 + (closeness) * distY);
@@ -67,7 +68,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
         
         Dimension d = component.getPreferredSize();
 
-        Shape edgeShape = rc.getEdgeShapeFunction().getShape(graph, e);
+        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V,E>(graph, e));
         
         double parallelOffset = 1;
 

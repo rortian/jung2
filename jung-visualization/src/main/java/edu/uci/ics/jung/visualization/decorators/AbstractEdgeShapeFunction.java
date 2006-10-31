@@ -9,6 +9,10 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
+import java.awt.Shape;
+
+import org.apache.commons.collections15.Transformer;
+
 
 
 
@@ -18,7 +22,7 @@ package edu.uci.ics.jung.visualization.decorators;
  *  
  * @author Tom Nelson
  */
-public abstract class AbstractEdgeShapeFunction<V,E> implements EdgeShapeFunction<V,E> {
+public abstract class AbstractEdgeShapeFunction<V,E> implements Transformer<EdgeContext<V,E>,Shape> {
 
     /**
      * Specifies how far apart to place the control points for edges being

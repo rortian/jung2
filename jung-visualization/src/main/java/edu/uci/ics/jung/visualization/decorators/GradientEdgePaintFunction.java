@@ -31,7 +31,8 @@ import edu.uci.ics.jung.visualization.transform.Transformer;
  * 
  * @author Joshua O'Madadhain
  */
-public class GradientEdgePaintFunction<V, E> extends AbstractEdgePaintFunction<E>
+public class GradientEdgePaintFunction<V, E> 
+	implements org.apache.commons.collections15.Transformer<E,Paint>
 {
     protected Color c1;
     protected Color c2;
@@ -47,7 +48,7 @@ public class GradientEdgePaintFunction<V, E> extends AbstractEdgePaintFunction<E
         this.transformer = vv.getLayoutTransformer();
     }
     
-    public Paint getDrawPaint(E e)
+    public Paint transform(E e)
     {
         Layout<V, E> layout = vv.getGraphLayout();
         Pair<V> p = layout.getGraph().getEndpoints(e);

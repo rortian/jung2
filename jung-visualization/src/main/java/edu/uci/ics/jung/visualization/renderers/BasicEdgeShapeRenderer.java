@@ -23,6 +23,7 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
+import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
@@ -42,7 +43,7 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
         
         GraphicsDecorator g2d = rc.getGraphicsContext();
 
-        Stroke new_stroke = rc.getEdgeStrokeFunction().getStroke(e);
+        Stroke new_stroke = rc.getEdgeStrokeFunction().transform(e);
         Stroke old_stroke = g2d.getStroke();
         if (new_stroke != null)
             g2d.setStroke(new_stroke);
@@ -69,8 +70,8 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         boolean isLoop = v1.equals(v2);
-        Shape s2 = rc.getVertexShapeFunction().getShape(v2);
-        Shape edgeShape = rc.getEdgeShapeFunction().getShape(graph, e);
+        Shape s2 = rc.getVertexShapeFunction().transform(v2);
+        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V,E>(graph, e));
         
         boolean edgeHit = true;
         Rectangle deviceRectangle = null;
@@ -114,13 +115,13 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
             
             // get Paints for filling and drawing
             // (filling is done first so that drawing and label use same Paint)
-            Paint fill_paint = rc.getEdgePaintFunction().getFillPaint(e); 
+            Paint fill_paint = rc.getEdgeFillPaintFunction().transform(e); 
             if (fill_paint != null)
             {
                 g.setPaint(fill_paint);
                 g.fill(edgeShape);
             }
-            Paint draw_paint = rc.getEdgePaintFunction().getDrawPaint(e);
+            Paint draw_paint = rc.getEdgeDrawPaintFunction().transform(e);
             if (draw_paint != null)
             {
                 g.setPaint(draw_paint);
@@ -135,7 +136,7 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
             if (graph.isDirected(e)) {
                 
                 Shape destVertexShape = 
-                    rc.getVertexShapeFunction().getShape(graph.getEndpoints(e).getSecond());
+                    rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getSecond());
                 AffineTransform xf = AffineTransform.getTranslateInstance(x2, y2);
                 destVertexShape = xf.createTransformedShape(destVertexShape);
             }

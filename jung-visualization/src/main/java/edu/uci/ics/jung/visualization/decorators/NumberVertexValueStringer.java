@@ -14,13 +14,15 @@ package edu.uci.ics.jung.visualization.decorators;
 import java.text.NumberFormat;
 import java.util.Map;
 
+import org.apache.commons.collections15.Transformer;
+
 /**
  * Returns the values specified by a <code>NumberVertexValue</code>
  * instance as <code>String</code>s.
  * 
  * @author Joshua O'Madadhain
  */
-public class NumberVertexValueStringer<V> implements VertexStringer<V>
+public class NumberVertexValueStringer<V> implements Transformer<V,String>
 {
     protected Map<V,Number> nvv;
     protected final static NumberFormat nf = NumberFormat.getInstance();
@@ -31,9 +33,9 @@ public class NumberVertexValueStringer<V> implements VertexStringer<V>
     }
     
     /**
-     * @see edu.uci.ics.jung.graph.decorators.EdgeStringer#getLabel(ArchetypeEdge)
+     * 
      */
-    public String getLabel(V v)
+    public String transform(V v)
     {
         return nf.format(nvv.get(v));
     }

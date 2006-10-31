@@ -17,10 +17,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
-import edu.uci.ics.jung.visualization.decorators.ConstantVertexAspectRatioFunction;
-import edu.uci.ics.jung.visualization.decorators.ConstantVertexSizeFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexAspectRatioFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexSizeFunction;
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
 
 /**
  * A utility class for generating <code>Shape</code>s for drawing vertices.  
@@ -35,14 +33,14 @@ import edu.uci.ics.jung.visualization.decorators.VertexSizeFunction;
  */
 public class VertexShapeFactory<V>
 {
-    protected VertexSizeFunction<V> vsf;
-    protected VertexAspectRatioFunction<V> varf;
+    protected Transformer<V,Integer> vsf;
+    protected Transformer<V,Float> varf;
     
     /**
      * Creates a <code>VertexShapeFactory</code> with the specified 
      * vertex size and aspect ratio functions.
      */
-    public VertexShapeFactory(VertexSizeFunction<V> vsf, VertexAspectRatioFunction<V> varf)
+    public VertexShapeFactory(Transformer<V,Integer> vsf, Transformer<V,Float> varf)
     {
         this.vsf = vsf;
         this.varf = varf;
@@ -54,8 +52,8 @@ public class VertexShapeFactory<V>
      */
     public VertexShapeFactory()
     {
-        this(new ConstantVertexSizeFunction<V>(10), 
-            new ConstantVertexAspectRatioFunction<V>(1.0f));
+        this(new ConstantTransformer(10), 
+            new ConstantTransformer(1.0f));
     }
     
     private static final Rectangle2D theRectangle = new Rectangle2D.Float();
@@ -66,8 +64,8 @@ public class VertexShapeFactory<V>
      */
     public Rectangle2D getRectangle(V v)
     {
-        float width = vsf.getSize(v);
-        float height = width * varf.getAspectRatio(v);
+        float width = vsf.transform(v);
+        float height = width * varf.transform(v);
         float h_offset = -(width / 2);
         float v_offset = -(height / 2);
         theRectangle.setFrame(h_offset, v_offset, width, height);

@@ -23,13 +23,13 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 public class BasicVertexLabelRenderer<V,E> implements Renderer.Vertex<V,E> {
 
 	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-		labelVertex(rc, v, rc.getVertexStringer().getLabel(v), x, y);
+		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
 	}
 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getVertexFontFunction().getFont(vertex), isSelected, vertex);
+				rc.getVertexFontFunction().transform(vertex), isSelected, vertex);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.Vertex<V,E> {
             v_offset = -d.height / 2;
 
         } else {
-            Rectangle2D bounds = rc.getVertexShapeFunction().getShape(v).getBounds2D();
+            Rectangle2D bounds = rc.getVertexShapeFunction().transform(v).getBounds2D();
             h_offset = (int)(bounds.getWidth() / 2) + 5;
             v_offset = (int)(bounds.getHeight() / 2) + 5 -d.height;
         }

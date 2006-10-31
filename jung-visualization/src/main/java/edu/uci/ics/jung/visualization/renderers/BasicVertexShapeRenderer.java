@@ -48,7 +48,7 @@ public class BasicVertexShapeRenderer<V,E> implements Renderer.Vertex<V,E> {
                     d.width,d.height);
         }
         // get the shape to be rendered
-        Shape shape = rc.getVertexShapeFunction().getShape(v);
+        Shape shape = rc.getVertexShapeFunction().transform(v);
         
         // create a transform that translates to the location of
         // the vertex to be rendered
@@ -61,7 +61,7 @@ public class BasicVertexShapeRenderer<V,E> implements Renderer.Vertex<V,E> {
         if (vertexHit) {
 
         	Stroke old_stroke = g2d.getStroke();
-        	Stroke new_stroke = rc.getVertexStrokeFunction().getStroke(v);
+        	Stroke new_stroke = rc.getVertexStrokeFunction().transform(v);
         	if (new_stroke != null) {
         		g2d.setStroke(new_stroke);
         	}
@@ -76,13 +76,13 @@ public class BasicVertexShapeRenderer<V,E> implements Renderer.Vertex<V,E> {
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {
         GraphicsDecorator g2d = rc.getGraphicsContext();
         Paint oldPaint = g2d.getPaint();
-        Paint fillPaint = rc.getVertexPaintFunction().getFillPaint(v);
+        Paint fillPaint = rc.getVertexFillPaintFunction().transform(v);
         if(fillPaint != null) {
             g2d.setPaint(fillPaint);
             g2d.fill(shape);
             g2d.setPaint(oldPaint);
         }
-        Paint drawPaint = rc.getVertexPaintFunction().getDrawPaint(v);
+        Paint drawPaint = rc.getVertexDrawPaintFunction().transform(v);
         if(drawPaint != null) {
             g2d.setPaint(drawPaint);
             g2d.draw(shape);

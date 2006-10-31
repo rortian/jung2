@@ -21,5 +21,5 @@ import edu.uci.ics.jung.visualization.VisualizationViewer.ToolTipListener;
 public interface ToolTipFunction extends ToolTipListener {
     
     String getToolTipText(Object v);
-//    String getToolTipText(E e);
+
 }

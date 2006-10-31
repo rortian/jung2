@@ -17,15 +17,16 @@ import java.awt.geom.AffineTransform;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
-import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicVertexIconRenderer<V,E> extends BasicVertexShapeRenderer<V,E> implements Renderer.Vertex<V,E> {
 
-	VertexIconFunction<V> vertexIconFunction;
+	Transformer<V,Icon> vertexIconFunction;
 	
     public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
         if (rc.getVertexIncludePredicate().evaluateVertex(graph, v)) {
@@ -52,7 +53,7 @@ public class BasicVertexIconRenderer<V,E> extends BasicVertexShapeRenderer<V,E> 
                     d.width,d.height);
         }
         // get the shape to be rendered
-        Shape shape = rc.getVertexShapeFunction().getShape(v);
+        Shape shape = rc.getVertexShapeFunction().transform(v);
         
         // create a transform that translates to the location of
         // the vertex to be rendered
@@ -64,7 +65,7 @@ public class BasicVertexIconRenderer<V,E> extends BasicVertexShapeRenderer<V,E> 
 
         if (vertexHit) {
         	if(vertexIconFunction != null) {
-        		Icon icon = vertexIconFunction.getIcon(v);
+        		Icon icon = vertexIconFunction.transform(v);
         		if(icon != null) {
         		
         			int xLoc = x - icon.getIconWidth()/2;

@@ -16,13 +16,15 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Transformer;
+
 /**
  * Returns the values specified by a <code>NumberEdgeValue</code>
  * instance as <code>String</code>s.
  * 
  * @author Joshua O'Madadhain
  */
-public class NumberEdgeValueStringer<E> implements EdgeStringer<E>
+public class NumberEdgeValueStringer<E> implements Transformer<E,String>
 {
 //    protected NumberEdgeValue<E> nev;
     protected Map<E,Number> nev = new HashMap<E,Number>();
@@ -34,9 +36,9 @@ public class NumberEdgeValueStringer<E> implements EdgeStringer<E>
     }
     
     /**
-     * @see edu.uci.ics.jung.graph.decorators.EdgeStringer#getLabel(ArchetypeEdge)
+     *
      */
-    public String getLabel(E e)
+    public String transform(E e)
     {
         return nf.format(nev.get(e));
     }

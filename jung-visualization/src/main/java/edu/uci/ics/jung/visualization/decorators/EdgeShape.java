@@ -65,12 +65,14 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * SimpleLoop shared instance.
          */
-        public Shape getShape(Graph<V,E> graph, E e) {
+        public Shape transform(EdgeContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
             
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
-                return simpleLoop.getShape(graph, e);
+                return simpleLoop.transform(context);
 
             return instance;
         }
@@ -100,11 +102,13 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
          */
-        public Shape getShape(Graph<V,E> graph, E e) {
+        public Shape transform(EdgeContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
-                return loop.getShape(graph, e);
+                return loop.transform(context);
             int index = 1;
             if(parallelEdgeIndexFunction != null) {
                 index = parallelEdgeIndexFunction.getIndex(graph, e);
@@ -143,11 +147,13 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
          */
-        public Shape getShape(Graph<V,E> graph, E e) {
+        public Shape transform(EdgeContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
-                return loop.getShape(graph, e);
+                return loop.transform(context);
             
             int index = 1;
             if(parallelEdgeIndexFunction != null) {
@@ -187,11 +193,13 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
          */
-       public Shape getShape(Graph<V,E> graph, E e) {
+        public Shape transform(EdgeContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
            Pair<V> endpoints = graph.getEndpoints(e);
            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
            if (isLoop)
-                return loop.getShape(graph, e);
+                return loop.transform(context);
            
            int index = 1;
            if(parallelEdgeIndexFunction != null) {
@@ -223,7 +231,7 @@ public class EdgeShape<V,E>  {
          * getter for the shape
          * @return the shared instance
          */
-        public Shape getShape(Graph<V,E> graph, E e) {
+        public Shape transform(EdgeContext<V,E> context) {
             return instance;
         }
     }
@@ -251,7 +259,9 @@ public class EdgeShape<V,E>  {
          * Get the shape for this edge, modifying the diameter in the
          * case of parallel edges, so they do not overlap
          */
-        public Shape getShape(Graph<V,E> graph, E e) {
+        public Shape transform(EdgeContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
             int count = 1;
             if(parallelEdgeIndexFunction != null) {
                 count = parallelEdgeIndexFunction.getIndex(graph, e);
@@ -274,13 +284,11 @@ public class EdgeShape<V,E>  {
      * and as a "bowtie" shape for undirected edges.
      * @author Joshua O'Madadhain
      */
-    public static class Wedge<V,E> extends AbstractEdgeShapeFunction<V,E>
-    {
+    public static class Wedge<V,E> extends AbstractEdgeShapeFunction<V,E> {
         private static GeneralPath triangle;
         private static GeneralPath bowtie;
         
-        public Wedge(int width)
-        {
+        public Wedge(int width)  {
             triangle = ArrowFactory.getWedgeArrow(width, 1);
             triangle.transform(AffineTransform.getTranslateInstance(1,0));
             bowtie = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
@@ -291,8 +299,10 @@ public class EdgeShape<V,E>  {
             bowtie.closePath();
         }
         
-        public Shape getShape(Graph<V,E> graph, E e)
-        {
+        public Shape transform(EdgeContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
+        
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
@@ -307,5 +317,6 @@ public class EdgeShape<V,E>  {
     public static interface ParallelRendering<V,E> {
         void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> peif);
     }
-    
 }
+    
+

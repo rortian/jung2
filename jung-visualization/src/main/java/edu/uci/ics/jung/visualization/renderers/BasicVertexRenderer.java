@@ -42,7 +42,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         GraphicsDecorator g = rc.getGraphicsContext();
         boolean vertexHit = true;
         // get the shape to be rendered
-        Shape shape = rc.getVertexShapeFunction().getShape(v);
+        Shape shape = rc.getVertexShapeFunction().transform(v);
         
         // create a transform that translates to the location of
         // the vertex to be rendered
@@ -55,7 +55,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
 
         if (vertexHit) {
         	if(rc.getVertexIconFunction() != null) {
-        		Icon icon = rc.getVertexIconFunction().getIcon(v);
+        		Icon icon = rc.getVertexIconFunction().transform(v);
         		if(icon != null) {
         		
         			int xLoc = x - icon.getIconWidth()/2;
@@ -67,7 +67,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         	} else {
         		paintShapeForVertex(rc, v, shape);
         	}
-    		labelVertex(rc, v, rc.getVertexStringer().getLabel(v), x, y);
+    		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
         }
     }
     
@@ -90,18 +90,18 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {
         GraphicsDecorator g = rc.getGraphicsContext();
         Paint oldPaint = g.getPaint();
-        Paint fillPaint = rc.getVertexPaintFunction().getFillPaint(v);
+        Paint fillPaint = rc.getVertexFillPaintFunction().transform(v);
         if(fillPaint != null) {
             g.setPaint(fillPaint);
             g.fill(shape);
             g.setPaint(oldPaint);
         }
-        Paint drawPaint = rc.getVertexPaintFunction().getDrawPaint(v);
+        Paint drawPaint = rc.getVertexDrawPaintFunction().transform(v);
         if(drawPaint != null) {
             g.setPaint(drawPaint);
         }
         Stroke oldStroke = g.getStroke();
-        Stroke stroke = rc.getVertexStrokeFunction().getStroke(v);
+        Stroke stroke = rc.getVertexStrokeFunction().transform(v);
         if(stroke != null) {
             g.setStroke(stroke);
         }
@@ -113,7 +113,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getVertexFontFunction().getFont(vertex), isSelected, vertex);
+				rc.getVertexFontFunction().transform(vertex), isSelected, vertex);
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
             v_offset = -d.height / 2;
 
         } else {
-            Rectangle2D bounds = rc.getVertexShapeFunction().getShape(v).getBounds2D();
+            Rectangle2D bounds = rc.getVertexShapeFunction().transform(v).getBounds2D();
             h_offset = (int)(bounds.getWidth() / 2) + 5;
             v_offset = (int)(bounds.getHeight() / 2) + 5 -d.height;
         }

@@ -11,6 +11,8 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
+import org.apache.commons.collections15.Transformer;
+
 
 /**
  * Provides vertex sizes that are spaced proportionally between 
@@ -18,7 +20,7 @@ package edu.uci.ics.jung.visualization.decorators;
  * 
  * @author Joshua O'Madadhain
  */
-public class InterpolatingVertexSizeFunction<V> implements VertexSizeFunction<V>
+public class InterpolatingVertexSizeFunction<V> implements Transformer<V,Integer>
 {
     protected double min;
     protected double max;
@@ -41,7 +43,7 @@ public class InterpolatingVertexSizeFunction<V> implements VertexSizeFunction<V>
         setMaxSize(max_size);
     }
 
-    public int getSize(V v)
+    public Integer transform(V v)
     {
         Number n = nvv.getNumber(v);
         double value = min;

@@ -13,16 +13,19 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.Shape;
 
+import org.apache.commons.collections15.Transformer;
+
 /**
  * 
  * @author Joshua O'Madadhain
  */
 public class EllipseVertexShapeFunction<V> extends AbstractVertexShapeFunction<V>
+	implements Transformer<V,Shape>
 {
     public EllipseVertexShapeFunction() 
     {
     }
-    public EllipseVertexShapeFunction(VertexSizeFunction<V> vsf, VertexAspectRatioFunction<V> varf)
+    public EllipseVertexShapeFunction(Transformer<V,Integer> vsf, Transformer<V,Float> varf)
     {
         super(vsf, varf);
     }
@@ -31,4 +34,7 @@ public class EllipseVertexShapeFunction<V> extends AbstractVertexShapeFunction<V
     {
         return factory.getEllipse(v);
     }
+	public Shape transform(V input) {
+		return getShape(input);
+	}
 }

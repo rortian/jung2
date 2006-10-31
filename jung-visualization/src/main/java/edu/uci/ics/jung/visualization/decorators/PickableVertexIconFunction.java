@@ -13,6 +13,8 @@ package edu.uci.ics.jung.visualization.decorators;
 
 import javax.swing.Icon;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 
 /**
@@ -20,7 +22,7 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  * parameters given in the constructor, so that picked and
  * non-picked vertices can be made to look different.
  */
-public class PickableVertexIconFunction<V> implements VertexIconFunction<V> {
+public class PickableVertexIconFunction<V> implements Transformer<V,Icon> {
 
     protected Icon icon;
     protected Icon picked_icon;
@@ -44,7 +46,7 @@ public class PickableVertexIconFunction<V> implements VertexIconFunction<V> {
     /**
      * Returns the appropriate <code>Icon</code>, depending on picked state.
      */
-	public Icon getIcon(V v) {
+	public Icon transform(V v) {
         if (pi.isPicked(v))
             return picked_icon;
         else

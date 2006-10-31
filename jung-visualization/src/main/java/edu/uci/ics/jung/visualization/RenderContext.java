@@ -1,28 +1,22 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.BasicStroke;
+import java.awt.Font;
+import java.awt.Paint;
+import java.awt.Shape;
 import java.awt.Stroke;
 
 import javax.swing.CellRendererPane;
+import javax.swing.Icon;
 import javax.swing.JComponent;
+
+import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.predicates.GraphPredicate;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeArrowFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeFontFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.EdgeStringer;
-import edu.uci.ics.jung.visualization.decorators.EdgeStrokeFunction;
-import edu.uci.ics.jung.visualization.decorators.NumberDirectionalEdgeValue;
-import edu.uci.ics.jung.visualization.decorators.VertexFontFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexIconFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexPaintFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexStringer;
-import edu.uci.ics.jung.visualization.decorators.VertexStrokeFunction;
+import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -63,46 +57,50 @@ public interface RenderContext<V, E> {
 
     void setCenterVertexLabel(boolean centerVertexLabel);
 
-    EdgeArrowFunction<V, E> getEdgeArrowFunction();
+    Transformer<EdgeContext<V,E>,Shape> getEdgeArrowFunction();
 
-    void setEdgeArrowFunction(EdgeArrowFunction<V, E> edgeArrowFunction);
+    void setEdgeArrowFunction(Transformer<EdgeContext<V,E>,Shape> edgeArrowFunction);
 
     GraphPredicate<V,E> getEdgeArrowPredicate() ;
 
     void setEdgeArrowPredicate(GraphPredicate<V,E> edgeArrowPredicate);
 
-    EdgeFontFunction<E> getEdgeFontFunction();
+    Transformer<E,Font> getEdgeFontFunction();
 
-    void setEdgeFontFunction(EdgeFontFunction<E> edgeFontFunction);
+    void setEdgeFontFunction(Transformer<E,Font> edgeFontFunction);
 
     GraphPredicate<V,E> getEdgeIncludePredicate();
 
     void setEdgeIncludePredicate(GraphPredicate<V,E> edgeIncludePredicate);
 
-    NumberDirectionalEdgeValue<V, E> getEdgeLabelClosenessFunction();
+    Transformer<EdgeContext<V,E>,Number> getEdgeLabelClosenessFunction();
 
     void setEdgeLabelClosenessFunction(
-            NumberDirectionalEdgeValue<V, E> edgeLabelClosenessFunction);
+    		Transformer<EdgeContext<V,E>,Number> edgeLabelClosenessFunction);
 
     EdgeLabelRenderer getEdgeLabelRenderer();
 
     void setEdgeLabelRenderer(EdgeLabelRenderer edgeLabelRenderer);
 
-    EdgePaintFunction<E> getEdgePaintFunction();
+    Transformer<E,Paint> getEdgeFillPaintFunction();
 
-    void setEdgePaintFunction(EdgePaintFunction<E> edgePaintFunction);
+    void setEdgeFillPaintFunction(Transformer<E,Paint> edgePaintFunction);
 
-    EdgeShapeFunction<V, E> getEdgeShapeFunction();
+    Transformer<E,Paint> getEdgeDrawPaintFunction();
 
-    void setEdgeShapeFunction(EdgeShapeFunction<V, E> edgeShapeFunction);
+    void setEdgeDrawPaintFunction(Transformer<E,Paint> edgeDrawPaintFunction);
 
-    EdgeStringer<E> getEdgeStringer();
+    Transformer<EdgeContext<V,E>,Shape> getEdgeShapeFunction();
 
-    void setEdgeStringer(EdgeStringer<E> edgeStringer);
+    void setEdgeShapeFunction(Transformer<EdgeContext<V,E>,Shape> edgeShapeFunction);
 
-    EdgeStrokeFunction<E> getEdgeStrokeFunction();
+    Transformer<E,String> getEdgeStringer();
 
-    void setEdgeStrokeFunction(EdgeStrokeFunction<E> edgeStrokeFunction);
+    void setEdgeStringer(Transformer<E,String> edgeStringer);
+
+    Transformer<E,Stroke> getEdgeStrokeFunction();
+
+    void setEdgeStrokeFunction(Transformer<E,Stroke> edgeStrokeFunction);
     
     GraphicsDecorator getGraphicsContext();
     
@@ -129,13 +127,13 @@ public interface RenderContext<V, E> {
 
     void setScreenDevice(JComponent screenDevice);
 
-    VertexFontFunction<V> getVertexFontFunction();
+    Transformer<V,Font> getVertexFontFunction();
 
-    void setVertexFontFunction(VertexFontFunction<V> vertexFontFunction);
+    void setVertexFontFunction(Transformer<V,Font> vertexFontFunction);
 
-    VertexIconFunction<V> getVertexIconFunction();
+    Transformer<V,Icon> getVertexIconFunction();
 
-    void setVertexIconFunction(VertexIconFunction<V> vertexIconFunction);
+    void setVertexIconFunction(Transformer<V,Icon> vertexIconFunction);
 
     GraphPredicate<V,E> getVertexIncludePredicate();
 
@@ -145,21 +143,25 @@ public interface RenderContext<V, E> {
 
     void setVertexLabelRenderer(VertexLabelRenderer vertexLabelRenderer);
 
-    VertexPaintFunction<V> getVertexPaintFunction();
+    Transformer<V,Paint> getVertexFillPaintFunction();
 
-    void setVertexPaintFunction(VertexPaintFunction<V> vertexPaintFunction);
+    void setVertexFillPaintFunction(Transformer<V,Paint> vertexFillPaintFunction);
 
-    VertexShapeFunction<V> getVertexShapeFunction();
+    Transformer<V,Paint> getVertexDrawPaintFunction();
 
-    void setVertexShapeFunction(VertexShapeFunction<V> vertexShapeFunction);
+    void setVertexDrawPaintFunction(Transformer<V,Paint> vertexDrawPaintFunction);
 
-    VertexStringer<V> getVertexStringer();
+    Transformer<V,Shape> getVertexShapeFunction();
 
-    void setVertexStringer(VertexStringer<V> vertexStringer);
+    void setVertexShapeFunction(Transformer<V,Shape> vertexShapeFunction);
 
-    VertexStrokeFunction<V> getVertexStrokeFunction();
+    Transformer<V,String> getVertexStringer();
 
-    void setVertexStrokeFunction(VertexStrokeFunction<V> vertexStrokeFunction);
+    void setVertexStringer(Transformer<V,String> vertexStringer);
+
+    Transformer<V,Stroke> getVertexStrokeFunction();
+
+    void setVertexStrokeFunction(Transformer<V,Stroke> vertexStrokeFunction);
 
     MutableTransformer getViewTransformer();
 

@@ -20,26 +20,28 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
-import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 
-public class VertexLabelAsShapeRenderer<V,E> implements Renderer.Vertex<V,E>, VertexShapeFunction<V> {
+public class VertexLabelAsShapeRenderer<V,E> 
+	implements Renderer.Vertex<V,E>, Transformer<V,Shape> {
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
 	
 	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-		labelVertex(rc, v, rc.getVertexStringer().getLabel(v), x, y);
+		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
 	}
 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getVertexFontFunction().getFont(vertex), isSelected, vertex);
+				rc.getVertexFontFunction().transform(vertex), isSelected, vertex);
 	}
 
 	/**
@@ -69,9 +71,13 @@ public class VertexLabelAsShapeRenderer<V,E> implements Renderer.Vertex<V,E>, Ve
         shapes.put(v, bounds);
     }
 
-	public Shape getShape(V v) {
+	public Shape transform(V v) {
 		Shape shape = shapes.get(v);
 		if(shape == null) return new Rectangle(-20,-20,40,40);
 		else return shape;
 	}
+
+//	public Shape transform(V input) {
+//		return getShape(input);
+//	}
 }

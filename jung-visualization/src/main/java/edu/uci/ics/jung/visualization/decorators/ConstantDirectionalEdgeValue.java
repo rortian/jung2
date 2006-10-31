@@ -11,6 +11,8 @@
  */
 package edu.uci.ics.jung.visualization.decorators;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 
 
@@ -19,7 +21,7 @@ import edu.uci.ics.graph.Graph;
  * 
  * @author Joshua O'Madadhain
  */
-public class ConstantDirectionalEdgeValue<V,E> implements NumberDirectionalEdgeValue<V,E>
+public class ConstantDirectionalEdgeValue<V,E> implements Transformer<EdgeContext<V,E>,Number>
 {
     protected Double undirected_closeness;
     protected Double directed_closeness;
@@ -38,8 +40,9 @@ public class ConstantDirectionalEdgeValue<V,E> implements NumberDirectionalEdgeV
     /**
      * @see edu.uci.ics.jung.graph.decorators.NumberEdgeValue#getNumber(ArchetypeEdge)
      */
-    public Number getNumber(Graph<V,E> graph, E e)
-    {
+    public Number transform(EdgeContext<V,E> context) {//Graph<V,E> graph, E e)
+    	Graph<V,E> graph = context.graph;
+    	E e = context.edge;
         if (graph.isDirected(e))
             return directed_closeness;
         else 
