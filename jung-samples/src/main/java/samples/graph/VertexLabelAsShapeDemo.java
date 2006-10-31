@@ -23,6 +23,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ChainedTransformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.BasicRenderer;
@@ -80,11 +83,15 @@ public class VertexLabelAsShapeDemo extends JApplet {
         vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
         VertexLabelAsShapeRenderer<String,Number> vlasr = new VertexLabelAsShapeRenderer<String,Number>();
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller<String>() {
-            @Override
-            public String getLabel(String v) {
-                return "<html><center>Vertex<p>"+super.getLabel(v);
-            }});
+        vv.getRenderContext().setVertexStringer(
+        		new ChainedTransformer<String,String>(new Transformer[]{
+        		new ToStringLabeller<String>(),
+        		new Transformer<String,String>() {
+
+					public String transform(String input) {
+						return "<html><center>Vertex<p>"+input;
+					}}}));
+
         vv.getRenderContext().setVertexShapeFunction(vlasr);
         
         pr.setVertexRenderer(vlasr);

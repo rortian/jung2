@@ -25,6 +25,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
@@ -36,11 +38,11 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
+import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconFunction;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexIconAndShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexStringer;
+import edu.uci.ics.jung.visualization.decorators.VertexIconShapeFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 
 /**
@@ -84,13 +86,15 @@ public class UnicodeLabelDemo {
         vv.getRenderContext().setVertexStringer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
-        VertexIconAndShapeFunction<Integer> dvisf =
-            new VertexIconAndShapeFunction<Integer>(new EllipseVertexShapeFunction<Integer>());
-        vv.getRenderContext().setVertexShapeFunction(dvisf);
-        vv.getRenderContext().setVertexIconFunction(dvisf);
-        loadImages(v, dvisf.getIconMap());
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.lightGray, Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+        VertexIconShapeFunction<Integer> vertexIconShapeFunction =
+            new VertexIconShapeFunction<Integer>(new EllipseVertexShapeFunction<Integer>());
+        DefaultVertexIconFunction<Integer> vertexIconFunction = new DefaultVertexIconFunction<Integer>();
+        vv.getRenderContext().setVertexShapeFunction(vertexIconShapeFunction);
+        vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
+        loadImages(v, vertexIconFunction.getIconMap());
+        vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 
@@ -143,7 +147,7 @@ public class UnicodeLabelDemo {
     }
     
     
-    class UnicodeVertexStringer<V> implements VertexStringer<V> {
+    class UnicodeVertexStringer<V> implements Transformer<V,String> {
 
         Map<V,String> map = new HashMap<V,String>();
         Map<V,Icon> iconMap = new HashMap<V,Icon>();
@@ -175,9 +179,9 @@ public class UnicodeLabelDemo {
             }
         }
         
-        public Icon getIcon(V v) {
-            return (Icon)iconMap.get(v);
-        }
+		public String transform(V input) {
+			return getLabel(input);
+		}
     }
     
     /**

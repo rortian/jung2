@@ -105,9 +105,9 @@ public class ShowLayouts extends JApplet {
                         .getConstructor(new Class[] {Graph.class});
                 Object o = constructor.newInstance(constructorArgs);
                 Layout l = (Layout) o;
-                vv.stop();
+                vv.getModel().stop();
                 vv.setGraphLayout(l, false);
-                vv.restart();
+                vv.getModel().restart();
             }
             catch (Exception e)
             {
@@ -134,7 +134,7 @@ public class ShowLayouts extends JApplet {
 
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
         
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.red, Color.yellow));
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);

@@ -16,7 +16,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -29,6 +28,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
@@ -50,7 +51,6 @@ import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -126,11 +126,13 @@ public class MultiViewDemo extends JApplet {
         vv3 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
         vv1.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<String,Number>());
-        vv2.getRenderContext().setVertexShapeFunction(new VertexShapeFunction<String>() {
-            public Shape getShape(String v) {
-                return new Rectangle2D.Float(-6, -6, 12, 12);
-            }
-        });
+        vv2.getRenderContext().setVertexShapeFunction(
+        		new ConstantTransformer(new Rectangle2D.Float(-6,-6,12,12)));
+//        		new VertexShapeFunction<String>() {
+//            public Shape getShape(String v) {
+//                return new Rectangle2D.Float(-6, -6, 12, 12);
+//            }
+//        });
         vv2.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
         
         vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<String,Number>());
@@ -163,12 +165,12 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
-        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
-        vv3.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
-        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.black, Color.red, Color.yellow));
-        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.black, Color.red, Color.yellow));
-        vv3.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
+        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
+        vv3.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.red, Color.yellow));
+        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.red, Color.yellow));
+        vv3.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.red, Color.yellow));
         
         // add default listener for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());

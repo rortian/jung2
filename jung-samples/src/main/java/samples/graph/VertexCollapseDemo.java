@@ -29,6 +29,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
@@ -39,7 +41,6 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.ConstantVertexSizeFunction;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
@@ -153,7 +154,7 @@ public class VertexCollapseDemo extends JApplet {
                     	sumy += p.getY();
                     }
                     Point2D cp = new Point2D.Double(sumx/picked.size(), sumy/picked.size());
-                    vv.stop();
+                    vv.getModel().stop();
                     vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
                     layout.forceMove(clusterGraph, cp.getX(), cp.getY());
@@ -170,7 +171,7 @@ public class VertexCollapseDemo extends JApplet {
                         
                         Graph g = collapser.expand(layout.getGraph(), (Graph)v);
                         
-                        vv.stop();
+                        vv.getModel().stop();
                         vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
@@ -182,9 +183,9 @@ public class VertexCollapseDemo extends JApplet {
         reset.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                vv.stop();
+                vv.getModel().stop();
                 layout.setGraph(graph);
-                vv.restart();
+                vv.getModel().restart();
             }});
         
         JButton help = new JButton("Help");
@@ -214,7 +215,7 @@ public class VertexCollapseDemo extends JApplet {
     class ClusterVertexShapeFunction<V> extends EllipseVertexShapeFunction<V> {
 
         ClusterVertexShapeFunction() {
-            setSizeFunction(new ClusterVertexSizeFunction<V>(20));
+            setSizeTransformer(new ClusterVertexSizeFunction<V>(20));
         }
         @Override
         public Shape getShape(V v) {
@@ -232,18 +233,17 @@ public class VertexCollapseDemo extends JApplet {
         }
     }
     
-    class ClusterVertexSizeFunction<V> extends ConstantVertexSizeFunction<V> {
-
-        public ClusterVertexSizeFunction(int size) {
-            super(size);
+    class ClusterVertexSizeFunction<V> implements Transformer<V,Integer> {
+    	int size;
+        public ClusterVertexSizeFunction(Integer size) {
+            this.size = size;
         }
 
-        @Override
-        public int getSize(V v) {
+        public Integer transform(V v) {
             if(v instanceof Graph) {
                 return 30;
             }
-            return super.getSize(v);
+            return size;
         }
     }
 

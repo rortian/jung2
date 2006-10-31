@@ -31,6 +31,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.TestGraphs;
@@ -48,7 +51,6 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexShapeFunction;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -140,17 +142,17 @@ public class LensDemo extends JApplet {
 
         PickedState<String> ps = vv.getPickedVertexState();
         PickedState<Number> pes = vv.getPickedEdgeState();
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(ps, Color.black, Color.red, Color.yellow));
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(ps, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
-        final VertexShapeFunction<String> ovals = vv.getRenderContext().getVertexShapeFunction();
-        final VertexShapeFunction<String> squares = 
-        	new VertexShapeFunction<String>() {
+        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeFunction();
+        final Transformer<String,Shape> squares = 
+        	new ConstantTransformer(new Rectangle2D.Float(-10,-10,20,20));
 
-            public Shape getShape(String v) {
-                return new Rectangle2D.Float(-10,-10,20,20);
-            }};
+//            public Shape transform(String v) {
+//                return new Rectangle2D.Float(-10,-10,20,20);
+//            }};
 
         // add a listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());

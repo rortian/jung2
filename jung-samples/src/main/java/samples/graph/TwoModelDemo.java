@@ -114,9 +114,9 @@ public class TwoModelDemo extends JApplet {
         vv2.setPickedEdgeState(pes);
         
         // set an edge paint function that will show picking for edges
-        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
-        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(),
-                Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(),
+                Color.red, Color.yellow));
         // add default listeners for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());
         vv2.setToolTipFunction(new DefaultToolTipFunction());

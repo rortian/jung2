@@ -35,6 +35,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
@@ -49,7 +51,6 @@ import edu.uci.ics.jung.visualization.decorators.AbstractEdgeShapeFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValue;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.EdgeStringer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
 import edu.uci.ics.jung.visualization.layout.CircleLayout;
@@ -101,14 +102,14 @@ public class EdgeLabelDemo extends JApplet {
         vertexLabelRenderer = vv.getRenderContext().getVertexLabelRenderer();
         edgeLabelRenderer = vv.getRenderContext().getEdgeLabelRenderer();
         
-        EdgeStringer<Number> stringer = new EdgeStringer<Number>(){
-            public String getLabel(Number e) {
+        Transformer<Number,String> stringer = new Transformer<Number,String>(){
+            public String transform(Number e) {
                 return "Edge:"+graph.getEndpoints(e).toString();
             }
         };
         vv.getRenderContext().setEdgeStringer(stringer);
-        vv.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         

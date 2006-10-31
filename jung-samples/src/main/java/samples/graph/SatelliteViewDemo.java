@@ -40,7 +40,7 @@ import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.VisualizationViewer.Paintable;
+import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
@@ -129,10 +129,10 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         
         vv1.setBackground(Color.white);
         
-        vv1.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
-        vv1.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(), Color.black, Color.red, Color.yellow));
-        vv2.getRenderContext().setEdgePaintFunction(new PickableEdgePaintFunction<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
-        vv2.getRenderContext().setVertexPaintFunction(new PickableVertexPaintFunction<String>(vv2.getPickedVertexState(), Color.black, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
+        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(), Color.red, Color.yellow));
+        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
+        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
 
         
         viewGrid = new ViewGrid(vv2, vv1);
