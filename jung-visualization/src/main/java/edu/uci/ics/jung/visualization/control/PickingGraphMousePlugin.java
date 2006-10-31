@@ -28,9 +28,9 @@ import javax.swing.JComponent;
 
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.VisualizationViewer.Paintable;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 
 /** 
  * PickingGraphMousePlugin supports the picking of graph elements
