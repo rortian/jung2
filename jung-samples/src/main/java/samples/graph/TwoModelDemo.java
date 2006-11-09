@@ -32,8 +32,8 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -114,8 +114,8 @@ public class TwoModelDemo extends JApplet {
         vv2.setPickedEdgeState(pes);
         
         // set an edge paint function that will show picking for edges
-        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
-        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(),
+        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(),
                 Color.red, Color.yellow));
         // add default listeners for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());

@@ -33,7 +33,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.CircleLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
@@ -134,7 +134,7 @@ public class ShowLayouts extends JApplet {
 
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
         
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer(vv.getPickedVertexState(), Color.red, Color.yellow));
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);

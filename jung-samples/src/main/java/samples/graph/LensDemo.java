@@ -49,8 +49,8 @@ import edu.uci.ics.jung.visualization.control.LensMagnificationGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -142,8 +142,8 @@ public class LensDemo extends JApplet {
 
         PickedState<String> ps = vv.getPickedVertexState();
         PickedState<Number> pes = vv.getPickedEdgeState();
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(ps, Color.red, Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
         final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeFunction();

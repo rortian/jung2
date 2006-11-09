@@ -60,11 +60,11 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconFunction;
-import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexIconShapeFunction;
+import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
+import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
@@ -156,9 +156,9 @@ public class VertexImageShaperDemo extends JApplet {
         vv.getRenderer().setVertexRenderer(new DemoRenderer<Number,Number>());
 
         Transformer<Number,Paint> vpf = 
-            new PickableVertexPaintFunction<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
+            new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
         vv.getRenderContext().setVertexFillPaintFunction(vpf);
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
@@ -172,7 +172,7 @@ public class VertexImageShaperDemo extends JApplet {
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconAndShapeFunction instead.
         final DemoVertexImageShapeFunction<Number> vertexImageShapeFunction =
-            new DemoVertexImageShapeFunction<Number>(new EllipseVertexShapeFunction<Number>());
+            new DemoVertexImageShapeFunction<Number>(new EllipseVertexShapeTransformer<Number>());
         
         final DemoVertexIconFunction<Number> vertexIconFunction =
         	new DemoVertexIconFunction<Number>();
@@ -302,10 +302,10 @@ public class VertexImageShaperDemo extends JApplet {
      *
      */
     public static class PickWithIconListener implements ItemListener {
-        DefaultVertexIconFunction<Number> imager;
+        DefaultVertexIconTransformer<Number> imager;
         Icon checked;
         
-        public PickWithIconListener(DefaultVertexIconFunction<Number> imager) {
+        public PickWithIconListener(DefaultVertexIconTransformer<Number> imager) {
             this.imager = imager;
             checked = new Checkmark();
         }
@@ -411,7 +411,7 @@ public class VertexImageShaperDemo extends JApplet {
      * In a real application, use VertexIconAndShapeFunction instead.
      * 
      */
-    public static class DemoVertexIconFunction<V> extends DefaultVertexIconFunction<V>
+    public static class DemoVertexIconFunction<V> extends DefaultVertexIconTransformer<V>
     	implements Transformer<V,Icon> {
         
 //        boolean shapeImages = true;
@@ -465,7 +465,7 @@ public class VertexImageShaperDemo extends JApplet {
      * In a real application, use VertexIconAndShapeFunction instead.
      * 
      */
-    public static class DemoVertexImageShapeFunction<V> extends VertexIconShapeFunction<V> {
+    public static class DemoVertexImageShapeFunction<V> extends VertexIconShapeTransformer<V> {
         
         boolean shapeImages = true;
         boolean fillImages = true;

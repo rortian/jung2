@@ -38,11 +38,11 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconFunction;
-import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
-import edu.uci.ics.jung.visualization.decorators.VertexIconShapeFunction;
+import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
+import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 
 /**
@@ -86,15 +86,15 @@ public class UnicodeLabelDemo {
         vv.getRenderContext().setVertexStringer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
-        VertexIconShapeFunction<Integer> vertexIconShapeFunction =
-            new VertexIconShapeFunction<Integer>(new EllipseVertexShapeFunction<Integer>());
-        DefaultVertexIconFunction<Integer> vertexIconFunction = new DefaultVertexIconFunction<Integer>();
+        VertexIconShapeTransformer<Integer> vertexIconShapeFunction =
+            new VertexIconShapeTransformer<Integer>(new EllipseVertexShapeTransformer<Integer>());
+        DefaultVertexIconTransformer<Integer> vertexIconFunction = new DefaultVertexIconTransformer<Integer>();
         vv.getRenderContext().setVertexShapeFunction(vertexIconShapeFunction);
         vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
         loadImages(v, vertexIconFunction.getIconMap());
         vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 

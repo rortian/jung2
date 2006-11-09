@@ -49,8 +49,8 @@ import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ViewScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -128,11 +128,7 @@ public class MultiViewDemo extends JApplet {
         vv1.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<String,Number>());
         vv2.getRenderContext().setVertexShapeFunction(
         		new ConstantTransformer(new Rectangle2D.Float(-6,-6,12,12)));
-//        		new VertexShapeFunction<String>() {
-//            public Shape getShape(String v) {
-//                return new Rectangle2D.Float(-6, -6, 12, 12);
-//            }
-//        });
+
         vv2.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
         
         vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<String,Number>());
@@ -165,12 +161,12 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
-        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
-        vv3.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(pes, Color.black, Color.red));
-        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.red, Color.yellow));
-        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.red, Color.yellow));
-        vv3.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(pvs, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv3.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
+        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.blue, Color.cyan));
+        vv3.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
         
         // add default listener for ToolTips
         vv1.setToolTipFunction(new DefaultToolTipFunction());

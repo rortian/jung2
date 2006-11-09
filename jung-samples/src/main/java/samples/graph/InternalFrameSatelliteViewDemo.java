@@ -33,8 +33,8 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -100,8 +100,8 @@ public class InternalFrameSatelliteViewDemo {
         Layout<String,Number> layout = new ISOMLayout<String,Number>(graph);
 
         vv = new VisualizationViewer<String,Number>(layout, new Dimension(600,600));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
 
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
@@ -111,8 +111,8 @@ public class InternalFrameSatelliteViewDemo {
         satellite =
             new SatelliteVisualizationViewer<String,Number>(vv, layout, 
                     new Dimension(200,200));
-        satellite.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
-        satellite.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
+        satellite.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
+        satellite.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
 
         JFrame frame = new JFrame();
         desktop = new JDesktopPane();

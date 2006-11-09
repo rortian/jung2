@@ -46,8 +46,8 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
@@ -129,10 +129,10 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         
         vv1.setBackground(Color.white);
         
-        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
-        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv1.getPickedVertexState(), Color.red, Color.yellow));
-        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
-        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
+        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(), Color.red, Color.yellow));
+        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
+        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
 
         
         viewGrid = new ViewGrid(vv2, vv1);

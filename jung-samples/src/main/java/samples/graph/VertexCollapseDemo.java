@@ -42,7 +42,7 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeFunction;
+import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
@@ -212,13 +212,13 @@ public class VertexCollapseDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
-    class ClusterVertexShapeFunction<V> extends EllipseVertexShapeFunction<V> {
+    class ClusterVertexShapeFunction<V> extends EllipseVertexShapeTransformer<V> {
 
         ClusterVertexShapeFunction() {
             setSizeTransformer(new ClusterVertexSizeFunction<V>(20));
         }
         @Override
-        public Shape getShape(V v) {
+        public Shape transform(V v) {
             if(v instanceof Graph) {
                 int size = ((Graph)v).getVertices().size();
                 if (size < 8) {   
@@ -229,7 +229,7 @@ public class VertexCollapseDemo extends JApplet {
                     return factory.getRegularStar(v, size);
                 }
             }
-            return super.getShape(v);
+            return super.transform(v);
         }
     }
     

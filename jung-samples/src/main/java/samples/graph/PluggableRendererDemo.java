@@ -63,13 +63,13 @@ import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.AbstractVertexShapeFunction;
+import edu.uci.ics.jung.visualization.decorators.AbstractVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.GradientEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.GradientEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.NumberEdgeValueStringer;
 import edu.uci.ics.jung.visualization.decorators.NumberVertexValueStringer;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
@@ -270,11 +270,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         // uses a gradient edge if unpicked, otherwise uses picked selection
         edgeDrawPaint = 
             new GradientPickedEdgePaintFunction<Integer,Number>(
-                    new PickableEdgePaintFunction<Integer,Number>(
+                    new PickableEdgePaintTransformer<Integer,Number>(
                             vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
         edgeFillPaint = 
             new GradientPickedEdgePaintFunction<Integer,Number>(
-                    new PickableEdgePaintFunction<Integer,Number>(
+                    new PickableEdgePaintTransformer<Integer,Number>(
                             vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
         
         vv.getRenderContext().setVertexFillPaintFunction(seedFillColor);
@@ -962,7 +962,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
      * @author Joshua O'Madadhain
      */
     private final static class VertexShapeSizeAspect<V,E>
-    extends AbstractVertexShapeFunction <V>
+    extends AbstractVertexShapeTransformer <V>
     implements
     //VertexSizeFunction<V>, VertexAspectRatioFunction<V>, 
     org.apache.commons.collections15.Transformer<V,Shape>
@@ -1111,7 +1111,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
     }
     
-    public class GradientPickedEdgePaintFunction<V,E> extends GradientEdgePaintFunction<V,E> 
+    public class GradientPickedEdgePaintFunction<V,E> extends GradientEdgePaintTransformer<V,E> 
     {
         private org.apache.commons.collections15.Transformer<E,Paint> defaultFunc;
         protected boolean fill_edge = false;

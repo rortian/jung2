@@ -47,12 +47,12 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.AbstractEdgeShapeFunction;
-import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValue;
+import edu.uci.ics.jung.visualization.decorators.AbstractEdgeShapeTransformer;
+import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.CircleLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
@@ -108,8 +108,8 @@ public class EdgeLabelDemo extends JApplet {
             }
         };
         vv.getRenderContext().setEdgeStringer(stringer);
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         
@@ -207,7 +207,7 @@ public class EdgeLabelDemo extends JApplet {
 
             public void stateChanged(ChangeEvent e) {
                 JSlider s = (JSlider)e.getSource();
-                AbstractEdgeShapeFunction aesf = (AbstractEdgeShapeFunction)vv.getRenderContext().getEdgeShapeFunction();
+                AbstractEdgeShapeTransformer aesf = (AbstractEdgeShapeTransformer)vv.getRenderContext().getEdgeShapeFunction();
                 aesf.setControlOffsetIncrement(s.getValue());
                 vv.repaint();
             }
@@ -266,7 +266,7 @@ public class EdgeLabelDemo extends JApplet {
      *
      *
      */
-    class MutableDirectionalEdgeValue extends ConstantDirectionalEdgeValue<Integer,Number> {
+    class MutableDirectionalEdgeValue extends ConstantDirectionalEdgeValueTransformer<Integer,Number> {
         BoundedRangeModel undirectedModel = new DefaultBoundedRangeModel(5,0,0,10);
         BoundedRangeModel directedModel = new DefaultBoundedRangeModel(7,0,0,10);
         

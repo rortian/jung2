@@ -37,8 +37,8 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -103,8 +103,8 @@ public class SubLayoutDemo extends JApplet {
         
         vv.setPickedVertexState(new ClusterListener<String,Number>(clusteringLayout));
         ps = vv.getPickedVertexState();
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintFunction<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintFunction<String>(vv.getPickedVertexState(), 
+        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
+        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), 
                 Color.red, Color.yellow));
         vv.setBackground(Color.white);
         
