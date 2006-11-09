@@ -26,8 +26,8 @@ import edu.uci.ics.graph.predicates.GraphPredicate;
 import edu.uci.ics.graph.predicates.TrueGraphPredicate;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
-import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValue;
-import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowFunction;
+import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
+import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -38,33 +38,18 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 /**
  */
+@SuppressWarnings("unchecked")
 public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
 	protected float arrowPlacementTolerance = 1;
     protected GraphPredicate<V,E> vertexIncludePredicate = new TrueGraphPredicate<V,E>();
-    protected Transformer<V,Stroke> vertexStrokeFunction = 
+    protected Transformer<V,Stroke> vertexStrokeTransformer = 
     	new ConstantTransformer(new BasicStroke(1.0f));
     
-    protected Transformer<V,Shape> vertexShapeFunction = 
-//        new ChainedTransformer(new Transformer[]{
+    protected Transformer<V,Shape> vertexShapeTransformer = 
         		new ConstantTransformer(
-//        }
         		new Ellipse2D.Float(-10,-10,20,20));
-//    , 
-//        		new Transformer<Shape,Shape>(){
-//
-//					public Shape transform(Shape input) {
-//						// scale to constant size
-//						return input;
-//					}}, 
-//        		new Transformer<Shape,Shape>() {
-//
-//					public Shape transform(Shape input) {
-//						// scale with aspect ratio
-//						return input;
-//					}}});
-//                new ConstantVertexSizeFunction<V>(20),
-//                new ConstantVertexAspectRatioFunction<V>(1.0f));
+
     protected Transformer<V,String> vertexStringer = new ConstantTransformer(null);
     protected Transformer<V,Icon> vertexIconFunction;
     protected Transformer<V,Font> vertexFontFunction = 
@@ -78,14 +63,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected Transformer<E,Stroke> edgeStrokeFunction = new ConstantTransformer(new BasicStroke(1.0f));
     
     protected Transformer<EdgeContext<V,E>,Shape> edgeArrowFunction = 
-        new DirectionalEdgeArrowFunction<V,E>(10, 8, 4);
+        new DirectionalEdgeArrowTransformer<V,E>(10, 8, 4);
     
     protected GraphPredicate<V,E> edgeArrowPredicate = new DirectedEdgeArrowPredicate<V,E>();
     protected GraphPredicate<V,E> edgeIncludePredicate = new TrueGraphPredicate<V,E>();
     protected Transformer<E,Font> edgeFontFunction =
         new ConstantTransformer(new Font("Helvetica", Font.PLAIN, 12));
     protected Transformer<EdgeContext<V,E>,Number> edgeLabelClosenessFunction = 
-        new ConstantDirectionalEdgeValue<V,E>(0.5, 0.65);
+        new ConstantDirectionalEdgeValueTransformer<V,E>(0.5, 0.65);
     protected Transformer<EdgeContext<V,E>,Shape> edgeShapeFunction = 
         new EdgeShape.QuadCurve<V,E>();
     protected Transformer<E,Paint> edgeFillPaintFunction =
@@ -494,14 +479,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexShapeFunction()
      */
     public Transformer<V,Shape> getVertexShapeFunction() {
-        return vertexShapeFunction;
+        return vertexShapeTransformer;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexShapeFunction(edu.uci.ics.jung.visualization.decorators.VertexShapeFunction)
      */
     public void setVertexShapeFunction(Transformer<V,Shape> vertexShapeFunction) {
-        this.vertexShapeFunction = vertexShapeFunction;
+        this.vertexShapeTransformer = vertexShapeFunction;
     }
 
     /* (non-Javadoc)
@@ -522,14 +507,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexStrokeFunction()
      */
     public Transformer<V,Stroke> getVertexStrokeFunction() {
-        return vertexStrokeFunction;
+        return vertexStrokeTransformer;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexStrokeFunction(edu.uci.ics.jung.visualization.decorators.VertexStrokeFunction)
      */
     public void setVertexStrokeFunction(Transformer<V,Stroke> vertexStrokeFunction) {
-        this.vertexStrokeFunction = vertexStrokeFunction;
+        this.vertexStrokeTransformer = vertexStrokeFunction;
     }
 
     /* (non-Javadoc)

@@ -31,7 +31,7 @@ import edu.uci.ics.jung.visualization.FourPassImageShaper;
  * @author Tom Nelson - RABA Technologies
  *
  *
- */public class VertexIconShapeFunction<V> implements Transformer<V,Shape> {
+ */public class VertexIconShapeTransformer<V> implements Transformer<V,Shape> {
      
      protected Map<Image, Shape> shapeMap = new HashMap<Image, Shape>();
      protected Map<V,Icon> iconMap;
@@ -40,7 +40,7 @@ import edu.uci.ics.jung.visualization.FourPassImageShaper;
       * 
       *
       */
-    public VertexIconShapeFunction(Transformer<V,Shape> delegate) {
+    public VertexIconShapeTransformer(Transformer<V,Shape> delegate) {
         this.delegate = delegate;
     }
 

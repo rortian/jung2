@@ -54,7 +54,7 @@ public class EdgeShape<V,E>  {
      * An edge shape that renders as a straight line between
      * the vertex endpoints.
      */
-    public static class Line<V,E> extends AbstractEdgeShapeFunction<V,E> {
+    public static class Line<V,E> extends AbstractEdgeShapeTransformer<V,E> {
 
         /**
          * Singleton instance of the Line2D edge shape
@@ -65,7 +65,8 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * SimpleLoop shared instance.
          */
-        public Shape transform(EdgeContext<V,E> context) {
+        @SuppressWarnings("unchecked")
+		public Shape transform(EdgeContext<V,E> context) {
         	Graph<V,E> graph = context.graph;
         	E e = context.edge;
             
@@ -83,7 +84,7 @@ public class EdgeShape<V,E>  {
      * vertex endpoints.
      */
     public static class BentLine<V,E> 
-             extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
+             extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
         
         /**
          * singleton instance of the BentLine shape
@@ -92,7 +93,8 @@ public class EdgeShape<V,E>  {
         
         protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
-        public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+        @SuppressWarnings("unchecked")
+		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
             loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
         }
@@ -102,7 +104,8 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
          */
-        public Shape transform(EdgeContext<V,E> context) {
+        @SuppressWarnings("unchecked")
+		public Shape transform(EdgeContext<V,E> context) {
         	Graph<V,E> graph = context.graph;
         	E e = context.edge;
             Pair<V> endpoints = graph.getEndpoints(e);
@@ -128,7 +131,7 @@ public class EdgeShape<V,E>  {
      * endpoints.
      */
     public static class QuadCurve<V,E>
-           extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
+           extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
         
         /**
          * singleton instance of the QuadCurve shape
@@ -137,7 +140,8 @@ public class EdgeShape<V,E>  {
         
         protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
-        public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+        @SuppressWarnings("unchecked")
+		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
             loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
         }
@@ -147,7 +151,8 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
          */
-        public Shape transform(EdgeContext<V,E> context) {
+        @SuppressWarnings("unchecked")
+		public Shape transform(EdgeContext<V,E> context) {
         	Graph<V,E> graph = context.graph;
         	E e = context.edge;
             Pair<V> endpoints = graph.getEndpoints(e);
@@ -174,7 +179,7 @@ public class EdgeShape<V,E>  {
      * giving a 'spiral' effect.
      */
     public static class CubicCurve<V,E> 
-         extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
+         extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
         
         /**
          * singleton instance of the CubicCurve edge shape
@@ -183,7 +188,8 @@ public class EdgeShape<V,E>  {
         
         protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
-        public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+        @SuppressWarnings("unchecked")
+		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
             loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
        }
@@ -193,7 +199,8 @@ public class EdgeShape<V,E>  {
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
          */
-        public Shape transform(EdgeContext<V,E> context) {
+        @SuppressWarnings("unchecked")
+		public Shape transform(EdgeContext<V,E> context) {
         	Graph<V,E> graph = context.graph;
         	E e = context.edge;
            Pair<V> endpoints = graph.getEndpoints(e);
@@ -220,7 +227,7 @@ public class EdgeShape<V,E>  {
 	 * 
      * @author Tom Nelson - RABA Technologies
      */
-    public static class SimpleLoop<V,E> extends AbstractEdgeShapeFunction<V,E> {
+    public static class SimpleLoop<V,E> extends AbstractEdgeShapeTransformer<V,E> {
         
         /**
          * singleton instance of the SimpleLoop shape
@@ -241,7 +248,7 @@ public class EdgeShape<V,E>  {
      * center of the vertex. Parallel instances will not overlap.
      */
     public static class Loop<V,E>
-           extends AbstractEdgeShapeFunction<V,E> implements ParallelRendering<V,E> {
+           extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
         
         /**
          * singleton instance of the Loop shape
@@ -284,7 +291,7 @@ public class EdgeShape<V,E>  {
      * and as a "bowtie" shape for undirected edges.
      * @author Joshua O'Madadhain
      */
-    public static class Wedge<V,E> extends AbstractEdgeShapeFunction<V,E> {
+    public static class Wedge<V,E> extends AbstractEdgeShapeTransformer<V,E> {
         private static GeneralPath triangle;
         private static GeneralPath bowtie;
         

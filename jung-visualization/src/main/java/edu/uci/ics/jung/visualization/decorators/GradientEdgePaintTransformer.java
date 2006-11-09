@@ -31,7 +31,7 @@ import edu.uci.ics.jung.visualization.transform.Transformer;
  * 
  * @author Joshua O'Madadhain
  */
-public class GradientEdgePaintFunction<V, E> 
+public class GradientEdgePaintTransformer<V, E> 
 	implements org.apache.commons.collections15.Transformer<E,Paint>
 {
     protected Color c1;
@@ -39,7 +39,7 @@ public class GradientEdgePaintFunction<V, E>
     protected VisualizationViewer<V,E> vv;
     protected Transformer transformer;
     
-    public GradientEdgePaintFunction(Color c1, Color c2, 
+    public GradientEdgePaintTransformer(Color c1, Color c2, 
             VisualizationViewer<V,E> vv)
     {
         this.c1 = c1;

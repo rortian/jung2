@@ -31,8 +31,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintFunction;
-import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintFunction;
+import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -197,8 +197,8 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		setPickedVertexState(new MultiPickedState<V>());
 		setPickedEdgeState(new MultiPickedState<E>());
         
-        renderContext.setEdgeDrawPaintFunction(new PickableEdgePaintFunction<V,E>(getPickedEdgeState(), Color.black, Color.cyan));
-        renderContext.setVertexFillPaintFunction(new PickableVertexPaintFunction<V>(getPickedVertexState(), 
+        renderContext.setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<V,E>(getPickedEdgeState(), Color.black, Color.cyan));
+        renderContext.setVertexFillPaintFunction(new PickableVertexPaintTransformer<V>(getPickedVertexState(), 
                 Color.red, Color.yellow));
         renderContext.setViewTransformer(viewTransformer);
 

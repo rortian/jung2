@@ -22,7 +22,7 @@ import edu.uci.ics.jung.visualization.VertexShapeFactory;
  * 
  * @author Joshua O'Madadhain
  */
-public abstract class AbstractVertexShapeFunction<V> implements SettableVertexShapeFunction<V>
+public abstract class AbstractVertexShapeTransformer<V> implements SettableVertexShapeTransformer<V>
 {
     protected Transformer<V,Integer> vsf;
     protected Transformer<V,Float> varf;
@@ -30,14 +30,15 @@ public abstract class AbstractVertexShapeFunction<V> implements SettableVertexSh
     public final static int DEFAULT_SIZE = 8;
     public final static float DEFAULT_ASPECT_RATIO = 1.0f;
     
-    public AbstractVertexShapeFunction(Transformer<V,Integer> vsf, Transformer<V,Float> varf)
+    public AbstractVertexShapeTransformer(Transformer<V,Integer> vsf, Transformer<V,Float> varf)
     {
         this.vsf = vsf;
         this.varf = varf;
         factory = new VertexShapeFactory<V>(vsf, varf);
     }
 
-    public AbstractVertexShapeFunction()
+    @SuppressWarnings("unchecked")
+	public AbstractVertexShapeTransformer()
     {
         this(new ConstantTransformer(DEFAULT_SIZE), 
                 new ConstantTransformer(DEFAULT_ASPECT_RATIO));

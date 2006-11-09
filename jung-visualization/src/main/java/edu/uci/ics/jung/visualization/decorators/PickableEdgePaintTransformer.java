@@ -26,7 +26,7 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  * @author Joshua O'Madadhain
  * 
  */
-public class PickableEdgePaintFunction<V,E> implements Transformer<E,Paint> {
+public class PickableEdgePaintTransformer<V,E> implements Transformer<E,Paint> {
     protected PickedInfo<E> pi;
     protected Paint draw_paint;
     protected Paint picked_paint;
@@ -37,7 +37,7 @@ public class PickableEdgePaintFunction<V,E> implements Transformer<E,Paint> {
      * @param draw_paint    <code>Paint</code> used to draw edge shapes
      * @param picked_paint  <code>Paint</code> used to draw picked edge shapes
      */
-    public PickableEdgePaintFunction(PickedInfo<E> pi, Paint draw_paint, Paint picked_paint) {
+    public PickableEdgePaintTransformer(PickedInfo<E> pi, Paint draw_paint, Paint picked_paint) {
         if (pi == null)
             throw new IllegalArgumentException("PickedInfo instance must be non-null");
         this.pi = pi;

@@ -25,7 +25,7 @@ import org.apache.commons.collections15.Transformer;
  *
  *
  */
-public class DefaultVertexIconFunction<V> implements Transformer<V,Icon> {
+public class DefaultVertexIconTransformer<V> implements Transformer<V,Icon> {
      
     /**
      * icon storage

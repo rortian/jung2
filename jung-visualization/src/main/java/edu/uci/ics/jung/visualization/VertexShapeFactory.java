@@ -50,7 +50,8 @@ public class VertexShapeFactory<V>
      * Creates a <code>VertexShapeFactory</code> with a constant size of
      * 10 and a constant aspect ratio of 1.
      */
-    public VertexShapeFactory()
+    @SuppressWarnings("unchecked")
+	public VertexShapeFactory()
     {
         this(new ConstantTransformer(10), 
             new ConstantTransformer(1.0f));

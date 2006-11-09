@@ -19,22 +19,19 @@ import org.apache.commons.collections15.Transformer;
  * 
  * @author Joshua O'Madadhain
  */
-public class EllipseVertexShapeFunction<V> extends AbstractVertexShapeFunction<V>
+public class EllipseVertexShapeTransformer<V> extends AbstractVertexShapeTransformer<V>
 	implements Transformer<V,Shape>
 {
-    public EllipseVertexShapeFunction() 
+    public EllipseVertexShapeTransformer() 
     {
     }
-    public EllipseVertexShapeFunction(Transformer<V,Integer> vsf, Transformer<V,Float> varf)
+    public EllipseVertexShapeTransformer(Transformer<V,Integer> vsf, Transformer<V,Float> varf)
     {
         super(vsf, varf);
     }
     
-    public Shape getShape(V v)
+    public Shape transform(V v)
     {
         return factory.getEllipse(v);
     }
-	public Shape transform(V input) {
-		return getShape(input);
-	}
 }

@@ -20,7 +20,7 @@ import org.apache.commons.collections15.Transformer;
  * 
  * @author Joshua O'Madadhain
  */
-public class InterpolatingVertexSizeFunction<V> implements Transformer<V,Integer>
+public class InterpolatingVertexSizeTransformer<V> implements Transformer<V,Integer>
 {
     protected double min;
     protected double max;
@@ -28,7 +28,7 @@ public class InterpolatingVertexSizeFunction<V> implements Transformer<V,Integer
     protected int min_size;
     protected int size_diff;
     
-    public InterpolatingVertexSizeFunction(NumberVertexValue<V> nvv, 
+    public InterpolatingVertexSizeTransformer(NumberVertexValue<V> nvv, 
             int min_size, int max_size)
     {
         super();

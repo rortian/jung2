@@ -22,7 +22,7 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  * parameters given in the constructor, so that picked and
  * non-picked vertices can be made to look different.
  */
-public class PickableVertexPaintFunction<V> implements Transformer<V,Paint> {
+public class PickableVertexPaintTransformer<V> implements Transformer<V,Paint> {
 
 //    protected Paint draw_paint;
     protected Paint fill_paint;
@@ -36,7 +36,7 @@ public class PickableVertexPaintFunction<V> implements Transformer<V,Paint> {
      * @param fill_paint    <code>Paint</code> used to fill vertex shapes
      * @param picked_paint  <code>Paint</code> used to fill picked vertex shapes
      */
-    public PickableVertexPaintFunction(PickedInfo<V> pi, 
+    public PickableVertexPaintTransformer(PickedInfo<V> pi, 
 //    		Paint draw_paint, 
     		Paint fill_paint, Paint picked_paint)
     {

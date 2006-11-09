@@ -21,7 +21,7 @@ import org.apache.commons.collections15.Transformer;
  * 
  * @author Joshua O'Madadhain
  */
-public interface SettableVertexShapeFunction<V> extends Transformer<V,Shape>
+public interface SettableVertexShapeTransformer<V> extends Transformer<V,Shape>
 {
     public abstract void setSizeTransformer(Transformer<V,Integer> vsf);
 

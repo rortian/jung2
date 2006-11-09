@@ -23,11 +23,11 @@ import edu.uci.ics.jung.visualization.ArrowFactory;
  * 
  * @author Joshua O'Madadhain
  */
-public class DirectionalEdgeArrowFunction<V,E> implements Transformer<EdgeContext<V,E>,Shape> {
+public class DirectionalEdgeArrowTransformer<V,E> implements Transformer<EdgeContext<V,E>,Shape> {
     protected Shape undirected_arrow;
     protected Shape directed_arrow;
     
-    public DirectionalEdgeArrowFunction(int length, int width, int notch_depth)
+    public DirectionalEdgeArrowTransformer(int length, int width, int notch_depth)
     {
         directed_arrow = ArrowFactory.getNotchedArrow(width, length, notch_depth);
         undirected_arrow = ArrowFactory.getWedgeArrow(width, length);
