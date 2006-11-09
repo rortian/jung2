@@ -11,6 +11,7 @@
  */
 package edu.uci.ics.jung.graph;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,9 +22,10 @@ import java.util.Set;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
 
+@SuppressWarnings("serial")
 public class SimpleUndirectedSparseGraph<V,E> 
     extends SimpleAbstractSparseGraph<V,E>
-    implements UndirectedGraph<V,E>
+    implements UndirectedGraph<V,E>, Serializable
 {
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
