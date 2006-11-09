@@ -129,7 +129,8 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
         currentIteration = 0;
 	}
 
-    protected void initializeLocations() {
+    @SuppressWarnings("unchecked")
+	protected void initializeLocations() {
 		super.initializeLocations();
 
 		Dimension d = getCurrentSize();

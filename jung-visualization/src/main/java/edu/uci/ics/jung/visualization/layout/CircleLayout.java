@@ -115,6 +115,7 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 
 	protected void initialize_local() {}
 
+	@SuppressWarnings("unchecked")
 	protected void initializeLocations() {
 		super.initializeLocations();
 
