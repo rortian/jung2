@@ -29,7 +29,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
 
 //    private static final Object SPRING_KEY = "temp_edu.uci.ics.jung.Spring_Visualization_Key";
     protected double stretch = 0.70;
-    protected LengthFunction lengthFunction;
+    protected LengthFunction<E> lengthFunction;
     protected int repulsion_range = 100;
     protected double force_multiplier = 1.0 / 3.0;
     
@@ -62,7 +62,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * @param f
      *            the length function
      */
-    public SpringLayout(Graph<V,E> g, LengthFunction f) {
+    public SpringLayout(Graph<V,E> g, LengthFunction<E> f) {
         super(g);
         this.lengthFunction = f;
     }
@@ -141,8 +141,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     protected void initialize_local() {
         try {
         	for(E e : getGraph().getEdges()) {
-//        for (Iterator iter = getGraph().getEdges().iterator(); iter.hasNext();) {
-//            Edge e = (Edge) iter.next();
             SpringEdgeData<E> sed = getSpringData(e);
             if (sed == null) {
                 sed = new SpringEdgeData<E>(e);
@@ -179,7 +177,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
 
     /* ------------------------- */
 
-    protected void calcEdgeLength(SpringEdgeData<E> sed, LengthFunction f) {
+    protected void calcEdgeLength(SpringEdgeData<E> sed, LengthFunction<E> f) {
         sed.length = f.getLength(sed.e);
     }
 
