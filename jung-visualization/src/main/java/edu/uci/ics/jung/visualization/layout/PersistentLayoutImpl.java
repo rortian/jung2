@@ -49,15 +49,8 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
     /**
      * a container for Vertices
      */
-    protected Map<Integer,Point> map;
+    protected Map<V,Point> map;
     
-    protected Map<V, Point2D> locations = new HashMap<V, Point2D>();
-    
-    /**
-     * a key for this class
-     */
-    protected Object key;
-
     /**
      * a collection of Vertices that should not move
      */
@@ -77,7 +70,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      */
     public PersistentLayoutImpl(Layout<V,E> layout) {
         super(layout);
-        this.map = new HashMap<Integer,Point>();
+        this.map = new HashMap<V,Point>();
         this.dontmove = new HashSet<V>();
         this.elementAccessor = new RadiusGraphElementAccessor<V,E>();
         if(layout instanceof ChangeEventSupport) {
@@ -96,15 +89,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      */
     protected void initializeLocations() {
         for(V v : getGraph().getVertices()) {
-//        for (Iterator iter = getGraph().getVertices().iterator(); iter
-//                .hasNext();) {
-//            Vertex v = (Vertex) iter.next();
-
-            Point2D coord = locations.get(v);
-            if (coord == null) {
-                coord = new Point2D.Float();
-                locations.put(v, coord);
-            }
+            Point2D coord = delegate.getLocation(v);
             if (!dontmove.contains(v))
                 initializeLocation(v, coord, getCurrentSize());
         }
@@ -123,7 +108,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
     protected void initializeLocation(V v, Point2D coord, Dimension d) {
         double x;
         double y;
-        Point point = map.get(new Integer(v.hashCode()));
+        Point point = map.get(v);
         if (point == null) {
             x = Math.random() * d.getWidth();
             y = Math.random() * d.getHeight();
@@ -140,12 +125,11 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * @throws an IOException if the file cannot be used
      */
     public void persist(String fileName) throws IOException {
-//        Set set = getGraph().getVertices();
+
         for(V v : getGraph().getVertices()) {
-//        for (Iterator iterator = set.iterator(); iterator.hasNext();) {
-//            Vertex v = (Vertex) iterator.next();
+
             Point p = new Point(getX(v), getY(v));
-            map.put(new Integer(v.hashCode()), p);
+            map.put(v, p);
         }
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
                 fileName));
@@ -159,7 +143,8 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * @throws IOException for file problems
      * @throws ClassNotFoundException for classpath problems
      */
-    public void restore(String fileName) throws IOException,
+    @SuppressWarnings("unchecked")
+	public void restore(String fileName) throws IOException,
             ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
                 fileName));
@@ -167,6 +152,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
         ois.close();
         initializeLocations();
         locked = true;
+        fireStateChanged();
     }
 
     public void lock(boolean locked) {
@@ -204,7 +190,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
 
     public void update() {
         if(delegate instanceof LayoutMutable) {
-            ((LayoutMutable)delegate).update();
+            ((LayoutMutable<V,E>)delegate).update();
         }
     }
 
