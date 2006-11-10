@@ -28,7 +28,6 @@ import javax.swing.event.ChangeListener;
 
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
-import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
 
 /**
@@ -42,9 +41,6 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  */
 public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
     implements PersistentLayout<V,E> {
-
-    protected DefaultChangeEventSupport changeSupport =
-        new DefaultChangeEventSupport(this);
 
     /**
      * a container for Vertices
