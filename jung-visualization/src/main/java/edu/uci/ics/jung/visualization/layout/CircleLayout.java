@@ -20,8 +20,6 @@ package edu.uci.ics.jung.visualization.layout;
  * This source is under the same license with JUNG.
  * http://jung.sourceforge.net/license.txt for a description.
  */
-//package edu.uci.ics.jung.visualization;
-//package org.ingrid.nexas.graph;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -42,9 +40,7 @@ import edu.uci.ics.graph.Graph;
  * @author Masanori Harada
  */
 public class CircleLayout<V, E> extends AbstractLayout<V,E> {
-//	private static final Object CIRCLE_KEY =
-//	"jung.Circle_Visualization_Key";
-//	private Pair key;
+
 	private double radius;
 	
 	Map<V, CircleVertexData> circleVertexDataMap =
@@ -52,7 +48,6 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 
 	public CircleLayout(Graph<V,E> g) {
 		super(g);
-//		key = new Pair(this, CIRCLE_KEY);
 	}
 
 	public String getStatus() {
@@ -94,22 +89,9 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 		Collections.shuffle(list);
 	}
 
-	/**
-	 * Returns a visualization-specific key (that is, specific both
-	 * to this instance and <tt>AbstractLayout</tt>) that can be used
-	 * to access UserData related to the <tt>AbstractLayout</tt>.
-	 */
-//	public Object getKey() {
-//		if (key == null)
-//			key = new Pair(this, CIRCLE_KEY);
-//		return key;
-//	}
-
 	protected void initialize_local_vertex(V v) {
-//		if (v.getUserDatum(getKey()) == null) {
 		if(circleVertexDataMap.get(v) == null) {
 			circleVertexDataMap.put(v, new CircleVertexData());
-//			v.addUserDatum(getKey(), new CircleVertexData(), UserData.REMOVE);
 		}
 	}
 
@@ -135,8 +117,6 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 			Point2D coord = getCoordinates(vertices[i]);
 
 			double angle = (2 * Math.PI * i) / vertices.length;
-//			coord.setX(Math.cos(angle) * radius + width / 2);
-//			coord.setY(Math.sin(angle) * radius + height / 2);
 			
 			coord.setLocation(Math.cos(angle) * radius + width / 2,
 				Math.sin(angle) * radius + height / 2);
@@ -147,7 +127,6 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 	}
 
 	public CircleVertexData getCircleData(V v) {
-//		return (CircleVertexData) (v.getUserDatum(getKey()));
 		return circleVertexDataMap.get(v);
 	}
 

@@ -96,12 +96,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	public void setRoot(Graph<V,E> g) {
 		numRoots = 0;
 		for(V v : g.getVertices()) {
-//		Collection<V> verts = g.getVertices();
-//		Iterator iter = verts.iterator();
-//		V v;
-//		Set successors;
-//		while (iter.hasNext()) {
-//			v = (Vertex) iter.next();
 			Collection<V> successors = getGraph().getSuccessors(v);//v.getSuccessors();
 			if (successors.size() == 0) {
 				setRoot(v);
@@ -115,7 +109,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 */
 
 	public void setRoot(V v) {
-//		v.setUserDatum(MINIMUMLEVELKEY, new Integer(0), UserData.REMOVE);
 		minLevels.put(v, new Integer(0));
 		//
 		// Iterate through now, setting all the levels.
@@ -132,15 +125,8 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
 	public void propagateMinimumLevel(V v) {
 		int level = minLevels.get(v).intValue();
-//		int level = ((Integer) v.getUserDatum(MINIMUMLEVELKEY)).intValue();
-//		Set<V> predecessors = getGraph().getPredecessors(v);//v.getPredecessors();
 		for(V child : getGraph().getPredecessors(v)) {
-//		Iterator iter = predecessors.iterator();
-//		Vertex child; // odd to use predecessors for child, isn't it. Sorry!
-//		while (iter.hasNext()) {
-//			child = (Vertex) iter.next();
 			int oldLevel, newLevel;
-//			Object o = child.getUserDatum(MINIMUMLEVELKEY);
 			Number o = minLevels.get(child);
 			if (o != null)
 				oldLevel = o.intValue();
@@ -148,10 +134,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 				oldLevel = 0;
 			newLevel = Math.max(oldLevel, level + 1);
 			minLevels.put(child, new Integer(newLevel));
-//			child.setUserDatum(
-//				MINIMUMLEVELKEY,
-//				new Integer(newLevel),
-//				UserData.REMOVE);
+
 			if (newLevel > graphHeight)
 				graphHeight = newLevel;
 			propagateMinimumLevel(child);
@@ -169,15 +152,12 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 		V v,
 		Point2D coord,
 		Dimension d) {
-		//if (v.getUserDatum(MINIMUMLEVELKEY)==null) setRoot(getGraph());
+
 		int level = minLevels.get(v).intValue();
-//		int level = ((Integer) v.getUserDatum(MINIMUMLEVELKEY)).intValue();
 		int minY = (int) (level * d.getHeight() / (graphHeight * SPACEFACTOR));
 		double x = Math.random() * d.getWidth();
 		double y = Math.random() * (d.getHeight() - minY) + minY;
 		coord.setLocation(x,y);
-//		coord.setX(x);
-//		coord.setY(y);
 	}
 
 	/**
@@ -185,15 +165,10 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 */
 	protected void initialize_local() {
 		for(E e : getGraph().getEdges()) {
-//		for (Iterator iter = getGraph().getEdges().iterator();
-//			iter.hasNext();
-//			) {
-//			Edge e = (Edge) iter.next();
 			SpringEdgeData<E> sed = getSpringData(e);
 			if (sed == null) {
 				sed = new SpringEdgeData<E>(e);
 				springEdgeData.put(e, sed);
-//				e.addUserDatum(getSpringKey(), sed, UserData.REMOVE);
 			}
 			calcEdgeLength(sed, lengthFunction);
 		}
@@ -212,10 +187,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
 		synchronized (getCurrentSize()) {
 
-			// int showingNodes = 0;
 			for(V v : getVisibleVertices()) {
-//			for (Iterator i = getVisibleVertices().iterator(); i.hasNext();) {
-//				Vertex v = (Vertex) i.next();
 				if (isLocked(v))
 					continue;
 				SpringLayout.SpringVertexData vd = getSpringData(v);
@@ -227,7 +199,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 				// (JY addition: three lines are new)
 				int level =
 					minLevels.get(v).intValue();
-//					((Integer) v.getUserDatum(MINIMUMLEVELKEY)).intValue();
 				int minY = (int) (level * height / (graphHeight * SPACEFACTOR));
 				int maxY =
 					level == 0
@@ -250,36 +221,27 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 				meanSquareVel += (vd.dx * vd.dx + vd.dy * vd.dy);
 
 				// keeps nodes from moving any faster than 5 per time unit
-//				xyd.addX(Math.max(-5, Math.min(5, vd.dx)));
-//				xyd.addY(Math.max(-5, Math.min(5, vd.dy)));
 				xyd.setLocation(xyd.getX()+Math.max(-5, Math.min(5, vd.dx)) , xyd.getY()+Math.max(-5, Math.min(5, vd.dy)) );
 
 				if (xyd.getX() < 0) {
 					xyd.setLocation(0, xyd.getY());
-//					xyd.setX(0);
 				} else if (xyd.getX() > width) {
 					xyd.setLocation(width, xyd.getY());
-//					xyd.setX(width);
 				}
 
 				// (JY addition: These two lines replaced 0 with minY)
 				if (xyd.getY() < minY) {
 					xyd.setLocation(xyd.getX(), minY);
-//					xyd.setY(minY);
 					// (JY addition: replace height with maxY)
 				} else if (xyd.getY() > maxY) {
 					xyd.setLocation(xyd.getX(), maxY);
-//					xyd.setY(maxY);
 				}
 
 				// (JY addition: if there's only one root, anchor it in the
 				// middle-top of the screen)
 				if (numRoots == 1 && level == 0) {
 					xyd.setLocation(width/2, xyd.getY());
-//					xyd.setX(width / 2);
-					//xyd.setY(0);
 				}
-
 			}
 		}
 		//System.out.println("MeanSquareAccel="+meanSquareVel);
@@ -313,8 +275,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	public void forceMove(V picked, int x, int y) {
 		Point2D coord = getCoordinates(picked);
 		coord.setLocation(x,y);
-//		coord.setX(x);
-//		coord.setY(y);
 		stoppingIncrements = false;
 	}
 
@@ -326,8 +286,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
 	protected void relaxEdges() {
 		for(E e : getVisibleEdges()) {
-//		for (Iterator i = getVisibleEdges().iterator(); i.hasNext();) {
-//			Edge e = (Edge) i.next();
 
 			V v1 = getAVertex(e);
 			V v2 = getGraph().getOpposite(v1, e);//e.getOpposite(v1);
@@ -341,10 +299,8 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			// JY addition.
 			int level1 =
 				minLevels.get(v1).intValue();
-//				((Integer) v1.getUserDatum(MINIMUMLEVELKEY)).intValue();
 			int level2 =
 				minLevels.get(v2).intValue();
-//				((Integer) v2.getUserDatum(MINIMUMLEVELKEY)).intValue();
 
 			double desiredLen = getLength(e);
 			// desiredLen *= Math.pow( 1.1, (v1.degree() + v2.degree()) );
@@ -361,7 +317,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
 			f = f * Math.pow(stretch / 100.0, 
 					(getGraph().degree(v1) + getGraph().degree(v2) -2));
-//					(v1.degree() + v2.degree() - 2));
 
 			// JY addition. If this is an edge which stretches a long way,
 			// don't be so concerned about it.

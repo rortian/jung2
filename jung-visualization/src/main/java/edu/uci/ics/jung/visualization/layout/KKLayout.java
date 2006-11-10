@@ -147,9 +147,6 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 		    try {
 		        int index = 0;
                 for(V v : getGraph().getVertices()) {
-//		        for (Iterator iter = getGraph().getVertices().iterator();
-//		        iter.hasNext(); ) {
-//		            V v = (Vertex) iter.next();
 		            Point2D xyd = getCoordinates(v);
 		            vertices[index] = v;
 		            xydata[index] = xyd;
@@ -216,12 +213,9 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 			double[] dxy = calcDeltaXY(pm);
 			xydata[pm].setLocation(xydata[pm].getX()+dxy[0], xydata[pm].getY()+dxy[1]);
             
-            //add(dxy[0], dxy[1]);
 			double deltam = calcDeltaM(pm);
             if (deltam < EPSILON)
                 break;
-            //if (dxy[0] > 1 || dxy[1] > 1 || dxy[0] < -1 || dxy[1] < -1)
-            //    break;
 		}
 
 		if (adjustForGravity)
@@ -240,13 +234,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 						double sx = xydata[i].getX();
 						double sy = xydata[i].getY();
                         xydata[i].setLocation(xydata[j]);
-//						xydata[i].setX(xydata[j].getX());
-//						xydata[i].setY(xydata[j].getY());
                         xydata[j].setLocation(sx, sy);
-//						xydata[j].setX(sx);
-//						xydata[j].setY(sy);
-						//System.out.println("SWAP " + i + " with " + j +
-						//				   " maxDeltaM=" + maxDeltaM);
 						return;
 					}
 				}
@@ -274,7 +262,6 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 		double diffy = height / 2 - gy;
 		for (int i = 0; i < xydata.length; i++) {
             xydata[i].setLocation(xydata[i].getX()+diffx, xydata[i].getY()+diffy);
-//			xydata[i].add(diffx, diffy);
 		}
 	}
 

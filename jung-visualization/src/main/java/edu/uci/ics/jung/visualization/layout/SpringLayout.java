@@ -27,7 +27,6 @@ import edu.uci.ics.graph.Graph;
  */
 public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMutable<V,E> {
 
-//    private static final Object SPRING_KEY = "temp_edu.uci.ics.jung.Spring_Visualization_Key";
     protected double stretch = 0.70;
     protected LengthFunction<E> lengthFunction;
     protected int repulsion_range = 100;
@@ -35,8 +34,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     
     Map<E, SpringEdgeData<E>> springEdgeData = new HashMap<E, SpringEdgeData<E>>();
     Map<V, SpringVertexData> springVertexData = new HashMap<V, SpringVertexData>();
-//    Map<V, Point2D> locations = new HashMap<V, Point2D>();
-    
 
     /**
      * Returns the status.
@@ -139,27 +136,19 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     }
     
     protected void initialize_local() {
-        try {
-        	for(E e : getGraph().getEdges()) {
-            SpringEdgeData<E> sed = getSpringData(e);
-            if (sed == null) {
-                sed = new SpringEdgeData<E>(e);
-                springEdgeData.put(e, sed);
-//                e.addUserDatum(getSpringKey(), sed, UserData.REMOVE);
-            }
-            calcEdgeLength(sed, lengthFunction);
-        }
-        } catch(ConcurrentModificationException cme) {
-            initialize_local();
-        }
+    	try {
+    		for(E e : getGraph().getEdges()) {
+    			SpringEdgeData<E> sed = getSpringData(e);
+    			if (sed == null) {
+    				sed = new SpringEdgeData<E>(e);
+    				springEdgeData.put(e, sed);
+    			}
+    			calcEdgeLength(sed, lengthFunction);
+    		}
+    	} catch(ConcurrentModificationException cme) {
+    		initialize_local();
+    	}
     }
-
-    Object key = null;
-
-//    public Object getSpringKey() {
-//        if (key == null) key = new Pair(this, SPRING_KEY);
-//        return key;
-//    }
 
     /**
      * (non-Javadoc)
@@ -171,7 +160,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
         if (vud == null) {
             vud = new SpringVertexData();
             springVertexData.put(v, vud);
-//            v.addUserDatum(getSpringKey(), vud, UserData.REMOVE);
         }
     }
 
@@ -188,26 +176,24 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * Relaxation step. Moves all nodes a smidge.
      */
     public void advancePositions() {
-        try {
-        	for(V v : getVisibleVertices()) {
-//        for (Iterator iter = getVisibleVertices().iterator(); iter.hasNext();) {
-//            Vertex v = (Vertex) iter.next();
-            SpringVertexData svd = getSpringData(v);
-            if (svd == null) {
-                continue;
-            }
-            svd.dx /= 4;
-            svd.dy /= 4;
-            svd.edgedx = svd.edgedy = 0;
-            svd.repulsiondx = svd.repulsiondy = 0;
-        }
-        } catch(ConcurrentModificationException cme) {
-            advancePositions();
-        }
+    	try {
+    		for(V v : getVisibleVertices()) {
+    			SpringVertexData svd = getSpringData(v);
+    			if (svd == null) {
+    				continue;
+    			}
+    			svd.dx /= 4;
+    			svd.dy /= 4;
+    			svd.edgedx = svd.edgedy = 0;
+    			svd.repulsiondx = svd.repulsiondy = 0;
+    		}
+    	} catch(ConcurrentModificationException cme) {
+    		advancePositions();
+    	}
 
-        relaxEdges();
-        calculateRepulsion();
-        moveNodes();
+    	relaxEdges();
+    	calculateRepulsion();
+    	moveNodes();
     }
 
     protected V getAVertex(E e) {
@@ -216,58 +202,55 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     }
 
     protected void relaxEdges() {
-        try {
-        	for(E e : getVisibleEdges()) {
-//        for (Iterator i = getVisibleEdges().iterator(); i.hasNext();) {
-//            Edge e = (Edge) i.next();
+    	try {
+    		for(E e : getVisibleEdges()) {
 
-            V v1 = getAVertex(e);
-            V v2 = getGraph().getOpposite(v1, e);
+    			V v1 = getAVertex(e);
+    			V v2 = getGraph().getOpposite(v1, e);
 
-            Point2D p1 = getLocation(v1);
-            Point2D p2 = getLocation(v2);
-            if(p1 == null || p2 == null) continue;
-            double vx = p1.getX() - p2.getX();
-            double vy = p1.getY() - p2.getY();
-            double len = Math.sqrt(vx * vx + vy * vy);
-            
-            SpringEdgeData<E> sed = getSpringData(e);
-            if (sed == null) {
-                continue;
-            }
-            double desiredLen = sed.length;
+    			Point2D p1 = getLocation(v1);
+    			Point2D p2 = getLocation(v2);
+    			if(p1 == null || p2 == null) continue;
+    			double vx = p1.getX() - p2.getX();
+    			double vy = p1.getY() - p2.getY();
+    			double len = Math.sqrt(vx * vx + vy * vy);
 
-            // round from zero, if needed [zero would be Bad.].
-            len = (len == 0) ? .0001 : len;
+    			SpringEdgeData<E> sed = getSpringData(e);
+    			if (sed == null) {
+    				continue;
+    			}
+    			double desiredLen = sed.length;
 
-            double f = force_multiplier * (desiredLen - len) / len;
-            
-            f = f * Math.pow(stretch, (getGraph().degree(v1) + getGraph().degree(v2) - 2));
+    			// round from zero, if needed [zero would be Bad.].
+    			len = (len == 0) ? .0001 : len;
 
-            // the actual movement distance 'dx' is the force multiplied by the
-            // distance to go.
-            double dx = f * vx;
-            double dy = f * vy;
-            SpringVertexData v1D, v2D;
-            v1D = getSpringData(v1);
-            v2D = getSpringData(v2);
+    			double f = force_multiplier * (desiredLen - len) / len;
 
-            sed.f = f;
+    			f = f * Math.pow(stretch, (getGraph().degree(v1) + getGraph().degree(v2) - 2));
 
-            v1D.edgedx += dx;
-            v1D.edgedy += dy;
-            v2D.edgedx += -dx;
-            v2D.edgedy += -dy;
-        }
-        } catch(ConcurrentModificationException cme) {
-            relaxEdges();
-        }
+    			// the actual movement distance 'dx' is the force multiplied by the
+    			// distance to go.
+    			double dx = f * vx;
+    			double dy = f * vy;
+    			SpringVertexData v1D, v2D;
+    			v1D = getSpringData(v1);
+    			v2D = getSpringData(v2);
+
+    			sed.f = f;
+
+    			v1D.edgedx += dx;
+    			v1D.edgedy += dy;
+    			v2D.edgedx += -dx;
+    			v2D.edgedy += -dy;
+    		}
+    	} catch(ConcurrentModificationException cme) {
+    		relaxEdges();
+    	}
     }
 
     protected void calculateRepulsion() {
         try {
         for (V v : getGraph().getVertices()) {
-//            V v = (Vertex) iter.next();
             if (isLocked(v)) continue;
 
             SpringVertexData svd = getSpringData(v);
@@ -275,7 +258,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
             double dx = 0, dy = 0;
 
             for (V v2 : getGraph().getVertices()) {
-//                V v2 = (Vertex) iter2.next();
                 if (v == v2) continue;
                 Point2D p = getLocation(v);
                 Point2D p2 = getLocation(v2);
@@ -309,7 +291,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
         synchronized (getCurrentSize()) {
             try {
                 for (V v : getVisibleVertices()) {
-//                    Vertex v = (Vertex) i.next();
                     if (isLocked(v)) continue;
                     SpringVertexData vd = getSpringData(v);
                     if(vd == null) continue;
@@ -319,8 +300,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
                     vd.dy += vd.repulsiondy + vd.edgedy;
                     
                     // keeps nodes from moving any faster than 5 per time unit
-//                    xyd.addX(Math.max(-5, Math.min(5, vd.dx)));
-//                    xyd.addY(Math.max(-5, Math.min(5, vd.dy)));
                     xyd.setLocation(xyd.getX()+Math.max(-5, Math.min(5, vd.dx)),
                     		xyd.getY()+Math.max(-5, Math.min(5, vd.dy)));
                     
@@ -355,7 +334,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
 
     public double getLength(E e) {
     	return springEdgeData.get(e).length;
-//        return ((SpringEdgeData) e.getUserDatum(getSpringKey())).length;
     }
 
     /* ---------------Length Function------------------ */
@@ -453,23 +431,21 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * @see edu.uci.ics.jung.visualization.layout.LayoutMutable#update()
      */
     public void update() {
-        try {
-        	for(V v : getGraph().getVertices()) {
-//        for (Iterator iter = getGraph().getVertices().iterator(); iter
-//                .hasNext();) {
-//            V v = (Vertex) iter.next();
-            Point2D coord = locations.get(v);
-            if (coord == null) {
-                coord = new Point2D.Float();
-                locations.put(v, coord);
-                initializeLocation(v, coord, getCurrentSize());
-                initialize_local_vertex(v);
-            }
-        }
-        } catch(ConcurrentModificationException cme) {
-            update();
-        }
-        initialize_local();
+    	try {
+    		for(V v : getGraph().getVertices()) {
+
+    			Point2D coord = locations.get(v);
+    			if (coord == null) {
+    				coord = new Point2D.Float();
+    				locations.put(v, coord);
+    				initializeLocation(v, coord, getCurrentSize());
+    				initialize_local_vertex(v);
+    			}
+    		}
+    	} catch(ConcurrentModificationException cme) {
+    		update();
+    	}
+    	initialize_local();
     }
 
 

@@ -23,8 +23,6 @@ import edu.uci.ics.graph.Graph;
  */
 public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutable<V, E> {
 
-//    private static final Object FR_KEY = "edu.uci.ics.jung.FR_Visualization_Key";
-
     private double forceConstant;
 
     private double temperature;
@@ -34,8 +32,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
     private String status = null;
 
     private int mMaxIterations = 700;
-    
-//    private Map<V, Point2D> locations = new HashMap<V, Point2D>();
     
     private Map<V, FRVertexData> frVertexData = new HashMap<V, FRVertexData>();
 
@@ -67,19 +63,14 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
     public synchronized void update() {
         try {
             for(V v : getGraph().getVertices()) {
-//            for (Iterator iter = getGraph().getVertices().iterator(); iter
-//            .hasNext();) {
-//                Vertex v = (Vertex) iter.next();
+
                 Point2D coord = getCoordinates(v);
-//                Coordinates coord = (Coordinates) v.getUserDatum(getBaseKey());
                 if (coord == null) {
                     coord = new Point2D.Float();
                     locations.put(v, coord);
-//                    v.addUserDatum(getBaseKey(), coord, UserData.REMOVE);
                     initializeLocation(v, coord, getCurrentSize());
                     initialize_local_vertex(v);
                 }
-                
             } 
         } catch(ConcurrentModificationException cme) {
             update();
@@ -108,38 +99,18 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
             .sqrt(getCurrentSize().getHeight()
                     * getCurrentSize().getWidth()
                     / getGraph().getVertices().size());
-//                    / Math.max(getVisibleGraph().numEdges(), getVisibleGraph().numVertices()));
         
         attraction_constant = attraction_multiplier * forceConstant;
         repulsion_constant = repulsion_multiplier * forceConstant;
         
-//        forceConstant = 0.75 * Math
-//                .sqrt(getCurrentSize().getHeight()
-//                        * getCurrentSize().getWidth()
-//                        / getVisibleGraph().numVertices());
     }
 
-//    private Object key = null;
-
     private double EPSILON = 0.000001D;
-
-    /**
-     * Returns a visualization-specific key (that is, specific both to this
-     * instance and <tt>AbstractLayout</tt>) that can be used to access
-     * UserData related to the <tt>AbstractLayout</tt>.
-     */
-//    public Object getKey() {
-//        if (key == null) key = new Pair(this, FR_KEY);
-//        return key;
-//    }
 
     protected void initialize_local_vertex(V v) {
         if(frVertexData.get(v) == null) {
             frVertexData.put(v, new FRVertexData());
         }
-//        if (v.getUserDatum(getKey()) == null) {
-//            v.addUserDatum(getKey(), new FRVertexData(), UserData.REMOVE);
-//        }
     }
 
     /**
@@ -157,8 +128,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
             
             try {
                 for(V v1 : getVisibleVertices()) {
-//                for (Iterator iter = getVisibleVertices().iterator(); iter.hasNext();) {
-//                    Vertex v1 = (Vertex) iter.next();
                     if (isLocked(v1)) continue;
                     calcRepulsion(v1);
                 }
@@ -172,8 +141,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
         while(true) {
             try {
                 for(E e : getVisibleEdges()) {
-//                for (Iterator iter = getVisibleEdges().iterator(); iter.hasNext();) {
-//                    Edge e = (Edge) iter.next();
                     
                     calcAttraction(e);
                 }
@@ -181,13 +148,10 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
             } catch(ConcurrentModificationException cme) {}
         }
 
-//        double cumulativeChange = 0;
 
         while(true) {
             try {    
                 for(V v : getVisibleVertices()) {
-//                for (Iterator iter = getVisibleVertices().iterator(); iter.hasNext();) {
-//                    Vertex v = (Vertex) iter.next();
                     if (isLocked(v)) continue;
                     calcPositions(v);
                 }
@@ -213,8 +177,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
         double newYDisp = fvd.getYDisp() / deltaLength
                 * Math.min(deltaLength, temperature);
         xyd.setLocation(xyd.getX()+newXDisp, xyd.getY()+newYDisp);
-//        xyd.addX(newXDisp);
-//        xyd.addY(newYDisp);
 
         double borderWidth = getCurrentSize().getWidth() / 50.0;
         double newXPos = xyd.getX();
@@ -224,8 +186,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
             newXPos = getCurrentSize().getWidth() - borderWidth - Math.random()
                     * borderWidth * 2.0;
         }
-        //double newXPos = Math.min(getCurrentSize().getWidth() - 20.0,
-        // Math.max(20.0, xyd.getX()));
 
         double newYPos = xyd.getY();
         if (newYPos < borderWidth) {
@@ -234,20 +194,13 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
             newYPos = getCurrentSize().getHeight() - borderWidth
                     - Math.random() * borderWidth * 2.0;
         }
-        //double newYPos = Math.min(getCurrentSize().getHeight() - 20.0,
-        // Math.max(20.0, xyd.getY()));
 
         xyd.setLocation(newXPos, newYPos);
-//        xyd.setX(newXPos);
-//        xyd.setY(newYPos);
     }
 
     public void calcAttraction(E e) {
         V v1 = getGraph().getIncidentVertices(e).iterator().next();
         V v2 = getGraph().getOpposite(v1, e);
-//        Vertex v1 = (Vertex) e.getIncidentVertices().iterator().next();
-//        Vertex v2 = e.getOpposite(v1);
-
         Point2D p1 = getLocation(v1);
         Point2D p2 = getLocation(v2);
         if(p1 == null || p2 == null) return;
@@ -257,8 +210,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
         double deltaLength = Math.max(EPSILON, Math.sqrt((xDelta * xDelta)
                 + (yDelta * yDelta)));
 
-//        double force = (deltaLength * deltaLength) / forceConstant;
-        
         double force = (deltaLength * deltaLength) / attraction_constant;
 
         if (Double.isNaN(force)) { throw new IllegalArgumentException(
@@ -280,8 +231,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
 
         try {
             for(V v2 : getVisibleVertices()) {
-//            for (Iterator iter2 = getVisibleVertices().iterator(); iter2.hasNext();) {
-//                Vertex v2 = (Vertex) iter2.next();
+
                 if (isLocked(v2)) continue;
                 if (v1 != v2) {
                     Point2D p1 = getLocation(v1);
@@ -293,7 +243,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
                     double deltaLength = Math.max(EPSILON, Math
                             .sqrt((xDelta * xDelta) + (yDelta * yDelta)));
                     
-//                    double force = (forceConstant * forceConstant) / deltaLength;
                     double force = (repulsion_constant * repulsion_constant) / deltaLength;
                     
                     if (Double.isNaN(force)) { throw new RuntimeException(
@@ -318,7 +267,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
 
     public FRVertexData getFRData(V v) {
         return frVertexData.get(v);
-//        return (FRVertexData) (v.getUserDatum(getKey()));
     }
 
     /**
@@ -334,7 +282,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
      */
     public boolean incrementsAreDone() {
         if (currentIteration > mMaxIterations) { 
-//            System.out.println("Reached currentIteration =" + currentIteration + ", maxIterations=" + mMaxIterations);
             return true; 
         } 
         return false;

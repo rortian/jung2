@@ -96,26 +96,6 @@ public interface Layout<V, E> extends VertexLocationFunction<V> {
 	void restart();
 
 	/**
-	 * Finds the closest vertex to an input (x,y) coordinate. Useful for mouse clicks.
-	 * @deprecated Use PickSupport instead
-	 * @param x		The x coordinate of the input
-	 * @param y		The y coordinate of the input
-	 * @return		The nearest vertex. It is up to the user to check if it is satisfactorily close.
-	 */
-//	V getVertex(double x, double y);
-
-	/**
-	 * Finds the closest vertex to an input (x,y) coordinate. Useful for mouse clicks.
-	 * @deprecated Use PickSupport instead
-	*
-	 * @param x		The x coordinate of the input
-	 * @param y		The y coordinate of the input
-	 * @param maxDistance The maximum acceptable distance. Beyond this, vertices are ignored.
-	 * @return		The nearest vertex. It is up to the user to check if it is satisfactorily close.
-	 */
-//	V getVertex(double x, double y, double maxDistance);
-
-	/**
 	 * Returns the full graph (the one that was passed in at 
 	 * construction time) that this Layout refers to.
 	 * 
@@ -189,22 +169,6 @@ public interface Layout<V, E> extends VertexLocationFunction<V> {
 	 * @param y
 	 */
 	void forceMove(V picked, double x, double y);
-
-	/**
-	 * Returns all currently showing edges
-     * @deprecated Use of this facility is discouraged and will be removed
-     * in future.  For an alternative, see the <code>PluggableRenderer</code> method
-     * <code>setEdgeIncludePredicate</code>.
-	 */
-//	Collection<E> getVisibleEdges();
-
-	/**
-	 * Returns all currently visible vertices
-     * @deprecated Use of this facility is discouraged and will be removed
-     * in future.  For an alternative, see the <code>PluggableRenderer</code> method
-     * <code>setVertexIncludePredicate</code>.
-	 */
-//	Collection<V> getVisibleVertices();
 
 	/**
 	 * Returns the current size of the visualization's space.

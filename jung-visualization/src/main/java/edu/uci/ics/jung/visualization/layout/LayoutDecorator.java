@@ -31,6 +31,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport {
     
     protected Layout<V, E> delegate;
+    
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
 
@@ -102,41 +103,6 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     public String getStatus() {
         return delegate.getStatus();
     }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.Layout#getVertex(double, double, double)
-     */
-//    public V getVertex(double x, double y, double maxDistance) {
-//        return delegate.getVertex(x, y, maxDistance);
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.Layout#getVertex(double, double)
-     */
-//    public V getVertex(double x, double y) {
-//        return delegate.getVertex(x, y);
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.VertexLocationFunction#getVertexIterator()
-     */
-//    public Iterator getVertexIterator() {
-//        return delegate.getVertexIterator();
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.Layout#getVisibleEdges()
-     */
-//    public Set<E> getVisibleEdges() {
-//        return delegate.getEdges();
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.Layout#getVisibleVertices()
-     */
-//    public Set<V> getVisibleVertices() {
-//        return delegate.getVisibleVertices();
-//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getX(edu.uci.ics.jung.graph.Vertex)

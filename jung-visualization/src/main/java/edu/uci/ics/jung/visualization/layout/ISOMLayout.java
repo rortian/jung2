@@ -30,15 +30,6 @@ import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
  */
 public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 
-//	private static final Object ISOM_KEY =
-//		"edu.uci.ics.jung.ISOM_Visualization_Key";
-
-//	private Object key = null;
-//	public Object getIsomKey() {
-//		if (key == null)
-//			key = new Pair(this, ISOM_KEY);
-//		return key;
-//	}
 	Map<V, ISOMVertexData> isomVertexData = new HashMap<V, ISOMVertexData>();
 
 	private int maxEpoch;
@@ -54,16 +45,8 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
     
     protected GraphElementAccessor<V,E> elementAccessor;
 
-//	private double factor;
 	private double coolingFactor;
 
-	//private double temperature;
-	//private int initialJumpRadius;
-	//private int jumpRadius;
-
-	//private int delay;
-
-	//private ISOMVertexData temp;
 	private Vector<V> queue;
 	private String status = null;
 	
@@ -74,18 +57,13 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		return status;
 	}
 
-//	private boolean trace;
-//	private boolean done;
-
 	public ISOMLayout(Graph<V,E> g) {
 		super(g);
         elementAccessor = new RadiusGraphElementAccessor<V,E>();
 		queue = new Vector<V>();
-//		trace = false;
 	}
 
 	protected void initialize_local() {
-//		done = false;
 
 		maxEpoch = 2000;
 		epoch = 1;
@@ -117,7 +95,6 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		if (vd == null) {
 			vd = new ISOMVertexData();
 			isomVertexData.put(v, vd);
-//			v.addUserDatum(getIsomKey(), vd, UserData.REMOVE);
 		}
 		vd.visited = false;
 	}
@@ -148,8 +125,6 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		tempXYD = new Point2D.Double();
 
 		// creates a new XY data location
-//		tempXYD.setX(10 + Math.random() * getCurrentSize().getWidth());
-//		tempXYD.setY(10 + Math.random() * getCurrentSize().getHeight());
         tempXYD.setLocation(10 + Math.random() * getCurrentSize().getWidth(),
                 10 + Math.random() * getCurrentSize().getHeight());
 
@@ -159,10 +134,6 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		while(true) {
 		    try {
 		    	for(V v : getVisibleVertices()) {
-//		        for (Iterator iter = getVisibleVertices().iterator();
-//		        iter.hasNext();
-//		        ) {
-//		            V v = (Vertex) iter.next();
 		            ISOMVertexData ivd = getISOMVertexData(v);
 		            ivd.distance = 0;
 		            ivd.visited = false;
