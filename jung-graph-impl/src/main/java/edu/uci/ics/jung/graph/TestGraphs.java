@@ -211,8 +211,6 @@ public class TestGraphs {
 	public static Graph<String,Number> getOneComponentGraph() {
 		SimpleUndirectedSparseGraph<String, Number> g = 
 			new SimpleUndirectedSparseGraph<String, Number>();
-//		StringLabeller sl = StringLabeller.getLabeller(g);
-//		EdgeWeightLabeller el = EdgeWeightLabeller.getLabeller(g);
 
 		// let's throw in a clique, too
 		for (int i = 1; i <= 10; i++) {
