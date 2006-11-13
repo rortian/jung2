@@ -116,7 +116,7 @@ public class PerspectiveTransformerDemo extends JApplet {
         graphLayout = new FRLayout<String,Number>(graph);
         ((FRLayout)graphLayout).setMaxIterations(1000);
 
-        Dimension preferredSize = new Dimension(600,400);
+        Dimension preferredSize = new Dimension(600,600);
         DefaultSettableVertexLocationFunction<String> vlf =
             new DefaultSettableVertexLocationFunction<String>();
         grid = this.generateVertexGrid(vlf, preferredSize, 25);
@@ -169,29 +169,83 @@ public class PerspectiveTransformerDemo extends JApplet {
                 scaler.scale(vv, 0.9f, vv.getCenter());
             }
         });
-        JSlider slider = new JSlider(-1000,1000,0);
-        slider.addChangeListener(new ChangeListener() {
+        final JSlider horizontalSlider = new JSlider(-120,120,0);
+        final JSlider verticalSlider = new JSlider(-120,120,0);
+        final ChangeListener changeListener = new ChangeListener() {
 
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider)e.getSource();
-                int value = source.getValue();
+			public void stateChanged(ChangeEvent e) {
+                int vval = verticalSlider.getValue();
+                int hval = horizontalSlider.getValue();
+
                 Dimension d = vv.getSize();
                  PerspectiveTransform pt = null;
-                 if(value > 0) {
                     pt = PerspectiveTransform.getQuadToQuad(
-                            0, 0, d.width, -value, d.width, d.height+value, 0, d.height,
-                            0, 0, d.width, 0, d.width, d.height, 0, d.height);
-                 } else {
-                     pt = PerspectiveTransform.getQuadToQuad(
-                             0, value, d.width, 0, d.width, d.height, 0, d.height-value,
-                             0, 0, d.width, 0, d.width, d.height, 0, d.height);
+                            vval,          hval, 
+                            d.width-vval, -hval, 
+                            d.width+vval, d.height+hval, 
+                            -vval,         d.height-hval,
+                            
+                            0, 0, 
+                            d.width, 0, 
+                            d.width, d.height, 
+                            0, d.height);
 
-                 }
                 viewSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
                 layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
                 vv.repaint();
-            }});
-        slider.setBorder(BorderFactory.createTitledBorder("Perspective Change"));
+			}};
+			horizontalSlider.addChangeListener(changeListener);
+			verticalSlider.addChangeListener(changeListener);
+//        horizontalSlider.addChangeListener(new ChangeListener() {
+//
+//            public void stateChanged(ChangeEvent e) {
+//                JSlider source = (JSlider)e.getSource();
+//                int vval = verticalSlider.getValue();
+//                int value = source.getValue();
+//                Dimension d = vv.getSize();
+//                 PerspectiveTransform pt = null;
+////                 if(value > 0) {
+//                    pt = PerspectiveTransform.getQuadToQuad(
+//                            -vval, 0, d.width+vval, -value, d.width, d.height+value, 0, d.height,
+//                            0, 0, d.width, 0, d.width, d.height, 0, d.height);
+////                 } else {
+////                     pt = PerspectiveTransform.getQuadToQuad(
+////                             0, value, d.width, 0, d.width-vval, d.height, vval, d.height-value,
+////                             0, 0, d.width, 0, d.width, d.height, 0, d.height);
+////
+////                 }
+//                viewSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
+//                layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
+//                vv.repaint();
+//            }});
+        horizontalSlider.setBorder(BorderFactory.createTitledBorder("Perspective Change"));
+
+//        verticalSlider.addChangeListener(new ChangeListener() {
+//
+//            public void stateChanged(ChangeEvent e) {
+//                JSlider source = (JSlider)e.getSource();
+//                int hval = horizontalSlider.getValue();
+//                int value = source.getValue();
+//                Dimension d = vv.getSize();
+//                 PerspectiveTransform pt = null;
+////                 if(value > 0) {
+//                    pt = PerspectiveTransform.getQuadToQuad(
+//                    		-value, 0, d.width+value, -hval, d.width, d.height+hval, 0, d.height,
+//                            0, 0, d.width, 0, d.width, d.height, 0, d.height);
+////                 } else {
+////                     pt = PerspectiveTransform.getQuadToQuad(
+////                    		 0, hval, d.width, 0, d.width-value, d.height, value, d.height-hval,
+////                             0, 0, d.width, 0, d.width, d.height, 0, d.height);
+//
+////                 }
+//                viewSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
+//                layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
+//                vv.repaint();
+//            }});
+        
+        verticalSlider.setBorder(BorderFactory.createTitledBorder("Perspective Change"));
+        
+        
         ButtonGroup radio = new ButtonGroup();
         JRadioButton normal = new JRadioButton("None");
         normal.addItemListener(new ItemListener() {
@@ -270,7 +324,8 @@ public class PerspectiveTransformerDemo extends JApplet {
         controls.add(zoomControls);
         controls.add(perspectiveControls);
         controls.add(modePanel);
-        controls.add(slider);
+        controls.add(horizontalSlider);
+        controls.add(verticalSlider);
         content.add(controls, BorderLayout.SOUTH);
     }
 
