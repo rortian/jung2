@@ -2,7 +2,6 @@ package edu.uci.ics.jung.algorithms.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class BasicMapEntry<K,V> implements Map.Entry<K,V> {
     final K key;

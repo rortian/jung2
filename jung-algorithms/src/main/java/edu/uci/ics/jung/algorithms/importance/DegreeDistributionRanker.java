@@ -9,9 +9,6 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
-import java.util.Iterator;
-
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 
