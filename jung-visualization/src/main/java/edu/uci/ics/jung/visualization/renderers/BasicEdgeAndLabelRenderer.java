@@ -28,7 +28,7 @@ public class BasicEdgeAndLabelRenderer<V,E>
 
     public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
     	super.paintEdge(rc, graph, e, x1, y1, x2, y2);
-    	labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, x2, y1, y2);
+//    	labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, x2, y1, y2);
     }
 	public Component prepareRenderer(RenderContext<V,E> rc, EdgeLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, E edge) {
@@ -45,6 +45,7 @@ public class BasicEdgeAndLabelRenderer<V,E>
      * by this instance's edge label closeness function.
      */
     protected void labelEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, String label, int x1, int x2, int y1, int y2) {
+    	System.err.println("blk label "+label+" at "+x1+","+x2+","+y1+","+y2);
         // don't draw edge if either incident vertex is not drawn
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
