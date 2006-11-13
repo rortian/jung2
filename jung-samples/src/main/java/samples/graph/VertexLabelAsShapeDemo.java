@@ -31,6 +31,7 @@ import edu.uci.ics.jung.graph.TestGraphs;
 import edu.uci.ics.jung.visualization.BasicRenderer;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -93,8 +94,8 @@ public class VertexLabelAsShapeDemo extends JApplet {
 					}}}));
 
         vv.getRenderContext().setVertexShapeFunction(vlasr);
-        
-        pr.setVertexRenderer(vlasr);
+        pr.setVertexRenderer(new Renderer.Vertex.NOOP());
+        pr.setVertexLabelRenderer(vlasr);
         vv.setRenderer(pr);
 
         vv.setBackground(Color.white);
