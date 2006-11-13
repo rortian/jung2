@@ -30,7 +30,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 
 public class VertexLabelAsShapeRenderer<V,E> 
-	implements Renderer.Vertex<V,E>, Transformer<V,Shape> {
+	implements Renderer.VertexLabel<V,E>, Transformer<V,Shape> {
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
 	
@@ -52,7 +52,7 @@ public class VertexLabelAsShapeRenderer<V,E>
 	 * is active, the label is centered on the position of the vertex; otherwise
      * the label is offset slightly.
      */
-    protected void labelVertex(RenderContext<V,E> rc, V v, String label, int x, int y) {
+    public void labelVertex(RenderContext<V,E> rc, V v, String label, int x, int y) {
         GraphicsDecorator g = rc.getGraphicsContext();
         Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
         		rc.getPickedVertexState().isPicked(v), v);
@@ -76,8 +76,4 @@ public class VertexLabelAsShapeRenderer<V,E>
 		if(shape == null) return new Rectangle(-20,-20,40,40);
 		else return shape;
 	}
-
-//	public Shape transform(V input) {
-//		return getShape(input);
-//	}
 }
