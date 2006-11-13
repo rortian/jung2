@@ -51,6 +51,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -146,13 +147,11 @@ public class LensDemo extends JApplet {
         vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+        
         final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeFunction();
         final Transformer<String,Shape> squares = 
         	new ConstantTransformer(new Rectangle2D.Float(-10,-10,20,20));
-
-//            public Shape transform(String v) {
-//                return new Rectangle2D.Float(-10,-10,20,20);
-//            }};
 
         // add a listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
@@ -275,6 +274,7 @@ public class LensDemo extends JApplet {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     visualizationModel.setGraphLayout(graphLayout);
                     vv.getRenderContext().setVertexShapeFunction(ovals);
+                    vv.getRenderContext().setVertexStringer(new ToStringLabeller());
                     vv.repaint();
                 }
             }});
@@ -285,6 +285,7 @@ public class LensDemo extends JApplet {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     visualizationModel.setGraphLayout(gridLayout);
                     vv.getRenderContext().setVertexShapeFunction(squares);
+                    vv.getRenderContext().setVertexStringer(new ConstantTransformer(null));
                     vv.repaint();
                 }
             }});
