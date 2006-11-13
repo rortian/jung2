@@ -41,7 +41,7 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
 
     protected static final String instructions = 
         "<html><center>The mouse mode button is<p>"+
-        "in the lower-left corner<p>"+
+        "in the lower-right corner<p>"+
         "of the scroll-pane.</center></html>";
     
     /**
@@ -81,7 +81,9 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
         
         public Lens(PerspectiveShapeTransformer perspectiveTransformer, Dimension d) {
             this.perspectiveTransformer = perspectiveTransformer;
-            this.rectangle = new Rectangle2D.Float(0,0,d.width,d.height);
+            this.rectangle = 
+            	new Rectangle2D.Float(d.width/8,d.height/8,
+            			3*d.width/4,3*d.height/4);
         }
         
         /**
