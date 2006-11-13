@@ -8,7 +8,9 @@
 package edu.uci.ics.jung.visualization;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.visualization.renderers.BasicEdgeAndLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.BasicEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
+import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 
 /**
@@ -21,17 +23,28 @@ import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
  * 
  * @author Tom Nelson
  */
-public class BasicRenderer<V, E> implements Renderer<V, E> {
+public class BasicRenderer<V,E> implements Renderer<V, E> {
 	
     Renderer.Vertex<V,E> vertexRenderer = new BasicVertexRenderer<V,E>();
-    Renderer.Edge<V, E> edgeRenderer = new BasicEdgeAndLabelRenderer<V,E>();
+    Renderer.VertexLabel<V,E> vertexLabelRenderer = new BasicVertexLabelRenderer<V,E>();
+    Renderer.Edge<V,E> edgeRenderer = new BasicEdgeRenderer<V,E>();
+    	//new BasicEdgeAndLabelRenderer<V,E>();
+    Renderer.EdgeLabel<V,E> edgeLabelRenderer = new BasicEdgeLabelRenderer<V,E>();
     
     public void renderVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
         vertexRenderer.paintVertex(rc, graph, v, x, y);
     }
     
-    public void renderEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
+    public void renderVertexLabel(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
+        vertexLabelRenderer.labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
+    }
+    
+    public void renderEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2) {
     	edgeRenderer.paintEdge(rc, graph, e, x1, y1, x2, y2);
+    }
+    
+    public void renderEdgeLabel(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2) {
+    	edgeLabelRenderer.labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, y1, x2, y2);
     }
     
     public void setVertexRenderer(Renderer.Vertex<V,E> r) {
@@ -41,5 +54,48 @@ public class BasicRenderer<V, E> implements Renderer<V, E> {
     public void setEdgeRenderer(Renderer.Edge<V,E> r) {
     	this.edgeRenderer = r;
     }
+
+	/**
+	 * @return the edgeLabelRenderer
+	 */
+	public Renderer.EdgeLabel<V, E> getEdgeLabelRenderer() {
+		return edgeLabelRenderer;
+	}
+
+	/**
+	 * @param edgeLabelRenderer the edgeLabelRenderer to set
+	 */
+	public void setEdgeLabelRenderer(Renderer.EdgeLabel<V, E> edgeLabelRenderer) {
+		this.edgeLabelRenderer = edgeLabelRenderer;
+	}
+
+	/**
+	 * @return the vertexLabelRenderer
+	 */
+	public Renderer.VertexLabel<V, E> getVertexLabelRenderer() {
+		return vertexLabelRenderer;
+	}
+
+	/**
+	 * @param vertexLabelRenderer the vertexLabelRenderer to set
+	 */
+	public void setVertexLabelRenderer(
+			Renderer.VertexLabel<V, E> vertexLabelRenderer) {
+		this.vertexLabelRenderer = vertexLabelRenderer;
+	}
+
+	/**
+	 * @return the edgeRenderer
+	 */
+	public Renderer.Edge<V, E> getEdgeRenderer() {
+		return edgeRenderer;
+	}
+
+	/**
+	 * @return the vertexRenderer
+	 */
+	public Renderer.Vertex<V, E> getVertexRenderer() {
+		return vertexRenderer;
+	}
 
 }

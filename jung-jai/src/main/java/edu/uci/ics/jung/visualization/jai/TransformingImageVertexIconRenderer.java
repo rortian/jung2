@@ -114,7 +114,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         	} else {
         		paintShapeForVertex(rc, v, shape);
         	}
-    		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
+//    		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
         }
     }
     

@@ -496,7 +496,16 @@ public class BasicVisualizationServer<V, E> extends JPanel
             }
 
 		    if(p != null && q != null) {
+
 		        renderer.renderEdge(
+		                renderContext,
+		                layout.getGraph(),
+		                e,
+		                (int) p.getX(),
+		                (int) p.getY(),
+		                (int) q.getX(),
+		                (int) q.getY());
+		        renderer.renderEdgeLabel(
 		                renderContext,
 		                layout.getGraph(),
 		                e,
@@ -522,6 +531,12 @@ public class BasicVisualizationServer<V, E> extends JPanel
             }
 		    if(p != null) {
 		    	renderer.renderVertex(
+		                renderContext,
+                        layout.getGraph(),
+		                v,
+		                (int) p.getX(),
+		                (int) p.getY());
+		    	renderer.renderVertexLabel(
 		                renderContext,
                         layout.getGraph(),
 		                v,
