@@ -23,19 +23,19 @@ import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
-public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
+public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
 	
-	public void paintEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int x2, int y1, int y2) {
-        // don't draw edge label if either incident vertex is not drawn
-        Pair<V> endpoints = graph.getEndpoints(e);
-        V v1 = endpoints.getFirst();
-        V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluateVertex(graph, v1) || 
-            !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
-            return;
-
-		labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, y1, x2, y2);
-	}
+//	public void paintEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int x2, int y1, int y2) {
+//        // don't draw edge label if either incident vertex is not drawn
+//        Pair<V> endpoints = graph.getEndpoints(e);
+//        V v1 = endpoints.getFirst();
+//        V v2 = endpoints.getSecond();
+//        if (!rc.getVertexIncludePredicate().evaluateVertex(graph, v1) || 
+//            !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
+//            return;
+//
+//		labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, y1, x2, y2);
+//	}
 	
 	public Component prepareRenderer(RenderContext<V,E> rc, EdgeLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, E edge) {
@@ -51,11 +51,74 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
      * label between the endpoints according to the coefficient returned
      * by this instance's edge label closeness function.
      */
-    protected void labelEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, String label, int x1, int x2, int y1, int y2) {
+//    public void labelEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, String label, int x1, int x2, int y1, int y2) {
+//        int distX = x2 - x1;
+//        int distY = y2 - y1;
+//        double totalLength = Math.sqrt(distX * distX + distY * distY);
+//        GraphicsDecorator g2d = rc.getGraphicsContext();
+//        double closeness = rc.getEdgeLabelClosenessFunction().transform(new EdgeContext<V,E>(graph, e)).doubleValue();
+//
+//        int posX = (int) (x1 + (closeness) * distX);
+//        int posY = (int) (y1 + (closeness) * distY);
+//
+//        int xDisplacement = (int) (rc.getLabelOffset() * (distY / totalLength));
+//        int yDisplacement = (int) (rc.getLabelOffset() * (-distX / totalLength));
+//        
+//        Component component = prepareRenderer(rc, rc.getEdgeLabelRenderer(), label, rc.getPickedEdgeState().isPicked(e), e);
+//        
+//        Dimension d = component.getPreferredSize();
+//
+//        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V,E>(graph, e));
+//        
+//        double parallelOffset = 1;
+//
+//        parallelOffset += rc.getParallelEdgeIndexFunction().getIndex(graph, e);
+//
+//        if(edgeShape instanceof Ellipse2D) {
+//            parallelOffset += edgeShape.getBounds().getHeight();
+//            parallelOffset = -parallelOffset;
+//        }
+//        
+//        parallelOffset *= d.height;
+//        
+//        AffineTransform old = g2d.getTransform();
+//        AffineTransform xform = new AffineTransform(old);
+//        xform.translate(posX+xDisplacement, posY+yDisplacement);
+//        double dx = x2 - x1;
+//        double dy = y2 - y1;
+//        if(rc.getEdgeLabelRenderer().isRotateEdgeLabels()) {
+//            double theta = Math.atan2(dy, dx);
+//            if(dx < 0) {
+//                theta += Math.PI;
+//            }
+//            xform.rotate(theta);
+//        }
+//        if(dx < 0) {
+//            parallelOffset = -parallelOffset;
+//        }
+//        
+//        xform.translate(-d.width/2, -(d.height/2-parallelOffset));
+//        g2d.setTransform(xform);
+//        rc.getRendererPane().paintComponent(g2d.getDelegate(), component, rc.getScreenDevice(), 
+//                0, 0,
+//                d.width, d.height, true);
+//        g2d.setTransform(old);
+//    }
+    public void labelEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, String label, int x1, int y1, int x2, int y2) {
+    	if(label == null || label.length() == 0) return;
+        // don't draw edge if either incident vertex is not drawn
+        Pair<V> endpoints = graph.getEndpoints(e);
+        V v1 = endpoints.getFirst();
+        V v2 = endpoints.getSecond();
+        if (!rc.getVertexIncludePredicate().evaluateVertex(graph, v1) || 
+            !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
+            return;
+
+        GraphicsDecorator g = rc.getGraphicsContext();
         int distX = x2 - x1;
         int distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
-        GraphicsDecorator g2d = rc.getGraphicsContext();
+
         double closeness = rc.getEdgeLabelClosenessFunction().transform(new EdgeContext<V,E>(graph, e)).doubleValue();
 
         int posX = (int) (x1 + (closeness) * distX);
@@ -64,11 +127,12 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
         int xDisplacement = (int) (rc.getLabelOffset() * (distY / totalLength));
         int yDisplacement = (int) (rc.getLabelOffset() * (-distX / totalLength));
         
-        Component component = prepareRenderer(rc, rc.getEdgeLabelRenderer(), label, rc.getPickedEdgeState().isPicked(e), e);
+        Component component = prepareRenderer(rc, rc.getEdgeLabelRenderer(), label, 
+                rc.getPickedEdgeState().isPicked(e), e);
         
         Dimension d = component.getPreferredSize();
 
-        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V,E>(graph, e));
+        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V, E>(graph, e));
         
         double parallelOffset = 1;
 
@@ -81,7 +145,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
         
         parallelOffset *= d.height;
         
-        AffineTransform old = g2d.getTransform();
+        AffineTransform old = g.getTransform();
         AffineTransform xform = new AffineTransform(old);
         xform.translate(posX+xDisplacement, posY+yDisplacement);
         double dx = x2 - x1;
@@ -98,10 +162,11 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.Edge<V,E> {
         }
         
         xform.translate(-d.width/2, -(d.height/2-parallelOffset));
-        g2d.setTransform(xform);
-        rc.getRendererPane().paintComponent(g2d.getDelegate(), component, rc.getScreenDevice(), 
+        g.setTransform(xform);
+        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), 
                 0, 0,
                 d.width, d.height, true);
-        g2d.setTransform(old);
+        g.setTransform(old);
     }
+
 }
