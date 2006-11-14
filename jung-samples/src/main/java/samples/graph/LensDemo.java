@@ -22,6 +22,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -292,17 +293,24 @@ public class LensDemo extends JApplet {
         graphRadio.add(graphButton);
         graphRadio.add(gridButton);
         
-        JPanel modePanel = new JPanel(new GridLayout(2,1));
+        JPanel modePanel = new JPanel(new GridLayout(3,1));
         modePanel.setBorder(BorderFactory.createTitledBorder("Display"));
         modePanel.add(graphButton);
         modePanel.add(gridButton);
-        
+        JRadioButton centerLabels = new JRadioButton("Center Labels");
+        centerLabels.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent e) {
+				vv.getRenderContext().setCenterVertexLabel(e.getStateChange() == ItemEvent.SELECTED);
+				vv.repaint();
+			}});
+        modePanel.add(centerLabels);
         JMenuBar menubar = new JMenuBar();
         menubar.add(graphMouse.getModeMenu());
         gzsp.setCorner(menubar);
         
 
-        JPanel controls = new JPanel();
+        Box controls = Box.createHorizontalBox();
         JPanel zoomControls = new JPanel(new GridLayout(2,1));
         zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
         JPanel hyperControls = new JPanel(new GridLayout(3,2));
