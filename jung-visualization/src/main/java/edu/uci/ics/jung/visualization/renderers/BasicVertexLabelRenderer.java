@@ -9,10 +9,8 @@
  */
 package edu.uci.ics.jung.visualization.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -27,12 +25,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 
-
 public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> {
-
-	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
-	}
 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
@@ -48,7 +41,11 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
 	 * is active, the label is centered on the position of the vertex; otherwise
      * the label is offset slightly.
      */
-    public void labelVertex(RenderContext<V,E> rc, V v, String label, int x, int y) {
+    public void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y) {
+        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v) == false) {
+        	return;
+        }
+
         Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
         		rc.getPickedVertexState().isPicked(v), v);
         GraphicsDecorator g = rc.getGraphicsContext();

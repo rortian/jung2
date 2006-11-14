@@ -34,10 +34,6 @@ public class VertexLabelAsShapeRenderer<V,E>
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
 	
-	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
-	}
-
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
@@ -52,7 +48,10 @@ public class VertexLabelAsShapeRenderer<V,E>
 	 * is active, the label is centered on the position of the vertex; otherwise
      * the label is offset slightly.
      */
-    public void labelVertex(RenderContext<V,E> rc, V v, String label, int x, int y) {
+    public void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y) {
+        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v) == false) {
+        	return;
+        }
         GraphicsDecorator g = rc.getGraphicsContext();
         Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
         		rc.getPickedVertexState().isPicked(v), v);

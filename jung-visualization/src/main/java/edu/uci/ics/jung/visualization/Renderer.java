@@ -39,9 +39,9 @@ public interface Renderer<V,E> {
 	}
 	
 	interface VertexLabel<V,E> {
-		void labelVertex(RenderContext<V,E> rc, V v, String label, int x, int y);
+		void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y);
 		class NOOP implements VertexLabel {
-			public void labelVertex(RenderContext rc, Object v, String label, int x, int y) {}
+			public void labelVertex(RenderContext rc, Graph graph, Object v, String label, int x, int y) {}
 		}
 	}
 	

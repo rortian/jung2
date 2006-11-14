@@ -36,7 +36,7 @@ public class BasicRenderer<V,E> implements Renderer<V, E> {
     }
     
     public void renderVertexLabel(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-        vertexLabelRenderer.labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
+        vertexLabelRenderer.labelVertex(rc, graph, v, rc.getVertexStringer().transform(v), x, y);
     }
     
     public void renderEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2) {
