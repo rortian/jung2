@@ -12,8 +12,10 @@ package edu.uci.ics.jung.visualization.renderers;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.graph.Graph;
@@ -54,15 +56,23 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
         AffineTransform xform = AffineTransform.getTranslateInstance(x, y);
         
         if (rc.isCenterVertexLabel()) {
-            x += -d.width / 2;
-            y += -d.height / 2;
+        	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
+        		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
+        		Point2D p = transformer.transform(new Point2D.Float(x,y));
+        		x = (int) (p.getX() - d.width/2);
+        		y = (int) (p.getY() - d.height/2);
+        	} else {
+                x += -d.width / 2;
+                y += -d.height / 2;
+        		
+        	}
 
         } else {
         	Shape shape = rc.getVertexShapeFunction().transform(v);
         	shape = xform.createTransformedShape(shape);
         	Rectangle2D bounds = shape.getBounds2D();
-    		x += (int)(bounds.getWidth() / 2) + 5;
-    		y += (int)(bounds.getHeight() / 2) + 5 -d.height;
+    		x = (int)(bounds.getMaxX()) + 5;
+    		y = (int)(bounds.getMaxY()) + 5 -d.height;
 
         	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
         		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
