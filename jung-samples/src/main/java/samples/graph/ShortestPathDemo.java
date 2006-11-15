@@ -8,14 +8,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -27,40 +25,42 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.bidimap.DualHashBidiMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 import edu.uci.ics.jung.graph.EppsteinPowerLawGenerator;
-import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.graph.GraphElementFactory;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
  * @author danyelf
  */
-public class ShortestPathDemo<V,E> extends JPanel {
+public class ShortestPathDemo extends JPanel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7526217664458188502L;
 
 	/**
 	 * Starting vertex
 	 */
-	private Number mFrom;
+	private String mFrom;
 
 	/**
 	 * Ending vertex
 	 */	
-	private Number mTo;
-	private Graph<Number,Number> mGraph;
-	private Set<Number> mPred;
+	private String mTo;
+	private Graph<String,Number> mGraph;
+	private Set<String> mPred;
 	
-	BidiMap<Number,String> vertexLabels = new DualHashBidiMap<Number,String>();
-
 	/**
 	 * @param g
 	 */
@@ -69,19 +69,15 @@ public class ShortestPathDemo<V,E> extends JPanel {
 		this.mGraph = getGraph();
 		setBackground(Color.WHITE);
 		// show graph
-        final Layout<Number,Number> layout = new FRLayout<Number,Number>(mGraph);
-        final VisualizationViewer<Number,Number> vv = new VisualizationViewer<Number,Number>(layout);
+        final Layout<String,Number> layout = new FRLayout<String,Number>(mGraph);
+        final VisualizationViewer<String,Number> vv = new VisualizationViewer<String,Number>(layout);
         vv.setBackground(Color.WHITE);
 
-        vv.getRenderContext().setVertexDrawPaintFunction(new MyVertexDrawPaintFunction<Number>());
-        vv.getRenderContext().setVertexFillPaintFunction(new MyVertexFillPaintFunction<Number>());
+        vv.getRenderContext().setVertexDrawPaintFunction(new MyVertexDrawPaintFunction<String>());
+        vv.getRenderContext().setVertexFillPaintFunction(new MyVertexFillPaintFunction<String>());
         vv.getRenderContext().setEdgeDrawPaintFunction(new MyEdgePaintFunction());
         vv.getRenderContext().setEdgeStrokeFunction(new MyEdgeStrokeFunction());
-        vv.getRenderContext().setVertexStringer(new Transformer<Number,String>() {
-
-			public String transform(Number v) {
-				return vertexLabels.get(v);
-			}});
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller<String>());
         vv.setGraphMouse(new DefaultModalGraphMouse());
         vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             
@@ -95,14 +91,13 @@ public class ShortestPathDemo<V,E> extends JPanel {
                 for (Number e : layout.getGraph().getEdges()) {
                     
                     if(isBlessed(e)) {
-                        Number v1 = mGraph.getEndpoints(e).getFirst();
-                        Number v2 = mGraph.getEndpoints(e).getSecond();
+                        String v1 = mGraph.getEndpoints(e).getFirst();
+                        String v2 = mGraph.getEndpoints(e).getSecond();
                         Point2D p1 = layout.getLocation(v1);
                         Point2D p2 = layout.getLocation(v2);
                         p1 = vv.layoutTransform(p1);
                         p2 = vv.layoutTransform(p2);
-                        RenderContext rc = vv.getRenderContext();
-                        Renderer renderer = vv.getRenderer();
+                        Renderer<String,Number> renderer = vv.getRenderer();
                         renderer.renderEdge(
                                 vv.getRenderContext(),
                                 mGraph,
@@ -123,9 +118,9 @@ public class ShortestPathDemo<V,E> extends JPanel {
 	}
 
     boolean isBlessed( Number e ) {
-    	Pair<Number> endpoints = mGraph.getEndpoints(e);
-		Number v1= endpoints.getFirst()	;
-		Number v2= endpoints.getSecond() ;
+    	Pair<String> endpoints = mGraph.getEndpoints(e);
+		String v1= endpoints.getFirst()	;
+		String v2= endpoints.getSecond() ;
 		return mPred.contains(v1) && mPred.contains( v2 );
     }
     
@@ -226,8 +221,8 @@ public class ShortestPathDemo<V,E> extends JPanel {
 
 		Set<String> s = new TreeSet<String>();
 		
-		for (Number v : mGraph.getVertices()) {
-			s.add(vertexLabels.get(v));
+		for (String v : mGraph.getVertices()) {
+			s.add(v);
 		}
 		final JComboBox choices = new JComboBox(s.toArray());
 		choices.setSelectedIndex(-1);
@@ -235,7 +230,7 @@ public class ShortestPathDemo<V,E> extends JPanel {
 		choices.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				Number v = vertexLabels.inverseBidiMap().get(choices.getSelectedItem());
+				String v = (String)choices.getSelectedItem();
 					
 				if (from) {
 					mFrom = v;
@@ -256,13 +251,13 @@ public class ShortestPathDemo<V,E> extends JPanel {
 		if (mFrom == null || mTo == null) {
 			return;
 		}
-		BFSDistanceLabeler bdl = new BFSDistanceLabeler();
+		BFSDistanceLabeler<String,Number> bdl = new BFSDistanceLabeler<String,Number>();
 		bdl.labelDistances(mGraph, mFrom);
-		mPred = new HashSet<Number>();
+		mPred = new HashSet<String>();
 		
 		// grab a predecessor
-		Number v = mTo;
-		Set<Number> prd = bdl.getPredecessors(v);
+		String v = mTo;
+		Set<String> prd = bdl.getPredecessors(v);
 		mPred.add( mTo );
 		while( prd != null && prd.size() > 0) {
 			v = prd.iterator().next();
@@ -283,25 +278,32 @@ public class ShortestPathDemo<V,E> extends JPanel {
 	/**
 	 * @return
 	 */
-	Graph<Number,Number> getGraph() {
+	Graph<String,Number> getGraph() {
 
-		Graph<Number,Number> g =
-			new EppsteinPowerLawGenerator(26, 50, 50).generateGraph();
-		Set<Number> removeMe = new HashSet<Number>();
-		for (Number v : g.getVertices()) {
+		Graph<String,Number> g =
+			new EppsteinPowerLawGenerator<String,Number>(new GraphElementFactoryImpl(), 26, 50, 50).generateGraph();
+		Set<String> removeMe = new HashSet<String>();
+		for (String v : g.getVertices()) {
             if ( g.degree(v) == 0 ) {
                 removeMe.add( v );
             }
         }
-		for(Number v : removeMe) {
+		for(String v : removeMe) {
 			g.removeVertex(v);
 		}
-		char c = 0;
-		for (Number v : g.getVertices()) {
-			vertexLabels.put(v, ""+(char)(c + 'a'));
-			c++;
-		}
 		return g;
+	}
+	
+	static class GraphElementFactoryImpl implements GraphElementFactory<String,Number> {
+
+		public Number generateEdge(Graph<String, Number> graph) {
+			return graph.getEdges().size();
+		}
+
+		public String generateVertex(Graph<String, Number> graph) {
+			return ""+(char)(graph.getVertices().size()+'a');
+		}
+		
 	}
 
 }
