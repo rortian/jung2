@@ -138,9 +138,11 @@ public class VertexShapeFactory<V>
         Rectangle2D r = thePolygon.getBounds2D();
         double scale_x = width / r.getWidth();
         double scale_y = height / r.getHeight();
-        
-        AffineTransform at = AffineTransform.getTranslateInstance(-width/2, height/2);
-        at.scale(scale_x, scale_y);
+        float translationX = (float) (r.getMinX() + r.getWidth()/2);
+        float translationY = (float) (r.getMinY() + r.getHeight()/2);
+
+        AffineTransform at = AffineTransform.getScaleInstance(scale_x, scale_y);
+        at.translate(-translationX, -translationY);
 
         Shape shape = at.createTransformedShape(thePolygon);
         return shape;
