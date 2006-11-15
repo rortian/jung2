@@ -29,17 +29,17 @@ import edu.uci.ics.graph.Graph;
  * cluster needs to equal the set of all vertices in the graph.
  * @author Scott White
  */
-public abstract class ClusterSet<V,E> {
-    private List<Set<? extends Object>> mClusters;
-    private Map<Object,Set<Object>> mUDCToClustersMap;
+public abstract class ClusterSet<V,E,T> {
+    private List<Set<T>> mClusters;
+    private Map<T,Set<T>> mUDCToClustersMap;
     private Graph<V,E> mUnderlyingGraph;
 
     /**
      * Creates a new instance.
      */
     public ClusterSet(Graph<V,E> underlyingGraph) {
-        mClusters = new ArrayList<Set<?>>();
-        mUDCToClustersMap = new HashMap<Object,Set<Object>>();
+        mClusters = new ArrayList<Set<T>>();
+        mUDCToClustersMap = new HashMap<T,Set<T>>();
         mUnderlyingGraph = underlyingGraph;
     }
 
@@ -47,23 +47,23 @@ public abstract class ClusterSet<V,E> {
      * Adds a new cluster to the collection.
      * @param elements the set of vertices (or edges) comprising a component to be added
      */
-    public void addCluster(Set elements) {
+    public void addCluster(Set<T> elements) {
         if (elements == null || elements.size() == 0) {
             throw new IllegalArgumentException("The set of elements must have at least one element");
         }
 
-        for (Iterator udcIt=elements.iterator();udcIt.hasNext();) {
-            Object udc = udcIt.next();
+        for (Iterator<T> udcIt=elements.iterator();udcIt.hasNext();) {
+            T udc = udcIt.next();
 
             checkLegality(udc);
 
-            Set components = (Set) mUDCToClustersMap.get(udc);
+            Set<T> components = mUDCToClustersMap.get(udc);
             if (components == null) {
-                components = new HashSet();
+                components = new HashSet<T>();
                 mUDCToClustersMap.put(udc,components);
             }
 
-            components.add(elements);
+            components.addAll(elements);
         }
         mClusters.add(elements);
 
@@ -107,7 +107,7 @@ public abstract class ClusterSet<V,E> {
      * @param index the 0-based index of the cluster in the list.
      * @return the set of vertices (or edges) comprising the cluster
      */
-    public Set getCluster(int index) {
+    public Set<V> getCluster(int index) {
         return (Set) mClusters.get(index);
     }
 
@@ -115,7 +115,7 @@ public abstract class ClusterSet<V,E> {
      * Returns an iterator to the component list.
      * @return the iterator to the component list
      */
-    public Iterator iterator() {
+    public Iterator<Set<T>> iterator() {
         return mClusters.iterator();
     }
 

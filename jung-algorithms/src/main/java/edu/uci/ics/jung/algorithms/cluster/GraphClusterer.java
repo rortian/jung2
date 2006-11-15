@@ -17,12 +17,12 @@ import edu.uci.ics.graph.Graph;
  * Interface for finding clusters (sets of possibly overlapping vertices) in graphs.
  * @author Scott White
  */
-public interface GraphClusterer<V,E> {
+public interface GraphClusterer<V,E,T> {
 
     /**
      * Extracts the clusters from a graph.
      * @param graph the graph
      * @return the set of clusters
      */
-    ClusterSet<V,E> extract(Graph<V,E> graph);
+    ClusterSet<V,E,T> extract(Graph<V,E> graph);
 }
