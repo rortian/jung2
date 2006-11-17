@@ -104,7 +104,18 @@ public class VertexCollapseDemo extends JApplet {
         vv.setBackground(Color.white);
         
         // add a listener for ToolTips
-        vv.setToolTipFunction(new DefaultToolTipFunction());
+        vv.setToolTipFunction(new DefaultToolTipFunction() {
+
+			/* (non-Javadoc)
+			 * @see edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction#getToolTipText(java.lang.Object)
+			 */
+			@Override
+			public String getToolTipText(Object v) {
+				if(v instanceof Graph) {
+					return ((Graph)v).getVertices().toString();
+				}
+				return super.getToolTipText(v);
+			}});
         
         /**
          * the regular graph mouse for the normal view
