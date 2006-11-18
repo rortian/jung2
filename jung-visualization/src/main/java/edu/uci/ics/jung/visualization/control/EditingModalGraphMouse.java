@@ -14,7 +14,8 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.basic.BasicIconFactory;
 
-import edu.uci.ics.graph.util.GraphElementFactory;
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.jung.visualization.SettableVertexLocationFunction;
 
 public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse 
@@ -61,8 +62,8 @@ public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse
 	 * create an instance with default values
 	 *
 	 */
-	public EditingModalGraphMouse(GraphElementFactory<V,E> graphElementFactory) {
-		this(graphElementFactory, 1.1f, 1/1.1f);
+	public EditingModalGraphMouse(Factory<V> vertexFactory, Factory<E> edgeFactory) {
+		this(vertexFactory, edgeFactory, 1.1f, 1/1.1f);
 	}
 
 	/**
@@ -70,24 +71,24 @@ public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public EditingModalGraphMouse(GraphElementFactory<V,E> graphElementFactory, float in, float out) {
+	public EditingModalGraphMouse(Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
 		this.in = in;
 		this.out = out;
-		loadPlugins(graphElementFactory);
+		loadPlugins(vertexFactory, edgeFactory);
 	}
 
 	/**
 	 * create the plugins, and load the plugins for TRANSFORMING mode
 	 *
 	 */
-	protected void loadPlugins(GraphElementFactory<V,E> graphElementFactory) {
+	protected void loadPlugins(Factory<V> vertexFactory, Factory<E> edgeFactory) {
 		pickingPlugin = new PickingGraphMousePlugin();
 		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
 		translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
 		scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		rotatingPlugin = new RotatingGraphMousePlugin();
 		shearingPlugin = new ShearingGraphMousePlugin();
-		editingPlugin = new EditingGraphMousePlugin<V,E>(graphElementFactory);
+		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 
 		add(scalingPlugin);
 		setMode(Mode.EDITING);

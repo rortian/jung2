@@ -9,8 +9,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.GraphElementFactory;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.SettableVertexLocationFunction;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -27,12 +28,14 @@ import edu.uci.ics.jung.visualization.picking.PickedState;
 public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePlugin {
     
     protected SettableVertexLocationFunction vertexLocations;
-    protected GraphElementFactory<V,E> graphElementFactory;
+    protected Factory<V> vertexFactory;
+    protected Factory<E> edgeFactory;
 
     public EditingPopupGraphMousePlugin(SettableVertexLocationFunction vertexLocations,
-    		GraphElementFactory<V,E> graphElementFactory) {
+    		Factory<V> vertexFactory, Factory<E> edgeFactory) {
         this.vertexLocations = vertexLocations;
-        this.graphElementFactory = graphElementFactory;
+        this.vertexFactory = vertexFactory;
+        this.edgeFactory = edgeFactory;
     }
 
     @SuppressWarnings({ "unchecked", "serial", "serial" })
@@ -62,7 +65,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                         directedMenu.add(new AbstractAction("["+other+","+vertex+"]") {
                             public void actionPerformed(ActionEvent e) {
 //                                Number newEdge = new Number(other, vertex);
-                                graph.addDirectedEdge(graphElementFactory.generateEdge(graph),
+                                graph.addDirectedEdge(edgeFactory.create(),
 //                                		graph.getEdges().size(), 
                                 		other, vertex);
                                 vv.repaint();
@@ -74,7 +77,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                     for(final V other : picked) {
                         undirectedMenu.add(new AbstractAction("[" + other+","+vertex+"]") {
                             public void actionPerformed(ActionEvent e) {
-                                graph.addEdge(graphElementFactory.generateEdge(graph),
+                                graph.addEdge(edgeFactory.create(),
                                 		//graph.getEdges().size(), 
                                 		other, vertex);
                                 vv.repaint();
@@ -104,7 +107,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                         for(V vertex : graph.getVertices()) {
                             layout.lockVertex(vertex);
                         }
-                        graph.addVertex(graphElementFactory.generateVertex(graph));
+                        graph.addVertex(vertexFactory.create());
                         vv.getModel().restart();
                         for(V vertex : graph.getVertices()) {
                             layout.unlockVertex(vertex);

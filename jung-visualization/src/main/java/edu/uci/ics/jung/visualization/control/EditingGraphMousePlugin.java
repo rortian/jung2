@@ -11,8 +11,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.GraphElementFactory;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.SettableVertexLocationFunction;
@@ -41,19 +42,21 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected VisualizationServer.Paintable edgePaintable;
     protected VisualizationServer.Paintable arrowPaintable;
     boolean edgeIsDirected;
-    protected GraphElementFactory<V,E> graphElementFactory;
+    protected Factory<V> vertexFactory;
+    protected Factory<E> edgeFactory;
     
-    public EditingGraphMousePlugin(GraphElementFactory<V,E> graphElementFactory) {
-        this(MouseEvent.BUTTON1_MASK, graphElementFactory);
+    public EditingGraphMousePlugin(Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(MouseEvent.BUTTON1_MASK, vertexFactory, edgeFactory);
     }
 
     /**
      * create instance and prepare shapes for visual effects
      * @param modifiers
      */
-    public EditingGraphMousePlugin(int modifiers, GraphElementFactory<V,E> graphElementFactory) {
+    public EditingGraphMousePlugin(int modifiers, Factory<V> vertexFactory, Factory<E> edgeFactory) {
         super(modifiers);
-        this.graphElementFactory = graphElementFactory;
+        this.vertexFactory = vertexFactory;
+        this.edgeFactory = edgeFactory;
         rawEdge.setCurve(0.0f, 0.0f, 0.33f, 100, .66f, -50,
                 1.0f, 0.0f);
         rawArrowShape = ArrowFactory.getNotchedArrow(20, 16, 8);
@@ -105,7 +108,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 } else { // make a new vertex
                     Graph<V,E> graph = 
                     	(Graph<V,E>)vv.getGraphLayout().getGraph();
-                    V newVertex = graphElementFactory.generateVertex(graph);
+                    V newVertex = vertexFactory.create();
                     	new Integer(graph.getVertices().size());
                     vertexLocations.setLocation(newVertex, vv.inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getModel().getGraphLayout();
@@ -143,11 +146,11 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                     Graph<V,E> graph = 
                     	(Graph<V,E>)vv.getGraphLayout().getGraph();
                     if(edgeIsDirected) {
-                        graph.addDirectedEdge(graphElementFactory.generateEdge(graph),
+                        graph.addDirectedEdge(edgeFactory.create(),
                         		//graph.getEdges().size(), 
                         		startVertex, vertex);
                     } else {
-                        graph.addEdge(graphElementFactory.generateEdge(graph),
+                        graph.addEdge(edgeFactory.create(),
                         		//graph.getEdges().size(), 
                         		startVertex, vertex);
                     }
