@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.GraphElementFactory;
 
 
 
@@ -29,7 +30,8 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
     private int mNumIterations;
     private double mMaxDegree;
     private Random mRandom;
-    private GraphElementFactory<V,E> factory;
+    private Transformer<Graph<V,E>,V> vertexFactory;
+    private Transformer<Graph<V,E>,E> edgeFactory;
 
     /**
      * Constructor which specifies the parameters of the generator
@@ -38,8 +40,10 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
      * @param r the model parameter. The larger the value for this parameter the better the graph's degree
      * distribution will approximate a power-law.
      */
-    public EppsteinPowerLawGenerator(GraphElementFactory<V,E> factory, int numVertices, int numEdges, int r) {
-    	this.factory = factory;
+    public EppsteinPowerLawGenerator(Transformer<Graph<V,E>,V> vertexFactory, Transformer<Graph<V,E>,E> edgeFactory, 
+    		int numVertices, int numEdges, int r) {
+    	this.vertexFactory = vertexFactory;
+    	this.edgeFactory = edgeFactory;
         mNumVertices = numVertices;
         mNumEdges = numEdges;
         mNumIterations = r;
@@ -50,14 +54,14 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
         Graph<V,E> graph = null;
         graph = new SimpleUndirectedSparseGraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
-        	graph.addVertex(factory.generateVertex(graph));
+        	graph.addVertex(vertexFactory.transform(graph));
         }
         List<V> vertices = new ArrayList<V>(graph.getVertices());
         while (graph.getEdges().size() < mNumEdges) {
             V u = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
             V v = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
             if (!graph.isSuccessor(v,u)) {
-            	graph.addEdge(factory.generateEdge(graph), u, v);
+            	graph.addEdge(edgeFactory.transform(graph), u, v);
             }
         }
 
@@ -100,7 +104,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
 
             if (!graph.isSuccessor(y,x) && x != y) {
                 graph.removeEdge(randomExistingEdge);
-                graph.addEdge(factory.generateEdge(graph), x, y);
+                graph.addEdge(edgeFactory.transform(graph), x, y);
             }
         }
 
