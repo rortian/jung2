@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.GraphElementFactory;
+
 
 
 /**
