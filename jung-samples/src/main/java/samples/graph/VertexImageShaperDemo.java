@@ -83,7 +83,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
  * uses the FourPassImageShaper class to compute the Shape from
  * an image with transparent background.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class VertexImageShaperDemo extends JApplet {
@@ -298,7 +298,7 @@ public class VertexImageShaperDemo extends JApplet {
     /**
      * When Vertices are picked, add a checkmark icon to the imager.
      * Remove the icon when a Vertex is unpicked
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      */
     public static class PickWithIconListener implements ItemListener {
@@ -325,7 +325,7 @@ public class VertexImageShaperDemo extends JApplet {
      * A simple implementation of VertexStringer that
      * gets Vertex labels from a Map  
      * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      *
      */
@@ -551,7 +551,7 @@ public class VertexImageShaperDemo extends JApplet {
      * You won't need this for a real application.
      * Use PluggableRenderer instead
      * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      */
     class DemoRenderer<V,E> extends BasicVertexRenderer<V,E> {
@@ -628,7 +628,7 @@ public class VertexImageShaperDemo extends JApplet {
      * They are rendered in layers starting with the first
      * Icon added (from the constructor).
      * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      */
     public static class LayeredIcon extends ImageIcon {

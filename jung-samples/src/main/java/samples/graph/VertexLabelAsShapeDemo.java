@@ -47,12 +47,17 @@ import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 
 /**
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class VertexLabelAsShapeDemo extends JApplet {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1017336668368978842L;
+
+	/**
      * the graph
      */
     Graph<String,Number> graph;

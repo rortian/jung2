@@ -74,7 +74,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
  * The hyperbolic transform is applied in an elliptical lens
  * that affects that part of the visualization.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class LensDemo extends JApplet {

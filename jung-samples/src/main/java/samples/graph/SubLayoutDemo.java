@@ -52,7 +52,7 @@ import edu.uci.ics.jung.visualization.subLayout.SubLayoutDecorator;
  * are selected. The cluster is formed in a circle centered at the
  * location of the first vertex selected.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class SubLayoutDemo extends JApplet {

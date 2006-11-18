@@ -45,7 +45,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * Demonstrates a single graph with 2 layouts in 2 views.
  * They share picking, transforms, and a pluggable renderer
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class TwoModelDemo extends JApplet {

@@ -28,7 +28,6 @@ import javax.swing.SwingConstants;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.GraphElementFactory;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 import edu.uci.ics.jung.graph.EppsteinPowerLawGenerator;
@@ -281,7 +280,7 @@ public class ShortestPathDemo extends JPanel {
 	Graph<String,Number> getGraph() {
 
 		Graph<String,Number> g =
-			new EppsteinPowerLawGenerator<String,Number>(new GraphElementFactoryImpl(), 26, 50, 50).generateGraph();
+			new EppsteinPowerLawGenerator<String,Number>(new VertexTransformer(), new EdgeTransformer(), 26, 50, 50).generateGraph();
 		Set<String> removeMe = new HashSet<String>();
 		for (String v : g.getVertices()) {
             if ( g.degree(v) == 0 ) {
@@ -294,14 +293,17 @@ public class ShortestPathDemo extends JPanel {
 		return g;
 	}
 	
-	static class GraphElementFactoryImpl implements GraphElementFactory<String,Number> {
+	static class VertexTransformer implements Transformer<Graph<String,Number>,String> {
 
-		public Number generateEdge(Graph<String, Number> graph) {
-			return graph.getEdges().size();
-		}
-
-		public String generateVertex(Graph<String, Number> graph) {
+		public String transform(Graph<String,Number> graph) {
 			return ""+(char)(graph.getVertices().size()+'a');
+		}
+		
+	}
+	static class EdgeTransformer implements Transformer<Graph<String,Number>,Number> {
+
+		public Number transform(Graph<String,Number> graph) {
+			return graph.getEdges().size();
 		}
 		
 	}

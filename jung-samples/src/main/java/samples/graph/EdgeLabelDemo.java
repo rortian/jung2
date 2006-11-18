@@ -61,12 +61,17 @@ import edu.uci.ics.jung.visualization.layout.Layout;
  * can be positioned at any point along the edge, and can
  * be rotated to be parallel with the edge.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class EdgeLabelDemo extends JApplet {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6077157664507049647L;
+
+	/**
      * the graph
      */
     Graph<Integer,Number> graph;
@@ -262,7 +267,7 @@ public class EdgeLabelDemo extends JApplet {
     /**
      * subclassed to hold two BoundedRangeModel instances that
      * are used by JSliders to move the edge label positions
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      *
      */

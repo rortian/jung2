@@ -61,7 +61,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * Demonstrates 3 views of one graph in one model with one layout.
  * Each view uses a different scaling graph mouse.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  * 
  */
 public class MultiViewDemo extends JApplet {

@@ -50,7 +50,7 @@ import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 
 /**
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class VertexCollapseDemo extends JApplet {

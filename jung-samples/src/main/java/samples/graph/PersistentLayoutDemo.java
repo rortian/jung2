@@ -33,7 +33,7 @@ import edu.uci.ics.jung.visualization.layout.PersistentLayoutImpl;
  * and <code>PersistentLayoutImpl</code>.
  * This demo also shows ToolTips on graph vertices.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class PersistentLayoutDemo {

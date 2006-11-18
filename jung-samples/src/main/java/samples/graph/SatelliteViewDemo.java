@@ -60,7 +60,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  * view. Using the mouse in either window affects only the main view
  * and the lens shape in the satellite view.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class SatelliteViewDemo<V, E> extends JApplet {
@@ -213,7 +213,7 @@ public class SatelliteViewDemo<V, E> extends JApplet {
     
     /**
      * draws a grid on the SatelliteViewer's lens
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      */
     static class ViewGrid implements Paintable {

@@ -12,31 +12,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.ItemSelectable;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.io.File;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -46,43 +31,23 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.event.EventListenerList;
-import javax.swing.plaf.basic.BasicIconFactory;
 
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.GraphElementFactory;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.visualization.ArrowFactory;
 import edu.uci.ics.jung.visualization.DefaultSettableVertexLocationFunction;
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.SettableVertexLocationFunction;
-import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.AnimatedPickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
-import edu.uci.ics.jung.visualization.control.RotatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.ShearingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
-import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.StaticLayout;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
  * Shows how easy it is to create a graph editor with JUNG.
@@ -91,7 +56,7 @@ import edu.uci.ics.jung.visualization.picking.PickedState;
  * File menu with an option to save the visible graph as
  * a jpeg file.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class GraphEditorDemo extends JApplet implements Printable {
@@ -182,18 +147,18 @@ public class GraphEditorDemo extends JApplet implements Printable {
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
-        GraphElementFactory<Number,Number> graphElementFactory =
-        	new GraphElementFactoryImpl();
+        Factory<Number> vertexFactory = new VertexFactory(graph);
+        Factory<Number> edgeFactory = new EdgeFactory(graph);
         
         final EditingModalGraphMouse<Number,Number> graphMouse = 
-        	new EditingModalGraphMouse<Number,Number>(graphElementFactory);
+        	new EditingModalGraphMouse<Number,Number>(vertexFactory, edgeFactory);
         
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
         // they are created
         graphMouse.setVertexLocations(vertexLocations);
         vv.setGraphMouse(graphMouse);
-        graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, graphElementFactory));
+        graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, vertexFactory, edgeFactory));
         graphMouse.setMode(ModalGraphMouse.Mode.EDITING);
         
         final ScalingControl scaler = new CrossoverScalingControl();
@@ -265,16 +230,28 @@ public class GraphEditorDemo extends JApplet implements Printable {
         }
     }
     
-    class GraphElementFactoryImpl implements GraphElementFactory<Number,Number> {
+    class VertexFactory implements Factory<Number> {
 
-		public Number generateEdge(Graph<Number, Number> graph) {
-			return graph.getEdges().size();
-		}
-
-		public Number generateVertex(Graph<Number, Number> graph) {
+    	Graph<Number,Number> graph;
+    	
+    	public VertexFactory(Graph<Number,Number> graph) {
+    		this.graph = graph;
+    	}
+		public Number create() {
 			return graph.getVertices().size();
 		}
+    }
+    
+    class EdgeFactory implements Factory<Number> {
+
+    	Graph<Number,Number> graph;
     	
+    	public EdgeFactory(Graph<Number,Number> graph) {
+    		this.graph = graph;
+    	}
+		public Number create() {
+			return graph.getEdges().size();
+		}
     }
 
     /**

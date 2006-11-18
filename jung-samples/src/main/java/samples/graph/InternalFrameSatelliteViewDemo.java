@@ -40,7 +40,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class InternalFrameSatelliteViewDemo {

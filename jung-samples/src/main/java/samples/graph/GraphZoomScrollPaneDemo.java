@@ -44,7 +44,7 @@ import edu.uci.ics.jung.visualization.layout.FRLayout;
  *
  * <p>This demo also shows ToolTips on graph vertices.</p>
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class GraphZoomScrollPaneDemo {
