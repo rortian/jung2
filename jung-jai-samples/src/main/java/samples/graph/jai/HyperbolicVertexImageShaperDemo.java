@@ -260,18 +260,15 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         
         JPanel scaleGrid = new JPanel(new GridLayout(1,0));
         scaleGrid.setBorder(BorderFactory.createTitledBorder("Zoom"));
-        JPanel labelFeatures = new JPanel(new GridLayout(1,0));
-        labelFeatures.setBorder(BorderFactory.createTitledBorder("Image Effects"));
         JPanel controls = new JPanel();
         scaleGrid.add(plus);
         scaleGrid.add(minus);
         controls.add(scaleGrid);
 
-        controls.add(labelFeatures);
         controls.add(modePanel);
         content.add(controls, BorderLayout.SOUTH);
         
-        this.viewSupport = new HyperbolicImageLensSupport<Number,Number>(vv);//, new HyperbolicShapeTransformer(vv),
+        this.viewSupport = new HyperbolicImageLensSupport<Number,Number>(vv);
         this.modelSupport = new LayoutLensSupport<Number,Number>(vv);
         
         graphMouse.addItemListener(modelSupport.getGraphMouse().getModeListener());
