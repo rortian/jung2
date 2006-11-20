@@ -89,6 +89,11 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 public class VertexImageShaperDemo extends JApplet {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4332663871914930864L;
+
+	/**
      * the graph
      */
     SimpleDirectedSparseGraph<Number, Number> graph;
@@ -171,23 +176,23 @@ public class VertexImageShaperDemo extends JApplet {
         
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconAndShapeFunction instead.
-        final DemoVertexImageShapeFunction<Number> vertexImageShapeFunction =
-            new DemoVertexImageShapeFunction<Number>(new EllipseVertexShapeTransformer<Number>());
+        final DemoVertexIconShapeTransformer<Number> vertexIconShapeTransformer =
+            new DemoVertexIconShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
         
-        final DemoVertexIconFunction<Number> vertexIconFunction =
-        	new DemoVertexIconFunction<Number>();
+        final DemoVertexIconTransformer<Number> vertexIconTransformer =
+        	new DemoVertexIconTransformer<Number>();
         
-        vertexImageShapeFunction.setIconMap(iconMap);
-        vertexIconFunction.setIconMap(iconMap);
+        vertexIconShapeTransformer.setIconMap(iconMap);
+        vertexIconTransformer.setIconMap(iconMap);
         
-        vv.getRenderContext().setVertexShapeFunction(vertexImageShapeFunction);
-        vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
+        vv.getRenderContext().setVertexShapeFunction(vertexIconShapeTransformer);
+        vv.getRenderContext().setVertexIconFunction(vertexIconTransformer);
 
         
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
         PickedState<Number> ps = vv.getPickedVertexState();
-        ps.addItemListener(new PickWithIconListener(vertexIconFunction));
+        ps.addItemListener(new PickWithIconListener(vertexIconTransformer));
         
         vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             int x;
@@ -248,7 +253,7 @@ public class VertexImageShaperDemo extends JApplet {
         shape.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
-                vertexImageShapeFunction.setShapeImages(e.getStateChange()==ItemEvent.SELECTED);
+                vertexIconShapeTransformer.setShapeImages(e.getStateChange()==ItemEvent.SELECTED);
                 vv.repaint();
             }
         });
@@ -258,7 +263,7 @@ public class VertexImageShaperDemo extends JApplet {
         fill.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
-                vertexIconFunction.setFillImages(e.getStateChange()==ItemEvent.SELECTED);
+                vertexIconTransformer.setFillImages(e.getStateChange()==ItemEvent.SELECTED);
                 vv.repaint();
             }
         });
@@ -268,7 +273,7 @@ public class VertexImageShaperDemo extends JApplet {
         drawOutlines.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
-                vertexIconFunction.setOutlineImages(e.getStateChange()==ItemEvent.SELECTED);
+                vertexIconTransformer.setOutlineImages(e.getStateChange()==ItemEvent.SELECTED);
                 vv.repaint();
             }
         });
@@ -408,13 +413,12 @@ public class VertexImageShaperDemo extends JApplet {
     /** 
      * this class exists only to provide settings to turn on/off shapes and image fill
      * in this demo.
-     * In a real application, use VertexIconAndShapeFunction instead.
+     * In a real application, use DefaultVertexIconTransformer instead.
      * 
      */
-    public static class DemoVertexIconFunction<V> extends DefaultVertexIconTransformer<V>
+    public static class DemoVertexIconTransformer<V> extends DefaultVertexIconTransformer<V>
     	implements Transformer<V,Icon> {
         
-//        boolean shapeImages = true;
         boolean fillImages = true;
         boolean outlineImages = false;
 
@@ -430,19 +434,7 @@ public class VertexImageShaperDemo extends JApplet {
         public void setFillImages(boolean fillImages) {
             this.fillImages = fillImages;
         }
-//        /**
-//         * @return Returns the shapeImages.
-//         */
-//        public boolean isShapeImages() {
-//            return shapeImages;
-//        }
-//        /**
-//         * @param shapeImages The shapeImages to set.
-//         */
-//        public void setShapeImages(boolean shapeImages) {
-//            shapeMap.clear();
-//            this.shapeImages = shapeImages;
-//        }
+
         public boolean isOutlineImages() {
             return outlineImages;
         }
@@ -462,30 +454,17 @@ public class VertexImageShaperDemo extends JApplet {
     /** 
      * this class exists only to provide settings to turn on/off shapes and image fill
      * in this demo.
-     * In a real application, use VertexIconAndShapeFunction instead.
+     * In a real application, use VertexIconShapeTransformer instead.
      * 
      */
-    public static class DemoVertexImageShapeFunction<V> extends VertexIconShapeTransformer<V> {
+    public static class DemoVertexIconShapeTransformer<V> extends VertexIconShapeTransformer<V> {
         
         boolean shapeImages = true;
-        boolean fillImages = true;
-        boolean outlineImages = false;
 
-        public DemoVertexImageShapeFunction(Transformer<V,Shape> delegate) {
+        public DemoVertexIconShapeTransformer(Transformer<V,Shape> delegate) {
             super(delegate);
         }
-        /**
-         * @return Returns the fillImages.
-         */
-        public boolean isFillImages() {
-            return fillImages;
-        }
-        /**
-         * @param fillImages The fillImages to set.
-         */
-        public void setFillImages(boolean fillImages) {
-            this.fillImages = fillImages;
-        }
+
         /**
          * @return Returns the shapeImages.
          */
@@ -499,12 +478,7 @@ public class VertexImageShaperDemo extends JApplet {
             shapeMap.clear();
             this.shapeImages = shapeImages;
         }
-        public boolean isOutlineImages() {
-            return outlineImages;
-        }
-        public void setOutlineImages(boolean outlineImages) {
-            this.outlineImages = outlineImages;
-        }
+
         public Shape transform(V v) {
 			Icon icon = (Icon) iconMap.get(v);
 
@@ -535,21 +509,13 @@ public class VertexImageShaperDemo extends JApplet {
 				return delegate.transform(v);
 			}
 		}
-        
-//        public Icon getIcon(V v) {
-//            if(fillImages) {
-//                return (Icon)iconMap.get(v);
-//            } else {
-//                return null;
-//            }
-//        }
     }
     
     /**
      * a special renderer that can turn outlines on and off
      * in this demo.
      * You won't need this for a real application.
-     * Use PluggableRenderer instead
+     * Use BasicVertexRenderer instead
      * 
      * @author Tom Nelson
      *
@@ -560,8 +526,8 @@ public class VertexImageShaperDemo extends JApplet {
             boolean outlineImages = false;
             Transformer<V,Icon> vertexIconFunction = rc.getVertexIconFunction();
             
-            if(vertexIconFunction instanceof DemoVertexIconFunction) {
-                outlineImages = ((DemoVertexIconFunction)vertexIconFunction).isOutlineImages();
+            if(vertexIconFunction instanceof DemoVertexIconTransformer) {
+                outlineImages = ((DemoVertexIconTransformer)vertexIconFunction).isOutlineImages();
             }
             Icon icon = vertexIconFunction.transform(v);
             if(icon == null || outlineImages) {
