@@ -127,13 +127,14 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
     };
     
     PerspectiveTransformSupport viewSupport;
-    PerspectiveTransformSupport modelSupport;
+    PerspectiveTransformSupport layoutSupport;
     /**
      * create an instance of a simple graph with controls to
      * demo the zoom features.
      * 
      */
-    public PerspectiveVertexImageShaperDemo() {
+    @SuppressWarnings("serial")
+	public PerspectiveVertexImageShaperDemo() {
         
         // create a simple graph for the demo
         graph = new SimpleDirectedSparseGraph<Number,Number>();
@@ -160,8 +161,8 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         
         createEdges(vertices);
         
-        final VertexStringerImpl vertexStringerImpl = 
-            new VertexStringerImpl(map);
+        final VertexStringerImpl<Number> vertexStringerImpl = 
+            new VertexStringerImpl<Number>(map);
         
         final VertexIconShapeTransformer<Number> vertexImageShapeFunction =
             new VertexIconShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
@@ -177,7 +178,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         vertexIconFunction.setIconMap(iconMap);
         vv.getRenderContext().setVertexShapeFunction(vertexImageShapeFunction);
         vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
-
+        vv.getRenderContext().setVertexStringer(vertexStringerImpl);
         PickedState ps = vv.getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
 
@@ -224,7 +225,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         vv.setGraphMouse(graphMouse);
         
         this.viewSupport = new PerspectiveImageLensSupport<Number,Number>(vv);
-        this.modelSupport = new PerspectiveLayoutTransformSupport<Number,Number>(vv);
+        this.layoutSupport = new PerspectiveLayoutTransformSupport<Number,Number>(vv);
         
         final ScalingControl scaler = new CrossoverScalingControl();
 
@@ -240,29 +241,65 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
                 scaler.scale(vv, 0.9f, vv.getCenter());
             }
         });
-        JSlider slider = new JSlider(-1000,1000,0);
-        slider.addChangeListener(new ChangeListener() {
+        final JSlider horizontalSlider = new JSlider(-120,120,0){
 
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider)e.getSource();
-                int value = source.getValue();
+			/* (non-Javadoc)
+			 * @see javax.swing.JComponent#getPreferredSize()
+			 */
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(80, super.getPreferredSize().height);
+			}
+        };
+        
+        final JSlider verticalSlider = new JSlider(-120,120,0) {
+
+			/* (non-Javadoc)
+			 * @see javax.swing.JComponent#getPreferredSize()
+			 */
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(super.getPreferredSize().width, 80);
+			}
+        };
+        verticalSlider.setOrientation(JSlider.VERTICAL);
+        final ChangeListener changeListener = new ChangeListener() {
+
+			public void stateChanged(ChangeEvent e) {
+                int vval = -verticalSlider.getValue();
+                int hval = horizontalSlider.getValue();
+
                 Dimension d = vv.getSize();
                  PerspectiveTransform pt = null;
-                 if(value > 0) {
                     pt = PerspectiveTransform.getQuadToQuad(
-                            0, 0, d.width, -value, d.width, d.height+value, 0, d.height,
-                            0, 0, d.width, 0, d.width, d.height, 0, d.height);
-                 } else {
-                     pt = PerspectiveTransform.getQuadToQuad(
-                             0, value, d.width, 0, d.width, d.height, 0, d.height-value,
-                             0, 0, d.width, 0, d.width, d.height, 0, d.height);
+                            vval,          hval, 
+                            d.width-vval, -hval, 
+                            d.width+vval, d.height+hval, 
+                            -vval,         d.height-hval,
+                            
+                            0, 0, 
+                            d.width, 0, 
+                            d.width, d.height, 
+                            0, d.height);
 
-                 }
                 viewSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
-                modelSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
+                layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
                 vv.repaint();
-            }});
-        slider.setBorder(BorderFactory.createTitledBorder("Perspective Change"));
+			}};
+		horizontalSlider.addChangeListener(changeListener);
+		verticalSlider.addChangeListener(changeListener);
+		
+		
+        JPanel perspectivePanel = new JPanel(new BorderLayout());
+        JPanel perspectiveCenterPanel = new JPanel(new BorderLayout());
+        perspectivePanel.setBorder(BorderFactory.createTitledBorder("Perspective Controls"));
+        final JButton center = new JButton("Center");
+        center.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				horizontalSlider.setValue(0);
+				verticalSlider.setValue(0);
+			}});
 
         final JCheckBox noText = new JCheckBox("No Text");
         noText.addItemListener(new ItemListener(){
@@ -273,17 +310,25 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
                 vv.repaint();
             }
         });
-        
+        JPanel centerPanel = new JPanel();
+        centerPanel.add(noText);
+
         ButtonGroup radio = new ButtonGroup();
         JRadioButton none = new JRadioButton("None");
         none.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
-                if(viewSupport != null) {
-                    viewSupport.deactivate();
+            	boolean selected = e.getStateChange() == ItemEvent.SELECTED;
+                if(selected) {
+                    if(viewSupport != null) {
+                        viewSupport.deactivate();
+                    }
+                    if(layoutSupport != null) {
+                        layoutSupport.deactivate();
+                    }
                 }
-                if(modelSupport != null) {
-                    modelSupport.deactivate();
-                }
+                center.setEnabled(!selected);
+                horizontalSlider.setEnabled(!selected);
+                verticalSlider.setEnabled(!selected);
             }
         });
         none.setSelected(true);
@@ -298,7 +343,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         JRadioButton hyperModel = new JRadioButton("Layout");
         hyperModel.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
-                modelSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
+                layoutSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
             }
         });
         radio.add(none);
@@ -313,19 +358,25 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         
         JPanel scaleGrid = new JPanel(new GridLayout(2,0));
         scaleGrid.setBorder(BorderFactory.createTitledBorder("Zoom"));
-        JPanel controls = new JPanel();
+        JPanel controls = new JPanel(new BorderLayout());
         scaleGrid.add(plus);
         scaleGrid.add(minus);
-        controls.add(scaleGrid);
+        controls.add(scaleGrid, BorderLayout.WEST);
 
         JPanel lensPanel = new JPanel(new GridLayout(2,0));
-        lensPanel.setBorder(BorderFactory.createTitledBorder("Lens"));
         lensPanel.add(none);
         lensPanel.add(hyperView);
         lensPanel.add(hyperModel);
 
-        controls.add(lensPanel);
-        controls.add(slider);
+        perspectivePanel.add(lensPanel, BorderLayout.WEST);
+        perspectiveCenterPanel.add(horizontalSlider, BorderLayout.SOUTH);
+        perspectivePanel.add(verticalSlider, BorderLayout.EAST);
+        perspectiveCenterPanel.add(center);
+        perspectivePanel.add(perspectiveCenterPanel);
+        controls.add(perspectivePanel, BorderLayout.EAST);
+        
+        
+        controls.add(centerPanel);
         content.add(controls, BorderLayout.SOUTH);
     }
     
@@ -337,7 +388,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
      *
      *
      */
-    class VertexStringerImpl implements Transformer {
+    class VertexStringerImpl<V> implements Transformer<V,String> {
 
         Map map = new HashMap();
         

@@ -108,7 +108,8 @@ public class PerspectiveTransformerDemo extends JApplet {
      * demo the zoom and perspective features.
      * 
      */
-    public PerspectiveTransformerDemo() {
+    @SuppressWarnings("serial")
+	public PerspectiveTransformerDemo() {
         
         // create a simple graph for the demo
         graph = TestGraphs.getOneComponentGraph();
@@ -126,9 +127,6 @@ public class PerspectiveTransformerDemo extends JApplet {
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
         vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
-//        vv.setPickSupport(new ShapePickSupport<String,Number>());
-//        vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve());
-//        PickedState<String> ps = vv.getPickedVertexState();
         PickedState<Number> pes = vv.getPickedEdgeState();
         vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
         vv.getRenderContext().setVertexShapeFunction(new Transformer<String,Shape>() {
@@ -169,12 +167,32 @@ public class PerspectiveTransformerDemo extends JApplet {
                 scaler.scale(vv, 0.9f, vv.getCenter());
             }
         });
-        final JSlider horizontalSlider = new JSlider(-120,120,0);
-        final JSlider verticalSlider = new JSlider(-120,120,0);
+        final JSlider horizontalSlider = new JSlider(-120,120,0){
+
+			/* (non-Javadoc)
+			 * @see javax.swing.JComponent#getPreferredSize()
+			 */
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(80, super.getPreferredSize().height);
+			}
+        };
+        
+        final JSlider verticalSlider = new JSlider(-120,120,0) {
+
+			/* (non-Javadoc)
+			 * @see javax.swing.JComponent#getPreferredSize()
+			 */
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(super.getPreferredSize().width, 80);
+			}
+        };
+        verticalSlider.setOrientation(JSlider.VERTICAL);
         final ChangeListener changeListener = new ChangeListener() {
 
 			public void stateChanged(ChangeEvent e) {
-                int vval = verticalSlider.getValue();
+                int vval = -verticalSlider.getValue();
                 int hval = horizontalSlider.getValue();
 
                 Dimension d = vv.getSize();
@@ -194,63 +212,25 @@ public class PerspectiveTransformerDemo extends JApplet {
                 layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
                 vv.repaint();
 			}};
-			horizontalSlider.addChangeListener(changeListener);
-			verticalSlider.addChangeListener(changeListener);
-//        horizontalSlider.addChangeListener(new ChangeListener() {
-//
-//            public void stateChanged(ChangeEvent e) {
-//                JSlider source = (JSlider)e.getSource();
-//                int vval = verticalSlider.getValue();
-//                int value = source.getValue();
-//                Dimension d = vv.getSize();
-//                 PerspectiveTransform pt = null;
-////                 if(value > 0) {
-//                    pt = PerspectiveTransform.getQuadToQuad(
-//                            -vval, 0, d.width+vval, -value, d.width, d.height+value, 0, d.height,
-//                            0, 0, d.width, 0, d.width, d.height, 0, d.height);
-////                 } else {
-////                     pt = PerspectiveTransform.getQuadToQuad(
-////                             0, value, d.width, 0, d.width-vval, d.height, vval, d.height-value,
-////                             0, 0, d.width, 0, d.width, d.height, 0, d.height);
-////
-////                 }
-//                viewSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
-//                layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
-//                vv.repaint();
-//            }});
-        horizontalSlider.setBorder(BorderFactory.createTitledBorder("Perspective Change"));
+		horizontalSlider.addChangeListener(changeListener);
+		verticalSlider.addChangeListener(changeListener);
 
-//        verticalSlider.addChangeListener(new ChangeListener() {
-//
-//            public void stateChanged(ChangeEvent e) {
-//                JSlider source = (JSlider)e.getSource();
-//                int hval = horizontalSlider.getValue();
-//                int value = source.getValue();
-//                Dimension d = vv.getSize();
-//                 PerspectiveTransform pt = null;
-////                 if(value > 0) {
-//                    pt = PerspectiveTransform.getQuadToQuad(
-//                    		-value, 0, d.width+value, -hval, d.width, d.height+hval, 0, d.height,
-//                            0, 0, d.width, 0, d.width, d.height, 0, d.height);
-////                 } else {
-////                     pt = PerspectiveTransform.getQuadToQuad(
-////                    		 0, hval, d.width, 0, d.width-value, d.height, value, d.height-hval,
-////                             0, 0, d.width, 0, d.width, d.height, 0, d.height);
-//
-////                 }
-//                viewSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
-//                layoutSupport.getPerspectiveTransformer().setPerspectiveTransform(pt);
-//                vv.repaint();
-//            }});
-        
-        verticalSlider.setBorder(BorderFactory.createTitledBorder("Perspective Change"));
-        
-        
+        JPanel perspectivePanel = new JPanel(new BorderLayout());
+        JPanel perspectiveCenterPanel = new JPanel(new BorderLayout());
+        perspectivePanel.setBorder(BorderFactory.createTitledBorder("Perspective Controls"));
+        final JButton center = new JButton("Center");
+        center.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				horizontalSlider.setValue(0);
+				verticalSlider.setValue(0);
+			}});
         ButtonGroup radio = new ButtonGroup();
         JRadioButton normal = new JRadioButton("None");
         normal.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
+            	boolean selected = e.getStateChange() == ItemEvent.SELECTED;
+                if(selected) {
                     if(viewSupport != null) {
                         viewSupport.deactivate();
                     }
@@ -258,6 +238,9 @@ public class PerspectiveTransformerDemo extends JApplet {
                         layoutSupport.deactivate();
                     }
                 }
+                center.setEnabled(!selected);
+                horizontalSlider.setEnabled(!selected);
+                verticalSlider.setEnabled(!selected);
             }
         });
 
@@ -303,7 +286,7 @@ public class PerspectiveTransformerDemo extends JApplet {
         graphRadio.add(gridButton);
         
         JPanel modePanel = new JPanel(new GridLayout(2,1));
-        modePanel.setBorder(BorderFactory.createTitledBorder("Graph Type"));
+        modePanel.setBorder(BorderFactory.createTitledBorder("Display"));
         modePanel.add(graphButton);
         modePanel.add(gridButton);
 
@@ -311,21 +294,25 @@ public class PerspectiveTransformerDemo extends JApplet {
         menubar.add(graphMouse.getModeMenu());
         gzsp.setCorner(menubar);
         
-        JPanel controls = new JPanel();
+        Container controls = new JPanel(new BorderLayout());
         JPanel zoomControls = new JPanel(new GridLayout(2,1));
         zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
-        JPanel perspectiveControls = new JPanel(new GridLayout(2,2));
-        perspectiveControls.setBorder(BorderFactory.createTitledBorder("Perspective Transform"));
+        JPanel perspectiveControls = new JPanel(new GridLayout(3,1));
         zoomControls.add(plus);
         zoomControls.add(minus);
         perspectiveControls.add(normal);
         perspectiveControls.add(perspectiveModel);
         perspectiveControls.add(perspectiveView);
-        controls.add(zoomControls);
-        controls.add(perspectiveControls);
+        
+        controls.add(zoomControls, BorderLayout.WEST);
         controls.add(modePanel);
-        controls.add(horizontalSlider);
-        controls.add(verticalSlider);
+        perspectivePanel.add(perspectiveControls, BorderLayout.WEST);
+        perspectiveCenterPanel.add(horizontalSlider, BorderLayout.SOUTH);
+        perspectivePanel.add(verticalSlider, BorderLayout.EAST);
+        perspectiveCenterPanel.add(center);
+        perspectivePanel.add(perspectiveCenterPanel);
+        controls.add(perspectivePanel, BorderLayout.EAST);
+
         content.add(controls, BorderLayout.SOUTH);
     }
 
