@@ -13,5 +13,5 @@ package edu.uci.ics.graph;
 
 public interface UndirectedGraph<V,E> extends Graph<V,E>
 {
-    void addEdge(E edge, V v1, V v2);
+    boolean addEdge(E edge, V v1, V v2);
 }

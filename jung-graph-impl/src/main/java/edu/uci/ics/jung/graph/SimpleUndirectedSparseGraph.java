@@ -25,36 +25,31 @@ import edu.uci.ics.graph.util.Pair;
 @SuppressWarnings("serial")
 public class SimpleUndirectedSparseGraph<V,E> 
     extends SimpleAbstractSparseGraph<V,E>
-    implements UndirectedGraph<V,E>, Serializable
-{
+    implements UndirectedGraph<V,E>, Serializable {
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
-    public SimpleUndirectedSparseGraph()
-    {
+    public SimpleUndirectedSparseGraph() {
         vertices = new HashMap<V, Set<E>>();
         edges = new HashMap<E, Pair<V>>();
     }
 
-    public Collection<E> getEdges()
-    {
+    public Collection<E> getEdges() {
         return Collections.unmodifiableCollection(edges.keySet());
     }
 
-    public Collection<V> getVertices()
-    {
+    public Collection<V> getVertices() {
         return Collections.unmodifiableCollection(vertices.keySet());
     }
 
-    public void addVertex(V vertex)
-    {
+    public boolean addVertex(V vertex) {
         if (!vertices.containsKey(vertex))
         {
             vertices.put(vertex, new HashSet<E>());
-//            return true;
+            return true;
+        } else {
+            return false;
         }
-//        else
-//            return false;
     }
 
     public boolean removeVertex(V vertex) {
@@ -71,10 +66,9 @@ public class SimpleUndirectedSparseGraph<V,E>
         return true;
     }
     
-    public void addEdge(E edge, V v1, V v2)
-    {
+    public boolean addEdge(E edge, V v1, V v2) {
         if (edges.containsKey(edge))
-            return;
+            return false;
         
         if (!vertices.containsKey(v1))
             this.addVertex(v1);
@@ -86,11 +80,10 @@ public class SimpleUndirectedSparseGraph<V,E>
         edges.put(edge, endpoints);
         vertices.get(v1).add(edge);
         vertices.get(v2).add(edge);        
-//        return true;
+        return true;
     }
 
-    public boolean removeEdge(E edge)
-    {
+    public boolean removeEdge(E edge) {
         if (!edges.containsKey(edge))
             return false;
         
@@ -106,28 +99,23 @@ public class SimpleUndirectedSparseGraph<V,E>
         return true;
     }
     
-    public Collection<E> getInEdges(V vertex)
-    {
+    public Collection<E> getInEdges(V vertex) {
         return this.getIncidentEdges(vertex);
     }
 
-    public Collection<E> getOutEdges(V vertex)
-    {
+    public Collection<E> getOutEdges(V vertex) {
         return this.getIncidentEdges(vertex);
     }
 
-    public Collection<V> getPredecessors(V vertex)
-    {
+    public Collection<V> getPredecessors(V vertex) {
         return this.getNeighbors(vertex);
     }
 
-    public Collection<V> getSuccessors(V vertex)
-    {
+    public Collection<V> getSuccessors(V vertex) {
         return this.getNeighbors(vertex);
     }
 
-    public Collection<V> getNeighbors(V vertex)
-    {
+    public Collection<V> getNeighbors(V vertex) {
         Set<E> incident_edges = vertices.get(vertex);        
         Set<V> neighbors = new HashSet<V>();
         for (E edge : incident_edges)
@@ -144,16 +132,13 @@ public class SimpleUndirectedSparseGraph<V,E>
         return Collections.unmodifiableCollection(neighbors);
     }
 
-    public Collection<E> getIncidentEdges(V vertex)
-    {
+    public Collection<E> getIncidentEdges(V vertex) {
         return Collections.unmodifiableCollection(vertices.get(vertex));
     }
 
-    public E findEdge(V v1, V v2)
-    {
+    public E findEdge(V v1, V v2) {
         Set<E> incident_edges = vertices.get(v1);
-        for (E edge : incident_edges)
-        {
+        for (E edge : incident_edges) {
             Pair<V> endpoints = this.getEndpoints(edge);
             V e_a = endpoints.getFirst();
             V e_b = endpoints.getSecond();
@@ -164,8 +149,7 @@ public class SimpleUndirectedSparseGraph<V,E>
         return null;
     }
 
-    public Pair<V> getEndpoints(E edge)
-    {
+    public Pair<V> getEndpoints(E edge) {
         return edges.get(edge);
     }
 
@@ -173,7 +157,7 @@ public class SimpleUndirectedSparseGraph<V,E>
         return false;
     }
 
-    public void addDirectedEdge(E e, V v1, V v2) {
+    public boolean addDirectedEdge(E e, V v1, V v2) {
         throw new UnsupportedOperationException("Cannot add a directed edge to an undirected graph");
     }
 }

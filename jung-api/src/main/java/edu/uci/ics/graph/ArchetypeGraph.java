@@ -15,11 +15,11 @@ import java.util.Collection;
 
 public interface ArchetypeGraph<V, E>
 {
-    public Collection<E> getEdges();
+    Collection<E> getEdges();
     
-    public Collection<V> getVertices();
+    Collection<V> getVertices();
 
-    public Collection<V> getNeighbors(V vertex);
+    Collection<V> getNeighbors(V vertex);
     
     Collection<E> getIncidentEdges(V vertex);
     
@@ -27,13 +27,13 @@ public interface ArchetypeGraph<V, E>
     
     E findEdge(V v1, V v2);
     
-    void addVertex(V vertex);
+    boolean addVertex(V vertex);
     
     boolean removeVertex(V vertex);
     
-    void addEdge(E e, V v1, V v2);
+    boolean addEdge(E e, V v1, V v2);
     
-    void addDirectedEdge(E e, V v1, V v2);
+    boolean addDirectedEdge(E e, V v1, V v2);
     
     boolean removeEdge(E edge);
     

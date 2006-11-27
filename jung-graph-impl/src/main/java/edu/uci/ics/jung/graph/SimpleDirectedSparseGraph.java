@@ -27,40 +27,33 @@ import edu.uci.ics.graph.util.Pair;
 @SuppressWarnings("serial")
 public class SimpleDirectedSparseGraph<V,E> 
     extends SimpleAbstractSparseGraph<V,E>
-    implements DirectedGraph<V,E>, Serializable
-{
+    implements DirectedGraph<V,E>, Serializable {
     protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
-    public SimpleDirectedSparseGraph()
-    {
+    public SimpleDirectedSparseGraph() {
         vertices = new HashMap<V, Pair<Set<E>>>();
         edges = new HashMap<E, Pair<V>>();
     }
     
-    public Collection<E> getEdges()
-    {
+    public Collection<E> getEdges() {
         return Collections.unmodifiableCollection(edges.keySet());
     }
 
-    public Collection<V> getVertices()
-    {
+    public Collection<V> getVertices() {
         return Collections.unmodifiableCollection(vertices.keySet());
     }
 
-    public void addVertex(V vertex)
-    {
-        if (!vertices.containsKey(vertex))
-        {
+    public boolean addVertex(V vertex) {
+        if (!vertices.containsKey(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new HashSet<E>(), new HashSet<E>()));
-//            return true;
+            return true;
+        } else {
+            return false;
         }
-//        else
-//            return false;
     }
 
-    public boolean removeVertex(V vertex)
-    {
+    public boolean removeVertex(V vertex) {
         // copy to avoid concurrent modification in removeEdge
         Pair<Set<E>> i_adj_set = vertices.get(vertex);
         Pair<Set<E>> adj_set = new Pair<Set<E>>(new HashSet<E>(i_adj_set.getFirst()), 
@@ -81,8 +74,7 @@ public class SimpleDirectedSparseGraph<V,E>
         return true;
     }
     
-    public boolean removeEdge(E edge)
-    {
+    public boolean removeEdge(E edge) {
         if (!edges.containsKey(edge))
             return false;
         
@@ -99,18 +91,15 @@ public class SimpleDirectedSparseGraph<V,E>
     }
 
     
-    public Collection<E> getInEdges(V vertex)
-    {
+    public Collection<E> getInEdges(V vertex) {
         return Collections.unmodifiableCollection(vertices.get(vertex).getFirst());
     }
 
-    public Collection<E> getOutEdges(V vertex)
-    {
+    public Collection<E> getOutEdges(V vertex) {
         return Collections.unmodifiableCollection(vertices.get(vertex).getSecond());
     }
 
-    public Collection<V> getPredecessors(V vertex)
-    {
+    public Collection<V> getPredecessors(V vertex) {
         Set<E> incoming = vertices.get(vertex).getFirst();        
         Set<V> preds = new HashSet<V>();
         for (E edge : incoming)
@@ -119,8 +108,7 @@ public class SimpleDirectedSparseGraph<V,E>
         return Collections.unmodifiableCollection(preds);
     }
 
-    public Collection<V> getSuccessors(V vertex)
-    {
+    public Collection<V> getSuccessors(V vertex) {
         Set<E> outgoing = vertices.get(vertex).getSecond();        
         Set<V> succs = new HashSet<V>();
         for (E edge : outgoing)
@@ -145,8 +133,7 @@ public class SimpleDirectedSparseGraph<V,E>
 //        return CollectionUtils.union(this.getInEdges(vertex), this.getOutEdges(vertex));
     }
 
-    public E findEdge(V v1, V v2)
-    {
+    public E findEdge(V v1, V v2) {
         Set<E> outgoing = vertices.get(v1).getSecond();
         for (E edge : outgoing)
             if (this.getDest(edge).equals(v2))
@@ -155,8 +142,8 @@ public class SimpleDirectedSparseGraph<V,E>
         return null;
     }
     
-    public void addDirectedEdge(E edge, V source, V dest) {
-        addEdge(edge, source, dest);
+    public boolean addDirectedEdge(E edge, V source, V dest) {
+        return addEdge(edge, source, dest);
     }
     /**
      * Adds <code>edge</code> to the graph.  Also adds 
@@ -164,17 +151,16 @@ public class SimpleDirectedSparseGraph<V,E>
      * are not already present.  Returns <code>false</code> if 
      * the specified edge is 
      */
-    public void addEdge(E edge, V source, V dest)
-    {
-        if (edges.containsKey(edge))
-        {
+    public boolean addEdge(E edge, V source, V dest) {
+        if (edges.containsKey(edge)) {
             Pair<V> endpoints = edges.get(edge);
             Pair<V> new_endpoints = new Pair<V>(source, dest);
-            if (!endpoints.equals(new_endpoints))
+            if (!endpoints.equals(new_endpoints)) {
                 throw new IllegalArgumentException("Edge " + edge + 
                         " exists in this graph with endpoints " + source + ", " + dest);
-//            else
-//                return false;
+            } else {
+                return false;
+            }
         }
         
         if (!vertices.containsKey(source))
@@ -188,31 +174,26 @@ public class SimpleDirectedSparseGraph<V,E>
         vertices.get(source).getSecond().add(edge);        
         vertices.get(dest).getFirst().add(edge);        
         
-//        return true;
+        return true;
     }
 
-    public V getSource(E edge)
-    {
+    public V getSource(E edge) {
         return this.getEndpoints(edge).getFirst();
     }
 
-    public V getDest(E edge)
-    {
+    public V getDest(E edge) {
         return this.getEndpoints(edge).getSecond();
     }
 
-    public boolean isSource(V vertex, E edge)
-    {
+    public boolean isSource(V vertex, E edge) {
         return vertex.equals(this.getEndpoints(edge).getFirst());
     }
 
-    public boolean isDest(V vertex, E edge)
-    {
+    public boolean isDest(V vertex, E edge) {
         return vertex.equals(this.getEndpoints(edge).getSecond());
     }
 
-    public Pair<V> getEndpoints(E edge)
-    {
+    public Pair<V> getEndpoints(E edge) {
         return edges.get(edge);
     }
 
