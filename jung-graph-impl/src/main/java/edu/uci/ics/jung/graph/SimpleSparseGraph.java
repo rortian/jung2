@@ -48,19 +48,16 @@ public class SimpleSparseGraph<V,E>
         return Collections.unmodifiableCollection(vertices.keySet());
     }
 
-    public void addVertex(V vertex)
-    {
-        if (!vertices.containsKey(vertex))
-        {
+    public boolean addVertex(V vertex) {
+        if (!vertices.containsKey(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new HashSet<E>(), new HashSet<E>()));
-//            return true;
+            return true;
+        } else {
+        	return false;
         }
-//        else
-//            return false;
     }
 
-    public boolean removeVertex(V vertex)
-    {
+    public boolean removeVertex(V vertex) {
         // copy to avoid concurrent modification in removeEdge
         Pair<Set<E>> i_adj_set = vertices.get(vertex);
         Pair<Set<E>> adj_set = new Pair<Set<E>>(new HashSet<E>(i_adj_set.getFirst()), 
@@ -81,26 +78,47 @@ public class SimpleSparseGraph<V,E>
         return true;
     }
     
-    public void addDirectedEdge(E edge, V v1, V v2) {
+    public boolean addDirectedEdge(E edge, V source, V dest) {
+        if (edges.containsKey(edge)) {
+            Pair<V> endpoints = edges.get(edge);
+            Pair<V> new_endpoints = new Pair<V>(source, dest);
+            if (!endpoints.equals(new_endpoints)) {
+                throw new IllegalArgumentException("Edge " + edge + 
+                        " exists in this graph with endpoints " + source + ", " + dest);
+            } else {
+                return false;
+            }
+        }
+        
+        if (!vertices.containsKey(source))
+            this.addVertex(source);
+        
+        if (!vertices.containsKey(dest))
+            this.addVertex(dest);
+        
+        Pair<V> endpoints = new Pair<V>(source, dest);
+        edges.put(edge, endpoints);
+        vertices.get(source).getSecond().add(edge);        
+        vertices.get(dest).getFirst().add(edge);        
+        
         directedEdges.add(edge);
-        addEdge(edge, v1, v2);
+        return true;
     }
     
-    public void addUndirectedEdge(E e, V v1, V v2) {
-        addEdge(e, v1, v2);
+    public boolean addEdge(E e, V v1, V v2) {
+        return addUndirectedEdge(e, v1, v2);
     }
     
-    public void addEdge(E edge, V v1, V v2)
-    {
-        if (edges.containsKey(edge))
-        {
+    public boolean addUndirectedEdge(E edge, V v1, V v2) {
+        if (edges.containsKey(edge)) {
             Pair<V> endpoints = edges.get(edge);
             Pair<V> new_endpoints = new Pair<V>(v1, v2);
-            if (!endpoints.equals(new_endpoints))
+            if (!endpoints.equals(new_endpoints)) {
                 throw new IllegalArgumentException("Edge " + edge + 
                         " exists in this graph with endpoints " + v1 + ", " + v2);
-//            else
-//                return false;
+            } else {
+                return false;
+            }
         }
         
         if (!vertices.containsKey(v1))
@@ -111,10 +129,12 @@ public class SimpleSparseGraph<V,E>
         
         Pair<V> endpoints = new Pair<V>(v1, v2);
         edges.put(edge, endpoints);
+        vertices.get(v1).getFirst().add(edge);        
         vertices.get(v1).getSecond().add(edge);        
         vertices.get(v2).getFirst().add(edge);        
+        vertices.get(v2).getSecond().add(edge);        
         
-//        return true;
+        return true;
     }
 
     public boolean removeEdge(E edge)
@@ -127,11 +147,16 @@ public class SimpleSparseGraph<V,E>
         V v2 = endpoints.getSecond();
         
         // remove edge from incident vertices' adjacency sets
-        vertices.get(v1).remove(edge);
-        vertices.get(v2).remove(edge);
+        vertices.get(v1).getSecond().remove(edge);
+        vertices.get(v2).getFirst().remove(edge);
         
+        if(directedEdges.remove(edge) == false) {
+        	
+        	// its an undirected edge, remove the other ends
+            vertices.get(v2).getSecond().remove(edge);
+            vertices.get(v1).getFirst().remove(edge);
+        }
         edges.remove(edge);
-        directedEdges.remove(edge);
         return true;
     }
     
