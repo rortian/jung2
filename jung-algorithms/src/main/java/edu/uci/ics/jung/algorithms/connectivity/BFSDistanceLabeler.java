@@ -28,31 +28,18 @@ import edu.uci.ics.graph.Graph;
  * @author Scott White
  */
 public class BFSDistanceLabeler<V, E> {
-	public static final String DEFAULT_DISTANCE_KEY = "algorithms.connectivity.BFSDiststanceLabeler.DISTANCE_KEY";
-//    private NumericDecorator mDistanceDecorator;
+
     private Map<V, Number> distanceDecorator = new HashMap<V,Number>();
     private List<V> mCurrentList;
     private Set<V> mUnvisitedVertices;
     private List<V> mVerticesInOrderVisited;
     private Map<V,HashSet<V>> mPredecessorMap;
 
-
-    /**
-     * Creates a new BFS labeler for the specified graph and root set.
-     * @param distanceKey the UserDatum key the algorithm should use to store/decorate the distances from the root set
-     * The distances are stored in the corresponding Vertex objects and are of type MutableInteger
-     */
-    public BFSDistanceLabeler(String distanceKey) {
-//        mDistanceDecorator = new NumericDecorator(distanceKey,UserData.SHARED);
-        mPredecessorMap = new HashMap<V,HashSet<V>>();
-    }
-    
 	/**
 	 * Creates a new BFS labeler for the specified graph and root set
 	 * The distances are stored in the corresponding Vertex objects and are of type MutableInteger
 	 */
 	public BFSDistanceLabeler() {
-//		mDistanceDecorator = new NumericDecorator(DEFAULT_DISTANCE_KEY,UserData.SHARED);
 		mPredecessorMap = new HashMap<V,HashSet<V>>();
 	}
 
@@ -98,16 +85,12 @@ public class BFSDistanceLabeler<V, E> {
         mVerticesInOrderVisited = new ArrayList<V>();
         mUnvisitedVertices = new HashSet<V>();
         for(V currentVertex : g.getVertices()) {
-//        for (Iterator vIt=g.getVertices().iterator(); vIt.hasNext();) {
-//            Vertex currentVertex = (Vertex) vIt.next();
             mUnvisitedVertices.add(currentVertex);
             mPredecessorMap.put(currentVertex,new HashSet<V>());
         }
 
         mCurrentList = new ArrayList<V>();
         for(V v : rootSet) {
-//        for (Iterator rootIt = rootSet.iterator(); rootIt.hasNext();) {
-//            Vertex v = (Vertex) rootIt.next();
             distanceDecorator.put(v, new Integer(0));
             mCurrentList.add(v);
             mUnvisitedVertices.remove(v);
@@ -122,8 +105,6 @@ public class BFSDistanceLabeler<V, E> {
 
     public void removeDecorations(Graph<V,E> g) {
         for(V v : g.getVertices()) {
-//        for (Iterator vIt=g.getVertices().iterator();vIt.hasNext();) {
-//            Vertex v = (Vertex) vIt.next();
             distanceDecorator.remove(v);
         }
     }
@@ -143,10 +124,7 @@ public class BFSDistanceLabeler<V, E> {
         while (true) {
             List<V> newList = new ArrayList<V>();
             for(V currentVertex : mCurrentList) {
-//           for (Iterator vIt = mCurrentList.iterator(); vIt.hasNext();) {
-//                Vertex currentVertex = (Vertex) vIt.next();
                 for(V next : graph.getSuccessors(currentVertex)) {
-//                for (Iterator uIt = currentVertex.getSuccessors().iterator(); uIt.hasNext();) {
                     visitNewVertex(currentVertex,next, distance, newList);
                 }
             }
@@ -156,10 +134,7 @@ public class BFSDistanceLabeler<V, E> {
         }
 
         for(V v : mUnvisitedVertices) {
-//        for (Iterator vIt = mUnvisitedVertices.iterator(); vIt.hasNext();) {
-//            Vertex v = (Vertex) vIt.next();
             distanceDecorator.put(v,new Integer(-1));
-
         }
     }
 

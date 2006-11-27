@@ -64,19 +64,17 @@ public class PageRankWithPriors<V,E> extends PageRank<V,E> {
         nonPriors.removeAll(priors);
 
         for (V currentVertex : nonPriors) {
-//            Vertex currentVertex = (Vertex) vIt.next();
             setPriorRankScore(currentVertex, 0.0);
         }
 
         for (V currentVertex : getPriors()) {
-//            Vertex currentVertex = (Vertex) vIt.next();
             setPriorRankScore(currentVertex, 1.0 / numPriors);
         }
     }
 
     private static <V,E> Pair<Set<V>> computeReachableVertices(Graph<V,E> g, Set<V> priors) {
 
-        BFSDistanceLabeler<V,E> labeler = new BFSDistanceLabeler<V,E>("DISTANCE");
+        BFSDistanceLabeler<V,E> labeler = new BFSDistanceLabeler<V,E>();
         labeler.labelDistances(g, priors);
         labeler.removeDecorations(g);
         Pair<Set<V>> p = new Pair<Set<V>>(new HashSet<V>(labeler.getVerticesInOrderVisited()),

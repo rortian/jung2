@@ -98,20 +98,15 @@ public class UnweightedShortestPath<V, E>
 	 */
 	private void computeShortestPathsFromSource(V source)
 	{
-		String DISTANCE_KEY = "UnweightedShortestPath.DISTANCE";
-		BFSDistanceLabeler<V,E> labeler = new BFSDistanceLabeler<V,E>(DISTANCE_KEY);
+		BFSDistanceLabeler<V,E> labeler = new BFSDistanceLabeler<V,E>();
 		labeler.labelDistances(mGraph, source);
         distances = labeler.getDistanceDecorator();
 		Map<V,Number> currentSourceSPMap = new HashMap<V,Number>();
 		Map<V,E> currentSourceEdgeMap = new HashMap<V,E>();
 
         for(V vertex : mGraph.getVertices()) {
-//		for (Iterator vIt = mGraph.getVertices().iterator(); vIt.hasNext();)
-//		{
-//			Vertex vertex = (Vertex) vIt.next();
             
 			Number distanceVal = distances.get(vertex);
-                //(Number) vertex.getUserDatum(DISTANCE_KEY);
             // BFSDistanceLabeler uses -1 to indicate unreachable vertices;
             // don't bother to store unreachable vertices
             if (distanceVal != null && distanceVal.intValue() >= 0) 
@@ -119,15 +114,12 @@ public class UnweightedShortestPath<V, E>
                 currentSourceSPMap.put(vertex, distanceVal);
                 int minDistance = distanceVal.intValue();
                 for(E incomingEdge : mGraph.getInEdges(vertex)) {
-//                for (Iterator eIt = vertex.getInEdges().iterator(); eIt.hasNext();)
-//                {
-//                    Edge incomingEdge = (Edge) eIt.next();
+
                     V neighbor = mGraph.getOpposite(vertex, incomingEdge);
-//                    Vertex neighbor = incomingEdge.getOpposite(vertex);
+
                     Number predDistanceVal = distances.get(neighbor);
-//                        (Number) neighbor.getUserDatum(DISTANCE_KEY);
+
                     int pred_distance = predDistanceVal.intValue();
-//                    if (predDistanceVal.intValue() < minDistance)
                     if (pred_distance < minDistance && pred_distance >= 0)
                     {
                         minDistance = predDistanceVal.intValue();
@@ -136,9 +128,6 @@ public class UnweightedShortestPath<V, E>
                 }
             }
 		}
-
-//		UserDataUtils.cleanup(mGraph.getVertices(), DISTANCE_KEY);
-
 		mDistanceMap.put(source, currentSourceSPMap);
 		mIncomingEdgeMap.put(source, currentSourceEdgeMap);
 	}
