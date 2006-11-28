@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.graph.DirectedGraph;
 
 
@@ -48,6 +50,8 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
     private Map<E,Integer> pathIndices = new HashMap<E,Integer>();
     private Map<Object,V> roots = new HashMap<Object,V>();
     private Map<V,Set<Integer>> pathsSeen = new HashMap<V,Set<Integer>>();
+    private Factory<V> vertexFactory;
+    private Factory<E> edgeFactory;
 
     /**
      * Constructs and initializes the algorithm.
@@ -56,8 +60,11 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
      * @param maxDepth the maximal depth to search out from the root set
      * @param priors the root set (starting vertices)
      */
-    public WeightedNIPaths(DirectedGraph<V,E> graph, double alpha, int maxDepth, Set<V> priors) {
+    public WeightedNIPaths(DirectedGraph<V,E> graph, Factory<V> vertexFactory,
+    		Factory<E> edgeFactory, double alpha, int maxDepth, Set<V> priors) {
         super.initialize(graph, true,false);
+        this.vertexFactory = vertexFactory;
+        this.edgeFactory = edgeFactory;
         mAlpha = alpha;
         mMaxDepth = maxDepth;
         mPriors = priors;
@@ -97,26 +104,11 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
 
         List<E> edges = new ArrayList<E>();
 
-        V virtualNode = null;
-		try {
-			virtualNode = (V)getGraph().getVertices().iterator().next().getClass().newInstance();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		}
+        V virtualNode = vertexFactory.create();
 		//addVertex(new SparseVertex());
         getGraph().addVertex(virtualNode);
-        E virtualSinkEdge = null;
-		try {
-			virtualSinkEdge = (E)getGraph().getEdges().iterator().next().getClass().newInstance();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        E virtualSinkEdge = edgeFactory.create();
+
         getGraph().addEdge(virtualSinkEdge, virtualNode, root);
 //        E virtualSinkEdge = getGraph().addEdge(arg0, arg1, arg2)
         	//GraphUtils.addEdge(getGraph(), virtualNode, root);
