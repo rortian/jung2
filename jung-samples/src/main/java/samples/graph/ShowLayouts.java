@@ -27,8 +27,10 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.TestGraphs;
+import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -121,9 +123,21 @@ public class ShowLayouts extends JApplet {
         g_array = //(Graph<Object, ? extends Edge<Object>>)
             (Graph<? extends Object,? extends Object>[])
             new Graph<?,?>[graph_names.length];
+        
+    	Factory<Integer> vertexFactory = new Factory<Integer>() {
+    			int count;
+				public Integer create() {
+					return count++;
+				}};
+		Factory<Number> edgeFactory = new Factory<Number>() {
+			int count;
+				public Number create() {
+					return count++;
+				}};
+
             
         g_array[0] = TestGraphs.createTestGraph(false);
-        g_array[1] = TestGraphs.generateMixedRandomGraph(new HashMap(), 20, true, new HashSet());
+        g_array[1] = TestGraphs.generateMixedRandomGraph(vertexFactory, edgeFactory, new HashMap(), 20, true, new HashSet());
         g_array[2] = TestGraphs.getDemoGraph();
         g_array[3] = TestGraphs.createDirectedAcyclicGraph(4, 4, 0.3);
         g_array[4] = TestGraphs.getOneComponentGraph();

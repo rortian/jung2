@@ -47,6 +47,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
@@ -54,7 +55,7 @@ import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.predicates.GraphPredicate;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
-import edu.uci.ics.jung.graph.TestGraphs;
+import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -317,9 +318,22 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
      * Generates a mixed-mode random graph, runs VoltageRanker on it, and
      * returns the resultant graph.
      */
-    public Graph<Integer,Number> getGraph()
-    {
-        Graph<Integer,Number> g = TestGraphs.generateMixedRandomGraph(edge_weight, 20, false, seedVertices);
+    public Graph<Integer,Number> getGraph() {
+    	Factory<Integer> vertexFactory = 
+    		new Factory<Integer>() {
+    			int count;
+				public Integer create() {
+					return count++;
+				}};
+		Factory<Number> edgeFactory = 
+		    new Factory<Number>() {
+			    int count;
+				public Number create() {
+					return count++;
+				}};
+        Graph<Integer,Number> g = 
+        	TestGraphs.<Integer,Number>generateMixedRandomGraph(vertexFactory, edgeFactory,
+        		edge_weight, 20, false, seedVertices);
         vs = new NumberVertexValueStringer<Integer>(voltages);
         es = new NumberEdgeValueStringer<Number>(edge_weight);
         

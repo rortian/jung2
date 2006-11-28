@@ -25,12 +25,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
-import edu.uci.ics.jung.graph.EppsteinPowerLawGenerator;
+import edu.uci.ics.jung.graph.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -280,7 +281,7 @@ public class ShortestPathDemo extends JPanel {
 	Graph<String,Number> getGraph() {
 
 		Graph<String,Number> g =
-			new EppsteinPowerLawGenerator<String,Number>(new VertexTransformer(), new EdgeTransformer(), 26, 50, 50).generateGraph();
+			new EppsteinPowerLawGenerator<String,Number>(new VertexFactory(), new EdgeFactory(), 26, 50, 50).generateGraph();
 		Set<String> removeMe = new HashSet<String>();
 		for (String v : g.getVertices()) {
             if ( g.degree(v) == 0 ) {
@@ -293,17 +294,17 @@ public class ShortestPathDemo extends JPanel {
 		return g;
 	}
 	
-	static class VertexTransformer implements Transformer<Graph<String,Number>,String> {
-
-		public String transform(Graph<String,Number> graph) {
-			return ""+(char)(graph.getVertices().size()+'a');
+	static class VertexFactory implements Factory<String> {
+		int count;
+		public String create() {
+			return Character.toString((char)(count+++'a'));
 		}
 		
 	}
-	static class EdgeTransformer implements Transformer<Graph<String,Number>,Number> {
-
-		public Number transform(Graph<String,Number> graph) {
-			return graph.getEdges().size();
+	static class EdgeFactory implements Factory<Number> {
+		int count;
+		public Number create() {
+			return count++;
 		}
 		
 	}

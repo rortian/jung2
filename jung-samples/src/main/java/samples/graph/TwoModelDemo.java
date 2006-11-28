@@ -23,7 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.TestGraphs;
+import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
