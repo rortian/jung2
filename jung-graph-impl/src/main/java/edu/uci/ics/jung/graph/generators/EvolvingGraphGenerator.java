@@ -7,7 +7,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.graph;
+package edu.uci.ics.jung.graph.generators;
 
 import java.util.Set;
 

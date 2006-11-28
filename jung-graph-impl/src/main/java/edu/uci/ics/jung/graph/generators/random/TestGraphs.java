@@ -9,7 +9,7 @@
  * Created on Jul 2, 2003
  *  
  */
-package edu.uci.ics.jung.graph;
+package edu.uci.ics.jung.graph.generators.random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,9 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.SimpleSparseGraph;
+import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
 
 
 
@@ -290,9 +296,13 @@ public class TestGraphs {
 	/**
 	 * Equivalent to <code>generateMixedRandomGraph(edge_weight, num_vertices, true)</code>.
 	 */
-	public static Graph<Integer, Number> generateMixedRandomGraph(Map<Number,Number> edge_weight, int num_vertices, Set<Integer> seedVertices)
+	public static <V,E> Graph<V, E> generateMixedRandomGraph(
+			Factory<V> vertexFactory,
+    		Factory<E> edgeFactory,
+    		Map<E,Number> edge_weight, 
+			int num_vertices, Set<V> seedVertices)
 	{
-		return generateMixedRandomGraph(edge_weight, num_vertices, true, seedVertices);
+		return generateMixedRandomGraph(vertexFactory, edgeFactory, edge_weight, num_vertices, true, seedVertices);
 	}
 
     /**
@@ -302,50 +312,39 @@ public class TestGraphs {
      * Then takes the resultant graph, replaces random undirected edges with directed
      * edges, and assigns random weights to each edge.
      */
-    public static Graph<Integer, Number> generateMixedRandomGraph(Map<Number,Number> edge_weights, 
-            int num_vertices, boolean parallel, Set<Integer> seedVertices)
+    public static <V,E> Graph<V,E> generateMixedRandomGraph(
+    		Factory<V> vertexFactory,
+    		Factory<E> edgeFactory,
+    		Map<E,Number> edge_weights, 
+            int num_vertices, boolean parallel, Set<V> seedVertices)
     {
         int seed = (int)(Math.random() * 10000);
-        BarabasiAlbertGenerator bag = 
-            new BarabasiAlbertGenerator(4, 3, false, parallel, seed, seedVertices);
+        BarabasiAlbertGenerator<V,E> bag = 
+            new BarabasiAlbertGenerator<V,E>(vertexFactory, edgeFactory,
+            		4, 3, false, parallel, seed, seedVertices);
         bag.evolveGraph(num_vertices - 4);
-        Graph<Integer, Number> ug = bag.generateGraph();
-//        SettableVertexMapper svm = new HashSettableVertexMapper();
-//        Map<Integer,Integer> svm = new HashMap<Integer,Integer>();
+        Graph<V, E> ug = bag.generateGraph();
 
         // create a SparseGraph version of g
-        Graph<Integer, Number> g = new SimpleSparseGraph<Integer, Number>();
-        for(Integer v : ug.getVertices()) {
+        Graph<V, E> g = new SimpleSparseGraph<V, E>();
+        for(V v : ug.getVertices()) {
         	g.addVertex(v);
         }
-//        for(Integer v : ug.getVertices()) {
-////        for (Iterator iter = ug.getVertices().iterator(); iter.hasNext(); )
-////        {
-////            Vertex v = (Vertex)iter.next();
-//        	Integer w = new Integer(ug.getVertices().size());
-////            Vertex w = new SparseVertex();
-//            g.addVertex(w);
-////            if (v.containsUserDatumKey(BarabasiAlbertGenerator.SEED))
-////                w.addUserDatum(BarabasiAlbertGenerator.SEED, BarabasiAlbertGenerator.SEED, UserData.REMOVE);
-//            svm.put(v, w);
-//        }
         
         // randomly replace some of the edges by directed edges to 
         // get a mixed-mode graph, add random weights
         
-        for(Number e : ug.getEdges()) {
-            Integer v1 = ug.getEndpoints(e).getFirst();
-            Integer v2 = ug.getEndpoints(e).getSecond();
+        for(E e : ug.getEdges()) {
+            V v1 = ug.getEndpoints(e).getFirst();
+            V v2 = ug.getEndpoints(e).getSecond();
 
-            Double me = new Double(Math.random());
-            if (Math.random() < 0.5)
+            E me = edgeFactory.create();
+            if (Math.random() < 0.5) {
                 g.addDirectedEdge(me, v1, v2);
-//                me = new DirectedSparseEdge<Integer>(v1, v2);
-            else
+            } else {
                 g.addEdge(me, v1, v2);
-//                me = new UndirectedSparseEdge<Integer>(v1, v2);
-//            g.addEdge(me);
-            edge_weights.put(me, me);
+            }
+            edge_weights.put(me, Math.random());
         }
         
         return g;
