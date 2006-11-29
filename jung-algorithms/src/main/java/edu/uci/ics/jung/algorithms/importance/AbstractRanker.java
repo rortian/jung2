@@ -9,16 +9,15 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cern.colt.list.DoubleArrayList;
-import corejava.Format;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeProcess;
 
@@ -41,34 +40,30 @@ import edu.uci.ics.jung.algorithms.IterativeProcess;
  */
 public abstract class AbstractRanker<V,E> extends IterativeProcess {
     private Graph<V,E> mGraph;
-    private List<Ranking> mRankings;
-    public static final String DEFAULT_EDGE_WEIGHT_KEY = "jung.algorithms.importance.AbstractRanker.EdgeWeight";
-//    private String mUserDefinedEdgeWeightKey;
+    private List<Ranking<?>> mRankings;
     private boolean mRemoveRankScoresOnFinalize;
     private boolean mRankNodes;
     private boolean mRankEdges;
     private boolean mNormalizeRankings;
-    private Map<Object, Number> scoreMap = new HashMap<Object, Number>();
+    private Map<Object, Number> rankScores = new HashMap<Object, Number>();
     private Map<E,Number> edgeWeights = new HashMap<E,Number>();
 
     protected void initialize(Graph<V,E> graph, boolean isNodeRanker, 
-        boolean isEdgeRanker)
-    {
+        boolean isEdgeRanker) {
         if (!isNodeRanker && !isEdgeRanker)
             throw new IllegalArgumentException("Must rank edges, vertices, or both");
         mGraph = graph;
         mRemoveRankScoresOnFinalize = true;
         mNormalizeRankings = true;
-//        mUserDefinedEdgeWeightKey = null;
         mRankNodes = isNodeRanker;
         mRankEdges = isEdgeRanker;
     }
     
     /**
-	 * @return the scoreMap
+	 * @return the rankScores
 	 */
-	public Map<Object, Number> getScoreMap() {
-		return scoreMap;
+	public Map<Object, Number> getRankScores() {
+		return rankScores;
 	}
 
 	protected Collection<V> getVertices() {
@@ -94,8 +89,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
      * Returns <code>true</code> if this ranker ranks edges, and 
      * <code>false</code> otherwise.
      */
-    public boolean isRankingEdges()
-    {
+    public boolean isRankingEdges() {
         return mRankEdges;
     }
     
@@ -111,29 +105,27 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
     protected void onFinalize(Object e) {}
 
     protected void finalizeIterations() {
-        ArrayList<Ranking> sortedRankings = new ArrayList<Ranking>();
+        List<Ranking<?>> sortedRankings = new ArrayList<Ranking<?>>();
 
         int id = 1;
-        if (mRankNodes) 
-        {
+        if (mRankNodes) {
             for (V currentVertex : getVertices()) {
-                NodeRanking<V> ranking = new NodeRanking<V>(id,getRankScore(currentVertex),currentVertex);
+                Ranking<V> ranking = new Ranking<V>(id,getRankScore(currentVertex),currentVertex);
                 sortedRankings.add(ranking);
                 if (mRemoveRankScoresOnFinalize) {
-                	this.scoreMap.remove(currentVertex);
+                	this.rankScores.remove(currentVertex);
                 }
                 id++;
                 onFinalize(currentVertex);
             }
         }
-        if (mRankEdges) 
-        {
+        if (mRankEdges) {
             for (E currentEdge : mGraph.getEdges()) {
 
-                EdgeRanking<E> ranking = new EdgeRanking<E>(id,getRankScore(currentEdge),currentEdge);
+                Ranking<E> ranking = new Ranking<E>(id,getRankScore(currentEdge),currentEdge);
                 sortedRankings.add(ranking);
                 if (mRemoveRankScoresOnFinalize) {
-                	this.scoreMap.remove(currentEdge);
+                	this.rankScores.remove(currentEdge);
                 }
                 id++;
                 onFinalize(currentEdge);
@@ -141,7 +133,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
         }
 
         mRankings = sortedRankings;
-        Collections.<Ranking>sort(mRankings);
+        Collections.sort(mRankings);
     }
 
     /**
@@ -150,7 +142,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
      * if the algorithm is ranking nodes the instances will be of type <code>NodeRanking</code>
      * @return  the list of rankings
      */
-    public List<Ranking> getRankings() {
+    public List<Ranking<?>> getRankings() {
         return mRankings;
     }
 
@@ -159,26 +151,19 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
      * @param topKRankings the value of k to use
      * @return list of rank scores
      */
-    public DoubleArrayList getRankScores(int topKRankings) {
-        DoubleArrayList scores = new DoubleArrayList();
+    public List<Double> getRankScores(int topKRankings) {
+        List<Double> scores = new ArrayList<Double>();
         int count=1;
-        for (Iterator rIt=getRankings().iterator(); rIt.hasNext();) {
+        for (Ranking<?> currentRanking : getRankings()) {
             if (count > topKRankings) {
                 return scores;
             }
-            NodeRanking currentRanking = (NodeRanking) rIt.next();
             scores.add(currentRanking.rankScore);
             count++;
         }
 
         return scores;
     }
-
-    /**
-     * The user datum key used to store the rank score.
-     * @return the key
-     */
-//    abstract public String getRankScoreKey();
 
     /**
      * Given an edge or node, returns the corresponding rank score. This is a default
@@ -188,7 +173,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
      * @return  the rank score value
      */
     public double getRankScore(Object e) {
-        Number rankScore = scoreMap.get(e);
+        Number rankScore = rankScores.get(e);
         if (rankScore != null) {
             return rankScore.doubleValue();
         } else {
@@ -198,29 +183,12 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
     }
 
     protected void setRankScore(Object e, double rankValue) {
-    	if(scoreMap.containsKey(e) == false) {
-    		scoreMap.put(e, rankValue);
-        } else {
-        	scoreMap.put(e, scoreMap.get(e).doubleValue() + rankValue);
-        }
-
+    		rankScores.put(e, rankValue);
     }
 
     protected double getEdgeWeight(E e) {
     	return edgeWeights.get(e).doubleValue();
     }
-
-    /**
-     * the user datum key used to store the edge weight, if any
-     * @return  the key
-     */
-//    public String getEdgeWeightKeyName() {
-//        if (mUserDefinedEdgeWeightKey == null) {
-//           return DEFAULT_EDGE_WEIGHT_KEY;
-//        } else {
-//            return mUserDefinedEdgeWeightKey;
-//        }
-//    }
 
     protected void setEdgeWeight(E e, double weight) {
     	edgeWeights.put(e, weight);
@@ -231,15 +199,14 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
         for (V currentVertex : getVertices()) {
 
             Collection<E> outgoingEdges = mGraph.getOutEdges(currentVertex);
+            System.err.println("outEdges for "+currentVertex+" is "+outgoingEdges);
 
             double numOutEdges = outgoingEdges.size();
             for (E currentEdge : outgoingEdges) {
                 setEdgeWeight(currentEdge,1.0/numOutEdges);
             }
         }
-
     }
-
 
     protected void normalizeEdgeTransitionWeights() {
 
@@ -252,7 +219,6 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
                 totalEdgeWeight += getEdgeWeight(currentEdge);
             }
 
-            //double numOutEdges = outgoingEdges.size();
             for (E currentEdge : outgoingEdges) {
                 setEdgeWeight(currentEdge,getEdgeWeight(currentEdge)/totalEdgeWeight);
             }
@@ -282,12 +248,10 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
      */
     public void printRankings(boolean verbose,boolean printScore) {
             double total = 0;
-            Format formatter = new Format("%7.6f");
+            Format formatter = new DecimalFormat("#0.#######");
             int rank = 1;
-//            boolean hasLabels = StringLabeller.hasStringLabeller(getGraph());
-//            StringLabeller labeller = StringLabeller.getLabeller(getGraph());
-            for (Iterator it = getRankings().iterator(); it.hasNext();) {
-                Ranking currentRanking = (Ranking) it.next();
+
+            for (Ranking currentRanking : getRankings()) {
                 double rankScore = currentRanking.rankScore;
                 if (verbose) {
                     System.out.print("Rank " + rank + ": ");
@@ -295,10 +259,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
                         System.out.print(formatter.format(rankScore));
                     }
                     System.out.print("\tVertex Id: " + currentRanking.originalPos);
-                    if (currentRanking instanceof NodeRanking) {
-                        V v = ((NodeRanking<V>) currentRanking).getNode();
-                        System.out.print(" (" + v + ")");
-                    }
+                        System.out.print(" (" + currentRanking.getRanked() + ")");
                     System.out.println();
                 } else {
                     System.out.print(rank + "\t");
@@ -326,14 +287,4 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
     public void setNormalizeRankings(boolean normalizeRankings) {
         mNormalizeRankings = normalizeRankings;
     }
-
-    /**
-     * Allows the user to provide his own set of data instances as edge weights by giving the ranker
-     * the <code>UserDatum</code> key where those instances can be found.
-     * @param keyName the name of the <code>UserDatum</code> key where the data instance representing an edge weight
-     * can be found
-     */
-//    public void setUserDefinedEdgeWeightKey(String keyName) {
-//        mUserDefinedEdgeWeightKey = keyName;
-//    }
 }
