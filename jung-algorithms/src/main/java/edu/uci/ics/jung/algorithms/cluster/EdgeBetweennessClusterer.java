@@ -10,13 +10,11 @@
 package edu.uci.ics.jung.algorithms.cluster;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.importance.BetweennessCentrality;
-import edu.uci.ics.jung.algorithms.importance.EdgeRanking;
 import edu.uci.ics.jung.algorithms.importance.Ranking;
 
 
@@ -76,9 +74,9 @@ public class EdgeBetweennessClusterer<V,E> implements GraphClusterer<V,E,V> {
             BetweennessCentrality<V,E> bc = new BetweennessCentrality<V,E>(graph,false);
             bc.setRemoveRankScoresOnFinalize(true);
             bc.evaluate();
-            EdgeRanking<E> highestBetweenness = (EdgeRanking<E>)bc.getRankings().get(0);
-            mEdgesRemoved.add(highestBetweenness.edge);
-            graph.removeEdge(highestBetweenness.edge);
+            Ranking<E> highestBetweenness = (Ranking<E>)bc.getRankings().get(0);
+            mEdgesRemoved.add(highestBetweenness.getRanked());
+            graph.removeEdge(highestBetweenness.getRanked());
         }
 
         WeakComponentClusterer wcSearch = new WeakComponentClusterer();
