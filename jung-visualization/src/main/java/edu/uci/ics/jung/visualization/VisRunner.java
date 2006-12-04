@@ -104,7 +104,7 @@ public class VisRunner implements Relaxer, Runnable {
 	                    try {
 	                        pauseObject.wait();
 	                    } catch (InterruptedException e) {
-	                        System.err.println("vis runner wait interrupted");
+//	                        System.err.println("vis runner wait interrupted");
 	                    }
 	                }
 	            }
@@ -116,7 +116,7 @@ public class VisRunner implements Relaxer, Runnable {
 	            try {
 	                Thread.sleep(sleepTime);
 	            } catch (InterruptedException ie) {
-	                System.err.println("vis runner sleep insterrupted");
+//	                System.err.println("vis runner sleep interrupted");
 	            }
 	        }
 
