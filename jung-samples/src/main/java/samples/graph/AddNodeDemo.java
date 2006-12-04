@@ -10,6 +10,8 @@
 
 package samples.graph;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,14 +19,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JRootPane;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
+import edu.uci.ics.jung.visualization.VisRunner;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
-import edu.uci.ics.jung.visualization.layout.LayoutMutable;
+import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.layout.SpringLayout;
 import edu.uci.ics.jung.visualization.layout.SpringLayout.LengthFunction;
 
@@ -48,9 +55,11 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
     private VisualizationViewer<Number,Number> vv = null;
 
-    private LayoutMutable<Number,Number> layout = null;
+    private Layout<Number,Number> layout = null;
 
     Timer timer;
+    
+    boolean done;
 
     protected JButton switchLayout;
 
@@ -65,7 +74,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         //create a graphdraw
         layout = new FRLayout<Number,Number>(g);
         
-        vv = new VisualizationViewer<Number,Number>(layout);
+        vv = new VisualizationViewer<Number,Number>(layout, new Dimension(600,600));
 
         JRootPane rp = this.getRootPane();
         rp.putClientProperty("defeatSystemEventQueueCheck", Boolean.TRUE);
@@ -80,25 +89,28 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
         //set a visualization viewer
         
-        vv.getModel().setRelaxerThreadSleepTime(500);
+        vv.getModel().getRelaxer().setSleepTime(500);
         vv.setGraphMouse(new DefaultModalGraphMouse());
-
+        
+        vv.getRenderContext().setCenterVertexLabel(true);
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller<Number>());
+        vv.setForeground(Color.white);
         getContentPane().add(vv);
         switchLayout = new JButton("Switch to SpringLayout");
         switchLayout.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
+            	Dimension d = new Dimension(600,600);
                 if (switchLayout.getText().indexOf("Spring") > 0) {
                     switchLayout.setText("Switch to FRLayout");
                     layout = new SpringLayout<Number,Number>(g, UNITLENGTHFUNCTION);
-                    vv.getModel().setGraphLayout(layout);
+                    layout.setSize(d);
+                    vv.getModel().setGraphLayout(layout, d);
                 } else {
                     switchLayout.setText("Switch to SpringLayout");
-                    layout = new FRLayout<Number,Number>(g);
-                    vv.getModel().setGraphLayout(layout);
+                    layout = new FRLayout<Number,Number>(g, d);
+                    vv.getModel().setGraphLayout(layout, d);
                 }
-                if (!vv.isVisRunnerRunning())
-                    vv.getModel().init();
             }
         });
 
@@ -118,27 +130,24 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
     public void process() {
 
-        System.out.println("-[----------------------------");
-        int label_number = 0;
+//        System.out.println("-[----------------------------");
+//        int label_number = 0;
 
-        boolean redraw = false;
-
-        //run in loop populating data on graph as it goes into the database
-        //        while (t != -1) {
-        redraw = true;
         try {
 
             if (g.getVertices().size() < 100) {
-                redraw = true;
 
-                //pull out last record processed and label
-                label_number = (int) (Math.random() * 10000);
+//                //pull out last record processed and label
+//                label_number = (int) (Math.random() * 10000);
 
-                System.out.println("P: adding a node " + label_number);
 
                 //add a vertex
                 Integer v1 = new Integer(g.getVertices().size());
+
+                Relaxer relaxer = vv.getModel().getRelaxer();
+                relaxer.pause();
                 g.addVertex(v1);
+                System.err.println("added node " + v1);
 
                 // wire it to some edges
                 if (v_prev != null) {
@@ -149,33 +158,72 @@ public class AddNodeDemo extends javax.swing.JApplet {
                 }
 
                 v_prev = v1;
+                
+//                VisRunner relaxer = vv.getModel().getRelaxer();
+//                if(relaxer != null) {
+//                	relaxer.stop();
+//                	relaxer = null;
+//                }
+//            	layout.initialize();
+//                if(layout instanceof IterativeContext) {
+//                	relaxer = new VisRunner((IterativeContext)layout);
+//                	relaxer.relax();
+//                }
+                layout.reset();
+                relaxer.resume();
 
+
+            } else {
+            	done = true;
             }
 
-            if (redraw) {
-                System.out.println("P: Updating");
+//            if (redraw) {
                 //update the layout
                 // see
                 // https://sourceforge.net/forum/forum.php?thread_id=1021284&forum_id=252062
                 
-                layout.update();
-                if (!vv.isVisRunnerRunning())
-                    vv.getModel().init();
-                vv.repaint();
-            }
+//                layout.update();
+//                if (!vv.isVisRunnerRunning())
+//                    vv.getModel().init();
+//                VisRunner relaxer = vv.getModel().getRelaxer();
+//                if(relaxer != null) {
+//                	relaxer.stop();
+//                	relaxer = null;
+//                }
+//            	layout.initialize();
+//                if(layout instanceof IterativeContext) {
+//                	relaxer = new VisRunner((IterativeContext)layout);
+//                	relaxer.relax();
+//                }
+               
+//                vv.repaint();
+//            }
 
         } catch (Exception e) {
             System.out.println(e);
 
         }
-        System.out.println("------------end process------------");
+//        System.out.println("------------end process------------");
     }
 
     class RemindTask extends TimerTask {
 
         public void run() {
             process();
+            if(done) cancel();
 
         }
+    }
+    
+    public static void main(String[] args) {
+    	AddNodeDemo and = new AddNodeDemo();
+    	JFrame frame = new JFrame();
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frame.getContentPane().add(and);
+
+    	and.init();
+    	and.start();
+    	frame.pack();
+    	frame.setVisible(true);
     }
 }

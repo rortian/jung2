@@ -166,13 +166,13 @@ public class SatelliteVisualizationViewer<V, E>
             Point2D p = (Point2D) locationMap.get(v1);
             if(p == null) {
                 
-                p = layout.getLocation(v1);
+                p = layout.transform(v1);
                 p = layoutTransformer.transform(p);
                 locationMap.put(v1, p);
             }
             Point2D q = (Point2D) locationMap.get(v2);
             if(q == null) {
-                q = layout.getLocation(v2);
+                q = layout.transform(v2);
                 q = layoutTransformer.transform(q);
                 locationMap.put(v2, q);
             }
@@ -199,7 +199,7 @@ public class SatelliteVisualizationViewer<V, E>
 
             Point2D p = (Point2D) locationMap.get(v);
             if(p == null) {
-                p = layout.getLocation(v);
+                p = layout.transform(v);
                 p = layoutTransformer.transform(p);
                 locationMap.put(v, p);
             }

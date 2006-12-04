@@ -102,7 +102,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 			final VisualizationViewer<V,E> vv = (VisualizationViewer<V,E>) e.getSource();
 			if (vertex != null) {
 				Layout<V,E> layout = vv.getGraphLayout();
-				Point2D q = layout.getLocation(vertex);
+				Point2D q = layout.transform(vertex);
 				Point2D lvc = vv.inverseTransform(vv.getCenter());
 				final double dx = (lvc.getX() - q.getX()) / 10;
 				final double dy = (lvc.getY() - q.getY()) / 10;

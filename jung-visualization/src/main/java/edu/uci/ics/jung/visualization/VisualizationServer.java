@@ -103,7 +103,7 @@ public interface VisualizationServer<V, E> {
      * Returns a flag that says whether the visRunner thread is running. If
      * it is not, then you may need to restart the thread. 
      */
-    boolean isVisRunnerRunning();
+//    boolean isVisRunnerRunning();
 
     /**
      * Transform the mouse point with the inverse transform

@@ -247,7 +247,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         Graph<Integer,Number> g = getGraph();
         
         Layout<Integer,Number> layout = new FRLayout<Integer,Number>(g);
+//        layout.setSize(new Dimension(5000,5000));
         vv = new VisualizationViewer<Integer,Number>(layout);
+//        layout.initialize(new Dimension(5000,5000));
+//        vv.setGraphLayout(layout, true);
         // add Shape based pick support
         PickedState<Integer> picked_state = vv.getPickedVertexState();
 

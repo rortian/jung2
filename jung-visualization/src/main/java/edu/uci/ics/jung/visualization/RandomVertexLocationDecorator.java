@@ -18,50 +18,40 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.map.LazyMap;
+
 import cern.jet.random.engine.DRand;
-import cern.jet.random.engine.RandomEngine;
 
 
-public class RandomVertexLocationDecorator<V> implements VertexLocationFunction<V>
-{
-    RandomEngine rand;
-    Map<V,Point2D> v_locations = new HashMap<V,Point2D>();
-    Dimension dim;
+public class RandomVertexLocationDecorator<V> implements Transformer<V,Point2D> {
+    Map<V,Point2D> v_locations;
     
-    public RandomVertexLocationDecorator(Dimension d) 
-    {
-        this.rand = new DRand((int)(new Date().getTime()));
-        this.dim = d;
+    public RandomVertexLocationDecorator(Dimension d) {
+    	this(d, (int)(new Date().getTime()));
     }
     
-    public RandomVertexLocationDecorator(Dimension d, int seed)
-    {
-        this.rand = new DRand(seed);
-        this.dim = d;
+    public RandomVertexLocationDecorator(final Dimension d, int seed) {
+    	final DRand rand = new DRand(seed);
+        v_locations = LazyMap.decorate(new HashMap<V,Point2D>(), new Transformer<V,Point2D>() {
+			public Point2D transform(V v) {
+				return new Point2D.Double(rand.nextDouble() * d.width, rand.nextDouble() * d.height);
+			}});
     }
     
     /**
      * Resets all vertex locations returned by <code>getLocation</code>
      * to new (random) locations.
      */
-    public void reset()
-    {
+    public void reset() {
         v_locations.clear();
     }
     
-    public Point2D getLocation(V v)
-    {
-        Point2D location = (Point2D)v_locations.get(v);
-        if (location == null)
-        {
-            location = new Point2D.Double(rand.nextDouble() * dim.width, rand.nextDouble() * dim.height);
-            v_locations.put(v, location);
-        }
-        return location;
+    public Point2D transform(V v) {
+        return v_locations.get(v);
     }
 
-    public Collection<V> getVertices()
-    {
+    public Collection<V> getVertices() {
         return v_locations.keySet();
     }
 }

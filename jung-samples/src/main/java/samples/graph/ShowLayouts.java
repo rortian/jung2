@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -41,6 +42,7 @@ import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.KKLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.layout.SpringLayout;
 
 
@@ -107,9 +109,9 @@ public class ShowLayouts extends JApplet {
                         .getConstructor(new Class[] {Graph.class});
                 Object o = constructor.newInstance(constructorArgs);
                 Layout l = (Layout) o;
-                vv.getModel().stop();
+//                vv.getModel().stop();
                 vv.setGraphLayout(l, false);
-                vv.getModel().restart();
+//                vv.getModel().restart();
             }
             catch (Exception e)
             {
@@ -167,6 +169,19 @@ public class ShowLayouts extends JApplet {
                 scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
+        JButton reset = new JButton("reset");
+        reset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Layout layout = vv.getGraphLayout();
+				layout.initialize();
+				Relaxer relaxer = vv.getModel().getRelaxer();
+				if(relaxer != null) {
+//				if(layout instanceof IterativeContext) {
+					relaxer.stop();
+					relaxer.prerelax();
+					relaxer.relax();
+				}
+			}});
         
         JComboBox modeBox = graphMouse.getModeComboBox();
         modeBox.addItemListener(((DefaultModalGraphMouse)vv.getGraphMouse()).getModeListener());
@@ -205,6 +220,7 @@ public class ShowLayouts extends JApplet {
         bottomControls.add(plus);
         bottomControls.add(minus);
         bottomControls.add(modeBox);
+        bottomControls.add(reset);
         return jp;
     }
 

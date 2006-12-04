@@ -185,16 +185,16 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 		double oldMSV = meanSquareVel;
 		meanSquareVel = 0;
 
-		synchronized (getCurrentSize()) {
+		synchronized (getSize()) {
 
-			for(V v : getVisibleVertices()) {
+			for(V v : getGraph().getVertices()) {
 				if (isLocked(v))
 					continue;
 				SpringLayout.SpringVertexData vd = getSpringData(v);
-				Point2D xyd = getCoordinates(v);
+				Point2D xyd = transform(v);
 
-				int width = getCurrentSize().width;
-				int height = getCurrentSize().height;
+				int width = getSize().width;
+				int height = getSize().height;
 
 				// (JY addition: three lines are new)
 				int level =
@@ -261,7 +261,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	/**
 	 * Override incrementsAreDone so that we can eventually stop.
 	 */
-	public boolean incrementsAreDone() {
+	public boolean done() {
 		if (stoppingIncrements && incrementsLeft == 0)
 			return true;
 		else
@@ -273,7 +273,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * everything.
 	 */
 	public void forceMove(V picked, int x, int y) {
-		Point2D coord = getCoordinates(picked);
+		Point2D coord = transform(picked);
 		coord.setLocation(x,y);
 		stoppingIncrements = false;
 	}
@@ -285,7 +285,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 */
 
 	protected void relaxEdges() {
-		for(E e : getVisibleEdges()) {
+		for(E e : getGraph().getEdges()) {
 
 			V v1 = getAVertex(e);
 			V v2 = getGraph().getOpposite(v1, e);//e.getOpposite(v1);

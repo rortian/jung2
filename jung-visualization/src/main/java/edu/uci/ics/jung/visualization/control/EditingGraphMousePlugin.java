@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
+import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 
@@ -31,7 +32,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
 public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin implements
     MouseListener, MouseMotionListener {
     
-    protected SettableVertexLocationFunction vertexLocations;
+    protected Map<V,Point2D> vertexLocations;
     protected V startVertex;
     protected Point2D down;
     
@@ -68,7 +69,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
      * sets the vertex locations. Needed to place new vertices
      * @param vertexLocations
      */
-    public void setVertexLocations(SettableVertexLocationFunction vertexLocations) {
+    public void setVertexLocations(Map<V,Point2D> vertexLocations) {
         this.vertexLocations = vertexLocations;
     }
     
@@ -110,15 +111,15 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                     	(Graph<V,E>)vv.getGraphLayout().getGraph();
                     V newVertex = vertexFactory.create();
                     	new Integer(graph.getVertices().size());
-                    vertexLocations.setLocation(newVertex, vv.inverseTransform(e.getPoint()));
+                    vertexLocations.put(newVertex, vv.inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
-                        layout.lockVertex(lockVertex);
+                        layout.lock(lockVertex,true);
                     }
                     graph.addVertex(newVertex);
-                    vv.getModel().restart();
+//                    vv.getModel().restart();
                     for(V lockVertex : graph.getVertices()) {
-                        layout.unlockVertex(lockVertex);
+                        layout.lock(lockVertex, false);
                     }
                     vv.repaint();
                 }

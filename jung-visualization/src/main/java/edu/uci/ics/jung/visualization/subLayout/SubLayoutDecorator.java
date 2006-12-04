@@ -69,7 +69,7 @@ public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
         if(p != null) {
             return p;
         } else {
-            return super.getLocation(v);
+            return super.transform(v);
         }
     }
     
@@ -78,7 +78,7 @@ public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
         if(p != null) {
             p.setLocation(x, y);
         } else {
-            super.forceMove(picked, x, y);
+            super.setLocation(picked, p);
         }
         fireStateChanged();
     }

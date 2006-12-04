@@ -93,8 +93,8 @@ public class ShortestPathDemo extends JPanel {
                     if(isBlessed(e)) {
                         String v1 = mGraph.getEndpoints(e).getFirst();
                         String v2 = mGraph.getEndpoints(e).getSecond();
-                        Point2D p1 = layout.getLocation(v1);
-                        Point2D p2 = layout.getLocation(v2);
+                        Point2D p1 = layout.transform(v1);
+                        Point2D p2 = layout.transform(v2);
                         p1 = vv.layoutTransform(p1);
                         p2 = vv.layoutTransform(p2);
                         Renderer<String,Number> renderer = vv.getRenderer();

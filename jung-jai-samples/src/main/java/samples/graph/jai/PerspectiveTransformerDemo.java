@@ -20,6 +20,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.media.jai.PerspectiveTransform;
 import javax.swing.BorderFactory;
@@ -35,11 +37,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.TransformerUtils;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
-import edu.uci.ics.jung.visualization.DefaultSettableVertexLocationFunction;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -118,11 +120,11 @@ public class PerspectiveTransformerDemo extends JApplet {
         ((FRLayout)graphLayout).setMaxIterations(1000);
 
         Dimension preferredSize = new Dimension(600,600);
-        DefaultSettableVertexLocationFunction<String> vlf =
-            new DefaultSettableVertexLocationFunction<String>();
-        grid = this.generateVertexGrid(vlf, preferredSize, 25);
-        gridLayout = new StaticLayout<String,Number>(grid);
-        ((AbstractLayout<String,Number>)gridLayout).initialize(preferredSize, vlf);
+        Map<String,Point2D> map =
+            new HashMap<String,Point2D>();
+        Transformer<String,Point2D> vlf = TransformerUtils.mapTransformer(map);
+        grid = this.generateVertexGrid(map, preferredSize, 25);
+        gridLayout = new StaticLayout<String,Number>(grid, vlf, preferredSize);
         
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
@@ -316,7 +318,7 @@ public class PerspectiveTransformerDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
 
-    private Graph<String,Number> generateVertexGrid(DefaultSettableVertexLocationFunction<String> vlf,
+    private Graph<String,Number> generateVertexGrid(Map<String,Point2D> map,
             Dimension d, int interval) {
         int count = d.width/interval * d.height/interval;
         Graph<String,Number> graph = new SimpleSparseGraph<String,Number>();
@@ -328,7 +330,7 @@ public class PerspectiveTransformerDemo extends JApplet {
             
             Point2D location = new Point2D.Float(x, y);
             v[i] = ""+i;
-            vlf.setLocation(v[i], location);
+            map.put(v[i], location);
             graph.addVertex(v[i]);
         }
         return graph;

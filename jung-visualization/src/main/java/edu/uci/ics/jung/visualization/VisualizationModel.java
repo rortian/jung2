@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import javax.swing.event.ChangeListener;
 
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
 /**
@@ -29,47 +30,48 @@ public interface VisualizationModel<V, E> extends ChangeEventSupport {
      * 
      * @return the sleep time of the relaxer thread
      */
-    long getRelaxerThreadSleepTime();
+//    long getRelaxerThreadSleepTime();
     
     /**
      * restart the layout
      */
-    void restart();
+//    void restart();
     
     /**
      * initialize the layout
      *
      */
-    void init();
+//    void init();
     
     /**
      * start the relaxer
      *
      */
-    void start();
+//    void start();
     
     /**
      * suspend the relaxer
      *
      */
-    void suspend();
+//    void suspend();
     /**
      * unsuspend the relaxer
      *
      */
-    void unsuspend();
+//    void unsuspend();
     /**
      * iterate over the layout algorithm prior to displaying the graph
      *
      */
-    void prerelax();
+//    void prerelax();
     
     /**
      * Sets the relaxerThreadSleepTime. @see #getRelaxerThreadSleepTime()
      * @param relaxerThreadSleepTime The relaxerThreadSleepTime to set.
      */
-    void setRelaxerThreadSleepTime(long relaxerThreadSleepTime);
+//    void setRelaxerThreadSleepTime(long relaxerThreadSleepTime);
 
+	Relaxer getRelaxer();
     /**
      * set the graph Layout
      * @param layout
@@ -90,19 +92,19 @@ public interface VisualizationModel<V, E> extends ChangeEventSupport {
      */
     Layout<V,E> getGraphLayout();
 
-    void restartThreadOnly();
+//    void restartThreadOnly();
 
     /**
      * Returns a flag that says whether the visRunner thread is running. If
      * it is not, then you may need to restart the thread. 
      */
-    boolean isVisRunnerRunning();
+//    boolean isVisRunnerRunning();
     
     /**
      * Request that the relaxer be stopped. The Thread
      * will terminate.
      */
-    void stop();
+//    void stop();
 
     /**
      * Register <code>l</code> as a listeners to changes in the model. The View registers

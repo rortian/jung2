@@ -5,6 +5,8 @@ import java.awt.ItemSelectable;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.Point2D;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -93,8 +95,8 @@ public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse
 		add(scalingPlugin);
 		setMode(Mode.EDITING);
 	}
-	public void setVertexLocations(SettableVertexLocationFunction vertexLocations) {
-		((EditingGraphMousePlugin)editingPlugin).setVertexLocations(vertexLocations);
+	public void setVertexLocations(Map<V,Point2D> vertexLocations) {
+		((EditingGraphMousePlugin<V,E>)editingPlugin).setVertexLocations(vertexLocations);
 	}
 
 	/**

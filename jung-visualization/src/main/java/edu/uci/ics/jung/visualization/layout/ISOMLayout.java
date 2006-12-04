@@ -10,17 +10,23 @@
 package edu.uci.ics.jung.visualization.layout;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
+
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
+import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * Implements a self-organizing map layout algorithm, based on Meyer's
@@ -28,9 +34,14 @@ import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
  * 
  * @author Yan Biao Boey
  */
-public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
+public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeContext {
 
-	Map<V, ISOMVertexData> isomVertexData = new HashMap<V, ISOMVertexData>();
+	Map<V, ISOMVertexData> isomVertexData = 
+		LazyMap.decorate(new HashMap<V, ISOMVertexData>(),
+				new Factory<ISOMVertexData>() {
+					public ISOMVertexData create() {
+						return new ISOMVertexData();
+					}});
 
 	private int maxEpoch;
 	private int epoch;
@@ -43,11 +54,12 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 	private double initialAdaption;
 	private double minAdaption;
     
-    protected GraphElementAccessor<V,E> elementAccessor;
+    protected GraphElementAccessor<V,E> elementAccessor = 
+    	new RadiusGraphElementAccessor<V,E>();
 
 	private double coolingFactor;
 
-	private Vector<V> queue;
+	private List<V> queue = new ArrayList<V>();
 	private String status = null;
 	
 	/**
@@ -59,12 +71,11 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 
 	public ISOMLayout(Graph<V,E> g) {
 		super(g);
-        elementAccessor = new RadiusGraphElementAccessor<V,E>();
-		queue = new Vector<V>();
 	}
 
-	protected void initialize_local() {
+	public void initialize() {
 
+		setInitializer(new RandomVertexLocationDecorator<V>(getSize()));
 		maxEpoch = 2000;
 		epoch = 1;
 
@@ -86,23 +97,11 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		//delay = 100;
 	}
 	
-	/**
-	 * (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#initialize_local_vertex(edu.uci.ics.jung.graph.Vertex)
-	 */
-	protected void initialize_local_vertex(V v) {
-		ISOMVertexData vd = getISOMVertexData(v);
-		if (vd == null) {
-			vd = new ISOMVertexData();
-			isomVertexData.put(v, vd);
-		}
-		vd.visited = false;
-	}
 
 	/**
 	* Advances the current positions of the graph elements.
 	*/
-	public void advancePositions() {
+	public void step() {
 		status = "epoch: " + epoch + "; ";
 		if (epoch < maxEpoch) {
 			adjust();
@@ -125,15 +124,15 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		tempXYD = new Point2D.Double();
 
 		// creates a new XY data location
-        tempXYD.setLocation(10 + Math.random() * getCurrentSize().getWidth(),
-                10 + Math.random() * getCurrentSize().getHeight());
+        tempXYD.setLocation(10 + Math.random() * getSize().getWidth(),
+                10 + Math.random() * getSize().getHeight());
 
 		//Get closest vertex to random position
 		V winner = elementAccessor.getVertex(this, tempXYD.getX(), tempXYD.getY());
 
 		while(true) {
 		    try {
-		    	for(V v : getVisibleVertices()) {
+		    	for(V v : getGraph().getVertices()) {
 		            ISOMVertexData ivd = getISOMVertexData(v);
 		            ivd.distance = 0;
 		            ivd.visited = false;
@@ -156,7 +155,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 	}
 
 	private synchronized void adjustVertex(V v) {
-		queue.removeAllElements();
+		queue.clear();
 		ISOMVertexData ivd = getISOMVertexData(v);
 		ivd.distance = 0;
 		ivd.visited = true;
@@ -166,7 +165,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 		while (!queue.isEmpty()) {
 			current = queue.remove(0);
 			ISOMVertexData currData = getISOMVertexData(current);
-			Point2D currXYData = getCoordinates(current);
+			Point2D currXYData = transform(current);
 
 			double dx = tempXYD.getX() - currXYData.getX();
 			double dy = tempXYD.getY() - currXYData.getY();
@@ -188,7 +187,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 			                if (childData != null && !childData.visited) {
 			                    childData.visited = true;
 			                    childData.distance = currData.distance + 1;
-			                    queue.addElement(child);
+			                    queue.add(child);
 			                }
 			            }
 			            break;
@@ -214,8 +213,8 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 	 * For now, we pretend it never finishes.
 	 * @return <code>true</code> is the increments are done, <code>false</code> otherwise
 	 */
-	public boolean incrementsAreDone() {
-		return false;
+	public boolean done() {
+		return epoch >= maxEpoch;
 	}
 
 	public static class ISOMVertexData {
@@ -257,5 +256,9 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> {
 			disp.set(0, disp.get(0) - x);
 			disp.set(1, disp.get(1) - y);
 		}
+	}
+
+	public void reset() {
+		epoch = 0;
 	}
 }

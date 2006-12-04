@@ -12,7 +12,6 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.geom.Point2D;
-import java.util.Collection;
 
 /**
  * An interface for classes that return a location for
@@ -24,6 +23,6 @@ public interface VertexLocationFunction<V> {
     
     public Point2D getLocation(V v);
     
-    Collection<V> getVertices();
+//    Collection<V> getVertices();
 
 }

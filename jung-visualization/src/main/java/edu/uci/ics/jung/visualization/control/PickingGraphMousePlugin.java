@@ -186,7 +186,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                     }
                     // layout.getLocation applies the layout transformer so
                     // q is transformed by the layout transformer only
-                    Point2D q = layout.getLocation(vertex);
+                    Point2D q = layout.transform(vertex);
                     // transform the mouse point to graph coordinate system
                     Point2D gp = vv.inverseLayoutTransform(ip);
 
@@ -216,7 +216,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 
                         // layout.getLocation applies the layout transformer so
                         // q is transformed by the layout transformer only
-                        Point2D q = layout.getLocation(vertex);
+                        Point2D q = layout.transform(vertex);
                         // translate mouse point to graph coord system
                         Point2D gp = vv.inverseLayoutTransform(ip);
 
@@ -285,8 +285,9 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                 for(V v : ps.getPicked()) {
 //                for(Iterator iterator=ps.getPicked().iterator(); iterator.hasNext(); ) {
 //                    Vertex v = (Vertex)iterator.next();
-                    Point2D vp = layout.getLocation(v);
-                    layout.forceMove(v, vp.getX()+dx, vp.getY()+dy);
+                    Point2D vp = layout.transform(v);
+                    vp.setLocation(vp.getX()+dx, vp.getY()+dy);
+                    layout.setLocation(v, vp);
                 }
                 down = p;
 
@@ -332,7 +333,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                 	for(V v : layout.getGraph().getVertices()) {
 //                    for (Iterator iter=layout.getGraph().getVertices().iterator(); iter.hasNext();  ) {
 //                        Vertex v = (Vertex) iter.next();
-                        if(rect.contains(vv.transform(layout.getLocation(v)))) {
+                        if(rect.contains(vv.transform(layout.transform(v)))) {
                             pickedVertexState.pick(v, true);
                         }
                     }

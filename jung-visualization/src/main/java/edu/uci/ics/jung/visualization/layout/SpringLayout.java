@@ -7,6 +7,7 @@
  */
 package edu.uci.ics.jung.visualization.layout;
 
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
@@ -14,7 +15,13 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.map.LazyMap;
+
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * The SpringLayout package represents a visualization of a set of nodes. The
@@ -25,15 +32,25 @@ import edu.uci.ics.graph.Graph;
  * @author Danyel Fisher
  * @author Joshua O'Madadhain
  */
-public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMutable<V,E> {
+public class SpringLayout<V, E> extends AbstractLayout<V,E> implements IterativeContext {
 
     protected double stretch = 0.70;
     protected LengthFunction<E> lengthFunction;
     protected int repulsion_range = 100;
     protected double force_multiplier = 1.0 / 3.0;
     
-    Map<E, SpringEdgeData<E>> springEdgeData = new HashMap<E, SpringEdgeData<E>>();
-    Map<V, SpringVertexData> springVertexData = new HashMap<V, SpringVertexData>();
+    Map<E, SpringEdgeData<E>> springEdgeData = 
+    	LazyMap.decorate(new HashMap<E, SpringEdgeData<E>>(),
+    			new Transformer<E,SpringEdgeData<E>>() {
+					public SpringEdgeData<E> transform(E e) {
+						return new SpringEdgeData<E>(e);
+					}});
+    Map<V, SpringVertexData> springVertexData = 
+    	LazyMap.decorate(new HashMap<V, SpringVertexData>(),
+    			new Factory<SpringVertexData>() {
+					public SpringVertexData create() {
+						return new SpringVertexData();
+					}});
 
     /**
      * Returns the status.
@@ -68,10 +85,18 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * @return the current value for the stretch parameter
      * @see #setStretch(double)
      */
-    public double getStretch()
-    {
+    public double getStretch() {
         return stretch;
     }
+    
+    /* (non-Javadoc)
+	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
+	 */
+	@Override
+	public void setSize(Dimension size) {
+		super.setSize(size);
+		setInitializer(new RandomVertexLocationDecorator<V>(size));
+	}
     
     /**
      * <p>Sets the stretch parameter for this instance.  This value 
@@ -86,8 +111,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * and inconsistent results.</p>
      * @param stretch
      */
-    public void setStretch(double stretch)
-    {
+    public void setStretch(double stretch) {
         this.stretch = stretch;
     }
     
@@ -95,8 +119,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * @return the current value for the node repulsion range
      * @see #setRepulsionRange(int)
      */
-    public int getRepulsionRange()
-    {
+    public int getRepulsionRange() {
         return repulsion_range;
     }
 
@@ -106,8 +129,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * is 100.  Negative values are treated as their positive equivalents.
      * @param range
      */
-    public void setRepulsionRange(int range)
-    {
+    public void setRepulsionRange(int range) {
         this.repulsion_range = range;
     }
     
@@ -115,8 +137,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * @return the current value for the edge length force multiplier
      * @see #setForceMultiplier(double)
      */
-    public double getForceMultiplier()
-    {
+    public double getForceMultiplier() {
         return force_multiplier;
     }
     
@@ -130,37 +151,24 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
      * values cause long edges to get longer and short edges to get shorter; use
      * at your own risk.
      */
-    public void setForceMultiplier(double force)
-    {
+    public void setForceMultiplier(double force) {
         this.force_multiplier = force;
     }
     
-    protected void initialize_local() {
-    	try {
-    		for(E e : getGraph().getEdges()) {
-    			SpringEdgeData<E> sed = getSpringData(e);
-    			if (sed == null) {
-    				sed = new SpringEdgeData<E>(e);
-    				springEdgeData.put(e, sed);
-    			}
-    			calcEdgeLength(sed, lengthFunction);
-    		}
-    	} catch(ConcurrentModificationException cme) {
-    		initialize_local();
-    	}
-    }
+    public void initialize() {
+    	Graph<V,E> graph = getGraph();
+    	Dimension d = getSize();
+    	if(graph != null && d != null) {
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#initialize_local_vertex(edu.uci.ics.jung.graph.Vertex)
-     */
-    protected void initialize_local_vertex(V v) {
-        SpringVertexData vud = getSpringData(v);
-        if (vud == null) {
-            vud = new SpringVertexData();
-            springVertexData.put(v, vud);
-        }
+    		try {
+    			for(E e : graph.getEdges()) {
+    				SpringEdgeData<E> sed = getSpringData(e);
+    				calcEdgeLength(sed, lengthFunction);
+    			}
+    		} catch(ConcurrentModificationException cme) {
+    			initialize();
+    		}
+    	}
     }
 
     /* ------------------------- */
@@ -175,9 +183,9 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     /**
      * Relaxation step. Moves all nodes a smidge.
      */
-    public void advancePositions() {
+    public void step() {
     	try {
-    		for(V v : getVisibleVertices()) {
+    		for(V v : getGraph().getVertices()) {
     			SpringVertexData svd = getSpringData(v);
     			if (svd == null) {
     				continue;
@@ -188,12 +196,13 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     			svd.repulsiondx = svd.repulsiondy = 0;
     		}
     	} catch(ConcurrentModificationException cme) {
-    		advancePositions();
+    		step();
     	}
 
     	relaxEdges();
     	calculateRepulsion();
     	moveNodes();
+    	this.fireStateChanged();
     }
 
     protected V getAVertex(E e) {
@@ -203,7 +212,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
 
     protected void relaxEdges() {
     	try {
-    		for(E e : getVisibleEdges()) {
+    		for(E e : getGraph().getEdges()) {
 
     			V v1 = getAVertex(e);
     			V v2 = getGraph().getOpposite(v1, e);
@@ -288,13 +297,13 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
 
     protected void moveNodes() {
 
-        synchronized (getCurrentSize()) {
+        synchronized (getSize()) {
             try {
-                for (V v : getVisibleVertices()) {
+                for (V v : getGraph().getVertices()) {
                     if (isLocked(v)) continue;
                     SpringVertexData vd = getSpringData(v);
                     if(vd == null) continue;
-                    Point2D xyd = getCoordinates(v);
+                    Point2D xyd = transform(v);
                     
                     vd.dx += vd.repulsiondx + vd.edgedx;
                     vd.dy += vd.repulsiondy + vd.edgedy;
@@ -303,8 +312,9 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
                     xyd.setLocation(xyd.getX()+Math.max(-5, Math.min(5, vd.dx)),
                     		xyd.getY()+Math.max(-5, Math.min(5, vd.dy)));
                     
-                    int width = getCurrentSize().width;
-                    int height = getCurrentSize().height;
+                    Dimension d = getSize();
+                    int width = d.width;
+                    int height = d.height;
                     
                     if (xyd.getX() < 0) {
                         xyd.setLocation(0, xyd.getY());//                     setX(0);
@@ -409,7 +419,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     public class SpringDimensionChecker extends ComponentAdapter {
 
         public void componentResized(ComponentEvent e) {
-            resize(e.getComponent().getSize());
+            setSize(e.getComponent().getSize());
         }
     }
 
@@ -423,30 +433,13 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements LayoutMut
     /**
      * For now, we pretend it never finishes.
      */
-    public boolean incrementsAreDone() {
+    public boolean done() {
         return false;
     }
 
-    /**
-     * @see edu.uci.ics.jung.visualization.layout.LayoutMutable#update()
-     */
-    public void update() {
-    	try {
-    		for(V v : getGraph().getVertices()) {
-
-    			Point2D coord = locations.get(v);
-    			if (coord == null) {
-    				coord = new Point2D.Float();
-    				locations.put(v, coord);
-    				initializeLocation(v, coord, getCurrentSize());
-    				initialize_local_vertex(v);
-    			}
-    		}
-    	} catch(ConcurrentModificationException cme) {
-    		update();
-    	}
-    	initialize_local();
-    }
-
-
+	public void reset() {
+		// no counter, do nothing.
+//		locations.clear();
+//		initialize();
+	}
 }

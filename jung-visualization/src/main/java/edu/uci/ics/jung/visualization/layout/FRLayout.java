@@ -7,21 +7,27 @@
  */
 package edu.uci.ics.jung.visualization.layout;
 
+import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * Implements the Fruchterman-Reingold algorithm for node layout.
  * 
  * @author Scott White, Yan-Biao Boey, Danyel Fisher
  */
-public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutable<V, E> {
+public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeContext {
 
     private double forceConstant;
 
@@ -29,15 +35,15 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
 
     private int currentIteration;
 
-    private String status = null;
+//    private String status = null;
 
     private int mMaxIterations = 700;
     
-    private Map<V, FRVertexData> frVertexData = new HashMap<V, FRVertexData>();
-
-    public FRLayout(Graph<V, E> g) {
-        super(g);
-    }
+    private Map<V, FRVertexData> frVertexData = 
+    	LazyMap.decorate(new HashMap<V,FRVertexData>(), new Factory<FRVertexData>() {
+    		public FRVertexData create() {
+    			return new FRVertexData();
+    		}});
 
     private double attraction_multiplier = 0.75;
     
@@ -47,87 +53,76 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
     
     private double repulsion_constant;
     
-    public void setAttractionMultiplier(double attraction)
-    {
+    public FRLayout(Graph<V, E> g) {
+        super(g);
+    }
+    
+    public FRLayout(Graph<V, E> g, Dimension d) {
+        super(g, new RandomVertexLocationDecorator<V>(d));
+        initialize();
+    }
+    
+    /* (non-Javadoc)
+	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
+	 */
+	@Override
+	public void setSize(Dimension size) {
+		super.setSize(size);
+		setInitializer(new RandomVertexLocationDecorator<V>(size));
+	}
+
+	public void setAttractionMultiplier(double attraction) {
         this.attraction_multiplier = attraction;
     }
     
-    public void setRepulsionMultiplier(double repulsion)
-    {
+    public void setRepulsionMultiplier(double repulsion) {
         this.repulsion_multiplier = repulsion;
     }
     
-    /*
-     * new function for handling updates and changes to the graph
-     */
-    public synchronized void update() {
-        try {
-            for(V v : getGraph().getVertices()) {
-
-                Point2D coord = getCoordinates(v);
-                if (coord == null) {
-                    coord = new Point2D.Float();
-                    locations.put(v, coord);
-                    initializeLocation(v, coord, getCurrentSize());
-                    initialize_local_vertex(v);
-                }
-            } 
-        } catch(ConcurrentModificationException cme) {
-            update();
-        }
-        initialize_local();
+	public void reset() {
+		doInit();
+	}
+    
+    public void initialize() {
+    	doInit();
     }
 
-    /**
-     * Returns the current temperature and number of iterations elapsed, as a
-     * string.
-     */
-    public String getStatus() {
-        return status;
-    }
+    private void doInit() {
+    	Graph<V,E> graph = getGraph();
+    	Dimension d = getSize();
+    	if(graph != null && d != null) {
+    		currentIteration = 0;
+    		temperature = d.getWidth() / 10;
 
-    public void forceMove(V picked,double x, double y) {
-        super.forceMove(picked, x, y);
-    }
+    		forceConstant = 
+    			Math
+    			.sqrt(d.getHeight()
+    					* d.getWidth()
+    					/ graph.getVertices().size());
 
-    protected void initialize_local() {
-        currentIteration = 0;
-        temperature = getCurrentSize().getWidth() / 10;
-        
-        forceConstant = 
-            Math
-            .sqrt(getCurrentSize().getHeight()
-                    * getCurrentSize().getWidth()
-                    / getGraph().getVertices().size());
-        
-        attraction_constant = attraction_multiplier * forceConstant;
-        repulsion_constant = repulsion_multiplier * forceConstant;
-        
+    		attraction_constant = attraction_multiplier * forceConstant;
+    		repulsion_constant = repulsion_multiplier * forceConstant;
+    	}
     }
 
     private double EPSILON = 0.000001D;
-
-    protected void initialize_local_vertex(V v) {
-        if(frVertexData.get(v) == null) {
-            frVertexData.put(v, new FRVertexData());
-        }
-    }
 
     /**
      * Moves the iteration forward one notch, calculation attraction and
      * repulsion between vertices and edges and cooling the temperature.
      */
-    public synchronized void advancePositions() {
+    public synchronized void step() {
         currentIteration++;
-        status = "VV: " + getVisibleVertices().size() + " IT: "
-                + currentIteration + " temp: " + temperature;
+//        System.err.println("step to "+currentIteration);
+//        status = "VV: " + getGraph().getVertices().size() + " IT: "
+//                + currentIteration + " temp: " + temperature;
         /**
          * Calculate repulsion
          */
         while(true) {
             
             try {
-                for(V v1 : getVisibleVertices()) {
+                for(V v1 : getGraph().getVertices()) {
                     if (isLocked(v1)) continue;
                     calcRepulsion(v1);
                 }
@@ -140,7 +135,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
          */
         while(true) {
             try {
-                for(E e : getVisibleEdges()) {
+                for(E e : getGraph().getEdges()) {
                     
                     calcAttraction(e);
                 }
@@ -151,7 +146,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
 
         while(true) {
             try {    
-                for(V v : getVisibleVertices()) {
+                for(V v : getGraph().getVertices()) {
                     if (isLocked(v)) continue;
                     calcPositions(v);
                 }
@@ -159,39 +154,41 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
             } catch(ConcurrentModificationException cme) {}
         }
         cool();
+        fireStateChanged();
     }
 
     public synchronized void calcPositions(V v) {
         FRVertexData fvd = getFRData(v);
         if(fvd == null) return;
-        Point2D xyd = getCoordinates(v);
+        Point2D xyd = transform(v);
         double deltaLength = Math.max(EPSILON, Math.sqrt(fvd.disp
                 .zDotProduct(fvd.disp)));
 
         double newXDisp = fvd.getXDisp() / deltaLength
                 * Math.min(deltaLength, temperature);
 
-        if (Double.isNaN(newXDisp)) { throw new IllegalArgumentException(
+        if (Double.isNaN(newXDisp)) { 
+        	throw new IllegalArgumentException(
                 "Unexpected mathematical result in FRLayout:calcPositions [xdisp]"); }
 
         double newYDisp = fvd.getYDisp() / deltaLength
                 * Math.min(deltaLength, temperature);
         xyd.setLocation(xyd.getX()+newXDisp, xyd.getY()+newYDisp);
 
-        double borderWidth = getCurrentSize().getWidth() / 50.0;
+        double borderWidth = getSize().getWidth() / 50.0;
         double newXPos = xyd.getX();
         if (newXPos < borderWidth) {
             newXPos = borderWidth + Math.random() * borderWidth * 2.0;
-        } else if (newXPos > (getCurrentSize().getWidth() - borderWidth)) {
-            newXPos = getCurrentSize().getWidth() - borderWidth - Math.random()
+        } else if (newXPos > (getSize().getWidth() - borderWidth)) {
+            newXPos = getSize().getWidth() - borderWidth - Math.random()
                     * borderWidth * 2.0;
         }
 
         double newYPos = xyd.getY();
         if (newYPos < borderWidth) {
             newYPos = borderWidth + Math.random() * borderWidth * 2.0;
-        } else if (newYPos > (getCurrentSize().getHeight() - borderWidth)) {
-            newYPos = getCurrentSize().getHeight() - borderWidth
+        } else if (newYPos > (getSize().getHeight() - borderWidth)) {
+            newYPos = getSize().getHeight() - borderWidth
                     - Math.random() * borderWidth * 2.0;
         }
 
@@ -230,7 +227,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
         fvd1.setDisp(0, 0);
 
         try {
-            for(V v2 : getVisibleVertices()) {
+            for(V v2 : getGraph().getVertices()) {
 
                 if (isLocked(v2)) continue;
                 if (v1 != v2) {
@@ -280,7 +277,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
      * Returns true once the current iteration has passed the maximum count,
      * <tt>MAX_ITERATIONS</tt>.
      */
-    public boolean incrementsAreDone() {
+    public boolean done() {
         if (currentIteration > mMaxIterations) { 
             return true; 
         } 
@@ -320,6 +317,9 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements LayoutMutabl
         public void decrementDisp(double x, double y) {
             disp.set(0, disp.get(0) - x);
             disp.set(1, disp.get(1) - y);
+        }
+        public String toString() {
+        	return "fvd:"+hashCode()+",disp=["+disp.get(0)+","+disp.get(1)+"]";
         }
     }
 }

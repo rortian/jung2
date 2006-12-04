@@ -54,8 +54,8 @@ public class GradientEdgePaintTransformer<V, E>
         Pair<V> p = layout.getGraph().getEndpoints(e);
         V b = p.getFirst();
         V f = p.getSecond();
-        Point2D pb = transformer.transform(layout.getLocation(b));
-        Point2D pf = transformer.transform(layout.getLocation(f));
+        Point2D pb = transformer.transform(layout.transform(b));
+        Point2D pf = transformer.transform(layout.transform(f));
         float xB = (float) pb.getX();
         float yB = (float) pb.getY();
         float xF = (float) pf.getX();

@@ -29,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import edu.uci.ics.graph.Graph;
 
 
@@ -44,28 +47,14 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 	private double radius;
 	
 	Map<V, CircleVertexData> circleVertexDataMap =
-		new HashMap<V, CircleVertexData>();
+			LazyMap.decorate(new HashMap<V,CircleVertexData>(), 
+			new Factory<CircleVertexData>() {
+				public CircleVertexData create() {
+					return new CircleVertexData();
+				}});	
 
 	public CircleLayout(Graph<V,E> g) {
 		super(g);
-	}
-
-	public String getStatus() {
-		return "CircleLayout";
-	}
-	
-	/**
-	 * This one is not incremental.
-	 */
-	public boolean isIncremental() {
-		return false;
-	}
-
-	/**
-	 * Returns true;
-	 */
-	public boolean incrementsAreDone() {
-		return true;
 	}
 
 	public double getRadius() {
@@ -88,52 +77,44 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 		List<V> list = Arrays.asList(vertices);
 		Collections.shuffle(list);
 	}
-
-	protected void initialize_local_vertex(V v) {
-		if(circleVertexDataMap.get(v) == null) {
-			circleVertexDataMap.put(v, new CircleVertexData());
-		}
+	
+	public void reset() {
+		initialize();
 	}
 
-	protected void initialize_local() {}
-
 	@SuppressWarnings("unchecked")
-	protected void initializeLocations() {
-		super.initializeLocations();
+	public void initialize() {
+		Graph<V,E> graph = getGraph();
+		Dimension d = getSize();
+		if(graph != null && d != null) {
+			V[] vertices =
+				(V[])graph.getVertices().toArray();
+			orderVertices(vertices);
 
-		V[] vertices =
-			(V[])getVisibleVertices().toArray();
-		orderVertices(vertices);
+			double height = d.getHeight();
+			double width = d.getWidth();
 
-		Dimension d = getCurrentSize();
-		double height = d.getHeight();
-		double width = d.getWidth();
+			if (radius <= 0) {
+				radius = 0.45 * (height < width ? height : width);
+			}
 
-		if (radius <= 0) {
-			radius = 0.45 * (height < width ? height : width);
+			for (int i = 0; i < vertices.length; i++) {
+				Point2D coord = transform(vertices[i]);
+
+				double angle = (2 * Math.PI * i) / vertices.length;
+
+				coord.setLocation(Math.cos(angle) * radius + width / 2,
+						Math.sin(angle) * radius + height / 2);
+
+				CircleVertexData data = getCircleData(vertices[i]);
+				data.setAngle(angle);
+			}
 		}
-
-		for (int i = 0; i < vertices.length; i++) {
-			Point2D coord = getCoordinates(vertices[i]);
-
-			double angle = (2 * Math.PI * i) / vertices.length;
-			
-			coord.setLocation(Math.cos(angle) * radius + width / 2,
-				Math.sin(angle) * radius + height / 2);
-
-			CircleVertexData data = getCircleData(vertices[i]);
-			data.setAngle(angle);
-		}
+		fireStateChanged();
 	}
 
 	public CircleVertexData getCircleData(V v) {
 		return circleVertexDataMap.get(v);
-	}
-
-	/**
-	 * Do nothing.
-	 */
-	public void advancePositions() {
 	}
 
 	public static class CircleVertexData {

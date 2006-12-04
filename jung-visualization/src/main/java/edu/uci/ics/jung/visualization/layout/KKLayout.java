@@ -19,8 +19,10 @@ import java.util.ConcurrentModificationException;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.GraphStatistics;
+import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
+import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * Implements the Kamada-Kawai algorithm for node layout.
@@ -31,7 +33,7 @@ import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
  *
  * @author Masanori Harada
  */
-public class KKLayout<V,E> extends AbstractLayout<V,E> {
+public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeContext {
 
 	private double EPSILON = 0.1d;
 
@@ -76,8 +78,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
         this(g, new UnweightedShortestPath<V,E>(g));
 	}
 
-    public KKLayout(Graph<V,E> g, Distance<V> distance)
-    {
+    public KKLayout(Graph<V,E> g, Distance<V> distance){
         super(g);
         this.distance = distance;
     }
@@ -86,8 +87,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
      * Sets a multiplicative factor which 
      * partly specifies the "preferred" length of an edge (L).
      */
-    public void setLengthFactor(double length_factor)
-    {
+    public void setLengthFactor(double length_factor){
         this.length_factor = length_factor;
     }
     
@@ -95,13 +95,12 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
      * Sets a multiplicative factor that specifies the fraction of the graph's diameter to be 
      * used as the inter-vertex distance between disconnected vertices.
      */
-    public void setDisconnectedDistanceMultiplier(double disconnected_multiplier)
-    {
+    public void setDisconnectedDistanceMultiplier(double disconnected_multiplier){
         this.disconnected_multiplier = disconnected_multiplier;
     }
     
 	public String getStatus() {
-		return status + this.getCurrentSize();
+		return status + this.getSize();
 	}
 
     public void setMaxIterations(int maxIterations) {
@@ -118,73 +117,68 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 	/**
 	 * Returns true once the current iteration has passed the maximum count.
 	 */
-	public boolean incrementsAreDone() {
+	public boolean done() {
 		if (currentIteration > maxIterations) {
 			return true;
 		}
 		return false;
 	}
 
-    protected void initialize_local() {
-        currentIteration = 0;
+	public void initialize() {
+    	currentIteration = 0;
+    	Graph<V,E> graph = getGraph();
+    	Dimension d = getSize();
+
+    	if(graph != null && d != null) {
+        	setInitializer(new RandomVertexLocationDecorator<V>(d));
+
+        	double height = d.getHeight();
+    		double width = d.getWidth();
+
+    		int n = graph.getVertices().size();
+    		dm = new double[n][n];
+    		vertices = (V[])graph.getVertices().toArray();
+    		xydata = new Point2D[n];
+
+    		// assign IDs to all visible vertices
+    		while(true) {
+    			try {
+    				int index = 0;
+    				for(V v : graph.getVertices()) {
+    					Point2D xyd = transform(v);
+    					vertices[index] = v;
+    					xydata[index] = xyd;
+    					index++;
+    				}
+    				break;
+    			} catch(ConcurrentModificationException cme) {}
+    		}
+
+    		diameter = GraphStatistics.<V,E>diameter(graph, distance, true);
+
+    		double L0 = Math.min(height, width);
+    		L = (L0 / diameter) * length_factor;  // length_factor used to be hardcoded to 0.9
+    		//L = 0.75 * Math.sqrt(height * width / n);
+
+    		for (int i = 0; i < n - 1; i++) {
+    			for (int j = i + 1; j < n; j++) {
+    				Number d_ij = distance.getDistance(vertices[i], vertices[j]);
+    				Number d_ji = distance.getDistance(vertices[j], vertices[i]);
+    				double dist = diameter * disconnected_multiplier;
+    				if (d_ij != null)
+    					dist = Math.min(d_ij.doubleValue(), dist);
+    				if (d_ji != null)
+    					dist = Math.min(d_ji.doubleValue(), dist);
+    				dm[i][j] = dm[j][i] = dist;
+    			}
+    		}
+    	}
 	}
 
-    @SuppressWarnings("unchecked")
-	protected void initializeLocations() {
-		super.initializeLocations();
-
-		Dimension d = getCurrentSize();
-		double height = d.getHeight();
-		double width = d.getWidth();
-
-        int n = getGraph().getVertices().size();
-        dm = new double[n][n];
-		vertices = (V[])getGraph().getVertices().toArray();
-		xydata = new Point2D[n];
-
-		// assign IDs to all visible vertices
-		while(true) {
-		    try {
-		        int index = 0;
-                for(V v : getGraph().getVertices()) {
-		            Point2D xyd = getCoordinates(v);
-		            vertices[index] = v;
-		            xydata[index] = xyd;
-		            index++;
-		        }
-		        break;
-		    } catch(ConcurrentModificationException cme) {}
-		}
-
-        diameter = GraphStatistics.<V,E>diameter(getGraph(), distance, true);
-            
-        double L0 = Math.min(height, width);
-        L = (L0 / diameter) * length_factor;  // length_factor used to be hardcoded to 0.9
-		//L = 0.75 * Math.sqrt(height * width / n);
-
-		for (int i = 0; i < n - 1; i++) 
-        {
-			for (int j = i + 1; j < n; j++) 
-            {
-                Number d_ij = distance.getDistance(vertices[i], vertices[j]);
-                Number d_ji = distance.getDistance(vertices[j], vertices[i]);
-                double dist = diameter * disconnected_multiplier;
-                if (d_ij != null)
-                   dist = Math.min(d_ij.doubleValue(), dist);
-                if (d_ji != null)
-                    dist = Math.min(d_ji.doubleValue(), dist);
-                dm[i][j] = dm[j][i] = dist;
-			}
-		}
-	}
-
-	protected void initialize_local_vertex(V v) {
-	}
-
-    public void advancePositions() {
+    public void step() {
 		currentIteration++;
 		double energy = calcEnergy();
-		status = "Kamada-Kawai V=" + getVisibleVertices().size()
+		status = "Kamada-Kawai V=" + getGraph().getVertices().size()
             + "(" + getGraph().getVertices().size() + ")"
 			+ " IT: " + currentIteration
 			+ " E=" + energy
@@ -200,7 +194,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
             if (isLocked(vertices[i]))
                 continue;
 			double deltam = calcDeltaM(i);
-			//System.out.println("* i=" + i + " deltaM=" + deltam);
+
 			if (maxDeltaM < deltam) {
 				maxDeltaM = deltam;
 				pm = i;
@@ -240,6 +234,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 				}
 			}
 		}
+//		fireStateChanged();
 	}
 
 	/**
@@ -247,7 +242,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 	 * the center of the screen.
 	 */
 	public void adjustForGravity() {
-		Dimension d = getCurrentSize();
+		Dimension d = getSize();
 		double height = d.getHeight();
 		double width = d.getWidth();
 		double gx = 0;
@@ -406,5 +401,9 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> {
 			}
 		}
 		return energy;
+	}
+
+	public void reset() {
+		currentIteration = 0;
 	}
 }

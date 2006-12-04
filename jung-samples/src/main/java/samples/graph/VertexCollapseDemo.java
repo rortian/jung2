@@ -160,15 +160,15 @@ public class VertexCollapseDemo extends JApplet {
                     double sumx = 0;
                     double sumy = 0;
                     for(Object v : picked) {
-                    	Point2D p = layout.getLocation(v);
+                    	Point2D p = (Point2D)layout.transform(v);
                     	sumx += p.getX();
                     	sumy += p.getY();
                     }
                     Point2D cp = new Point2D.Double(sumx/picked.size(), sumy/picked.size());
-                    vv.getModel().stop();
+//                    vv.getModel().stop();
                     vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
-                    layout.forceMove(clusterGraph, cp.getX(), cp.getY());
+                    layout.setLocation(clusterGraph, cp);
                 }
             }});
         
@@ -182,7 +182,7 @@ public class VertexCollapseDemo extends JApplet {
                         
                         Graph g = collapser.expand(layout.getGraph(), (Graph)v);
                         
-                        vv.getModel().stop();
+//                        vv.getModel().stop();
                         vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
@@ -194,9 +194,9 @@ public class VertexCollapseDemo extends JApplet {
         reset.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                vv.getModel().stop();
+//                vv.getModel().stop();
                 layout.setGraph(graph);
-                vv.getModel().restart();
+//                vv.getModel().restart();
             }});
         
         JButton help = new JButton("Help");

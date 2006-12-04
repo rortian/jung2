@@ -11,32 +11,21 @@
  */
 package edu.uci.ics.jung.visualization.layout;
 
+import java.awt.Dimension;
+import java.awt.geom.Point2D;
+
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 
-
-
-
-public class StaticLayout<V, E> extends AbstractLayout<V,E>
-{
-    public StaticLayout(Graph<V,E> g)
-    {
-        super(g);
+public class StaticLayout<V, E> extends AbstractLayout<V,E> {
+	
+    public StaticLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer, Dimension size) {
+        super(graph, initializer, size);
     }
     
-    protected void initialize_local() {}
+    public void initialize() {}
 
-    protected void initialize_local_vertex(V v) {}
-
-    public void advancePositions() {}
-
-    public boolean isIncremental()
-    {
-        return false;
-    }
-
-    public boolean incrementsAreDone()
-    {
-        return true;
-    }
+	public void reset() {}
 
 }

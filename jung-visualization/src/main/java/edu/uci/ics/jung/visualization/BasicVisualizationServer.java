@@ -206,7 +206,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		
 		setPreferredSize(preferredSize);
 		renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        scaleToLayout(model.getGraphLayout().getCurrentSize());
+        scaleToLayout(model.getGraphLayout().getSize());
         this.layoutTransformer.addChangeListener(this);
         this.viewTransformer.addChangeListener(this);
 	}
@@ -290,7 +290,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	        viewSize = getPreferredSize();
 	    }
 	    model.setGraphLayout(layout, viewSize);
-        if(scaleToLayout) scaleToLayout(layout.getCurrentSize());
+        if(scaleToLayout) scaleToLayout(layout.getSize());
 	}
     
     protected void scaleToLayout(Dimension layoutSize) {
@@ -322,15 +322,15 @@ public class BasicVisualizationServer<V, E> extends JPanel
      */
 	public void setVisible(boolean aFlag) {
 		super.setVisible(aFlag);
-		model.getGraphLayout().resize(this.getSize());
+		model.getGraphLayout().setSize(this.getSize());
 	}
 
 	/* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#isVisRunnerRunning()
      */
-	public boolean isVisRunnerRunning() {
-	    return model.isVisRunnerRunning();
-	}
+//	public boolean isVisRunnerRunning() {
+//	    return model.isVisRunnerRunning();
+//	}
 
 	/* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseTransform(java.awt.geom.Point2D)
@@ -425,7 +425,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
         super.paintComponent(g);
 
 	    checkOffscreenImage(getSize());
-		model.start();
+//		model.start();
 
 		Graphics2D g2d = (Graphics2D)g;
 		if(doubleBuffered) {
@@ -484,13 +484,13 @@ public class BasicVisualizationServer<V, E> extends JPanel
             Point2D p = (Point2D) locationMap.get(v1);
             if(p == null) {
                 
-                p = layout.getLocation(v1);
+                p = layout.transform(v1);
                 p = layoutTransformer.transform(p);
                 locationMap.put(v1, p);
             }
 		    Point2D q = (Point2D) locationMap.get(v2);
             if(q == null) {
-                q = layout.getLocation(v2);
+                q = layout.transform(v2);
                 q = layoutTransformer.transform(q);
                 locationMap.put(v2, q);
             }
@@ -525,7 +525,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 
 		    Point2D p = (Point2D) locationMap.get(v);
             if(p == null) {
-                p = layout.getLocation(v);
+                p = layout.transform(v);
                 p = layoutTransformer.transform(p);
                 locationMap.put(v, p);
             }

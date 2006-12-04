@@ -89,7 +89,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 
                     Shape shape = vv.getRenderContext().getVertexShapeFunction().transform(v);
                     // transform the vertex location to screen coords
-                    Point2D p = vv.layoutTransform(layout.getLocation(v));
+                    Point2D p = vv.layoutTransform(layout.transform(v));
                     if(p == null) continue;
                     AffineTransform xform = 
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
@@ -135,8 +135,8 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
                     V v1 = pair.getFirst();
                     V v2 = pair.getSecond();
                     boolean isLoop = v1.equals(v2);
-                    Point2D p1 = vv.layoutTransform(layout.getLocation(v1));
-                    Point2D p2 = vv.layoutTransform(layout.getLocation(v2));
+                    Point2D p1 = vv.layoutTransform(layout.transform(v1));
+                    Point2D p2 = vv.layoutTransform(layout.transform(v2));
                     if(p1 == null || p2 == null) continue;
                     float x1 = (float) p1.getX();
                     float y1 = (float) p1.getY();

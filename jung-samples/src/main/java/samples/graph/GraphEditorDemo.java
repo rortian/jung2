@@ -15,10 +15,13 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -34,10 +37,10 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.TransformerUtils;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.visualization.DefaultSettableVertexLocationFunction;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -78,7 +81,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
      */
     VisualizationViewer<Number,Number> vv;
     
-    DefaultSettableVertexLocationFunction<Number> vertexLocations;
+    Map<Number,Point2D> vertexLocations = new HashMap<Number,Point2D>();
     
     String instructions =
         "<html>"+
@@ -125,13 +128,15 @@ public class GraphEditorDemo extends JApplet implements Printable {
     public GraphEditorDemo() {
         
         // allows the precise setting of initial vertex locations
-        vertexLocations = new DefaultSettableVertexLocationFunction<Number>();
+//        vertexLocations = new DefaultSettableVertexLocationFunction<Number>();
         
         // create a simple graph for the demo
         graph = new SimpleSparseGraph<Number,Number>();
 
-        this.layout = new StaticLayout<Number,Number>(graph);
-        layout.initialize(new Dimension(600,600), vertexLocations);
+        this.layout = new StaticLayout<Number,Number>(graph, 
+        	TransformerUtils.mapTransformer(vertexLocations),
+        	new Dimension(600,600));
+//        layout.initialize(new Dimension(600,600), vertexLocations);
         
         vv =  new VisualizationViewer<Number,Number>(layout);
         vv.setBackground(Color.white);

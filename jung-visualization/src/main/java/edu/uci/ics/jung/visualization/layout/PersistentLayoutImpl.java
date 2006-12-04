@@ -26,6 +26,8 @@ import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
@@ -85,9 +87,9 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      */
     protected void initializeLocations() {
         for(V v : getGraph().getVertices()) {
-            Point2D coord = delegate.getLocation(v);
+            Point2D coord = delegate.transform(v);
             if (!dontmove.contains(v))
-                initializeLocation(v, coord, getCurrentSize());
+                initializeLocation(v, coord, getSize());
         }
     }
 
@@ -124,7 +126,8 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
 
         for(V v : getGraph().getVertices()) {
 
-            Point p = new Point(getX(v), getY(v));
+            Point p = new Point(transform(v));
+            		//getX(v), getY(v));
             map.put(v, p);
         }
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
@@ -160,7 +163,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * 
      * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
      */
-    public boolean incrementsAreDone() {
+    public boolean done() {
         return locked;
     }
 
@@ -169,9 +172,9 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * 
      * @see edu.uci.ics.jung.visualization.Layout#lockVertex(edu.uci.ics.jung.graph.Vertex)
      */
-    public void lockVertex(V v) {
+    public void lock(V v, boolean state) {
         dontmove.add(v);
-        delegate.lockVertex(v);
+        delegate.lock(v, state);
     }
 
     /*
@@ -179,10 +182,10 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * 
      * @see edu.uci.ics.jung.visualization.Layout#unlockVertex(edu.uci.ics.jung.graph.Vertex)
      */
-    public void unlockVertex(V v) {
-        dontmove.remove(v);
-        delegate.unlockVertex(v);
-    }
+//    public void unlockVertex(V v) {
+//        dontmove.remove(v);
+//        delegate.unlockVertex(v);
+//    }
 
     public void update() {
         if(delegate instanceof LayoutMutable) {
@@ -216,5 +219,25 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
         return getGraph().getVertices();
         
     }
+
+	public void setInitializer(Transformer<V, Point2D> initializer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setLocation(V v, Point2D location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Point2D transform(V arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

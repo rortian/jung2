@@ -15,8 +15,11 @@ import java.awt.geom.Point2D;
 
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.collections15.Transformer;
+
 import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -28,7 +31,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  *
  *
  */
-public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport {
+public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, IterativeContext {
     
     protected Layout<V, E> delegate;
     
@@ -56,31 +59,67 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#advancePositions()
+     * @see edu.uci.ics.jung.visualization.layout.Layout#step()
      */
-    public void advancePositions() {
-        delegate.advancePositions();
+    public void step() {
+    	if(delegate instanceof IterativeContext) {
+    		((IterativeContext)delegate).step();
+    	}
     }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#applyFilter(edu.uci.ics.jung.graph.Graph)
      */
-    public void applyFilter(Graph<V,E> subgraph) {
-        delegate.applyFilter(subgraph);
-    }
+//    public void applyFilter(Graph<V,E> subgraph) {
+//        delegate.applyFilter(subgraph);
+//    }
 
     /**
+	 * 
+	 * @see edu.uci.ics.jung.visualization.layout.Layout#initialize()
+	 */
+	public void initialize() {
+		delegate.initialize();
+	}
+
+	/**
+	 * @param initializer
+	 * @see edu.uci.ics.jung.visualization.layout.Layout#setInitializer(org.apache.commons.collections15.Transformer)
+	 */
+	public void setInitializer(Transformer<V, Point2D> initializer) {
+		delegate.setInitializer(initializer);
+	}
+
+	/**
+	 * @param v
+	 * @param location
+	 * @see edu.uci.ics.jung.visualization.layout.Layout#setLocation(java.lang.Object, java.awt.geom.Point2D)
+	 */
+	public void setLocation(V v, Point2D location) {
+		delegate.setLocation(v, location);
+	}
+
+	/**
+	 * @param arg0
+	 * @return
+	 * @see org.apache.commons.collections15.Transformer#transform(java.lang.Object)
+	 */
+//	public Point2D transform(V arg0) {
+//		return delegate.transform(arg0);
+//	}
+
+	/**
      * @see edu.uci.ics.jung.visualization.layout.Layout#forceMove(edu.uci.ics.jung.graph.Vertex, double, double)
      */
-    public void forceMove(V picked, double x, double y) {
-        delegate.forceMove(picked, x, y);
-    }
+//    public void setLocation(V picked, double x, double y) {
+//        delegate.setLocation(picked, x, y);
+//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getCurrentSize()
      */
-    public Dimension getCurrentSize() {
-        return delegate.getCurrentSize();
+    public Dimension getSize() {
+        return delegate.getSize();
     }
 
     /**
@@ -93,57 +132,60 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getLocation(edu.uci.ics.jung.graph.ArchetypeVertex)
      */
-    public Point2D getLocation(V v) {
-        return delegate.getLocation(v);
+    public Point2D transform(V v) {
+        return delegate.transform(v);
     }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getStatus()
      */
-    public String getStatus() {
-        return delegate.getStatus();
-    }
+//    public String getStatus() {
+//        return delegate.getStatus();
+//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getX(edu.uci.ics.jung.graph.Vertex)
      */
-    public double getX(V v) {
-        return delegate.getX(v);
-    }
+//    public double getX(V v) {
+//        return delegate.getX(v);
+//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getY(edu.uci.ics.jung.graph.Vertex)
      */
-    public double getY(V v) {
-        return delegate.getY(v);
-    }
+//    public double getY(V v) {
+//        return delegate.getY(v);
+//    }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#incrementsAreDone()
+     * @see edu.uci.ics.jung.visualization.layout.Layout#done()
      */
-    public boolean incrementsAreDone() {
-        return delegate.incrementsAreDone();
+    public boolean done() {
+    	if(delegate instanceof IterativeContext) {
+    		return ((IterativeContext)delegate).done();
+    	}
+    	return true;
     }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#initialize(java.awt.Dimension)
      */
-    public void initialize(Dimension currentSize) {
-        delegate.initialize(currentSize);
-    }
+//    protected void initialize() {
+//        delegate.initialize();
+//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#isIncremental()
      */
-    public boolean isIncremental() {
-        return delegate.isIncremental();
-    }
+//    public boolean isIncremental() {
+//        return delegate.isIncremental();
+//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#lockVertex(edu.uci.ics.jung.graph.Vertex)
      */
-    public void lockVertex(V v) {
-        delegate.lockVertex(v);
+    public void lock(V v, boolean state) {
+        delegate.lock(v, state);
     }
 
     /**
@@ -157,23 +199,23 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#resize(java.awt.Dimension)
      */
-    public void resize(Dimension d) {
-        delegate.resize(d);
+    public void setSize(Dimension d) {
+        delegate.setSize(d);
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#restart()
+     * @see edu.uci.ics.jung.visualization.layout.Layout#reset()
      */
-    public void restart() {
-        delegate.restart();
+    public void reset() {
+    	delegate.reset();
     }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#unlockVertex(edu.uci.ics.jung.graph.Vertex)
      */
-    public void unlockVertex(V v) {
-        delegate.unlockVertex(v);
-    }
+//    public void unlockVertex(V v) {
+//        delegate.unlockVertex(v);
+//    }
 
     public void addChangeListener(ChangeListener l) {
         changeSupport.addChangeListener(l);

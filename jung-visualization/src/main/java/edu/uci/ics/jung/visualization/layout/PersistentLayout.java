@@ -10,6 +10,7 @@
   */
 package edu.uci.ics.jung.visualization.layout;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -41,6 +42,10 @@ public interface PersistentLayout<V, E> extends Layout<V,E>, ChangeEventSupport 
         public Point(double x, double y) {
             this.x=x;
             this.y=y;
+        }
+        public Point(Point2D p) {
+        	this.x = p.getX();
+        	this.y = p.getY();
         }
     }
 
