@@ -170,11 +170,11 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         return hasAugmentingPath;
     }
 
-     protected double evaluateIteration() {
+     public void step() {
         while (hasAugmentingPath()) {
         }
         computeMinCut();
-        return 0;
+//        return 0;
     }
 
     private void computeMinCut() {

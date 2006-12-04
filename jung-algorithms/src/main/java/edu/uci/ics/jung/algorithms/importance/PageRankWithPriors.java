@@ -83,8 +83,8 @@ public class PageRankWithPriors<V,E> extends PageRank<V,E> {
         return p;
     }
 
-    protected void reinitialize() {
-        super.reinitialize();
+    public void reset() {
+        super.reset();
         initializePriorWeights();
     }
 }

@@ -48,7 +48,7 @@ public class BaryCenter<V,E> extends AbstractRanker<V,E> {
         initialize(g, true, false);
     }
 
-    protected double evaluateIteration()
+    public void step()
     {
         // Use this class to compute shortest path lengths.
         DijkstraDistance p = new DijkstraDistance(getGraph());
@@ -66,7 +66,7 @@ public class BaryCenter<V,E> extends AbstractRanker<V,E> {
             }
             setRankScore(u, baryCenter);
         }
-        return 0;
+//        return 0;
     }
 
 //    public String getRankScoreKey()

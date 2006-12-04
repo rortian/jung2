@@ -204,9 +204,9 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
 //        return CENTRALITY;
 //    }
 
-    protected double evaluateIteration() {
+    public void step() {
         computeBetweenness(getGraph());
-        return 0;
+//        return 0;
     }
 
 //    class BetweennessDataDecorator extends Decorator {

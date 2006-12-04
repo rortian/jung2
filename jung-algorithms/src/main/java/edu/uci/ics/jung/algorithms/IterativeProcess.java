@@ -32,7 +32,7 @@ import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
  * 
  * @author Scott White (originally written by Didier Besset)
  */
-public abstract class IterativeProcess {
+public abstract class IterativeProcess implements IterativeContext {
     /**
      * Number of iterations performed.
      */
@@ -66,7 +66,8 @@ public abstract class IterativeProcess {
         iterations = 0;
         initializeIterations();
         while (iterations++ < maximumIterations) {
-            precision = evaluateIteration();
+        	step();
+            precision = getPrecision();
             if (hasConverged())
                 break;
         }
@@ -77,7 +78,7 @@ public abstract class IterativeProcess {
      * Evaluate the result of the current interation.
      * @return the estimated precision of the result.
      */
-    abstract protected double evaluateIteration();
+    abstract public void step();
 
     /**
      * Perform eventual clean-up operations
@@ -122,6 +123,14 @@ public abstract class IterativeProcess {
     public boolean hasConverged() {
         return precision < desiredPrecision;
     }
+    
+    public String getStatus() {
+    	return "Precision = "+precision+", desiredPrecision = "+desiredPrecision;
+    }
+    
+    public boolean done() {
+    	return hasConverged();
+    }
 
     /**
      * Initializes internal parameters to start the iterative process.
@@ -129,7 +138,7 @@ public abstract class IterativeProcess {
     protected void initializeIterations() {
     }
 
-    protected void reinitialize() {
+    public void reset() {
     }
 
     /**

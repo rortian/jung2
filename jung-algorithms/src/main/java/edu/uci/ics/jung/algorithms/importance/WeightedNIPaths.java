@@ -165,13 +165,13 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
         roots.put(dest, root);
     }
 
-    protected double evaluateIteration() {
+    public void step() {
         for (V v : mPriors) {
             computeWeightedPathsFromSource(v, mMaxDepth);
         }
 
         normalizeRankings();
-        return 0;
+//        return 0;
     }
 
     protected void onFinalize(Object udc) {

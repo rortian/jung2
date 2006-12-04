@@ -117,7 +117,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         }
     }
 
-    protected void reinitialize() {
+    public void reset() {
         initializeRankings(mReachableVertices, mUnreachableVertices);
     }
 
@@ -157,7 +157,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         }
     }
 
-    protected double evaluateIteration() {
+    public void step() {
         updateRankings();
 
         double rankingMSE = 0;
@@ -171,7 +171,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
 
         rankingMSE = Math.pow(rankingMSE / getVertices().size(), 0.5);
 
-        return rankingMSE;
+//        return rankingMSE;
     }
 
     /**

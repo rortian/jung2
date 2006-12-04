@@ -55,7 +55,7 @@ public class DegreeDistributionRanker<V,E> extends AbstractRanker<V,E> {
     }
 
 
-    protected double evaluateIteration() {
+    public void step() {
         for (V currentVertex : getVertices()) {
             if (directed)
             {
@@ -69,7 +69,7 @@ public class DegreeDistributionRanker<V,E> extends AbstractRanker<V,E> {
         }
         normalizeRankings();
 
-        return 0;
+//        return 0;
     }
 
 //    public String getRankScoreKey() {

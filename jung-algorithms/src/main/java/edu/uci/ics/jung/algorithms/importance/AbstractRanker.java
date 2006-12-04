@@ -74,7 +74,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
         return mGraph;
     }
 
-    protected void reinitialize() {
+    public void reset() {
     }
 
     /**
