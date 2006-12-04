@@ -19,6 +19,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Set;
 
 import javax.swing.BoundedRangeModel;
@@ -72,7 +73,7 @@ public class GraphZoomScrollPane extends JPanel {
         super(new BorderLayout());
         this.vv = vv;
         addComponentListener(new ResizeListener());        
-        Dimension d = vv.getGraphLayout().getCurrentSize();
+        Dimension d = vv.getGraphLayout().getSize();
         verticalScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, d.height, 0, d.height);
         horizontalScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 0, d.width, 0, d.width);
         verticalScrollBar.addAdjustmentListener(new VerticalAdjustmentListenerImpl());
@@ -110,9 +111,7 @@ public class GraphZoomScrollPane extends JPanel {
             if(dh != 0 && scrollBarsMayControlAdjusting) {
                 // get the uniform scale of all transforms
                 float layoutScale = (float) vv.getLayoutTransformer().getScale();
-                float viewScale = (float) vv.getViewTransformer().getScale();
-                float scale = layoutScale*viewScale;
-                dh *= scale;
+                dh *= layoutScale;
                 AffineTransform at = AffineTransform.getTranslateInstance(dh, 0);
                 vv.getLayoutTransformer().preConcatenate(at);
             }
@@ -132,11 +131,10 @@ public class GraphZoomScrollPane extends JPanel {
             float dv = previous - vval;
             previous = vval;
             if(dv != 0 && scrollBarsMayControlAdjusting) {
+            
                 // get the uniform scale of all transforms
                 float layoutScale = (float) vv.getLayoutTransformer().getScale();
-                float viewScale = (float) vv.getViewTransformer().getScale();
-                float scale = layoutScale*viewScale;
-                dv *= scale;
+                dv *= layoutScale;
                 AffineTransform at = AffineTransform.getTranslateInstance(0, dv);
                 vv.getLayoutTransformer().preConcatenate(at);
             }
@@ -150,12 +148,13 @@ public class GraphZoomScrollPane extends JPanel {
      * @param xform the transform of the VisualizationViewer
      */
     private void setScrollBars(VisualizationViewer vv) {
-        Dimension d = vv.getGraphLayout().getCurrentSize();
-        Rectangle vvBounds = vv.getBounds();
+        Dimension d = vv.getGraphLayout().getSize();
+        Rectangle2D vvBounds = vv.getBounds();
         
         // a rectangle representing the layout
         Rectangle layoutRectangle = 
-            new Rectangle(-d.width/2, -d.height/2, 2*d.width, 2*d.height);
+            new Rectangle(0,0,d.width,d.height);
+            		//-d.width/2, -d.height/2, 2*d.width, 2*d.height);
         
         Transformer viewTransformer = vv.getViewTransformer();
         Transformer layoutTransformer = vv.getLayoutTransformer();
