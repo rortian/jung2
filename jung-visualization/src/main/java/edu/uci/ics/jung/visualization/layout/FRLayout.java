@@ -35,8 +35,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 
     private int currentIteration;
 
-//    private String status = null;
-
     private int mMaxIterations = 700;
     
     private Map<V, FRVertexData> frVertexData = 
@@ -113,9 +111,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
      */
     public synchronized void step() {
         currentIteration++;
-//        System.err.println("step to "+currentIteration);
-//        status = "VV: " + getGraph().getVertices().size() + " IT: "
-//                + currentIteration + " temp: " + temperature;
+
         /**
          * Calculate repulsion
          */
@@ -318,8 +314,5 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
             disp.set(0, disp.get(0) - x);
             disp.set(1, disp.get(1) - y);
         }
-        public String toString() {
-        	return "fvd:"+hashCode()+",disp=["+disp.get(0)+","+disp.get(1)+"]";
-        }
-    }
+     }
 }
