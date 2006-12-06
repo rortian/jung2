@@ -70,7 +70,6 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         JComponent vv = rc.getScreenDevice();
         Rectangle deviceRectangle = null;
         if(vv != null) {
-//            deviceRectangle = vv.getBounds();
             Dimension d = vv.getSize();
             if(d.width <= 0 || d.height <= 0) {
                 d = vv.getPreferredSize();
@@ -86,8 +85,12 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         GraphicsDecorator g = rc.getGraphicsContext();
         Paint oldPaint = g.getPaint();
         Rectangle r = shape.getBounds();
+        float y2 = (float)r.getMaxY();
+        if(cyclic) {
+        	y2 = (float)(r.getMinY()+r.getHeight()/2);
+        }
         Paint fillPaint = new GradientPaint((float)r.getMinX(), (float)r.getMinY(), colorOne,
-        		(float)r.getMinX(), (float)(r.getMinY()+r.getHeight()/2), colorTwo, true);
+        		(float)r.getMinX(), y2, colorTwo, cyclic);
         if(fillPaint != null) {
             g.setPaint(fillPaint);
             g.fill(shape);
