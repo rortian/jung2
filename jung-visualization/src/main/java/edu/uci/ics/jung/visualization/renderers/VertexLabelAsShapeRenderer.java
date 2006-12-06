@@ -9,16 +9,12 @@
  */
 package edu.uci.ics.jung.visualization.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Transformer;
 
@@ -28,7 +24,17 @@ import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
-
+/**
+ * Renders Vertex Labels, but can also supply Shapes for vertices.
+ * This has the effect of making the vertex label the actual vertex
+ * shape. The user will probably want to center the vertex label
+ * on the vertex location.
+ * 
+ * @author Tom Nelson
+ *
+ * @param <V>
+ * @param <E>
+ */
 public class VertexLabelAsShapeRenderer<V,E> 
 	implements Renderer.VertexLabel<V,E>, Transformer<V,Shape> {
 
@@ -55,8 +61,6 @@ public class VertexLabelAsShapeRenderer<V,E>
         GraphicsDecorator g = rc.getGraphicsContext();
         Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
         		rc.getPickedVertexState().isPicked(v), v);
-        ((JComponent)component).setBorder(BorderFactory.createLineBorder(Color.black,1));
-        component.setBackground(Color.pink);
         Dimension d = component.getPreferredSize();
         
         int h_offset = -d.width / 2;
