@@ -33,6 +33,9 @@ if you are a user, do this:
   cvs -z3 -d:pserver:anonymous@jung.cvs.sourceforge.net:/cvsroot/jung co -P jung2
 
 
+(*** see separate instructions at the end of this file 
+  for those unable to use a command-line console **)
+
 
 
 ********** Build Jung2 **********************
@@ -114,6 +117,13 @@ Add each subproject (jung-api, jung-graph-impl, jung-visualization,
 jung-algorithms, jung-samples) as a top-level project in eclipse, each 
 with its own classpath dependencies. 
 
+One approach is to use the eclipse feature for importing existing projects
+AFTER mvn eclipse:eclipse has been run as shown above.
+Simply point the eclipse import project file chooser to the jung2 directory,
+then check off the list of subprojects that are shown. You can import
+all of the subprojects at once this way.
+
+Another approach is to manually add each subproject as follows:
 In the 'New Project' dialog, select 'Java Project', then
 'Create project from existing source'. Create the new project to point 
 to where you downloaded jung2 and its subprojects.
@@ -121,7 +131,7 @@ For example, you would create a new project from the existing
 source in '/where/it/is/jung2/jung-api'
 and name that project 'jung-api'.
 
-If you previously ran mvn eclipse:eclipse at the jung2 directory
+Because you previously ran mvn eclipse:eclipse at the jung2 directory
 level, then the projects will already reference the other
 projects they depend on (instead of the jar from those projects).
 
@@ -153,3 +163,28 @@ of the maven build process.
 
 
 
+(***  Special cvs checkout instructions using eclipse  ***)
+
+If you are unable to use cvs from the command prompt, you may check
+out jung2 using eclipse, HOWEVER, because of the above stated limitation
+that eclipse cannot manage nested projects, you must use the following
+trick:
+
+Create a new workspace that you will be using only to check out the
+project. You will not be using this workspace to work on the project.
+Let's call the new workspace $HOME/checkout_base.
+From that workspace, use eclipse to check out jung2 from cvs.
+Next, open a command prompt console and change directory to the
+newly created $HOME/checkout_base/jung2.
+Execute this command:
+
+  mvn eclipse:eclipse
+
+That will build the eclipse artifacts
+
+Next, change eclipse to point to a different workspace, one that you
+will actually be working in. Use the above instructions to import the
+jung2 subprojects from $HOME/checkout_base/jung2 into your real
+workspace.
+
+(*** end special eclipse cvs instructions ***) 
