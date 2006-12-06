@@ -42,6 +42,7 @@ import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 
 
@@ -99,7 +100,8 @@ public class VertexLabelAsShapeDemo extends JApplet {
 					}}}));
 
         vv.getRenderContext().setVertexShapeFunction(vlasr);
-        pr.setVertexRenderer(new Renderer.Vertex.NOOP());
+        pr.setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.red, Color.white, true));
+        		//new Renderer.Vertex.NOOP());
         pr.setVertexLabelRenderer(vlasr);
         vv.setRenderer(pr);
 
