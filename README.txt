@@ -1,6 +1,7 @@
-             Quick intro to building jung2 jars with maven2
+             Quick intro to building Jung2 jars with maven2
 
 
+***********    Get Maven   *************
 
 Download and install maven2 from maven.apache.org
 
@@ -16,10 +17,25 @@ installation by typing 'mvn --version' in a command terminal
 window.
 
 
+
+
+**********  Get Jung2   *******************
+
 Get the jung2 code from CVS:
 
-export CVS_RSH=ssh
-cvs -z3 -d:ext:your-login@jung.cvs.sourceforge.net:/cvsroot/jung co -P jung2
+if you are a developer, do this:
+
+  export CVS_RSH=ssh
+  cvs -z3 -d:ext:your-login@jung.cvs.sourceforge.net:/cvsroot/jung co -P jung2
+
+if you are a user, do this:
+
+  cvs -z3 -d:pserver:anonymous@jung.cvs.sourceforge.net:/cvsroot/jung co -P jung2
+
+
+
+
+********** Build Jung2 **********************
 
 cd jung2
 mvn install
@@ -34,6 +50,37 @@ If so, just run it again (and again) and it should
 eventually succeed.
 Once all the files are cached in your local maven
 repository, the build process will be faster.
+
+Jung2 uses a generics-enabled version of the jakarta
+commons-collections library. The name of that library is:
+
+  collections-generic-4.01.jar
+
+When maven fails to build jung2 because it could not find
+that jar file, maven will provide you with the command
+to install the file in your local repository.
+
+First, download the collections-generic project from
+sourceforge:
+
+http://sourceforge.net/project/showfiles.php?group_id=139125
+
+Download either the tar.gz or the zip file, and inflate the
+file someplace.
+
+The maven command to place the needed jar file in your 
+local repository looks like this:
+
+mvn install:install-file -DgroupId=collections-generic \
+ -DartifactId=collections-generic -Dversion=4.01 \
+ -Dpackaging=jar -Dfile=/path/to/file/collections-generic-4.01.jar
+
+Once you have done that, the build should complete successfully.
+
+
+
+
+***********  Prepare Jung2 for Eclipse  **********************
 
 To prepare jung2 for eclipse, run the following maven
 command:
@@ -86,15 +133,23 @@ sub-projects.
 
 
 
-
+************* Run some Jung2 demos  *******************************************
 
 Once you have built everything (preceding instructions), here is a straightforward
-way to run a demo from the command line:
+way to run some demos from the command line:
 
-cd jung-samples
-mvn assembly:assembly -Ddescriptor=assembly.xml
-cd target
+cd jung2/jung-samples/target
 tar xvf jung-samples-2.0-dependencies.tar
+
 java -cp jung-samples-2.0.jar samples.graph.VertexImageShaperDemo
+java -cp jung-samples-2.0.jar samples.graph.SatelliteViewDemo
+java -cp jung-samples-2.0.jar samples.graph.ShowLayouts
+
+
+The jung-samples-dependencies.tar file contains all of the jar
+dependencies for the jung-samples project. It was created as part
+of the maven build process.
+
+
 
 
