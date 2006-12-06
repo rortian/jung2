@@ -87,7 +87,11 @@ public interface Layout<V, E> extends Transformer<V,Point2D> {
      */
     boolean isLocked(V v);
 
-
+    /**
+     * set the location of a vertex
+     * @param v
+     * @param location
+     */
 	void setLocation(V v, Point2D location);
 
 
