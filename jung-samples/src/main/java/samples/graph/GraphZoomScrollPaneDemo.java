@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,6 +24,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
@@ -33,7 +37,9 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
+import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 
 
 /**
@@ -122,6 +128,8 @@ public class GraphZoomScrollPaneDemo {
         });
 
         vv.addGraphMouseListener(new TestGraphMouseListener<String>());
+        vv.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.white, Color.red, false));
+        vv.getRenderContext().setEdgeDrawPaintFunction(new ConstantTransformer(Color.lightGray));
         
         // add my listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
