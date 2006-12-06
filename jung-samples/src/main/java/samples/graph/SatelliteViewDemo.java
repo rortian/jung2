@@ -43,13 +43,14 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
+import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
 /**
@@ -116,7 +117,6 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         // create one layout for the graph
         FRLayout<String,Number> layout = new FRLayout<String,Number>(graph);
         layout.setMaxIterations(500);
-//        layout.setSize(new Dimension(1000,1000));
         
         // create one model that both views will share
         VisualizationModel<String,Number> vm =
@@ -128,12 +128,13 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         final SatelliteVisualizationViewer<String,Number> vv2 = 
             new SatelliteVisualizationViewer<String,Number>(vv1, vm, preferredSize2);
         vv1.setBackground(Color.white);
-//        vv1.setGraphLayout(layout, false);
         vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
         vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(), Color.red, Color.yellow));
         vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
         vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
-
+        vv1.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.red, Color.white, true));
+        vv1.getRenderContext().setVertexStringer(new ToStringLabeller());
+        vv1.getRenderContext().setCenterVertexLabel(true);
         
         viewGrid = new ViewGrid(vv2, vv1);
 
