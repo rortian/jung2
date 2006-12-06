@@ -16,7 +16,7 @@ import java.awt.Font;
 import javax.swing.JComponent;
 
 /**
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  * 
  */

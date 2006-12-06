@@ -16,7 +16,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
@@ -34,7 +33,7 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
     ChangeEventSupport changeSupport = new DefaultChangeEventSupport(this);
 
     /**
-	 * the thread that applies the current layout algorithm
+	 * manages the thread that applies the current layout algorithm
 	 */
 	protected Relaxer relaxer;
 	
@@ -43,6 +42,10 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
 	 */
 	protected Layout<V,E> layout;
 	
+	/**
+	 * listens for changes in the layout, forwards to the viewer
+	 *
+	 */
     protected ChangeListener changeListener;
     
     /**
