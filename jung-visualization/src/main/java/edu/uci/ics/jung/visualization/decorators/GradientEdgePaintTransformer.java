@@ -16,6 +16,8 @@ import java.awt.GradientPaint;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.graph.predicates.GraphPredicate;
+import edu.uci.ics.graph.predicates.SelfLoopEdgePredicate;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -38,7 +40,8 @@ public class GradientEdgePaintTransformer<V, E>
     protected Color c2;
     protected VisualizationViewer<V,E> vv;
     protected Transformer transformer;
-    
+    protected GraphPredicate<V,E> selfLoop = new SelfLoopEdgePredicate<V,E>();
+
     public GradientEdgePaintTransformer(Color c1, Color c2, 
             VisualizationViewer<V,E> vv)
     {
@@ -60,10 +63,13 @@ public class GradientEdgePaintTransformer<V, E>
         float yB = (float) pb.getY();
         float xF = (float) pf.getX();
         float yF = (float) pf.getY();
-        if ((layout.getGraph().isDirected(e)) == false) 
-        {
+        if ((layout.getGraph().isDirected(e)) == false)  {
             xF = (xF + xB) / 2;
             yF = (yF + yB) / 2;
+        } 
+        if(selfLoop.evaluateEdge(layout.getGraph(), e)) {
+        	yF += 50;
+        	xF += 50;
         }
 
         return new GradientPaint(xB, yB, getColor1(e), xF, yF, getColor2(e), true);
