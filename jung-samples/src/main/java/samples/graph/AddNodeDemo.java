@@ -23,7 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JRootPane;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.Graphs;
+import edu.uci.ics.graph.Graphs;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
