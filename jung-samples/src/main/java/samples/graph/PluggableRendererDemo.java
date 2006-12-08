@@ -53,7 +53,7 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.predicates.GraphPredicate;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.graph.predicates.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
@@ -75,7 +75,6 @@ import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.transform.Transformer;
 
 
 /**
@@ -224,7 +223,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     
     protected VisualizationViewer<Integer,Number> vv;
     protected DefaultModalGraphMouse gm;
-    protected Transformer affineTransformer;
+//    protected Transformer affineTransformer;
     protected Set<Integer> seedVertices = new HashSet<Integer>();
     
     public void start()
@@ -249,12 +248,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         Layout<Integer,Number> layout = new FRLayout<Integer,Number>(g);
 //        layout.setSize(new Dimension(5000,5000));
         vv = new VisualizationViewer<Integer,Number>(layout);
-//        layout.initialize(new Dimension(5000,5000));
-//        vv.setGraphLayout(layout, true);
-        // add Shape based pick support
+
         PickedState<Integer> picked_state = vv.getPickedVertexState();
 
-        affineTransformer = vv.getLayoutTransformer();
+//        affineTransformer = vv.getLayoutTransformer();
         self_loop = new SelfLoopEdgePredicate<Integer,Number>();
         // create decorators
         seedFillColor = new SeedFillColor<Integer>(picked_state);
@@ -398,20 +395,20 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         control_panel.add(both_panel, BorderLayout.CENTER);
         
         // set up vertex controls
-        v_color = new JCheckBox("vertex seed coloring");
+        v_color = new JCheckBox("seed highlight");
         v_color.addActionListener(this);
-        v_stroke = new JCheckBox("<html>vertex selection<p>stroke highlighting</html>");
+        v_stroke = new JCheckBox("stroke highlight on selection");
         v_stroke.addActionListener(this);
-        v_labels = new JCheckBox("show vertex ranks (voltages)");
+        v_labels = new JCheckBox("show voltage values");
         v_labels.addActionListener(this);
-        v_shape = new JCheckBox("vertex degree shapes");
+        v_shape = new JCheckBox("shape by degree");
         v_shape.addActionListener(this);
-        v_size = new JCheckBox("vertex voltage size");
+        v_size = new JCheckBox("size by voltage");
         v_size.addActionListener(this);
         v_size.setSelected(true);
-        v_aspect = new JCheckBox("vertex degree ratio stretch");
+        v_aspect = new JCheckBox("stretch by degree ratio");
         v_aspect.addActionListener(this);
-        v_small = new JCheckBox("filter vertices of degree < " + VertexDisplayPredicate.MIN_DEGREE);
+        v_small = new JCheckBox("filter when degree < " + VertexDisplayPredicate.MIN_DEGREE);
         v_small.addActionListener(this);
 
         vertex_panel.add(v_color);
@@ -469,9 +466,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         fill_edges.addActionListener(this);
         shape_panel.add(fill_edges);
         shape_panel.setOpaque(true);
-        e_color = new JCheckBox("edge weight highlighting");
+        e_color = new JCheckBox("highlight edge weights");
         e_color.addActionListener(this);
-        e_labels = new JCheckBox("show edge weights");
+        e_labels = new JCheckBox("show edge weight values");
         e_labels.addActionListener(this);
         e_uarrow_pred = new JCheckBox("undirected");
         e_uarrow_pred.addActionListener(this);
@@ -511,6 +508,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         // set up zoom controls
         zoom_at_mouse = new JCheckBox("<html><center>zoom at mouse<p>(wheel only)</center></html>");
         zoom_at_mouse.addActionListener(this);
+        zoom_at_mouse.setSelected(true);
         
         final ScalingControl scaler = new CrossoverScalingControl();
 
@@ -908,13 +906,6 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             return f;
     }
 }
-    private static class SelfLoopEdgePredicate<V,E> extends AbstractGraphPredicate<V,E> {
-
-        public boolean evaluateEdge(Graph<V,E> graph, E edge) {
-            Pair<V> endpoints = graph.getEndpoints(edge);
-            return endpoints.getFirst().equals(endpoints.getSecond());
-        }
-    }
     private final static class DirectionDisplayPredicate<V,E> extends AbstractGraphPredicate<V,E>
     {
         protected boolean show_d;
@@ -1132,14 +1123,13 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     {
         private org.apache.commons.collections15.Transformer<E,Paint> defaultFunc;
         protected boolean fill_edge = false;
-        GraphPredicate<V,E> selfLoop;
+        GraphPredicate<V,E> selfLoop = new SelfLoopEdgePredicate<V,E>();
         
         public GradientPickedEdgePaintFunction(org.apache.commons.collections15.Transformer<E,Paint> defaultEdgePaintFunction, 
                 VisualizationViewer<V,E> vv) 
         {
             super(Color.WHITE, Color.BLACK, vv);
             this.defaultFunc = defaultEdgePaintFunction;
-            selfLoop = new SelfLoopEdgePredicate<V,E>();
         }
         
         public void useFill(boolean b)
@@ -1151,7 +1141,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             if (gradient_level == GRADIENT_NONE) {
                 return defaultFunc.transform(e);
             } else {
-                return super.transform(e);
+            	return super.transform(e);
             }
         }
         
