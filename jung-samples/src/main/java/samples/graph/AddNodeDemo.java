@@ -23,9 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.JRootPane;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graphs;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
-import edu.uci.ics.jung.visualization.VisRunner;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -69,7 +68,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
     public void init() {
 
         //create a graph
-        g = new SimpleDirectedSparseGraph<Number,Number>();
+        g = Graphs.<Number,Number>synchronizedDirectedGraph(new SimpleDirectedSparseGraph<Number,Number>());
 
         //create a graphdraw
         layout = new FRLayout<Number,Number>(g);
