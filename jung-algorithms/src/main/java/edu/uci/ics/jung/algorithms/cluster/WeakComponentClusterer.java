@@ -36,7 +36,7 @@ public class WeakComponentClusterer<V,E> implements GraphClusterer<V,E,V> {
      * @param aGraph the graph whose weak components are to be extracted
      * @return the list of weak components
      */
-    public ClusterSet extract(Graph<V,E> aGraph) {
+    public ClusterSet<V,E,V> extract(Graph<V,E> aGraph) {
 
         ClusterSet<V,E,V> clusterSet = new VertexClusterSet<V,E>(aGraph);
 
