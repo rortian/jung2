@@ -275,6 +275,10 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
     protected void setEdgeWeight(E e, double weight) {
     	edgeWeights.put(e, weight);
     }
+    
+    public void setEdgeWeights(Map<E,Number> edgeWeights) {
+    	this.edgeWeights = edgeWeights;
+    }
 
     protected void assignDefaultEdgeTransitionWeights() {
 
