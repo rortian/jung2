@@ -116,6 +116,13 @@ public abstract class IterativeProcess implements IterativeContext {
     }
 
     /**
+	 * @param precision the precision to set
+	 */
+	public void setPrecision(double precision) {
+		this.precision = precision;
+	}
+
+	/**
      *
      * Check to see if the result has been attained.
      * @return boolean
