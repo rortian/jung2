@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
  * DefaultVertexLabelRenderer is similar to the cell renderers
  * used by the JTable and JTree jfc classes.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  * 
  */
@@ -41,7 +41,6 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      * Creates a default table cell renderer.
      */
     public DefaultVertexLabelRenderer(Color pickedVertexLabelColor) {
-        super();
         this.pickedVertexLabelColor = pickedVertexLabelColor;
         setOpaque(true);
         setBorder(noFocusBorder);
