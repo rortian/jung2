@@ -40,7 +40,7 @@ import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
  * @see "The Anatomy of a Large-Scale Hypertextual Web Search Engine by L. Page and S. Brin, 1999"
  */
 public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
-//    public final static String KEY = "jung.algorithms.importance.PageRank.RankScore";
+    public final static String KEY = "jung.algorithms.importance.PageRank.RankScore";
     private double mAlpha;
     private final HashMap<V,Number> mPreviousRankingsMap = new HashMap<V,Number>();
     private final Set<V> mUnreachableVertices = new HashSet<V>();
@@ -100,7 +100,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         mPreviousRankingsMap.clear();
         mLeafNodes.clear();
         for (V currentVertex : mReachableVertices) {
-            setRankScore(currentVertex, 1.0 / numVertices);
+            setVertexRankScore(currentVertex, 1.0 / numVertices);
             setPriorRankScore(currentVertex, 1.0 / numVertices);
             mPreviousRankingsMap.put(currentVertex, new Double(1.0 / numVertices));
             if (getGraph().outDegree(currentVertex) == 0) {
@@ -111,7 +111,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         mUnreachableVertices.clear();
         mUnreachableVertices.addAll(unreachableVertices);
         for (V currentVertex : mUnreachableVertices) {
-            setRankScore(currentVertex, 0);
+            setVertexRankScore(currentVertex, 0);
             setPriorRankScore(currentVertex, 0);
             mPreviousRankingsMap.put(currentVertex, new Double(0));
         }
@@ -148,7 +148,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
 
             //totalSum += currentPageRankSum;
             totalSum += currentPageRankSum * (1.0 - mAlpha) + mAlpha * getPriorRankScore(currentVertex);
-            setRankScore(currentVertex, currentPageRankSum * (1.0 - mAlpha) + mAlpha * getPriorRankScore(currentVertex));
+            setVertexRankScore(currentVertex, currentPageRankSum * (1.0 - mAlpha) + mAlpha * getPriorRankScore(currentVertex));
         }
 
         if (!NumericalPrecision.equal(totalSum, 1, .05)) {
@@ -165,8 +165,8 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         //Normalize rankings and test for convergence
         for (V currentVertex : mReachableVertices) {
             double previousRankScore = mPreviousRankingsMap.get(currentVertex).doubleValue();
-            rankingMSE += Math.pow(getRankScore(currentVertex) - previousRankScore, 2);
-            mPreviousRankingsMap.put(currentVertex, getRankScore(currentVertex));
+            rankingMSE += Math.pow(getVertexRankScore(currentVertex) - previousRankScore, 2);
+            mPreviousRankingsMap.put(currentVertex, getVertexRankScore(currentVertex));
         }
 
         rankingMSE = Math.pow(rankingMSE / getVertices().size(), 0.5);
@@ -178,8 +178,8 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
      * The user datum key used to store the rank scores.
      * @return the key
      */
-//    public String getRankScoreKey() {
-//        return KEY;
-//    }
+    public String getRankScoreKey() {
+        return KEY;
+    }
 
 }

@@ -29,7 +29,7 @@ import edu.uci.ics.graph.Graph;
  * @author Scott White
  */
 public class DegreeDistributionRanker<V,E> extends AbstractRanker<V,E> {
-//    public final static String KEY = "jung.algorithms.importance.DegreeDistributionRanker.RankScore";
+    public final static String KEY = "jung.algorithms.importance.DegreeDistributionRanker.RankScore";
 
     private boolean mUseInDegree;
     private boolean directed;
@@ -60,19 +60,19 @@ public class DegreeDistributionRanker<V,E> extends AbstractRanker<V,E> {
             if (directed)
             {
                 if (mUseInDegree)
-                    setRankScore(currentVertex, getGraph().inDegree(currentVertex));
+                    setVertexRankScore(currentVertex, getGraph().inDegree(currentVertex));
                 else
-                    setRankScore(currentVertex, getGraph().outDegree(currentVertex));
+                    setVertexRankScore(currentVertex, getGraph().outDegree(currentVertex));
             }
             else
-                setRankScore(currentVertex,getGraph().degree(currentVertex));
+                setVertexRankScore(currentVertex,getGraph().degree(currentVertex));
         }
         normalizeRankings();
 
 //        return 0;
     }
 
-//    public String getRankScoreKey() {
-//        return KEY;
-//    }
+    public String getRankScoreKey() {
+        return KEY;
+    }
 }

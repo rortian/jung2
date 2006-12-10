@@ -42,7 +42,7 @@ import edu.uci.ics.graph.UndirectedGraph;
 
 public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
 
-//    public static final String CENTRALITY = "centrality.BetweennessCentrality";
+    public static final String CENTRALITY = "centrality.BetweennessCentrality";
 	protected Map<Object,Number> centralityMap = new HashMap<Object,Number>();
 
     /**
@@ -200,9 +200,9 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
      * the user datum key used to store the rank scores
      * @return the key
      */
-//    public String getRankScoreKey() {
-//        return CENTRALITY;
-//    }
+    public String getRankScoreKey() {
+        return CENTRALITY;
+    }
 
     public void step() {
         computeBetweenness(getGraph());

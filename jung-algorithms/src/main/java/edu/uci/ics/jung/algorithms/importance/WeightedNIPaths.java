@@ -43,7 +43,7 @@ import edu.uci.ics.graph.DirectedGraph;
  * @see "Algorithms for Estimating Relative Importance in Graphs by Scott White and Padhraic Smyth, 2003"
  */
 public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
-
+    public final static String WEIGHTED_NIPATHS_KEY = "jung.algorithms.importance.WEIGHTED_NIPATHS_KEY";
     private double mAlpha;
     private int mMaxDepth;
     private Set<V> mPriors;
@@ -69,12 +69,12 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
         mMaxDepth = maxDepth;
         mPriors = priors;
         for (V v : graph.getVertices()) {
-        	super.setRankScore(v, 0.0);
+        	super.setVertexRankScore(v, 0.0);
         }
     }
 
     protected void incrementRankScore(V v, double rankValue) {
-        setRankScore(v, getRankScore(v) + rankValue);
+        setVertexRankScore(v, getVertexRankScore(v) + rankValue);
     }
 
     protected void computeWeightedPathsFromSource(V root, int depth) {
@@ -172,6 +172,15 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
 
         normalizeRankings();
 //        return 0;
+    }
+    
+    /**
+     * Given a node, returns the corresponding rank score. This implementation of <code>getRankScore</code> assumes
+     * the decoration representing the rank score is of type <code>MutableDouble</code>.
+     * @return  the rank score for this node
+     */
+    public String getRankScoreKey() {
+        return WEIGHTED_NIPATHS_KEY;
     }
 
     protected void onFinalize(Object udc) {

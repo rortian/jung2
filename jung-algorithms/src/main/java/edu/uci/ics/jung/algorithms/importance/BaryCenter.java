@@ -36,8 +36,8 @@ import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
  */
 public class BaryCenter<V,E> extends AbstractRanker<V,E> {
 
-//    public final static String KEY =
-//        "edu.uci.ics.jung.algorithms.importance.BaryCenter.RankScore";
+    public final static String KEY =
+        "edu.uci.ics.jung.algorithms.importance.BaryCenter.RankScore";
 
     /**
      * Constructor which initializes the algorithm
@@ -51,26 +51,26 @@ public class BaryCenter<V,E> extends AbstractRanker<V,E> {
     public void step()
     {
         // Use this class to compute shortest path lengths.
-        DijkstraDistance p = new DijkstraDistance(getGraph());
+        DijkstraDistance<V,E> p = new DijkstraDistance<V,E>(getGraph());
 
 
         for(V u : getVertices()) {        
 
             double baryCenter = 0;
 
-            Iterator j = p.getDistanceMap(u).values().iterator();
+            Iterator<Number> j = p.getDistanceMap(u).values().iterator();
 
             while (j.hasNext())
             {
                 baryCenter += ((Number) j.next()).doubleValue();
             }
-            setRankScore(u, baryCenter);
+            setVertexRankScore(u, baryCenter);
         }
 //        return 0;
     }
 
-//    public String getRankScoreKey()
-//    {
-//        return KEY;
-//    }
+    public String getRankScoreKey()
+    {
+        return KEY;
+    }
 }
