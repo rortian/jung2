@@ -29,6 +29,7 @@ import org.apache.commons.collections15.functors.ChainedTransformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.BasicRenderer;
+import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -93,13 +94,13 @@ public class VertexLabelAsShapeDemo extends JApplet {
         		new ChainedTransformer<String,String>(new Transformer[]{
         		new ToStringLabeller<String>(),
         		new Transformer<String,String>() {
-
 					public String transform(String input) {
 						return "<html><center>Vertex<p>"+input;
 					}}}));
 
         vv.getRenderContext().setVertexShapeFunction(vlasr);
-        pr.setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.red, Color.white, true));
+        vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.red));
+        pr.setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.darkGray, Color.white, true));
         pr.setVertexLabelRenderer(vlasr);
         vv.setRenderer(pr);
 
