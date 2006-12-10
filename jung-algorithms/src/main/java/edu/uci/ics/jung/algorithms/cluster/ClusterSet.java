@@ -10,6 +10,7 @@
 package edu.uci.ics.jung.algorithms.cluster;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -107,8 +108,12 @@ public abstract class ClusterSet<V,E,T> {
      * @param index the 0-based index of the cluster in the list.
      * @return the set of vertices (or edges) comprising the cluster
      */
-    public Set<V> getCluster(int index) {
-        return (Set) mClusters.get(index);
+    public Set<T> getCluster(int index) {
+        return mClusters.get(index);
+    }
+    
+    public Collection<Set<T>> getClusters() {
+    	return mClusters;
     }
 
     /**
