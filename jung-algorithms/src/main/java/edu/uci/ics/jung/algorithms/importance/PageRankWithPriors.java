@@ -11,6 +11,7 @@ package edu.uci.ics.jung.algorithms.importance;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.DirectedGraph;
@@ -47,8 +48,8 @@ public class PageRankWithPriors<V,E> extends PageRank<V,E> {
      * @param edgeWeightKeyName the user datum key associated with any user-defined weights. If there are none,
      * null should be passed in.
      */
-    public PageRankWithPriors(DirectedGraph<V,E> graph, double beta, Set<V> priors, String edgeWeightKeyName) {
-        super(graph, beta, edgeWeightKeyName,computeReachableVertices(graph,priors));
+    public PageRankWithPriors(DirectedGraph<V,E> graph, double beta, Set<V> priors, Map<E,Number> edgeWeights) {
+        super(graph, beta, edgeWeights,computeReachableVertices(graph,priors));
         setPriors(priors);
         initializePriorWeights();
     }
