@@ -1,0 +1,59 @@
+/*
+* Copyright (c) 2003, the JUNG Project and the Regents of the University 
+* of California
+* All rights reserved.
+*
+* This software is open-source under the BSD license; see either
+* "license.txt" or
+* http://jung.sourceforge.net/license.txt for a description.
+*/
+package edu.uci.ics.jung.algorithms;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+import quicktime.std.movies.media.UserData;
+
+/**
+ * Implements the basic matrix operations on double-precision values.  Assumes
+ * that the edges have a MutableDouble value.
+ * 
+ * @author Joshua O'Madadhain
+ */
+public class RealMatrixElementOperations<E> implements MatrixElementOperations<E>
+{
+    private String EDGE_KEY;
+    private Map<E,Number> edgeData = new HashMap<E,Number>();
+
+    public RealMatrixElementOperations(Map<E,Number> edgeData)
+    {
+        this.edgeData = edgeData;
+    }
+
+	/**
+	 * @see MatrixElementOperations#mergePaths(Edge, Object)
+	 */
+	public void mergePaths(E e, Object pathData) 
+    {
+        Number pd = (Number)pathData;
+        Number ed = edgeData.get(e);
+        if (ed == null) {
+        	edgeData.put(e, pd);
+//            e.addUserDatum(EDGE_KEY, pd, UserData.SHARED);
+        } else {
+        	edgeData.put(e, ed.doubleValue()+pd.doubleValue());
+//            ed.add(pd.doubleValue());
+        }
+	}
+
+	/**
+	 * @see MatrixElementOperations#computePathData(Edge, Edge)
+	 */
+	public Number computePathData(E e1, E e2) 
+    {
+        double d1 = edgeData.get(e1).doubleValue();
+        double d2 = edgeData.get(e2).doubleValue();
+        return d1*d2;
+	}
+}
