@@ -12,6 +12,7 @@ package edu.uci.ics.jung.algorithms.importance;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.DirectedGraph;
@@ -67,26 +68,26 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
      * @param edgeWeightKeyName if non-null, uses the user-defined weights to compute the transition probabilities;
      * if null then default transition probabilities (1/outdegree(u)) are used
      */
-    public PageRank(DirectedGraph<V,E> graph, double bias, String edgeWeightKeyName) {
-        initialize(graph, bias, edgeWeightKeyName);
+    public PageRank(DirectedGraph<V,E> graph, double bias, Map<E,Number> edgeWeights) {
+        initialize(graph, bias, edgeWeights);
         initializeRankings(graph.getVertices(), new HashSet<V>());
     }
 
-    protected PageRank(DirectedGraph<V,E> graph, double bias, String edgeWeightKeyName, Pair<Set<V>> reachables) {
-        initialize(graph, bias, edgeWeightKeyName);
+    protected PageRank(DirectedGraph<V,E> graph, double bias, Map<E,Number> edgeWeights, Pair<Set<V>> reachables) {
+        initialize(graph, bias, edgeWeights);
         initializeRankings(reachables.getFirst(), reachables.getSecond());
     }
 
-    protected void initialize(DirectedGraph<V,E> graph, double bias, String edgeWeightKeyName) {
+    protected void initialize(DirectedGraph<V,E> graph, double bias, Map<E,Number> edgeWeights) {
         super.initialize(graph, true, false);
         if ((bias < 0) || (bias > 1.0)) {
             throw new IllegalArgumentException("Bias " + bias + " must be between 0 and 1.");
         }
         mAlpha = bias;
-        if (edgeWeightKeyName == null) {
+        if (edgeWeights == null) {
             assignDefaultEdgeTransitionWeights();
         } else {
-//            setUserDefinedEdgeWeightKey(edgeWeightKeyName);
+            setEdgeWeights(edgeWeights);
             normalizeEdgeTransitionWeights();
         }
 
@@ -126,8 +127,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
 
         for (V currentVertex : mReachableVertices) {
 
-            Collection<E> incomingEdges = getGraph().getIncidentEdges(currentVertex);
-
+            Collection<E> incomingEdges = getGraph().getInEdges(currentVertex);
             double currentPageRankSum = 0;
             for (E incomingEdge : incomingEdges) {
                 if (mUnreachableVertices.contains(getGraph().getOpposite(currentVertex, incomingEdge))) {
@@ -150,7 +150,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
             totalSum += currentPageRankSum * (1.0 - mAlpha) + mAlpha * getPriorRankScore(currentVertex);
             setVertexRankScore(currentVertex, currentPageRankSum * (1.0 - mAlpha) + mAlpha * getPriorRankScore(currentVertex));
         }
-
+        
         if (!NumericalPrecision.equal(totalSum, 1, .05)) {
             System.err.println("Page rank scores can not be generated because the specified graph is not connected.");
             System.out.println(totalSum);
@@ -170,7 +170,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         }
 
         rankingMSE = Math.pow(rankingMSE / getVertices().size(), 0.5);
-
+        setPrecision(rankingMSE);
 //        return rankingMSE;
     }
 
