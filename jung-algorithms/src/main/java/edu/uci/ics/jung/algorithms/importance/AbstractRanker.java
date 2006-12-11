@@ -280,7 +280,14 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
     	this.edgeWeights = edgeWeights;
     }
 
-    protected void assignDefaultEdgeTransitionWeights() {
+    /**
+	 * @return the edgeWeights
+	 */
+	public Map<E, Number> getEdgeWeights() {
+		return edgeWeights;
+	}
+
+	protected void assignDefaultEdgeTransitionWeights() {
 
         for (V currentVertex : getVertices()) {
 
