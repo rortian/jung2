@@ -12,9 +12,12 @@ package edu.uci.ics.jung.algorithms.importance;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections15.BidiMap;
+
 import cern.colt.matrix.DoubleMatrix2D;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.GraphMatrixOperations;
+import edu.uci.ics.jung.algorithms.Indexer;
 
 
 /**
@@ -38,7 +41,7 @@ public class RandomWalkSTBetweenness<V,E> extends AbstractRanker<V,E> {
 
     public static final String CENTRALITY = "centrality.RandomWalkSTBetweennessCentrality";
     private DoubleMatrix2D mVoltageMatrix;
-    private List<V> mIndexer;
+    private BidiMap<V,Integer> mIndexer;
     V mSource;
     V mTarget;
 
@@ -54,7 +57,7 @@ public class RandomWalkSTBetweenness<V,E> extends AbstractRanker<V,E> {
         mTarget = t;
     }
 
-    protected List<V> getIndexer() {
+    protected BidiMap<V,Integer> getIndexer() {
         return mIndexer;
     }
 
@@ -64,7 +67,7 @@ public class RandomWalkSTBetweenness<V,E> extends AbstractRanker<V,E> {
 
     protected void setUp() {
         mVoltageMatrix = GraphMatrixOperations.<V,E>computeVoltagePotentialMatrix((UndirectedGraph<V,E>) getGraph());
-        mIndexer = new ArrayList<V>(getGraph().getVertices());
+        mIndexer = Indexer.<V>create(getGraph().getVertices());
     }
 
     protected void computeBetweenness() {
@@ -80,13 +83,13 @@ public class RandomWalkSTBetweenness<V,E> extends AbstractRanker<V,E> {
         if (mVoltageMatrix == null) {
             setUp();
         }
-        int i = mIndexer.indexOf(ithVertex);
-        int s = mIndexer.indexOf(source);
-        int t = mIndexer.indexOf(target);
+        int i = mIndexer.get(ithVertex);
+        int s = mIndexer.get(source);
+        int t = mIndexer.get(target);
 
         double betweenness = 0;
         for (V jthVertex : getGraph().getSuccessors(ithVertex)) {
-            int j = mIndexer.indexOf(jthVertex);
+            int j = mIndexer.get(jthVertex);
             double currentFlow = 0;
             currentFlow += mVoltageMatrix.get(i,s);
             currentFlow -= mVoltageMatrix.get(i,t);

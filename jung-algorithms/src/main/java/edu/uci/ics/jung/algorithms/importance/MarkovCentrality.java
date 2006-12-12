@@ -14,12 +14,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.BidiMap;
+
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.GraphMatrixOperations;
+import edu.uci.ics.jung.algorithms.Indexer;
 
 /**
  * @author Scott White and Joshua O'Madadhain
@@ -29,7 +32,7 @@ import edu.uci.ics.jung.algorithms.GraphMatrixOperations;
 public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     public final static String MEAN_FIRST_PASSAGE_TIME = "jung.algorithms.importance.mean_first_passage_time";
     private DoubleMatrix1D mRankings;
-    private List<V> mIndexer;
+    private BidiMap<V,Integer> mIndexer;
 
     public MarkovCentrality(DirectedGraph<V,E> graph, Set<V> rootNodes) {
         this(graph,rootNodes,null);
@@ -44,7 +47,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
             setEdgeWeights(edgeWeightKey);
         normalizeEdgeTransitionWeights();
 
-        mIndexer = new ArrayList<V>(graph.getVertices());
+        mIndexer = Indexer.<V>create(graph.getVertices());
         mRankings = new SparseDoubleMatrix1D(graph.getVertices().size());
     }
 
@@ -59,7 +62,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
      * @see edu.uci.ics.jung.algorithms.importance.AbstractRanker#getRankScore(edu.uci.ics.jung.graph.Element)
      */
     public double getVertexRankScore(V vert) {
-        return mRankings.get(mIndexer.indexOf(vert));
+        return mRankings.get(mIndexer.get(vert));
     }
 
     /**
@@ -71,22 +74,22 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
         mRankings.assign(0);
 
         for (V p : getPriors()) {
-            int p_id = mIndexer.indexOf(p);
+            int p_id = mIndexer.get(p);
             for (V v : getVertices()) {
-                int v_id = mIndexer.indexOf(v);
+                int v_id = mIndexer.get(v);
                 mRankings.set(v_id, mRankings.get(v_id) + mFPTMatrix.get(p_id, v_id));
             }
         }
 
         for (V v : getVertices()) {
-            int v_id = mIndexer.indexOf(v);
+            int v_id = mIndexer.get(v);
             mRankings.set(v_id, 1 / (mRankings.get(v_id) / getPriors().size()));
         }
 
         double total = mRankings.zSum();
 
         for (V v : getVertices()) {
-            int v_id = mIndexer.indexOf(v);
+            int v_id = mIndexer.get(v);
             mRankings.set(v_id, mRankings.get(v_id) / total);
         }
     }
@@ -105,7 +108,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
         List<Ranking<?>> rankings = pageRank.getRankings();
 
         for (Ranking<?> rank : rankings) {
-            piVector.set(mIndexer.indexOf(rank.getRanked()), rank.rankScore);
+            piVector.set(mIndexer.get(rank.getRanked()), rank.rankScore);
         }
         return piVector;
     }

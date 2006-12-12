@@ -6,13 +6,12 @@
  */
 package edu.uci.ics.jung.algorithms;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.Factory;
 
 import cern.colt.matrix.DoubleMatrix1D;
@@ -132,7 +131,7 @@ public class GraphMatrixOperations
         	graph.addVertex(vertexFactory.create());
         }
 
-        List<V> indexer = new ArrayList<V>();
+        BidiMap<V,Integer> indexer = Indexer.<V>create(graph.getVertices());
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -140,8 +139,8 @@ public class GraphMatrixOperations
                 double value = matrix.getQuick(i, j);
                 if (value != 0)
                 {
-                    V vI = indexer.get(i);
-                    V vJ = indexer.get(j);
+                    V vI = indexer.getKey(i);
+                    V vJ = indexer.getKey(j);
                     E e = edgeFactory.create();
                     if (isSymmetric)
                     {
@@ -256,14 +255,14 @@ public class GraphMatrixOperations
         SparseDoubleMatrix2D matrix = new SparseDoubleMatrix2D(numVertices,
                 numVertices);
 
-        List<V> indexer = new ArrayList<V>(g.getVertices());
+        BidiMap<V,Integer> indexer = Indexer.<V>create(g.getVertices());
         int i=0;
-        for(V v : indexer)
+        for(V v : indexer.keySet())
         {
             for (E e : g.getOutEdges(v))
             {
                 V w = g.getOpposite(v,e);
-                int j = indexer.indexOf(w);
+                int j = indexer.get(w);
                 matrix.set(i, j, matrix.getQuick(i,j) + nev.get(e).doubleValue());
             }
             i++;
@@ -282,10 +281,10 @@ public class GraphMatrixOperations
         int numVertices = graph.getVertices().size();
         SparseDoubleMatrix2D matrix = new SparseDoubleMatrix2D(numVertices,
                 numVertices);
-        List<V> indexer = new ArrayList<V>(graph.getVertices());
+        BidiMap<V,Integer> indexer = Indexer.<V>create(graph.getVertices());
         for (V v : graph.getVertices())
         {
-        	int vi = indexer.indexOf(v);
+        	int vi = indexer.get(v);
             matrix.set(vi,vi, graph.degree(v));
         }
         return matrix;
@@ -350,10 +349,10 @@ public class GraphMatrixOperations
         int numVertices = map.size();
         DoubleMatrix1D vector = new DenseDoubleMatrix1D(numVertices);
         Set<V> vertices = map.keySet();
-        List<V> indexer = new ArrayList<V>(vertices);
+        BidiMap<V,Integer> indexer = Indexer.<V>create(vertices);
         for (V v : vertices)
         {
-            int v_id = indexer.indexOf(v);
+            int v_id = indexer.get(v);
             if (v_id < 0 || v_id > numVertices)
                 throw new IllegalArgumentException("Vertex ID not "
                         + "supported by mapTo1DMatrix: outside range [0,n-1]");

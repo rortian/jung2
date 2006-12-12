@@ -51,8 +51,8 @@ public class RandomWalkBetweenness<V,E> extends RandomWalkSTBetweenness<V,E> {
             double ithBetweenness = 0;
             for (int t=0;t<numVertices;t++) {
                 for (int s=0;s<t;s++) {
-                    V sthVertex = getIndexer().get(s);
-                    V tthVertex = getIndexer().get(t);
+                    V sthVertex = getIndexer().getKey(s);
+                    V tthVertex = getIndexer().getKey(t);
                     ithBetweenness += computeSTBetweenness(ithVertex,sthVertex, tthVertex);
                 }
             }
