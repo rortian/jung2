@@ -257,7 +257,8 @@ public class GraphMatrixOperations
 
         BidiMap<V,Integer> indexer = Indexer.<V>create(g.getVertices());
         int i=0;
-        for(V v : indexer.keySet())
+        
+        for(V v : g.getVertices())
         {
             for (E e : g.getOutEdges(v))
             {
