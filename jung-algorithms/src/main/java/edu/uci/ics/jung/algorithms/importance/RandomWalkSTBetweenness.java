@@ -9,9 +9,6 @@
  */
 package edu.uci.ics.jung.algorithms.importance;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.collections15.BidiMap;
 
 import cern.colt.matrix.DoubleMatrix2D;
@@ -86,7 +83,7 @@ public class RandomWalkSTBetweenness<V,E> extends AbstractRanker<V,E> {
         int i = mIndexer.get(ithVertex);
         int s = mIndexer.get(source);
         int t = mIndexer.get(target);
-
+        
         double betweenness = 0;
         for (V jthVertex : getGraph().getSuccessors(ithVertex)) {
             int j = mIndexer.get(jthVertex);
