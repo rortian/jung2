@@ -421,14 +421,12 @@ public class BasicVisualizationServer<V, E> extends JPanel
         this.renderingHints = renderingHints;
     }
     
-	protected synchronized void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-	    checkOffscreenImage(getSize());
-//		model.start();
 
 		Graphics2D g2d = (Graphics2D)g;
 		if(doubleBuffered) {
+		    checkOffscreenImage(getSize());
 			renderGraph(offscreenG2d);
 		    g2d.drawImage(offscreen, null, 0, 0);
 		} else {
@@ -440,7 +438,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	    if(renderContext.getGraphicsContext() == null) {
 	        renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
         } else {
-        renderContext.getGraphicsContext().setDelegate(g2d);
+        	renderContext.getGraphicsContext().setDelegate(g2d);
         }
         renderContext.setScreenDevice(this);
 	    Layout<V,E> layout = model.getGraphLayout();

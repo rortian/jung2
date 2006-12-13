@@ -27,7 +27,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * a pure decorator for the Layout interface. Intended to be overridden
  * to provide specific behavior decoration
  * @see PersistentLayoutImpl
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */
@@ -68,13 +68,6 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#applyFilter(edu.uci.ics.jung.graph.Graph)
-     */
-//    public void applyFilter(Graph<V,E> subgraph) {
-//        delegate.applyFilter(subgraph);
-//    }
-
-    /**
 	 * 
 	 * @see edu.uci.ics.jung.visualization.layout.Layout#initialize()
 	 */
@@ -99,22 +92,6 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
 		delegate.setLocation(v, location);
 	}
 
-	/**
-	 * @param arg0
-	 * @return
-	 * @see org.apache.commons.collections15.Transformer#transform(java.lang.Object)
-	 */
-//	public Point2D transform(V arg0) {
-//		return delegate.transform(arg0);
-//	}
-
-	/**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#forceMove(edu.uci.ics.jung.graph.Vertex, double, double)
-     */
-//    public void setLocation(V picked, double x, double y) {
-//        delegate.setLocation(picked, x, y);
-//    }
-
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#getCurrentSize()
      */
@@ -137,27 +114,6 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#getStatus()
-     */
-//    public String getStatus() {
-//        return delegate.getStatus();
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#getX(edu.uci.ics.jung.graph.Vertex)
-     */
-//    public double getX(V v) {
-//        return delegate.getX(v);
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#getY(edu.uci.ics.jung.graph.Vertex)
-     */
-//    public double getY(V v) {
-//        return delegate.getY(v);
-//    }
-
-    /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#done()
      */
     public boolean done() {
@@ -166,20 +122,6 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     	}
     	return true;
     }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#initialize(java.awt.Dimension)
-     */
-//    protected void initialize() {
-//        delegate.initialize();
-//    }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#isIncremental()
-     */
-//    public boolean isIncremental() {
-//        return delegate.isIncremental();
-//    }
 
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#lockVertex(edu.uci.ics.jung.graph.Vertex)
@@ -191,8 +133,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     /**
      * @see edu.uci.ics.jung.visualization.layout.Layout#isLocked(Vertex)
      */
-    public boolean isLocked(V v)
-    {
+    public boolean isLocked(V v) {
         return delegate.isLocked(v);
     }
     
@@ -209,13 +150,6 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     public void reset() {
     	delegate.reset();
     }
-
-    /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#unlockVertex(edu.uci.ics.jung.graph.Vertex)
-     */
-//    public void unlockVertex(V v) {
-//        delegate.unlockVertex(v);
-//    }
 
     public void addChangeListener(ChangeListener l) {
         changeSupport.addChangeListener(l);
@@ -235,7 +169,5 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     
     public void setGraph(Graph<V, E> graph) {
         delegate.setGraph(graph);
-        
     }
-
 }

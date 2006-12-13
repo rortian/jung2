@@ -82,12 +82,6 @@ public class AddNodeDemo extends javax.swing.JApplet {
         getContentPane().setBackground(java.awt.Color.lightGray);
         getContentPane().setFont(new Font("Serif", Font.PLAIN, 12));
 
-        //define my layout for dynamic graphing
-        // info can be found at
-        // https://sourceforge.net/forum/forum.php?thread_id=1021284&forum_id=252062
-
-        //set a visualization viewer
-        
         vv.getModel().getRelaxer().setSleepTime(500);
         vv.setGraphMouse(new DefaultModalGraphMouse());
         
@@ -129,16 +123,9 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
     public void process() {
 
-//        System.out.println("-[----------------------------");
-//        int label_number = 0;
-
         try {
 
             if (g.getVertices().size() < 100) {
-
-//                //pull out last record processed and label
-//                label_number = (int) (Math.random() * 10000);
-
 
                 //add a vertex
                 Integer v1 = new Integer(g.getVertices().size());
@@ -157,52 +144,18 @@ public class AddNodeDemo extends javax.swing.JApplet {
                 }
 
                 v_prev = v1;
-                
-//                VisRunner relaxer = vv.getModel().getRelaxer();
-//                if(relaxer != null) {
-//                	relaxer.stop();
-//                	relaxer = null;
-//                }
-//            	layout.initialize();
-//                if(layout instanceof IterativeContext) {
-//                	relaxer = new VisRunner((IterativeContext)layout);
-//                	relaxer.relax();
-//                }
+
                 layout.reset();
                 relaxer.resume();
-
 
             } else {
             	done = true;
             }
 
-//            if (redraw) {
-                //update the layout
-                // see
-                // https://sourceforge.net/forum/forum.php?thread_id=1021284&forum_id=252062
-                
-//                layout.update();
-//                if (!vv.isVisRunnerRunning())
-//                    vv.getModel().init();
-//                VisRunner relaxer = vv.getModel().getRelaxer();
-//                if(relaxer != null) {
-//                	relaxer.stop();
-//                	relaxer = null;
-//                }
-//            	layout.initialize();
-//                if(layout instanceof IterativeContext) {
-//                	relaxer = new VisRunner((IterativeContext)layout);
-//                	relaxer.relax();
-//                }
-               
-//                vv.repaint();
-//            }
-
         } catch (Exception e) {
             System.out.println(e);
 
         }
-//        System.out.println("------------end process------------");
     }
 
     class RemindTask extends TimerTask {
