@@ -92,6 +92,8 @@ public class VertexImageShaperDemo extends JApplet {
 	 * 
 	 */
 	private static final long serialVersionUID = -4332663871914930864L;
+	
+	private static final int VERTEX_COUNT=11;
 
 	/**
      * the graph
@@ -120,44 +122,38 @@ public class VertexImageShaperDemo extends JApplet {
             "privacy"
     };
     
-    /**
-     * create an instance of a simple graph with controls to
-     * demo the zoom features.
-     * 
-     */
     public VertexImageShaperDemo() {
         
         // create a simple graph for the demo
         graph = new SimpleDirectedSparseGraph<Number,Number>();
-        Number[] vertices = createVertices(11);
+        createGraph(VERTEX_COUNT);
         
         // a Map for the labels
         Map<Number,String> map = new HashMap<Number,String>();
-        for(int i=0; i<vertices.length; i++) {
-            map.put(vertices[i], iconNames[i%iconNames.length]);
+        for(int i=0; i<VERTEX_COUNT; i++) {
+            map.put(i, iconNames[i%iconNames.length]);
         }
         
         // a Map for the Icons
         Map<Number,Icon> iconMap = new HashMap<Number,Icon>();
-        for(int i=0; i<vertices.length; i++) {
+        for(int i=0; i<VERTEX_COUNT; i++) {
             String name = "/images/topic"+iconNames[i]+".gif";
             try {
                 Icon icon = 
                     new LayeredIcon(new ImageIcon(VertexImageShaperDemo.class.getResource(name)).getImage());
-                iconMap.put(vertices[i], icon);
+                iconMap.put(i, icon);
             } catch(Exception ex) {
                 System.err.println("You need slashdoticons.jar in your classpath to see the image "+name);
             }
         }
-        
-        createEdges(vertices);
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);
         layout.setMaxIterations(100);
         vv =  new VisualizationViewer<Number, Number>(layout, new Dimension(400,400));
         
         // This demo uses a special renderer to turn outlines on and off.
-        // you do not need to do this in a real application. Just use a PluggableRender
+        // you do not need to do this in a real application.
+        // Instead, just let vv use the Renderer it already has
         vv.getRenderer().setVertexRenderer(new DemoRenderer<Number,Number>());
 
         Transformer<Number,Paint> vpf = 
@@ -175,7 +171,7 @@ public class VertexImageShaperDemo extends JApplet {
         
         
         // For this demo only, I use a special class that lets me turn various
-        // features on and off. For a real application, use VertexIconAndShapeFunction instead.
+        // features on and off. For a real application, use VertexIconShapeTransformer instead.
         final DemoVertexIconShapeTransformer<Number> vertexIconShapeTransformer =
             new DemoVertexIconShapeTransformer<Number>(new EllipseVertexShapeTransformer<Number>());
         
@@ -187,7 +183,6 @@ public class VertexImageShaperDemo extends JApplet {
         
         vv.getRenderContext().setVertexShapeFunction(vertexIconShapeTransformer);
         vv.getRenderContext().setVertexIconFunction(vertexIconTransformer);
-
         
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
@@ -375,39 +370,30 @@ public class VertexImageShaperDemo extends JApplet {
      * @param count how many to create
      * @return the Vertices in an array
      */
-    private Number[] createVertices(int count) {
-        Number[] v = new Number[count];
-        for (int i = 0; i < count; i++) {
-            v[i] = new Integer(i);
-            graph.addVertex(v[i]);
+    private void createGraph(int vertexCount) {
+        for (int i = 0; i < vertexCount; i++) {
+            graph.addVertex(i);
         }
-        return v;
-    }
-
-    /**
-     * create edges for this demo graph
-     * @param v an array of Vertices to connect
-     */
-    void createEdges(Number[] v) {
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[3], v[0]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[4]);
-        graph.addDirectedEdge(new Double(Math.random()), v[4], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[5], v[3]);
-        graph.addDirectedEdge(new Double(Math.random()), v[2], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[4], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[8], v[2]);
-        graph.addDirectedEdge(new Double(Math.random()), v[3], v[8]);
-        graph.addDirectedEdge(new Double(Math.random()), v[6], v[7]);
-        graph.addDirectedEdge(new Double(Math.random()), v[7], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[9]);
-        graph.addDirectedEdge(new Double(Math.random()), v[9], v[8]);
-        graph.addDirectedEdge(new Double(Math.random()), v[7], v[6]);
-        graph.addDirectedEdge(new Double(Math.random()), v[6], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[4], v[2]);
-        graph.addDirectedEdge(new Double(Math.random()), v[5], v[4]);
-        graph.addDirectedEdge(new Double(Math.random()), v[4], v[10]);
-        graph.addDirectedEdge(new Double(Math.random()), v[10], v[4]);
+    	int j=0;
+        graph.addDirectedEdge(j++, 0, 1);
+        graph.addDirectedEdge(j++, 3, 0);
+        graph.addDirectedEdge(j++, 0, 4);
+        graph.addDirectedEdge(j++, 4, 5);
+        graph.addDirectedEdge(j++, 5, 3);
+        graph.addDirectedEdge(j++, 2, 1);
+        graph.addDirectedEdge(j++, 4, 1);
+        graph.addDirectedEdge(j++, 8, 2);
+        graph.addDirectedEdge(j++, 3, 8);
+        graph.addDirectedEdge(j++, 6, 7);
+        graph.addDirectedEdge(j++, 7, 5);
+        graph.addDirectedEdge(j++, 0, 9);
+        graph.addDirectedEdge(j++, 9, 8);
+        graph.addDirectedEdge(j++, 7, 6);
+        graph.addDirectedEdge(j++, 6, 5);
+        graph.addDirectedEdge(j++, 4, 2);
+        graph.addDirectedEdge(j++, 5, 4);
+        graph.addDirectedEdge(j++, 4, 10);
+        graph.addDirectedEdge(j++, 10, 4);
     }
 
     /** 

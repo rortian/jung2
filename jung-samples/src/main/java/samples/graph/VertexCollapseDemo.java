@@ -49,6 +49,11 @@ import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 
 
 /**
+ * A demo that shows how collections of vertices can be collapsed
+ * into a single vertex. In this demo, the vertices that are
+ * collapsed are those mouse-picked by the user. Any criteria
+ * could be used to form the vertex collections to be collapsed,
+ * perhaps some common characteristic of those vertex objects.
  * 
  * @author Tom Nelson
  * 
@@ -80,11 +85,7 @@ public class VertexCollapseDemo extends JApplet {
     Layout layout;
     
     GraphCollapser collapser;
-    /**
-     * create an instance of a simple graph with controls to
-     * demo the zoomand hyperbolic features.
-     * 
-     */
+
     public VertexCollapseDemo() {
         
         // create a simple graph for the demo
@@ -165,7 +166,6 @@ public class VertexCollapseDemo extends JApplet {
                     	sumy += p.getY();
                     }
                     Point2D cp = new Point2D.Double(sumx/picked.size(), sumy/picked.size());
-//                    vv.getModel().stop();
                     vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
                     layout.setLocation(clusterGraph, cp);
@@ -181,8 +181,6 @@ public class VertexCollapseDemo extends JApplet {
                     if(v instanceof Graph) {
                         
                         Graph g = collapser.expand(layout.getGraph(), (Graph)v);
-                        
-//                        vv.getModel().stop();
                         vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
@@ -194,9 +192,7 @@ public class VertexCollapseDemo extends JApplet {
         reset.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-//                vv.getModel().stop();
                 layout.setGraph(graph);
-//                vv.getModel().restart();
             }});
         
         JButton help = new JButton("Help");
@@ -223,6 +219,16 @@ public class VertexCollapseDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
+    /**
+     * a demo class that will create a vertex shape that is either a
+     * polygon or star. The number of sides corresponds to the number
+     * of vertices that were collapsed into the vertex represented by
+     * this shape.
+     * 
+     * @author Tom Nelson
+     *
+     * @param <V>
+     */
     class ClusterVertexShapeFunction<V> extends EllipseVertexShapeTransformer<V> {
 
         ClusterVertexShapeFunction() {
@@ -244,6 +250,13 @@ public class VertexCollapseDemo extends JApplet {
         }
     }
     
+    /**
+     * A demo class that will make vertices larger if they represent
+     * a collapsed collection of original vertices
+     * @author Tom Nelson
+     *
+     * @param <V>
+     */
     class ClusterVertexSizeFunction<V> implements Transformer<V,Integer> {
     	int size;
         public ClusterVertexSizeFunction(Integer size) {

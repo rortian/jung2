@@ -15,7 +15,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -25,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
@@ -37,14 +35,13 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 
 
 /**
  * Demonstrates the use of <code>GraphZoomScrollPane</code>.
- * This class shows off the <code>VisualizationViewer</code> zooming
+ * This class shows the <code>VisualizationViewer</code> zooming
  * and panning capabilities, using horizontal and
  * vertical scrollbars.
  *
@@ -212,13 +209,13 @@ public class GraphZoomScrollPaneDemo {
     static class TestGraphMouseListener<V> implements GraphMouseListener<V> {
         
     		public void graphClicked(V v, MouseEvent me) {
-//    		    System.err.println("Vertex "+v+" was clicked at ("+me.getX()+","+me.getY()+")");
+    		    System.err.println("Vertex "+v+" was clicked at ("+me.getX()+","+me.getY()+")");
     		}
     		public void graphPressed(V v, MouseEvent me) {
-//    		    System.err.println("Vertex "+v+" was pressed at ("+me.getX()+","+me.getY()+")");
+    		    System.err.println("Vertex "+v+" was pressed at ("+me.getX()+","+me.getY()+")");
     		}
     		public void graphReleased(V v, MouseEvent me) {
-//    		    System.err.println("Vertex "+v+" was released at ("+me.getX()+","+me.getY()+")");
+    		    System.err.println("Vertex "+v+" was released at ("+me.getX()+","+me.getY()+")");
     		}
     }
 

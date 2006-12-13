@@ -46,12 +46,8 @@ import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 
 /**
- * Demonstrates the use of <code>GraphZoomScrollPane</code>.
- * This class shows off the <code>VisualizationViewer</code> zooming
- * and panning capabilities, using horizontal and
- * vertical scrollbars.
- *
- * <p>This demo also shows ToolTips on graph vertices.</p>
+ * A demo that shows flag images as vertices, and uses unicode
+ * to render vertex labels.
  * 
  * @author Tom Nelson 
  * 
@@ -70,11 +66,6 @@ public class UnicodeLabelDemo {
     
     boolean showLabels;
     
-    /**
-     * create an instance of a simple graph with controls to
-     * demo the zoom features.
-     * 
-     */
     public UnicodeLabelDemo() {
         
         // create a simple graph for the demo

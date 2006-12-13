@@ -8,6 +8,7 @@
  */
 package samples.graph;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -25,10 +26,10 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ChainedTransformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
-import edu.uci.ics.jung.visualization.BasicRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -47,6 +48,10 @@ import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
 
 
 /**
+ * This demo shows how to use the vertex labels themselves as 
+ * the vertex shapes. Additionally, it shows html labels
+ * so they are multi-line, and gradient painting of the
+ * vertex labels.
  * 
  * @author Tom Nelson
  * 
@@ -58,30 +63,20 @@ public class VertexLabelAsShapeDemo extends JApplet {
 	 */
 	private static final long serialVersionUID = 1017336668368978842L;
 
-	/**
-     * the graph
-     */
     Graph<String,Number> graph;
 
-    /**
-     * the visual component and renderer for the graph
-     */
     VisualizationViewer<String,Number> vv;
     
     Layout<String,Number> layout;
     
     /**
-     * create an instance of a simple graph with controls to
-     * demo the zoomand hyperbolic features.
-     * 
+     * create an instance of a simple graph with basic controls
      */
     public VertexLabelAsShapeDemo() {
         
         // create a simple graph for the demo
-        graph = 
-        TestGraphs.getOneComponentGraph();
+        graph = TestGraphs.getOneComponentGraph();
         
-        BasicRenderer<String,Number> pr = new BasicRenderer<String,Number>();
         layout = new FRLayout<String,Number>(graph);
 
         Dimension preferredSize = new Dimension(400,400);
@@ -89,29 +84,33 @@ public class VertexLabelAsShapeDemo extends JApplet {
             new DefaultVisualizationModel<String,Number>(layout, preferredSize);
         vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
+        // this class will provide both label drawing and vertex shapes
         VertexLabelAsShapeRenderer<String,Number> vlasr = new VertexLabelAsShapeRenderer<String,Number>();
+        
+        // customize the render context
         vv.getRenderContext().setVertexStringer(
+        		// this chains together Transformers so that the html tags
+        		// are prepended to the toString method output
         		new ChainedTransformer<String,String>(new Transformer[]{
         		new ToStringLabeller<String>(),
         		new Transformer<String,String>() {
 					public String transform(String input) {
 						return "<html><center>Vertex<p>"+input;
 					}}}));
-
         vv.getRenderContext().setVertexShapeFunction(vlasr);
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.red));
-        pr.setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.darkGray, Color.white, true));
-        pr.setVertexLabelRenderer(vlasr);
-        vv.setRenderer(pr);
+        vv.getRenderContext().setEdgeDrawPaintFunction(new ConstantTransformer(Color.yellow));
+        vv.getRenderContext().setEdgeStrokeFunction(new ConstantTransformer(new BasicStroke(2.5f)));
+        
+        // customize the renderer
+        vv.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.gray, Color.white, true));
+        vv.getRenderer().setVertexLabelRenderer(vlasr);
 
-        vv.setBackground(Color.white);
+        vv.setBackground(Color.black);
         
         // add a listener for ToolTips
         vv.setToolTipFunction(new DefaultToolTipFunction());
         
-        /**
-         * the regular graph mouse for the normal view
-         */
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
 
         vv.setGraphMouse(graphMouse);

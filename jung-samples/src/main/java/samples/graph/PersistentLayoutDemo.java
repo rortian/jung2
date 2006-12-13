@@ -31,7 +31,6 @@ import edu.uci.ics.jung.visualization.layout.PersistentLayoutImpl;
 /**
  * Demonstrates the use of <code>PersistentLayout</code>
  * and <code>PersistentLayoutImpl</code>.
- * This demo also shows ToolTips on graph vertices.
  * 
  * @author Tom Nelson
  * 
@@ -105,7 +104,6 @@ public class PersistentLayoutDemo {
                 PersistentLayout<String,Number> pl = (PersistentLayout<String,Number>) vv.getGraphLayout();
                 try {
                     pl.restore(fileName);
-//                    vv.repaint();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -115,7 +113,7 @@ public class PersistentLayoutDemo {
         p.add(gm.getModeComboBox());
 
         frame.getContentPane().add(p, BorderLayout.SOUTH);
-        frame.setSize(600, 600);
+        frame.pack();//setSize(600, 600);
         frame.setVisible(true);
     }
 

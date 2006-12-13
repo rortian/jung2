@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
