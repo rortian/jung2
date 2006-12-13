@@ -177,7 +177,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
                         float cx=0;
                         float cy=0;
                         float[] f = new float[6];
-                        PathIterator pi = ((GeneralPath)edgeShape).getPathIterator(null);
+                        PathIterator pi = new GeneralPath(edgeShape).getPathIterator(null);
                         if(pi.isDone()==false) {
                             pi.next();
                             pi.currentSegment(f);

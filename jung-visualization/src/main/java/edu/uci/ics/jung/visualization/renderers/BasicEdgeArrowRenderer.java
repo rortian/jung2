@@ -139,7 +139,7 @@ public class BasicEdgeArrowRenderer<V,E> extends BasicEdgeShapeRenderer<V,E>
                 if(arrowHit) {
                     
                     AffineTransform at = 
-                        getArrowTransform(rc, (GeneralPath)edgeShape, destVertexShape);
+                        getArrowTransform(rc, new GeneralPath(edgeShape), destVertexShape);
                     if(at == null) return;
                     Shape arrow = rc.getEdgeArrowFunction().transform(new EdgeContext<V,E>(graph, e));
                     arrow = at.createTransformedShape(arrow);
@@ -155,7 +155,7 @@ public class BasicEdgeArrowRenderer<V,E> extends BasicEdgeShapeRenderer<V,E>
                     arrowHit = rc.getViewTransformer().transform(vertexShape).intersects(deviceRectangle);
                     
                     if(arrowHit) {
-                        AffineTransform at = getReverseArrowTransform(rc, (GeneralPath)edgeShape, vertexShape, !isLoop);
+                        AffineTransform at = getReverseArrowTransform(rc, new GeneralPath(edgeShape), vertexShape, !isLoop);
                         if(at == null) return;
                         Shape arrow = rc.getEdgeArrowFunction().transform(new EdgeContext<V,E>(graph, e));
                         arrow = at.createTransformedShape(arrow);
