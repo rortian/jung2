@@ -14,6 +14,8 @@ import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
 
@@ -22,25 +24,25 @@ import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
  * cause the location methods to check with the sublayouts
  * for location information
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  *
  */
 public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
 
-    final protected Collection<SubLayout<V>> subLayouts = 
-        new LinkedHashSet<SubLayout<V>>();
+    final protected Collection<Transformer<V,Point2D>> subLayouts = 
+        new LinkedHashSet<Transformer<V,Point2D>>();
     
     public SubLayoutDecorator(Layout<V,E> delegate) {
         super(delegate);
     }
     
-    public void addSubLayout(SubLayout<V> subLayout) {
+    public void addSubLayout(Transformer<V,Point2D> subLayout) {
         subLayouts.add(subLayout);
         fireStateChanged();
     }
     
-    public boolean removeSubLayout(SubLayout<V> subLayout) {
+    public boolean removeSubLayout(Transformer<V,Point2D> subLayout) {
         boolean wasThere = subLayouts.remove(subLayout);
         fireStateChanged();
         return wasThere;
@@ -53,10 +55,8 @@ public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
     
     protected Point2D getLocationInSubLayout(V v) {
         Point2D location = null;
-        for(SubLayout<V> subLayout : subLayouts) {
-//        for(Iterator iterator=subLayouts.iterator(); iterator.hasNext(); ) {
-//            SubLayout subLayout = (SubLayout)iterator.next();
-            location = subLayout.getLocation(v);
+        for(Transformer<V,Point2D> subLayout : subLayouts) {
+            location = subLayout.transform(v);
             if(location != null) {
                 break;
             }
@@ -64,7 +64,7 @@ public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
         return location;
     }
     
-    public Point2D getLocation(V v) {
+    public Point2D transform(V v) {
         Point2D p = getLocationInSubLayout(v);
         if(p != null) {
             return p;
@@ -73,7 +73,7 @@ public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
         }
     }
     
-    public void forceMove(V picked, double x, double y) {
+    public void setLocation(V picked, double x, double y) {
         Point2D p = getLocationInSubLayout(picked);
         if(p != null) {
             p.setLocation(x, y);
@@ -82,15 +82,4 @@ public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
         }
         fireStateChanged();
     }
-
-//    public void applyFilter(Graph<V, E> subgraph) {
-//        // TODO Auto-generated method stub
-//        
-//    }
-
-    public Collection<V> getVertices() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

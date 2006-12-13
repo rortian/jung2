@@ -14,16 +14,18 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.collections15.Transformer;
+
 /**
  * An implementation of SubLayout that places its collection of
  * Vertices in a circle. The center and radius are settable
  * properties.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */
-public class CircularSubLayout<V> implements SubLayout<V> {
+public class CircularSubLayout<V> implements Transformer<V,Point2D> {
 
 	protected double radius;
     protected Point2D center;
@@ -76,7 +78,7 @@ public class CircularSubLayout<V> implements SubLayout<V> {
 		}
 	}
 	
-    public Point2D getLocation(V v) {
-        return (Point2D)map.get(v);
+    public Point2D transform(V v) {
+        return map.get(v);
     }
 }

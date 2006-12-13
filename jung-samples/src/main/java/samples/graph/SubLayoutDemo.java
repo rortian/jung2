@@ -26,6 +26,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
@@ -43,7 +45,6 @@ import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.subLayout.CircularSubLayout;
-import edu.uci.ics.jung.visualization.subLayout.SubLayout;
 import edu.uci.ics.jung.visualization.subLayout.SubLayoutDecorator;
 
 /**
@@ -180,17 +181,17 @@ public class SubLayoutDemo extends JApplet {
         }
         public void vertexPicked(V v) {
             if(center == null) {
-                center = layout.getLocation(v);
+                center = layout.transform(v);
             }
             layout.removeAllSubLayouts();
-            SubLayout<V> subLayout = new CircularSubLayout<V>(getPicked(), 20, center);
+            Transformer<V,Point2D> subLayout = new CircularSubLayout<V>(getPicked(), 20, center);
             layout.addSubLayout(subLayout);
         }
 
         public void vertexUnpicked(V v) {
             layout.removeAllSubLayouts();
             if(this.getPicked().isEmpty() == false) {
-                SubLayout<V> subLayout = new CircularSubLayout<V>(getPicked(), 20, center);
+                Transformer<V,Point2D> subLayout = new CircularSubLayout<V>(getPicked(), 20, center);
                 layout.addSubLayout(subLayout);
             } else {
                 center = null;

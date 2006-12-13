@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,7 +25,8 @@ import java.util.Set;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
@@ -37,7 +37,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
  * Defers to another layout until 'restore' is called,
  * then it uses the saved vertex locations
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  *  
  */
@@ -68,7 +68,14 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      */
     public PersistentLayoutImpl(Layout<V,E> layout) {
         super(layout);
-        this.map = new HashMap<V,Point>();
+        this.map = LazyMap.decorate(new HashMap<V,Point>(),
+        		new Factory<Point>() {
+
+					public edu.uci.ics.jung.visualization.layout.PersistentLayout.Point create() {
+			            double x = Math.random() * getSize().getWidth();
+			            double y = Math.random() * getSize().getHeight();
+						return new Point(x,y);
+					}});
         this.dontmove = new HashSet<V>();
         this.elementAccessor = new RadiusGraphElementAccessor<V,E>();
         if(layout instanceof ChangeEventSupport) {
@@ -104,17 +111,9 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * @param d
      */
     protected void initializeLocation(V v, Point2D coord, Dimension d) {
-        double x;
-        double y;
+
         Point point = map.get(v);
-        if (point == null) {
-            x = Math.random() * d.getWidth();
-            y = Math.random() * d.getHeight();
-        } else {
-            x = point.x;
-            y = point.y;
-        }
-        coord.setLocation(x, y);
+        coord.setLocation(point.x, point.y);
     }
 
     /**
@@ -125,9 +124,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
     public void persist(String fileName) throws IOException {
 
         for(V v : getGraph().getVertices()) {
-
             Point p = new Point(transform(v));
-            		//getX(v), getY(v));
             map.put(v, p);
         }
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
@@ -177,16 +174,6 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
         delegate.lock(v, state);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.uci.ics.jung.visualization.Layout#unlockVertex(edu.uci.ics.jung.graph.Vertex)
-     */
-//    public void unlockVertex(V v) {
-//        dontmove.remove(v);
-//        delegate.unlockVertex(v);
-//    }
-
     public void update() {
         if(delegate instanceof LayoutMutable) {
             ((LayoutMutable<V,E>)delegate).update();
@@ -214,30 +201,4 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
     public void fireStateChanged() {
         changeSupport.fireStateChanged();
     }
-
-    public Collection<V> getVertices() {
-        return getGraph().getVertices();
-        
-    }
-
-	public void setInitializer(Transformer<V, Point2D> initializer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setLocation(V v, Point2D location) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Point2D transform(V arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
