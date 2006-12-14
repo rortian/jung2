@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.Renderer;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 /**
@@ -36,6 +37,9 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
 	
 	Color colorOne;
 	Color colorTwo;
+	Color pickedColorOne;
+	Color pickedColorTwo;
+	PickedState<V> pickedState;
 	boolean cyclic;
 	
 
@@ -44,6 +48,17 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
 		this.colorTwo = colorTwo;
 		this.cyclic = cyclic;
 	}
+
+
+	public GradientVertexRenderer(Color colorOne, Color colorTwo, Color pickedColorOne, Color pickedColorTwo, PickedState<V> pickedState, boolean cyclic) {
+		this.colorOne = colorOne;
+		this.colorTwo = colorTwo;
+		this.pickedColorOne = pickedColorOne;
+		this.pickedColorTwo = pickedColorTwo;
+		this.pickedState = pickedState;
+		this.cyclic = cyclic;
+	}
+
 
 	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
         if (rc.getVertexIncludePredicate().evaluateVertex(graph, v)) {
@@ -89,8 +104,15 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         if(cyclic) {
         	y2 = (float)(r.getMinY()+r.getHeight()/2);
         }
-        Paint fillPaint = new GradientPaint((float)r.getMinX(), (float)r.getMinY(), colorOne,
+        
+        Paint fillPaint = null;
+        if(pickedState != null && pickedState.isPicked(v)) {
+        	fillPaint = new GradientPaint((float)r.getMinX(), (float)r.getMinY(), pickedColorOne,
+            		(float)r.getMinX(), y2, pickedColorTwo, cyclic);
+        } else {
+        	fillPaint = new GradientPaint((float)r.getMinX(), (float)r.getMinY(), colorOne,
         		(float)r.getMinX(), y2, colorTwo, cyclic);
+        }
         if(fillPaint != null) {
             g.setPaint(fillPaint);
             g.fill(shape);
