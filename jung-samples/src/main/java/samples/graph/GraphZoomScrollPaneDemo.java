@@ -30,7 +30,7 @@ import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.VisualizationViewer.GraphMouse;
+import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -125,7 +125,12 @@ public class GraphZoomScrollPaneDemo {
         });
 
         vv.addGraphMouseListener(new TestGraphMouseListener<String>());
-        vv.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.white, Color.red, false));
+        vv.getRenderer().setVertexRenderer(
+        		new GradientVertexRenderer<String,Number>(
+        				Color.white, Color.red, 
+        				Color.white, Color.blue,
+        				vv.getPickedVertexState(),
+        				false));
         vv.getRenderContext().setEdgeDrawPaintFunction(new ConstantTransformer(Color.lightGray));
         
         // add my listener for ToolTips
@@ -137,8 +142,11 @@ public class GraphZoomScrollPaneDemo {
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final GraphMouse graphMouse = new DefaultModalGraphMouse();
+        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
+        
+        vv.addKeyListener(graphMouse.getModeKeyListener());
+        vv.setToolTipText("<html><center>Type 'p' for Pick mode<p>Type 't' for Transform mode");
         
         final ScalingControl scaler = new CrossoverScalingControl();
 
