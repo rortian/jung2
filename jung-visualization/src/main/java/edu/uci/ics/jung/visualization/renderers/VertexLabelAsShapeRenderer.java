@@ -79,4 +79,13 @@ public class VertexLabelAsShapeRenderer<V,E>
 		if(shape == null) return new Rectangle(-20,-20,40,40);
 		else return shape;
 	}
+
+	public Renderer.VertexLabel.Position getPosition() {
+		return Renderer.VertexLabel.Position.C;
+	}
+
+	public void setPosition(Renderer.VertexLabel.Position position) {
+		// TODO Auto-generated method stub
+		
+	}
 }
