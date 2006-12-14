@@ -11,8 +11,12 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.ItemSelectable;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 /** 
@@ -53,9 +57,9 @@ public class DefaultModalGraphMouse extends AbstractModalGraphMouse
      * @param out override value for scale out
      */
     public DefaultModalGraphMouse(float in, float out) {
-        this.in = in;
-        this.out = out;
+        super(in,out);
         loadPlugins();
+		setModeKeyListener(new ModeKeyAdapter(this));
     }
     
     /**
@@ -72,5 +76,32 @@ public class DefaultModalGraphMouse extends AbstractModalGraphMouse
 
         add(scalingPlugin);
         setMode(Mode.TRANSFORMING);
+    }
+    
+    public static class ModeKeyAdapter extends KeyAdapter {
+    	private char t = 't';
+    	private char p = 'p';
+    	protected ModalGraphMouse graphMouse;
+
+    	public ModeKeyAdapter(ModalGraphMouse graphMouse) {
+			this.graphMouse = graphMouse;
+		}
+
+		public ModeKeyAdapter(char t, char p, ModalGraphMouse graphMouse) {
+			this.t = t;
+			this.p = p;
+			this.graphMouse = graphMouse;
+		}
+		
+		public void keyTyped(KeyEvent event) {
+			char keyChar = event.getKeyChar();
+			if(keyChar == t) {
+				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				graphMouse.setMode(Mode.TRANSFORMING);
+			} else if(keyChar == p) {
+				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				graphMouse.setMode(Mode.PICKING);
+			}
+		}
     }
 }

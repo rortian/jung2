@@ -1,10 +1,14 @@
 package edu.uci.ics.jung.visualization.control;
 
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.ItemSelectable;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.util.Map;
 
@@ -13,51 +17,15 @@ import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.event.EventListenerList;
 import javax.swing.plaf.basic.BasicIconFactory;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.jung.visualization.SettableVertexLocationFunction;
-
-public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse 
+public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse 
 	implements ModalGraphMouse, ItemSelectable {
 
-	/**
-	 * used by the scaling plugins for zoom in
-	 */
-	protected float in;
-	/**
-	 * used by the scaling plugins for zoom out
-	 */
-	protected float out;
-	/**
-	 * a listener for mode changes
-	 */
-	protected ItemListener modeListener;
-	/**
-	 * a JComboBox control available to set the mode
-	 */
-	protected JComboBox modeBox;
-	/**
-	 * a menu available to set the mode
-	 */
-	protected JMenu modeMenu;
-	/**
-	 * the current mode
-	 */
-	protected Mode mode;
-	/**
-	 * listeners for mode changes
-	 */
-	protected EventListenerList listenerList = new EventListenerList();
-
-	protected GraphMousePlugin pickingPlugin;
-	protected GraphMousePlugin translatingPlugin;
-	protected GraphMousePlugin animatedPickingPlugin;
-	protected GraphMousePlugin scalingPlugin;
-	protected GraphMousePlugin rotatingPlugin;
-	protected GraphMousePlugin shearingPlugin;
+	protected Factory<V> vertexFactory;
+	protected Factory<E> edgeFactory;
 	protected GraphMousePlugin editingPlugin;
 
 	/**
@@ -74,16 +42,18 @@ public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse
 	 * @param out override value for scale out
 	 */
 	public EditingModalGraphMouse(Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
-		this.in = in;
-		this.out = out;
-		loadPlugins(vertexFactory, edgeFactory);
+		super(in,out);
+		this.vertexFactory = vertexFactory;
+		this.edgeFactory = edgeFactory;
+		loadPlugins();
+		setModeKeyListener(new ModeKeyAdapter(this));
 	}
 
 	/**
 	 * create the plugins, and load the plugins for TRANSFORMING mode
 	 *
 	 */
-	protected void loadPlugins(Factory<V> vertexFactory, Factory<E> edgeFactory) {
+	protected void loadPlugins() {
 		pickingPlugin = new PickingGraphMousePlugin();
 		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
 		translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
@@ -151,32 +121,6 @@ public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse
 		remove(rotatingPlugin);
 		remove(shearingPlugin);
 		add(editingPlugin);
-	}
-
-	/**
-	 * @param zoomAtMouse The zoomAtMouse to set.
-	 */
-	public void setZoomAtMouse(boolean zoomAtMouse) {
-		((ScalingGraphMousePlugin) scalingPlugin).setZoomAtMouse(zoomAtMouse);
-	}
-
-	/**
-	 * listener to set the mode from an external event source
-	 */
-	class ModeListener implements ItemListener {
-		public void itemStateChanged(ItemEvent e) {
-			setMode((Mode) e.getItem());
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#getModeListener()
-	 */
-	public ItemListener getModeListener() {
-		if (modeListener == null) {
-			modeListener = new ModeListener();
-		}
-		return modeListener;
 	}
 
 	/**
@@ -255,60 +199,38 @@ public class EditingModalGraphMouse<V,E> extends PluggableGraphMouse
 		}
 		return modeMenu;
 	}
+	
+    public static class ModeKeyAdapter extends KeyAdapter {
+    	private char t = 't';
+    	private char p = 'p';
+    	private char e = 'e';
+    	protected ModalGraphMouse graphMouse;
 
-	/**
-	 * add a listener for mode changes
-	 */
-	public void addItemListener(ItemListener aListener) {
-		listenerList.add(ItemListener.class,aListener);
-	}
-
-	/**
-	 * remove a listener for mode changes
-	 */
-	public void removeItemListener(ItemListener aListener) {
-		listenerList.remove(ItemListener.class,aListener);
-	}
-
-	/**
-	 * Returns an array of all the <code>ItemListener</code>s added
-	 * to this JComboBox with addItemListener().
-	 *
-	 * @return all of the <code>ItemListener</code>s added or an empty
-	 *         array if no listeners have been added
-	 * @since 1.4
-	 */
-	public ItemListener[] getItemListeners() {
-		return (ItemListener[])listenerList.getListeners(ItemListener.class);
-	}
-
-	public Object[] getSelectedObjects() {
-		if ( mode == null )
-			return new Object[0];
-		else {
-			Object result[] = new Object[1];
-			result[0] = mode;
-			return result;
+    	public ModeKeyAdapter(ModalGraphMouse graphMouse) {
+			this.graphMouse = graphMouse;
 		}
-	}
 
-	/**
-	 * Notifies all listeners that have registered interest for
-	 * notification on this event type.
-	 * @param e  the event of interest
-	 *  
-	 * @see EventListenerList
-	 */
-	protected void fireItemStateChanged(ItemEvent e) {
-		// Guaranteed to return a non-null array
-		Object[] listeners = listenerList.getListenerList();
-		// Process the listeners last to first, notifying
-		// those that are interested in this event
-		for ( int i = listeners.length-2; i>=0; i-=2 ) {
-			if ( listeners[i]==ItemListener.class ) {
-				((ItemListener)listeners[i+1]).itemStateChanged(e);
+		public ModeKeyAdapter(char t, char p, char e, ModalGraphMouse graphMouse) {
+			this.t = t;
+			this.p = p;
+			this.e = e;
+			this.graphMouse = graphMouse;
+		}
+		
+		public void keyTyped(KeyEvent event) {
+			char keyChar = event.getKeyChar();
+			if(keyChar == t) {
+				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				graphMouse.setMode(Mode.TRANSFORMING);
+			} else if(keyChar == p) {
+				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				graphMouse.setMode(Mode.PICKING);
+			} else if(keyChar == e) {
+				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				graphMouse.setMode(Mode.EDITING);
 			}
 		}
-	}   
+    }
+
 }
 

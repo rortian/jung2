@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.ItemSelectable;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -89,8 +90,15 @@ public abstract class AbstractModalGraphMouse extends PluggableGraphMouse
     protected GraphMousePlugin scalingPlugin;
     protected GraphMousePlugin rotatingPlugin;
     protected GraphMousePlugin shearingPlugin;
+    protected KeyListener modeKeyListener;
     
-    /**
+
+    protected AbstractModalGraphMouse(float in, float out) {
+		this.in = in;
+		this.out = out;
+	}
+
+	/**
      * create the plugins, and load the plugins for TRANSFORMING mode
      *
      */
@@ -164,6 +172,20 @@ public abstract class AbstractModalGraphMouse extends PluggableGraphMouse
 	}
     
     /**
+	 * @return the modeKeyListener
+	 */
+	public KeyListener getModeKeyListener() {
+		return modeKeyListener;
+	}
+
+	/**
+	 * @param modeKeyListener the modeKeyListener to set
+	 */
+	public void setModeKeyListener(KeyListener modeKeyListener) {
+		this.modeKeyListener = modeKeyListener;
+	}
+
+	/**
 	 * @return Returns the modeBox.
 	 */
     public JComboBox getModeComboBox() {
