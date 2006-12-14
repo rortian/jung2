@@ -10,6 +10,8 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -41,6 +43,13 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
      * events to the graph
      */
     protected GraphMouse graphMouse;
+    
+    protected MouseListener focusKeyListener = new MouseAdapter() {
+		public void mouseClicked(MouseEvent e) {
+			requestFocusInWindow();
+		}
+    };
+
 
     /**
      * Create an instance with passed parameters.
@@ -130,6 +139,17 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
 	 */
 	public void addGraphMouseListener( GraphMouseListener<V> gel ) {
 		addMouseListener( new MouseListenerTranslator<V,E>( gel, this ));
+	}
+	
+	/** 
+	 * Override to request focus on mouse enter, if a key listener is added
+	 * @see java.awt.Component#addKeyListener(java.awt.event.KeyListener)
+	 */
+	@Override
+	public synchronized void addKeyListener(KeyListener l) {
+		super.addKeyListener(l);
+		setFocusable(true);
+		addMouseListener(focusKeyListener);
 	}
 	
 	/**
