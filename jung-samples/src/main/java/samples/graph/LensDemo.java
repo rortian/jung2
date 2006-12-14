@@ -169,6 +169,7 @@ public class LensDemo extends JApplet {
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
 
         vv.setGraphMouse(graphMouse);
+        vv.addKeyListener(graphMouse.getModeKeyListener());
         
         hyperbolicViewSupport = 
             new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv), 
