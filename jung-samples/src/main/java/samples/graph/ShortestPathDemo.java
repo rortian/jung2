@@ -121,7 +121,7 @@ public class ShortestPathDemo extends JPanel {
     	Pair<String> endpoints = mGraph.getEndpoints(e);
 		String v1= endpoints.getFirst()	;
 		String v2= endpoints.getSecond() ;
-		return mPred.contains(v1) && mPred.contains( v2 );
+		return v1.equals(v2) == false && mPred.contains(v1) && mPred.contains(v2);
     }
     
 	/**
@@ -295,9 +295,9 @@ public class ShortestPathDemo extends JPanel {
 	}
 	
 	static class VertexFactory implements Factory<String> {
-		int count;
+		char a = 'a';
 		public String create() {
-			return Character.toString((char)(count+++'a'));
+			return Character.toString(a++);
 		}
 		
 	}
