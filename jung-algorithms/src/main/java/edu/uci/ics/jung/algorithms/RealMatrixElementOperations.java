@@ -13,8 +13,6 @@ package edu.uci.ics.jung.algorithms;
 import java.util.HashMap;
 import java.util.Map;
 
-import quicktime.std.movies.media.UserData;
-
 /**
  * Implements the basic matrix operations on double-precision values.  Assumes
  * that the edges have a MutableDouble value.
