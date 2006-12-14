@@ -28,6 +28,7 @@ import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> {
 
 	protected Position position = Position.SE;
+	private Positioner positioner = new OutsidePositioner();
 	
 	public BasicVertexLabelRenderer() {
 		super();
@@ -93,7 +94,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     		if(vvd.width == 0 || vvd.height == 0) {
     			vvd = rc.getScreenDevice().getPreferredSize();
     		}
-    		p = getAnchorPoint(bounds, d, getPosition(x, y, vvd));
+    		p = getAnchorPoint(bounds, d, positioner.getPosition(x, y, vvd));
     	} else {
     		p = getAnchorPoint(bounds, d, position);
     	}
@@ -159,12 +160,40 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	}
     	
     }
-    protected Position getPosition(int x, int y, Dimension d) {
-    	int cx = d.width/2;
-    	int cy = d.height/2;
-    	if(x > cx && y > cy) return Position.NW;
-    	if(x > cx && y < cy) return Position.SW;
-    	if(x < cx && y > cy) return Position.NE;
-    	return Position.SE;
+    public static interface Positioner {
+    	Position getPosition(int x, int y, Dimension d);
     }
+    public static class InsidePositioner implements Positioner {
+    	public Position getPosition(int x, int y, Dimension d) {
+    		int cx = d.width/2;
+    		int cy = d.height/2;
+    		if(x > cx && y > cy) return Position.NW;
+    		if(x > cx && y < cy) return Position.SW;
+    		if(x < cx && y > cy) return Position.NE;
+    		return Position.SE;
+    	}
+    }
+    public static class OutsidePositioner implements Positioner {
+    	public Position getPosition(int x, int y, Dimension d) {
+    		int cx = d.width/2;
+    		int cy = d.height/2;
+    		if(x > cx && y > cy) return Position.SE;
+    		if(x > cx && y < cy) return Position.NE;
+    		if(x < cx && y > cy) return Position.SW;
+    		return Position.NW;
+    	}
+    }
+	/**
+	 * @return the positioner
+	 */
+	public Positioner getPositioner() {
+		return positioner;
+	}
+
+	/**
+	 * @param positioner the positioner to set
+	 */
+	public void setPositioner(Positioner positioner) {
+		this.positioner = positioner;
+	}
 }
