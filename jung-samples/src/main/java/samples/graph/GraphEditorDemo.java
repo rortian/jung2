@@ -165,15 +165,6 @@ public class GraphEditorDemo extends JApplet implements Printable {
         // they are created
         graphMouse.setVertexLocations(vertexLocations);
         vv.setGraphMouse(graphMouse);
-        vv.addMouseListener(new MouseAdapter() {
-
-			/* (non-Javadoc)
-			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
-			 */
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				vv.requestFocus();
-			}});
         vv.addKeyListener(graphMouse.getModeKeyListener());
 
         graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, vertexFactory, edgeFactory));
