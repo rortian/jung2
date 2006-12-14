@@ -45,7 +45,6 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -139,8 +138,8 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         viewGrid = new ViewGrid(vv2, vv1);
 
         // add default listener for ToolTips
-        vv1.setToolTipFunction(new DefaultToolTipFunction());
-        vv2.setToolTipFunction(new DefaultToolTipFunction());
+        vv1.setVertexToolTipTransformer(new ToStringLabeller());
+        vv2.setVertexToolTipTransformer(new ToStringLabeller());
         
         ToolTipManager.sharedInstance().setDismissDelay(10000);
         

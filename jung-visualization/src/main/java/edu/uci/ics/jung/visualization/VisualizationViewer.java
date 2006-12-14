@@ -18,8 +18,8 @@ import java.awt.geom.Point2D;
 
 import javax.swing.ToolTipManager;
 
-import edu.uci.ics.jung.visualization.decorators.ToolTipFunction;
-import edu.uci.ics.jung.visualization.decorators.ToolTipFunctionAdapter;
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
@@ -32,10 +32,9 @@ import edu.uci.ics.jung.visualization.layout.Layout;
 @SuppressWarnings("serial")
 public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
 
-	/** should be set to user-defined class to provide
-	 * tooltips on the graph elements
-	 */
-	protected ToolTipFunction toolTipFunction;
+	protected Transformer<V,String> vertexToolTipTransformer;
+	protected Transformer<E,String> edgeToolTipTransformer;
+	protected Transformer<MouseEvent,String> mouseEventToolTipTransformer;
 	
     /**
      * provides MouseListener, MouseMotionListener, and MouseWheelListener
@@ -134,71 +133,58 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
 	}
 	
 	/**
-	 * sets the tooltip listener to the user's defined implementation
-	 * of ToolTipListener
-	 * @param listener the listener to ser
+	 * @param edgeToolTipTransformer the edgeToolTipTransformer to set
 	 */
-    public void setToolTipListener(ToolTipListener listener) {
-        if(listener instanceof ToolTipFunction) {
-            setToolTipFunction((ToolTipFunction)listener);
-        } else {
-            setToolTipFunction(new ToolTipListenerWrapper(listener));
-        }
-    }
+	public void setEdgeToolTipTransformer(
+			Transformer<E, String> edgeToolTipTransformer) {
+		this.edgeToolTipTransformer = edgeToolTipTransformer;
+		ToolTipManager.sharedInstance().registerComponent(this);
+	}
 
-    public void setToolTipFunction(ToolTipFunction toolTipFunction) {
-        this.toolTipFunction = toolTipFunction;
-        ToolTipManager.sharedInstance().registerComponent(this);
-    }
+	/**
+	 * @param mouseEventToolTipTransformer the mouseEventToolTipTransformer to set
+	 */
+	public void setMouseEventToolTipTransformer(
+			Transformer<MouseEvent, String> mouseEventToolTipTransformer) {
+		this.mouseEventToolTipTransformer = mouseEventToolTipTransformer;
+		ToolTipManager.sharedInstance().registerComponent(this);
+	}
+
+	/**
+	 * @param vertexToolTipTransformer the vertexToolTipTransformer to set
+	 */
+	public void setVertexToolTipTransformer(
+			Transformer<V, String> vertexToolTipTransformer) {
+		this.vertexToolTipTransformer = vertexToolTipTransformer;
+		ToolTipManager.sharedInstance().registerComponent(this);
+	}
+
     /**
      * called by the superclass to display tooltips
      */
     public String getToolTipText(MouseEvent event) {
-        if(toolTipFunction != null) {
-            if(toolTipFunction instanceof ToolTipListenerWrapper) {
-                return toolTipFunction.getToolTipText(event);
-            } 
-            Layout<V,E> layout = getGraphLayout();
-            Point2D p = inverseViewTransform(event.getPoint());
-            Object vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
+        Layout<V,E> layout = getGraphLayout();
+        Point2D p = null;
+        if(vertexToolTipTransformer != null) {
+            p = inverseViewTransform(event.getPoint());
+            V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
             if(vertex != null) {
-                return toolTipFunction.getToolTipText(vertex);
+                return vertexToolTipTransformer.transform(vertex);
             }
-            Object edge = pickSupport.getEdge(layout, p.getX(), p.getY());
+        }
+        if(edgeToolTipTransformer != null) {
+        	if(p == null) p = inverseViewTransform(event.getPoint());
+            E edge = pickSupport.getEdge(layout, p.getX(), p.getY());
             if(edge != null) {
-                return toolTipFunction.getToolTipText(edge);
+                return edgeToolTipTransformer.transform(edge);
             }
-            return toolTipFunction.getToolTipText(event);
+        }
+        if(mouseEventToolTipTransformer != null) {
+        	return mouseEventToolTipTransformer.transform(event);
         }
         return super.getToolTipText(event);
     }
 
-	/**
-	 * The interface for the tool tip listener. Implement this
-	 * interface to add custom tool tip to the graph elements.
-	 * See sample code for examples
-	 */
-    public interface ToolTipListener {
-        	String getToolTipText(MouseEvent event);
-    }
-    
-    /**
-     * used internally to wrap any legacy ToolTipListener
-     * implementations so they can be used as a ToolTipFunction
-     * @author Tom Nelson - RABA Technologies
-     *
-     *
-     */
-    protected static class ToolTipListenerWrapper extends ToolTipFunctionAdapter {
-        ToolTipListener listener;
-        public ToolTipListenerWrapper(ToolTipListener listener) {
-            this.listener = listener;
-        }
-        public String getToolTipText(MouseEvent e) {
-            return listener.getToolTipText(e);
-        }
-    }
-    
     /**
      * a convenience type to represent a class that
      * processes all types of mouse events for the graph

@@ -22,7 +22,7 @@ import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.PersistentLayout;
 import edu.uci.ics.jung.visualization.layout.PersistentLayoutImpl;
@@ -68,7 +68,7 @@ public class PersistentLayoutDemo {
         vv = new VisualizationViewer<String,Number>(layout);
         
         // add my listener for ToolTips
-        vv.setToolTipFunction(new DefaultToolTipFunction());
+        vv.setVertexToolTipTransformer(new ToStringLabeller());
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         vv.setGraphMouse(gm);
         

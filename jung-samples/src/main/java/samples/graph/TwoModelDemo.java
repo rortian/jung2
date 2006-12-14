@@ -31,9 +31,9 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
@@ -118,8 +118,8 @@ public class TwoModelDemo extends JApplet {
         vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(),
                 Color.red, Color.yellow));
         // add default listeners for ToolTips
-        vv1.setToolTipFunction(new DefaultToolTipFunction());
-        vv2.setToolTipFunction(new DefaultToolTipFunction());
+        vv1.setVertexToolTipTransformer(new ToStringLabeller());
+        vv2.setVertexToolTipTransformer(new ToStringLabeller());
         
         Container content = getContentPane();
         JPanel panel = new JPanel(new GridLayout(1,0));

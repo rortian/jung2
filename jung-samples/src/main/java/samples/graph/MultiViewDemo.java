@@ -47,10 +47,10 @@ import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ShearingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ViewScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -169,9 +169,9 @@ public class MultiViewDemo extends JApplet {
         vv3.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
         
         // add default listener for ToolTips
-        vv1.setToolTipFunction(new DefaultToolTipFunction());
-        vv2.setToolTipFunction(new DefaultToolTipFunction());
-        vv3.setToolTipFunction(new DefaultToolTipFunction());
+        vv1.setVertexToolTipTransformer(new ToStringLabeller());
+        vv2.setVertexToolTipTransformer(new ToStringLabeller());
+        vv3.setVertexToolTipTransformer(new ToStringLabeller());
         
         Container content = getContentPane();
         JPanel panel = new JPanel(new GridLayout(1,0));

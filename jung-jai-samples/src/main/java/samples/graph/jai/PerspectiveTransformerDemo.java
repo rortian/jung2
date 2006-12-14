@@ -49,12 +49,11 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.jai.PerspectiveLayoutTransformSupport;
 import edu.uci.ics.jung.visualization.jai.PerspectiveTransformSupport;
 import edu.uci.ics.jung.visualization.jai.PerspectiveViewTransformSupport;
-import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.StaticLayout;
@@ -139,7 +138,7 @@ public class PerspectiveTransformerDemo extends JApplet {
         vv.setBackground(Color.white);
 
         // add a listener for ToolTips
-        vv.setToolTipFunction(new DefaultToolTipFunction());
+        vv.setVertexToolTipTransformer(new ToStringLabeller());
         
         Container content = getContentPane();
         GraphZoomScrollPane gzsp = new GraphZoomScrollPane(vv);

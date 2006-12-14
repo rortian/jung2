@@ -65,7 +65,6 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.AbstractVertexShapeTransformer;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.GradientEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.NumberEdgeValueStringer;
@@ -306,7 +305,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         addBottomControls( jp );
         vssa.setScaling(true);
 
-        vv.setToolTipFunction(new VoltageTips());
+        vv.setVertexToolTipTransformer(new VoltageTips());
         vv.setToolTipText("<html><center>Use the mouse wheel to zoom<p>Click and Drag the mouse to pan<p>Shift-click and Drag to Rotate</center></html>");
         
 
@@ -1109,13 +1108,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
     }
     
-    public class VoltageTips extends DefaultToolTipFunction {
+    public class VoltageTips<V> implements org.apache.commons.collections15.Transformer<V,String> {
         
-//        public String getToolTipText(Object v) {
-//           return "Voltage:"+voltages.get(v);
-//        }
-        public String getToolTipText(Object edge) {
-            return edge.toString();
+        public String transform(V v) {
+           return "Voltage:"+voltages.get(v);
         }
     }
     

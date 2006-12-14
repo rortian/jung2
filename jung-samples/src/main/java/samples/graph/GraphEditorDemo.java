@@ -15,6 +15,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
@@ -48,7 +50,7 @@ import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.StaticLayout;
 
@@ -147,8 +149,8 @@ public class GraphEditorDemo extends JApplet implements Printable {
                 return v.toString();
             }});
 
-        vv.setToolTipFunction(new DefaultToolTipFunction());
-        
+        vv.setVertexToolTipTransformer(new ToStringLabeller());
+
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
@@ -163,6 +165,17 @@ public class GraphEditorDemo extends JApplet implements Printable {
         // they are created
         graphMouse.setVertexLocations(vertexLocations);
         vv.setGraphMouse(graphMouse);
+        vv.addMouseListener(new MouseAdapter() {
+
+			/* (non-Javadoc)
+			 * @see java.awt.event.MouseAdapter#mouseEntered(java.awt.event.MouseEvent)
+			 */
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				vv.requestFocus();
+			}});
+        vv.addKeyListener(graphMouse.getModeKeyListener());
+
         graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, vertexFactory, edgeFactory));
         graphMouse.setMode(ModalGraphMouse.Mode.EDITING);
         

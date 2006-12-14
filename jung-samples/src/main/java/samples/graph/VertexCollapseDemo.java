@@ -41,8 +41,8 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
@@ -105,17 +105,17 @@ public class VertexCollapseDemo extends JApplet {
         vv.setBackground(Color.white);
         
         // add a listener for ToolTips
-        vv.setToolTipFunction(new DefaultToolTipFunction() {
+        vv.setVertexToolTipTransformer(new ToStringLabeller() {
 
 			/* (non-Javadoc)
 			 * @see edu.uci.ics.jung.visualization.decorators.DefaultToolTipFunction#getToolTipText(java.lang.Object)
 			 */
 			@Override
-			public String getToolTipText(Object v) {
+			public String transform(Object v) {
 				if(v instanceof Graph) {
 					return ((Graph)v).getVertices().toString();
 				}
-				return super.getToolTipText(v);
+				return super.transform(v);
 			}});
         
         /**
