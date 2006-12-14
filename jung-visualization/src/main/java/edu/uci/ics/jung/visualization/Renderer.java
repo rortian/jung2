@@ -12,6 +12,9 @@ package edu.uci.ics.jung.visualization;
 import edu.uci.ics.graph.Graph;
 
 /**
+ * The interface for drawing vertices, edges, and their labels.
+ * Implementations of this class can set specific renderers for
+ * each element, allowing custom control of each.
  */
 public interface Renderer<V,E> {
 
