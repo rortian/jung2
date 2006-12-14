@@ -26,6 +26,10 @@ public interface Renderer<V,E> {
     void setEdgeRenderer(Renderer.Edge<V,E> r);
     void setVertexLabelRenderer(Renderer.VertexLabel<V,E> r);
     void setEdgeLabelRenderer(Renderer.EdgeLabel<V,E> r);
+    Renderer.VertexLabel getVertexLabelRenderer();
+    Renderer.Vertex getVertexRenderer();
+    Renderer.Edge getEdgeRenderer();
+    Renderer.EdgeLabel getEdgeLabelRenderer();
 
 	interface Vertex<V,E> {
 		void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y);
@@ -43,9 +47,14 @@ public interface Renderer<V,E> {
 	
 	interface VertexLabel<V,E> {
 		void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y);
+		Position getPosition();
+		void setPosition(Position position);
 		class NOOP implements VertexLabel {
 			public void labelVertex(RenderContext rc, Graph graph, Object v, String label, int x, int y) {}
+			public Position getPosition() { return Position.C; }
+			public void setPosition(Position position) {}
 		}
+		enum Position { N, NE, E, SE, S, SW, W, NW, C, AUTO }
 	}
 	
 	interface EdgeLabel<V,E> {
