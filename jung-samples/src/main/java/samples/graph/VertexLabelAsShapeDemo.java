@@ -113,6 +113,7 @@ public class VertexLabelAsShapeDemo extends JApplet {
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
 
         vv.setGraphMouse(graphMouse);
+        vv.addKeyListener(graphMouse.getModeKeyListener());
         
         Container content = getContentPane();
         GraphZoomScrollPane gzsp = new GraphZoomScrollPane(vv);

@@ -228,7 +228,7 @@ public class VertexImageShaperDemo extends JApplet {
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
-        
+        vv.addKeyListener(graphMouse.getModeKeyListener());
         final ScalingControl scaler = new CrossoverScalingControl();
 
         JButton plus = new JButton("+");
