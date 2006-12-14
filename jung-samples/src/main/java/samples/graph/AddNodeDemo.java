@@ -25,6 +25,7 @@ import javax.swing.JRootPane;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Graphs;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -85,7 +86,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         vv.getModel().getRelaxer().setSleepTime(500);
         vv.setGraphMouse(new DefaultModalGraphMouse());
         
-        vv.getRenderContext().setCenterVertexLabel(true);
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.C);
         vv.getRenderContext().setVertexStringer(new ToStringLabeller<Number>());
         vv.setForeground(Color.white);
         getContentPane().add(vv);

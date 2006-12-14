@@ -53,10 +53,6 @@ public interface RenderContext<V, E> {
 
     void setArrowPlacementTolerance(float arrow_placement_tolerance);
 
-    boolean isCenterVertexLabel();
-
-    void setCenterVertexLabel(boolean centerVertexLabel);
-
     Transformer<EdgeContext<V,E>,Shape> getEdgeArrowFunction();
 
     void setEdgeArrowFunction(Transformer<EdgeContext<V,E>,Shape> edgeArrowFunction);

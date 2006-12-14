@@ -38,6 +38,7 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
@@ -133,7 +134,7 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
         vv1.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.red, Color.white, true));
         vv1.getRenderContext().setVertexStringer(new ToStringLabeller());
-        vv1.getRenderContext().setCenterVertexLabel(true);
+        vv1.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.C);
         
         viewGrid = new ViewGrid(vv2, vv1);
 

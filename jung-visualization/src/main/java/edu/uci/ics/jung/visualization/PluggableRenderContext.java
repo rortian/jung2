@@ -54,7 +54,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected Transformer<V,Icon> vertexIconFunction;
     protected Transformer<V,Font> vertexFontFunction = 
         new ConstantTransformer(new Font("Helvetica", Font.PLAIN, 12));
-    protected boolean centerVertexLabel = false;
     
     protected Transformer<V,Paint> vertexDrawPaintFunction = new ConstantTransformer(Color.BLACK);
     protected Transformer<V,Paint> vertexFillPaintFunction = new ConstantTransformer(Color.RED);
@@ -135,20 +134,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setArrowPlacementTolerance(float arrow_placement_tolerance) {
         this.arrowPlacementTolerance = arrow_placement_tolerance;
-    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.RenderContext#isCenterVertexLabel()
-     */
-    public boolean isCenterVertexLabel() {
-        return centerVertexLabel;
-    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.RenderContext#setCenterVertexLabel(boolean)
-     */
-    public void setCenterVertexLabel(boolean centerVertexLabel) {
-        this.centerVertexLabel = centerVertexLabel;
     }
 
     /* (non-Javadoc)

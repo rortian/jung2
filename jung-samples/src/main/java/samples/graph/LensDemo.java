@@ -300,14 +300,7 @@ public class LensDemo extends JApplet {
         modePanel.setBorder(BorderFactory.createTitledBorder("Display"));
         modePanel.add(graphButton);
         modePanel.add(gridButton);
-        JRadioButton centerLabels = new JRadioButton("Center Labels");
-        centerLabels.addItemListener(new ItemListener() {
 
-			public void itemStateChanged(ItemEvent e) {
-				vv.getRenderContext().setCenterVertexLabel(e.getStateChange() == ItemEvent.SELECTED);
-				vv.repaint();
-			}});
-        modePanel.add(centerLabels);
         JMenuBar menubar = new JMenuBar();
         menubar.add(graphMouse.getModeMenu());
         gzsp.setCorner(menubar);
