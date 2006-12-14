@@ -11,9 +11,9 @@ package edu.uci.ics.jung.visualization.renderers;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.graph.Graph;
@@ -26,6 +26,30 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 
 public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> {
+
+	protected Position position = Position.SE;
+	
+	public BasicVertexLabelRenderer() {
+		super();
+	}
+
+	public BasicVertexLabelRenderer(Position position) {
+		this.position = position;
+	}
+
+	/**
+	 * @return the position
+	 */
+	public Position getPosition() {
+		return position;
+	}
+
+	/**
+	 * @param position the position to set
+	 */
+	public void setPosition(Position position) {
+		this.position = position;
+	}
 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
@@ -52,39 +76,95 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
         Dimension d = component.getPreferredSize();
         AffineTransform xform = AffineTransform.getTranslateInstance(x, y);
         
-        if (rc.isCenterVertexLabel()) {
-        	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
-        		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
-        		Point2D p = transformer.transform(new Point2D.Float(x,y));
-        		x = (int) (p.getX() - d.width/2);
-        		y = (int) (p.getY() - d.height/2);
-        	} else {
-                x += -d.width / 2;
-                y += -d.height / 2;
-        		
-        	}
+    	Shape shape = rc.getVertexShapeFunction().transform(v);
+    	shape = xform.createTransformedShape(shape);
+    	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
+    		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
+    		if(transformer instanceof ShapeTransformer) {
+    			ShapeTransformer shapeTransformer = (ShapeTransformer)transformer;
+    			shape = shapeTransformer.transform(shape);
+    		}
+    	}
+    	Rectangle2D bounds = shape.getBounds2D();
 
-        } else {
-        	Shape shape = rc.getVertexShapeFunction().transform(v);
-        	shape = xform.createTransformedShape(shape);
-        	Rectangle2D bounds = shape.getBounds2D();
-    		x = (int)(bounds.getMaxX()) + 5;
-    		y = (int)(bounds.getMaxY()) + 5 -d.height;
-
-        	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
-        		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
-        		if(transformer instanceof ShapeTransformer) {
-        			ShapeTransformer shapeTransformer = (ShapeTransformer)transformer;
-        			shape = shapeTransformer.transform(shape);
-        			bounds = shape.getBounds2D();
-                    x = (int)(bounds.getMaxX()) + 5;
-                    y = (int)(bounds.getMaxY()) + 5 -d.height;
-        		}
-        	}
-        }
+    	Point p = null;
+    	if(position == Position.AUTO) {
+    		Dimension vvd = rc.getScreenDevice().getSize();
+    		if(vvd.width == 0 || vvd.height == 0) {
+    			vvd = rc.getScreenDevice().getPreferredSize();
+    		}
+    		p = getAnchorPoint(bounds, d, getPosition(x, y, vvd));
+    	} else {
+    		p = getAnchorPoint(bounds, d, position);
+    	}
         
-        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), x, y,
+        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), p.x, p.y,
                 d.width, d.height, true);
         
+    }
+    
+    protected Point getAnchorPoint(Rectangle2D vertexBounds, Dimension labelSize, Position position) {
+    	double x;
+    	double y;
+    	int offset = 5;
+    	switch(position) {
+    	
+    	case N:
+    		x = vertexBounds.getCenterX()-labelSize.width/2;
+    		y = vertexBounds.getMinY()-offset - labelSize.height;
+    		return new Point((int)x,(int)y);
+
+    	case NE:
+    		x = vertexBounds.getMaxX()+offset;
+    		y = vertexBounds.getMinY()-offset-labelSize.height;
+    		return new Point((int)x,(int)y);
+
+    	case E:
+    		x = vertexBounds.getMaxX()+offset;
+    		y = vertexBounds.getCenterY()-labelSize.height/2;
+    		return new Point((int)x,(int)y);
+
+    	case SE:
+    		x = vertexBounds.getMaxX()+offset;
+    		y = vertexBounds.getMaxY()+offset;
+    		return new Point((int)x,(int)y);
+
+    	case S:
+    		x = vertexBounds.getCenterX()-labelSize.width/2;
+    		y = vertexBounds.getMaxY()+offset;
+    		return new Point((int)x,(int)y);
+
+    	case SW:
+    		x = vertexBounds.getMinX()-offset-labelSize.width;
+    		y = vertexBounds.getMaxY()+offset;
+    		return new Point((int)x,(int)y);
+
+    	case W:
+    		x = vertexBounds.getMinX()-offset-labelSize.width;
+    		y = vertexBounds.getCenterY()-labelSize.height/2;
+    		return new Point((int)x,(int)y);
+
+    	case NW:
+    		x = vertexBounds.getMinX()-offset-labelSize.width;
+    		y = vertexBounds.getMinY()-offset-labelSize.height;
+    		return new Point((int)x,(int)y);
+
+    	case C:
+    		x = vertexBounds.getCenterX()-labelSize.width/2;
+    		y = vertexBounds.getCenterY()-labelSize.height/2;
+    		return new Point((int)x,(int)y);
+
+    	default:
+    		return new Point();
+    	}
+    	
+    }
+    protected Position getPosition(int x, int y, Dimension d) {
+    	int cx = d.width/2;
+    	int cy = d.height/2;
+    	if(x > cx && y > cy) return Position.NW;
+    	if(x > cx && y < cy) return Position.SW;
+    	if(x < cx && y > cy) return Position.NE;
+    	return Position.SE;
     }
 }
