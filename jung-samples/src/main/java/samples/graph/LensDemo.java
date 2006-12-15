@@ -137,8 +137,6 @@ public class LensDemo extends JApplet {
         	TransformerUtils.mapTransformer(map);
         grid = this.generateVertexGrid(map, preferredSize, 25);
         gridLayout = new StaticLayout<String,Number>(grid, vlf, preferredSize);
-//        gridLayout.setInitializer(vlf);
-//        gridLayout.setSize(preferredSize);
         
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
