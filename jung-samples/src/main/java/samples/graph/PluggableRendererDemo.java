@@ -23,6 +23,8 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
@@ -59,6 +61,7 @@ import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -552,7 +555,37 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         };
         modePanel.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
         modePanel.add(modeBox);
-        fontPanel.add(modePanel);
+        JPanel comboGrid = new JPanel(new GridLayout(0,1));
+        comboGrid.add(modePanel);
+        fontPanel.add(comboGrid);
+        
+        
+        JComboBox cb = new JComboBox();
+        cb.addItem(Renderer.VertexLabel.Position.N);
+        cb.addItem(Renderer.VertexLabel.Position.NE);
+        cb.addItem(Renderer.VertexLabel.Position.E);
+        cb.addItem(Renderer.VertexLabel.Position.SE);
+        cb.addItem(Renderer.VertexLabel.Position.S);
+        cb.addItem(Renderer.VertexLabel.Position.SW);
+        cb.addItem(Renderer.VertexLabel.Position.W);
+        cb.addItem(Renderer.VertexLabel.Position.NW);
+        cb.addItem(Renderer.VertexLabel.Position.N);
+        cb.addItem(Renderer.VertexLabel.Position.CNTR);
+        cb.addItem(Renderer.VertexLabel.Position.AUTO);
+        cb.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				Renderer.VertexLabel.Position position = 
+					(Renderer.VertexLabel.Position)e.getItem();
+				vv.getRenderer().getVertexLabelRenderer().setPosition(position);
+				vv.repaint();
+			}});
+        cb.setSelectedItem(Renderer.VertexLabel.Position.SE);
+        JPanel positionPanel = new JPanel();
+        positionPanel.setBorder(BorderFactory.createTitledBorder("Label Position"));
+        positionPanel.add(cb);
+
+        comboGrid.add(positionPanel);
+
     }
     
     public void actionPerformed(ActionEvent e)
