@@ -85,7 +85,7 @@ public class VisRunner implements Relaxer, Runnable {
         catch(Exception ex) {
             // the applet security manager may have prevented this.
             // just sleep for a second to let the thread stop on its own
-            System.err.println("got "+ex);
+//            System.err.println("got "+ex);
             try { Thread.sleep(1000); }
             catch(InterruptedException ie) {} // ignore
         }
