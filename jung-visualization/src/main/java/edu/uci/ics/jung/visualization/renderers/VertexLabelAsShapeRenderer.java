@@ -81,7 +81,7 @@ public class VertexLabelAsShapeRenderer<V,E>
 	}
 
 	public Renderer.VertexLabel.Position getPosition() {
-		return Renderer.VertexLabel.Position.C;
+		return Renderer.VertexLabel.Position.CNTR;
 	}
 
 	public void setPosition(Renderer.VertexLabel.Position position) {

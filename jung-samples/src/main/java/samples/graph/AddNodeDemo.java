@@ -86,7 +86,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         vv.getModel().getRelaxer().setSleepTime(500);
         vv.setGraphMouse(new DefaultModalGraphMouse());
         
-        vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.C);
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         vv.getRenderContext().setVertexStringer(new ToStringLabeller<Number>());
         vv.setForeground(Color.white);
         getContentPane().add(vv);

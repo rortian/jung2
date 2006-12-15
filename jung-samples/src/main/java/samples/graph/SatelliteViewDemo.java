@@ -134,7 +134,7 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
         vv1.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.red, Color.white, true));
         vv1.getRenderContext().setVertexStringer(new ToStringLabeller());
-        vv1.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.C);
+        vv1.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         
         viewGrid = new ViewGrid(vv2, vv1);
 

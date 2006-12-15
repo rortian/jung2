@@ -51,10 +51,10 @@ public interface Renderer<V,E> {
 		void setPosition(Position position);
 		class NOOP implements VertexLabel {
 			public void labelVertex(RenderContext rc, Graph graph, Object v, String label, int x, int y) {}
-			public Position getPosition() { return Position.C; }
+			public Position getPosition() { return Position.CNTR; }
 			public void setPosition(Position position) {}
 		}
-		enum Position { N, NE, E, SE, S, SW, W, NW, C, AUTO }
+		enum Position { N, NE, E, SE, S, SW, W, NW, CNTR, AUTO }
 	}
 	
 	interface EdgeLabel<V,E> {

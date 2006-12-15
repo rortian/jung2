@@ -156,7 +156,7 @@ public class VertexLabelPositionDemo extends JApplet {
         cb.addItem(Renderer.VertexLabel.Position.W);
         cb.addItem(Renderer.VertexLabel.Position.NW);
         cb.addItem(Renderer.VertexLabel.Position.N);
-        cb.addItem(Renderer.VertexLabel.Position.C);
+        cb.addItem(Renderer.VertexLabel.Position.CNTR);
         cb.addItem(Renderer.VertexLabel.Position.AUTO);
         cb.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {

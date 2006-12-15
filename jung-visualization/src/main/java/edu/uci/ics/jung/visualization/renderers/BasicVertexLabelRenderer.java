@@ -150,7 +150,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     		y = vertexBounds.getMinY()-offset-labelSize.height;
     		return new Point((int)x,(int)y);
 
-    	case C:
+    	case CNTR:
     		x = vertexBounds.getCenterX()-labelSize.width/2;
     		y = vertexBounds.getCenterY()-labelSize.height/2;
     		return new Point((int)x,(int)y);
