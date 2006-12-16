@@ -35,11 +35,6 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
         super(vv);
         perspectiveTransformer = 
             new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getLayoutTransformer());
-
-        Dimension d = vv.getSize();
-        if(d.width <= 0 || d.height <= 0) {
-            d = vv.getPreferredSize();
-        }
    }
     
     public void activate() {

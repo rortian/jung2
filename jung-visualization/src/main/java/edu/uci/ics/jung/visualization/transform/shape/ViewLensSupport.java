@@ -44,9 +44,6 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensTransformer = lensTransformer;
         Dimension d = vv.getSize();
-        if(d.width == 0 || d.height == 0) {
-            d = vv.getPreferredSize();
-        }
         lensTransformer.setViewRadius(d.width/5);
         this.lensGraphicsDecorator = new TransformingGraphics(lensTransformer);
 

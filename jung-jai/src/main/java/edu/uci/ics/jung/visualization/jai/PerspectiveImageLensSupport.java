@@ -52,11 +52,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
 
         Dimension d = vv.getSize();
-        if(d.width == 0 || d.height == 0) {
-            d = vv.getPreferredSize();
-        }
         this.renderer = vv.getRenderer();
-        
     }
     
     public void activate() {
