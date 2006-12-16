@@ -244,7 +244,4 @@ public class SimpleSparseGraph<V,E>
     public boolean isDirected(E edge) {
         return directedEdges.contains(edge);
     }
-    public String toString() {
-        return "Graph:"+getVertices();
-    }
 }

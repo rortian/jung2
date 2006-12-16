@@ -93,5 +93,18 @@ public abstract class SimpleAbstractSparseGraph<V, E> implements Graph<V,E>
         
         return Collections.unmodifiableCollection(incident);
     }
+    public String toString() {
+    	StringBuffer sb = new StringBuffer("Vertices:");
+    	for(V v : getVertices()) {
+    		sb.append(v+",");
+    	}
+    	sb.setLength(sb.length()-1);
+    	sb.append("\nEdges:");
+    	for(E e : getEdges()) {
+    		Pair<V> ep = getEndpoints(e);
+    		sb.append(e+"["+ep.getFirst()+","+ep.getSecond()+"]");
+    	}
+        return sb.toString();
+    }
 
 }
