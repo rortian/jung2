@@ -26,7 +26,6 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
-import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * Implements a self-organizing map layout algorithm, based on Meyer's
@@ -75,7 +74,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 
 	public void initialize() {
 
-		setInitializer(new RandomVertexLocationDecorator<V>(getSize()));
+		setInitializer(new RandomLocationTransformer<V>(getSize()));
 		maxEpoch = 2000;
 		epoch = 1;
 

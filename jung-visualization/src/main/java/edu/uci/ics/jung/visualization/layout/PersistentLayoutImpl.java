@@ -174,12 +174,6 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
         delegate.lock(v, state);
     }
 
-    public void update() {
-        if(delegate instanceof LayoutMutable) {
-            ((LayoutMutable<V,E>)delegate).update();
-        }
-    }
-
     public void addChangeListener(ChangeListener l) {
         if(delegate instanceof ChangeEventSupport) {
             ((ChangeEventSupport)delegate).addChangeListener(l);

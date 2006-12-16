@@ -21,7 +21,6 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * The SpringLayout package represents a visualization of a set of nodes. The
@@ -51,13 +50,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 					public SpringVertexData create() {
 						return new SpringVertexData();
 					}});
-
-    /**
-     * Returns the status.
-     */
-    public String getStatus() {
-        return null;
-    }
 
     /**
      * Constructor for a SpringLayout for a raw graph with associated
@@ -94,8 +86,8 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 	 */
 	@Override
 	public void setSize(Dimension size) {
+		setInitializer(new RandomLocationTransformer<V>(size));
 		super.setSize(size);
-		setInitializer(new RandomVertexLocationDecorator<V>(size));
 	}
     
     /**

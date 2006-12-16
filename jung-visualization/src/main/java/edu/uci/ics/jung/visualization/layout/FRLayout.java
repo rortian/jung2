@@ -20,7 +20,6 @@ import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * Implements the Fruchterman-Reingold algorithm for node layout.
@@ -56,7 +55,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     }
     
     public FRLayout(Graph<V, E> g, Dimension d) {
-        super(g, new RandomVertexLocationDecorator<V>(d));
+        super(g, new RandomLocationTransformer<V>(d), d);
         initialize();
     }
     
@@ -65,8 +64,8 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 	 */
 	@Override
 	public void setSize(Dimension size) {
+		setInitializer(new RandomLocationTransformer<V>(size));
 		super.setSize(size);
-		setInitializer(new RandomVertexLocationDecorator<V>(size));
 	}
 
 	public void setAttractionMultiplier(double attraction) {
@@ -119,7 +118,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
             
             try {
                 for(V v1 : getGraph().getVertices()) {
-                    if (isLocked(v1)) continue;
+//                    if (isLocked(v1)) continue;
                     calcRepulsion(v1);
                 }
                 break;
@@ -145,6 +144,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
                 for(V v : getGraph().getVertices()) {
                     if (isLocked(v)) continue;
                     calcPositions(v);
+                    fireStateChanged();
                 }
                 break;
             } catch(ConcurrentModificationException cme) {}
@@ -225,7 +225,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         try {
             for(V v2 : getGraph().getVertices()) {
 
-                if (isLocked(v2)) continue;
+//                if (isLocked(v2)) continue;
                 if (v1 != v2) {
                     Point2D p1 = getLocation(v1);
                     Point2D p2 = getLocation(v2);

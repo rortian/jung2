@@ -22,7 +22,6 @@ import edu.uci.ics.jung.algorithms.GraphStatistics;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
-import edu.uci.ics.jung.visualization.RandomVertexLocationDecorator;
 
 /**
  * Implements the Kamada-Kawai algorithm for node layout.
@@ -130,7 +129,6 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
     	Dimension d = getSize();
 
     	if(graph != null && d != null) {
-        	setInitializer(new RandomVertexLocationDecorator<V>(d));
 
         	double height = d.getHeight();
     		double width = d.getWidth();
@@ -175,66 +173,70 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
     	}
 	}
 
-    public void step() {
-		currentIteration++;
-		double energy = calcEnergy();
-		status = "Kamada-Kawai V=" + getGraph().getVertices().size()
-            + "(" + getGraph().getVertices().size() + ")"
+	public void step() {
+		try {
+			currentIteration++;
+			double energy = calcEnergy();
+			status = "Kamada-Kawai V=" + getGraph().getVertices().size()
+			+ "(" + getGraph().getVertices().size() + ")"
 			+ " IT: " + currentIteration
 			+ " E=" + energy
 			;
 
-		int n = getGraph().getVertices().size();
-        if (n == 0)
-            return;
+			int n = getGraph().getVertices().size();
+			if (n == 0)
+				return;
 
-		double maxDeltaM = 0;
-		int pm = -1;            // the node having max deltaM
-		for (int i = 0; i < n; i++) {
-            if (isLocked(vertices[i]))
-                continue;
-			double deltam = calcDeltaM(i);
+			double maxDeltaM = 0;
+			int pm = -1;            // the node having max deltaM
+			for (int i = 0; i < n; i++) {
+				if (isLocked(vertices[i]))
+					continue;
+				double deltam = calcDeltaM(i);
 
-			if (maxDeltaM < deltam) {
-				maxDeltaM = deltam;
-				pm = i;
+				if (maxDeltaM < deltam) {
+					maxDeltaM = deltam;
+					pm = i;
+				}
 			}
-		}
-		if (pm == -1)
-            return;
+			if (pm == -1)
+				return;
 
-        for (int i = 0; i < 100; i++) {
-			double[] dxy = calcDeltaXY(pm);
-			xydata[pm].setLocation(xydata[pm].getX()+dxy[0], xydata[pm].getY()+dxy[1]);
-            
-			double deltam = calcDeltaM(pm);
-            if (deltam < EPSILON)
-                break;
-		}
+			for (int i = 0; i < 100; i++) {
+				double[] dxy = calcDeltaXY(pm);
+				xydata[pm].setLocation(xydata[pm].getX()+dxy[0], xydata[pm].getY()+dxy[1]);
 
-		if (adjustForGravity)
-			adjustForGravity();
+				double deltam = calcDeltaM(pm);
+				if (deltam < EPSILON)
+					break;
+			}
 
-		if (exchangeVertices && maxDeltaM < EPSILON) {
-            energy = calcEnergy();
-			for (int i = 0; i < n - 1; i++) {
-                if (isLocked(vertices[i]))
-                    continue;
-				for (int j = i + 1; j < n; j++) {
-                    if (isLocked(vertices[j]))
-                        continue;
-					double xenergy = calcEnergyIfExchanged(i, j);
-					if (energy > xenergy) {
-						double sx = xydata[i].getX();
-						double sy = xydata[i].getY();
-                        xydata[i].setLocation(xydata[j]);
-                        xydata[j].setLocation(sx, sy);
-						return;
+			if (adjustForGravity)
+				adjustForGravity();
+
+			if (exchangeVertices && maxDeltaM < EPSILON) {
+				energy = calcEnergy();
+				for (int i = 0; i < n - 1; i++) {
+					if (isLocked(vertices[i]))
+						continue;
+					for (int j = i + 1; j < n; j++) {
+						if (isLocked(vertices[j]))
+							continue;
+						double xenergy = calcEnergyIfExchanged(i, j);
+						if (energy > xenergy) {
+							double sx = xydata[i].getX();
+							double sy = xydata[i].getY();
+							xydata[i].setLocation(xydata[j]);
+							xydata[j].setLocation(sx, sy);
+							return;
+						}
 					}
 				}
 			}
 		}
-//		fireStateChanged();
+		finally {
+			fireStateChanged();
+		}
 	}
 
 	/**
@@ -258,6 +260,15 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
 		for (int i = 0; i < xydata.length; i++) {
             xydata[i].setLocation(xydata[i].getX()+diffx, xydata[i].getY()+diffy);
 		}
+	}
+
+    /* (non-Javadoc)
+	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
+	 */
+	@Override
+	public void setSize(Dimension size) {
+		setInitializer(new RandomLocationTransformer<V>(size));
+		super.setSize(size);
 	}
 
 	/**

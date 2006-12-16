@@ -276,6 +276,12 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E>, ChangeEventSu
 		if(state == true) dontmove.add(v);
 		else dontmove.remove(v);
 	}
+	
+	public void lock(boolean lock) {
+		for(V v : graph.getVertices()) {
+			lock(v, lock);
+		}
+	}
 
     /**
      * Adds a <code>ChangeListener</code>.
