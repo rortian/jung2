@@ -227,6 +227,20 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	}
 	
 	/**
+	 * Always sanity-check getSize so that we don't use a
+	 * value that is improbable
+	 * @see java.awt.Component#getSize()
+	 */
+	@Override
+	public Dimension getSize() {
+		Dimension d = super.getSize();
+		if(d.width <= 0 || d.height <= 0) {
+			d = getPreferredSize();
+		}
+		return d;
+	}
+
+	/**
 	 * Ensure that, if doubleBuffering is enabled, the offscreen
 	 * image buffer exists and is the correct size.
 	 * @param d
@@ -287,9 +301,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	public void setGraphLayout(Layout<V,E> layout, boolean scaleToLayout) {
 
 	    Dimension viewSize = getSize();
-	    if(viewSize.width <= 0 || viewSize.height <= 0) {
-	        viewSize = getPreferredSize();
-	    }
 	    model.setGraphLayout(layout, viewSize);
         if(scaleToLayout) scaleToLayout(layout.getSize());
 	}
@@ -300,9 +311,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
     
     protected void scaleToLayout(Dimension layoutSize) {
         Dimension viewSize = getSize();
-        if(viewSize.width == 0 || viewSize.height == 0) {
-            viewSize = getPreferredSize();
-        }
         float scalex = (float)viewSize.width/layoutSize.width;
         float scaley = (float)viewSize.height/layoutSize.height;
         float scale = 1;
@@ -327,7 +335,13 @@ public class BasicVisualizationServer<V, E> extends JPanel
      */
 	public void setVisible(boolean aFlag) {
 		super.setVisible(aFlag);
-		model.getGraphLayout().setSize(this.getSize());
+		if(aFlag == true) {
+			Dimension d = this.getSize();
+			if(d.width <= 0 || d.height <= 0) {
+				d = this.getPreferredSize();
+			}
+			model.getGraphLayout().setSize(d);
+		}
 	}
 
 	/* (non-Javadoc)
