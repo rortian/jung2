@@ -44,7 +44,7 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
      */
     protected GraphMouse graphMouse;
     
-    protected MouseListener focusKeyListener = new MouseAdapter() {
+    protected MouseListener requestFocusListener = new MouseAdapter() {
 		public void mouseClicked(MouseEvent e) {
 			requestFocusInWindow();
 		}
@@ -92,6 +92,8 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
     public VisualizationViewer(VisualizationModel<V,E> model,
 	        Dimension preferredSize) {
         super(model, preferredSize);
+		setFocusable(true);
+        addMouseListener(requestFocusListener);
 	}
 	
 	/**
@@ -148,8 +150,8 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
 	@Override
 	public synchronized void addKeyListener(KeyListener l) {
 		super.addKeyListener(l);
-		setFocusable(true);
-		addMouseListener(focusKeyListener);
+//		setFocusable(true);
+//		addMouseListener(requestFocusListener);
 	}
 	
 	/**

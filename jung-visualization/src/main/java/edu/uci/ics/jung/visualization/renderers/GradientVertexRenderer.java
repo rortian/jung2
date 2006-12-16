@@ -22,7 +22,6 @@ import javax.swing.JComponent;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 

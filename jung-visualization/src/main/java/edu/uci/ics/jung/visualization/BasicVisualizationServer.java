@@ -37,6 +37,7 @@ import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -292,6 +293,10 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	    model.setGraphLayout(layout, viewSize);
         if(scaleToLayout) scaleToLayout(layout.getSize());
 	}
+	
+	public void scaleToLayout() {
+		scaleToLayout(getModel().getGraphLayout().getSize());
+	}
     
     protected void scaleToLayout(Dimension layoutSize) {
         Dimension viewSize = getSize();
@@ -324,13 +329,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		super.setVisible(aFlag);
 		model.getGraphLayout().setSize(this.getSize());
 	}
-
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#isVisRunnerRunning()
-     */
-//	public boolean isVisRunnerRunning() {
-//	    return model.isVisRunnerRunning();
-//	}
 
 	/* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseTransform(java.awt.geom.Point2D)

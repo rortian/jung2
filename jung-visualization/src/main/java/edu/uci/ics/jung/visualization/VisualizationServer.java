@@ -19,6 +19,7 @@ import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
