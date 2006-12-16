@@ -169,6 +169,7 @@ public class VertexCollapseDemo extends JApplet {
                     vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
                     layout.setLocation(clusterGraph, cp);
+                    vv.repaint();
                 }
             }});
         
@@ -193,6 +194,7 @@ public class VertexCollapseDemo extends JApplet {
 
             public void actionPerformed(ActionEvent e) {
                 layout.setGraph(graph);
+                vv.repaint();
             }});
         
         JButton help = new JButton("Help");
