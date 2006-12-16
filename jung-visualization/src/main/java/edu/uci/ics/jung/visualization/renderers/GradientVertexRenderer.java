@@ -85,9 +85,6 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         Rectangle deviceRectangle = null;
         if(vv != null) {
             Dimension d = vv.getSize();
-            if(d.width <= 0 || d.height <= 0) {
-                d = vv.getPreferredSize();
-            }
             deviceRectangle = new Rectangle(
                     0,0,
                     d.width,d.height);

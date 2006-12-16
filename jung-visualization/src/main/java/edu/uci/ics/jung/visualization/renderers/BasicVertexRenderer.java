@@ -71,11 +71,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         JComponent vv = rc.getScreenDevice();
         Rectangle deviceRectangle = null;
         if(vv != null) {
-//            deviceRectangle = vv.getBounds();
             Dimension d = vv.getSize();
-            if(d.width <= 0 || d.height <= 0) {
-                d = vv.getPreferredSize();
-            }
             deviceRectangle = new Rectangle(
                     0,0,
                     d.width,d.height);

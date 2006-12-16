@@ -81,9 +81,6 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         JComponent vv = rc.getScreenDevice();
         if(vv != null) {
             Dimension d = vv.getSize();
-            if(d.width <= 0 || d.height <= 0) {
-                d = vv.getPreferredSize();
-            }
             deviceRectangle = new Rectangle(0,0,d.width,d.height);
         }
 
