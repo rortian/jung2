@@ -11,8 +11,8 @@ package edu.uci.ics.jung.visualization.jai;
 import javax.media.jai.PerspectiveTransform;
 
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 
