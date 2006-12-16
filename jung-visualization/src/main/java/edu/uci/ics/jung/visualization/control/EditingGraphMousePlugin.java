@@ -1,6 +1,7 @@
 package edu.uci.ics.jung.visualization.control;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -11,6 +12,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.Map;
+
+import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Factory;
 
@@ -62,6 +65,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         rawArrowShape = ArrowFactory.getNotchedArrow(20, 16, 8);
         edgePaintable = new EdgePaintable();
         arrowPaintable = new ArrowPaintable();
+		this.cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
     }
     
     /**
@@ -254,7 +258,13 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         }
     }
     public void mouseClicked(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+        JComponent c = (JComponent)e.getSource();
+        c.setCursor(cursor);
+    }
+    public void mouseExited(MouseEvent e) {
+        JComponent c = (JComponent)e.getSource();
+        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
     public void mouseMoved(MouseEvent e) {}
 }
