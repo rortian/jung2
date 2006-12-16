@@ -15,8 +15,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
@@ -138,7 +136,6 @@ public class GraphEditorDemo extends JApplet implements Printable {
         this.layout = new StaticLayout<Number,Number>(graph, 
         	TransformerUtils.mapTransformer(vertexLocations),
         	new Dimension(600,600));
-//        layout.initialize(new Dimension(600,600), vertexLocations);
         
         vv =  new VisualizationViewer<Number,Number>(layout);
         vv.setBackground(Color.white);
