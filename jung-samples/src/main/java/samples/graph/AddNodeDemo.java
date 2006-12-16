@@ -25,15 +25,15 @@ import javax.swing.JRootPane;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Graphs;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.visualization.Renderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.layout.AbstractLayout;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
-import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.layout.SpringLayout;
 import edu.uci.ics.jung.visualization.layout.SpringLayout.LengthFunction;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /*
  * Created on May 10, 2004
@@ -55,7 +55,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
     private VisualizationViewer<Number,Number> vv = null;
 
-    private Layout<Number,Number> layout = null;
+    private AbstractLayout<Number,Number> layout = null;
 
     Timer timer;
     
@@ -73,6 +73,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
         //create a graphdraw
         layout = new FRLayout<Number,Number>(g);
+//        ((FRLayout)layout).setMaxIterations(200);
         
         vv = new VisualizationViewer<Number,Number>(layout, new Dimension(600,600));
 
@@ -127,7 +128,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         try {
 
             if (g.getVertices().size() < 100) {
-
+            	layout.lock(true);
                 //add a vertex
                 Integer v1 = new Integer(g.getVertices().size());
 
@@ -146,9 +147,9 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
                 v_prev = v1;
 
-                layout.reset();
+                layout.initialize();
                 relaxer.resume();
-
+                layout.lock(false);
             } else {
             	done = true;
             }
@@ -158,7 +159,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
         }
     }
-
+    
     class RemindTask extends TimerTask {
 
         public void run() {

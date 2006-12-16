@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
@@ -45,7 +46,8 @@ import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
  * and panning capabilities, using horizontal and
  * vertical scrollbars.
  *
- * <p>This demo also shows ToolTips on graph vertices.</p>
+ * <p>This demo also shows ToolTips on graph vertices and edges,
+ * and a key listener to change graph mouse modes.</p>
  * 
  * @author Tom Nelson
  * 
@@ -133,8 +135,12 @@ public class GraphZoomScrollPaneDemo {
         				false));
         vv.getRenderContext().setEdgeDrawPaintFunction(new ConstantTransformer(Color.lightGray));
         
-        // add my listener for ToolTips
+        // add my listeners for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setEdgeToolTipTransformer(new Transformer<Number,String>() {
+			public String transform(Number edge) {
+				return "E"+graph.getEndpoints(edge).toString();
+			}});
         
         // create a frome to hold the graph
         final JFrame frame = new JFrame();
@@ -180,7 +186,7 @@ public class GraphZoomScrollPaneDemo {
     private String[] createVertices(int count) {
         String[] v = new String[count];
         for (int i = 0; i < count; i++) {
-        	v[i] = "Count:"+i;
+        	v[i] = "V"+i;
             graph.addVertex(v[i]);
         }
         return v;
