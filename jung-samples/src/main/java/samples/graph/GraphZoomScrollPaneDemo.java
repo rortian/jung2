@@ -37,7 +37,10 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.FRLayout;
+import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsidePositioner;
 
 
 /**
@@ -141,6 +144,11 @@ public class GraphZoomScrollPaneDemo {
 			public String transform(Number edge) {
 				return "E"+graph.getEndpoints(edge).toString();
 			}});
+        
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+        vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
+        vv.setForeground(Color.lightGray);
         
         // create a frome to hold the graph
         final JFrame frame = new JFrame();
