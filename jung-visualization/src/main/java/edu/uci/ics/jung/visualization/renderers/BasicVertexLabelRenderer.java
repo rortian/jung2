@@ -159,9 +159,6 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	}
     	
     }
-    public static interface Positioner {
-    	Position getPosition(int x, int y, Dimension d);
-    }
     public static class InsidePositioner implements Positioner {
     	public Position getPosition(int x, int y, Dimension d) {
     		int cx = d.width/2;

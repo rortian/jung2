@@ -83,8 +83,18 @@ public class VertexLabelAsShapeRenderer<V,E>
 		return Renderer.VertexLabel.Position.CNTR;
 	}
 
+	public Renderer.VertexLabel.Positioner getPositioner() {
+		return new Positioner() {
+			public Renderer.VertexLabel.Position getPosition(int x, int y, Dimension d) {
+				return Renderer.VertexLabel.Position.CNTR;
+			}};
+	}
+
 	public void setPosition(Renderer.VertexLabel.Position position) {
-		// TODO Auto-generated method stub
-		
+		// noop
+	}
+
+	public void setPositioner(Renderer.VertexLabel.Positioner positioner) {
+		//noop
 	}
 }
