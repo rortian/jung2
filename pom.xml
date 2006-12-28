@@ -36,6 +36,7 @@
     <module>jung-samples</module>
     <module>jung-visualization</module>
     <module>jung-algorithms</module>
+    <module>jung-io</module>
     <!-- un-comment if you have jai installed
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
