@@ -34,7 +34,7 @@ if you are a user, do this:
 
 
 (*** see separate instructions at the end of this file 
-  for those unable to use a command-line console **)
+  for those unable to use CVS from a command-line console **)
 
 
 
@@ -107,14 +107,14 @@ and use the 'add variables' button in the 'libraries' tab.
 
 To load jung2 in eclipse, you need to overcome an
 eclipse limitation: Eclipse projects cannot contain
-subprojects. (Jung2 contains 5 sub-projects).
+subprojects. (Jung2 contains 6 sub-projects).
 The common work-around is to make eclipse think that
 each sub-project is a top-level project.
 
 The most common way to proceed is as follows:
 
 Add each subproject (jung-api, jung-graph-impl, jung-visualization, 
-jung-algorithms, jung-samples) as a top-level project in eclipse, each 
+jung-algorithms, jung-samples, jung-io) as a top-level project in eclipse, each 
 with its own classpath dependencies. 
 
 One approach is to use the eclipse feature for importing existing projects
