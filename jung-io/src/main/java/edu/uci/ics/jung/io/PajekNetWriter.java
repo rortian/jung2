@@ -155,6 +155,8 @@ public class PajekNetWriter<V,E>
             u_set.addAll(graph.getEdges());
         if (!directed && !undirected) // mixed-mode graph
         {
+        	u_set.addAll(graph.getEdges());
+        	d_set.addAll(graph.getEdges());
         	for(E e : graph.getEdges()) {
         		if(graph.isDirected(e) == false) {
         			d_set.remove(e);

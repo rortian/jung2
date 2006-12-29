@@ -91,7 +91,7 @@ import edu.uci.ics.graph.util.Pair;
  */
 public class PajekNetReader<V,E> {
 	
-	protected Factory<Graph<V,E>> graphFactory;
+	protected Factory<? extends Graph<V,E>> graphFactory;
 	protected Factory<V> vertexFactory;
 	protected Factory<E> edgeFactory;
     protected boolean unique_labels;
@@ -629,14 +629,14 @@ public class PajekNetReader<V,E> {
 	/**
 	 * @return the graphFactory
 	 */
-	public Factory<Graph<V, E>> getGraphFactory() {
+	public Factory<? extends Graph<V, E>> getGraphFactory() {
 		return graphFactory;
 	}
 
 	/**
 	 * @param graphFactory the graphFactory to set
 	 */
-	public void setGraphFactory(Factory<Graph<V, E>> graphFactory) {
+	public void setGraphFactory(Factory<? extends Graph<V, E>> graphFactory) {
 		this.graphFactory = graphFactory;
 	}
 
