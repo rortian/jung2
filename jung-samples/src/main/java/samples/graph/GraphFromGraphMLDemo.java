@@ -70,7 +70,7 @@ public class GraphFromGraphMLDemo {
      * demo the zoom features.
      * 
      */
-    public GraphFromGraphMLDemo() {
+    public GraphFromGraphMLDemo(String filename) {
         
     	Factory<Graph<Number,Number>> graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {
@@ -88,7 +88,7 @@ public class GraphFromGraphMLDemo {
     	GraphMLFile<Number,Number> file = new GraphMLFile<Number,Number>(graphFactory,vertexFactory,edgeFactory);
     	
         // create a simple graph for the demo
-        graph = file.load("simple.graphml");
+        graph = file.load(filename);
         vv =  new VisualizationViewer<Number,Number>(new FRLayout<Number,Number>(graph));
 
         vv.addGraphMouseListener(new TestGraphMouseListener<Number>());
@@ -98,7 +98,6 @@ public class GraphFromGraphMLDemo {
         				Color.white, Color.blue,
         				vv.getPickedVertexState(),
         				false));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new ConstantTransformer(Color.lightGray));
         
         // add my listeners for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -110,7 +109,6 @@ public class GraphFromGraphMLDemo {
         vv.getRenderContext().setVertexStringer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
-        vv.setForeground(Color.lightGray);
         
         // create a frome to hold the graph
         final JFrame frame = new JFrame();
@@ -176,6 +174,8 @@ public class GraphFromGraphMLDemo {
      */
     public static void main(String[] args) 
     {
-        new GraphFromGraphMLDemo();
+    	String filename = "simple.graphml";
+    	if(args.length > 0) filename = args[0];
+        new GraphFromGraphMLDemo(filename);
     }
 }
