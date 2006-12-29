@@ -16,8 +16,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
-
 /**
  * an implementation of the AbstractModalGraphMouse that includes plugins for
  * manipulating a view that is using a LensTransformer.
