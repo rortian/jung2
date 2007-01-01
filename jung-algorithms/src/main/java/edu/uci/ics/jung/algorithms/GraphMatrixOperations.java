@@ -51,11 +51,18 @@ public class GraphMatrixOperations
      *            the graph to be squared
      * @return the result of squaring g
      */
-    public static <V,E> Graph<V,E> square(Graph<V,E> g, Factory<Graph<V,E>> graphFactory,
+    public static <V,E> Graph<V,E> square(Graph<V,E> g, 
     		Factory<E> edgeFactory, MatrixElementOperations<E> meo)
     {
         // create new graph of same type
-        Graph<V, E> squaredGraph = graphFactory.create();
+        Graph<V, E> squaredGraph = null;
+        try {
+			squaredGraph = g.getClass().newInstance();
+		} catch (InstantiationException e3) {
+			e3.printStackTrace();
+		} catch (IllegalAccessException e3) {
+			e3.printStackTrace();
+		}
 
         Collection<V> vertices = g.getVertices();
         for (V v : vertices)
@@ -77,7 +84,8 @@ public class GraphMatrixOperations
                     E e = squaredGraph.findEdge(src,dest);
                     // if no edge from src to dest exists in G2, create one
                     if (e == null) {
-                    	squaredGraph.addEdge(edgeFactory.create(), src, dest);
+                    	e = edgeFactory.create();
+                    	squaredGraph.addEdge(e, src, dest);
                     }
                     meo.mergePaths(e, pathData);
                 }
