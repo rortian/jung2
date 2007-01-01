@@ -13,7 +13,6 @@ package edu.uci.ics.jung.algorithms.metrics;
 
 import java.util.Map;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -61,8 +60,8 @@ public class StructuralHoles<V,E> {
      * <li/><code>p(v,w) =</code> normalized mutual edge weight of v and w
      * <li/><code>m(u,w)</code> = maximum-scaled mutual edge weight of u and w
      * </ul>
-     * @see #normalizedMutualEdgeWeight(Vertex, Vertex)
-     * @see #maxScaledMutualEdgeWeight(Vertex, Vertex) 
+     * @see #normalizedMutualEdgeWeight(V, V)
+     * @see #maxScaledMutualEdgeWeight(V, V) 
      */
     public double effectiveSize(Graph<V,E> g, V v)
     {
@@ -102,7 +101,7 @@ public class StructuralHoles<V,E> {
      * constraint(v) = sum_{w in MP(v), w != v} localConstraint(v,w)
      * </pre>
      * where MP(v) is the subset of v's neighbors that are both predecessors and successors of v. 
-     * @see #localConstraint(Vertex, Vertex)
+     * @see #localConstraint(V, V)
      */
     public double constraint(Graph<V,E> g, V v) {
         double result = 0;
@@ -130,8 +129,8 @@ public class StructuralHoles<V,E> {
      * <li/><code>N(v) = v.getNeighbors()</code> 
      * <li/><code>s(v,w) = localConstraint(v,w) / (aggregateConstraint(v) / v.degree())</code>
      * </ul>
-     * @see #localConstraint(Vertex, Vertex)
-     * @see #aggregateConstraint(Vertex)
+     * @see #localConstraint(V, V)
+     * @see #aggregateConstraint(V)
      */
     public double hierarchy(Graph<V,E> g, V v)
     {
@@ -169,7 +168,7 @@ public class StructuralHoles<V,E> {
      * <li/><code>N(v) = v.getNeighbors()</code>
      * <li/><code>p(v,w) =</code> normalized mutual edge weight of v and w
      * </ul>
-     * @see #normalizedMutualEdgeWeight(Vertex, Vertex)
+     * @see #normalizedMutualEdgeWeight(V, V)
      */
     public double localConstraint(Graph<V,E> g, V v1, V v2) 
     {
@@ -227,7 +226,7 @@ public class StructuralHoles<V,E> {
      * normalizedMutualEdgeWeight(a,b) = mutual_weight(a,b) / (sum_c mutual_weight(a,c))
      * </pre>
      * Returns 0 if either numerator or denominator = 0, or if <code>v1 == v2</code>.
-     * @see #mutualWeight(Vertex, Vertex)
+     * @see #mutualWeight(V, V)
      */
     protected double normalizedMutualEdgeWeight(Graph<V,E> g, V v1, V v2)
     {
@@ -278,7 +277,7 @@ public class StructuralHoles<V,E> {
      * normalized_mutual_weight = mutual_weight(a,b) / (max_c mutual_weight(a,c))
      * </pre>
      * Returns 0 if either numerator or denominator is 0, or if <code>v1 == v2</code>.
-     * @see #mutualWeight(Vertex, Vertex)
+     * @see #mutualWeight(V, V)
      */
     protected double maxScaledMutualEdgeWeight(Graph<V,E> g, V v1, V v2)
     {

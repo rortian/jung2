@@ -12,7 +12,6 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 import java.util.HashMap;
 import java.util.Map;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 
@@ -137,9 +136,9 @@ public class UnweightedShortestPath<V, E>
      * Should be called whenever the graph is modified (edge weights 
      * changed or edges added/removed).  If the user knows that
      * some currently calculated distances are unaffected by a
-     * change, <code>reset(Vertex)</code> may be appropriate instead.
+     * change, <code>reset(V)</code> may be appropriate instead.
      * 
-     * @see #reset(Vertex)
+     * @see #reset(V)
      */
     public void reset()
     {
@@ -154,7 +153,7 @@ public class UnweightedShortestPath<V, E>
      * 
      * @see #reset()
      */
-    public void reset(Vertex v)
+    public void reset(V v)
     {
         mDistanceMap.remove(v);
         mIncomingEdgeMap.remove(v);

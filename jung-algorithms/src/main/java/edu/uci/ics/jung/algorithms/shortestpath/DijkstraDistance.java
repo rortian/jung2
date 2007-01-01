@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.util.BasicMapEntry;
 import edu.uci.ics.jung.algorithms.util.ConstantMap;
@@ -189,7 +188,6 @@ public class DijkstraDistance<V,E> implements Distance<V>
             
             for (E e : getIncidentEdges(v) )
             {
-//              Vertex w = e.getOpposite(v);
                 for (V w : g.getIncidentVertices(e))
                 {
                     if (!sd.distances.containsKey(w))
@@ -229,7 +227,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
     
     /**
      * Returns the set of edges incident to <code>v</code> that should be tested.
-     * By default, this is the set of outgoing edges for instances of <code>Vertex</code>,
+     * By default, this is the set of outgoing edges for instances of <code>V</code>,
      * the set of incident edges for instances of <code>Hypervertex</code>,
      * and is otherwise undefined.
      */
@@ -246,8 +244,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * If either vertex is not in the graph for which this instance
      * was created, throws <code>IllegalArgumentException</code>.
      * 
-     * @see #getDistanceMap(ArchetypeVertex)
-     * @see #getDistanceMap(ArchetypeVertex,int)
+     * @see #getDistanceMap(V)
+     * @see #getDistanceMap(V,int)
      */
     public Number getDistance(V source, V target)
     {
@@ -286,8 +284,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * <p>The size of the map returned will be the number of 
      * vertices reachable from <code>source</code>.</p>
      * 
-     * @see #getDistanceMap(ArchetypeVertex,int)
-     * @see #getDistance(ArchetypeVertex,ArchetypeVertex)
+     * @see #getDistanceMap(V,int)
+     * @see #getDistance(V,V)
      * @param source    the vertex from which distances are measured
      */
     public Map<V,Number> getDistanceMap(V source)
@@ -311,8 +309,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * <code>numDests</code> and the number of vertices reachable from
      * <code>source</code>. 
      * 
-     * @see #getDistanceMap(ArchetypeVertex)
-     * @see #getDistance(ArchetypeVertex,ArchetypeVertex)
+     * @see #getDistanceMap(V)
+     * @see #getDistance(V,V)
      * @param source    the vertex from which distances are measured
      * @param numDests  the number of vertices for which to measure distances
      */
@@ -392,9 +390,9 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * Should be called whenever the graph is modified (edge weights 
      * changed or edges added/removed).  If the user knows that
      * some currently calculated distances are unaffected by a
-     * change, <code>reset(Vertex)</code> may be appropriate instead.
+     * change, <code>reset(V)</code> may be appropriate instead.
      * 
-     * @see #reset(Vertex)
+     * @see #reset(V)
      */
     public void reset()
     {
