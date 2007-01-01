@@ -18,11 +18,11 @@ import javax.swing.JComponent;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.ArrowFactory;
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
  * A plugin that can create vertices, undirected edges, and directed edges

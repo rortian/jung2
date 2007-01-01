@@ -15,7 +15,7 @@ import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 
 
 @SuppressWarnings("serial")

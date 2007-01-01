@@ -20,9 +20,9 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 

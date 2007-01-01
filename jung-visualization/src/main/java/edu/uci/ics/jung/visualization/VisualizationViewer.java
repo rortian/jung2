@@ -22,7 +22,7 @@ import javax.swing.ToolTipManager;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 
 /**
  * Adds mouse behaviors and tooltips to the graph visualization base class

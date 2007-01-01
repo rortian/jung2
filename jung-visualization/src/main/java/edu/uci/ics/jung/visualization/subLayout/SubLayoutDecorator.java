@@ -16,7 +16,7 @@ import java.util.LinkedHashSet;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
 
 /**

@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.visualization.picking;
 
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 
 
 /**

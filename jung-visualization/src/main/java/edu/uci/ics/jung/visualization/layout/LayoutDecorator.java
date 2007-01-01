@@ -17,9 +17,9 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.collections15.Transformer;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -31,7 +31,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  *
  *
  */
-public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, IterativeContext {
+public class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, IterativeContext {
     
     protected Layout<V, E> delegate;
     
@@ -59,25 +59,27 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#step()
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#step()
      */
     public void step() {
     	if(delegate instanceof IterativeContext) {
     		((IterativeContext)delegate).step();
+        	fireStateChanged();
     	}
     }
 
     /**
 	 * 
-	 * @see edu.uci.ics.jung.visualization.layout.Layout#initialize()
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#initialize()
 	 */
 	public void initialize() {
 		delegate.initialize();
+		fireStateChanged();
 	}
 
 	/**
 	 * @param initializer
-	 * @see edu.uci.ics.jung.visualization.layout.Layout#setInitializer(org.apache.commons.collections15.Transformer)
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setInitializer(org.apache.commons.collections15.Transformer)
 	 */
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 		delegate.setInitializer(initializer);
@@ -86,35 +88,36 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
 	/**
 	 * @param v
 	 * @param location
-	 * @see edu.uci.ics.jung.visualization.layout.Layout#setLocation(java.lang.Object, java.awt.geom.Point2D)
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setLocation(java.lang.Object, java.awt.geom.Point2D)
 	 */
 	public void setLocation(V v, Point2D location) {
 		delegate.setLocation(v, location);
+		fireStateChanged();
 	}
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#getCurrentSize()
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#getCurrentSize()
      */
     public Dimension getSize() {
         return delegate.getSize();
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#getGraph()
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#getGraph()
      */
     public Graph<V, E> getGraph() {
         return delegate.getGraph();
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#getLocation(edu.uci.ics.jung.graph.ArchetypeVertex)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#getLocation(edu.uci.ics.jung.graph.ArchetypeVertex)
      */
     public Point2D transform(V v) {
         return delegate.transform(v);
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#done()
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#done()
      */
     public boolean done() {
     	if(delegate instanceof IterativeContext) {
@@ -124,28 +127,28 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEvent
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#lockVertex(edu.uci.ics.jung.graph.Vertex)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#lockVertex(edu.uci.ics.jung.graph.Vertex)
      */
     public void lock(V v, boolean state) {
         delegate.lock(v, state);
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#isLocked(Vertex)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#isLocked(V)
      */
     public boolean isLocked(V v) {
         return delegate.isLocked(v);
     }
     
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#resize(java.awt.Dimension)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#resize(java.awt.Dimension)
      */
     public void setSize(Dimension d) {
         delegate.setSize(d);
     }
 
     /**
-     * @see edu.uci.ics.jung.visualization.layout.Layout#reset()
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#reset()
      */
     public void reset() {
     	delegate.reset();

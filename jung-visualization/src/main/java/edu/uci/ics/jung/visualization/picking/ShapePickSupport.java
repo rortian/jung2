@@ -21,10 +21,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.ConcurrentModificationException;
 
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.decorators.EdgeContext;
-import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
  * ShapePickSupport provides access to Vertices and Edges based on

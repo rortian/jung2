@@ -16,7 +16,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
 import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.layout.VisRunner;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
@@ -84,11 +85,14 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
 	        ((ChangeEventSupport)this.layout).removeChangeListener(changeListener);
         }
 	    // set to new layout
-		this.layout = layout;
-		// add listener to the new layout
-        if(this.layout instanceof ChangeEventSupport) {
-            ((ChangeEventSupport)this.layout).addChangeListener(changeListener);
-        }
+	    if(layout instanceof LayoutDecorator) {
+	    	this.layout = layout;
+	    } else {
+	    	this.layout = new LayoutDecorator<V,E>(layout);
+	    }
+		
+		((ChangeEventSupport)this.layout).addChangeListener(changeListener);
+
         if(viewSize == null) {
             viewSize = new Dimension(600,600);
         }
@@ -105,7 +109,7 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
         if(layout instanceof IterativeContext) {
         	layout.initialize();
             if(relaxer == null) {
-            	relaxer = new VisRunner((IterativeContext)layout);
+            	relaxer = new VisRunner((IterativeContext)this.layout);
             	relaxer.prerelax();
             	relaxer.relax();
             }

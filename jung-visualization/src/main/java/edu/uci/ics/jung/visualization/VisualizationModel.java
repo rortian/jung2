@@ -14,7 +14,7 @@ import java.awt.Dimension;
 
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 

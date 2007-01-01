@@ -14,8 +14,7 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
 
-import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
-
+import edu.uci.ics.jung.algorithms.layout.Layout;
 
 /**
  * interface for PersistentLayout
@@ -24,7 +23,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public interface PersistentLayout<V, E> extends Layout<V,E>, ChangeEventSupport {
+public interface PersistentLayout<V, E> extends Layout<V,E> {
     
     void persist(String fileName) throws IOException;
 

@@ -13,9 +13,9 @@
  */
 package edu.uci.ics.jung.visualization.picking;
 
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
-import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
-import edu.uci.ics.jung.visualization.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.RadiusGraphElementAccessor;
 
 
 

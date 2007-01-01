@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -28,7 +29,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.jung.visualization.RadiusGraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
 
@@ -59,32 +60,21 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      */
     protected boolean locked;
 
-    protected RadiusGraphElementAccessor elementAccessor;
-
     /**
      * create an instance with a passed layout
      * create containers for graph components
      * @param layout 
      */
     public PersistentLayoutImpl(Layout<V,E> layout) {
-        super(layout);
-        this.map = LazyMap.decorate(new HashMap<V,Point>(),
-        		new Factory<Point>() {
+        super(new LayoutDecorator<V,E>(layout));
+        this.map = LazyMap.decorate(new HashMap<V,Point>(), new RandomPointFactory(getSize()));
 
-					public edu.uci.ics.jung.visualization.layout.PersistentLayout.Point create() {
-			            double x = Math.random() * getSize().getWidth();
-			            double y = Math.random() * getSize().getHeight();
-						return new Point(x,y);
-					}});
         this.dontmove = new HashSet<V>();
-        this.elementAccessor = new RadiusGraphElementAccessor<V,E>();
-        if(layout instanceof ChangeEventSupport) {
-            ((ChangeEventSupport)layout).addChangeListener(new ChangeListener() {
-                public void stateChanged(ChangeEvent e) {
-                    fireStateChanged();
-                }
-            });
-        }
+        ((ChangeEventSupport)getDelegate()).addChangeListener(new ChangeListener() {
+        	public void stateChanged(ChangeEvent e) {
+        		fireStateChanged();
+        	}
+        });
     }
 
     /**
@@ -173,26 +163,19 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
         dontmove.add(v);
         delegate.lock(v, state);
     }
+    
+    @SuppressWarnings("serial")
+	public static class RandomPointFactory implements Factory<Point>, Serializable {
 
-    public void addChangeListener(ChangeListener l) {
-        if(delegate instanceof ChangeEventSupport) {
-            ((ChangeEventSupport)delegate).addChangeListener(l);
-        }
-        changeSupport.addChangeListener(l);
-    }
-
-    public void removeChangeListener(ChangeListener l) {
-        if(delegate instanceof ChangeEventSupport) {
-            ((ChangeEventSupport)delegate).removeChangeListener(l);
-        }
-        changeSupport.removeChangeListener(l);
-    }
-
-    public ChangeListener[] getChangeListeners() {
-        return changeSupport.getChangeListeners();
-    }
-
-    public void fireStateChanged() {
-        changeSupport.fireStateChanged();
+    	Dimension d;
+    	public RandomPointFactory(Dimension d) {
+    		this.d = d;
+    	}
+		public edu.uci.ics.jung.visualization.layout.PersistentLayout.Point create() {
+	            double x = Math.random() * d.width;
+	            double y = Math.random() * d.height;
+				return new Point(x,y);
+		}
+    	
     }
 }

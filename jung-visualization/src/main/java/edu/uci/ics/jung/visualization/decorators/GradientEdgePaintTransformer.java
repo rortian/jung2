@@ -19,8 +19,8 @@ import java.awt.geom.Point2D;
 import edu.uci.ics.graph.predicates.GraphPredicate;
 import edu.uci.ics.graph.predicates.SelfLoopEdgePredicate;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.transform.Transformer;
 
 /**

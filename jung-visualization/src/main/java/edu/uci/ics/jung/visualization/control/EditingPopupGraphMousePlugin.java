@@ -13,9 +13,9 @@ import javax.swing.JPopupMenu;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.visualization.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.layout.Layout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
