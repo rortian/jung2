@@ -38,6 +38,8 @@ import javax.swing.event.ChangeListener;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -53,8 +55,6 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.layout.CircleLayout;
-import edu.uci.ics.jung.visualization.layout.Layout;
 
 /**
  * Demonstrates jung support for drawing edge labels that

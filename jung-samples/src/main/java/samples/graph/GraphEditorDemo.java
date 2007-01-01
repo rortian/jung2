@@ -40,6 +40,8 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -49,8 +51,6 @@ import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.layout.AbstractLayout;
-import edu.uci.ics.jung.visualization.layout.StaticLayout;
 
 /**
  * Shows how easy it is to create a graph editor with JUNG.

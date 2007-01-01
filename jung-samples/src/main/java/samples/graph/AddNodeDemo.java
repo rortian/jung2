@@ -24,15 +24,15 @@ import javax.swing.JRootPane;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Graphs;
+import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout.LengthFunction;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.layout.AbstractLayout;
-import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.Relaxer;
-import edu.uci.ics.jung.visualization.layout.SpringLayout;
-import edu.uci.ics.jung.visualization.layout.SpringLayout.LengthFunction;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /*

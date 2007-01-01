@@ -18,12 +18,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.layout.PersistentLayout;
 import edu.uci.ics.jung.visualization.layout.PersistentLayoutImpl;
 
@@ -51,6 +51,8 @@ public class PersistentLayoutDemo {
      * the visual component and renderer for the graph
      */
     VisualizationViewer<String,Number> vv;
+    
+    PersistentLayout<String,Number> persistentLayout;
 
     /**
      * create an instance of a simple graph with controls to
@@ -62,10 +64,10 @@ public class PersistentLayoutDemo {
         this.fileName = fileName;
         
         // create a simple graph for the demo
-        final PersistentLayout<String,Number> layout = 
+        persistentLayout = 
             new PersistentLayoutImpl<String,Number>(new FRLayout<String,Number>(graph));
 
-        vv = new VisualizationViewer<String,Number>(layout);
+        vv = new VisualizationViewer<String,Number>(persistentLayout);
         
         // add my listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -85,12 +87,11 @@ public class PersistentLayoutDemo {
         // saves the graph vertex positions to a file
         persist.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                PersistentLayout<String,Number> pl = (PersistentLayout<String,Number>) vv.getGraphLayout();
                 try {
-                    pl.persist(fileName);
+                    persistentLayout.persist(fileName);
                 } catch (IOException e1) {
                     System.err.println("got "+e1);
-                }
+            	}
             }
         });
         p.add(persist);
@@ -101,9 +102,9 @@ public class PersistentLayoutDemo {
         // they will be placed at random locations
         restore.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                PersistentLayout<String,Number> pl = (PersistentLayout<String,Number>) vv.getGraphLayout();
+//                PersistentLayout<String,Number> pl = (PersistentLayout<String,Number>) vv.getGraphLayout();
                 try {
-                    pl.restore(fileName);
+                    persistentLayout.restore(fileName);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }

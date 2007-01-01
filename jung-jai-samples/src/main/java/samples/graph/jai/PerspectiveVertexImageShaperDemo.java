@@ -43,6 +43,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -58,7 +59,6 @@ import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
 import edu.uci.ics.jung.visualization.jai.PerspectiveImageLensSupport;
 import edu.uci.ics.jung.visualization.jai.PerspectiveLayoutTransformSupport;
 import edu.uci.ics.jung.visualization.jai.PerspectiveTransformSupport;
-import edu.uci.ics.jung.visualization.layout.FRLayout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 

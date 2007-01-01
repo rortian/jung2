@@ -40,6 +40,9 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
@@ -54,9 +57,6 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.jai.PerspectiveLayoutTransformSupport;
 import edu.uci.ics.jung.visualization.jai.PerspectiveTransformSupport;
 import edu.uci.ics.jung.visualization.jai.PerspectiveViewTransformSupport;
-import edu.uci.ics.jung.visualization.layout.FRLayout;
-import edu.uci.ics.jung.visualization.layout.Layout;
-import edu.uci.ics.jung.visualization.layout.StaticLayout;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 
