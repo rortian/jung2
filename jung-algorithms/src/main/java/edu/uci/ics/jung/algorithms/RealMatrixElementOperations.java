@@ -21,7 +21,6 @@ import java.util.Map;
  */
 public class RealMatrixElementOperations<E> implements MatrixElementOperations<E>
 {
-    private String EDGE_KEY;
     private Map<E,Number> edgeData = new HashMap<E,Number>();
 
     public RealMatrixElementOperations(Map<E,Number> edgeData)
@@ -34,15 +33,17 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
 	 */
 	public void mergePaths(E e, Object pathData) 
     {
+
         Number pd = (Number)pathData;
         Number ed = edgeData.get(e);
         if (ed == null) {
         	edgeData.put(e, pd);
-//            e.addUserDatum(EDGE_KEY, pd, UserData.SHARED);
+
         } else {
         	edgeData.put(e, ed.doubleValue()+pd.doubleValue());
-//            ed.add(pd.doubleValue());
+
         }
+
 	}
 
 	/**
@@ -53,5 +54,12 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
         double d1 = edgeData.get(e1).doubleValue();
         double d2 = edgeData.get(e2).doubleValue();
         return d1*d2;
+	}
+
+	/**
+	 * @return the edgeData
+	 */
+	public Map<E, Number> getEdgeData() {
+		return edgeData;
 	}
 }

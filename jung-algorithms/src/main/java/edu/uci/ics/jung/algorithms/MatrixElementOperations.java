@@ -9,6 +9,8 @@
 */
 package edu.uci.ics.jung.algorithms;
 
+import java.util.Map;
+
 
 /**
  * An interface for specifying the behavior of graph/matrix operations
@@ -63,4 +65,6 @@ public interface MatrixElementOperations<E>
      * (from source of e1 to destination of e2) comprised of (e1, e2)
      */
     public Number computePathData(E e1, E e2);
+    
+    Map<E,Number> getEdgeData();
 }
