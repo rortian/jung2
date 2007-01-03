@@ -13,31 +13,23 @@ package edu.uci.ics.jung.visualization.layout;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
-import javax.swing.event.ChangeListener;
-
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
-import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
 /**
  * a pure decorator for the Layout interface. Intended to be overridden
  * to provide specific behavior decoration
- * @see PersistentLayoutImpl
+ * 
  * @author Tom Nelson 
  *
- *
  */
-public class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, IterativeContext {
+public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeContext {
     
     protected Layout<V, E> delegate;
     
-    protected ChangeEventSupport changeSupport =
-        new DefaultChangeEventSupport(this);
-
     public LayoutDecorator(Layout<V, E> delegate) {
         this.delegate = delegate;
     }
@@ -64,7 +56,6 @@ public class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, 
     public void step() {
     	if(delegate instanceof IterativeContext) {
     		((IterativeContext)delegate).step();
-        	fireStateChanged();
     	}
     }
 
@@ -74,7 +65,6 @@ public class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, 
 	 */
 	public void initialize() {
 		delegate.initialize();
-		fireStateChanged();
 	}
 
 	/**
@@ -92,7 +82,6 @@ public class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, 
 	 */
 	public void setLocation(V v, Point2D location) {
 		delegate.setLocation(v, location);
-		fireStateChanged();
 	}
 
     /**
@@ -152,22 +141,6 @@ public class LayoutDecorator<V, E> implements Layout<V, E>, ChangeEventSupport, 
      */
     public void reset() {
     	delegate.reset();
-    }
-
-    public void addChangeListener(ChangeListener l) {
-        changeSupport.addChangeListener(l);
-    }
-
-    public void removeChangeListener(ChangeListener l) {
-        changeSupport.removeChangeListener(l);
-    }
-
-    public ChangeListener[] getChangeListeners() {
-        return changeSupport.getChangeListeners();
-    }
-
-    public void fireStateChanged() {
-        changeSupport.fireStateChanged();
     }
     
     public void setGraph(Graph<V, E> graph) {
