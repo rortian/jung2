@@ -17,6 +17,7 @@ import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.layout.LayoutEventBroadcaster;
 import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
 import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.layout.VisRunner;
@@ -85,10 +86,10 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
 	        ((ChangeEventSupport)this.layout).removeChangeListener(changeListener);
         }
 	    // set to new layout
-	    if(layout instanceof LayoutDecorator) {
+	    if(layout instanceof ChangeEventSupport) {
 	    	this.layout = layout;
 	    } else {
-	    	this.layout = new LayoutDecorator<V,E>(layout);
+	    	this.layout = new LayoutEventBroadcaster<V,E>(layout);
 	    }
 		
 		((ChangeEventSupport)this.layout).addChangeListener(changeListener);

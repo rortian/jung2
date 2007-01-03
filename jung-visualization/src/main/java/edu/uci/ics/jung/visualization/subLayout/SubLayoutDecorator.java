@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
+import edu.uci.ics.jung.visualization.layout.LayoutEventBroadcaster;
 
 /**
  * Extends the base decorator class and overrides methods to 
@@ -28,7 +28,7 @@ import edu.uci.ics.jung.visualization.layout.LayoutDecorator;
  *
  *
  */
-public class SubLayoutDecorator<V, E> extends LayoutDecorator<V,E> {
+public class SubLayoutDecorator<V, E> extends LayoutEventBroadcaster<V,E> {
 
     final protected Collection<Transformer<V,Point2D>> subLayouts = 
         new LinkedHashSet<Transformer<V,Point2D>>();

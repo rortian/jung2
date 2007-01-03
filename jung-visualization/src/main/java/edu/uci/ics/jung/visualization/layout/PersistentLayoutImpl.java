@@ -42,7 +42,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
  * 
  *  
  */
-public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
+public class PersistentLayoutImpl<V, E> extends LayoutEventBroadcaster<V,E>
     implements PersistentLayout<V,E> {
 
     /**
@@ -66,7 +66,7 @@ public class PersistentLayoutImpl<V, E> extends LayoutDecorator<V,E>
      * @param layout 
      */
     public PersistentLayoutImpl(Layout<V,E> layout) {
-        super(new LayoutDecorator<V,E>(layout));
+        super(new LayoutEventBroadcaster<V,E>(layout));
         this.map = LazyMap.decorate(new HashMap<V,Point>(), new RandomPointFactory(getSize()));
 
         this.dontmove = new HashSet<V>();
