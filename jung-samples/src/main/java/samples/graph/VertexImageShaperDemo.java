@@ -180,7 +180,7 @@ public class VertexImageShaperDemo extends JApplet {
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
         PickedState<Number> ps = vv.getPickedVertexState();
-        ps.addItemListener(new PickWithIconListener(vertexIconTransformer));
+        ps.addItemListener(new PickWithIconListener<Number>(vertexIconTransformer));
         
         vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             int x;
@@ -294,17 +294,17 @@ public class VertexImageShaperDemo extends JApplet {
      * @author Tom Nelson
      *
      */
-    public static class PickWithIconListener implements ItemListener {
-        DefaultVertexIconTransformer<Number> imager;
+    public static class PickWithIconListener<V> implements ItemListener {
+        DefaultVertexIconTransformer<V> imager;
         Icon checked;
         
-        public PickWithIconListener(DefaultVertexIconTransformer<Number> imager) {
+        public PickWithIconListener(DefaultVertexIconTransformer<V> imager) {
             this.imager = imager;
             checked = new Checkmark();
         }
 
         public void itemStateChanged(ItemEvent e) {
-            Icon icon = imager.transform((Number)e.getItem());
+            Icon icon = imager.transform((V)e.getItem());
             if(icon != null && icon instanceof LayeredIcon) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     ((LayeredIcon)icon).add(checked);
