@@ -33,7 +33,11 @@ public class LabelWrapper implements Transformer<String,String> {
 	 * call 'wrap' to transform the passed String
 	 */
 	public String transform(String str) {
-		return wrap(str);
+		if(str != null) {
+			return wrap(str);
+		} else {
+			return null;
+		}
 	}
 	
 	/**
