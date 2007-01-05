@@ -19,10 +19,6 @@ package samples.graph;
  * 
  */
 import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +28,6 @@ import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
-import edu.uci.ics.jung3d.algorithms.layout.FRLayout;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
 import edu.uci.ics.jung3d.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung3d.visualization.VisualizationViewer;
@@ -56,51 +51,10 @@ public class GraphDemo extends JPanel {
 		Graph<String,Number> graph = //TestGraphs.getOneComponentGraph();
 			TestGraphs.getDemoGraph();
 		
-		graphBox = new JComboBox(new String[]{"ONE","TWO"});
-		graphMap.put("ONE", demoGraph);
-		graphMap.put("TWO", oneComponentGraph);
-		graphBox.addItemListener(new ItemListener() {
-
-			public void itemStateChanged(ItemEvent e) {
-				Class clazz = layoutMap.get(layoutBox.getSelectedItem());
-				Constructor ctor;
-				try {
-					ctor = clazz.getConstructor(new Class[]{Graph.class});
-					Layout layout = (Layout) ctor.newInstance(graphMap.get(e.getItem()));
-					vv.setGraphLayout(layout);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-			}});
-
-		layoutBox = new JComboBox(new String[]{"SpringLayout","FRLayout"});
-		layoutMap.put("SpringLayout", SpringLayout.class);
-		layoutMap.put("FRLayout", FRLayout.class);
-		layoutBox.addItemListener(new ItemListener() {
-
-			public void itemStateChanged(ItemEvent e) {
-				Class clazz = layoutMap.get(e.getItem());
-				Constructor ctor;
-				try {
-					ctor = clazz.getConstructor(new Class[]{Graph.class});
-					Layout layout = (Layout) ctor.newInstance(graphMap.get(graphBox.getSelectedItem()));
-					vv.setGraphLayout(layout);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-			}});
 		Layout<String,Number> layout = new SpringLayout<String,Number>(graph);
 		vv.setGraphLayout(layout);
-		JPanel controls = new JPanel();
-		controls.add(graphBox);
-		controls.add(layoutBox);
 		
 		add(vv);
-		add(controls, BorderLayout.SOUTH);
 	}
 
 	public static void main(String argv[])
