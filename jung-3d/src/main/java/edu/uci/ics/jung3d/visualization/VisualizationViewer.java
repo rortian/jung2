@@ -137,17 +137,19 @@ public class VisualizationViewer<V,E> extends JPanel {
 
 		TransformGroup objScale = new TransformGroup();
 		Transform3D t3d = new Transform3D();
-		t3d.setScale(0.01);
+//		t3d.setScale(0.05);
 		objScale.setTransform(t3d);
 		objRoot.addChild(objScale);
 
 		Transform3D tt = new Transform3D();
-		tt.setTranslation(new Vector3f(0, 0, -300.f));
+		tt.setScale(.05);
+		tt.setTranslation(new Vector3f(0, 0, -30.f));
 		objTrans = new TransformGroup(tt);
 		objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_READ );
 		objTrans.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
 		objScale.addChild(objTrans);
+//		objRoot.addChild(objTrans);
 
 		// Create Colors, Materials,  and Appearances.
 		Appearance look = new Appearance();
@@ -205,7 +207,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 
 		MouseWheelZoom behavior2 = new MouseWheelZoom();
 		behavior2.setTransformGroup(objTrans);
-		behavior2.setFactor(10);
+//		behavior2.setFactor(10);
 		objTrans.addChild(behavior2);
 		behavior2.setSchedulingBounds(bounds);
 
