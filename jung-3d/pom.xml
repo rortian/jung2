@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>jung</groupId>
   <artifactId>jung-3d</artifactId>
-  <name>jung-layout3d</name>
+  <name>jung-3d</name>
   <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <dependencies>
