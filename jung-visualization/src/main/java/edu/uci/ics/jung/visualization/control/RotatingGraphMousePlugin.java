@@ -61,12 +61,26 @@ public class RotatingGraphMousePlugin extends AbstractGraphMousePlugin
         g.setColor(new Color(0,0,0,0));
         g.fillRect(0,0,16,16);
 
-        g.setColor(Color.white);
-        g.setStroke(new BasicStroke(3));
         int left = 0;
         int top = 0;
         int right = 15;
         int bottom = 15;
+        
+        g.setColor(Color.white);
+        g.setStroke(new BasicStroke(3));
+        // top bent line
+        g.drawLine(left+2,top+6,right/2+1,top);
+        g.drawLine(right/2+1,top,right-2,top+5);
+        // bottom bent line
+        g.drawLine(left+2,bottom-6,right/2,bottom);
+        g.drawLine(right/2,bottom,right-2,bottom-6);
+        // top arrow
+        g.drawLine(left+2,top+6,left+5,top+6);
+        g.drawLine(left+2,top+6,left+2,top+3);
+        // bottom arrow
+        g.drawLine(right-2,bottom-6,right-6,bottom-6);
+        g.drawLine(right-2, bottom-6,right-2,bottom-3);
+
         
         g.setColor(Color.black);
         g.setStroke(new BasicStroke(1));

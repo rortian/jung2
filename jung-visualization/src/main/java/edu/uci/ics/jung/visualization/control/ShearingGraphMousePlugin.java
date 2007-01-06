@@ -76,14 +76,14 @@ public class ShearingGraphMousePlugin extends AbstractGraphMousePlugin
         int right = 15;
         int bottom = 15;
         
-//        g.setColor(Color.white);
-//        g2.setStroke(new BasicStroke(3));
-//        g.drawLine(left+2,top+5,right-2,top+5);
-//        g.drawLine(left+2,bottom-5,right-2,bottom-5);
-//        g.drawLine(left+2,top+5,left+4,top+3);
-//        g.drawLine(left+2,top+5,left+4,top+7);
-//        g.drawLine(right-2,bottom-5,right-4,bottom-3);
-//        g.drawLine(right-2,bottom-5,right-4,bottom-7);
+        g.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g.drawLine(left+2,top+5,right-2,top+5);
+        g.drawLine(left+2,bottom-5,right-2,bottom-5);
+        g.drawLine(left+2,top+5,left+4,top+3);
+        g.drawLine(left+2,top+5,left+4,top+7);
+        g.drawLine(right-2,bottom-5,right-4,bottom-3);
+        g.drawLine(right-2,bottom-5,right-4,bottom-7);
 
         g.setColor(Color.black);
         g2.setStroke(new BasicStroke(1));
