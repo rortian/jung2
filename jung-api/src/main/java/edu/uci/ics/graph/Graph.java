@@ -26,6 +26,9 @@ public interface Graph<V,E> extends ArchetypeGraph<V,E>
     
     Collection<V> getSuccessors(V vertex);
     
+    boolean addEdge(E e, V v1, V v2);
+    
+    boolean addDirectedEdge(E e, V v1, V v2);
     // convenience methods
     
     Pair<V> getEndpoints(E edge); // build Pair from getIncidentVertices()
