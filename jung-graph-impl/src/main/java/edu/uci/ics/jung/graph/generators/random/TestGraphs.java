@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
@@ -263,8 +262,6 @@ public class TestGraphs {
 	public static Graph<String, Number> getDemoGraph() {
 		UndirectedGraph<String, Number> g = 
             new SimpleUndirectedSparseGraph<String, Number>();
-//		StringLabeller sl = StringLabeller.getLabeller(g);
-//		EdgeWeightLabeller el = EdgeWeightLabeller.getLabeller(g);
 
 		for (int i = 0; i < pairs.length; i++) {
 			String[] pair = pairs[i];
@@ -274,8 +271,8 @@ public class TestGraphs {
 		// let's throw in a clique, too
 		for (int i = 1; i <= 10; i++) {
 			for (int j = i + 1; j <= 10; j++) {
-				String i1 = "" + i;
-				String i2 = "" + j;
+				String i1 = "clique" + i;
+				String i2 = "clique" + j;
 				createUndirectedEdge(g, i1, i2, i + j);
 			}
 		}
@@ -285,8 +282,8 @@ public class TestGraphs {
 			for (int j = i + 1; j <= 20; j++) {
 				if (Math.random() > 0.6)
 					continue;
-				String i1 = "" + i;
-				String i2 = "" + j;
+				String i1 = "partial" + i;
+				String i2 = "partial" + j;
 				createUndirectedEdge(g, i1, i2, i + j);
 			}
 		}
