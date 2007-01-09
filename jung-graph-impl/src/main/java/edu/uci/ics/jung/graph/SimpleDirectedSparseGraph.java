@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.util.Pair;
 
 
@@ -142,8 +143,8 @@ public class SimpleDirectedSparseGraph<V,E>
         return null;
     }
     
-    public boolean addDirectedEdge(E edge, V source, V dest) {
-        return addEdge(edge, source, dest);
+    public boolean addEdge(E edge, V source, V dest) {
+        return addEdge(edge, source, dest, Edges.DIRECTED);
     }
     /**
      * Adds <code>edge</code> to the graph.  Also adds 
@@ -151,12 +152,13 @@ public class SimpleDirectedSparseGraph<V,E>
      * are not already present.  Returns <code>false</code> if 
      * the specified edge is 
      */
-    public boolean addEdge(E edge, V source, V dest) {
+    public boolean addEdge(E edge, V source, V dest, Edges directed) {
+    	if(directed != Edges.DIRECTED) throw new IllegalArgumentException();
         if (edges.containsKey(edge)) {
             Pair<V> endpoints = edges.get(edge);
             Pair<V> new_endpoints = new Pair<V>(source, dest);
             if (!endpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("Edge " + edge + 
+                throw new IllegalArgumentException("Edges " + edge + 
                         " exists in this graph with endpoints " + source + ", " + dest);
             } else {
                 return false;
@@ -197,7 +199,11 @@ public class SimpleDirectedSparseGraph<V,E>
         return edges.get(edge);
     }
 
-    public boolean isDirected(E edge) {
-        return true;
+    public Edges getDirectedness(E edge) {
+        return Edges.DIRECTED;
     }
+
+	public Collection<E> getEdges(Edges directedness) {
+		return getEdges();
+	}
 }

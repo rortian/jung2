@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import junit.framework.TestCase;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
@@ -110,13 +111,23 @@ public class SimpleDirectedSparseGraphTest extends TestCase {
 
     public void testIsDirected() {
         for(Number edge : graph.getEdges()) {
-            assertTrue(graph.isDirected(edge));
+            assertEquals(graph.getDirectedness(edge), Edges.DIRECTED);
         }
     }
 
     public void testAddDirectedEdge() {
         Float edge = new Float(.9);
-        graph.addDirectedEdge(edge, v1, v2);
-        assertTrue(graph.isDirected(edge));
+        graph.addEdge(edge, v1, v2, Edges.DIRECTED);
+        assertEquals(graph.getDirectedness(edge), Edges.DIRECTED);
     }
+    
+    public void testAddUndirectedEdge() {
+        try {
+            graph.addEdge(new Float(.9), v1, v2, Edges.UNDIRECTED);
+            fail("Cannot add an undirected edge to this graph");
+        } catch(IllegalArgumentException uoe) {
+            // all is well
+        }
+    }
+
 }

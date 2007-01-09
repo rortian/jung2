@@ -20,6 +20,7 @@ import java.util.Set;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
@@ -173,7 +174,6 @@ public class TestGraphs {
 			String v1Label,
 			String v2Label,
 			int weight) {
-			
 			g.addEdge(new Double(Math.random()), v1Label, v2Label);
 	}
 	
@@ -185,7 +185,7 @@ public class TestGraphs {
 		String v2Label,
 		int weight) {
 		
-		g.addDirectedEdge(new Double(Math.random()), v1Label, v2Label);
+		g.addEdge(new Double(Math.random()), v1Label, v2Label, Edges.DIRECTED);
 
 //		try {
 //			Vertex v1 = sl.getVertex(v1Label);
@@ -198,7 +198,7 @@ public class TestGraphs {
 //				v2 = g.addVertex(new SparseVertex());
 //				sl.setLabel(v2, v2Label);
 //			}
-//			Edge e = GraphUtils.addEdge(g, v1, v2);
+//			Edges e = GraphUtils.addEdge(g, v1, v2);
 //			el.setWeight(e, weight);
 //		} catch (StringLabeller.UniqueLabelException e) {
 //			throw new FatalException("This should not happen " + e);
@@ -336,11 +336,7 @@ public class TestGraphs {
             V v2 = ug.getEndpoints(e).getSecond();
 
             E me = edgeFactory.create();
-            if (Math.random() < 0.5) {
-                g.addDirectedEdge(me, v1, v2);
-            } else {
-                g.addEdge(me, v1, v2);
-            }
+            g.addEdge(me, v1, v2, Math.random() < 5 ? Edges.DIRECTED : Edges.UNDIRECTED);
             edge_weights.put(me, Math.random());
         }
         
@@ -355,11 +351,11 @@ public class TestGraphs {
             v[i] = new Integer(i);
             graph.addVertex(v[i]);
         }
-        graph.addDirectedEdge(new Double(0), v[0], v[1]);
-        graph.addDirectedEdge(new Double(.1), v[0], v[1]);
-        graph.addDirectedEdge(new Double(.2), v[0], v[1]);
-        graph.addDirectedEdge(new Double(.3), v[1], v[0]);
-        graph.addDirectedEdge(new Double(.4), v[1], v[0]);
+        graph.addEdge(new Double(0), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(.1), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(.2), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(.3), v[1], v[0], Edges.DIRECTED);
+        graph.addEdge(new Double(.4), v[1], v[0], Edges.DIRECTED);
         graph.addEdge(new Double(.5), v[1], v[2]);
         graph.addEdge(new Double(.6), v[1], v[2]);
 
