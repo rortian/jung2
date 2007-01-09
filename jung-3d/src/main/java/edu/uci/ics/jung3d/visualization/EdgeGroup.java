@@ -48,7 +48,7 @@ import com.sun.j3d.utils.geometry.Primitive;
 //				 26, 26, look);
 
 		 Transform3D t = new Transform3D();
-//		 t.setTranslation(new Vector3f(0.f, .5f, 0.f));
+		 t.setTranslation(new Vector3f(0.f, .5f, 0.f));
 		 TransformGroup group = new TransformGroup(t);
 		 group.addChild(shape);
 		 addChild(group);

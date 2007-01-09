@@ -96,15 +96,15 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 
 			public Node transform(EdgeContext<V,E> ec) {
 				LineArray lineArray = new LineArray(2, LineArray.COORDINATES | LineArray.COLOR_3);
-				lineArray.setCoordinates(0, new Point3f[]{new Point3f(),new Point3f(0,1,0)});
+				lineArray.setCoordinates(0, new Point3f[]{new Point3f(0,-.5f,0),new Point3f(0,.5f,0)});
 				lineArray.setColor(0, new Color3f(1,1,1));
 				lineArray.setColor(1, new Color3f(1,1,1));
 				Shape3D shape = new Shape3D();
 				shape.setGeometry(lineArray);
 				return shape;
 //				return new Cylinder(1, 1, 
-//						 Node.GENERATE_NORMALS |
-//						 Node.ENABLE_GEOMETRY_PICKING,
+//						Cylinder.GENERATE_NORMALS |
+//						Cylinder.ENABLE_GEOMETRY_PICKING,
 //						 26, 26, lightGrayLook);
 			}};
 		this.vertexAppearanceTransformer = new ConstantTransformer(redLook);
