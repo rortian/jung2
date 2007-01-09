@@ -18,9 +18,8 @@ package edu.uci.ics.jung3d.visualization;
 /**
  */
 import javax.media.j3d.Node;
+import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-
-import com.sun.j3d.utils.geometry.Primitive;
 
 /**
  * 
@@ -31,12 +30,17 @@ public class VertexGroup<V> extends TransformGroup {
 
 	 V vertex;
 	 Node shape;
+	 TransformGroup labelNode = new TransformGroup();
 
 	 public VertexGroup(V vertex, Node shape) {
 		 this.vertex = vertex;
 		 this.shape = shape;
 		 setCapability(TransformGroup.ENABLE_PICK_REPORTING);
 		 addChild(shape);
+		 addChild(labelNode);
+		 Transform3D tt = new Transform3D();
+//		 tt.setTranslation(new Vector3f(10,10,0));
+		 labelNode.setTransform(tt);
 	 }
 
 
@@ -56,6 +60,14 @@ public class VertexGroup<V> extends TransformGroup {
 	 }
 
 
-	 public String toString() { return vertex.toString(); }
+	 public String toString() { return "VertexGroup for "+vertex.toString(); }
+
+
+	/**
+	 * @return the labelNode
+	 */
+	public TransformGroup getLabelNode() {
+		return labelNode;
+	}
 
  }
