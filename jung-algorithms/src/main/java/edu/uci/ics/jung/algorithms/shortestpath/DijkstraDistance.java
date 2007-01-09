@@ -194,7 +194,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
                     {
                         double edge_weight = nev.get(e).doubleValue();
                         if (edge_weight < 0)
-                            throw new IllegalArgumentException("Edge weights must be non-negative");
+                            throw new IllegalArgumentException("Edges weights must be non-negative");
                         double new_dist = v_dist + edge_weight;
                         if (!sd.estimatedDistances.containsKey(w))
                         {

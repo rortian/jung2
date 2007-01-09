@@ -28,6 +28,7 @@ import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.OrPredicate;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
@@ -429,12 +430,14 @@ public class PajekNetReader<V,E> {
 
         boolean reading_arcs = false;
         boolean reading_edges = false;
+        Edges directedness = null;
         if (a_pred.evaluate(nextLine))
         {
             if (g instanceof UndirectedGraph) {
                 throw new IllegalArgumentException("Supplied undirected-only graph cannot be populated with directed edges");
             } else {
                 reading_arcs = true;
+                directedness = Edges.DIRECTED;
             }
         }
         if (e_pred.evaluate(nextLine))
@@ -443,6 +446,7 @@ public class PajekNetReader<V,E> {
                 throw new IllegalArgumentException("Supplied directed-only graph cannot be populated with undirected edges");
             else
                 reading_edges = true;
+            directedness = Edges.UNDIRECTED;
         }
         
         if (!(reading_arcs || reading_edges))
@@ -474,12 +478,12 @@ public class PajekNetReader<V,E> {
             {
                 do
                 {
-                    createAddEdge(st, v1, reading_arcs, g, id, parallel_ok);
+                    createAddEdge(st, v1, directedness, g, id, parallel_ok);
                 } while (st.hasMoreTokens());
             }
             else // one source, one destination, at most one weight
             {
-                E e = createAddEdge(st, v1, reading_arcs, g, id, parallel_ok);
+                E e = createAddEdge(st, v1, directedness, g, id, parallel_ok);
                 // get the edge weight if we care
                 if (nev != null)
                     nev.put(e, new Float(st.nextToken()));
@@ -489,7 +493,7 @@ public class PajekNetReader<V,E> {
     }
 
     protected E createAddEdge(StringTokenizer st, V v1, 
-            boolean directed, Graph<V,E> g, List<V> id, boolean parallel_ok)
+            Edges directed, Graph<V,E> g, List<V> id, boolean parallel_ok)
     {
         int vid2 = Integer.parseInt(st.nextToken()) - 1;
         V v2 = id.get(vid2);
@@ -499,11 +503,7 @@ public class PajekNetReader<V,E> {
         // or if this isn't one; otherwise ignore it
         if (parallel_ok || !p_pred.evaluate(e)) {
         	
-        	if(directed) {
-        		g.addDirectedEdge(e, v1, v2);
-        	} else {
-        		g.addEdge(e, v1, v2);
-        	}
+        	g.addEdge(e, v1, v2, directed);
         }
         return e;
     }

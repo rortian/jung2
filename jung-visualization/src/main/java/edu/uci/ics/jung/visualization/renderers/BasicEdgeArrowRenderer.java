@@ -23,6 +23,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -124,7 +125,7 @@ public class BasicEdgeArrowRenderer<V,E> extends BasicEdgeShapeRenderer<V,E>
             // see if arrows are too small to bother drawing
             if(scalex < .3 || scaley < .3) return;
             
-            if (graph.isDirected(e)) {
+            if (graph.getDirectedness(e) == Edges.DIRECTED) {
                 
                 Shape destVertexShape = 
                     rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getSecond());
@@ -142,7 +143,7 @@ public class BasicEdgeArrowRenderer<V,E> extends BasicEdgeShapeRenderer<V,E>
                     // note that arrows implicitly use the edge's draw paint
                     g.fill(arrow);
                 }
-                if (graph.isDirected(e) == false) {
+                if (graph.getDirectedness(e) == Edges.UNDIRECTED) {
                     Shape vertexShape = 
                         rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getFirst());
                     xf = AffineTransform.getTranslateInstance(x1, y1);

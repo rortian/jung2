@@ -12,6 +12,7 @@ import javax.swing.JPopupMenu;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -58,21 +59,21 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
             if(vertex != null) {
                 Set<V> picked = pickedVertexState.getPicked();
                 if(picked.size() > 0) {
-                    JMenu directedMenu = new JMenu("Create Directed Edge");
+                    JMenu directedMenu = new JMenu("Create Directed Edges");
                     popup.add(directedMenu);
                     for(final V other : picked) {
 //                        final Number other = iterator.next();
                         directedMenu.add(new AbstractAction("["+other+","+vertex+"]") {
                             public void actionPerformed(ActionEvent e) {
 //                                Number newEdge = new Number(other, vertex);
-                                graph.addDirectedEdge(edgeFactory.create(),
+                                graph.addEdge(edgeFactory.create(),
 //                                		graph.getEdges().size(), 
-                                		other, vertex);
+                                		other, vertex, Edges.DIRECTED);
                                 vv.repaint();
                             }
                         });
                     }
-                    JMenu undirectedMenu = new JMenu("Create Undirected Edge");
+                    JMenu undirectedMenu = new JMenu("Create Undirected Edges");
                     popup.add(undirectedMenu);
                     for(final V other : picked) {
                         undirectedMenu.add(new AbstractAction("[" + other+","+vertex+"]") {
@@ -92,7 +93,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                         vv.repaint();
                     }});
             } else if(edge != null) {
-                popup.add(new AbstractAction("Delete Edge") {
+                popup.add(new AbstractAction("Delete Edges") {
                     public void actionPerformed(ActionEvent e) {
                         pickedEdgeState.pick(edge, false);
                         graph.removeEdge(edge);

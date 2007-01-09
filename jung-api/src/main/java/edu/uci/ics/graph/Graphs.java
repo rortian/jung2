@@ -101,8 +101,8 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.ArchetypeGraph#addDirectedEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
-		public synchronized boolean addDirectedEdge(E e, V v1, V v2) {
-			return delegate.addDirectedEdge(e, v1, v2);
+		public synchronized boolean addEdge(E e, V v1, V v2, Edges directed) {
+			return delegate.addEdge(e, v1, v2, directed);
 		}
 
 		/**
@@ -170,6 +170,15 @@ public class Graphs {
 		 */
 		public synchronized Collection<E> getEdges() {
 			return delegate.getEdges();
+		}
+
+		/**
+		 * @param directedness
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.Edges)
+		 */
+		public Collection<E> getEdges(Edges directedness) {
+			return delegate.getEdges(directedness);
 		}
 
 		/**
@@ -274,10 +283,10 @@ public class Graphs {
 		/**
 		 * @param edge
 		 * @return
-		 * @see edu.uci.ics.graph.Graph#isDirected(java.lang.Object)
+		 * @see edu.uci.ics.graph.Graph#getDirectedness(java.lang.Object)
 		 */
-		public synchronized boolean isDirected(E edge) {
-			return delegate.isDirected(edge);
+		public synchronized Edges getDirectedness(E edge) {
+			return delegate.getDirectedness(edge);
 		}
 
 		/**
@@ -368,9 +377,9 @@ public class Graphs {
 		private SynchronizedUndirectedGraph(UndirectedGraph<V,E> delegate) {
 			super(delegate);
 		}
-	    public boolean addDirectedEdge(E e, V v1, V v2) {
-	        throw new UnsupportedOperationException("Cannot add a directed edge to an undirected graph");
-	    }
+//	    public boolean addEdge(E e, V v1, V v2, boolean directed) {
+//	        throw new UnsupportedOperationException("Cannot add a directed edge to an undirected graph");
+//	    }
 
 	}
 	
@@ -415,7 +424,7 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.ArchetypeGraph#addDirectedEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
-		public boolean addDirectedEdge(E e, V v1, V v2) {
+		public boolean addEdge(E e, V v1, V v2, Edges directed) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -484,6 +493,15 @@ public class Graphs {
 		 */
 		public Collection<E> getEdges() {
 			return delegate.getEdges();
+		}
+
+		/**
+		 * @param directedness
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.Edges)
+		 */
+		public Collection<E> getEdges(Edges directedness) {
+			return delegate.getEdges(directedness);
 		}
 
 		/**
@@ -588,10 +606,10 @@ public class Graphs {
 		/**
 		 * @param edge
 		 * @return
-		 * @see edu.uci.ics.graph.Graph#isDirected(java.lang.Object)
+		 * @see edu.uci.ics.graph.Graph#getDirectedness(java.lang.Object)
 		 */
-		public boolean isDirected(E edge) {
-			return delegate.isDirected(edge);
+		public Edges getDirectedness(E edge) {
+			return delegate.getDirectedness(edge);
 		}
 
 		/**

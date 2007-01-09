@@ -97,7 +97,7 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 	 * @param x
 	 * @param y
 	 * @param maxDistance temporarily overrides member maxDistance
-	 * @return Edge closest to the click.
+	 * @return Edges closest to the click.
 	 */
 	public E getEdge(Layout<V,E> layout, double x, double y, double maxDistance) {
 		double minDistance = maxDistance * maxDistance;

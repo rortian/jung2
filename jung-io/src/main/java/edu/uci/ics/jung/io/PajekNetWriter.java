@@ -25,6 +25,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
@@ -34,7 +35,7 @@ import edu.uci.ics.jung.algorithms.util.ConstantMap;
  * Writes graphs in the Pajek NET format.
  * 
  * <p>Labels for vertices may optionally be specified by implementations of 
- * <code>VertexStringer</code>.  Edge weights are optionally specified by 
+ * <code>VertexStringer</code>.  Edges weights are optionally specified by 
  * implementations of <code>NumberEdgeValue</code>.  Vertex locations
  * are optionally specified by implementations of 
  * <code>VertexLocationFunction</code>.  Note that vertex location coordinates 
@@ -52,7 +53,7 @@ public class PajekNetWriter<V,E>
 
     /**
      * Saves <code>g</code> to <code>filename</code>.  Labels for vertices may
-     * be supplied by <code>vs</code>.  Edge weights are specified by <code>nev</code>.
+     * be supplied by <code>vs</code>.  Edges weights are specified by <code>nev</code>.
      * 
      * @see #save(Graph, Writer, VertexStringer, NumberEdgeValue, VertexLocationFunction)
      * @throws IOException
@@ -158,7 +159,7 @@ public class PajekNetWriter<V,E>
         	u_set.addAll(graph.getEdges());
         	d_set.addAll(graph.getEdges());
         	for(E e : graph.getEdges()) {
-        		if(graph.isDirected(e) == false) {
+        		if(graph.getDirectedness(e) == Edges.UNDIRECTED) {
         			d_set.remove(e);
         		} else {
         			u_set.remove(e);

@@ -160,7 +160,7 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
             	double bcValue = bcDecorator.get(e).doubleValue();
             	bcValue /= 2.0;
             	bcDecorator.put(e, bcValue);
-//                MutableDouble bcValue = (MutableDouble) bcDecorator.getValue((Edge) eIt.next());
+//                MutableDouble bcValue = (MutableDouble) bcDecorator.getValue((Edges) eIt.next());
 //                bcValue.setDoubleValue(bcValue.doubleValue() / 2.0);
             }
         }
@@ -185,7 +185,7 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
             decorator.put(vertex, new BetweennessData());
         }
         for (E e : g.getEdges()) {
-//            Edge e = (Edge) eIt.next();
+//            Edges e = (Edges) eIt.next();
 
 //            if (e.getUserDatum(CENTRALITY) == null) {
 //                e.addUserDatum(CENTRALITY, new MutableDouble(), UserData.SHARED);

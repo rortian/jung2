@@ -15,6 +15,7 @@ import java.awt.Shape;
 
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
 /**
@@ -38,7 +39,7 @@ public class DirectionalEdgeArrowTransformer<V,E> implements Transformer<EdgeCon
      */
     public Shape transform(EdgeContext<V,E> context)
     {
-        if (context.graph.isDirected(context.edge))
+        if (context.graph.getDirectedness(context.edge) == Edges.DIRECTED)
             return directed_arrow;
         else 
             return undirected_arrow;

@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.predicates.GraphPredicate;
@@ -167,7 +168,7 @@ public interface RenderContext<V, E> {
 
         @Override
         public boolean evaluateEdge(Graph<V, E> graph, E edge) {
-            return graph.isDirected(edge);
+            return graph.getDirectedness(edge) == Edges.DIRECTED;
         }
         
     }
@@ -175,7 +176,7 @@ public interface RenderContext<V, E> {
     class UndirectedEdgeArrowPredicate<V,E> extends AbstractGraphPredicate<V,E> {
         @Override
         public boolean evaluateEdge(Graph<V, E> graph, E edge) {
-            return graph.isDirected(edge) == false;
+            return graph.getDirectedness(edge) == Edges.UNDIRECTED;
         }
         
     }

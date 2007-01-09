@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -44,7 +45,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Shape arrowShape;
     protected VisualizationServer.Paintable edgePaintable;
     protected VisualizationServer.Paintable arrowPaintable;
-    boolean edgeIsDirected;
+    Edges edgeIsDirected;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
@@ -105,7 +106,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                     transformEdgeShape(down, down);
                     vv.addPostRenderPaintable(edgePaintable);
                     if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0) {
-                        edgeIsDirected = true;
+                        edgeIsDirected = Edges.DIRECTED;
                         transformArrowShape(down, e.getPoint());
                         vv.addPostRenderPaintable(arrowPaintable);
                     } 
@@ -149,21 +150,21 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 if(vertex != null && startVertex != null) {
                     Graph<V,E> graph = 
                     	(Graph<V,E>)vv.getGraphLayout().getGraph();
-                    if(edgeIsDirected) {
-                        graph.addDirectedEdge(edgeFactory.create(),
-                        		//graph.getEdges().size(), 
-                        		startVertex, vertex);
-                    } else {
+//                    if(edgeIsDirected) {
                         graph.addEdge(edgeFactory.create(),
                         		//graph.getEdges().size(), 
-                        		startVertex, vertex);
-                    }
+                        		startVertex, vertex, edgeIsDirected);
+//                    } else {
+//                        graph.addEdge(edgeFactory.create(),
+//                        		//graph.getEdges().size(), 
+//                        		startVertex, vertex);
+//                    }
                     vv.repaint();
                 }
             }
             startVertex = null;
             down = null;
-            edgeIsDirected = false;
+            edgeIsDirected = Edges.UNDIRECTED;
             vv.removePostRenderPaintable(edgePaintable);
             vv.removePostRenderPaintable(arrowPaintable);
         }
@@ -177,7 +178,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         if(checkModifiers(e)) {
             if(startVertex != null) {
                 transformEdgeShape(down, e.getPoint());
-                if(edgeIsDirected) {
+                if(edgeIsDirected == Edges.DIRECTED) {
                     transformArrowShape(down, e.getPoint());
                 }
             }

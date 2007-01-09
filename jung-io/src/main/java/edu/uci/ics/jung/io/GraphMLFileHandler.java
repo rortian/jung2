@@ -18,6 +18,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -28,7 +29,7 @@ import edu.uci.ics.graph.Graph;
 public class GraphMLFileHandler<V,E> extends DefaultHandler {
     private Graph<V,E> mGraph;
     private Map<String,V> mLabeller;
-    private boolean default_directed;
+    private Edges default_directed;
     private Factory<V> vertexFactory;
     private Factory<E> edgeFactory;
     private Factory<Graph<V,E>> graphFactory;
@@ -87,7 +88,7 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
                  mLabeller.get(targetId);
 
         String direction = attributeMap.remove("directed");
-        boolean directed;
+        Edges directed;
         if (direction == null)
         {
             // use default_directed
@@ -97,19 +98,15 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
         {
             // use specified direction
             if (direction.equals("true"))
-                directed = true;
+                directed = Edges.DIRECTED;
             else if (direction.equals("false"))
-                directed = false;
+                directed = Edges.UNDIRECTED;
             else
                 throw new RuntimeException("Error parsing graph: 'directed' tag has invalid value: " + direction);
         }
-//        Edge e = GraphUtils.addEdge(mGraph, sourceVertex, targetVertex);
+//        Edges e = GraphUtils.addEdge(mGraph, sourceVertex, targetVertex);
         E e = edgeFactory.create();
-        if (directed) {
-            mGraph.addDirectedEdge(e, sourceVertex, targetVertex);
-        } else {
-            mGraph.addEdge(e, sourceVertex, targetVertex);
-        }
+        mGraph.addEdge(e, sourceVertex, targetVertex, directed);
         
         edgeAttributes.get(e).putAll(attributeMap);
 //        for(String key : attributeMap.keySet()) {
@@ -125,16 +122,16 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
         String edgeDefaultType = attributeMap.remove("edgedefault");
         mGraph = graphFactory.create();
         if (edgeDefaultType.equals("directed")) {
-            default_directed = true;
+            default_directed = Edges.DIRECTED;
 //          mGraph = new DirectedSparseGraph();
         } 
         else if (edgeDefaultType.equals("undirected")) 
         {
-            default_directed = false;
+            default_directed = Edges.UNDIRECTED;
 //            mGraph = new UndirectedSparseGraph();
         } 
         else {
-            throw new RuntimeException("Error parsing graph. Edge default type not specified.");
+            throw new RuntimeException("Error parsing graph. Edges default type not specified.");
         }
 
         mLabeller = new HashMap<String,V>();

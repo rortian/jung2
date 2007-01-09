@@ -31,10 +31,6 @@ public interface ArchetypeGraph<V, E>
     
     boolean removeVertex(V vertex);
     
-//    boolean addEdge(E e, V v1, V v2);
-//    
-//    boolean addDirectedEdge(E e, V v1, V v2);
-    
     boolean removeEdge(E edge);
     
     

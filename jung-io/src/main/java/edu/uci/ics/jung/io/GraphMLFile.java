@@ -26,6 +26,7 @@ import org.apache.commons.collections15.Factory;
 import org.xml.sax.InputSource;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
@@ -61,7 +62,7 @@ import edu.uci.ics.graph.util.Pair;
  * the week for each node as follows:
  * <pre>
  * for (Iterator eIt = g.getEdges().iterator(); eIt.hasNext(); ) {
- *   Edge v = (Edge) eIt.next();
+ *   Edges v = (Edges) eIt.next();
  *   System.out.println(e.getUserDatum("day");
  * }
  * </pre><br>
@@ -241,7 +242,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
     	List<V> id = new ArrayList<V>(g.getVertices());
 //        Indexer id = Indexer.getIndexer(g);
         for (E e : g.getEdges())  {
-//            Edge e = (Edge) edgeIterator.next();
+//            Edges e = (Edges) edgeIterator.next();
             Pair<V> p = g.getEndpoints(e);
             V src = p.getFirst();
             V dest = p.getSecond();
@@ -253,11 +254,11 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
             // tag the edges that don't match the default
             if (directed)
             {
-                if (g.isDirected(e) == false)
+                if (g.getDirectedness(e) == Edges.UNDIRECTED)
                     out.print("directed=\"false\" ");
             }
             else // undirected
-                if (g.isDirected(e) == true)
+                if (g.getDirectedness(e) == Edges.DIRECTED)
                     out.print("directed=\"true\" ");
             
             saveUserData(this.mFileHandler.getEdgeAttributes().get(e), out);

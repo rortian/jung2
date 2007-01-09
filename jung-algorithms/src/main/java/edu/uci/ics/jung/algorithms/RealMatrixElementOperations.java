@@ -29,7 +29,7 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
     }
 
 	/**
-	 * @see MatrixElementOperations#mergePaths(Edge, Object)
+	 * @see MatrixElementOperations#mergePaths(Edges, Object)
 	 */
 	public void mergePaths(E e, Object pathData) 
     {
@@ -47,7 +47,7 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
 	}
 
 	/**
-	 * @see MatrixElementOperations#computePathData(Edge, Edge)
+	 * @see MatrixElementOperations#computePathData(Edges, Edges)
 	 */
 	public Number computePathData(E e1, E e2) 
     {

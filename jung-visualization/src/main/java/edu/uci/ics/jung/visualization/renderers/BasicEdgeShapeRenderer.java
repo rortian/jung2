@@ -19,6 +19,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -129,7 +130,7 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
             // see if arrows are too small to bother drawing
             if(scalex < .3 || scaley < .3) return;
             
-            if (graph.isDirected(e)) {
+            if (graph.getDirectedness(e) == Edges.DIRECTED) {
                 
                 Shape destVertexShape = 
                     rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getSecond());

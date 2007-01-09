@@ -33,6 +33,7 @@ import org.apache.commons.collections15.TransformerUtils;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
@@ -137,6 +138,17 @@ public class PajekNetIOTest extends TestCase
         graph1.addEdge(j++, 1, 3);
         graph1.addEdge(j++, 1, 4);
         graph1.addEdge(j++, 4, 3);
+        
+        
+        System.err.println("graph1 = "+graph1);
+        for(Number edge : graph1.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph1.getDirectedness(edge));
+        }
+        for(Number v : graph1.getVertices()) {
+        	System.err.println(v+" outedges are "+graph1.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph1.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph1.getIncidentEdges(v));
+        }
 
         assertEquals(graph1.getEdges().size(), 6);
 
@@ -152,6 +164,16 @@ public class PajekNetIOTest extends TestCase
 
         Graph<Number,Number> graph2 = pnr.load(testFilename);
 
+        System.err.println("graph2 = "+graph2);
+        for(Number edge : graph2.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph2.getDirectedness(edge));
+        }
+        for(Number v : graph2.getVertices()) {
+        	System.err.println(v+" outedges are "+graph2.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph2.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph2.getIncidentEdges(v));
+       }
+
         assertEquals(graph1.getVertices().size(), graph2.getVertices().size());
         assertEquals(graph1.getEdges().size(), graph2.getEdges().size());
 
@@ -161,7 +183,17 @@ public class PajekNetIOTest extends TestCase
 
         Graph<Number,Number> graph3 = pnr.load(testFilename2);
 
-        compareIndexedGraphs(graph2, graph3);
+        System.err.println("graph3 = "+graph3);
+        for(Number edge : graph3.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph3.getDirectedness(edge));
+        }
+        for(Number v : graph3.getVertices()) {
+        	System.err.println(v+" outedges are "+graph3.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph3.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph3.getIncidentEdges(v));
+        }
+
+       compareIndexedGraphs(graph2, graph3);
 
         File file1 = new File(testFilename);
         File file2 = new File(testFilename2);
@@ -191,6 +223,16 @@ public class PajekNetIOTest extends TestCase
 
         assertEquals(graph1.getEdges().size(), 6);
 
+        System.err.println("graph1 = "+graph1);
+        for(Number edge : graph1.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph1.getDirectedness(edge));
+        }
+        for(Number v : graph1.getVertices()) {
+        	System.err.println(v+" outedges are "+graph1.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph1.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph1.getIncidentEdges(v));
+        }
+
         String testFilename = "utest.net";
         String testFilename2 = testFilename + "2";
 
@@ -202,6 +244,18 @@ public class PajekNetIOTest extends TestCase
         pnw.save(graph1, testFilename, gl, null, null);
 
         Graph<Number,Number> graph2 = pnr.load(testFilename);
+        
+        
+        System.err.println("graph2 = "+graph2);
+        for(Number edge : graph2.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph2.getDirectedness(edge));
+        }
+        for(Number v : graph2.getVertices()) {
+        	System.err.println(v+" outedges are "+graph2.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph2.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph2.getIncidentEdges(v));
+        }
+
 
         assertEquals(graph1.getVertices().size(), graph2.getVertices().size());
         assertEquals(graph1.getEdges().size(), graph2.getEdges().size());
@@ -210,6 +264,15 @@ public class PajekNetIOTest extends TestCase
         compareIndexedGraphs(graph1, graph2);
 
         Graph<Number,Number> graph3 = pnr.load(testFilename2);
+        System.err.println("graph3 = "+graph3);
+        for(Number edge : graph3.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph3.getDirectedness(edge));
+        }
+        for(Number v : graph3.getVertices()) {
+        	System.err.println(v+" outedges are "+graph3.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph3.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph3.getIncidentEdges(v));
+        }
 
         compareIndexedGraphs(graph2, graph3);
 
@@ -233,9 +296,9 @@ public class PajekNetIOTest extends TestCase
         GreekLabels<Number> gl = new GreekLabels<Number>(id);
         Number[] edges = { 0,1,2,3,4,5 };
 
-        graph1.addDirectedEdge(j++, 0, 1);
-        graph1.addDirectedEdge(j++, 0, 2);
-        graph1.addDirectedEdge(j++, 1, 2);
+        graph1.addEdge(j++, 0, 1, Edges.DIRECTED);
+        graph1.addEdge(j++, 0, 2, Edges.DIRECTED);
+        graph1.addEdge(j++, 1, 2, Edges.DIRECTED);
         graph1.addEdge(j++, 1, 3);
         graph1.addEdge(j++, 1, 4);
         graph1.addEdge(j++, 4, 3);
@@ -247,6 +310,16 @@ public class PajekNetIOTest extends TestCase
         }
         
         assertEquals(graph1.getEdges().size(), 6);
+
+        System.err.println(" mixed graph1 = "+graph1);
+        for(Number edge : graph1.getEdges()) {
+        	System.err.println("edge "+edge+" is directed? "+graph1.getDirectedness(edge));
+        }
+        for(Number v : graph1.getVertices()) {
+        	System.err.println(v+" outedges are "+graph1.getOutEdges(v));
+        	System.err.println(v+" inedges are "+graph1.getInEdges(v));
+        	System.err.println(v+" incidentedges are "+graph1.getIncidentEdges(v));
+        }
 
         String testFilename = "mtest.net";
         String testFilename2 = testFilename + "2";
