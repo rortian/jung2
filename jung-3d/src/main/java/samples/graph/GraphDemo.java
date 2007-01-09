@@ -28,6 +28,8 @@ import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung3d.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
 import edu.uci.ics.jung3d.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung3d.visualization.VisualizationViewer;
@@ -50,7 +52,7 @@ public class GraphDemo extends JPanel {
 		final VisualizationViewer<String,Number> vv = new VisualizationViewer<String,Number>();
 		Graph<String,Number> graph = //TestGraphs.getOneComponentGraph();
 			TestGraphs.getDemoGraph();
-		
+		vv.getRenderContext().setVertexStringer(new ToStringLabeller<String>());
 		Layout<String,Number> layout = new SpringLayout<String,Number>(graph);
 		vv.setGraphLayout(layout);
 		

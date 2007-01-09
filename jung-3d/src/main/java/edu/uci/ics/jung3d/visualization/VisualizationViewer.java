@@ -19,6 +19,7 @@ package edu.uci.ics.jung3d.visualization;
  * 
  */
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -32,9 +33,13 @@ import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Font3D;
+import javax.media.j3d.FontExtrusion;
 import javax.media.j3d.Group;
 import javax.media.j3d.Material;
 import javax.media.j3d.Node;
+import javax.media.j3d.OrientedShape3D;
+import javax.media.j3d.Text3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.JPanel;
@@ -45,23 +50,27 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
-import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
-import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
+import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.bidimap.DualHashBidiMap;
+
 import com.sun.j3d.utils.behaviors.mouse.MouseWheelZoom;
 import com.sun.j3d.utils.geometry.Primitive;
-import com.sun.j3d.utils.geometry.Sphere;
+import com.sun.j3d.utils.picking.PickTool;
+import com.sun.j3d.utils.picking.behaviors.PickingCallback;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung3d.visualization.PluggableRenderContext;
-import edu.uci.ics.jung3d.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.layout.VisRunner;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
+import edu.uci.ics.jung3d.visualization.control.MouseRotate;
+import edu.uci.ics.jung3d.visualization.control.MouseTranslate;
+import edu.uci.ics.jung3d.visualization.control.PickSphereBehavior;
+import edu.uci.ics.jung3d.visualization.control.PickTranslateBehavior;
 import edu.uci.ics.jung3d.visualization.layout.LayoutEventBroadcaster;
 
 /**
@@ -75,6 +84,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 	TransformGroup objTrans;
 //	Appearance vertexLook;
 //	Appearance edgeLook;
+	Appearance grayLook;
     /**
      * a listener used to cause pick events to result in
      * repaints, even if they come from another view
@@ -94,7 +104,7 @@ public class VisualizationViewer<V,E> extends JPanel {
     
     protected RenderContext<V,E> renderContext = new PluggableRenderContext<V,E>();
 
-	Map<V,VertexGroup> vertexMap = new HashMap<V,VertexGroup>();
+	BidiMap<V,VertexGroup> vertexMap = new DualHashBidiMap<V,VertexGroup>();
 	Map<E,EdgeGroup> edgeMap = new HashMap<E,EdgeGroup>();
 	Graph<V,E> graph;
 	Layout<V,E> layout;
@@ -107,7 +117,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 		renderContext.setPickedEdgeState(new MultiPickedState<E>());
 		GraphicsConfiguration config = 
 			SimpleUniverse.getPreferredConfiguration();
-		Canvas3D c = new Canvas3D(config);
+		final Canvas3D c = new Canvas3D(config);
 		add(c, BorderLayout.CENTER);
 		setPickedVertexState(new MultiPickedState<V>());
 		setPickedEdgeState(new MultiPickedState<E>());
@@ -129,7 +139,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 	}
 
 
-	public BranchGroup createSceneGraph(Canvas3D canvas) {
+	public BranchGroup createSceneGraph(final Canvas3D canvas) {
 
 		objRoot = new BranchGroup();
 		objRoot.setCapability(Group.ALLOW_CHILDREN_EXTEND);
@@ -193,7 +203,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 
 		Appearance objLook = new Appearance();
 		objLook.setMaterial(objMaterial);
-//		edgeLook = objLook;
+		grayLook = objLook;
 		final Appearance yellowLook = new Appearance();
 		yellowLook.setMaterial(yellowMaterial);
 		Bounds bounds =
@@ -213,8 +223,40 @@ public class VisualizationViewer<V,E> extends JPanel {
 
 		MouseTranslate behavior3 = new MouseTranslate();
 		behavior3.setTransformGroup(objTrans);
-		objTrans.addChild(behavior3);
+//		objTrans.addChild(behavior3);
 		behavior3.setSchedulingBounds(bounds);
+		
+		PickTranslateBehavior ptb = new PickTranslateBehavior(objRoot,canvas,bounds,PickTool.GEOMETRY);
+		ptb.setSchedulingBounds(bounds);
+		objTrans.addChild(ptb);
+		ptb.setupCallback(new PickingCallback() {
+
+			public void transformChanged(int type, TransformGroup tg) {
+				if(tg == null) return;
+				Transform3D t3d = new Transform3D();
+				tg.getTransform(t3d);
+//				System.err.println(tg+" transformChanged \n"+t3d);
+				Point3f p1 = new Point3f();
+				V v = vertexMap.getKey(tg);
+				Transform3D lvw = new Transform3D();
+//				tg.getLocalToVworld(lvw);
+//				System.err.println("lvw = \n"+lvw);
+//				lvw.invert();
+//				System.err.println("invert lvw = \n"+lvw);
+				Point3f p0 = layout.transform(v);
+//				Transform3D vwip = new Transform3D();
+//				canvas.getVworldToImagePlate(vwip);
+//				System.err.println("vwip=\n"+vwip);
+//				t3d.mul(lvw);
+				t3d.transform(p1);
+//				scale.transform(p1);
+				System.err.println("change location for vertex "+v+", transformGroup "+tg+" from "+p0+" to "+p1);
+//				p1.set(p1.getX()*2,p1.getY()*2,p1.getZ()*2);
+//				layout.setLocation(v, p1);
+				
+			}});
+		
+		PickSphereBehavior psb = new PickSphereBehavior(objRoot,canvas,bounds);
 
 		PickVertexBehavior pvb = new PickVertexBehavior(objRoot,canvas,bounds,renderContext.getPickedVertexState());
 		objTrans.addChild(pvb);
@@ -269,7 +311,42 @@ public class VisualizationViewer<V,E> extends JPanel {
 			vg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 			vertexMap.put(v, vg);
 			branch.addChild(vg);
+			String label = renderContext.getVertexStringer().transform(v);
+			if(label != null) {
+				String fontName = "Serif";
+				Font3D f3d = new Font3D(new Font(fontName, Font.PLAIN, 2),
+						new FontExtrusion());
+				Text3D txt = new Text3D(f3d, label, 
+						new Point3f(2f,2f,0));
+				OrientedShape3D textShape = new OrientedShape3D();
+				textShape.setGeometry(txt);
+				textShape.setAppearance(grayLook);
+//				textShape.setAlignmentAxis( 0.0f, 1.0f, 0.0f);
+				textShape.setAlignmentMode(OrientedShape3D.ROTATE_ABOUT_POINT);
+				textShape.setRotationPoint(new Point3f());
+//				objScale.addChild( textShape );
+//				BranchGroup bg = new BranchGroup();
+//				bg.addChild(textShape);
+//				branch.addChild(bg);
+				
+				
+				
+//				Text2D text = new Text2D(label+" more text here", new Color3f(0,0,0),"Serif",50,Font.BOLD);
+				Transform3D tt = new Transform3D();
+//				tt.setTranslation(new Vector3f(100,100,100));
+				tt.setScale(5);
+				TransformGroup tg = new TransformGroup(tt);
+//				textShape.setGeometry(text);
+				tg.addChild(textShape);
+				BranchGroup bg = new BranchGroup();
+				bg.addChild(tg);
+//				branch.addChild(bg);
+				vg.getLabelNode().addChild(bg);
+				
+			}
+
 		}
+		System.err.println("vertexMap = "+vertexMap);
 
 		for(E edge : graph.getEdges()) {
 			EdgeGroup<E> eg = 
@@ -353,6 +430,13 @@ public class VisualizationViewer<V,E> extends JPanel {
         }
         pickedEdgeState.addItemListener(pickEventListener);
     }
+
+	/**
+	 * @return the renderContext
+	 */
+	public RenderContext<V, E> getRenderContext() {
+		return renderContext;
+	}
 
 	
 //	public static void main(String argv[])
