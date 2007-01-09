@@ -52,6 +52,7 @@ import javax.swing.JRadioButton;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
 import edu.uci.ics.graph.predicates.GraphPredicate;
@@ -130,7 +131,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  * (or their incident edges) whose degree in the original graph is less than 4; 
  * otherwise, all vertices are drawn.
  * </ul>
- * <li/>Edge stuff:
+ * <li/>Edges stuff:
  * <ul>
  * <li/>"edge shape": selects between lines, wedges, quadratic curves, and cubic curves
  * for drawing edges.  
@@ -423,7 +424,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         
         // set up edge controls
 		JPanel gradient_panel = new JPanel(new GridLayout(1, 0));
-        gradient_panel.setBorder(BorderFactory.createTitledBorder("Edge paint"));
+        gradient_panel.setBorder(BorderFactory.createTitledBorder("Edges paint"));
 		no_gradient = new JRadioButton("Solid color");
 		no_gradient.addActionListener(this);
 		no_gradient.setSelected(true);
@@ -440,7 +441,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 		gradient_panel.add(gradient_relative);
         
         JPanel shape_panel = new JPanel(new GridLayout(3,2));
-        shape_panel.setBorder(BorderFactory.createTitledBorder("Edge shape"));
+        shape_panel.setBorder(BorderFactory.createTitledBorder("Edges shape"));
         e_line = new JRadioButton("line");
         e_line.addActionListener(this);
         e_line.setSelected(true);
@@ -961,10 +962,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         
         public boolean evaluateEdge(Graph<V,E> graph, E e)
         {
-            if (graph.isDirected(e) && show_d) {
+            if (graph.getDirectedness(e) == Edges.DIRECTED && show_d) {
                 return true;
             }
-            if (graph.isDirected(e) == false && show_u) {
+            if (graph.getDirectedness(e) == Edges.UNDIRECTED && show_u) {
                 return true;
             }
             return false;

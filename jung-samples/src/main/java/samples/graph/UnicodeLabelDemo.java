@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
@@ -194,23 +195,23 @@ public class UnicodeLabelDemo {
      * @param v an array of Vertices to connect
      */
     void createEdges(Integer[] v) {
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[3]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[4]);
-        graph.addDirectedEdge(new Double(Math.random()), v[4], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[3], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[1], v[2]);
-        graph.addDirectedEdge(new Double(Math.random()), v[1], v[4]);
-        graph.addDirectedEdge(new Double(Math.random()), v[8], v[2]);
-        graph.addDirectedEdge(new Double(Math.random()), v[3], v[8]);
-        graph.addDirectedEdge(new Double(Math.random()), v[6], v[7]);
-        graph.addDirectedEdge(new Double(Math.random()), v[7], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[9]);
-        graph.addDirectedEdge(new Double(Math.random()), v[9], v[8]);
-        graph.addDirectedEdge(new Double(Math.random()), v[7], v[6]);
-        graph.addDirectedEdge(new Double(Math.random()), v[6], v[5]);
-        graph.addDirectedEdge(new Double(Math.random()), v[4], v[2]);
-        graph.addDirectedEdge(new Double(Math.random()), v[5], v[4]);
+        graph.addEdge(new Double(Math.random()), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[0], v[3], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[0], v[4], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[4], v[5], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[3], v[5], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[1], v[2], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[1], v[4], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[8], v[2], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[3], v[8], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[6], v[7], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[7], v[5], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[0], v[9], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[9], v[8], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[7], v[6], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[6], v[5], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[4], v[2], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[5], v[4], Edges.DIRECTED);
     }
 
     /**

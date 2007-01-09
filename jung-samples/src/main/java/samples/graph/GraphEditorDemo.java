@@ -89,8 +89,8 @@ public class GraphEditorDemo extends JApplet implements Printable {
         "<ul>"+
         "<li>Right-click an empty area for <b>Create Vertex</b> popup"+
         "<li>Right-click on a Vertex for <b>Delete Vertex</b> popup"+
-        "<li>Right-click on a Vertex for <b>Add Edge</b> menus <br>(if there are selected Vertices)"+
-        "<li>Right-click on an Edge for <b>Delete Edge</b> popup"+
+        "<li>Right-click on a Vertex for <b>Add Edges</b> menus <br>(if there are selected Vertices)"+
+        "<li>Right-click on an Edges for <b>Delete Edges</b> popup"+
         "<li>Mousewheel scales with a crossover value of 1.0.<p>"+
         "     - scales the graph layout when the combined scale is greater than 1<p>"+
         "     - scales the graph view when the combined scale is less than 1"+
@@ -99,8 +99,8 @@ public class GraphEditorDemo extends JApplet implements Printable {
         "<h3>Editing Mode:</h3>"+
         "<ul>"+
         "<li>Left-click an empty area to create a new Vertex"+
-        "<li>Left-click on a Vertex and drag to another Vertex to create an Undirected Edge"+
-        "<li>Shift+Left-click on a Vertex and drag to another Vertex to create a Directed Edge"+
+        "<li>Left-click on a Vertex and drag to another Vertex to create an Undirected Edges"+
+        "<li>Shift+Left-click on a Vertex and drag to another Vertex to create a Directed Edges"+
         "</ul>"+
         "<h3>Picking Mode:</h3>"+
         "<ul>"+

@@ -108,6 +108,7 @@ public class ShowLayouts extends JApplet {
                         .getConstructor(new Class[] {Graph.class});
                 Object o = constructor.newInstance(constructorArgs);
                 Layout l = (Layout) o;
+                l.setInitializer(vv.getGraphLayout());
 //                vv.getModel().stop();
                 vv.setGraphLayout(l, false);
 //                vv.getModel().restart();
@@ -121,7 +122,7 @@ public class ShowLayouts extends JApplet {
 
     private static JPanel getGraphPanel()
     {
-        g_array = //(Graph<Object, ? extends Edge<Object>>)
+        g_array = //(Graph<Object, ? extends Edges<Object>>)
             (Graph<? extends Object,? extends Object>[])
             new Graph<?,?>[graph_names.length];
         

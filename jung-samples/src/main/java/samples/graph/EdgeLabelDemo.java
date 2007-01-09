@@ -37,6 +37,7 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.graph.Edges;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -109,7 +110,7 @@ public class EdgeLabelDemo extends JApplet {
         
         Transformer<Number,String> stringer = new Transformer<Number,String>(){
             public String transform(Number e) {
-                return "Edge:"+graph.getEndpoints(e).toString();
+                return "Edges:"+graph.getEndpoints(e).toString();
             }
         };
         vv.getRenderContext().setEdgeStringer(stringer);
@@ -175,7 +176,7 @@ public class EdgeLabelDemo extends JApplet {
 
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         
-        JCheckBox rotate = new JCheckBox("<html><center>Edge<p>Parallel</center></html>");
+        JCheckBox rotate = new JCheckBox("<html><center>Edges<p>Parallel</center></html>");
         rotate.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 AbstractButton b = (AbstractButton)e.getSource();
@@ -227,7 +228,7 @@ public class EdgeLabelDemo extends JApplet {
         zoomPanel.add(minus);
 
         JPanel edgePanel = new JPanel(new GridLayout(0,1));
-        edgePanel.setBorder(BorderFactory.createTitledBorder("Edge Type"));
+        edgePanel.setBorder(BorderFactory.createTitledBorder("Edges Type"));
         edgePanel.add(lineButton);
         edgePanel.add(quadButton);
         edgePanel.add(cubicButton);
@@ -246,7 +247,7 @@ public class EdgeLabelDemo extends JApplet {
         sliderPanel.add(edgeOffsetSlider);
         sliderLabelPanel.add(new JLabel("Directed", JLabel.RIGHT));
         sliderLabelPanel.add(new JLabel("Undirected", JLabel.RIGHT));
-        sliderLabelPanel.add(new JLabel("Edge", JLabel.RIGHT));
+        sliderLabelPanel.add(new JLabel("Edges", JLabel.RIGHT));
         offsetPanel.add(sliderLabelPanel, BorderLayout.WEST);
         offsetPanel.add(sliderPanel);
         labelPanel.add(offsetPanel);
@@ -327,11 +328,11 @@ public class EdgeLabelDemo extends JApplet {
      * @param v an array of Vertices to connect
      */
     void createEdges(Integer[] v) {
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[0], v[1]);
-        graph.addDirectedEdge(new Double(Math.random()), v[1], v[0]);
-        graph.addDirectedEdge(new Double(Math.random()), v[1], v[0]);
+        graph.addEdge(new Double(Math.random()), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[0], v[1], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[1], v[0], Edges.DIRECTED);
+        graph.addEdge(new Double(Math.random()), v[1], v[0], Edges.DIRECTED);
         graph.addEdge(new Double(Math.random()), v[1], v[2]);
         graph.addEdge(new Double(Math.random()), v[1], v[2]);
     }
