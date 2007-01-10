@@ -56,7 +56,7 @@ import edu.uci.ics.graph.Graph;
  * At the end of this code, the new graph <code>sub_g</code> contains a copy of
  * some edges, and all nodes, of <code>g</code>. From here, we can treat it as
  * a <code>Graph</code>. Note that calls like 
- * {@link edu.uci.ics.jung.graph.ArchetypeVertex#getEqualVertex(ArchetypeGraph) getEquivalentVertex( Graph )} 
+ * {@link edu.uci.ics.jung.graph.ArchetypeVertex#getEqualVertex(Graph) getEquivalentVertex( Graph )} 
  * will do the right thing on the vertices of <code>sub_g</code> and point back to <code>g</code>.
  * <p>
  * In addition, we now have access to the <code>{@link edu.uci.ics.jung.graph.filters.GraphAssemblyRecord GraphAssemblyRecord}</code>

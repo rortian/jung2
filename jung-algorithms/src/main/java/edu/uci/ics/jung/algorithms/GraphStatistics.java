@@ -186,7 +186,7 @@ public class GraphStatistics
      * of the length of the shortest path from <code>u</code> to 
      * <code>v</code>, or <code>Double.POSITIVE_INFINITY</code>
      * if any of these distances do not exist.
-     * @see #diameter(ArchetypeGraph, Distance, boolean)
+     * @see #diameter(Graph, Distance, boolean)
      */
     public static <V, E> double diameter(Graph<V,E> g, Distance<V> d)
     {
@@ -195,7 +195,7 @@ public class GraphStatistics
     
     /**
      * Returns the diameter of <code>g</code>, ignoring edge weights.
-     * @see #diameter(ArchetypeGraph, Distance, boolean)
+     * @see #diameter(Graph, Distance, boolean)
      */
     public static <V, E> double diameter(Graph<V,E> g)
     {

@@ -28,9 +28,9 @@ public interface GraphElementAccessor<V, E>
     V getVertex(Layout<V,E> layout, double x, double y);
 
     /**
-     * Returns an <code>Edges</code> which is associated with the 
+     * Returns an <code>Edge</code> which is associated with the 
      * location <code>(x,y)</code>.  This is typically determined
-     * with respect to the <code>Edges</code>'s location as specified
+     * with respect to the <code>Edge</code>'s location as specified
      * by a Layout.
      */
     E getEdge(Layout<V,E> layout, double x, double y);

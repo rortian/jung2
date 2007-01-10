@@ -58,12 +58,7 @@ public class EdgeBetweennessClusterer<V,E> implements GraphClusterer<V,E,V> {
     * @param g the graph
     */
     public ClusterSet<V,E,V> extract(Graph<V,E> graph) {
-        
-//        if (!(g instanceof Graph))
-//            throw new IllegalArgumentException("Argument must be of type Graph.");
-
-//        Graph graph = (Graph)g;
-        
+                
         if (mNumEdgesToRemove < 0 || mNumEdgesToRemove > graph.getEdges().size()) {
             throw new IllegalArgumentException("Invalid number of edges passed in.");
         }

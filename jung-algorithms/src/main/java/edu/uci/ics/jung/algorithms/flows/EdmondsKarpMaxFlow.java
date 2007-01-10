@@ -22,7 +22,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.jung.algorithms.IterativeProcess;
 
 
@@ -96,7 +96,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
 			mFlowGraph = directedGraph.getClass().newInstance();
 			for(E e : mOriginalGraph.getEdges()) {
 				mFlowGraph.addEdge(e, mOriginalGraph.getSource(e), 
-						mOriginalGraph.getDest(e), Edges.DIRECTED);
+						mOriginalGraph.getDest(e), EdgeType.DIRECTED);
 			}
 			for(V v : mOriginalGraph.getVertices()) {
 				mFlowGraph.addVertex(v);
@@ -250,7 +250,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
             Number capacity = edgeCapacityMap.get(edge);
 
             if (capacity == null) {
-                throw new IllegalArgumentException("Edges capacities must be provided in map passed to ctor");
+                throw new IllegalArgumentException("Edge capacities must be provided in map passed to ctor");
             }
             residualCapacityMap.put(edge, capacity);
 
@@ -259,7 +259,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
 
             if(mFlowGraph.isPredecessor(source, destination) == false) {
             	E backEdge = edgeFactory.transform(mFlowGraph);
-            	mFlowGraph.addEdge(backEdge, destination, source, Edges.DIRECTED);
+            	mFlowGraph.addEdge(backEdge, destination, source, EdgeType.DIRECTED);
                 residualCapacityMap.put(backEdge, 0);
             }
         }
