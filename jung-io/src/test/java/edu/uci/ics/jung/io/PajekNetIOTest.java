@@ -33,7 +33,7 @@ import org.apache.commons.collections15.TransformerUtils;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
@@ -117,7 +117,6 @@ public class PajekNetIOTest extends TestCase
         pnr.setVertexFactory(vertexFactory);
         pnr.setEdgeFactory(edgeFactory);
         Graph g = pnr.load(r);
-        
         assertEquals(g.getVertices().size(), 3);
         assertEquals(g.getEdges().size(), 2);
     }
@@ -142,7 +141,7 @@ public class PajekNetIOTest extends TestCase
         
         System.err.println("graph1 = "+graph1);
         for(Number edge : graph1.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph1.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph1.getEdgeType(edge));
         }
         for(Number v : graph1.getVertices()) {
         	System.err.println(v+" outedges are "+graph1.getOutEdges(v));
@@ -166,7 +165,7 @@ public class PajekNetIOTest extends TestCase
 
         System.err.println("graph2 = "+graph2);
         for(Number edge : graph2.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph2.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph2.getEdgeType(edge));
         }
         for(Number v : graph2.getVertices()) {
         	System.err.println(v+" outedges are "+graph2.getOutEdges(v));
@@ -185,7 +184,7 @@ public class PajekNetIOTest extends TestCase
 
         System.err.println("graph3 = "+graph3);
         for(Number edge : graph3.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph3.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph3.getEdgeType(edge));
         }
         for(Number v : graph3.getVertices()) {
         	System.err.println(v+" outedges are "+graph3.getOutEdges(v));
@@ -225,7 +224,7 @@ public class PajekNetIOTest extends TestCase
 
         System.err.println("graph1 = "+graph1);
         for(Number edge : graph1.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph1.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph1.getEdgeType(edge));
         }
         for(Number v : graph1.getVertices()) {
         	System.err.println(v+" outedges are "+graph1.getOutEdges(v));
@@ -248,7 +247,7 @@ public class PajekNetIOTest extends TestCase
         
         System.err.println("graph2 = "+graph2);
         for(Number edge : graph2.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph2.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph2.getEdgeType(edge));
         }
         for(Number v : graph2.getVertices()) {
         	System.err.println(v+" outedges are "+graph2.getOutEdges(v));
@@ -266,7 +265,7 @@ public class PajekNetIOTest extends TestCase
         Graph<Number,Number> graph3 = pnr.load(testFilename2);
         System.err.println("graph3 = "+graph3);
         for(Number edge : graph3.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph3.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph3.getEdgeType(edge));
         }
         for(Number v : graph3.getVertices()) {
         	System.err.println(v+" outedges are "+graph3.getOutEdges(v));
@@ -296,9 +295,9 @@ public class PajekNetIOTest extends TestCase
         GreekLabels<Number> gl = new GreekLabels<Number>(id);
         Number[] edges = { 0,1,2,3,4,5 };
 
-        graph1.addEdge(j++, 0, 1, Edges.DIRECTED);
-        graph1.addEdge(j++, 0, 2, Edges.DIRECTED);
-        graph1.addEdge(j++, 1, 2, Edges.DIRECTED);
+        graph1.addEdge(j++, 0, 1, EdgeType.DIRECTED);
+        graph1.addEdge(j++, 0, 2, EdgeType.DIRECTED);
+        graph1.addEdge(j++, 1, 2, EdgeType.DIRECTED);
         graph1.addEdge(j++, 1, 3);
         graph1.addEdge(j++, 1, 4);
         graph1.addEdge(j++, 4, 3);
@@ -313,7 +312,7 @@ public class PajekNetIOTest extends TestCase
 
         System.err.println(" mixed graph1 = "+graph1);
         for(Number edge : graph1.getEdges()) {
-        	System.err.println("edge "+edge+" is directed? "+graph1.getDirectedness(edge));
+        	System.err.println("edge "+edge+" is directed? "+graph1.getEdgeType(edge));
         }
         for(Number v : graph1.getVertices()) {
         	System.err.println(v+" outedges are "+graph1.getOutEdges(v));

@@ -18,7 +18,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -29,7 +29,7 @@ import edu.uci.ics.graph.Graph;
 public class GraphMLFileHandler<V,E> extends DefaultHandler {
     private Graph<V,E> mGraph;
     private Map<String,V> mLabeller;
-    private Edges default_directed;
+    private EdgeType default_directed;
     private Factory<V> vertexFactory;
     private Factory<E> edgeFactory;
     private Factory<Graph<V,E>> graphFactory;
@@ -88,7 +88,7 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
                  mLabeller.get(targetId);
 
         String direction = attributeMap.remove("directed");
-        Edges directed;
+        EdgeType directed;
         if (direction == null)
         {
             // use default_directed
@@ -98,22 +98,16 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
         {
             // use specified direction
             if (direction.equals("true"))
-                directed = Edges.DIRECTED;
+                directed = EdgeType.DIRECTED;
             else if (direction.equals("false"))
-                directed = Edges.UNDIRECTED;
+                directed = EdgeType.UNDIRECTED;
             else
                 throw new RuntimeException("Error parsing graph: 'directed' tag has invalid value: " + direction);
         }
-//        Edges e = GraphUtils.addEdge(mGraph, sourceVertex, targetVertex);
         E e = edgeFactory.create();
         mGraph.addEdge(e, sourceVertex, targetVertex, directed);
         
         edgeAttributes.get(e).putAll(attributeMap);
-//        for(String key : attributeMap.keySet()) {
-//            String value = attributeMap.get(key);
-//            Map<String,String> edgeAttributeMap = edgeAttributes.get(e);
-//            edgeAttributeMap.put(key, value);
-//        }
 
         return e;
     }
@@ -122,27 +116,20 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
         String edgeDefaultType = attributeMap.remove("edgedefault");
         mGraph = graphFactory.create();
         if (edgeDefaultType.equals("directed")) {
-            default_directed = Edges.DIRECTED;
-//          mGraph = new DirectedSparseGraph();
+            default_directed = EdgeType.DIRECTED;
         } 
         else if (edgeDefaultType.equals("undirected")) 
         {
-            default_directed = Edges.UNDIRECTED;
-//            mGraph = new UndirectedSparseGraph();
+            default_directed = EdgeType.UNDIRECTED;
         } 
         else {
-            throw new RuntimeException("Error parsing graph. Edges default type not specified.");
+            throw new RuntimeException("Error parsing graph. EdgeType default type not specified.");
         }
 
         mLabeller = new HashMap<String,V>();
         	//StringLabeller.getLabeller(mGraph);
 
         graphAttributes.putAll(attributeMap);
-//        for (Iterator keyIt = attributeMap.keySet().iterator(); keyIt.hasNext();) {
-//            Object key = keyIt.next();
-//            Object value = attributeMap.get(key);
-//            mGraph.setUserDatum(key, value, UserData.SHARED);
-//        }
 
     }
 
@@ -159,21 +146,8 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
         if(mLabeller.put(idString, vertex) != null) {
         	throw new RuntimeException("Ids must be unique");
         }
-//        try {
-//            mLabeller.setLabel((Vertex) vertex,idString);
-//        } catch (StringLabeller.UniqueLabelException ule) {
-//            throw new FatalException("Ids must be unique");
-//
-//        }
 
         vertexAttributes.get(vertex).putAll(attributeMap);
-//        for (Iterator keyIt = attributeMap.keySet().iterator();
-//             keyIt.hasNext();
-//                ) {
-//            Object key = keyIt.next();
-//            Object value = attributeMap.get(key);
-//            vertex.setUserDatum(key, value, UserData.SHARED);
-//        }
         return vertex;
     }
 

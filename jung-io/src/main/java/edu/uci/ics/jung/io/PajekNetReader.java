@@ -28,7 +28,7 @@ import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.OrPredicate;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
@@ -424,20 +424,20 @@ public class PajekNetReader<V,E> {
         // in "*Arcs" and this graph is not strictly undirected
 //        boolean reading_arcs = a_pred.evaluate(nextLine) && 
 //            !PredicateUtils.enforcesUndirected(g);
-//        // in "*Edges" and this graph is not strictly directed
+//        // in "*EdgeType" and this graph is not strictly directed
 //        boolean reading_edges = e_pred.evaluate(nextLine) && 
 //            !PredicateUtils.enforcesDirected(g);
 
         boolean reading_arcs = false;
         boolean reading_edges = false;
-        Edges directedness = null;
+        EdgeType directedness = null;
         if (a_pred.evaluate(nextLine))
         {
             if (g instanceof UndirectedGraph) {
                 throw new IllegalArgumentException("Supplied undirected-only graph cannot be populated with directed edges");
             } else {
                 reading_arcs = true;
-                directedness = Edges.DIRECTED;
+                directedness = EdgeType.DIRECTED;
             }
         }
         if (e_pred.evaluate(nextLine))
@@ -446,7 +446,7 @@ public class PajekNetReader<V,E> {
                 throw new IllegalArgumentException("Supplied directed-only graph cannot be populated with undirected edges");
             else
                 reading_edges = true;
-            directedness = Edges.UNDIRECTED;
+            directedness = EdgeType.UNDIRECTED;
         }
         
         if (!(reading_arcs || reading_edges))
@@ -493,7 +493,7 @@ public class PajekNetReader<V,E> {
     }
 
     protected E createAddEdge(StringTokenizer st, V v1, 
-            Edges directed, Graph<V,E> g, List<V> id, boolean parallel_ok)
+            EdgeType directed, Graph<V,E> g, List<V> id, boolean parallel_ok)
     {
         int vid2 = Integer.parseInt(st.nextToken()) - 1;
         V v2 = id.get(vid2);
