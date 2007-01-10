@@ -17,7 +17,7 @@ import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -45,7 +45,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Shape arrowShape;
     protected VisualizationServer.Paintable edgePaintable;
     protected VisualizationServer.Paintable arrowPaintable;
-    Edges edgeIsDirected;
+    EdgeType edgeIsDirected;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
@@ -106,7 +106,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                     transformEdgeShape(down, down);
                     vv.addPostRenderPaintable(edgePaintable);
                     if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0) {
-                        edgeIsDirected = Edges.DIRECTED;
+                        edgeIsDirected = EdgeType.DIRECTED;
                         transformArrowShape(down, e.getPoint());
                         vv.addPostRenderPaintable(arrowPaintable);
                     } 
@@ -164,7 +164,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             }
             startVertex = null;
             down = null;
-            edgeIsDirected = Edges.UNDIRECTED;
+            edgeIsDirected = EdgeType.UNDIRECTED;
             vv.removePostRenderPaintable(edgePaintable);
             vv.removePostRenderPaintable(arrowPaintable);
         }
@@ -178,7 +178,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         if(checkModifiers(e)) {
             if(startVertex != null) {
                 transformEdgeShape(down, e.getPoint());
-                if(edgeIsDirected == Edges.DIRECTED) {
+                if(edgeIsDirected == EdgeType.DIRECTED) {
                     transformArrowShape(down, e.getPoint());
                 }
             }

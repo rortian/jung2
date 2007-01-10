@@ -23,7 +23,7 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -153,7 +153,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     // note that arrows implicitly use the edge's draw paint
                     g.fill(arrow);
                 }
-                if (graph.getDirectedness(e) == Edges.UNDIRECTED) {
+                if (graph.getEdgeType(e) == EdgeType.UNDIRECTED) {
                     Shape vertexShape = 
                         rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getFirst());
                     xf = AffineTransform.getTranslateInstance(x1, y1);

@@ -58,14 +58,14 @@ public class GraphCollapser  {
             if(cluster.containsAll(endpoints) == false) {
 
                 if(cluster.contains(endpoints.getFirst())) {
-                	graph.addEdge(e, clusterGraph, endpoints.getSecond(), inGraph.getDirectedness(e));
+                	graph.addEdge(e, clusterGraph, endpoints.getSecond(), inGraph.getEdgeType(e));
 //                    if(inGraph.isDirected(e)) {
 //                        graph.addDirectedEdge(e, clusterGraph, endpoints.getSecond());
 //                    } else {
 //                        graph.addEdge(e, clusterGraph, endpoints.getSecond());
 //                    }
                 } else if(cluster.contains(endpoints.getSecond())) {
-                	graph.addEdge(e, endpoints.getFirst(), clusterGraph, inGraph.getDirectedness(e));
+                	graph.addEdge(e, endpoints.getFirst(), clusterGraph, inGraph.getEdgeType(e));
 //                    if(inGraph.isDirected(e)) {
 //                        graph.addDirectedEdge(e, endpoints.getFirst(), clusterGraph);
 //                    } else {
@@ -75,7 +75,7 @@ public class GraphCollapser  {
 //                    if(inGraph.isDirected(e)) {
 //                        graph.addDirectedEdge(e, endpoints.getFirst(), endpoints.getSecond());
 //                    } else {
-                        graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond(), inGraph.getDirectedness(e));
+                        graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond(), inGraph.getEdgeType(e));
 //                    }
                 }
             }
@@ -101,7 +101,7 @@ public class GraphCollapser  {
 //                if(clusterGraph.isDirected(edge)) {
 //                    graph.addDirectedEdge(edge, endpoints.getFirst(), endpoints.getSecond());
 //                } else {
-                    graph.addEdge(edge, endpoints.getFirst(), endpoints.getSecond(), clusterGraph.getDirectedness(edge));
+                    graph.addEdge(edge, endpoints.getFirst(), endpoints.getSecond(), clusterGraph.getEdgeType(edge));
 //                }
             }
         }
@@ -131,7 +131,7 @@ public class GraphCollapser  {
 //                            if(inGraph.isDirected(edge)) {
 //                                graph.addDirectedEdge(edge, newV1, v2);
 //                            } else {
-                                graph.addEdge(edge, newV1, v2, inGraph.getDirectedness(edge));
+                                graph.addEdge(edge, newV1, v2, inGraph.getEdgeType(edge));
 //                            }
                         } else if(clusterGraph.equals(v2)) {
                             // i need a new v2
@@ -141,13 +141,13 @@ public class GraphCollapser  {
 //                            if(inGraph.isDirected(edge)) {
 //                                graph.addDirectedEdge(edge, v1, newV2);
 //                            } else {
-                                graph.addEdge(edge, v1, newV2, inGraph.getDirectedness(edge));
+                                graph.addEdge(edge, v1, newV2, inGraph.getEdgeType(edge));
 //                            }
                         } else {
 //                            if(inGraph.isDirected(edge)) {
 //                                graph.addDirectedEdge(edge, v1, v2);
 //                            } else {
-                                graph.addEdge(edge, v1, v2, inGraph.getDirectedness(edge));
+                                graph.addEdge(edge, v1, v2, inGraph.getEdgeType(edge));
 //                            }
                         }
                     }
@@ -209,7 +209,7 @@ public class GraphCollapser  {
 //                if(inGraph.isDirected(edge)) {
 //                    clusterGraph.addDirectedEdge(edge, v1, v2);
 //                } else {
-                    clusterGraph.addEdge(edge, v1, v2, inGraph.getDirectedness(edge));
+                    clusterGraph.addEdge(edge, v1, v2, inGraph.getEdgeType(edge));
 //                }
                 }
             }

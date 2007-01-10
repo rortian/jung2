@@ -122,7 +122,7 @@ public class ShowLayouts extends JApplet {
 
     private static JPanel getGraphPanel()
     {
-        g_array = //(Graph<Object, ? extends Edges<Object>>)
+        g_array = 
             (Graph<? extends Object,? extends Object>[])
             new Graph<?,?>[graph_names.length];
         

@@ -12,7 +12,7 @@ import javax.swing.JPopupMenu;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -59,7 +59,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
             if(vertex != null) {
                 Set<V> picked = pickedVertexState.getPicked();
                 if(picked.size() > 0) {
-                    JMenu directedMenu = new JMenu("Create Directed Edges");
+                    JMenu directedMenu = new JMenu("Create Directed EdgeType");
                     popup.add(directedMenu);
                     for(final V other : picked) {
 //                        final Number other = iterator.next();
@@ -68,12 +68,12 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
 //                                Number newEdge = new Number(other, vertex);
                                 graph.addEdge(edgeFactory.create(),
 //                                		graph.getEdges().size(), 
-                                		other, vertex, Edges.DIRECTED);
+                                		other, vertex, EdgeType.DIRECTED);
                                 vv.repaint();
                             }
                         });
                     }
-                    JMenu undirectedMenu = new JMenu("Create Undirected Edges");
+                    JMenu undirectedMenu = new JMenu("Create Undirected EdgeType");
                     popup.add(undirectedMenu);
                     for(final V other : picked) {
                         undirectedMenu.add(new AbstractAction("[" + other+","+vertex+"]") {
@@ -93,7 +93,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                         vv.repaint();
                     }});
             } else if(edge != null) {
-                popup.add(new AbstractAction("Delete Edges") {
+                popup.add(new AbstractAction("Delete EdgeType") {
                     public void actionPerformed(ActionEvent e) {
                         pickedEdgeState.pick(edge, false);
                         graph.removeEdge(edge);

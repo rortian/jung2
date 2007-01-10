@@ -36,7 +36,7 @@ import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
  * PickingGraphMousePlugin supports the picking of graph elements
  * with the mouse. MouseButtonOne picks a single vertex
  * or edge, and MouseButtonTwo adds to the set of selected Vertices
- * or Edges. If a Vertex is selected and the mouse is dragged while
+ * or EdgeType. If a Vertex is selected and the mouse is dragged while
  * on the selected Vertex, then that Vertex will be repositioned to
  * follow the mouse until the button is released.
  * 

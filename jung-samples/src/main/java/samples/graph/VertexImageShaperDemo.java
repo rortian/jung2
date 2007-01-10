@@ -40,7 +40,7 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.Checkmark;
@@ -369,25 +369,25 @@ public class VertexImageShaperDemo extends JApplet {
             graph.addVertex(i);
         }
     	int j=0;
-        graph.addEdge(j++, 0, 1, Edges.DIRECTED);
-        graph.addEdge(j++, 3, 0, Edges.DIRECTED);
-        graph.addEdge(j++, 0, 4, Edges.DIRECTED);
-        graph.addEdge(j++, 4, 5, Edges.DIRECTED);
-        graph.addEdge(j++, 5, 3, Edges.DIRECTED);
-        graph.addEdge(j++, 2, 1, Edges.DIRECTED);
-        graph.addEdge(j++, 4, 1, Edges.DIRECTED);
-        graph.addEdge(j++, 8, 2, Edges.DIRECTED);
-        graph.addEdge(j++, 3, 8, Edges.DIRECTED);
-        graph.addEdge(j++, 6, 7, Edges.DIRECTED);
-        graph.addEdge(j++, 7, 5, Edges.DIRECTED);
-        graph.addEdge(j++, 0, 9, Edges.DIRECTED);
-        graph.addEdge(j++, 9, 8, Edges.DIRECTED);
-        graph.addEdge(j++, 7, 6, Edges.DIRECTED);
-        graph.addEdge(j++, 6, 5, Edges.DIRECTED);
-        graph.addEdge(j++, 4, 2, Edges.DIRECTED);
-        graph.addEdge(j++, 5, 4, Edges.DIRECTED);
-        graph.addEdge(j++, 4, 10, Edges.DIRECTED);
-        graph.addEdge(j++, 10, 4, Edges.DIRECTED);
+        graph.addEdge(j++, 0, 1, EdgeType.DIRECTED);
+        graph.addEdge(j++, 3, 0, EdgeType.DIRECTED);
+        graph.addEdge(j++, 0, 4, EdgeType.DIRECTED);
+        graph.addEdge(j++, 4, 5, EdgeType.DIRECTED);
+        graph.addEdge(j++, 5, 3, EdgeType.DIRECTED);
+        graph.addEdge(j++, 2, 1, EdgeType.DIRECTED);
+        graph.addEdge(j++, 4, 1, EdgeType.DIRECTED);
+        graph.addEdge(j++, 8, 2, EdgeType.DIRECTED);
+        graph.addEdge(j++, 3, 8, EdgeType.DIRECTED);
+        graph.addEdge(j++, 6, 7, EdgeType.DIRECTED);
+        graph.addEdge(j++, 7, 5, EdgeType.DIRECTED);
+        graph.addEdge(j++, 0, 9, EdgeType.DIRECTED);
+        graph.addEdge(j++, 9, 8, EdgeType.DIRECTED);
+        graph.addEdge(j++, 7, 6, EdgeType.DIRECTED);
+        graph.addEdge(j++, 6, 5, EdgeType.DIRECTED);
+        graph.addEdge(j++, 4, 2, EdgeType.DIRECTED);
+        graph.addEdge(j++, 5, 4, EdgeType.DIRECTED);
+        graph.addEdge(j++, 4, 10, EdgeType.DIRECTED);
+        graph.addEdge(j++, 10, 4, EdgeType.DIRECTED);
     }
 
     /** 

@@ -27,7 +27,7 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 
 /**
- * ShapePickSupport provides access to Vertices and Edges based on
+ * ShapePickSupport provides access to Vertices and EdgeType based on
  * their actual shapes. 
  * 
  * @author Tom Nelson - RABA Technologies

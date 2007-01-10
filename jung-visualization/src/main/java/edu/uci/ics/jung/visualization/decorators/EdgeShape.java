@@ -17,7 +17,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.QuadCurve2D;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
@@ -315,7 +315,7 @@ public class EdgeShape<V,E>  {
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
                 return Loop.instance;
-            else if (graph.getDirectedness(e) == Edges.DIRECTED)
+            else if (graph.getEdgeType(e) == EdgeType.DIRECTED)
                 return triangle;
             else
                 return bowtie;
