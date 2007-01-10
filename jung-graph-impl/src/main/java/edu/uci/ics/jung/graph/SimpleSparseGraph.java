@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
@@ -80,15 +80,15 @@ public class SimpleSparseGraph<V,E>
     }
     
     public boolean addEdge(E e, V v1, V v2) {
-        return addEdge(e, v1, v2, Edges.UNDIRECTED);
+        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
     }
     
-    public boolean addEdge(E edge, V v1, V v2, Edges directed) {
+    public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
         if (edges.containsKey(edge)) {
             Pair<V> endpoints = edges.get(edge);
             Pair<V> new_endpoints = new Pair<V>(v1, v2);
             if (!endpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("Edges " + edge + 
+                throw new IllegalArgumentException("EdgeType " + edge + 
                         " exists in this graph with endpoints " + v1 + ", " + v2);
             } else {
                 return false;
@@ -103,76 +103,17 @@ public class SimpleSparseGraph<V,E>
         
         Pair<V> endpoints = new Pair<V>(v1, v2);
         edges.put(edge, endpoints);
-//        vertices.get(v1).getFirst().add(edge);        
-//        vertices.get(v1).getSecond().add(edge);        
-        if(directed == Edges.DIRECTED) {
-          vertices.get(v1).getSecond().add(edge);        
-          vertices.get(v2).getFirst().add(edge);        
+        vertices.get(v1).getSecond().add(edge);        
+        vertices.get(v2).getFirst().add(edge);        
+        if(edgeType == EdgeType.DIRECTED) {
         	directedEdges.add(edge);
         } else {
           vertices.get(v1).getFirst().add(edge);        
-          vertices.get(v1).getSecond().add(edge);        
-          vertices.get(v2).getFirst().add(edge);        
           vertices.get(v2).getSecond().add(edge);        
         }
         
         return true;
     }
-
-//    public boolean addDirectedEdge(E edge, V v1, V v2, boolean directed) {
-//        if (edges.containsKey(edge)) {
-//            Pair<V> endpoints = edges.get(edge);
-//            Pair<V> new_endpoints = new Pair<V>(v1, v2);
-//            if (!endpoints.equals(new_endpoints)) {
-//                throw new IllegalArgumentException("Edges " + edge + 
-//                        " exists in this graph with endpoints " + v1 + ", " + v2);
-//            } else {
-//                return false;
-//            }
-//        }
-//        
-//        if (!vertices.containsKey(v1))
-//            this.addVertex(v1);
-//        
-//        if (!vertices.containsKey(v2))
-//            this.addVertex(v2);
-//        
-//        Pair<V> endpoints = new Pair<V>(v1, v2);
-//        edges.put(edge, endpoints);
-//        vertices.get(v1).getSecond().add(edge);        
-//        vertices.get(v2).getFirst().add(edge);        
-//        
-//        directedEdges.add(edge);
-//        return true;
-//    }
-//    
-//    public boolean addUndirectedEdge(E edge, V v1, V v2) {
-//        if (edges.containsKey(edge)) {
-//            Pair<V> endpoints = edges.get(edge);
-//            Pair<V> new_endpoints = new Pair<V>(v1, v2);
-//            if (!endpoints.equals(new_endpoints)) {
-//                throw new IllegalArgumentException("Edges " + edge + 
-//                        " exists in this graph with endpoints " + v1 + ", " + v2);
-//            } else {
-//                return false;
-//            }
-//        }
-//        
-//        if (!vertices.containsKey(v1))
-//            this.addVertex(v1);
-//        
-//        if (!vertices.containsKey(v2))
-//            this.addVertex(v2);
-//        
-//        Pair<V> endpoints = new Pair<V>(v1, v2);
-//        edges.put(edge, endpoints);
-//        vertices.get(v1).getFirst().add(edge);        
-//        vertices.get(v1).getSecond().add(edge);        
-//        vertices.get(v2).getFirst().add(edge);        
-//        vertices.get(v2).getSecond().add(edge);        
-//        
-//        return true;
-//    }
 
     public boolean removeEdge(E edge)
     {
@@ -212,9 +153,13 @@ public class SimpleSparseGraph<V,E>
     {
         Set<E> incoming = vertices.get(vertex).getFirst();        
         Set<V> preds = new HashSet<V>();
-        for (E edge : incoming)
-            preds.add(this.getSource(edge));
-        
+        for (E edge : incoming) {
+        	if(getEdgeType(edge) == EdgeType.DIRECTED) {
+        		preds.add(this.getSource(edge));
+        	} else {
+        		preds.add(getOpposite(vertex, edge));
+        	}
+        }
         return Collections.unmodifiableCollection(preds);
     }
 
@@ -222,9 +167,13 @@ public class SimpleSparseGraph<V,E>
     {
         Set<E> outgoing = vertices.get(vertex).getSecond();        
         Set<V> succs = new HashSet<V>();
-        for (E edge : outgoing)
-            succs.add(this.getDest(edge));
-        
+        for (E edge : outgoing) {
+        	if(getEdgeType(edge) == EdgeType.DIRECTED) {
+        		succs.add(this.getDest(edge));
+        	} else {
+        		succs.add(getOpposite(vertex, edge));
+        	}
+        }
         return Collections.unmodifiableCollection(succs);
     }
 
@@ -248,7 +197,7 @@ public class SimpleSparseGraph<V,E>
     {
         Set<E> outgoing = vertices.get(v1).getSecond();
         for (E edge : outgoing)
-            if (this.getDest(edge).equals(v2))
+            if (this.getOpposite(v1, edge).equals(v2))
                 return edge;
         
         return null;
@@ -259,38 +208,44 @@ public class SimpleSparseGraph<V,E>
         return edges.get(edge);
     }
 
-    public V getSource(E edge)
-    {
-        return this.getEndpoints(edge).getFirst();
-    }
-
-    public V getDest(E edge)
-    {
-        return this.getEndpoints(edge).getSecond();
-    }
-
-    public boolean isSource(V vertex, E edge)
-    {
-        return vertex.equals(this.getEndpoints(edge).getFirst());
-    }
-
-    public boolean isDest(V vertex, E edge)
-    {
-        return vertex.equals(this.getEndpoints(edge).getSecond());
-    }
-
-    public Edges getDirectedness(E edge) {
+    public V getSource(E edge) {
     	if(directedEdges.contains(edge)) {
-    		return Edges.DIRECTED;
-    	} else {
-    		return Edges.UNDIRECTED;
+    		return this.getEndpoints(edge).getFirst();
     	}
+    	return null;
     }
 
-	public Collection<E> getEdges(Edges directedness) {
-		if(directedness == Edges.DIRECTED) {
+    public V getDest(E edge) {
+    	if(directedEdges.contains(edge)) {
+    		return this.getEndpoints(edge).getSecond();
+    	}
+    	return null;
+    }
+
+    public boolean isSource(V vertex, E edge) {
+    	if(directedEdges.contains(edge)) {
+    		return vertex.equals(this.getEndpoints(edge).getFirst());
+    	}
+    	return false;
+    }
+
+    public boolean isDest(V vertex, E edge) {
+    	if(directedEdges.contains(edge)) {
+    		return vertex.equals(this.getEndpoints(edge).getSecond());
+    	}
+    	return false;
+    }
+
+    public EdgeType getEdgeType(E edge) {
+    	return directedEdges.contains(edge) ?
+    		EdgeType.DIRECTED :
+    			EdgeType.UNDIRECTED;
+    }
+
+	public Collection<E> getEdges(EdgeType edgeType) {
+		if(edgeType == EdgeType.DIRECTED) {
 			return Collections.unmodifiableSet(this.directedEdges);
-		} else if(directedness == Edges.UNDIRECTED) {
+		} else if(edgeType == EdgeType.UNDIRECTED) {
 			Collection<E> edges = new HashSet<E>(getEdges());
 			edges.removeAll(directedEdges);
 			return edges;
