@@ -37,8 +37,8 @@
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  *
- * $Revision: 1.1 $
- * $Date: 2007/01/09 11:58:34 $
+ * $Revision: 1.2 $
+ * $Date: 2007/01/10 02:35:22 $
  * $State: Exp $
  */
 
@@ -117,7 +117,7 @@ public class PickTranslateBehavior extends PickMouseBehavior implements MouseBeh
 	 * @param ypos Current mouse Y pos.
 	 **/
 	public void updateScene(int xpos, int ypos){
-		System.err.println("update scene pick translate");
+//		System.err.println("update scene pick translate");
 		TransformGroup tg = null;
 
 		if (!mevent.isAltDown() && !mevent.isMetaDown()){

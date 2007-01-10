@@ -223,12 +223,12 @@ public class VisualizationViewer<V,E> extends JPanel {
 
 		MouseTranslate behavior3 = new MouseTranslate();
 		behavior3.setTransformGroup(objTrans);
-//		objTrans.addChild(behavior3);
+		objTrans.addChild(behavior3);
 		behavior3.setSchedulingBounds(bounds);
 		
 		PickTranslateBehavior ptb = new PickTranslateBehavior(objRoot,canvas,bounds,PickTool.GEOMETRY);
 		ptb.setSchedulingBounds(bounds);
-		objTrans.addChild(ptb);
+//		objTrans.addChild(ptb);
 		ptb.setupCallback(new PickingCallback() {
 
 			public void transformChanged(int type, TransformGroup tg) {

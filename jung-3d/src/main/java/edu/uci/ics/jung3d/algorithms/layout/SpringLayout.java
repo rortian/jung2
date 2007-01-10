@@ -39,7 +39,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     protected LengthFunction<E> lengthFunction;
     protected int repulsion_range = 100;
     protected double force_multiplier = 1.0 / 3.0;
-    int totalSteps = 10;
+    int totalSteps = 2000;
     int step = 0;
     
     Map<E, SpringEdgeData<E>> springEdgeData = 
