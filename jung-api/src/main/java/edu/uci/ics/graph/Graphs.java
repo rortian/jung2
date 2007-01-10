@@ -101,8 +101,8 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.ArchetypeGraph#addDirectedEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
-		public synchronized boolean addEdge(E e, V v1, V v2, Edges directed) {
-			return delegate.addEdge(e, v1, v2, directed);
+		public synchronized boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
+			return delegate.addEdge(e, v1, v2, edgeType);
 		}
 
 		/**
@@ -177,8 +177,8 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.Edges)
 		 */
-		public Collection<E> getEdges(Edges directedness) {
-			return delegate.getEdges(directedness);
+		public Collection<E> getEdges(EdgeType edgeType) {
+			return delegate.getEdges(edgeType);
 		}
 
 		/**
@@ -283,10 +283,10 @@ public class Graphs {
 		/**
 		 * @param edge
 		 * @return
-		 * @see edu.uci.ics.graph.Graph#getDirectedness(java.lang.Object)
+		 * @see edu.uci.ics.graph.Graph#getEdgeType(java.lang.Object)
 		 */
-		public synchronized Edges getDirectedness(E edge) {
-			return delegate.getDirectedness(edge);
+		public synchronized EdgeType getEdgeType(E edge) {
+			return delegate.getEdgeType(edge);
 		}
 
 		/**
@@ -424,7 +424,7 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.ArchetypeGraph#addDirectedEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
-		public boolean addEdge(E e, V v1, V v2, Edges directed) {
+		public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -498,10 +498,10 @@ public class Graphs {
 		/**
 		 * @param directedness
 		 * @return
-		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.Edges)
+		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.EdgeType)
 		 */
-		public Collection<E> getEdges(Edges directedness) {
-			return delegate.getEdges(directedness);
+		public Collection<E> getEdges(EdgeType edgeType) {
+			return delegate.getEdges(edgeType);
 		}
 
 		/**
@@ -606,10 +606,10 @@ public class Graphs {
 		/**
 		 * @param edge
 		 * @return
-		 * @see edu.uci.ics.graph.Graph#getDirectedness(java.lang.Object)
+		 * @see edu.uci.ics.graph.Graph#getEdgeType(java.lang.Object)
 		 */
-		public Edges getDirectedness(E edge) {
-			return delegate.getDirectedness(edge);
+		public EdgeType getEdgeType(E edge) {
+			return delegate.getEdgeType(edge);
 		}
 
 		/**

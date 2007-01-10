@@ -30,13 +30,13 @@ public interface Graph<V,E> extends ArchetypeGraph<V,E>
     
     boolean addEdge(E e, V v1, V v2);
     
-    boolean addEdge(E e, V v1, V v2, Edges directed);
+    boolean addEdge(E e, V v1, V v2, EdgeType edgeType);
     
-    Collection<E> getEdges(Edges directedness);
+    Collection<E> getEdges(EdgeType edgeType);
     // convenience methods
     
     Pair<V> getEndpoints(E edge); // build Pair from getIncidentVertices()
-    Edges getDirectedness(E edge); // whether edge is directed or not
+    EdgeType getEdgeType(E edge); // whether edge is directed or not
     V getOpposite(V vertex, E edge); // get edge's incident vertices, find the Vertex that's not the one input
     int inDegree(V vertex); // calculate from get{In,Out}Edges
     int outDegree(V vertex); // calculate from get{In,Out}Edges
