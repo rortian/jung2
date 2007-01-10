@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
@@ -58,7 +58,7 @@ public class SimpleSparseGraphTest extends TestCase {
         smallGraph.addEdge(e01, v0, v1);
         smallGraph.addEdge(e10, v1, v0);
         smallGraph.addEdge(e12, v1, v2);
-        smallGraph.addEdge(e21, v2, v1, Edges.DIRECTED);
+        smallGraph.addEdge(e21, v2, v1, EdgeType.DIRECTED);
 
     }
 
@@ -160,9 +160,9 @@ public class SimpleSparseGraphTest extends TestCase {
     public void testIsDirected() {
         for(Number edge : smallGraph.getEdges()) {
         	if(edge == e21) {
-        		assertEquals(smallGraph.getDirectedness(edge), Edges.DIRECTED);
+        		assertEquals(smallGraph.getEdgeType(edge), EdgeType.DIRECTED);
         	} else {
-        		assertEquals(smallGraph.getDirectedness(edge), Edges.UNDIRECTED);
+        		assertEquals(smallGraph.getEdgeType(edge), EdgeType.UNDIRECTED);
         	}
         }
     }

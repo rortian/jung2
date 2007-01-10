@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
 
@@ -67,8 +67,8 @@ public class SimpleUndirectedSparseGraph<V,E>
         return true;
     }
     
-    public boolean addEdge(E edge, V v1, V v2, Edges directed) {
-    	if(directed != Edges.UNDIRECTED) throw new IllegalArgumentException();
+    public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
+    	if(edgeType != EdgeType.UNDIRECTED) throw new IllegalArgumentException();
         if (edges.containsKey(edge))
             return false;
         
@@ -155,16 +155,15 @@ public class SimpleUndirectedSparseGraph<V,E>
         return edges.get(edge);
     }
 
-    public Edges getDirectedness(E edge) {
-        return Edges.UNDIRECTED;
+    public EdgeType getEdgeType(E edge) {
+        return EdgeType.UNDIRECTED;
     }
 
     public boolean addEdge(E e, V v1, V v2) {
-        return addEdge(e, v1, v2, Edges.UNDIRECTED);
+        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
     }
 
-	public Collection<E> getEdges(Edges directedness) {
-		// TODO Auto-generated method stub
+	public Collection<E> getEdges(EdgeType edgeType) {
 		return getEdges();
 	}
 }

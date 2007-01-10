@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Edges;
+import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
@@ -231,7 +231,7 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
         
         // add edges to graph, now that we have them all
         for(E edge : edges) {
-            mGraph.addEdge(edge, added_pairs.get(edge).getFirst(), added_pairs.get(edge).getSecond(), Edges.DIRECTED);
+            mGraph.addEdge(edge, added_pairs.get(edge).getFirst(), added_pairs.get(edge).getSecond(), EdgeType.DIRECTED);
         }
         // now that we're done attaching edges to this new vertex, 
         // add it to the index
