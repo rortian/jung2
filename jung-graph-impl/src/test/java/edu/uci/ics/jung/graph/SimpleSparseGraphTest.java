@@ -115,10 +115,14 @@ public class SimpleSparseGraphTest extends TestCase {
     		assertTrue(incident.containsAll(in));
     		assertTrue(incident.containsAll(out));
     		for(Number e : in) {
-    			assertFalse(out.contains(e));
+    			if(out.contains(e)) {
+    				assertTrue(graph.getEdgeType(e) == EdgeType.UNDIRECTED);
+    			}
     		}
     		for(Number e : out) {
-    			assertFalse(in.contains(e));
+    			if(in.contains(e)) {
+    				assertTrue(graph.getEdgeType(e) == EdgeType.UNDIRECTED);
+    			}
     		}
     	}
     	
