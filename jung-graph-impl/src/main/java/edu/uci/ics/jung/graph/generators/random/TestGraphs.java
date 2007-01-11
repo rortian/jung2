@@ -321,7 +321,7 @@ public class TestGraphs {
             V v2 = ug.getEndpoints(e).getSecond();
 
             E me = edgeFactory.create();
-            g.addEdge(me, v1, v2, Math.random() < 5 ? EdgeType.DIRECTED : EdgeType.UNDIRECTED);
+            g.addEdge(me, v1, v2, Math.random() < .5 ? EdgeType.DIRECTED : EdgeType.UNDIRECTED);
             edge_weights.put(me, Math.random());
         }
         
