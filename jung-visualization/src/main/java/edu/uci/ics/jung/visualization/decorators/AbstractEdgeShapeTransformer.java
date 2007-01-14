@@ -13,6 +13,8 @@ import java.awt.Shape;
 
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.graph.util.EdgeContext;
+
 
 
 
