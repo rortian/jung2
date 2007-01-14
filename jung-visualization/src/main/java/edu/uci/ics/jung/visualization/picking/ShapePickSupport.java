@@ -18,13 +18,20 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 import java.util.ConcurrentModificationException;
+import java.util.HashSet;
 
+import org.apache.commons.collections15.Predicate;
+
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeContext;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.graph.util.VertexContext;
+import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 
 /**
  * ShapePickSupport provides access to Vertices and EdgeType based on
@@ -33,10 +40,12 @@ import edu.uci.ics.jung.visualization.decorators.EdgeContext;
  * @author Tom Nelson - RABA Technologies
  *
  */
-public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
+public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, PredicatedGraphCollections<V,E> {
 
     protected float pickSize;
     protected VisualizationServer<V,E> vv;
+    protected Predicate<VertexContext<V,E>> vertexIncludePredicate;
+    protected Predicate<EdgeContext<V,E>> edgeIncludePredicate;
     
     /**
      * Create an instance.
@@ -85,7 +94,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
         double minDistance = Double.MAX_VALUE;
         while(true) {
             try {
-                for(V v : layout.getGraph().getVertices()) {
+                for(V v : getFilteredVertices(layout)) {
 
                     Shape shape = vv.getRenderContext().getVertexShapeFunction().transform(v);
                     // transform the vertex location to screen coords
@@ -129,7 +138,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
         double minDistance = Double.MAX_VALUE;
         while(true) {
             try {
-                for(E e : layout.getGraph().getEdges()) {
+                for(E e : getFilteredEdges(layout)) {
 
                     Pair<V> pair = layout.getGraph().getEndpoints(e);
                     V v1 = pair.getFirst();
@@ -203,4 +212,89 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 		}
 		return closest;
     }
+    
+    public Collection<V> getFilteredVertices(Layout<V,E> layout) {
+    	Collection<V> unfiltered = layout.getGraph().getVertices();
+    	Collection<V> filtered = new HashSet<V>();
+    	for(V v : unfiltered) {
+    		if(isRendered(new VertexContext<V,E>(layout.getGraph(),v))) {
+    			filtered.add(v);
+    		}
+    	}
+    	return filtered;
+    }
+    
+    public Collection<E> getFilteredEdges(Layout<V,E> layout) {
+    	Collection<E> unfiltered = layout.getGraph().getEdges();
+    	Collection<E> filtered = new HashSet<E>();
+    	for(E e : unfiltered) {
+    		if(isRendered(new EdgeContext<V,E>(layout.getGraph(),e))) {
+    			filtered.add(e);
+    		}
+    	}
+    	return filtered;
+    }
+    
+	protected boolean isRendered(VertexContext<V,E> context) {
+		return vertexIncludePredicate == null || vertexIncludePredicate.evaluate(context);
+	}
+	
+	protected boolean isRendered(EdgeContext<V,E> context) {
+		Graph<V,E> g = context.graph;
+		E e = context.edge;
+		boolean edgeTest = edgeIncludePredicate == null || edgeIncludePredicate.evaluate(context);
+		Pair<V> endpoints = g.getEndpoints(e);
+		V v1 = endpoints.getFirst();
+		V v2 = endpoints.getSecond();
+		boolean endpointsTest = vertexIncludePredicate == null ||
+			(vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v1)) && 
+					vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v2)));
+		return edgeTest && endpointsTest;
+	}
+
+
+	/**
+	 * @return the edgeIncludePredicate
+	 */
+	public Predicate<EdgeContext<V, E>> getEdgeIncludePredicate() {
+		return edgeIncludePredicate;
+	}
+
+	/**
+	 * @param edgeIncludePredicate the edgeIncludePredicate to set
+	 */
+	public void setEdgeIncludePredicate(
+			Predicate<EdgeContext<V, E>> edgeIncludePredicate) {
+		this.edgeIncludePredicate = edgeIncludePredicate;
+	}
+
+	/**
+	 * @return the vertexIncludePredicate
+	 */
+	public Predicate<VertexContext<V, E>> getVertexIncludePredicate() {
+		return vertexIncludePredicate;
+	}
+
+	/**
+	 * @param vertexIncludePredicate the vertexIncludePredicate to set
+	 */
+	public void setVertexIncludePredicate(
+			Predicate<VertexContext<V, E>> vertexIncludePredicate) {
+		this.vertexIncludePredicate = vertexIncludePredicate;
+	}
+
+	/**
+	 * @return the pickSize
+	 */
+	public float getPickSize() {
+		return pickSize;
+	}
+
+	/**
+	 * @param pickSize the pickSize to set
+	 */
+	public void setPickSize(float pickSize) {
+		this.pickSize = pickSize;
+	}
+
 }
