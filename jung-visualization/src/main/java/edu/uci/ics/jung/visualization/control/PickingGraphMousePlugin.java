@@ -321,6 +321,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         
         Layout<V,E> layout = vv.getGraphLayout();
         PickedState<V> pickedVertexState = vv.getPickedVertexState();
+        Rectangle2D trect = vv.getViewTransformer().inverseTransform(rect).getBounds2D();
         if(pickedVertexState != null) {
             if(clear) {
             	pickedVertexState.clear();
@@ -328,7 +329,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             while(true) {
                 try {
                 	for(V v : layout.getGraph().getVertices()) {
-                        if(rect.contains(vv.transform(layout.transform(v)))) {
+                        if(trect.contains(vv.transform(layout.transform(v)))) {
                             pickedVertexState.pick(v, true);
                         }
                     }

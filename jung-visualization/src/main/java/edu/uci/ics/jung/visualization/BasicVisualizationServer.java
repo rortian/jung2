@@ -82,12 +82,12 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	 */
 	protected Map renderingHints = new HashMap();
 		
-	/**
-	 * pluggable support for picking graph elements by
-	 * finding them based on their coordinates. Typically
-	 * used in mouse events.
-	 */
-	protected GraphElementAccessor<V, E> pickSupport;
+//	/**
+//	 * pluggable support for picking graph elements by
+//	 * finding them based on their coordinates. Typically
+//	 * used in mouse events.
+//	 */
+//	protected GraphElementAccessor<V, E> pickSupport;
 	
 	/**
 	 * holds the state of which vertices of the graph are
@@ -722,13 +722,13 @@ public class BasicVisualizationServer<V, E> extends JPanel
      * @see edu.uci.ics.jung.visualization.VisualizationServer#getPickSupport()
      */
     public GraphElementAccessor<V,E> getPickSupport() {
-        return pickSupport;
+        return renderContext.getPickSupport();
     }
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#setPickSupport(edu.uci.ics.jung.visualization.GraphElementAccessor)
      */
     public void setPickSupport(GraphElementAccessor<V,E> pickSupport) {
-        this.pickSupport = pickSupport;
+        renderContext.setPickSupport(pickSupport);
     }
     
     /* (non-Javadoc)

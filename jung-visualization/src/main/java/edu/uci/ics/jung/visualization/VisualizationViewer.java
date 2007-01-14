@@ -189,16 +189,16 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
         Point2D p = null;
         if(vertexToolTipTransformer != null) {
             p = inverseViewTransform(event.getPoint());
-            V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
+            V vertex = getPickSupport().getVertex(layout, p.getX(), p.getY());
             if(vertex != null) {
-                return vertexToolTipTransformer.transform(vertex);
+            	return vertexToolTipTransformer.transform(vertex);
             }
         }
         if(edgeToolTipTransformer != null) {
         	if(p == null) p = inverseViewTransform(event.getPoint());
-            E edge = pickSupport.getEdge(layout, p.getX(), p.getY());
+            E edge = getPickSupport().getEdge(layout, p.getX(), p.getY());
             if(edge != null) {
-                return edgeToolTipTransformer.transform(edge);
+            	return edgeToolTipTransformer.transform(edge);
             }
         }
         if(mouseEventToolTipTransformer != null) {
