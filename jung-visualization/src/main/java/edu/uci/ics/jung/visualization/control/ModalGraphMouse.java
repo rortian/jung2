@@ -10,23 +10,14 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer.GraphMouse;
 
 /**
  * Interface for a GraphMouse that supports modality.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public interface ModalGraphMouse extends GraphMouse {
