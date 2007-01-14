@@ -50,7 +50,6 @@ import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
 import edu.uci.ics.jung.visualization.control.LensMagnificationGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -170,7 +169,7 @@ public class LensDemo extends JApplet {
         vv.addKeyListener(graphMouse.getModeKeyListener());
         
         hyperbolicViewSupport = 
-            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv), 
+            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv, vv.getViewTransformer()), 
                     new ModalLensGraphMouse());
         hyperbolicLayoutSupport = 
             new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv, vv.getLayoutTransformer()),
@@ -186,7 +185,7 @@ public class LensDemo extends JApplet {
         magnifyLayoutSupport.getLensTransformer().setEllipse(magnifyViewSupport.getLensTransformer().getEllipse());
         
         final ScalingControl crossoverScaler = new CrossoverScalingControl();
-        final ScalingControl layoutScaler = new LayoutScalingControl();
+//        final ScalingControl layoutScaler = new LayoutScalingControl();
         scaler = crossoverScaler;
 
         JButton plus = new JButton("+");
@@ -228,28 +227,28 @@ public class LensDemo extends JApplet {
         hyperView.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 hyperbolicViewSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-                scaler = layoutScaler;
+                //scaler = layoutScaler;
             }
         });
         final JRadioButton hyperModel = new JRadioButton("Hyperbolic Layout");
         hyperModel.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 hyperbolicLayoutSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-                scaler = layoutScaler;
+                //scaler = layoutScaler;
             }
         });
         final JRadioButton magnifyView = new JRadioButton("Magnified View");
         magnifyView.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 magnifyViewSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-                scaler = layoutScaler;
+//                scaler = layoutScaler;
             }
         });
         final JRadioButton magnifyModel = new JRadioButton("Magnified Layout");
         magnifyModel.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 magnifyLayoutSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-                scaler = layoutScaler;
+//                scaler = layoutScaler;
             }
         });
 

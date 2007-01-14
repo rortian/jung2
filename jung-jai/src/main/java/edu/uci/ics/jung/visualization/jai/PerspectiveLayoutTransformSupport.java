@@ -10,8 +10,6 @@
 
 package edu.uci.ics.jung.visualization.jai;
 
-import java.awt.Dimension;
-
 import javax.media.jai.PerspectiveTransform;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;

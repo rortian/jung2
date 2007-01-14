@@ -75,12 +75,14 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     }
     
     public void activate() {
+    	lensTransformer.setDelegate(vv.getViewTransformer());
         if(lens == null) {
             lens = new Lens(lensTransformer);
         }
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
+        lensTransformer.setDelegate(vv.getViewTransformer());
         vv.setViewTransformer(lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.setRenderer(transformingRenderer);
@@ -92,7 +94,8 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     }
     
     public void deactivate() {
-        vv.setViewTransformer(savedViewTransformer);
+//        vv.setViewTransformer(savedViewTransformer);
+    	vv.setViewTransformer(lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);

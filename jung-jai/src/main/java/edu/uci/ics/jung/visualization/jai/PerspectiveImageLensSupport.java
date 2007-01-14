@@ -10,8 +10,6 @@
 
 package edu.uci.ics.jung.visualization.jai;
 
-import java.awt.Dimension;
-
 import javax.media.jai.PerspectiveTransform;
 
 import edu.uci.ics.jung.visualization.BasicRenderer;
@@ -51,7 +49,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
         this.lensGraphicsDecorator = new TransformingGraphics(perspectiveTransformer);
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
 
-        Dimension d = vv.getSize();
+//        Dimension d = vv.getSize();
         this.renderer = vv.getRenderer();
     }
     
