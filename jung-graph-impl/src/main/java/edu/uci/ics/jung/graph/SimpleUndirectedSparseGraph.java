@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 @SuppressWarnings("serial")
@@ -165,5 +165,25 @@ public class SimpleUndirectedSparseGraph<V,E>
 
 	public Collection<E> getEdges(EdgeType edgeType) {
 		return getEdges();
+	}
+
+	public V getDest(E directed_edge) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public V getSource(E directed_edge) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isDest(V vertex, E edge) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isSource(V vertex, E edge) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

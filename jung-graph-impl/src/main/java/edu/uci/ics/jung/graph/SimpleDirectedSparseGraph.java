@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.EdgeType;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 

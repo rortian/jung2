@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 @SuppressWarnings("serial")

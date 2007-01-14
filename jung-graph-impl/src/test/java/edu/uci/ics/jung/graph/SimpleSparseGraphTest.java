@@ -12,8 +12,8 @@ import junit.framework.TestCase;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 

@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import junit.framework.TestCase;
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 public class SimpleUndirectedSparseGraphTest extends TestCase {
