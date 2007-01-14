@@ -5,9 +5,7 @@ import javax.media.j3d.Node;
 
 import org.apache.commons.collections15.Transformer;
 
-import com.sun.j3d.utils.geometry.Primitive;
-
-import edu.uci.ics.jung.visualization.decorators.EdgeContext;
+import edu.uci.ics.graph.util.EdgeContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 public interface RenderContext<V, E> {

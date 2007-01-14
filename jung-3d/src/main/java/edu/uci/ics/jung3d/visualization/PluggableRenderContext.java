@@ -22,7 +22,7 @@ import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
 
-import edu.uci.ics.jung.visualization.decorators.EdgeContext;
+import edu.uci.ics.graph.util.EdgeContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 

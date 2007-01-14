@@ -10,14 +10,9 @@
  */
 package edu.uci.ics.jung3d.algorithms.layout;
 
-import java.awt.geom.Point2D;
-import java.util.Collection;
 import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 
 import javax.vecmath.Point3f;
-
-import edu.uci.ics.graph.Graph;
 
 
 /**

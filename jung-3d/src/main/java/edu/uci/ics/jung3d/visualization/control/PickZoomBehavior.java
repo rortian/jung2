@@ -37,21 +37,24 @@
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  *
- * $Revision: 1.1 $
- * $Date: 2007/01/09 11:58:34 $
+ * $Revision: 1.2 $
+ * $Date: 2007/01/14 12:01:10 $
  * $State: Exp $
  */
 
 package edu.uci.ics.jung3d.visualization.control;
 
-import com.sun.j3d.utils.picking.*;
+import javax.media.j3d.Bounds;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+
+import com.sun.j3d.utils.behaviors.mouse.MouseBehavior;
+import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
+import com.sun.j3d.utils.picking.PickResult;
+import com.sun.j3d.utils.picking.PickTool;
 import com.sun.j3d.utils.picking.behaviors.PickingCallback;
-import com.sun.j3d.utils.behaviors.mouse.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.media.j3d.*;
-import javax.vecmath.*;
 
 
 /**

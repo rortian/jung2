@@ -37,8 +37,8 @@
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  *
- * $Revision: 1.2 $
- * $Date: 2007/01/10 02:35:24 $
+ * $Revision: 1.3 $
+ * $Date: 2007/01/14 12:01:10 $
  * $State: Exp $
  */
 
@@ -251,16 +251,26 @@ public class MouseTranslate extends MouseBehavior {
 					ltvw.getRotationScale(mat);
 					Transform3D rot = new Transform3D();
 					rot.set(mat);
-
+//					x_factor = y_factor = 1/ltvw.getScale();
 					
 //					currXform.mulInverse(origCurrentXform);
 //					currXform.mul(rot);
 					
 					
 //					System.err.println("after mul. currXform is \n"+currXform);
-
+//					Transform3D scale = new Transform3D();
+//					scale.setScale(ltvw.getScale());
+//					scale.invert();
+//					rot.mul(scale);
+					
+					
+					
 					translation.x = dx*x_factor; 
 					translation.y = -dy*y_factor;
+					
+					
+//					Vector3d translationOut = new Vector3d();
+//					rot.transform(translation, translationOut);
 
 					transformX.set(translation);
 

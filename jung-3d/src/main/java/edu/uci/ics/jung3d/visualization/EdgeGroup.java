@@ -25,8 +25,6 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import com.sun.j3d.utils.geometry.Primitive;
-
 /**
  * 
  * @author Tom Nelson - tomnelson@dev.java.net

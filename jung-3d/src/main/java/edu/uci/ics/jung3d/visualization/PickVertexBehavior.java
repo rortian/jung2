@@ -26,10 +26,8 @@ import javax.media.j3d.Canvas3D;
 import javax.media.j3d.TransformGroup;
 import javax.swing.event.ChangeListener;
 
-//import com.sun.j3d.utils.behaviors.picking.PickObject;
 import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.picking.PickTool;
-import com.sun.j3d.utils.picking.behaviors.PickMouseBehavior;
 import com.sun.j3d.utils.picking.behaviors.PickTranslateBehavior;
 
 import edu.uci.ics.jung.visualization.picking.PickedState;
