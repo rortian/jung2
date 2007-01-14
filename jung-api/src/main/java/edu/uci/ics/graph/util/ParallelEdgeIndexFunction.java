@@ -21,7 +21,7 @@ import edu.uci.ics.graph.Graph;
  * <p>Note that in current use, this index is assumed to be an integer value in
  * the interval [0,n-1], where n-1 is the number of edges parallel to <code>e</code>.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public interface ParallelEdgeIndexFunction<V,E> {

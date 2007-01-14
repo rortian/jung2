@@ -3,6 +3,7 @@ package edu.uci.ics.graph;
 import java.io.Serializable;
 import java.util.Collection;
 
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 /**
  * This class consists exclusively of static methods that operate on or return
@@ -362,6 +363,44 @@ public class Graphs {
 		public synchronized boolean removeVertex(V vertex) {
 			return delegate.removeVertex(vertex);
 		}
+
+		/**
+		 * @param directed_edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#getDest(java.lang.Object)
+		 */
+		public V getDest(E directed_edge) {
+			return delegate.getDest(directed_edge);
+		}
+
+		/**
+		 * @param directed_edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#getSource(java.lang.Object)
+		 */
+		public V getSource(E directed_edge) {
+			return delegate.getSource(directed_edge);
+		}
+
+		/**
+		 * @param vertex
+		 * @param edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#isDest(java.lang.Object, java.lang.Object)
+		 */
+		public boolean isDest(V vertex, E edge) {
+			return delegate.isDest(vertex, edge);
+		}
+
+		/**
+		 * @param vertex
+		 * @param edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#isSource(java.lang.Object, java.lang.Object)
+		 */
+		public boolean isSource(V vertex, E edge) {
+			return delegate.isSource(vertex, edge);
+		}
 		
 	}
 	
@@ -409,6 +448,7 @@ public class Graphs {
 	
 	static abstract class UnmodifiableAbstractGraph<V,E> implements Graph<V,E>, Serializable {
 		protected Graph<V,E> delegate;
+
 
 		private UnmodifiableAbstractGraph(Graph<V, E> delegate) {
 			if(delegate == null) {
@@ -498,7 +538,7 @@ public class Graphs {
 		/**
 		 * @param directedness
 		 * @return
-		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.EdgeType)
+		 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.util.EdgeType)
 		 */
 		public Collection<E> getEdges(EdgeType edgeType) {
 			return delegate.getEdges(edgeType);
@@ -686,6 +726,44 @@ public class Graphs {
 			throw new UnsupportedOperationException();
 		}
 		
+		/**
+		 * @param directed_edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#getDest(java.lang.Object)
+		 */
+		public V getDest(E directed_edge) {
+			return delegate.getDest(directed_edge);
+		}
+
+		/**
+		 * @param directed_edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#getSource(java.lang.Object)
+		 */
+		public V getSource(E directed_edge) {
+			return delegate.getSource(directed_edge);
+		}
+
+		/**
+		 * @param vertex
+		 * @param edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#isDest(java.lang.Object, java.lang.Object)
+		 */
+		public boolean isDest(V vertex, E edge) {
+			return delegate.isDest(vertex, edge);
+		}
+
+		/**
+		 * @param vertex
+		 * @param edge
+		 * @return
+		 * @see edu.uci.ics.graph.Graph#isSource(java.lang.Object, java.lang.Object)
+		 */
+		public boolean isSource(V vertex, E edge) {
+			return delegate.isSource(vertex, edge);
+		}
+
 	}
 	
 	static class UnmodifiableGraph<V,E> extends UnmodifiableAbstractGraph<V,E> implements Serializable {

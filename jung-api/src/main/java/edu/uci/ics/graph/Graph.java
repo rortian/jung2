@@ -12,8 +12,8 @@
 package edu.uci.ics.graph;
 
 import java.util.Collection;
-import java.util.EnumSet;
 
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 
@@ -44,5 +44,15 @@ public interface Graph<V,E> extends ArchetypeGraph<V,E>
     boolean isSuccessor(V v1, V v2); // v1.get{Prede,Suc}cessors.contains(v2)
     int numPredecessors(V vertex); // get{Prede,Suc}cessors().size()
     int numSuccessors(V vertex); // getSuccessors().size()
+    
+    // methods from DirectedGraph
+    V getSource(E directed_edge);
+
+    V getDest(E directed_edge);
+    
+    boolean isSource(V vertex, E edge); // get{Source, Dest}(e) == v
+    
+    boolean isDest(V vertex, E edge); // get{Source, Dest}(e) == v
+
 
 }

@@ -11,14 +11,15 @@
  */
 package edu.uci.ics.graph;
 
-public interface DirectedGraph<V,E> extends Graph<V,E>
-{
-    V getSource(E directed_edge);
-
-    V getDest(E directed_edge);
-    
-    boolean isSource(V vertex, E edge); // get{Source, Dest}(e) == v
-    
-    boolean isDest(V vertex, E edge); // get{Source, Dest}(e) == v
-
+/**
+ * a marker interface.
+ * The meaning is that the implementing graph shall accept only
+ * directed edges
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ * @param <V>
+ * @param <E>
+ */
+public interface DirectedGraph<V,E> extends Graph<V,E> {
 }

@@ -11,6 +11,16 @@
  */
 package edu.uci.ics.graph;
 
+/**
+ * a marker interface
+ * The meaning is that the implementing graph shall accept
+ * only Undirected edges.
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ * @param <V>
+ * @param <E>
+ */
 public interface UndirectedGraph<V,E> extends Graph<V,E>
 {
 
