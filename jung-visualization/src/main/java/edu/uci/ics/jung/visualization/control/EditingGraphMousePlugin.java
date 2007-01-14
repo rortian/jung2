@@ -17,8 +17,10 @@ import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.EdgeType;
+import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.ArrowFactory;
@@ -45,7 +47,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Shape arrowShape;
     protected VisualizationServer.Paintable edgePaintable;
     protected VisualizationServer.Paintable arrowPaintable;
-    EdgeType edgeIsDirected;
+    protected EdgeType edgeIsDirected;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
@@ -99,20 +101,30 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             final Point2D p = vv.inverseViewTransform(e.getPoint());
             GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {
+            	Graph<V,E> graph = vv.getModel().getGraphLayout().getGraph();
+            	// set default edge type
+            	if(graph instanceof DirectedGraph) {
+            		edgeIsDirected = EdgeType.DIRECTED;
+            	} else {
+            		edgeIsDirected = EdgeType.UNDIRECTED;
+            	}
+            	
                 final V vertex = pickSupport.getVertex(vv.getModel().getGraphLayout(), p.getX(), p.getY());
                 if(vertex != null) { // get ready to make an edge
                     startVertex = vertex;
                     down = e.getPoint();
                     transformEdgeShape(down, down);
                     vv.addPostRenderPaintable(edgePaintable);
-                    if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0) {
+                    if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0
+                    		&& vv.getModel().getGraphLayout().getGraph() instanceof UndirectedGraph == false) {
                         edgeIsDirected = EdgeType.DIRECTED;
+                    }
+                    if(edgeIsDirected == EdgeType.DIRECTED) {
                         transformArrowShape(down, e.getPoint());
                         vv.addPostRenderPaintable(arrowPaintable);
-                    } 
+                    }
                 } else { // make a new vertex
-                    Graph<V,E> graph = 
-                    	(Graph<V,E>)vv.getGraphLayout().getGraph();
+
                     V newVertex = vertexFactory.create();
                     	new Integer(graph.getVertices().size());
                     vertexLocations.put(newVertex, vv.inverseTransform(e.getPoint()));
@@ -150,15 +162,8 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 if(vertex != null && startVertex != null) {
                     Graph<V,E> graph = 
                     	(Graph<V,E>)vv.getGraphLayout().getGraph();
-//                    if(edgeIsDirected) {
                         graph.addEdge(edgeFactory.create(),
-                        		//graph.getEdges().size(), 
                         		startVertex, vertex, edgeIsDirected);
-//                    } else {
-//                        graph.addEdge(edgeFactory.create(),
-//                        		//graph.getEdges().size(), 
-//                        		startVertex, vertex);
-//                    }
                     vv.repaint();
                 }
             }
