@@ -40,7 +40,7 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.EdgeType;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.visualization.Checkmark;

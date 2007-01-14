@@ -37,8 +37,8 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
@@ -247,7 +247,7 @@ public class EdgeLabelDemo extends JApplet {
         sliderPanel.add(edgeOffsetSlider);
         sliderLabelPanel.add(new JLabel("Directed", JLabel.RIGHT));
         sliderLabelPanel.add(new JLabel("Undirected", JLabel.RIGHT));
-        sliderLabelPanel.add(new JLabel("EdgeType", JLabel.RIGHT));
+        sliderLabelPanel.add(new JLabel("Edges", JLabel.RIGHT));
         offsetPanel.add(sliderLabelPanel, BorderLayout.WEST);
         offsetPanel.add(sliderPanel);
         labelPanel.add(offsetPanel);

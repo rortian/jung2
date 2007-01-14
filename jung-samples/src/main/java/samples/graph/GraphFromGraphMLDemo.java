@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;

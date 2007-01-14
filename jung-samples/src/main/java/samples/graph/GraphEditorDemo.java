@@ -72,7 +72,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
 	/**
      * the graph
      */
-    SimpleSparseGraph<Number,Number> graph;
+    Graph<Number,Number> graph;
     
     AbstractLayout<Number,Number> layout;
 
@@ -90,7 +90,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
         "<li>Right-click an empty area for <b>Create Vertex</b> popup"+
         "<li>Right-click on a Vertex for <b>Delete Vertex</b> popup"+
         "<li>Right-click on a Vertex for <b>Add Edge</b> menus <br>(if there are selected Vertices)"+
-        "<li>Right-click on an EdgeType for <b>Delete Edge</b> popup"+
+        "<li>Right-click on an Edge for <b>Delete Edge</b> popup"+
         "<li>Mousewheel scales with a crossover value of 1.0.<p>"+
         "     - scales the graph layout when the combined scale is greater than 1<p>"+
         "     - scales the graph view when the combined scale is less than 1"+

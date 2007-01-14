@@ -50,17 +50,18 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 
 import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.predicates.AbstractGraphPredicate;
-import edu.uci.ics.graph.predicates.GraphPredicate;
-import edu.uci.ics.graph.predicates.SelfLoopEdgePredicate;
+import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.EdgeType;
+import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -214,7 +215,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected DirectionDisplayPredicate<Integer,Number> show_edge;
     protected DirectionDisplayPredicate<Integer,Number> show_arrow;
     protected VertexDisplayPredicate<Integer,Number> show_vertex;
-    protected GraphPredicate<Integer,Number> self_loop;
+    protected Predicate<EdgeContext<Integer,Number>> self_loop;
     protected GradientPickedEdgePaintFunction<Integer,Number> edgeDrawPaint;
     protected GradientPickedEdgePaintFunction<Integer,Number> edgeFillPaint;
     protected final static Object VOLTAGE_KEY = "voltages";
@@ -939,7 +940,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             return f;
     }
 }
-    private final static class DirectionDisplayPredicate<V,E> extends AbstractGraphPredicate<V,E>
+    private final static class DirectionDisplayPredicate<V,E> 
+    	implements Predicate<EdgeContext<V,E>>
+    	//extends AbstractGraphPredicate<V,E>
     {
         protected boolean show_d;
         protected boolean show_u;
@@ -960,8 +963,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             show_u = b;
         }
         
-        public boolean evaluateEdge(Graph<V,E> graph, E e)
+        public boolean evaluate(EdgeContext<V,E> context)
         {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.edge;
             if (graph.getEdgeType(e) == EdgeType.DIRECTED && show_d) {
                 return true;
             }
@@ -972,7 +977,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
     }
     
-    private final static class VertexDisplayPredicate<V, E> extends  AbstractGraphPredicate<V,E>
+    private final static class VertexDisplayPredicate<V,E>
+    	implements Predicate<VertexContext<V,E>>
+//    	extends  AbstractGraphPredicate<V,E>
     {
         protected boolean filter_small;
         protected final static int MIN_DEGREE = 4;
@@ -987,8 +994,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             filter_small = b;
         }
         
-        public boolean evaluateVertex(Graph<V,E> graph, V v)
-        {
+        public boolean evaluate(VertexContext<V,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	V v = context.vertex;
 //            Vertex v = (Vertex)arg0;
             if (filter_small)
                 return (graph.degree(v) >= MIN_DEGREE);
@@ -1142,10 +1150,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
     }
     
-    public class VoltageTips<V> implements org.apache.commons.collections15.Transformer<V,String> {
+    public class VoltageTips<V,E>
+    	implements org.apache.commons.collections15.Transformer<V,String> {
         
-        public String transform(V v) {
-           return "Voltage:"+voltages.get(v);
+        public String transform(V vertex) {
+           return "Voltage:"+voltages.get(vertex);
         }
     }
     
@@ -1153,7 +1162,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     {
         private org.apache.commons.collections15.Transformer<E,Paint> defaultFunc;
         protected boolean fill_edge = false;
-        GraphPredicate<V,E> selfLoop = new SelfLoopEdgePredicate<V,E>();
+        Predicate<EdgeContext<V,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
         
         public GradientPickedEdgePaintFunction(org.apache.commons.collections15.Transformer<E,Paint> defaultEdgePaintFunction, 
                 VisualizationViewer<V,E> vv) 
