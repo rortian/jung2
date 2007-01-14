@@ -28,9 +28,10 @@ import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.OrPredicate;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.SimpleGraph;
 import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 
@@ -424,7 +425,7 @@ public class PajekNetReader<V,E> {
         // in "*Arcs" and this graph is not strictly undirected
 //        boolean reading_arcs = a_pred.evaluate(nextLine) && 
 //            !PredicateUtils.enforcesUndirected(g);
-//        // in "*EdgeType" and this graph is not strictly directed
+//        // in "*Edges" and this graph is not strictly directed
 //        boolean reading_edges = e_pred.evaluate(nextLine) && 
 //            !PredicateUtils.enforcesDirected(g);
 
@@ -458,7 +459,7 @@ public class PajekNetReader<V,E> {
         // TODO: Do we need some way to assert that parallel edges are
         // not allowed in a graph? To do so here would require that it
         // be part of the graph interface....
-        boolean parallel_ok = true;
+        boolean parallel_ok = g instanceof SimpleGraph == false;
         	//!PredicateUtils.enforcesNotParallel(g);
 
         while (br.ready())

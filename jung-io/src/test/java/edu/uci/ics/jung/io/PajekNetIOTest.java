@@ -33,11 +33,11 @@ import org.apache.commons.collections15.TransformerUtils;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.graph.util.RandomLocationTransformer;
+import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.graph.SimpleSparseGraph;
 import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
