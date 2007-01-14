@@ -19,16 +19,19 @@ import javax.swing.CellRendererPane;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
+import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections15.functors.TruePredicate;
 
-import edu.uci.ics.graph.predicates.GraphPredicate;
-import edu.uci.ics.graph.predicates.TrueGraphPredicate;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
+import edu.uci.ics.graph.util.EdgeContext;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.graph.util.VertexContext;
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
-import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
@@ -42,7 +45,7 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
 	protected float arrowPlacementTolerance = 1;
-    protected GraphPredicate<V,E> vertexIncludePredicate = new TrueGraphPredicate<V,E>();
+    protected Predicate<VertexContext<V,E>> vertexIncludePredicate = TruePredicate.getInstance();
     protected Transformer<V,Stroke> vertexStrokeTransformer = 
     	new ConstantTransformer(new BasicStroke(1.0f));
     
@@ -64,8 +67,8 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected Transformer<EdgeContext<V,E>,Shape> edgeArrowFunction = 
         new DirectionalEdgeArrowTransformer<V,E>(10, 8, 4);
     
-    protected GraphPredicate<V,E> edgeArrowPredicate = new DirectedEdgeArrowPredicate<V,E>();
-    protected GraphPredicate<V,E> edgeIncludePredicate = new TrueGraphPredicate<V,E>();
+    protected Predicate<EdgeContext<V,E>> edgeArrowPredicate = new DirectedEdgeArrowPredicate<V,E>();
+    protected Predicate<EdgeContext<V,E>> edgeIncludePredicate = TruePredicate.getInstance();
     protected Transformer<E,Font> edgeFontFunction =
         new ConstantTransformer(new Font("Helvetica", Font.PLAIN, 12));
     protected Transformer<EdgeContext<V,E>,Number> edgeLabelClosenessFunction = 
@@ -79,6 +82,13 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction = 
         DefaultParallelEdgeIndexFunction.<V,E>getInstance();
     protected MutableTransformer viewTransformer = new MutableAffineTransformer();
+    
+	/**
+	 * pluggable support for picking graph elements by
+	 * finding them based on their coordinates.
+	 */
+	protected GraphElementAccessor<V, E> pickSupport;
+
     
     protected int labelOffset = LABEL_OFFSET;
     
@@ -114,7 +124,37 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.setEdgeShapeFunction(new EdgeShape.QuadCurve<V,E>());
     }
 
-    public static float[] getDashing() {
+	/**
+	 * @return the vertexShapeTransformer
+	 */
+	public Transformer<V, Shape> getVertexShapeTransformer() {
+		return vertexShapeTransformer;
+	}
+
+	/**
+	 * @param vertexShapeTransformer the vertexShapeTransformer to set
+	 */
+	public void setVertexShapeTransformer(
+			Transformer<V, Shape> vertexShapeTransformer) {
+		this.vertexShapeTransformer = vertexShapeTransformer;
+	}
+
+	/**
+	 * @return the vertexStrokeTransformer
+	 */
+	public Transformer<V, Stroke> getVertexStrokeTransformer() {
+		return vertexStrokeTransformer;
+	}
+
+	/**
+	 * @param vertexStrokeTransformer the vertexStrokeTransformer to set
+	 */
+	public void setVertexStrokeTransformer(
+			Transformer<V, Stroke> vertexStrokeTransformer) {
+		this.vertexStrokeTransformer = vertexStrokeTransformer;
+	}
+
+	public static float[] getDashing() {
         return dashing;
     }
 
@@ -150,11 +190,11 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.edgeArrowFunction = edgeArrowFunction;
     }
 
-    public GraphPredicate<V,E> getEdgeArrowPredicate() {
+    public Predicate<EdgeContext<V,E>> getEdgeArrowPredicate() {
         return edgeArrowPredicate;
     }
 
-    public void setEdgeArrowPredicate(GraphPredicate<V,E> edgeArrowPredicate) {
+    public void setEdgeArrowPredicate(Predicate<EdgeContext<V,E>> edgeArrowPredicate) {
         this.edgeArrowPredicate = edgeArrowPredicate;
     }
 
@@ -175,15 +215,16 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeIncludePredicate()
      */
-    public GraphPredicate<V,E> getEdgeIncludePredicate() {
+    public Predicate<EdgeContext<V,E>> getEdgeIncludePredicate() {
         return edgeIncludePredicate;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeIncludePredicate(org.apache.commons.collections15.Predicate)
      */
-    public void setEdgeIncludePredicate(GraphPredicate<V,E> edgeIncludePredicate) {
+    public void setEdgeIncludePredicate(Predicate<EdgeContext<V,E>> edgeIncludePredicate) {
         this.edgeIncludePredicate = edgeIncludePredicate;
+        updateState(pickSupport, vertexIncludePredicate, edgeIncludePredicate);
     }
 
     /* (non-Javadoc)
@@ -407,15 +448,16 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexIncludePredicate()
      */
-    public GraphPredicate<V,E> getVertexIncludePredicate() {
+    public Predicate<VertexContext<V,E>> getVertexIncludePredicate() {
         return vertexIncludePredicate;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIncludePredicate(org.apache.commons.collections15.Predicate)
      */
-    public void setVertexIncludePredicate(GraphPredicate<V,E> vertexIncludePredicate) {
+    public void setVertexIncludePredicate(Predicate<VertexContext<V,E>> vertexIncludePredicate) {
         this.vertexIncludePredicate = vertexIncludePredicate;
+        updateState(pickSupport, vertexIncludePredicate, edgeIncludePredicate);
     }
 
     /* (non-Javadoc)
@@ -515,6 +557,156 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     public void setViewTransformer(MutableTransformer viewTransformer) {
         this.viewTransformer = viewTransformer;
     }
+
+	/**
+	 * @return the pickSupport
+	 */
+	public GraphElementAccessor<V, E> getPickSupport() {
+		return pickSupport;
+	}
+
+	/**
+	 * @param pickSupport the pickSupport to set
+	 */
+	public void setPickSupport(GraphElementAccessor<V, E> pickSupport) {
+		this.pickSupport = pickSupport;
+		updateState(pickSupport, vertexIncludePredicate, edgeIncludePredicate);
+	}
+	
+	private void updateState(GraphElementAccessor gae, 
+			Predicate<VertexContext<V,E>> vertexIncludePredicate,
+			Predicate<EdgeContext<V,E>> edgeIncludePredicate) {
+		
+		if(gae instanceof PredicatedGraphCollections) {
+			PredicatedGraphCollections fgea =
+				(PredicatedGraphCollections)gae;
+			fgea.setVertexIncludePredicate(vertexIncludePredicate);
+			fgea.setEdgeIncludePredicate(edgeIncludePredicate);
+		}
+		
+	}
+	
+//	public GraphElementAccessor<V,E> createPredicatedShapePickSupport(VisualizationServer<V,E> vv) {
+//		return new PredicatedShapePickSupport(vv);
+//	}
+	
+//	protected class PredicatedShapePickSupport extends ShapePickSupport<V,E> {
+//	
+//
+//	    public PredicatedShapePickSupport(VisualizationServer<V,E> vv, float pickSize) {
+//	    	super(vv, pickSize);
+//	    }
+//	    
+//	    public PredicatedShapePickSupport(float pickSize) {
+//	        super(pickSize);
+//	    }
+//	            
+//	    /**
+//	     * Create an instance.
+//	     * The pickSize footprint defaults to 2.
+//	     */
+//	    public PredicatedShapePickSupport(VisualizationServer<V,E> vv) {
+//	        this(vv, 2);
+//	    }
+//	    
+//	    /**
+//	     * Create an instance.
+//	     * The pickSize footprint defaults to 2.
+//	     */
+//	    public PredicatedShapePickSupport() {
+//	        this(2);
+//	    }
+//
+//	    
+//	    protected Collection<V> getVertices(Layout<V,E> layout) {
+//	    	Collection<V> unfiltered = layout.getGraph().getVertices();
+//	    	Collection<V> filtered = new HashSet<V>();
+//	    	for(V v : unfiltered) {
+//	    		if(isRendered(new VertexContext<V,E>(layout.getGraph(),v))) {
+//	    			filtered.add(v);
+//	    		}
+//	    	}
+//	    	return filtered;
+//	    }
+//	    
+//	    protected Collection<E> getEdges(Layout<V,E> layout) {
+//	    	Collection<E> unfiltered = layout.getGraph().getEdges();
+//	    	Collection<E> filtered = new HashSet<E>();
+//	    	for(E e : unfiltered) {
+//	    		if(isRendered(new EdgeContext<V,E>(layout.getGraph(),e))) {
+//	    			filtered.add(e);
+//	    		}
+//	    	}
+//	    	return filtered;
+//	    }
+//	    
+//		private boolean isRendered(VertexContext<V,E> context) {
+//			return vertexIncludePredicate == null || vertexIncludePredicate.evaluate(context);
+//		}
+//		
+//		private boolean isRendered(EdgeContext<V,E> context) {
+//			Graph<V,E> g = context.graph;
+//			E e = context.edge;
+//			boolean edgeTest = edgeIncludePredicate == null || edgeIncludePredicate.evaluate(context);
+//			Pair<V> endpoints = g.getEndpoints(e);
+//			V v1 = endpoints.getFirst();
+//			V v2 = endpoints.getSecond();
+//			boolean endpointsTest = vertexIncludePredicate == null ||
+//				(vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v1)) && 
+//						vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v2)));
+//			return edgeTest && endpointsTest;
+//		}
+//
+//
+//	}
+
+//    class PickSupportDecorator implements GraphElementAccessor<V,E> {
+//    	
+//		/**
+//		 * @param layout
+//		 * @param x
+//		 * @param y
+//		 * @return
+//		 * @see edu.uci.ics.jung.algorithms.layout.GraphElementAccessor#getEdge(edu.uci.ics.jung.algorithms.layout.Layout, double, double)
+//		 */
+//		public E getEdge(Layout<V, E> layout, double x, double y) {
+//			E e =  pickSupport.getEdge(layout, x, y);
+//			// ensure e is being rendered:
+//			return isRendered(new EdgeContext<V,E>(layout.getGraph(),e)) ?
+//					e : null;
+//		}
+//
+//		/**
+//		 * @param layout
+//		 * @param x
+//		 * @param y
+//		 * @return
+//		 * @see edu.uci.ics.jung.algorithms.layout.GraphElementAccessor#getVertex(edu.uci.ics.jung.algorithms.layout.Layout, double, double)
+//		 */
+//		public V getVertex(Layout<V, E> layout, double x, double y) {
+//			V v = pickSupport.getVertex(layout, x, y);
+//			return isRendered(new VertexContext<V,E>(layout.getGraph(),v)) ?
+//					v : null;
+//		}
+//		
+//		private boolean isRendered(VertexContext<V,E> context) {
+//			return vertexIncludePredicate == null || vertexIncludePredicate.evaluate(context);
+//		}
+//		
+//		private boolean isRendered(EdgeContext<V,E> context) {
+//			Graph<V,E> g = context.graph;
+//			E e = context.edge;
+//			boolean edgeTest = edgeIncludePredicate == null || edgeIncludePredicate.evaluate(context);
+//			Pair<V> endpoints = g.getEndpoints(e);
+//			V v1 = endpoints.getFirst();
+//			V v2 = endpoints.getSecond();
+//			boolean endpointsTest = vertexIncludePredicate == null ||
+//				(vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v1)) && 
+//						vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v2)));
+//			return edgeTest && endpointsTest;
+//		}
+//    }
+//
 }
 
 
