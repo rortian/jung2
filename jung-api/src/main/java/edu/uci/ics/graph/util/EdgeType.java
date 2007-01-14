@@ -1,4 +1,4 @@
-package edu.uci.ics.graph;
+package edu.uci.ics.graph.util;
 
 public enum EdgeType {
       DIRECTED,
