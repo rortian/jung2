@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 // not used
@@ -28,7 +29,7 @@ public class BasicVertexIconRenderer<V,E> extends BasicVertexShapeRenderer<V,E> 
 	Transformer<V,Icon> vertexIconFunction;
 	
     public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v)) {
+        if (rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v))) {
         	paintIconForVertex(rc, v, x, y);
         }
     }

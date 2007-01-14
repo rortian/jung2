@@ -15,7 +15,8 @@ import java.awt.Shape;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.EdgeType;
+import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
 /**

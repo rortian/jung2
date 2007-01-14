@@ -20,8 +20,8 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 
 /**
  * The SpringLayout package represents a visualization of a set of nodes. The

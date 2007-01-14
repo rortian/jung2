@@ -17,6 +17,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.Transformer;
@@ -66,7 +67,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
      * the label is offset slightly.
      */
     public void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v) == false) {
+        if (rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v)) == false) {
         	return;
         }
 

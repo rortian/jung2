@@ -20,9 +20,9 @@ import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.util.ConstantMap;
 
 

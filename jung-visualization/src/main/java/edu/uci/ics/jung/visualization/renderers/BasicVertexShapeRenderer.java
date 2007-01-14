@@ -19,13 +19,14 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 // not used
 public class BasicVertexShapeRenderer<V,E> implements Renderer.Vertex<V,E> {
 	
     public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluateVertex(graph, v)) {
+        if (rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v))) {
         	paintShapeForVertex(rc, v, x, y);
         }
     }

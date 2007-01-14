@@ -23,8 +23,8 @@ import org.apache.commons.collections15.map.LazyMap;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 
 /**
  * Implements a self-organizing map layout algorithm, based on Meyer's

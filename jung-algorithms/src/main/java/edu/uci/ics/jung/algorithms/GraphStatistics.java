@@ -10,7 +10,6 @@
 package edu.uci.ics.jung.algorithms;
 import java.util.Collection;
 
-import edu.uci.ics.graph.ArchetypeGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;

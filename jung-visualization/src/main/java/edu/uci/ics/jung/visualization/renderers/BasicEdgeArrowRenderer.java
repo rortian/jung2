@@ -23,26 +23,27 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.EdgeType;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 // not used
 public class BasicEdgeArrowRenderer<V,E> extends BasicEdgeShapeRenderer<V,E> 
 	implements Renderer.Edge<V,E> {
 	
     public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
-        if (!rc.getEdgeIncludePredicate().evaluateEdge(graph,e))
+        if (!rc.getEdgeIncludePredicate().evaluate(new EdgeContext<V,E>(graph,e)))
             return;
         
         // don't draw edge if either incident vertex is not drawn
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluateVertex(graph, v1) || 
-            !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
+        if (!rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v1)) || 
+            !rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v2)))
             return;
         
         GraphicsDecorator g2d = rc.getGraphicsContext();

@@ -16,10 +16,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeContext;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.decorators.EdgeContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
@@ -109,8 +110,8 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluateVertex(graph, v1) || 
-            !rc.getVertexIncludePredicate().evaluateVertex(graph, v2))
+        if (!rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v1)) || 
+            !rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v2)))
             return;
 
         GraphicsDecorator g = rc.getGraphicsContext();
