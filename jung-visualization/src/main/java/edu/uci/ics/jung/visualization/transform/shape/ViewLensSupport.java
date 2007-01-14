@@ -13,7 +13,6 @@ import java.awt.Dimension;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
@@ -22,7 +21,7 @@ import edu.uci.ics.jung.visualization.transform.LensTransformer;
  * Uses a LensTransformer to use in the view
  * transform. This one will distort Vertex shapes.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */
@@ -33,11 +32,12 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     GraphicsDecorator lensGraphicsDecorator;
     GraphicsDecorator savedGraphicsDecorator;
     
-    public ViewLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicShapeTransformer(vv),
-                new ModalLensGraphMouse());
-    }
-    public ViewLensSupport(VisualizationViewer<V,E> vv, LensTransformer lensTransformer,
+//    public ViewLensSupport(VisualizationViewer<V,E> vv) {
+//        this(vv, new HyperbolicShapeTransformer(vv, vv.getViewTransformer()),
+//                new ModalLensGraphMouse());
+//    }
+    public ViewLensSupport(VisualizationViewer<V,E> vv, 
+    		LensTransformer lensTransformer,
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.renderContext = vv.getRenderContext();
@@ -49,12 +49,14 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
 
     }
     public void activate() {
+    	lensTransformer.setDelegate(vv.getViewTransformer());
         if(lens == null) {
             lens = new Lens(lensTransformer);
         }
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
+        lensTransformer.setDelegate(vv.getViewTransformer());
         vv.setViewTransformer(lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
@@ -65,7 +67,9 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     }
 
     public void deactivate() {
-        vv.setViewTransformer(savedViewTransformer);
+//    	savedViewTransformer.setTransform(lensTransformer.getDelegate().getTransform());
+//        vv.setViewTransformer(savedViewTransformer);
+        vv.setViewTransformer(lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);

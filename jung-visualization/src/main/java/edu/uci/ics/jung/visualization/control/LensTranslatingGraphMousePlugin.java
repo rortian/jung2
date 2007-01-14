@@ -60,11 +60,16 @@ implements MouseListener, MouseMotionListener {
      */
     public void mousePressed(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
+        MutableTransformer vt = vv.getViewTransformer();
+        if(vt instanceof LensTransformer) {
+        	vt = ((LensTransformer)vt).getDelegate();
+        }
+        Point2D p = vt.inverseTransform(e.getPoint());
         boolean accepted = checkModifiers(e);
         if(accepted) {
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-            testViewCenter(vv.getLayoutTransformer(), e.getPoint());
-            testViewCenter(vv.getViewTransformer(), e.getPoint());
+            testViewCenter(vv.getLayoutTransformer(), p);
+            testViewCenter(vv.getViewTransformer(), p);
             vv.repaint();
         }
         super.mousePressed(e);
@@ -136,22 +141,26 @@ implements MouseListener, MouseMotionListener {
      */
     public void mouseDragged(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
+        MutableTransformer vt = vv.getViewTransformer();
+        if(vt instanceof LensTransformer) {
+        	vt = ((LensTransformer)vt).getDelegate();
+        }
+        Point2D p = vt.inverseTransform(e.getPoint());
         boolean accepted = checkModifiers(e);
+
         if(accepted ) {
             MutableTransformer modelTransformer = vv.getLayoutTransformer();
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-            
             if(dragOnLens) {
-                
-                setViewCenter(modelTransformer, vv.inverseViewTransform(e.getPoint()));
-                setViewCenter(vv.getViewTransformer(), e.getPoint());
+                setViewCenter(modelTransformer, p);
+                setViewCenter(vv.getViewTransformer(), p);
                 e.consume();
                 vv.repaint();
 
             } else if(dragOnEdge) {
-                
-                setViewRadius(modelTransformer, e.getPoint());
-                setViewRadius(vv.getViewTransformer(), e.getPoint());
+
+                setViewRadius(modelTransformer, p);
+                setViewRadius(vv.getViewTransformer(), p);
                 e.consume();
                 vv.repaint();
                 

@@ -25,7 +25,7 @@ import java.awt.geom.Point2D;
  * while applying a possibly non-affine filter in its transform and
  * inverseTransform methods.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  *
  */
@@ -37,15 +37,16 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     protected Ellipse2D ellipse = new Ellipse2D.Float();
     
     protected float magnification = 0.7f;
+    protected ViewTransformer viewTransformer;
     
     /**
      * create an instance, setting values from the passed component
      * and registering to listen for size changes on the component
      * @param component
      */
-    public LensTransformer(Component component) {
-        this(component, new MutableAffineTransformer());
-    }
+//    public LensTransformer(Component component) {
+//        this(component, new MutableAffineTransformer());
+//    }
     /**
      * create an instance with a possibly shared transform
      * @param component
@@ -63,6 +64,7 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @param component
      */
     private void setComponent(Component component) {
+    	this.viewTransformer = (ViewTransformer)component;
         Dimension d = component.getSize();
         if(d.width <= 0 || d.height <= 0) {
             d = component.getPreferredSize();
@@ -201,9 +203,15 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     public abstract Point2D inverseTransform(Point2D viewPoint);
     
     public double getDistanceFromCenter(Point2D p) {
-        double dx = ellipse.getCenterX()-p.getX();
-        double dy = ellipse.getCenterY()-p.getY();
-        dx *= getRatio();
-        return Math.sqrt(dx*dx + dy*dy);
+    	
+    	Point2D center = new Point2D.Double(ellipse.getCenterX(),ellipse.getCenterY());
+//    	center = viewTransformer.viewTransform(center);
+    	double dist = center.distance(p);
+//    	System.err.println("ellipse width = "+ellipse.getWidth());
+//        double dx = ellipse.getCenterX()-p.getX();
+//        double dy = ellipse.getCenterY()-p.getY();
+//        dx *= getRatio();
+//        return Math.sqrt(dx*dx + dy*dy);
+        return dist;
     }
 }

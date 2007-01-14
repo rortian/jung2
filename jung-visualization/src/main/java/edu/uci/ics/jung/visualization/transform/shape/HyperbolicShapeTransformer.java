@@ -17,13 +17,14 @@ import java.awt.geom.Point2D;
 import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
+
 /**
  * HyperbolicShapeTransformer extends HyperbolicTransformer and
  * adds implementations for methods in ShapeTransformer.
  * It modifies the shapes (Vertex, Edge, and Arrowheads) so that
  * they are distorted by the hyperbolic transformation
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  *
  */
@@ -146,4 +147,77 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
         }
         return newPath;
     }
+    /**
+     * override base class transform to project the fisheye effect
+     */
+    public Point2D transform(Point2D graphPoint) {
+        if(graphPoint == null) return null;
+        Point2D viewCenter = getViewCenter();
+        double viewRadius = getViewRadius();
+        double ratio = getRatio();
+        // transform the point from the graph to the view
+        Point2D viewPoint = graphPoint;//delegate.transform(graphPoint);
+        // calculate point from center
+        double dx = viewPoint.getX() - viewCenter.getX();
+        double dy = viewPoint.getY() - viewCenter.getY();
+        // factor out ellipse
+        dx *= ratio;
+        Point2D pointFromCenter = new Point2D.Double(dx, dy);
+        
+        PolarPoint polar = cartesianToPolar(pointFromCenter);
+        double theta = polar.getTheta();
+        double radius = polar.getRadius();
+        if(radius > viewRadius) return viewPoint;
+        
+        double mag = Math.tan(Math.PI/2*magnification);
+        radius *= mag;
+        
+        radius = Math.min(radius, viewRadius);
+        radius /= viewRadius;
+        radius *= Math.PI/2;
+        radius = Math.abs(Math.atan(radius));
+        radius *= viewRadius;
+        Point2D projectedPoint = polarToCartesian(theta, radius);
+        projectedPoint.setLocation(projectedPoint.getX()/ratio, projectedPoint.getY());
+        Point2D translatedBack = new Point2D.Double(projectedPoint.getX()+viewCenter.getX(),
+                projectedPoint.getY()+viewCenter.getY());
+        return translatedBack;
+    }
+    
+    /**
+     * override base class to un-project the fisheye effect
+     */
+    public Point2D inverseTransform(Point2D viewPoint) {
+    	
+        viewPoint = delegate.inverseTransform(viewPoint);
+        Point2D viewCenter = getViewCenter();
+        double viewRadius = getViewRadius();
+        double ratio = getRatio();
+        double dx = viewPoint.getX() - viewCenter.getX();
+        double dy = viewPoint.getY() - viewCenter.getY();
+        // factor out ellipse
+        dx *= ratio;
+
+        Point2D pointFromCenter = new Point2D.Double(dx, dy);
+        
+        PolarPoint polar = cartesianToPolar(pointFromCenter);
+
+        double radius = polar.getRadius();
+        if(radius > viewRadius) return viewPoint;//elegate.inverseTransform(viewPoint);
+        
+        radius /= viewRadius;
+        radius = Math.abs(Math.tan(radius));
+        radius /= Math.PI/2;
+        radius *= viewRadius;
+        double mag = Math.tan(Math.PI/2*magnification);
+        radius /= mag;
+        polar.setRadius(radius);
+        Point2D projectedPoint = polarToCartesian(polar);
+        projectedPoint.setLocation(projectedPoint.getX()/ratio, projectedPoint.getY());
+        Point2D translatedBack = new Point2D.Double(projectedPoint.getX()+viewCenter.getX(),
+                projectedPoint.getY()+viewCenter.getY());
+        return translatedBack;
+        //delegate.inverseTransform(translatedBack);
+    }
+
 }

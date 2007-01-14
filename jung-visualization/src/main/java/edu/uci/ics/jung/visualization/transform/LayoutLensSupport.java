@@ -20,7 +20,7 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
  * examining lens to a jung graph application. See HyperbolicTransformerDemo
  * for an example of how to use it.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  *
  */
@@ -56,7 +56,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
             lensControls = new LensControls(lensTransformer);
         }
         vv.setLayoutTransformer(lensTransformer);
-        vv.setViewTransformer(new MutableAffineTransformer());
+//        vv.setViewTransformer(new MutableAffineTransformer());
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
@@ -65,9 +65,9 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
     }
     
     public void deactivate() {
-        if(savedViewTransformer != null) {
-            vv.setViewTransformer(savedViewTransformer);
-        }
+//        if(savedViewTransformer != null) {
+//            vv.setViewTransformer(savedViewTransformer);
+//        }
         if(lensTransformer != null) {
             vv.removePreRenderPaintable(lens);
             vv.removePostRenderPaintable(lensControls);

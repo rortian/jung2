@@ -24,7 +24,7 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
  * ViewLensSupport and LayoutLensSupport
  * for examples of how to use it.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  *
  */
@@ -32,7 +32,6 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
 
     protected VisualizationViewer<V,E> vv;
     protected VisualizationViewer.GraphMouse graphMouse;
-    protected MutableTransformer savedViewTransformer;
     protected LensTransformer lensTransformer;
     protected ModalGraphMouse lensGraphMouse;
     protected Lens lens;
@@ -51,7 +50,6 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
      */
     public AbstractLensSupport(VisualizationViewer<V,E> vv, ModalGraphMouse lensGraphMouse) {
         this.vv = vv;
-        this.savedViewTransformer = vv.getViewTransformer();
         this.graphMouse = vv.getGraphMouse();
         this.defaultToolTipText = vv.getToolTipText();
 
@@ -101,7 +99,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
         }
 
         public boolean useTransform() {
-            return false;
+            return true;
         }
     }
     
@@ -146,7 +144,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
         }
 
         public boolean useTransform() {
-            return false;
+            return true;
         }
     }
 
