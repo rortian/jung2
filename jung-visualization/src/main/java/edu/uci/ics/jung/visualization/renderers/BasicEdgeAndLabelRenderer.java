@@ -16,9 +16,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -50,8 +49,8 @@ public class BasicEdgeAndLabelRenderer<V,E>
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v1)) || 
-            !rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v2)))
+        if (!rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v1)) || 
+            !rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v2)))
             return;
 
         GraphicsDecorator g = rc.getGraphicsContext();
@@ -59,7 +58,7 @@ public class BasicEdgeAndLabelRenderer<V,E>
         int distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
 
-        double closeness = rc.getEdgeLabelClosenessFunction().transform(new EdgeContext<V,E>(graph, e)).doubleValue();
+        double closeness = rc.getEdgeLabelClosenessFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e)).doubleValue();
 
         int posX = (int) (x1 + (closeness) * distX);
         int posY = (int) (y1 + (closeness) * distY);
@@ -72,7 +71,7 @@ public class BasicEdgeAndLabelRenderer<V,E>
         
         Dimension d = component.getPreferredSize();
 
-        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V, E>(graph, e));
+        Shape edgeShape = rc.getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
         
         double parallelOffset = 1;
 

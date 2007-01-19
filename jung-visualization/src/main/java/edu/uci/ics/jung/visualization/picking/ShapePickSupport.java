@@ -25,12 +25,11 @@ import java.util.HashSet;
 import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.graph.util.VertexContext;
-import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 
 /**
@@ -44,8 +43,8 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 
     protected float pickSize;
     protected VisualizationServer<V,E> vv;
-    protected Predicate<VertexContext<V,E>> vertexIncludePredicate;
-    protected Predicate<EdgeContext<V,E>> edgeIncludePredicate;
+    protected Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate;
+    protected Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate;
     
     /**
      * Create an instance.
@@ -156,7 +155,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
                     AffineTransform xform = AffineTransform.getTranslateInstance(x1, y1);
 
                     Shape edgeShape = 
-                    	vv.getRenderContext().getEdgeShapeFunction().transform(new EdgeContext<V,E>(vv.getGraphLayout().getGraph(),e));
+                    	vv.getRenderContext().getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(vv.getGraphLayout().getGraph(),e));
                     if(isLoop) {
                         // make the loops proportional to the size of the vertex
                         Shape s2 = vv.getRenderContext().getVertexShapeFunction().transform(v2);
@@ -217,7 +216,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
     	Collection<V> unfiltered = layout.getGraph().getVertices();
     	Collection<V> filtered = new HashSet<V>();
     	for(V v : unfiltered) {
-    		if(isRendered(new VertexContext<V,E>(layout.getGraph(),v))) {
+    		if(isVertexRendered(Context.<Graph<V,E>,V>getInstance(layout.getGraph(),v))) {
     			filtered.add(v);
     		}
     	}
@@ -228,27 +227,27 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
     	Collection<E> unfiltered = layout.getGraph().getEdges();
     	Collection<E> filtered = new HashSet<E>();
     	for(E e : unfiltered) {
-    		if(isRendered(new EdgeContext<V,E>(layout.getGraph(),e))) {
+    		if(isEdgeRendered(Context.<Graph<V,E>,E>getInstance(layout.getGraph(),e))) {
     			filtered.add(e);
     		}
     	}
     	return filtered;
     }
     
-	protected boolean isRendered(VertexContext<V,E> context) {
+	protected boolean isVertexRendered(Context<Graph<V,E>,V> context) {
 		return vertexIncludePredicate == null || vertexIncludePredicate.evaluate(context);
 	}
 	
-	protected boolean isRendered(EdgeContext<V,E> context) {
+	protected boolean isEdgeRendered(Context<Graph<V,E>,E> context) {
 		Graph<V,E> g = context.graph;
-		E e = context.edge;
+		E e = context.element;
 		boolean edgeTest = edgeIncludePredicate == null || edgeIncludePredicate.evaluate(context);
 		Pair<V> endpoints = g.getEndpoints(e);
 		V v1 = endpoints.getFirst();
 		V v2 = endpoints.getSecond();
 		boolean endpointsTest = vertexIncludePredicate == null ||
-			(vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v1)) && 
-					vertexIncludePredicate.evaluate(new VertexContext<V,E>(g,v2)));
+			(vertexIncludePredicate.evaluate(Context.<Graph<V,E>,V>getInstance(g,v1)) && 
+					vertexIncludePredicate.evaluate(Context.<Graph<V,E>,V>getInstance(g,v2)));
 		return edgeTest && endpointsTest;
 	}
 
@@ -256,7 +255,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 	/**
 	 * @return the edgeIncludePredicate
 	 */
-	public Predicate<EdgeContext<V, E>> getEdgeIncludePredicate() {
+	public Predicate<Context<Graph<V,E>,E>> getEdgeIncludePredicate() {
 		return edgeIncludePredicate;
 	}
 
@@ -264,14 +263,14 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 	 * @param edgeIncludePredicate the edgeIncludePredicate to set
 	 */
 	public void setEdgeIncludePredicate(
-			Predicate<EdgeContext<V, E>> edgeIncludePredicate) {
+			Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate) {
 		this.edgeIncludePredicate = edgeIncludePredicate;
 	}
 
 	/**
 	 * @return the vertexIncludePredicate
 	 */
-	public Predicate<VertexContext<V, E>> getVertexIncludePredicate() {
+	public Predicate<Context<Graph<V,E>,V>> getVertexIncludePredicate() {
 		return vertexIncludePredicate;
 	}
 
@@ -279,7 +278,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 	 * @param vertexIncludePredicate the vertexIncludePredicate to set
 	 */
 	public void setVertexIncludePredicate(
-			Predicate<VertexContext<V, E>> vertexIncludePredicate) {
+			Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate) {
 		this.vertexIncludePredicate = vertexIncludePredicate;
 	}
 

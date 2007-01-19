@@ -60,7 +60,7 @@ import com.sun.j3d.utils.picking.behaviors.PickingCallback;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.visualization.layout.VisRunner;
@@ -350,7 +350,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 
 		for(E edge : graph.getEdges()) {
 			EdgeGroup<E> eg = 
-				new EdgeGroup<E>(edge, renderContext.getEdgeShapeTransformer().transform(new EdgeContext<V,E>(graph, edge)));
+				new EdgeGroup<E>(edge, renderContext.getEdgeShapeTransformer().transform(Context.<Graph<V,E>,E>getInstance(graph, edge)));
 			eg.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 			eg.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 			edgeMap.put(edge, eg);

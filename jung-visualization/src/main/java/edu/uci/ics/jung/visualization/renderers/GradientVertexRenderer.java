@@ -21,7 +21,7 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.VertexContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -61,7 +61,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
 
 
 	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v))) {
+        if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v))) {
             boolean vertexHit = true;
             // get the shape to be rendered
             Shape shape = rc.getVertexShapeFunction().transform(v);

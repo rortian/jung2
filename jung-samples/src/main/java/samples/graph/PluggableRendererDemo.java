@@ -54,9 +54,9 @@ import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.VertexContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
@@ -215,7 +215,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected DirectionDisplayPredicate<Integer,Number> show_edge;
     protected DirectionDisplayPredicate<Integer,Number> show_arrow;
     protected VertexDisplayPredicate<Integer,Number> show_vertex;
-    protected Predicate<EdgeContext<Integer,Number>> self_loop;
+    protected Predicate<Context<Graph<Integer,Number>,Number>> self_loop;
     protected GradientPickedEdgePaintFunction<Integer,Number> edgeDrawPaint;
     protected GradientPickedEdgePaintFunction<Integer,Number> edgeFillPaint;
     protected final static Object VOLTAGE_KEY = "voltages";
@@ -941,7 +941,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
 }
     private final static class DirectionDisplayPredicate<V,E> 
-    	implements Predicate<EdgeContext<V,E>>
+    	implements Predicate<Context<Graph<V,E>,E>>
     	//extends AbstractGraphPredicate<V,E>
     {
         protected boolean show_d;
@@ -963,10 +963,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             show_u = b;
         }
         
-        public boolean evaluate(EdgeContext<V,E> context)
+        public boolean evaluate(Context<Graph<V,E>,E> context)
         {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
             if (graph.getEdgeType(e) == EdgeType.DIRECTED && show_d) {
                 return true;
             }
@@ -978,7 +978,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
     
     private final static class VertexDisplayPredicate<V,E>
-    	implements Predicate<VertexContext<V,E>>
+    	implements Predicate<Context<Graph<V,E>,V>>
 //    	extends  AbstractGraphPredicate<V,E>
     {
         protected boolean filter_small;
@@ -994,9 +994,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             filter_small = b;
         }
         
-        public boolean evaluate(VertexContext<V,E> context) {
+        public boolean evaluate(Context<Graph<V,E>,V> context) {
         	Graph<V,E> graph = context.graph;
-        	V v = context.vertex;
+        	V v = context.element;
 //            Vertex v = (Vertex)arg0;
             if (filter_small)
                 return (graph.degree(v) >= MIN_DEGREE);
@@ -1162,7 +1162,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     {
         private org.apache.commons.collections15.Transformer<E,Paint> defaultFunc;
         protected boolean fill_edge = false;
-        Predicate<EdgeContext<V,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
+        Predicate<Context<Graph<V,E>,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
         
         public GradientPickedEdgePaintFunction(org.apache.commons.collections15.Transformer<E,Paint> defaultEdgePaintFunction, 
                 VisualizationViewer<V,E> vv) 

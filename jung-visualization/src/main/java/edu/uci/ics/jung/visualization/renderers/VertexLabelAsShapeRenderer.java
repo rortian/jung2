@@ -19,7 +19,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.VertexContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -55,7 +55,7 @@ public class VertexLabelAsShapeRenderer<V,E>
      * the label is offset slightly.
      */
     public void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y) {
-        if (rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v)) == false) {
+        if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v)) == false) {
         	return;
         }
         GraphicsDecorator g = rc.getGraphicsContext();

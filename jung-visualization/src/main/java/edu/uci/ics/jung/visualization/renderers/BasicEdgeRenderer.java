@@ -24,10 +24,9 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
@@ -35,15 +34,15 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
 
     public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
         GraphicsDecorator g2d = rc.getGraphicsContext();
-        if (!rc.getEdgeIncludePredicate().evaluate(new EdgeContext<V,E>(graph,e)))
+        if (!rc.getEdgeIncludePredicate().evaluate(Context.<Graph<V,E>,E>getInstance(graph,e)))
             return;
         
         // don't draw edge if either incident vertex is not drawn
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v1)) || 
-            !rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v2)))
+        if (!rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v1)) || 
+            !rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v2)))
             return;
         
         Stroke new_stroke = rc.getEdgeStrokeFunction().transform(e);
@@ -75,7 +74,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         V v2 = endpoints.getSecond();
         boolean isLoop = v1.equals(v2);
         Shape s2 = rc.getVertexShapeFunction().transform(v2);
-        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V,E>(graph, e));
+        Shape edgeShape = rc.getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
         
         boolean edgeHit = true;
         boolean arrowHit = true;
@@ -135,7 +134,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             // see if arrows are too small to bother drawing
             if(scalex < .3 || scaley < .3) return;
             
-            if (rc.getEdgeArrowPredicate().evaluate(new EdgeContext<V,E>(graph, e))) {
+            if (rc.getEdgeArrowPredicate().evaluate(Context.<Graph<V,E>,E>getInstance(graph, e))) {
                 
                 Shape destVertexShape = 
                     rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getSecond());
@@ -149,7 +148,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     AffineTransform at = 
                         getArrowTransform(rc, new GeneralPath(edgeShape), destVertexShape);
                     if(at == null) return;
-                    Shape arrow = rc.getEdgeArrowFunction().transform(new EdgeContext<V,E>(graph, e));
+                    Shape arrow = rc.getEdgeArrowFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
                     arrow = at.createTransformedShape(arrow);
                     // note that arrows implicitly use the edge's draw paint
                     g.fill(arrow);
@@ -165,7 +164,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     if(arrowHit) {
                         AffineTransform at = getReverseArrowTransform(rc, new GeneralPath(edgeShape), vertexShape, !isLoop);
                         if(at == null) return;
-                        Shape arrow = rc.getEdgeArrowFunction().transform(new EdgeContext<V,E>(graph, e));
+                        Shape arrow = rc.getEdgeArrowFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
                         arrow = at.createTransformedShape(arrow);
                         g.fill(arrow);
                     }

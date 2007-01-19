@@ -22,7 +22,8 @@ import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
 
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 
@@ -32,7 +33,7 @@ import edu.uci.ics.jung.visualization.picking.PickedState;
 public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 
 	protected Transformer<E,Appearance> edgeAppearanceTransformer;
-	protected Transformer<EdgeContext<V,E>,Node> edgeShapeTransformer;
+	protected Transformer<Context<Graph<V,E>,E>,Node> edgeShapeTransformer;
 	protected PickedState<E> pickedEdgeState;
 	protected PickedState<V> pickedVertexState;
 	protected Transformer<V,Appearance> vertexAppearanceTransformer;
@@ -92,9 +93,9 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 	    		  redLook);
 
 		this.edgeAppearanceTransformer = new ConstantTransformer(lightGrayLook);
-		this.edgeShapeTransformer = new Transformer<EdgeContext<V,E>,Node>() {
+		this.edgeShapeTransformer = new Transformer<Context<Graph<V,E>,E>,Node>() {
 
-			public Node transform(EdgeContext<V,E> ec) {
+			public Node transform(Context<Graph<V,E>,E> ec) {
 				LineArray lineArray = new LineArray(2, LineArray.COORDINATES | LineArray.COLOR_3);
 				lineArray.setCoordinates(0, new Point3f[]{new Point3f(0,-.5f,0),new Point3f(0,.5f,0)});
 				lineArray.setColor(0, new Color3f(1,1,1));
@@ -123,7 +124,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 		return edgeAppearanceTransformer;
 	}
 
-	public Transformer<EdgeContext<V, E>, Node> getEdgeShapeTransformer() {
+	public Transformer<Context<Graph<V,E>,E>, Node> getEdgeShapeTransformer() {
 		return edgeShapeTransformer;
 	}
 
@@ -152,7 +153,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 		
 	}
 
-	public void setEdgeShapeTransformer(Transformer<EdgeContext<V, E>, Node> edgeShapeTransformer) {
+	public void setEdgeShapeTransformer(Transformer<Context<Graph<V,E>,E>, Node> edgeShapeTransformer) {
 		this.edgeShapeTransformer = edgeShapeTransformer;
 	}
 

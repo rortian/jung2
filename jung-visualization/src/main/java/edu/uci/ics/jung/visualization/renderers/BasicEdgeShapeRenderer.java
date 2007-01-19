@@ -20,10 +20,9 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 // not used
@@ -31,15 +30,15 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
 	
 	
     public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
-        if (!rc.getEdgeIncludePredicate().evaluate(new EdgeContext<V,E>(graph, e)))
+        if (!rc.getEdgeIncludePredicate().evaluate(Context.<Graph<V,E>,E>getInstance(graph, e)))
             return;
         
         // don't draw edge if either incident vertex is not drawn
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        if (!rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v1)) || 
-            !rc.getVertexIncludePredicate().evaluate(new VertexContext<V,E>(graph,v2)))
+        if (!rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v1)) || 
+            !rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v2)))
             return;
         
         GraphicsDecorator g2d = rc.getGraphicsContext();
@@ -72,7 +71,7 @@ public class BasicEdgeShapeRenderer<V,E> implements Renderer.Edge<V,E> {
         V v2 = endpoints.getSecond();
         boolean isLoop = v1.equals(v2);
         Shape s2 = rc.getVertexShapeFunction().transform(v2);
-        Shape edgeShape = rc.getEdgeShapeFunction().transform(new EdgeContext<V,E>(graph, e));
+        Shape edgeShape = rc.getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
         
         boolean edgeHit = true;
         Rectangle deviceRectangle = null;

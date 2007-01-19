@@ -5,7 +5,8 @@ import javax.media.j3d.Node;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 public interface RenderContext<V, E> {
@@ -14,9 +15,9 @@ public interface RenderContext<V, E> {
 
     void setEdgeAppearanceTransformer(Transformer<E,Appearance> edgeAppearanceTransformer);
 
-    Transformer<EdgeContext<V,E>,Node> getEdgeShapeTransformer();
+    Transformer<Context<Graph<V,E>,E>,Node> getEdgeShapeTransformer();
 
-    void setEdgeShapeTransformer(Transformer<EdgeContext<V,E>,Node> edgeShapeTransformer);
+    void setEdgeShapeTransformer(Transformer<Context<Graph<V,E>,E>,Node> edgeShapeTransformer);
 
     PickedState<E> getPickedEdgeState();
 
