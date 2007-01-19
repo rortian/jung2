@@ -13,10 +13,10 @@ import javax.swing.JComponent;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
-import edu.uci.ics.graph.util.VertexContext;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -54,26 +54,26 @@ public interface RenderContext<V, E> {
 
     void setArrowPlacementTolerance(float arrow_placement_tolerance);
 
-    Transformer<EdgeContext<V,E>,Shape> getEdgeArrowFunction();
+    Transformer<Context<Graph<V,E>,E>,Shape> getEdgeArrowFunction();
 
-    void setEdgeArrowFunction(Transformer<EdgeContext<V,E>,Shape> edgeArrowFunction);
+    void setEdgeArrowFunction(Transformer<Context<Graph<V,E>,E>,Shape> edgeArrowFunction);
 
-    Predicate<EdgeContext<V,E>> getEdgeArrowPredicate() ;
+    Predicate<Context<Graph<V,E>,E>> getEdgeArrowPredicate() ;
 
-    void setEdgeArrowPredicate(Predicate<EdgeContext<V,E>> edgeArrowPredicate);
+    void setEdgeArrowPredicate(Predicate<Context<Graph<V,E>,E>> edgeArrowPredicate);
 
     Transformer<E,Font> getEdgeFontFunction();
 
     void setEdgeFontFunction(Transformer<E,Font> edgeFontFunction);
 
-    Predicate<EdgeContext<V,E>> getEdgeIncludePredicate();
+    Predicate<Context<Graph<V,E>,E>> getEdgeIncludePredicate();
 
-    void setEdgeIncludePredicate(Predicate<EdgeContext<V,E>> edgeIncludePredicate);
+    void setEdgeIncludePredicate(Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate);
 
-    Transformer<EdgeContext<V,E>,Number> getEdgeLabelClosenessFunction();
+    Transformer<Context<Graph<V,E>,E>,Number> getEdgeLabelClosenessFunction();
 
     void setEdgeLabelClosenessFunction(
-    		Transformer<EdgeContext<V,E>,Number> edgeLabelClosenessFunction);
+    		Transformer<Context<Graph<V,E>,E>,Number> edgeLabelClosenessFunction);
 
     EdgeLabelRenderer getEdgeLabelRenderer();
 
@@ -87,9 +87,9 @@ public interface RenderContext<V, E> {
 
     void setEdgeDrawPaintFunction(Transformer<E,Paint> edgeDrawPaintFunction);
 
-    Transformer<EdgeContext<V,E>,Shape> getEdgeShapeFunction();
+    Transformer<Context<Graph<V,E>,E>,Shape> getEdgeShapeFunction();
 
-    void setEdgeShapeFunction(Transformer<EdgeContext<V,E>,Shape> edgeShapeFunction);
+    void setEdgeShapeFunction(Transformer<Context<Graph<V,E>,E>,Shape> edgeShapeFunction);
 
     Transformer<E,String> getEdgeStringer();
 
@@ -132,9 +132,9 @@ public interface RenderContext<V, E> {
 
     void setVertexIconFunction(Transformer<V,Icon> vertexIconFunction);
 
-    Predicate<VertexContext<V,E>> getVertexIncludePredicate();
+    Predicate<Context<Graph<V,E>,V>> getVertexIncludePredicate();
 
-    void setVertexIncludePredicate(Predicate<VertexContext<V,E>> vertexIncludePredicate);
+    void setVertexIncludePredicate(Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate);
 
     VertexLabelRenderer getVertexLabelRenderer();
 
@@ -165,21 +165,20 @@ public interface RenderContext<V, E> {
     void setViewTransformer(MutableTransformer viewTransformer);
     
     class DirectedEdgeArrowPredicate<V,E> 
-    	implements Predicate<EdgeContext<V,E>> {
-    //extends AbstractGraphPredicate<V,E> {
+    	implements Predicate<Context<Graph<V,E>,E>> {
 
-        public boolean evaluate(EdgeContext<V, E> c) {
-            return c.graph.getEdgeType(c.edge) == EdgeType.DIRECTED;
+        public boolean evaluate(Context<Graph<V,E>,E> c) {
+            return c.graph.getEdgeType(c.element) == EdgeType.DIRECTED;
         }
         
     }
     
     class UndirectedEdgeArrowPredicate<V,E> 
-    	implements Predicate<EdgeContext<V,E>> {
+    	implements Predicate<Context<Graph<V,E>,E>> {
     	//extends AbstractGraphPredicate<V,E> {
 
-        public boolean evaluate(EdgeContext<V, E> c) {
-            return c.graph.getEdgeType(c.edge) == EdgeType.UNDIRECTED;
+        public boolean evaluate(Context<Graph<V,E>,E> c) {
+            return c.graph.getEdgeType(c.element) == EdgeType.UNDIRECTED;
         }
         
     }
