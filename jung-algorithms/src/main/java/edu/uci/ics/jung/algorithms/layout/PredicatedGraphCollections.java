@@ -14,8 +14,8 @@ import java.util.Collection;
 
 import org.apache.commons.collections15.Predicate;
 
-import edu.uci.ics.graph.util.EdgeContext;
-import edu.uci.ics.graph.util.VertexContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 
 
 
@@ -29,8 +29,8 @@ public interface PredicatedGraphCollections<V, E>  {
     
     Collection<E> getFilteredEdges(Layout<V,E> layout);
     
-    void setVertexIncludePredicate(Predicate<VertexContext<V,E>> vertexPredicate);
+    void setVertexIncludePredicate(Predicate<Context<Graph<V,E>,V>> vertexPredicate);
     
-    void setEdgeIncludePredicate(Predicate<EdgeContext<V,E>> context);
+    void setEdgeIncludePredicate(Predicate<Context<Graph<V,E>,E>> context);
 
 }
