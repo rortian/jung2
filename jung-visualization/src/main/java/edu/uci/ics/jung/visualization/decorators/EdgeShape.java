@@ -18,7 +18,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.QuadCurve2D;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
@@ -68,9 +68,9 @@ public class EdgeShape<V,E>  {
          * SimpleLoop shared instance.
          */
         @SuppressWarnings("unchecked")
-		public Shape transform(EdgeContext<V,E> context) {
+		public Shape transform(Context<Graph<V,E>,E> context) {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
             
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
@@ -107,9 +107,9 @@ public class EdgeShape<V,E>  {
          * Loop shared instance.
          */
         @SuppressWarnings("unchecked")
-		public Shape transform(EdgeContext<V,E> context) {
+		public Shape transform(Context<Graph<V,E>,E> context) {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
@@ -154,9 +154,9 @@ public class EdgeShape<V,E>  {
          * Loop shared instance.
          */
         @SuppressWarnings("unchecked")
-		public Shape transform(EdgeContext<V,E> context) {
+		public Shape transform(Context<Graph<V,E>,E> context) {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             if (isLoop)
@@ -202,9 +202,9 @@ public class EdgeShape<V,E>  {
          * Loop shared instance.
          */
         @SuppressWarnings("unchecked")
-		public Shape transform(EdgeContext<V,E> context) {
+		public Shape transform(Context<Graph<V,E>,E> context) {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
            Pair<V> endpoints = graph.getEndpoints(e);
            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
            if (isLoop)
@@ -240,7 +240,7 @@ public class EdgeShape<V,E>  {
          * getter for the shape
          * @return the shared instance
          */
-        public Shape transform(EdgeContext<V,E> context) {
+        public Shape transform(Context<Graph<V,E>,E> context) {
             return instance;
         }
     }
@@ -268,9 +268,9 @@ public class EdgeShape<V,E>  {
          * Get the shape for this edge, modifying the diameter in the
          * case of parallel edges, so they do not overlap
          */
-        public Shape transform(EdgeContext<V,E> context) {
+        public Shape transform(Context<Graph<V,E>,E> context) {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
             int count = 1;
             if(parallelEdgeIndexFunction != null) {
                 count = parallelEdgeIndexFunction.getIndex(graph, e);
@@ -308,9 +308,9 @@ public class EdgeShape<V,E>  {
             bowtie.closePath();
         }
         
-        public Shape transform(EdgeContext<V,E> context) {
+        public Shape transform(Context<Graph<V,E>,E> context) {
         	Graph<V,E> graph = context.graph;
-        	E e = context.edge;
+        	E e = context.element;
         
             Pair<V> endpoints = graph.getEndpoints(e);
             boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());

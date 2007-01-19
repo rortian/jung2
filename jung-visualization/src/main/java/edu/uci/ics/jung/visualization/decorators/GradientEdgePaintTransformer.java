@@ -18,7 +18,8 @@ import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Predicate;
 
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -43,7 +44,7 @@ public class GradientEdgePaintTransformer<V, E>
     protected Color c2;
     protected VisualizationViewer<V,E> vv;
     protected Transformer transformer;
-    protected Predicate<EdgeContext<V,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
+    protected Predicate<Context<Graph<V,E>,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
 
     public GradientEdgePaintTransformer(Color c1, Color c2, 
             VisualizationViewer<V,E> vv)
@@ -70,7 +71,7 @@ public class GradientEdgePaintTransformer<V, E>
             xF = (xF + xB) / 2;
             yF = (yF + yB) / 2;
         } 
-        if(selfLoop.evaluate(new EdgeContext<V,E>(layout.getGraph(), e))) {
+        if(selfLoop.evaluate(Context.<Graph<V,E>,E>getInstance(layout.getGraph(), e))) {
         	yF += 50;
         	xF += 50;
         }

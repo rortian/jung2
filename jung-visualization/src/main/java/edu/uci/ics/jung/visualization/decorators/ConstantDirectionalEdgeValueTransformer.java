@@ -14,7 +14,7 @@ package edu.uci.ics.jung.visualization.decorators;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 
 
@@ -23,7 +23,7 @@ import edu.uci.ics.graph.util.EdgeType;
  * 
  * @author Joshua O'Madadhain
  */
-public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer<EdgeContext<V,E>,Number>
+public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer<Context<Graph<V,E>,E>,Number>
 {
     protected Double undirected_closeness;
     protected Double directed_closeness;
@@ -42,9 +42,9 @@ public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer
     /**
      * @see edu.uci.ics.jung.graph.decorators.NumberEdgeValue#getNumber(ArchetypeEdge)
      */
-    public Number transform(EdgeContext<V,E> context) {
+    public Number transform(Context<Graph<V,E>,E> context) {
     	Graph<V,E> graph = context.graph;
-    	E e = context.edge;
+    	E e = context.element;
         if (graph.getEdgeType(e) == EdgeType.DIRECTED)
             return directed_closeness;
         else 

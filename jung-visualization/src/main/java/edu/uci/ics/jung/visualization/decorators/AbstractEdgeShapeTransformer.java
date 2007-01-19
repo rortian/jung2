@@ -13,7 +13,8 @@ import java.awt.Shape;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 
 
 
@@ -24,7 +25,7 @@ import edu.uci.ics.graph.util.EdgeContext;
  *  
  * @author Tom Nelson
  */
-public abstract class AbstractEdgeShapeTransformer<V,E> implements Transformer<EdgeContext<V,E>,Shape> {
+public abstract class AbstractEdgeShapeTransformer<V,E> implements Transformer<Context<Graph<V,E>,E>,Shape> {
 
     /**
      * Specifies how far apart to place the control points for edges being
@@ -35,8 +36,7 @@ public abstract class AbstractEdgeShapeTransformer<V,E> implements Transformer<E
     /**
      * Sets the value of <code>control_offset_increment</code>.
      */
-    public void setControlOffsetIncrement(float y) 
-    {
+    public void setControlOffsetIncrement(float y) {
         control_offset_increment = y;
     }
     

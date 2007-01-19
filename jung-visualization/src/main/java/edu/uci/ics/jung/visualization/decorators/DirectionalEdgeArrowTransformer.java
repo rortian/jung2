@@ -15,7 +15,8 @@ import java.awt.Shape;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.util.EdgeContext;
+import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
@@ -25,7 +26,7 @@ import edu.uci.ics.jung.visualization.ArrowFactory;
  * 
  * @author Joshua O'Madadhain
  */
-public class DirectionalEdgeArrowTransformer<V,E> implements Transformer<EdgeContext<V,E>,Shape> {
+public class DirectionalEdgeArrowTransformer<V,E> implements Transformer<Context<Graph<V,E>,E>,Shape> {
     protected Shape undirected_arrow;
     protected Shape directed_arrow;
     
@@ -38,9 +39,9 @@ public class DirectionalEdgeArrowTransformer<V,E> implements Transformer<EdgeCon
     /**
      * 
      */
-    public Shape transform(EdgeContext<V,E> context)
+    public Shape transform(Context<Graph<V,E>,E> context)
     {
-        if (context.graph.getEdgeType(context.edge) == EdgeType.DIRECTED)
+        if (context.graph.getEdgeType(context.element) == EdgeType.DIRECTED)
             return directed_arrow;
         else 
             return undirected_arrow;
