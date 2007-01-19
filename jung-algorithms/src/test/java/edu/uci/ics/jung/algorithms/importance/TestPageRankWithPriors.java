@@ -9,23 +9,20 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections15.Factory;
 
 import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.algorithms.importance.PageRankWithPriors;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
