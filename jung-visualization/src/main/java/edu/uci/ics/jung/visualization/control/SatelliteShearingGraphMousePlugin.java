@@ -47,7 +47,7 @@ public class SatelliteShearingGraphMousePlugin extends ShearingGraphMousePlugin 
                 VisualizationViewer vvMaster = 
                     ((SatelliteVisualizationViewer)vv).getMaster();
                 
-                MutableTransformer modelTransformerMaster = vvMaster.getLayoutTransformer();
+                MutableTransformer modelTransformerMaster = vvMaster.getRenderContext().getBasicTransformer().getLayoutTransformer();
 
                 vv.setCursor(cursor);
                 Point2D q = down;
@@ -62,7 +62,7 @@ public class SatelliteShearingGraphMousePlugin extends ShearingGraphMousePlugin 
                 // lens center in the satellite view.
                 // translate the master view center to layout coords, then translate
                 // that point to the satellite view's view coordinate system....
-                Point2D center = vv.transform(vvMaster.inverseTransform(vvMaster.getCenter()));
+                Point2D center = vv.getRenderContext().getBasicTransformer().transform(vvMaster.getRenderContext().getBasicTransformer().inverseTransform(vvMaster.getCenter()));
                 if(p.getX() < center.getX()) {
                     shy = -shy;
                 }

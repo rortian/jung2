@@ -98,7 +98,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         if(checkModifiers(e)) {
             final VisualizationViewer<V,E> vv =
                 (VisualizationViewer<V,E>)e.getSource();
-            final Point2D p = vv.inverseViewTransform(e.getPoint());
+            final Point2D p = vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
             GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {
             	Graph<V,E> graph = vv.getModel().getGraphLayout().getGraph();
@@ -127,7 +127,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
 
                     V newVertex = vertexFactory.create();
                     	new Integer(graph.getVertices().size());
-                    vertexLocations.put(newVertex, vv.inverseTransform(e.getPoint()));
+                    vertexLocations.put(newVertex, vv.getRenderContext().getBasicTransformer().inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
                         layout.lock(lockVertex,true);
@@ -154,7 +154,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         if(checkModifiers(e)) {
             final VisualizationViewer<V,E> vv =
                 (VisualizationViewer<V,E>)e.getSource();
-            final Point2D p = vv.inverseViewTransform(e.getPoint());
+            final Point2D p = vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
             Layout<V,E> layout = vv.getModel().getGraphLayout();
             GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {

@@ -81,7 +81,9 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         new ConstantTransformer(Color.black);
     protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction = 
         DefaultParallelEdgeIndexFunction.<V,E>getInstance();
-    protected MutableTransformer viewTransformer = new MutableAffineTransformer();
+//    protected MutableTransformer viewTransformer = new MutableAffineTransformer();
+    
+    protected BasicTransformer basicTransformer = new BasicTransformer();
     
 	/**
 	 * pluggable support for picking graph elements by
@@ -547,16 +549,16 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getViewTransformer()
      */
-    public MutableTransformer getViewTransformer() {
-        return viewTransformer;
-    }
+//    public MutableTransformer getViewTransformer() {
+//        return viewTransformer;
+//    }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setViewTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
      */
-    public void setViewTransformer(MutableTransformer viewTransformer) {
-        this.viewTransformer = viewTransformer;
-    }
+//    public void setViewTransformer(MutableTransformer viewTransformer) {
+//        this.viewTransformer = viewTransformer;
+//    }
 
 	/**
 	 * @return the pickSupport
@@ -584,6 +586,20 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 			fgea.setEdgeIncludePredicate(edgeIncludePredicate);
 		}
 		
+	}
+
+	/**
+	 * @return the basicTransformer
+	 */
+	public BasicTransformer getBasicTransformer() {
+		return basicTransformer;
+	}
+
+	/**
+	 * @param basicTransformer the basicTransformer to set
+	 */
+	public void setBasicTransformer(BasicTransformer basicTransformer) {
+		this.basicTransformer = basicTransformer;
 	}
 	
 //	public GraphElementAccessor<V,E> createPredicatedShapePickSupport(VisualizationServer<V,E> vv) {

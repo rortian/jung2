@@ -28,7 +28,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
     implements LensSupport {
 
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicTransformer(vv, vv.getLayoutTransformer()),
+        this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getBasicTransformer().getLayoutTransformer()),
                 new ModalLensGraphMouse());
     }
     /**
@@ -55,7 +55,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
-        vv.setLayoutTransformer(lensTransformer);
+        vv.getRenderContext().getBasicTransformer().setLayoutTransformer(lensTransformer);
 //        vv.setViewTransformer(new MutableAffineTransformer());
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
@@ -71,7 +71,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensTransformer != null) {
             vv.removePreRenderPaintable(lens);
             vv.removePostRenderPaintable(lensControls);
-            vv.setLayoutTransformer(lensTransformer.getDelegate());
+            vv.getRenderContext().getBasicTransformer().setLayoutTransformer(lensTransformer.getDelegate());
         }
         vv.setToolTipText(defaultToolTipText);
         vv.setGraphMouse(graphMouse);

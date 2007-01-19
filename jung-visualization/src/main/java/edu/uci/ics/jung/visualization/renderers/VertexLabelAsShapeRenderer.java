@@ -13,6 +13,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -54,7 +56,8 @@ public class VertexLabelAsShapeRenderer<V,E>
 	 * is active, the label is centered on the position of the vertex; otherwise
      * the label is offset slightly.
      */
-    public void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y) {
+    public void labelVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v, String label) {
+    	Graph<V,E> graph = layout.getGraph();
         if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v)) == false) {
         	return;
         }
@@ -66,6 +69,12 @@ public class VertexLabelAsShapeRenderer<V,E>
         int h_offset = -d.width / 2;
         int v_offset = -d.height / 2;
         
+        Point2D p = layout.transform(v);
+        p = rc.getBasicTransformer().layoutTransform(p);
+
+        int x = (int)p.getX();
+        int y = (int)p.getY();
+
         rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), x+h_offset, y+v_offset,
                 d.width, d.height, true);
 
@@ -86,7 +95,7 @@ public class VertexLabelAsShapeRenderer<V,E>
 
 	public Renderer.VertexLabel.Positioner getPositioner() {
 		return new Positioner() {
-			public Renderer.VertexLabel.Position getPosition(int x, int y, Dimension d) {
+			public Renderer.VertexLabel.Position getPosition(float x, float y, Dimension d) {
 				return Renderer.VertexLabel.Position.CNTR;
 			}};
 	}

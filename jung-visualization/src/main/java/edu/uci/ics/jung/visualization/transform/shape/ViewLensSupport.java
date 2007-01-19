@@ -49,15 +49,15 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
 
     }
     public void activate() {
-    	lensTransformer.setDelegate(vv.getViewTransformer());
+    	lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getViewTransformer());
         if(lens == null) {
             lens = new Lens(lensTransformer);
         }
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
-        lensTransformer.setDelegate(vv.getViewTransformer());
-        vv.setViewTransformer(lensTransformer);
+        lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getViewTransformer());
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
@@ -69,7 +69,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     public void deactivate() {
 //    	savedViewTransformer.setTransform(lensTransformer.getDelegate().getTransform());
 //        vv.setViewTransformer(savedViewTransformer);
-        vv.setViewTransformer(lensTransformer.getDelegate());
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);

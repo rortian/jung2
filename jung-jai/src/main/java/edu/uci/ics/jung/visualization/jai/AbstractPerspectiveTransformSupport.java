@@ -51,7 +51,7 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
      */
     public AbstractPerspectiveTransformSupport(VisualizationViewer<V,E> vv) {
         this.vv = vv;
-        this.savedViewTransformer = vv.getViewTransformer();
+        this.savedViewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
         this.defaultToolTipText = vv.getToolTipText();
     }
 

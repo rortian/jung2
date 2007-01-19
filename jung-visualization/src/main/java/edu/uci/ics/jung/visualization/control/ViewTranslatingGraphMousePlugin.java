@@ -82,7 +82,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
         boolean accepted = checkModifiers(e);
         if(accepted) {
-            MutableTransformer viewTransformer = vv.getViewTransformer();
+            MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
             vv.setCursor(cursor);
             try {
                 Point2D q = viewTransformer.inverseTransform(down);

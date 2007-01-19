@@ -1104,7 +1104,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         protected void handlePopup(MouseEvent e) {
             final VisualizationViewer<Integer,Number> vv = 
                 (VisualizationViewer<Integer,Number>)e.getSource();
-            Point2D p = vv.inverseViewTransform(e.getPoint());
+            Point2D p = vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
             
             GraphElementAccessor<Integer,Number> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {

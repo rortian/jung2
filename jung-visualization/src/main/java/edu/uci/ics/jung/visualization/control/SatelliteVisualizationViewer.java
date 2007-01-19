@@ -96,11 +96,11 @@ public class SatelliteVisualizationViewer<V, E>
         // get a copy of the current layout transform
         // it may have been scaled to fit the graph
         AffineTransform modelLayoutTransform =
-            new AffineTransform(master.getLayoutTransformer().getTransform());
+            new AffineTransform(master.getRenderContext().getBasicTransformer().getLayoutTransformer().getTransform());
         
         // I want no layout transformations in the satellite view
         // this resets the auto-scaling that occurs in the super constructor
-        setLayoutTransformer(new MutableAffineTransformer(modelLayoutTransform));
+        getRenderContext().getBasicTransformer().setLayoutTransformer(new MutableAffineTransformer(modelLayoutTransform));
         
         // make sure the satellite listens for changes in the master
         master.addChangeListener(this);
@@ -138,7 +138,7 @@ public class SatelliteVisualizationViewer<V, E>
 
         AffineTransform oldXform = g2d.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
-        newXform.concatenate(viewTransformer.getTransform());
+        newXform.concatenate(getRenderContext().getBasicTransformer().getViewTransformer().getTransform());
         
         g2d.setTransform(newXform);
 
@@ -167,13 +167,13 @@ public class SatelliteVisualizationViewer<V, E>
             if(p == null) {
                 
                 p = layout.transform(v1);
-                p = layoutTransformer.transform(p);
+//                p = getRenderContext().getBasicTransformer().getLayoutTransformer().transform(p);
                 locationMap.put(v1, p);
             }
             Point2D q = (Point2D) locationMap.get(v2);
             if(q == null) {
                 q = layout.transform(v2);
-                q = layoutTransformer.transform(q);
+//                q = getRenderContext().getBasicTransformer().getLayoutTransformer().transform(q);
                 locationMap.put(v2, q);
             }
 
@@ -181,12 +181,8 @@ public class SatelliteVisualizationViewer<V, E>
 //              renderer.paintEdge(
                         renderer.renderEdge(
                         renderContext,
-                        layout.getGraph(),
-                        e,
-                        (int) p.getX(),
-                        (int) p.getY(),
-                        (int) q.getX(),
-                        (int) q.getY());
+                        layout,
+                        e);
             }
         }
         } catch(ConcurrentModificationException cme) {
@@ -200,17 +196,15 @@ public class SatelliteVisualizationViewer<V, E>
             Point2D p = (Point2D) locationMap.get(v);
             if(p == null) {
                 p = layout.transform(v);
-                p = layoutTransformer.transform(p);
+//                p = getRenderContext().getBasicTransformer().getLayoutTransformer().transform(p);
                 locationMap.put(v, p);
             }
             if(p != null) {
 //              renderer.paintVertex(
                 renderer.renderVertex(
                         renderContext,
-                        layout.getGraph(),
-                        v,
-                        (int) p.getX(),
-                        (int) p.getY());
+                        layout,
+                        v);
             }
         }
         } catch(ConcurrentModificationException cme) {
@@ -255,9 +249,9 @@ public class SatelliteVisualizationViewer<V, E>
             this.master = master;
         }
         public void paint(Graphics g) {
-            ShapeTransformer masterViewTransformer = master.getViewTransformer();
-            ShapeTransformer masterLayoutTransformer = master.getLayoutTransformer();
-            ShapeTransformer vvLayoutTransformer = vv.getLayoutTransformer();
+            ShapeTransformer masterViewTransformer = master.getRenderContext().getBasicTransformer().getViewTransformer();
+            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getLayoutTransformer();
+            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
 
             Shape lens = master.getBounds();
             lens = masterViewTransformer.inverseTransform(lens);

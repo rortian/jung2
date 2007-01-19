@@ -17,11 +17,13 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -60,12 +62,19 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
 	}
 
 
-	public void paintVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
+	public void paintVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v) {
+		Graph<V,E> graph = layout.getGraph();
         if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v))) {
             boolean vertexHit = true;
             // get the shape to be rendered
             Shape shape = rc.getVertexShapeFunction().transform(v);
             
+            Point2D p = layout.transform(v);
+            p = rc.getBasicTransformer().layoutTransform(p);
+
+            float x = (float)p.getX();
+            float y = (float)p.getY();
+
             // create a transform that translates to the location of
             // the vertex to be rendered
             AffineTransform xform = AffineTransform.getTranslateInstance(x,y);
@@ -90,7 +99,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
                     0,0,
                     d.width,d.height);
         }
-        return rc.getViewTransformer().transform(s).intersects(deviceRectangle);
+        return rc.getBasicTransformer().getViewTransformer().transform(s).intersects(deviceRectangle);
     }
 
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {

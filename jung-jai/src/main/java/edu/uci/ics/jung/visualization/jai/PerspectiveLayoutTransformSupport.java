@@ -32,13 +32,13 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
     public PerspectiveLayoutTransformSupport(VisualizationViewer<V,E> vv) {
         super(vv);
         perspectiveTransformer = 
-            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getLayoutTransformer());
+            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getBasicTransformer().getLayoutTransformer());
    }
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
-        vv.setLayoutTransformer(perspectiveTransformer);
-        vv.setViewTransformer(new MutableAffineTransformer());
+        vv.getRenderContext().getBasicTransformer().setLayoutTransformer(perspectiveTransformer);
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(new MutableAffineTransformer());
         vv.addPreRenderPaintable(lens);
         vv.setToolTipText(instructions);
         vv.repaint();
@@ -46,11 +46,11 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
     
     public void deactivate() {
         if(savedViewTransformer != null) {
-            vv.setViewTransformer(savedViewTransformer);
+            vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
         }
         if(perspectiveTransformer != null) {
             vv.removePreRenderPaintable(lens);
-            vv.setLayoutTransformer(perspectiveTransformer.getDelegate());
+            vv.getRenderContext().getBasicTransformer().setLayoutTransformer(perspectiveTransformer.getDelegate());
         }
         vv.setToolTipText(defaultToolTipText);
         vv.repaint();

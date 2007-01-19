@@ -30,14 +30,14 @@ public class AbsoluteCrossoverScalingControl extends CrossoverScalingControl
      * 
      */
     public void scale(VisualizationViewer vv, float amount, Point2D at) {
-        MutableTransformer layoutTransformer = vv.getLayoutTransformer();
-        MutableTransformer viewTransformer = vv.getViewTransformer();
+        MutableTransformer layoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+        MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
         double modelScale = layoutTransformer.getScale();
         double viewScale = viewTransformer.getScale();
         double inverseModelScale = Math.sqrt(crossover)/modelScale;
         double inverseViewScale = Math.sqrt(crossover)/viewScale;
         
-        Point2D transformedAt = vv.inverseViewTransform(at);
+        Point2D transformedAt = vv.getRenderContext().getBasicTransformer().inverseViewTransform(at);
         
         // return the transformers to 1.0
         layoutTransformer.scale(inverseModelScale, inverseModelScale, transformedAt);

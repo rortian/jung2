@@ -131,7 +131,8 @@ public class ShearingGraphMousePlugin extends AbstractGraphMousePlugin
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
         boolean accepted = checkModifiers(e);
         if(accepted) {
-            MutableTransformer modelTransformer = vv.getLayoutTransformer();
+            MutableTransformer modelTransformer = 
+            	vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
             vv.setCursor(cursor);
             Point2D q = down;
             Point2D p = e.getPoint();

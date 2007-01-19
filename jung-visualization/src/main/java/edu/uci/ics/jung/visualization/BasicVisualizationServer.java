@@ -39,12 +39,8 @@ import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
-import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
-import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
-import edu.uci.ics.jung.visualization.transform.MutableTransformer;
-import edu.uci.ics.jung.visualization.transform.Transformer;
-import edu.uci.ics.jung.visualization.transform.ViewTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
+import edu.uci.ics.jung.visualization.util.Caching;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -58,7 +54,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  */
 @SuppressWarnings("serial")
 public class BasicVisualizationServer<V, E> extends JPanel 
-                implements Transformer, LayoutTransformer, ViewTransformer, 
+                implements //Transformer, LayoutTransformer, ViewTransformer, 
                 ChangeListener, ChangeEventSupport, VisualizationServer<V, E>{
 
     protected ChangeEventSupport changeSupport =
@@ -82,13 +78,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	 */
 	protected Map renderingHints = new HashMap();
 		
-//	/**
-//	 * pluggable support for picking graph elements by
-//	 * finding them based on their coordinates. Typically
-//	 * used in mouse events.
-//	 */
-//	protected GraphElementAccessor<V, E> pickSupport;
-	
 	/**
 	 * holds the state of which vertices of the graph are
 	 * currently 'picked'
@@ -125,16 +114,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	 */
 	protected boolean doubleBuffered;
 	
-    /**
-     * Provides support for mutating the AffineTransform that
-     * is supplied to the rendering Graphics2D
-     */
-    protected MutableTransformer viewTransformer = 
-        new MutableAffineTransformer(new AffineTransform());
-    
-    protected MutableTransformer layoutTransformer =
-        new MutableAffineTransformer(new AffineTransform());
-    
 	/**
 	 * a collection of user-implementable functions to render under
 	 * the topology (before the graph is rendered)
@@ -202,15 +181,15 @@ public class BasicVisualizationServer<V, E> extends JPanel
         renderContext.setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<V,E>(getPickedEdgeState(), Color.black, Color.cyan));
         renderContext.setVertexFillPaintFunction(new PickableVertexPaintTransformer<V>(getPickedVertexState(), 
                 Color.red, Color.yellow));
-        renderContext.setViewTransformer(viewTransformer);
+//        renderContext.setViewTransformer(viewTransformer);
 
 //		setRenderer(renderer);
 		
 		setPreferredSize(preferredSize);
 		renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         scaleToLayout(model.getGraphLayout().getSize());
-        this.layoutTransformer.addChangeListener(this);
-        this.viewTransformer.addChangeListener(this);
+
+        renderContext.getBasicTransformer().addChangeListener(this);
 	}
 	
 	/* (non-Javadoc)
@@ -321,7 +300,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
         		scale = scaley;
         }
         // set scale to show the entire graph layout
-        viewTransformer.setScale(scale, scale, new Point2D.Float());
+        renderContext.getBasicTransformer().getViewTransformer().setScale(scale, scale, new Point2D.Float());
     }
 	
 	/* (non-Javadoc)
@@ -344,82 +323,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
 			model.getGraphLayout().setSize(d);
 		}
 	}
-
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseTransform(java.awt.geom.Point2D)
-     */
-	public Point2D inverseTransform(Point2D p) {
-	    return layoutTransformer.inverseTransform(inverseViewTransform(p));
-	}
-	
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseViewTransform(java.awt.geom.Point2D)
-     */
-	public Point2D inverseViewTransform(Point2D p) {
-	    return viewTransformer.inverseTransform(p);
-	}
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseLayoutTransform(java.awt.geom.Point2D)
-     */
-    public Point2D inverseLayoutTransform(Point2D p) {
-        return layoutTransformer.inverseTransform(p);
-    }
-
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#transform(java.awt.geom.Point2D)
-     */
-	public Point2D transform(Point2D p) {
-	    // transform with vv transform
-	    return viewTransformer.transform(layoutTransform(p));
-	}
-    
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#viewTransform(java.awt.geom.Point2D)
-     */
-    public Point2D viewTransform(Point2D p) {
-        return viewTransformer.transform(p);
-    }
-    
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#layoutTransform(java.awt.geom.Point2D)
-     */
-    public Point2D layoutTransform(Point2D p) {
-        return layoutTransformer.transform(p);
-    }
-    
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setViewTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
-     */
-    public void setViewTransformer(MutableTransformer transformer) {
-        this.viewTransformer.removeChangeListener(this);
-        this.viewTransformer = transformer;
-        this.viewTransformer.addChangeListener(this);
-        renderContext.setViewTransformer(transformer);
-    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setLayoutTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
-     */
-    public void setLayoutTransformer(MutableTransformer transformer) {
-        this.layoutTransformer.removeChangeListener(this);
-        this.layoutTransformer = transformer;
-        this.layoutTransformer.addChangeListener(this);
-    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getViewTransformer()
-     */
-    public MutableTransformer getViewTransformer() {
-        return viewTransformer;
-    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getLayoutTransformer()
-     */
-    public MutableTransformer getLayoutTransformer() {
-        return layoutTransformer;
-    }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#getRenderingHints()
@@ -467,7 +370,9 @@ public class BasicVisualizationServer<V, E> extends JPanel
 
 		AffineTransform oldXform = g2d.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
-        newXform.concatenate(viewTransformer.getTransform());
+        newXform.concatenate(
+        		renderContext.getBasicTransformer().getViewTransformer().getTransform());
+//        		viewTransformer.getTransform());
 		
         g2d.setTransform(newXform);
 
@@ -483,49 +388,23 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		    }
 		}
 		
-        locationMap.clear();
+        if(layout instanceof Caching) {
+        	((Caching)layout).clear();
+        }
         
 		// paint all the edges
         try {
         	for(E e : layout.getGraph().getEdges()) {
 
-		    V v1 = layout.getGraph().getEndpoints(e).getFirst();
-		    V v2 = layout.getGraph().getEndpoints(e).getSecond();
-            
-            Point2D p = (Point2D) locationMap.get(v1);
-            if(p == null) {
-                
-                p = layout.transform(v1);
-                p = layoutTransformer.transform(p);
-                locationMap.put(v1, p);
-            }
-		    Point2D q = (Point2D) locationMap.get(v2);
-            if(q == null) {
-                q = layout.transform(v2);
-                q = layoutTransformer.transform(q);
-                locationMap.put(v2, q);
-            }
-
-		    if(p != null && q != null) {
-
 		        renderer.renderEdge(
 		                renderContext,
-		                layout.getGraph(),
-		                e,
-		                (int) p.getX(),
-		                (int) p.getY(),
-		                (int) q.getX(),
-		                (int) q.getY());
+		                layout,
+		                e);
 		        renderer.renderEdgeLabel(
 		                renderContext,
-		                layout.getGraph(),
-		                e,
-		                (int) p.getX(),
-		                (int) p.getY(),
-		                (int) q.getX(),
-		                (int) q.getY());
-		    }
-		}
+		                layout,
+		                e);
+        	}
         } catch(ConcurrentModificationException cme) {
             repaint();
         }
@@ -534,27 +413,15 @@ public class BasicVisualizationServer<V, E> extends JPanel
         try {
         	for(V v : layout.getGraph().getVertices()) {
 
-		    Point2D p = (Point2D) locationMap.get(v);
-            if(p == null) {
-                p = layout.transform(v);
-                p = layoutTransformer.transform(p);
-                locationMap.put(v, p);
-            }
-		    if(p != null) {
 		    	renderer.renderVertex(
 		                renderContext,
-                        layout.getGraph(),
-		                v,
-		                (int) p.getX(),
-		                (int) p.getY());
+                        layout,
+		                v);
 		    	renderer.renderVertexLabel(
 		                renderContext,
-                        layout.getGraph(),
-		                v,
-		                (int) p.getX(),
-		                (int) p.getY());
-		    }
-		}
+                        layout,
+		                v);
+        	}
         } catch(ConcurrentModificationException cme) {
             repaint();
         }
@@ -751,6 +618,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
      */
     public void setRenderContext(RenderContext<V,E> renderContext) {
         this.renderContext = renderContext;
-        renderContext.setViewTransformer(getViewTransformer());
+//        renderContext.setViewTransformer(getViewTransformer());
     }
 }

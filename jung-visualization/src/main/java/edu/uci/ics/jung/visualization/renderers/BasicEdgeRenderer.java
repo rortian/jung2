@@ -27,13 +27,15 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
 
-    public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
+    public void paintEdge(RenderContext<V,E> rc, Layout<V, E> layout, E e) {
         GraphicsDecorator g2d = rc.getGraphicsContext();
+        Graph<V,E> graph = layout.getGraph();
         if (!rc.getEdgeIncludePredicate().evaluate(Context.<Graph<V,E>,E>getInstance(graph,e)))
             return;
         
@@ -50,7 +52,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         if (new_stroke != null)
             g2d.setStroke(new_stroke);
         
-        drawSimpleEdge(rc, graph, e, x1, y1, x2, y2);
+        drawSimpleEdge(rc, layout, e);
 
         // restore paint and stroke
         if (new_stroke != null)
@@ -65,13 +67,22 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
      * is scaled in the x-direction so that its width is equal to the distance between
      * <code>(x1,y1)</code> and <code>(x2,y2)</code>.
      */
-    protected void drawSimpleEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, 
-    		int x1, int y1, int x2, int y2) {
+    protected void drawSimpleEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e) {
         
         GraphicsDecorator g = rc.getGraphicsContext();
+        Graph<V,E> graph = layout.getGraph();
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
+        Point2D p1 = layout.transform(v1);
+        Point2D p2 = layout.transform(v2);
+        p1 = rc.getBasicTransformer().layoutTransform(p1);
+        p2 = rc.getBasicTransformer().layoutTransform(p2);
+        float x1 = (float) p1.getX();
+        float y1 = (float) p1.getY();
+        float x2 = (float) p2.getX();
+        float y2 = (float) p2.getY();
+        
         boolean isLoop = v1.equals(v2);
         Shape s2 = rc.getVertexShapeFunction().transform(v2);
         Shape edgeShape = rc.getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
@@ -108,7 +119,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         
         edgeShape = xform.createTransformedShape(edgeShape);
         
-        edgeHit = rc.getViewTransformer().transform(edgeShape).intersects(deviceRectangle);
+        edgeHit = rc.getBasicTransformer().getViewTransformer().transform(edgeShape).intersects(deviceRectangle);
 
         if(edgeHit == true) {
             
@@ -142,7 +153,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                 AffineTransform xf = AffineTransform.getTranslateInstance(x2, y2);
                 destVertexShape = xf.createTransformedShape(destVertexShape);
                 
-                arrowHit = rc.getViewTransformer().transform(destVertexShape).intersects(deviceRectangle);
+                arrowHit = rc.getBasicTransformer().getViewTransformer().transform(destVertexShape).intersects(deviceRectangle);
                 if(arrowHit) {
                     
                     AffineTransform at = 
@@ -159,7 +170,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     xf = AffineTransform.getTranslateInstance(x1, y1);
                     vertexShape = xf.createTransformedShape(vertexShape);
                     
-                    arrowHit = rc.getViewTransformer().transform(vertexShape).intersects(deviceRectangle);
+                    arrowHit = rc.getBasicTransformer().getViewTransformer().transform(vertexShape).intersects(deviceRectangle);
                     
                     if(arrowHit) {
                         AffineTransform at = getReverseArrowTransform(rc, new GeneralPath(edgeShape), vertexShape, !isLoop);

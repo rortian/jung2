@@ -175,7 +175,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                 // p is the screen point for the mouse event
                 Point2D p = e.getPoint();
                 // take away the view transform
-                Point2D ip = vv.inverseViewTransform(p);
+                Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
                 
                 vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
                 if(vertex != null) {
@@ -187,7 +187,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                     // q is transformed by the layout transformer only
                     Point2D q = layout.transform(vertex);
                     // transform the mouse point to graph coordinate system
-                    Point2D gp = vv.inverseLayoutTransform(ip);
+                    Point2D gp = vv.getRenderContext().getBasicTransformer().inverseLayoutTransform(ip);
 
                     offsetx = (float) (gp.getX()-q.getX());
                     offsety = (float) (gp.getY()-q.getY());
@@ -205,7 +205,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                 rect.setFrameFromDiagonal(down,down);
                 Point2D p = e.getPoint();
                 // remove view transform
-                Point2D ip = vv.inverseViewTransform(p);
+                Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
                 vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
                 if(vertex != null) {
                     boolean wasThere = pickedVertexState.pick(vertex, !pickedVertexState.isPicked(vertex));
@@ -217,7 +217,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                         // q is transformed by the layout transformer only
                         Point2D q = layout.transform(vertex);
                         // translate mouse point to graph coord system
-                        Point2D gp = vv.inverseLayoutTransform(ip);
+                        Point2D gp = vv.getRenderContext().getBasicTransformer().inverseLayoutTransform(ip);
 
                         offsetx = (float) (gp.getX()-q.getX());
                         offsety = (float) (gp.getY()-q.getY());
@@ -274,8 +274,8 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
             if(vertex != null) {
                 Point p = e.getPoint();
-                Point2D graphPoint = vv.inverseTransform(p);
-                Point2D graphDown = vv.inverseTransform(down);
+                Point2D graphPoint = vv.getRenderContext().getBasicTransformer().inverseTransform(p);
+                Point2D graphDown = vv.getRenderContext().getBasicTransformer().inverseTransform(down);
                 Layout<V,E> layout = vv.getGraphLayout();
                 double dx = graphPoint.getX()-graphDown.getX();
                 double dy = graphPoint.getY()-graphDown.getY();
@@ -321,7 +321,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         
         Layout<V,E> layout = vv.getGraphLayout();
         PickedState<V> pickedVertexState = vv.getPickedVertexState();
-        Rectangle2D trect = vv.getViewTransformer().inverseTransform(rect).getBounds2D();
+        Rectangle2D trect = vv.getRenderContext().getBasicTransformer().getViewTransformer().inverseTransform(rect).getBounds2D();
         if(pickedVertexState != null) {
             if(clear) {
             	pickedVertexState.clear();
@@ -329,7 +329,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             while(true) {
                 try {
                 	for(V v : layout.getGraph().getVertices()) {
-                        if(trect.contains(vv.transform(layout.transform(v)))) {
+                        if(trect.contains(vv.getRenderContext().getBasicTransformer().transform(layout.transform(v)))) {
                             pickedVertexState.pick(v, true);
                         }
                     }

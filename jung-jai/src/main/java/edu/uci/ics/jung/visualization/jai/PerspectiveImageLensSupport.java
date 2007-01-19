@@ -44,7 +44,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
         this.renderer = vv.getRenderer();
         this.transformingRenderer = new BasicRenderer<V,E>();
         this.perspectiveTransformer = 
-            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getViewTransformer());
+            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getBasicTransformer().getViewTransformer());
         this.transformingRenderer.setVertexRenderer(new TransformingImageVertexIconRenderer<V,E>());
         this.lensGraphicsDecorator = new TransformingGraphics(perspectiveTransformer);
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
@@ -55,7 +55,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
-        vv.setViewTransformer(perspectiveTransformer);
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer);
         vv.getRenderContext().setGraphicsContext(lensGraphicsDecorator);
         vv.setRenderer(transformingRenderer);
         vv.addPreRenderPaintable(lens);
@@ -64,7 +64,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     }
     
     public void deactivate() {
-        vv.setViewTransformer(savedViewTransformer);
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);
         vv.setRenderer(renderer);

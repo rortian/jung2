@@ -95,17 +95,13 @@ public class ShortestPathDemo extends JPanel {
                         String v2 = mGraph.getEndpoints(e).getSecond();
                         Point2D p1 = layout.transform(v1);
                         Point2D p2 = layout.transform(v2);
-                        p1 = vv.layoutTransform(p1);
-                        p2 = vv.layoutTransform(p2);
+                        p1 = vv.getRenderContext().getBasicTransformer().layoutTransform(p1);
+                        p2 = vv.getRenderContext().getBasicTransformer().layoutTransform(p2);
                         Renderer<String,Number> renderer = vv.getRenderer();
                         renderer.renderEdge(
                                 vv.getRenderContext(),
-                                mGraph,
-                                e,
-                                (int) p1.getX(),
-                                (int) p1.getY(),
-                                (int) p2.getX(),
-                                (int) p2.getY());
+                                layout,
+                                e);
                     }
                 }
             }

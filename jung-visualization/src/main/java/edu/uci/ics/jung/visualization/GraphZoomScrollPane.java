@@ -110,10 +110,10 @@ public class GraphZoomScrollPane extends JPanel {
             previous = hval;
             if(dh != 0 && scrollBarsMayControlAdjusting) {
                 // get the uniform scale of all transforms
-                float layoutScale = (float) vv.getLayoutTransformer().getScale();
+                float layoutScale = (float) vv.getRenderContext().getBasicTransformer().getLayoutTransformer().getScale();
                 dh *= layoutScale;
                 AffineTransform at = AffineTransform.getTranslateInstance(dh, 0);
-                vv.getLayoutTransformer().preConcatenate(at);
+                vv.getRenderContext().getBasicTransformer().getLayoutTransformer().preConcatenate(at);
             }
         }
     }
@@ -133,10 +133,10 @@ public class GraphZoomScrollPane extends JPanel {
             if(dv != 0 && scrollBarsMayControlAdjusting) {
             
                 // get the uniform scale of all transforms
-                float layoutScale = (float) vv.getLayoutTransformer().getScale();
+                float layoutScale = (float) vv.getRenderContext().getBasicTransformer().getLayoutTransformer().getScale();
                 dv *= layoutScale;
                 AffineTransform at = AffineTransform.getTranslateInstance(0, dv);
-                vv.getLayoutTransformer().preConcatenate(at);
+                vv.getRenderContext().getBasicTransformer().getLayoutTransformer().preConcatenate(at);
             }
         }
     }
@@ -156,8 +156,8 @@ public class GraphZoomScrollPane extends JPanel {
             new Rectangle(0,0,d.width,d.height);
             		//-d.width/2, -d.height/2, 2*d.width, 2*d.height);
         
-        Transformer viewTransformer = vv.getViewTransformer();
-        Transformer layoutTransformer = vv.getLayoutTransformer();
+        Transformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+        Transformer layoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
 
         Point2D h0 = new Point2D.Double(vvBounds.getMinX(), vvBounds.getCenterY());
         Point2D h1 = new Point2D.Double(vvBounds.getMaxX(), vvBounds.getCenterY());

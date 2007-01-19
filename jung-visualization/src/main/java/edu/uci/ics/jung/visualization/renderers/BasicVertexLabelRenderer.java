@@ -14,10 +14,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.Transformer;
@@ -66,10 +68,16 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
 	 * is active, the label is centered on the position of the vertex; otherwise
      * the label is offset slightly.
      */
-    public void labelVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, String label, int x, int y) {
+    public void labelVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v, String label) {
+    	Graph<V,E> graph = layout.getGraph();
         if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v)) == false) {
         	return;
         }
+        Point2D pt = layout.transform(v);
+        pt = rc.getBasicTransformer().layoutTransform(pt);
+
+        float x = (float) pt.getX();
+        float y = (float) pt.getY();
 
         Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), label,
         		rc.getPickedVertexState().isPicked(v), v);
@@ -161,7 +169,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	
     }
     public static class InsidePositioner implements Positioner {
-    	public Position getPosition(int x, int y, Dimension d) {
+    	public Position getPosition(float x, float y, Dimension d) {
     		int cx = d.width/2;
     		int cy = d.height/2;
     		if(x > cx && y > cy) return Position.NW;
@@ -171,7 +179,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	}
     }
     public static class OutsidePositioner implements Positioner {
-    	public Position getPosition(int x, int y, Dimension d) {
+    	public Position getPosition(float x, float y, Dimension d) {
     		int cx = d.width/2;
     		int cy = d.height/2;
     		if(x > cx && y > cy) return Position.SE;

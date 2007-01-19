@@ -60,7 +60,7 @@ implements MouseListener, MouseMotionListener {
      */
     public void mousePressed(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
-        MutableTransformer vt = vv.getViewTransformer();
+        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getViewTransformer();
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -68,8 +68,8 @@ implements MouseListener, MouseMotionListener {
         boolean accepted = checkModifiers(e);
         if(accepted) {
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-            testViewCenter(vv.getLayoutTransformer(), p);
-            testViewCenter(vv.getViewTransformer(), p);
+            testViewCenter(vv.getRenderContext().getBasicTransformer().getLayoutTransformer(), p);
+            testViewCenter(vv.getRenderContext().getBasicTransformer().getViewTransformer(), p);
             vv.repaint();
         }
         super.mousePressed(e);
@@ -141,7 +141,7 @@ implements MouseListener, MouseMotionListener {
      */
     public void mouseDragged(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
-        MutableTransformer vt = vv.getViewTransformer();
+        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getViewTransformer();
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -149,18 +149,18 @@ implements MouseListener, MouseMotionListener {
         boolean accepted = checkModifiers(e);
 
         if(accepted ) {
-            MutableTransformer modelTransformer = vv.getLayoutTransformer();
+            MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             if(dragOnLens) {
                 setViewCenter(modelTransformer, p);
-                setViewCenter(vv.getViewTransformer(), p);
+                setViewCenter(vv.getRenderContext().getBasicTransformer().getViewTransformer(), p);
                 e.consume();
                 vv.repaint();
 
             } else if(dragOnEdge) {
 
                 setViewRadius(modelTransformer, p);
-                setViewRadius(vv.getViewTransformer(), p);
+                setViewRadius(vv.getRenderContext().getBasicTransformer().getViewTransformer(), p);
                 e.consume();
                 vv.repaint();
                 

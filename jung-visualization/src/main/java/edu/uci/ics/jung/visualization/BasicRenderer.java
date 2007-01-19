@@ -8,6 +8,7 @@
 package edu.uci.ics.jung.visualization;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.renderers.BasicEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer;
@@ -32,20 +33,20 @@ public class BasicRenderer<V,E> implements Renderer<V, E> {
     	//new BasicEdgeAndLabelRenderer<V,E>();
     Renderer.EdgeLabel<V,E> edgeLabelRenderer = new BasicEdgeLabelRenderer<V,E>();
     
-    public void renderVertex(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-        vertexRenderer.paintVertex(rc, graph, v, x, y);
+    public void renderVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v) {
+        vertexRenderer.paintVertex(rc, layout, v);
     }
     
-    public void renderVertexLabel(RenderContext<V,E> rc, Graph<V,E> graph, V v, int x, int y) {
-        vertexLabelRenderer.labelVertex(rc, graph, v, rc.getVertexStringer().transform(v), x, y);
+    public void renderVertexLabel(RenderContext<V,E> rc, Layout<V,E> layout, V v) {
+        vertexLabelRenderer.labelVertex(rc, layout, v, rc.getVertexStringer().transform(v));
     }
     
-    public void renderEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2) {
-    	edgeRenderer.paintEdge(rc, graph, e, x1, y1, x2, y2);
+    public void renderEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e) {
+    	edgeRenderer.paintEdge(rc, layout, e);
     }
     
-    public void renderEdgeLabel(RenderContext<V,E> rc, Graph<V,E> graph, E e, int x1, int y1, int x2, int y2) {
-    	edgeLabelRenderer.labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, y1, x2, y2);
+    public void renderEdgeLabel(RenderContext<V,E> rc, Layout<V,E> layout, E e) {
+    	edgeLabelRenderer.labelEdge(rc, layout, e, rc.getEdgeStringer().transform(e));
     }
     
     public void setVertexRenderer(Renderer.Vertex<V,E> r) {

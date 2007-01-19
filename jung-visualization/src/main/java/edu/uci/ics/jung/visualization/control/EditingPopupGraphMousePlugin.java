@@ -48,7 +48,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
         final Layout<V,E> layout = vv.getGraphLayout();
         final Graph<V,E> graph = layout.getGraph();
         final Point2D p = e.getPoint();
-        final Point2D ivp = vv.inverseViewTransform(e.getPoint());
+        final Point2D ivp = vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
         GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
         if(pickSupport != null) {
             
@@ -109,7 +109,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                 popup.add(new AbstractAction("Create Vertex") {
                     public void actionPerformed(ActionEvent e) {
                         V newVertex = vertexFactory.create();
-                        vertexLocations.put(newVertex, vv.inverseTransform(p));
+                        vertexLocations.put(newVertex, vv.getRenderContext().getBasicTransformer().inverseTransform(p));
                         Layout layout = vv.getGraphLayout();
                         for(V vertex : graph.getVertices()) {
                             layout.lock(vertex, true);

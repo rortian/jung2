@@ -188,14 +188,14 @@ public class VisualizationViewer<V,E> extends BasicVisualizationServer<V,E> {
         Layout<V,E> layout = getGraphLayout();
         Point2D p = null;
         if(vertexToolTipTransformer != null) {
-            p = inverseViewTransform(event.getPoint());
+            p = renderContext.getBasicTransformer().inverseViewTransform(event.getPoint());
             V vertex = getPickSupport().getVertex(layout, p.getX(), p.getY());
             if(vertex != null) {
             	return vertexToolTipTransformer.transform(vertex);
             }
         }
         if(edgeToolTipTransformer != null) {
-        	if(p == null) p = inverseViewTransform(event.getPoint());
+        	if(p == null) p = renderContext.getBasicTransformer().inverseViewTransform(event.getPoint());
             E edge = getPickSupport().getEdge(layout, p.getX(), p.getY());
             if(edge != null) {
             	return edgeToolTipTransformer.transform(edge);

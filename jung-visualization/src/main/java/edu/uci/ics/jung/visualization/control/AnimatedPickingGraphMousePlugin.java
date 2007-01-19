@@ -74,7 +74,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 				// p is the screen point for the mouse event
 				Point2D p = e.getPoint();
 				// take away the view transform
-				Point2D ip = vv.inverseViewTransform(p);
+				Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
 
 				vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
 				if (vertex != null) {
@@ -103,7 +103,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 			if (vertex != null) {
 				Layout<V,E> layout = vv.getGraphLayout();
 				Point2D q = layout.transform(vertex);
-				Point2D lvc = vv.inverseTransform(vv.getCenter());
+				Point2D lvc = vv.getRenderContext().getBasicTransformer().inverseTransform(vv.getCenter());
 				final double dx = (lvc.getX() - q.getX()) / 10;
 				final double dy = (lvc.getY() - q.getY()) / 10;
 
@@ -111,7 +111,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 
 					public void run() {
 						for (int i = 0; i < 10; i++) {
-							vv.getLayoutTransformer().translate(dx, dy);
+							vv.getRenderContext().getBasicTransformer().getLayoutTransformer().translate(dx, dy);
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException ex) {

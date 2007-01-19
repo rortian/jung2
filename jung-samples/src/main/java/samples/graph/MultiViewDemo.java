@@ -81,7 +81,7 @@ public class MultiViewDemo extends JApplet {
     /**
      * the normal transformer
      */
-    MutableTransformer transformer;
+//    MutableTransformer transformer;
     
     Dimension preferredSize = new Dimension(300,300);
     
@@ -133,12 +133,20 @@ public class MultiViewDemo extends JApplet {
         
         vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<String,Number>());
 
-        transformer = vv1.getLayoutTransformer();
-        vv2.setLayoutTransformer(transformer);
-        vv3.setLayoutTransformer(transformer);
+//        transformer = vv1.getLayoutTransformer();
+//        vv2.setLayoutTransformer(transformer);
+//        vv3.setLayoutTransformer(transformer);
+//        
+//        vv2.setViewTransformer(vv1.getViewTransformer());
+//        vv3.setViewTransformer(vv1.getViewTransformer());
         
-        vv2.setViewTransformer(vv1.getViewTransformer());
-        vv3.setViewTransformer(vv1.getViewTransformer());
+        vv2.getRenderContext().setBasicTransformer(vv1.getRenderContext().getBasicTransformer());
+        vv3.getRenderContext().setBasicTransformer(vv1.getRenderContext().getBasicTransformer());
+
+        vv1.getRenderContext().getBasicTransformer().addChangeListener(vv1);
+        vv2.getRenderContext().getBasicTransformer().addChangeListener(vv2);
+        vv3.getRenderContext().getBasicTransformer().addChangeListener(vv3);
+
         
         vv1.setBackground(Color.white);
         vv2.setBackground(Color.white);

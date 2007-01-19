@@ -227,9 +227,9 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             this.master = master;
         }
         public void paint(Graphics g) {
-            ShapeTransformer masterViewTransformer = master.getViewTransformer();
-            ShapeTransformer masterLayoutTransformer = master.getLayoutTransformer();
-            ShapeTransformer vvLayoutTransformer = vv.getLayoutTransformer();
+            ShapeTransformer masterViewTransformer = master.getRenderContext().getBasicTransformer().getViewTransformer();
+            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getLayoutTransformer();
+            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
 
             Rectangle rect = master.getBounds();
             GeneralPath path = new GeneralPath();

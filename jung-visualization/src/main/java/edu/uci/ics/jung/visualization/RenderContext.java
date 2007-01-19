@@ -160,9 +160,9 @@ public interface RenderContext<V, E> {
 
     void setVertexStrokeFunction(Transformer<V,Stroke> vertexStrokeFunction);
 
-    MutableTransformer getViewTransformer();
+//    MutableTransformer getViewTransformer();
 
-    void setViewTransformer(MutableTransformer viewTransformer);
+//    void setViewTransformer(MutableTransformer viewTransformer);
     
     class DirectedEdgeArrowPredicate<V,E> 
     	implements Predicate<Context<Graph<V,E>,E>> {
@@ -183,6 +183,9 @@ public interface RenderContext<V, E> {
         
     }
     
+    BasicTransformer getBasicTransformer();
+    
+    void setBasicTransformer(BasicTransformer basicTransformer);
     
 	/**
 	 * @return the pickSupport

@@ -14,10 +14,12 @@ import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -25,8 +27,8 @@ import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 public class BasicEdgeAndLabelRenderer<V,E> 
 	extends BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
 
-    public void paintEdge(RenderContext<V,E> rc, Graph<V, E> graph, E e, int x1, int y1, int x2, int y2) {
-    	super.paintEdge(rc, graph, e, x1, y1, x2, y2);
+    public void paintEdge(RenderContext<V,E> rc, Layout<V, E> layout, E e) {
+    	super.paintEdge(rc, layout, e);
 //    	labelEdge(rc, graph, e, rc.getEdgeStringer().transform(e), x1, x2, y1, y2);
     }
 	public Component prepareRenderer(RenderContext<V,E> rc, EdgeLabelRenderer graphLabelRenderer, Object value, 
@@ -43,9 +45,10 @@ public class BasicEdgeAndLabelRenderer<V,E>
      * label between the endpoints according to the coefficient returned
      * by this instance's edge label closeness function.
      */
-    protected void labelEdge(RenderContext<V,E> rc, Graph<V,E> graph, E e, String label, int x1, int x2, int y1, int y2) {
-    	System.err.println("blk label "+label+" at "+x1+","+x2+","+y1+","+y2);
+    protected void labelEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e, String label) {
+//    	System.err.println("blk label "+label+" at "+x1+","+x2+","+y1+","+y2);
         // don't draw edge if either incident vertex is not drawn
+    	Graph<V,E> graph = layout.getGraph();
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
@@ -53,9 +56,16 @@ public class BasicEdgeAndLabelRenderer<V,E>
             !rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v2)))
             return;
 
+        Point2D p1 = layout.transform(v1);
+        Point2D p2 = layout.transform(v2);
+        float x1 = (float) p1.getX();
+        float y1 = (float) p1.getY();
+        float x2 = (float) p2.getX();
+        float y2 = (float) p2.getY();
+
         GraphicsDecorator g = rc.getGraphicsContext();
-        int distX = x2 - x1;
-        int distY = y2 - y1;
+        float distX = x2 - x1;
+        float distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
 
         double closeness = rc.getEdgeLabelClosenessFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e)).doubleValue();

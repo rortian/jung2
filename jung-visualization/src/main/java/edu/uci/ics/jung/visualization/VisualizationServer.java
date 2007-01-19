@@ -114,11 +114,11 @@ public interface VisualizationServer<V, E> {
      * @param p the point to transform (typically, a mouse point)
      * @return a transformed Point2D
      */
-    Point2D inverseTransform(Point2D p);
-
-    Point2D inverseViewTransform(Point2D p);
-
-    Point2D inverseLayoutTransform(Point2D p);
+//    Point2D inverseTransform(Point2D p);
+//
+//    Point2D inverseViewTransform(Point2D p);
+//
+//    Point2D inverseLayoutTransform(Point2D p);
 
     /**
      * Transform the mouse point with the current transform
@@ -127,22 +127,22 @@ public interface VisualizationServer<V, E> {
      * @param p the point to transform
      * @return a transformed Point2D
      */
-    Point2D transform(Point2D p);
-
-    Point2D viewTransform(Point2D p);
-
-    Point2D layoutTransform(Point2D p);
+//    Point2D transform(Point2D p);
+//
+//    Point2D viewTransform(Point2D p);
+//
+//    Point2D layoutTransform(Point2D p);
 
     /**
      * @param transformer The transformer to set.
      */
-    void setViewTransformer(MutableTransformer transformer);
-
-    void setLayoutTransformer(MutableTransformer transformer);
-
-    MutableTransformer getViewTransformer();
-
-    MutableTransformer getLayoutTransformer();
+//    void setViewTransformer(MutableTransformer transformer);
+//
+//    void setLayoutTransformer(MutableTransformer transformer);
+//
+//    MutableTransformer getViewTransformer();
+//
+//    MutableTransformer getLayoutTransformer();
 
     /**
      * @return Returns the renderingHints.

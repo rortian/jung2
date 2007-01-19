@@ -37,7 +37,7 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     protected Ellipse2D ellipse = new Ellipse2D.Float();
     
     protected float magnification = 0.7f;
-    protected ViewTransformer viewTransformer;
+//    protected ViewTransformer viewTransformer;
     
     /**
      * create an instance, setting values from the passed component
@@ -64,7 +64,7 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @param component
      */
     private void setComponent(Component component) {
-    	this.viewTransformer = (ViewTransformer)component;
+//    	this.viewTransformer = (ViewTransformer)component;
         Dimension d = component.getSize();
         if(d.width <= 0 || d.height <= 0) {
             d = component.getPreferredSize();

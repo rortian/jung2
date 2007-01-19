@@ -11,11 +11,19 @@
 package edu.uci.ics.jung.visualization.layout;
 
 import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ChainedTransformer;
+import org.apache.commons.collections15.functors.CloneTransformer;
+import org.apache.commons.collections15.map.LazyMap;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.util.Caching;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -28,15 +36,19 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * @author Tom Nelson 
  *
  */
-public class LayoutEventBroadcaster<V, E> extends LayoutDecorator<V,E> implements ChangeEventSupport {
+public class LayoutEventBroadcaster<V, E> extends LayoutDecorator<V,E> implements ChangeEventSupport, Caching {
     
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
+    
+    protected Map<V,Point2D> locationMap;
 
     public LayoutEventBroadcaster(Layout<V, E> delegate) {
     	super(delegate);
+    	this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), 
+    			new ChainedTransformer(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
     }
-
+    
     /**
      * @see edu.uci.ics.jung.algorithms.layout.Layout#step()
      */
@@ -83,4 +95,22 @@ public class LayoutEventBroadcaster<V, E> extends LayoutDecorator<V,E> implement
     public void setGraph(Graph<V, E> graph) {
         delegate.setGraph(graph);
     }
+
+	public void clear() {
+		this.locationMap.clear();
+		
+	}
+
+	public void init() {
+//		this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), delegate);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.uci.ics.jung.visualization.layout.LayoutDecorator#transform(java.lang.Object)
+	 */
+	@Override
+	public Point2D transform(V v) {
+		return locationMap.get(v);
+	}
 }

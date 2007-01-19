@@ -45,7 +45,7 @@ public class SatelliteRotatingGraphMousePlugin extends RotatingGraphMousePlugin 
                 VisualizationViewer vvMaster = 
                     ((SatelliteVisualizationViewer)vv).getMaster();
                 
-                MutableTransformer modelTransformerMaster = vvMaster.getLayoutTransformer();
+                MutableTransformer modelTransformerMaster = vvMaster.getRenderContext().getBasicTransformer().getLayoutTransformer();
 
                 // rotate
                 vv.setCursor(cursor);
@@ -53,14 +53,14 @@ public class SatelliteRotatingGraphMousePlugin extends RotatingGraphMousePlugin 
                 // lens center in the satellite view.
                 // translate the master view center to layout coords, then translate
                 // that point to the satellite view's view coordinate system....
-                Point2D center = vv.transform(vvMaster.inverseTransform(vvMaster.getCenter()));
+                Point2D center = vv.getRenderContext().getBasicTransformer().transform(vvMaster.getRenderContext().getBasicTransformer().inverseTransform(vvMaster.getCenter()));
                 Point2D q = down;
                 Point2D p = e.getPoint();
                 Point2D v1 = new Point2D.Double(center.getX()-p.getX(), center.getY()-p.getY());
                 Point2D v2 = new Point2D.Double(center.getX()-q.getX(), center.getY()-q.getY());
                 double theta = angleBetween(v1, v2);
                 modelTransformerMaster.rotate(-theta, 
-                        vvMaster.inverseViewTransform(vvMaster.getCenter()));
+                        vvMaster.getRenderContext().getBasicTransformer().inverseViewTransform(vvMaster.getCenter()));
                 down.x = e.getX();
                 down.y = e.getY();
             } 

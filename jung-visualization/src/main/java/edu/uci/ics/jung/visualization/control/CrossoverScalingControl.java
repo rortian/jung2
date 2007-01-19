@@ -54,15 +54,15 @@ public class CrossoverScalingControl implements ScalingControl {
      */
 	public void scale(VisualizationViewer vv, float amount, Point2D at) {
 	        
-	    MutableTransformer layoutTransformer = vv.getLayoutTransformer();
-	    MutableTransformer viewTransformer = vv.getViewTransformer();
+	    MutableTransformer layoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+	    MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
 	    double modelScale = layoutTransformer.getScale();
 	    double viewScale = viewTransformer.getScale();
 	    double inverseModelScale = Math.sqrt(crossover)/modelScale;
 	    double inverseViewScale = Math.sqrt(crossover)/viewScale;
 	    double scale = modelScale * viewScale;
 	    
-	    Point2D transformedAt = vv.inverseViewTransform(at);
+	    Point2D transformedAt = vv.getRenderContext().getBasicTransformer().inverseViewTransform(at);
 	    
         if((scale*amount - crossover)*(scale*amount - crossover) < 0.001) {
             // close to the control point, return both transformers to a scale of 1.0
