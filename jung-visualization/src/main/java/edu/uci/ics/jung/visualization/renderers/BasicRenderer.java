@@ -5,15 +5,12 @@
  * This software is open-source under the BSD license; see either "license.txt"
  * or http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.renderers;
 
-import edu.uci.ics.graph.Graph;
+import java.util.ConcurrentModificationException;
+
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.renderers.BasicEdgeLabelRenderer;
-import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
-import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer;
-import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
-import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.RenderContext;
 
 /**
  * The default implementation of the Renderer used by the
@@ -33,6 +30,42 @@ public class BasicRenderer<V,E> implements Renderer<V, E> {
     	//new BasicEdgeAndLabelRenderer<V,E>();
     Renderer.EdgeLabel<V,E> edgeLabelRenderer = new BasicEdgeLabelRenderer<V,E>();
     
+	public void render(RenderContext<V, E> renderContext, Layout<V, E> layout) {
+		// paint all the edges
+        try {
+        	for(E e : layout.getGraph().getEdges()) {
+
+		        renderEdge(
+		                renderContext,
+		                layout,
+		                e);
+		        renderEdgeLabel(
+		                renderContext,
+		                layout,
+		                e);
+        	}
+        } catch(ConcurrentModificationException cme) {
+        	renderContext.getScreenDevice().repaint();
+        }
+		
+		// paint all the vertices
+        try {
+        	for(V v : layout.getGraph().getVertices()) {
+
+		    	renderVertex(
+		                renderContext,
+                        layout,
+		                v);
+		    	renderVertexLabel(
+		                renderContext,
+                        layout,
+		                v);
+        	}
+        } catch(ConcurrentModificationException cme) {
+            renderContext.getScreenDevice().repaint();
+        }
+	}
+
     public void renderVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v) {
         vertexRenderer.paintVertex(rc, layout, v);
     }
@@ -99,5 +132,6 @@ public class BasicRenderer<V,E> implements Renderer<V, E> {
 	public Renderer.Vertex<V, E> getVertexRenderer() {
 		return vertexRenderer;
 	}
+
 
 }
