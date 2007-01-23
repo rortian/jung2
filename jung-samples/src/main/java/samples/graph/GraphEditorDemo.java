@@ -244,7 +244,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
     		this.graph = graph;
     	}
 		public Number create() {
-			return graph.getVertices().size();
+			return graph.getVertexCount();
 		}
     }
     
@@ -256,7 +256,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
     		this.graph = graph;
     	}
 		public Number create() {
-			return graph.getEdges().size();
+			return graph.getEdgeCount();
 		}
     }
 

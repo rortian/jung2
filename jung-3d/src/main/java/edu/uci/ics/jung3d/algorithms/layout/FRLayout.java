@@ -95,7 +95,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     			Math
     			.sqrt(d.getRadius()
     					* d.getRadius() * d.getRadius()
-    					/ graph.getVertices().size());
+    					/ graph.getVertexCount());
 
     		attraction_constant = attraction_multiplier * forceConstant;
     		repulsion_constant = repulsion_multiplier * forceConstant;

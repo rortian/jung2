@@ -127,10 +127,10 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
         try {
 
-            if (g.getVertices().size() < 100) {
+            if (g.getVertexCount() < 100) {
             	layout.lock(true);
                 //add a vertex
-                Integer v1 = new Integer(g.getVertices().size());
+                Integer v1 = new Integer(g.getVertexCount());
 
                 Relaxer relaxer = vv.getModel().getRelaxer();
                 relaxer.pause();
@@ -139,10 +139,10 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
                 // wire it to some edges
                 if (v_prev != null) {
-                    g.addEdge(g.getEdges().size(), v_prev, v1);
+                    g.addEdge(g.getEdgeCount(), v_prev, v1);
                     // let's connect to a random vertex, too!
-                    int rand = (int) (Math.random() * g.getVertices().size());
-                    g.addEdge(g.getEdges().size(), v1, rand);
+                    int rand = (int) (Math.random() * g.getVertexCount());
+                    g.addEdge(g.getEdgeCount(), v1, rand);
                 }
 
                 v_prev = v1;

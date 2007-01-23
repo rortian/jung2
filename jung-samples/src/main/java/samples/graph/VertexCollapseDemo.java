@@ -239,7 +239,7 @@ public class VertexCollapseDemo extends JApplet {
         @Override
         public Shape transform(V v) {
             if(v instanceof Graph) {
-                int size = ((Graph)v).getVertices().size();
+                int size = ((Graph)v).getVertexCount();
                 if (size < 8) {   
                     int sides = Math.max(size, 3);
                     return factory.getRegularPolygon(v, sides);

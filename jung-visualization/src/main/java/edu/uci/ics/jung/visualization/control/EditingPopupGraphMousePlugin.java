@@ -70,7 +70,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
             					public void actionPerformed(ActionEvent e) {
 //          						Number newEdge = new Number(other, vertex);
             						graph.addEdge(edgeFactory.create(),
-//          								graph.getEdges().size(), 
+//          								graph.getEdgeCount(), 
             								other, vertex, EdgeType.DIRECTED);
             						vv.repaint();
             					}
@@ -84,7 +84,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
             				undirectedMenu.add(new AbstractAction("[" + other+","+vertex+"]") {
             					public void actionPerformed(ActionEvent e) {
             						graph.addEdge(edgeFactory.create(),
-            								//graph.getEdges().size(), 
+            								//graph.getEdgeCount(), 
             								other, vertex);
             						vv.repaint();
             					}

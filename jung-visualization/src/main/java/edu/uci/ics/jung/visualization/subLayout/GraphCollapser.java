@@ -30,7 +30,7 @@ public class GraphCollapser  {
     
     public Graph collapse(Graph inGraph, Graph clusterGraph) {
         
-        if(clusterGraph.getVertices().size() < 2) return inGraph;
+        if(clusterGraph.getVertexCount() < 2) return inGraph;
 
         Graph graph = inGraph;
         try {
