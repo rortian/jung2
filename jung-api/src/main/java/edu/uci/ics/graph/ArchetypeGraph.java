@@ -18,6 +18,10 @@ public interface ArchetypeGraph<V, E>
     Collection<E> getEdges();
     
     Collection<V> getVertices();
+    
+    int getEdgeCount();
+    
+    int getVertexCount();
 
     Collection<V> getNeighbors(V vertex);
     

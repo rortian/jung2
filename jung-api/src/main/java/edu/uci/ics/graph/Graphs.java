@@ -273,6 +273,22 @@ public class Graphs {
 		}
 
 		/**
+		 * @return
+		 * @see edu.uci.ics.graph.ArchetypeGraph#getEdgeCount()
+		 */
+		public int getEdgeCount() {
+			return delegate.getEdgeCount();
+		}
+
+		/**
+		 * @return
+		 * @see edu.uci.ics.graph.ArchetypeGraph#getVertexCount()
+		 */
+		public int getVertexCount() {
+			return delegate.getVertexCount();
+		}
+
+		/**
 		 * @param vertex
 		 * @return
 		 * @see edu.uci.ics.graph.Graph#inDegree(java.lang.Object)
@@ -533,6 +549,22 @@ public class Graphs {
 		 */
 		public Collection<E> getEdges() {
 			return delegate.getEdges();
+		}
+
+		/**
+		 * @return
+		 * @see edu.uci.ics.graph.ArchetypeGraph#getEdgeCount()
+		 */
+		public int getEdgeCount() {
+			return delegate.getEdgeCount();
+		}
+
+		/**
+		 * @return
+		 * @see edu.uci.ics.graph.ArchetypeGraph#getVertexCount()
+		 */
+		public int getVertexCount() {
+			return delegate.getVertexCount();
 		}
 
 		/**
