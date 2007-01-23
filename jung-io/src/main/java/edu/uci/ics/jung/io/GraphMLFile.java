@@ -226,7 +226,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
     }
 
     private void saveVerticesSection(PrintStream out, Graph<V,E> g) {
-        int numVertices = g.getVertices().size();
+        int numVertices = g.getVertexCount();
         List<V> id = new ArrayList<V>(g.getVertices());
         for (int i = 0; i < numVertices; i++) {
             V v = id.get(i);

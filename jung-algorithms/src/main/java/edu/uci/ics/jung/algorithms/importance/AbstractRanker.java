@@ -101,6 +101,10 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
         return mGraph.getVertices();
     }
 
+	protected int getVertexCount() {
+        return mGraph.getVertexCount();
+    }
+
     protected Graph<V,E> getGraph() {
         return mGraph;
     }

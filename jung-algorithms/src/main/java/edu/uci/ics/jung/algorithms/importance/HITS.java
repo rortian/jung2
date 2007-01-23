@@ -133,7 +133,7 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
         double authorityMSE = 0;
 
         //Normalize rankings and test for convergence
-        int numVertices = getVertices().size();
+        int numVertices = getVertexCount();
         for (V v : getVertices()) {
 
             double currentAuthorityScore = getVertexRankScore(v, AUTHORITY_KEY);

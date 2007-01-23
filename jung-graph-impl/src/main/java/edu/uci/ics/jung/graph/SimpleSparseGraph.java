@@ -254,4 +254,12 @@ public class SimpleSparseGraph<V,E>
 		}
 		
 	}
+
+	public int getEdgeCount() {
+		return edges.keySet().size();
+	}
+
+	public int getVertexCount() {
+		return vertices.keySet().size();
+	}
 }

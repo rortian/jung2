@@ -54,8 +54,8 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
             generator.setSeed(2);
 
             Graph graph = (Graph) generator.generateGraph();
-            Assert.assertEquals(graph.getVertices().size(),10);
-            Assert.assertEquals(graph.getEdges().size(),40);
+            Assert.assertEquals(graph.getVertexCount(),10);
+            Assert.assertEquals(graph.getEdgeCount(),40);
         }
 
     }

@@ -47,7 +47,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
         normalizeEdgeTransitionWeights();
 
         mIndexer = Indexer.<V>create(graph.getVertices());
-        mRankings = new SparseDoubleMatrix1D(graph.getVertices().size());
+        mRankings = new SparseDoubleMatrix1D(graph.getVertexCount());
     }
 
     /**
@@ -101,7 +101,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
      * @return DoubleMatrix1D
      */
     private DoubleMatrix1D getStationaryDistribution() {
-        DoubleMatrix1D piVector = new DenseDoubleMatrix1D(getVertices().size());
+        DoubleMatrix1D piVector = new DenseDoubleMatrix1D(getVertexCount());
         PageRank<V,E> pageRank = new PageRank<V,E>((DirectedGraph<V,E>)getGraph(), 0, getEdgeWeights());
         pageRank.evaluate();
         List<Ranking<?>> rankings = pageRank.getRankings();

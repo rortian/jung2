@@ -43,7 +43,7 @@ public class RandomWalkBetweenness<V,E> extends RandomWalkSTBetweenness<V,E> {
     protected void computeBetweenness() {
         setUp();
 
-        int numVertices = getGraph().getVertices().size();
+        int numVertices = getGraph().getVertexCount();
         double normalizingConstant = numVertices*(numVertices-1)/2.0;
 
         for (V ithVertex : getGraph().getVertices()) {

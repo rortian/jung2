@@ -62,8 +62,8 @@ public class TestGraphMLFile extends TestCase {
 
         Graph<Number,Number> graph = loadGraph(testFilename);
 
-        Assert.assertEquals(graph.getVertices().size(),3);
-        Assert.assertEquals(graph.getEdges().size(),3);
+        Assert.assertEquals(graph.getVertexCount(),3);
+        Assert.assertEquals(graph.getEdgeCount(),3);
 
         GraphMLFileHandler<Number,Number> handler = graphmlFile.getMFileHandler();
         Map<String,Number> labeller = handler.getLabeller();
@@ -120,8 +120,8 @@ public class TestGraphMLFile extends TestCase {
         String newFilename = testFilename + "_save";
         graphmlFile.save(oldGraph,newFilename);
 		Graph<Number,Number> newGraph = graphmlFile.load(newFilename);
-        Assert.assertEquals(oldGraph.getVertices().size(),newGraph.getVertices().size());
-        Assert.assertEquals(oldGraph.getEdges().size(),newGraph.getEdges().size());
+        Assert.assertEquals(oldGraph.getVertexCount(),newGraph.getVertexCount());
+        Assert.assertEquals(oldGraph.getEdgeCount(),newGraph.getEdgeCount());
         File testFile = new File(testFilename);
         testFile.delete();
         File newFile = new File(newFilename);

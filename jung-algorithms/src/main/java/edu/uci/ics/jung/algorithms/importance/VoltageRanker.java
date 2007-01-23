@@ -99,7 +99,7 @@ public class VoltageRanker<V, E>
             throw new IllegalArgumentException("at least one source and one " +
                     "sink must exist");
 
-        if (sources.size() + sinks.size() > g.getVertices().size())
+        if (sources.size() + sinks.size() > g.getVertexCount())
             throw new IllegalArgumentException("either sources and sinks overlap " + 
                 "or sources and sinks contain vertices not in g");
         
@@ -125,7 +125,7 @@ public class VoltageRanker<V, E>
             throw new IllegalArgumentException("at least one source and one " +
                 "sink must exist");
         
-        if (source_voltages.size() + sinks.size() > g.getVertices().size())
+        if (source_voltages.size() + sinks.size() > g.getVertexCount())
             throw new IllegalArgumentException("either sources and sinks overlap " + 
                 "or sources and sinks contain vertices not in g");
 

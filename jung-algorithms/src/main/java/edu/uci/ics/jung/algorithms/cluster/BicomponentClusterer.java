@@ -76,13 +76,13 @@ public class BicomponentClusterer<V,E> implements GraphClusterer<V,E,V>
                 high = new HashMap<V,Number>();
                 stack = new Stack<E>();
                 parents = new HashMap<V,V>();
-                converse_depth = theGraph.getVertices().size();
+                converse_depth = theGraph.getVertexCount();
                 // find the biconnected components for this subgraph, starting from v
                 findBiconnectedComponents(theGraph, v, bicomponents);
                 
                 // if we only visited one vertex, this method won't have
                 // ID'd it as a biconnected component, so mark it as one
-                if (theGraph.getVertices().size() - converse_depth == 1)
+                if (theGraph.getVertexCount() - converse_depth == 1)
                 {
                     Set<V> s = new HashSet<V>();
                     s.add(v);

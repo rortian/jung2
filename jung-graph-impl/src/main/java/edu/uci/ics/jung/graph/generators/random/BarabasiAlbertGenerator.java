@@ -190,7 +190,7 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
             
             // subtract 1 from numVertices because we don't want to count newVertex
             // (which has already been added to the graph, but not to vertex_index)
-            double attach_prob = (degree + 1) / (mGraph.getEdges().size() + mGraph.getVertices().size() - 1);
+            double attach_prob = (degree + 1) / (mGraph.getEdgeCount() + mGraph.getVertexCount() - 1);
             if (attach_prob >= mRandom.nextDouble())
                 created_edge = true;
         }

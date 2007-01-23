@@ -117,8 +117,8 @@ public class PajekNetIOTest extends TestCase
         pnr.setVertexFactory(vertexFactory);
         pnr.setEdgeFactory(edgeFactory);
         Graph g = pnr.load(r);
-        assertEquals(g.getVertices().size(), 3);
-        assertEquals(g.getEdges().size(), 2);
+        assertEquals(g.getVertexCount(), 3);
+        assertEquals(g.getEdgeCount(), 2);
     }
     
     public void testDirectedSaveLoadSave() throws IOException
@@ -149,7 +149,7 @@ public class PajekNetIOTest extends TestCase
         	System.err.println(v+" incidentedges are "+graph1.getIncidentEdges(v));
         }
 
-        assertEquals(graph1.getEdges().size(), 6);
+        assertEquals(graph1.getEdgeCount(), 6);
 
         String testFilename = "dtest.net";
         String testFilename2 = testFilename + "2";
@@ -173,8 +173,8 @@ public class PajekNetIOTest extends TestCase
         	System.err.println(v+" incidentedges are "+graph2.getIncidentEdges(v));
        }
 
-        assertEquals(graph1.getVertices().size(), graph2.getVertices().size());
-        assertEquals(graph1.getEdges().size(), graph2.getEdges().size());
+        assertEquals(graph1.getVertexCount(), graph2.getVertexCount());
+        assertEquals(graph1.getEdgeCount(), graph2.getEdgeCount());
 
         pnw.save(graph2, testFilename2, new PajekLabels<Number>(pnr.getVertexLabeller()), null, null);
 
@@ -220,7 +220,7 @@ public class PajekNetIOTest extends TestCase
         graph1.addEdge(j++, 1, 4);
         graph1.addEdge(j++, 4, 3);
 
-        assertEquals(graph1.getEdges().size(), 6);
+        assertEquals(graph1.getEdgeCount(), 6);
 
         System.err.println("graph1 = "+graph1);
         for(Number edge : graph1.getEdges()) {
@@ -256,8 +256,8 @@ public class PajekNetIOTest extends TestCase
         }
 
 
-        assertEquals(graph1.getVertices().size(), graph2.getVertices().size());
-        assertEquals(graph1.getEdges().size(), graph2.getEdges().size());
+        assertEquals(graph1.getVertexCount(), graph2.getVertexCount());
+        assertEquals(graph1.getEdgeCount(), graph2.getEdgeCount());
 
         pnw.save(graph2, testFilename2, new PajekLabels<Number>(pnr.getVertexLabeller()), null, null);
         compareIndexedGraphs(graph1, graph2);
@@ -308,7 +308,7 @@ public class PajekNetIOTest extends TestCase
             nr.put(edges[i], new Float(Math.random()));
         }
         
-        assertEquals(graph1.getEdges().size(), 6);
+        assertEquals(graph1.getEdgeCount(), 6);
 
         System.err.println(" mixed graph1 = "+graph1);
         for(Number edge : graph1.getEdges()) {
@@ -345,11 +345,11 @@ public class PajekNetIOTest extends TestCase
         Transformer<Number,Point2D> vld2 = 
         	TransformerUtils.mapTransformer(pnr.getVertexLocationTransformer());
         
-        assertEquals(graph1.getVertices().size(), graph2.getVertices().size());
-        assertEquals(graph1.getEdges().size(), graph2.getEdges().size());
+        assertEquals(graph1.getVertexCount(), graph2.getVertexCount());
+        assertEquals(graph1.getEdgeCount(), graph2.getEdgeCount());
         
         // test vertex labels and locations
-        for (int i = 0; i < graph1.getVertices().size(); i++)
+        for (int i = 0; i < graph1.getVertexCount(); i++)
         {
             Number v1 = id.get(i);
             Number v2 = id2.get(i);
@@ -399,12 +399,12 @@ public class PajekNetIOTest extends TestCase
      */
     private void compareIndexedGraphs(Graph<Number,Number> g1, Graph<Number,Number> g2)
     {
-        int n1 = g1.getVertices().size();
-        int n2 = g2.getVertices().size();
+        int n1 = g1.getVertexCount();
+        int n2 = g2.getVertexCount();
 
         assertEquals(n1, n2);
 
-        assertEquals(g1.getEdges().size(), g2.getEdges().size());
+        assertEquals(g1.getEdgeCount(), g2.getEdgeCount());
 
         List<Number> id1 = new ArrayList<Number>(g1.getVertices());
         List<Number> id2 = new ArrayList<Number>(g2.getVertices());

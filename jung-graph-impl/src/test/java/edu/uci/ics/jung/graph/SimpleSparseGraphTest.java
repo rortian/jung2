@@ -63,48 +63,48 @@ public class SimpleSparseGraphTest extends TestCase {
     }
 
     public void testGetEdges() {
-        assertEquals(smallGraph.getEdges().size(), 4);
+        assertEquals(smallGraph.getEdgeCount(), 4);
     }
 
     public void testGetVertices() {
-        assertEquals(smallGraph.getVertices().size(), 3);
+        assertEquals(smallGraph.getVertexCount(), 3);
     }
 
     public void testAddVertex() {
-        int count = graph.getVertices().size();
+        int count = graph.getVertexCount();
         graph.addVertex(count);
-        assertEquals(graph.getVertices().size(), count+1);
+        assertEquals(graph.getVertexCount(), count+1);
     }
 
     public void testRemoveEndVertex() {
-        int vertexCount = graph.getVertices().size();
-        int edgeCount = graph.getEdges().size();
+        int vertexCount = graph.getVertexCount();
+        int edgeCount = graph.getEdgeCount();
         Collection<Number> incident = graph.getIncidentEdges(vertexCount-1);
         graph.removeVertex(vertexCount-1);
-        assertEquals(vertexCount-1, graph.getVertices().size());
-        assertEquals(edgeCount - incident.size(), graph.getEdges().size());
+        assertEquals(vertexCount-1, graph.getVertexCount());
+        assertEquals(edgeCount - incident.size(), graph.getEdgeCount());
     }
 
     public void testRemoveMiddleVertex() {
-        int vertexCount = graph.getVertices().size();
-        int edgeCount = graph.getEdges().size();
+        int vertexCount = graph.getVertexCount();
+        int edgeCount = graph.getEdgeCount();
         Collection<Number> incident = graph.getIncidentEdges(vertexCount/2);
         graph.removeVertex(vertexCount/2);
-        assertEquals(vertexCount-1, graph.getVertices().size());
-        assertEquals(edgeCount - incident.size(), graph.getEdges().size());
+        assertEquals(vertexCount-1, graph.getVertexCount());
+        assertEquals(edgeCount - incident.size(), graph.getEdgeCount());
     }
 
     public void testAddEdge() {
-        int edgeCount = graph.getEdges().size();
+        int edgeCount = graph.getEdgeCount();
         graph.addEdge(edgeFactory.create(), 0, 1);
-        assertEquals(graph.getEdges().size(), edgeCount+1);
+        assertEquals(graph.getEdgeCount(), edgeCount+1);
     }
 
     public void testRemoveEdge() {
     	List<Number> edgeList = new ArrayList<Number>(graph.getEdges());
-        int edgeCount = graph.getEdges().size();
+        int edgeCount = graph.getEdgeCount();
         graph.removeEdge(edgeList.get(edgeList.size()/2));
-        assertEquals(graph.getEdges().size(), edgeCount-1);
+        assertEquals(graph.getEdgeCount(), edgeCount-1);
     }
 
     public void testGetInOutEdges() {

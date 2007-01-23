@@ -115,7 +115,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
 
         Set<V> targets = new HashSet<V>();
         targets.add(target);
-        singleSourceShortestPath(source, targets, g.getVertices().size());
+        singleSourceShortestPath(source, targets, g.getVertexCount());
         Map<V,E> incomingEdgeMap = 
             ((SourcePathData)sourceMap.get(source)).incomingEdges;
         E incomingEdge = incomingEdgeMap.get(target);
@@ -140,7 +140,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      */
     public Map<V,E> getIncomingEdgeMap(V source)
 	{
-		return getIncomingEdgeMap(source, g.getVertices().size());
+		return getIncomingEdgeMap(source, g.getVertexCount());
 	}
 
     /**
@@ -167,7 +167,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
         // wipe out results if results are not cached
         Set<V> targets = new HashSet<V>();
         targets.add(target);
-        singleSourceShortestPath(source, targets, g.getVertices().size());
+        singleSourceShortestPath(source, targets, g.getVertexCount());
         Map<V,E> incomingEdges = 
             ((SourcePathData)sourceMap.get(source)).incomingEdges;
         
@@ -205,7 +205,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
 //            throw new IllegalArgumentException("Specified source vertex " + 
 //                    source + " is not part of graph " + g);
 
-        if (numDests < 1 || numDests > g.getVertices().size())
+        if (numDests < 1 || numDests > g.getVertexCount())
             throw new IllegalArgumentException("numDests must be >= 1 " + 
             "and <= g.numVertices()");
 

@@ -94,8 +94,8 @@ public class TestMatrixFile extends TestCase {
 		String filename = "testMatrixLoadSaveUW.mat";
 		mf.save(dg, filename);
 		Graph g = mf.load(filename);
-		Assert.assertEquals(dg.getVertices().size(), g.getVertices().size());
-		Assert.assertEquals(dg.getEdges().size(), g.getEdges().size());
+		Assert.assertEquals(dg.getVertexCount(), g.getVertexCount());
+		Assert.assertEquals(dg.getEdgeCount(), g.getEdgeCount());
 		File file = new File(filename);
 		file.delete();
 	}
@@ -106,8 +106,8 @@ public class TestMatrixFile extends TestCase {
 		String filename = "testMatrixLoadSaveW.mat";
 		mf.save(dg, filename);
 		Graph g = mf.load(filename);
-		Assert.assertEquals(dg.getVertices().size(), g.getVertices().size());
-		Assert.assertEquals(dg.getEdges().size(), g.getEdges().size());
+		Assert.assertEquals(dg.getVertexCount(), g.getVertexCount());
+		Assert.assertEquals(dg.getEdgeCount(), g.getEdgeCount());
 		File file = new File(filename);
 		file.delete();
 	}

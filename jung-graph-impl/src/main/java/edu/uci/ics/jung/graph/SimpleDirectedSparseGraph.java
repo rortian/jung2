@@ -206,4 +206,12 @@ public class SimpleDirectedSparseGraph<V,E>
 	public Collection<E> getEdges(EdgeType edgeType) {
 		return getEdges();
 	}
+
+	public int getEdgeCount() {
+		return edges.keySet().size();
+	}
+
+	public int getVertexCount() {
+		return vertices.keySet().size();
+	}
 }

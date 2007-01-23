@@ -169,7 +169,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
             mPreviousRankingsMap.put(currentVertex, getVertexRankScore(currentVertex));
         }
 
-        rankingMSE = Math.pow(rankingMSE / getVertices().size(), 0.5);
+        rankingMSE = Math.pow(rankingMSE / getVertexCount(), 0.5);
         setPrecision(rankingMSE);
 //        return rankingMSE;
     }

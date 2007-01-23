@@ -32,43 +32,43 @@ public class SimpleDirectedSparseGraphTest extends TestCase {
     }
 
     public void testGetEdges() {
-        assertEquals(graph.getEdges().size(), 4);
+        assertEquals(graph.getEdgeCount(), 4);
     }
 
     public void testGetVertices() {
-        assertEquals(graph.getVertices().size(), 3);
+        assertEquals(graph.getVertexCount(), 3);
     }
 
     public void testAddVertex() {
-        int count = graph.getVertices().size();
+        int count = graph.getVertexCount();
         graph.addVertex(new Integer(3));
-        assertEquals(graph.getVertices().size(), count+1);
+        assertEquals(graph.getVertexCount(), count+1);
     }
 
     public void testRemoveEndVertex() {
-        int vertexCount = graph.getVertices().size();
+        int vertexCount = graph.getVertexCount();
         graph.removeVertex(v0);
-        assertEquals(vertexCount-1, graph.getVertices().size());
-        assertEquals(2, graph.getEdges().size());
+        assertEquals(vertexCount-1, graph.getVertexCount());
+        assertEquals(2, graph.getEdgeCount());
     }
 
     public void testRemoveMiddleVertex() {
-        int vertexCount = graph.getVertices().size();
+        int vertexCount = graph.getVertexCount();
         graph.removeVertex(v1);
-        assertEquals(vertexCount-1, graph.getVertices().size());
-        assertEquals(0, graph.getEdges().size());
+        assertEquals(vertexCount-1, graph.getVertexCount());
+        assertEquals(0, graph.getEdgeCount());
     }
 
     public void testAddEdge() {
-        int edgeCount = graph.getEdges().size();
+        int edgeCount = graph.getEdgeCount();
         graph.addEdge(new Double(.5), v0, v1);
-        assertEquals(graph.getEdges().size(), edgeCount+1);
+        assertEquals(graph.getEdgeCount(), edgeCount+1);
     }
 
     public void testRemoveEdge() {
-        int edgeCount = graph.getEdges().size();
+        int edgeCount = graph.getEdgeCount();
         graph.removeEdge(e12);
-        assertEquals(graph.getEdges().size(), edgeCount-1);
+        assertEquals(graph.getEdgeCount(), edgeCount-1);
     }
 
     public void testGetInEdges() {

@@ -266,7 +266,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
         
         Map<V,Number> distanceMap = 
         	singleSourceShortestPath(source, targets, 
-        			(int)Math.min(g.getVertices().size(), max_targets));
+        			(int)Math.min(g.getVertexCount(), max_targets));
         
         if (!cached)
             reset(source);
@@ -290,7 +290,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      */
     public Map<V,Number> getDistanceMap(V source)
     {
-        return getDistanceMap(source, (int)Math.min(g.getVertices().size(), max_targets));
+        return getDistanceMap(source, (int)Math.min(g.getVertexCount(), max_targets));
     }
     
 
@@ -317,7 +317,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
     public LinkedHashMap<V,Number> getDistanceMap(V source, int numDests)
     {
 
-        if (numDests < 1 || numDests > g.getVertices().size())
+        if (numDests < 1 || numDests > g.getVertexCount())
             throw new IllegalArgumentException("numDests must be >= 1 " + 
                 "and <= g.numVertices()");
 

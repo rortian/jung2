@@ -118,7 +118,7 @@ public class PajekNetWriter<V,E>
         BufferedWriter writer = new BufferedWriter(w);
         if (nev == null)
             nev = new ConstantMap(1);
-        writer.write("*Vertices " + graph.getVertices().size());
+        writer.write("*Vertices " + graph.getVertexCount());
         writer.newLine();
         
         List<V> id = new ArrayList<V>(graph.getVertices());//Indexer.getIndexer(graph);

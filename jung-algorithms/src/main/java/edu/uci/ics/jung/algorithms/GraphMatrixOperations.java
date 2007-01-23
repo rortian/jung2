@@ -260,7 +260,7 @@ public class GraphMatrixOperations
     {
         if (nev == null)
             nev = new ConstantMap<E,Number>(1);
-        int numVertices = g.getVertices().size();
+        int numVertices = g.getVertexCount();
         SparseDoubleMatrix2D matrix = new SparseDoubleMatrix2D(numVertices,
                 numVertices);
 
@@ -288,7 +288,7 @@ public class GraphMatrixOperations
      */
     public static <V,E> SparseDoubleMatrix2D createVertexDegreeDiagonalMatrix(Graph<V,E> graph)
     {
-        int numVertices = graph.getVertices().size();
+        int numVertices = graph.getVertexCount();
         SparseDoubleMatrix2D matrix = new SparseDoubleMatrix2D(numVertices,
                 numVertices);
         BidiMap<V,Integer> indexer = Indexer.<V>create(graph.getVertices());
@@ -320,7 +320,7 @@ public class GraphMatrixOperations
     public static <V,E> DoubleMatrix2D computeVoltagePotentialMatrix(
             UndirectedGraph<V,E> graph)
     {
-        int numVertices = graph.getVertices().size();
+        int numVertices = graph.getVertexCount();
         //create adjacency matrix from graph
         DoubleMatrix2D A = GraphMatrixOperations.graphToSparseMatrix(graph,
                 null);

@@ -92,7 +92,7 @@ public class GraphMatrixOperationsTest extends TestCase
 
     public void testMatrixToGraphToMatrixDirected()
     {
-        DoubleMatrix2D m = new SparseDoubleMatrix2D(g.getVertices().size(), g.getVertices().size());
+        DoubleMatrix2D m = new SparseDoubleMatrix2D(g.getVertexCount(), g.getVertexCount());
         for (int i = 0; i < edges.length; i++)
             m.setQuick(edges[i][0] - 1, edges[i][1] - 1, edges[i][2]);
         
@@ -108,7 +108,7 @@ public class GraphMatrixOperationsTest extends TestCase
     
     public void testMatrixToGraphToMatrixUndirected()
     {
-        DoubleMatrix2D m = new SparseDoubleMatrix2D(g.getVertices().size(), g.getVertices().size());
+        DoubleMatrix2D m = new SparseDoubleMatrix2D(g.getVertexCount(), g.getVertexCount());
         for (int i = 0; i < edges.length; i++)
         {
             m.setQuick(edges[i][0] - 1, edges[i][1] - 1, edges[i][2]);
@@ -149,11 +149,11 @@ public class GraphMatrixOperationsTest extends TestCase
         addEdges(g3, g3_edges);
         
         // check vertex/edge set sizes
-        assertTrue(g2.getVertices().size() == g3.getVertices().size());
-        assertTrue(g2.getEdges().size() == g3.getEdges().size());      
+        assertTrue(g2.getVertexCount() == g3.getVertexCount());
+        assertTrue(g2.getEdgeCount() == g3.getEdgeCount());      
         
         // check vertex sets
-        assertEquals(g2.getVertices().size(), g3.getVertices().size());
+        assertEquals(g2.getVertexCount(), g3.getVertexCount());
         
         // check for equivalent vertices, edges, and edge weights
         for (int i = 0; i < g3_edges.length; i++)

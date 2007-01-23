@@ -50,8 +50,8 @@ public class TestBarabasiAlbert extends TestCase {
 	        
 	        generator.evolveGraph(num_timesteps);
 	        Graph graph = (Graph) generator.generateGraph();
-	        assertEquals(graph.getVertices().size(), (i*num_timesteps) + init_vertices);
-	        assertEquals(graph.getEdges().size(), edges_to_add_per_timestep * (i*num_timesteps));
+	        assertEquals(graph.getVertexCount(), (i*num_timesteps) + init_vertices);
+	        assertEquals(graph.getEdgeCount(), edges_to_add_per_timestep * (i*num_timesteps));
 	    }
 	}
 }

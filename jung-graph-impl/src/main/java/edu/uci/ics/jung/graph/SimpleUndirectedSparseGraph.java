@@ -186,4 +186,12 @@ public class SimpleUndirectedSparseGraph<V,E>
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public int getEdgeCount() {
+		return edges.keySet().size();
+	}
+
+	public int getVertexCount() {
+		return vertices.keySet().size();
+	}
 }

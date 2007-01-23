@@ -79,7 +79,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 		DirectedGraph<Number,Number> graph = new SimpleDirectedSparseGraph<Number,Number>();
 		Transformer<DirectedGraph<Number,Number>,Number> edgeFactory = new Transformer<DirectedGraph<Number,Number>,Number>() {
 			public Number transform(DirectedGraph<Number,Number> graph) {
-				return graph.getEdges().size();
+				return graph.getEdgeCount();
 			}
 		};
 
@@ -156,7 +156,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 		DirectedGraph<Number,Number> graph = new SimpleDirectedSparseGraph<Number,Number>();
 		Transformer<DirectedGraph<Number,Number>,Number> edgeFactory = new Transformer<DirectedGraph<Number,Number>,Number>() {
 			public Number transform(DirectedGraph<Number,Number> graph) {
-				return graph.getEdges().size();
+				return graph.getEdgeCount();
 			}
 		};
 

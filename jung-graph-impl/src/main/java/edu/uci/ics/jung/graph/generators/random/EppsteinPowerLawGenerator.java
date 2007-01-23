@@ -59,7 +59,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
         	graph.addVertex(vertexFactory.create());
         }
         List<V> vertices = new ArrayList<V>(graph.getVertices());
-        while (graph.getEdges().size() < mNumEdges) {
+        while (graph.getEdgeCount() < mNumEdges) {
             V u = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
             V v = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
             if (!graph.isSuccessor(v,u)) {

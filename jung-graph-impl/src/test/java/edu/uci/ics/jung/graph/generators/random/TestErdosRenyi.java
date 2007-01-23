@@ -47,8 +47,8 @@ public class TestErdosRenyi extends TestCase {
             generator.setSeed(0);
 
 			Graph<String,Number> graph = generator.generateGraph();
-			Assert.assertTrue(graph.getVertices().size() == numVertices);
-            total += graph.getEdges().size();
+			Assert.assertTrue(graph.getVertexCount() == numVertices);
+            total += graph.getEdgeCount();
 		}
         total /= 10.0;
         Assert.assertTrue(total > 495-50 && total < 495+50);

@@ -104,7 +104,7 @@ public class TriadicCensus {
         	//Indexer.getIndexer(g);
 
 		// apply algorithm to each edge, one at at time
-		for (int i_v = 0; i_v < g.getVertices().size(); i_v++) {
+		for (int i_v = 0; i_v < g.getVertexCount(); i_v++) {
 			V v = id.get(i_v);
 			for(V u : g.getNeighbors(v)) {
 					//Iterator iter = v.getNeighbors().iterator(); iter.hasNext();) {
@@ -120,7 +120,7 @@ public class TriadicCensus {
 				} else {
 					triType = 2;
 				}
-				count[triType] += g.getVertices().size() - neighbors.size() - 2;
+				count[triType] += g.getVertexCount() - neighbors.size() - 2;
 				for (V w : neighbors) {
 					if (shouldCount(g, id, u, v, w)) {
 						count [ triType ( triCode(g, u, v, w) ) ] ++;
@@ -132,7 +132,7 @@ public class TriadicCensus {
 		for (int i = 2; i <= 16; i++) {
 			sum += count[i];
 		}
-		int n = g.getVertices().size();
+		int n = g.getVertexCount();
 		count[1] = n * (n-1) * (n-2) / 6 - sum;
 		return count;		
 	}

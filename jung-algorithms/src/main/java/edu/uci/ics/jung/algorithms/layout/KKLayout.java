@@ -134,7 +134,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
         	double height = d.getHeight();
     		double width = d.getWidth();
 
-    		int n = graph.getVertices().size();
+    		int n = graph.getVertexCount();
     		dm = new double[n][n];
     		vertices = (V[])graph.getVertices().toArray();
     		xydata = new Point2D[n];
@@ -178,13 +178,13 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
 		try {
 			currentIteration++;
 			double energy = calcEnergy();
-			status = "Kamada-Kawai V=" + getGraph().getVertices().size()
-			+ "(" + getGraph().getVertices().size() + ")"
+			status = "Kamada-Kawai V=" + getGraph().getVertexCount()
+			+ "(" + getGraph().getVertexCount() + ")"
 			+ " IT: " + currentIteration
 			+ " E=" + energy
 			;
 
-			int n = getGraph().getVertices().size();
+			int n = getGraph().getVertexCount();
 			if (n == 0)
 				return;
 
