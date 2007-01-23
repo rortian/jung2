@@ -19,7 +19,6 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public interface RenderContext<V, E> {
