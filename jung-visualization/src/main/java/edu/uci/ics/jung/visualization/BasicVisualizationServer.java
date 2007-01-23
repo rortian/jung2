@@ -22,7 +22,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
+import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.util.Caching;
@@ -392,39 +392,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
         	((Caching)layout).clear();
         }
         
-		// paint all the edges
-        try {
-        	for(E e : layout.getGraph().getEdges()) {
-
-		        renderer.renderEdge(
-		                renderContext,
-		                layout,
-		                e);
-		        renderer.renderEdgeLabel(
-		                renderContext,
-		                layout,
-		                e);
-        	}
-        } catch(ConcurrentModificationException cme) {
-            repaint();
-        }
-		
-		// paint all the vertices
-        try {
-        	for(V v : layout.getGraph().getVertices()) {
-
-		    	renderer.renderVertex(
-		                renderContext,
-                        layout,
-		                v);
-		    	renderer.renderVertexLabel(
-		                renderContext,
-                        layout,
-		                v);
-        	}
-        } catch(ConcurrentModificationException cme) {
-            repaint();
-        }
+        renderer.render(renderContext, layout);
 		
 		// if there are postRenderers set, do it
 		for(Paintable paintable : postRenderers) {

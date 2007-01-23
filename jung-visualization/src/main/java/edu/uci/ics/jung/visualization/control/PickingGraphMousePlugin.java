@@ -29,8 +29,8 @@ import javax.swing.JComponent;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
  * PickingGraphMousePlugin supports the picking of graph elements
@@ -90,7 +90,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
      * color for the picking rectangle
      */
     protected Color lensColor = Color.cyan;
-
+    
     /**
 	 * create an instance with default settings
 	 */
@@ -176,7 +176,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                 Point2D p = e.getPoint();
                 // take away the view transform
                 Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
-                
+
                 vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
                 if(vertex != null) {
                     if(pickedVertexState.isPicked(vertex) == false) {
@@ -242,15 +242,17 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         if(e.getModifiers() == modifiers) {
             if(down != null) {
                 Point2D out = e.getPoint();
+
                 if(vertex == null && heyThatsTooClose(down, out, 5) == false) {
-                    pickContainedVertices(vv, true);
+                    pickContainedVertices(vv, down, out, true);
                 }
             }
         } else if(e.getModifiers() == this.addToSelectionModifiers) {
             if(down != null) {
                 Point2D out = e.getPoint();
+
                 if(vertex == null && heyThatsTooClose(down,out,5) == false) {
-                    pickContainedVertices(vv, false);
+                    pickContainedVertices(vv, down, out, false);
                 }
             }
         }
@@ -317,11 +319,16 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
      * pick the vertices inside the rectangle
      *
      */
-    protected void pickContainedVertices(VisualizationViewer<V,E> vv, boolean clear) {
+    protected void pickContainedVertices(VisualizationViewer<V,E> vv, Point2D down, Point2D out, boolean clear) {
         
         Layout<V,E> layout = vv.getGraphLayout();
         PickedState<V> pickedVertexState = vv.getPickedVertexState();
-        Rectangle2D trect = vv.getRenderContext().getBasicTransformer().getViewTransformer().inverseTransform(rect).getBounds2D();
+        
+        Rectangle2D pickRectangle = new Rectangle2D.Double();
+        pickRectangle.setFrameFromDiagonal(
+        		vv.getRenderContext().getBasicTransformer().inverseViewTransform(down), 
+        		vv.getRenderContext().getBasicTransformer().inverseViewTransform(out));
+
         if(pickedVertexState != null) {
             if(clear) {
             	pickedVertexState.clear();
@@ -329,7 +336,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             while(true) {
                 try {
                 	for(V v : layout.getGraph().getVertices()) {
-                        if(trect.contains(vv.getRenderContext().getBasicTransformer().transform(layout.transform(v)))) {
+                        if(pickRectangle.contains(vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v)))) {
                             pickedVertexState.pick(v, true);
                         }
                     }

@@ -29,6 +29,8 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.transform.LensTransformer;
+import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
@@ -119,7 +121,11 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         
         edgeShape = xform.createTransformedShape(edgeShape);
         
-        edgeHit = rc.getBasicTransformer().getViewTransformer().transform(edgeShape).intersects(deviceRectangle);
+        MutableTransformer vt = rc.getBasicTransformer().getViewTransformer();
+        if(vt instanceof LensTransformer) {
+        	vt = ((LensTransformer)vt).getDelegate();
+        }
+        edgeHit = vt.transform(edgeShape).intersects(deviceRectangle);
 
         if(edgeHit == true) {
             

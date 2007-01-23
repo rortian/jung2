@@ -22,6 +22,7 @@ import edu.uci.ics.jung.visualization.RenderContext;
  */
 public interface Renderer<V,E> {
 
+	void render(RenderContext<V,E> rc, Layout<V,E> layout);
 	void renderVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v);
 	void renderVertexLabel(RenderContext<V,E> rc, Layout<V,E> layout, V v);
 	void renderEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e);

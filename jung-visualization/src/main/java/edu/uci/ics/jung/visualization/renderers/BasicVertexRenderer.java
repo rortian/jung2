@@ -24,6 +24,8 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.transform.LensTransformer;
+import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
@@ -86,7 +88,11 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         }
 //        System.err.println("shape bounds "+rc.getBasicTransformer().getViewTransformer().transform(s).getBounds());
 //        System.err.println("deviceRect "+deviceRectangle);
-        return rc.getBasicTransformer().getViewTransformer().transform(s).intersects(deviceRectangle);
+        MutableTransformer vt = rc.getBasicTransformer().getViewTransformer();
+        if(vt instanceof LensTransformer) {
+        	vt = ((LensTransformer)vt).getDelegate();
+        }
+        return vt.transform(s).intersects(deviceRectangle);
     }
 
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {
