@@ -353,6 +353,13 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	}
 
 	public boolean addChild(V parent, V child) {
+		Collection<V> vertices = delegate.getVertices();
+		if(vertices.contains(parent) == false) {
+			throw new IllegalArgumentException("Tree must already contain parent "+parent);
+		}
+		if(vertices.contains(child)) {
+			throw new IllegalArgumentException("Tree must not already contain child "+child);
+		}
 		return delegate.addEdge(edgeFactory.create(), parent, child);
 	}
 
