@@ -6,9 +6,9 @@ public class VisRunner implements Relaxer, Runnable {
 	
 	protected boolean running;
 	protected IterativeContext process;
-	boolean stop;
-	boolean manualSuspend;
-	Thread thread;
+	protected boolean stop;
+	protected boolean manualSuspend;
+	protected Thread thread;
 	
 	/**
 	 * how long the relaxer thread pauses between iteration loops.
