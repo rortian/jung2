@@ -14,7 +14,6 @@ import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
 
-import sun.security.provider.certpath.Vertex;
 import edu.uci.ics.graph.Graph;
 
 /**
@@ -74,16 +73,16 @@ public interface Layout<V, E> extends Transformer<V,Point2D> {
 	 * Sets a flag which fixes this vertex in place.
      * 
 	 * @param v	vertex
-     * @see #unlockVertex(Vertex)
-     * @see #isLocked(Vertex)
+     * @see #unlockVertex(V)
+     * @see #isLocked(V)
 	 */
 	void lock(V v, boolean state);
 
     /**
      * Returns <code>true</code> if the position of vertex <code>v</code>
      * is locked.
-     * @see #lockVertex(Vertex)
-     * @see #unlockVertex(Vertex)
+     * @see #lockVertex(V)
+     * @see #unlockVertex(V)
      */
     boolean isLocked(V v);
 
