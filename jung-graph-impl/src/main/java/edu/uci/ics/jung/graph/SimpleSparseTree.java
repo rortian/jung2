@@ -7,26 +7,25 @@ import java.util.List;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Tree;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
-public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, Graph<V,Integer> {
+public class SimpleSparseTree<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
 	
-	protected DirectedGraph<V,Integer> delegate;
+	protected DirectedGraph<V,E> delegate;
+	protected Factory<E> edgeFactory;
 	protected V root;
-	protected Factory<Integer> edgeFactory = new Factory<Integer>() {
-		int i=0;
-		public Integer create() {
-			return i++;
-		}};
 
-	public SimpleSparseTree(V root) {
-		delegate = new SimpleDirectedSparseGraph<V,Integer>();
+	public SimpleSparseTree(Factory<DirectedGraph<V,E>> graphFactory, 
+			Factory<E> edgeFactory, 
+			V root) {
+		this.delegate = graphFactory.create();
+		this.edgeFactory = edgeFactory;
 		this.root = root;
-		delegate.addVertex(root);
+		this.delegate.addVertex(root);
 	}
+	
 	/**
 	 * @param e
 	 * @param v1
@@ -35,8 +34,8 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.graph.util.EdgeType)
 	 */
-	public boolean addEdge(Integer e, V v1, V v2, EdgeType edgeType) {
-		throw new UnsupportedOperationException("Instead, use addChild(V parent, V child)");
+	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
+		return addChild(e, v1, v2, edgeType);
 	}
 
 	/**
@@ -46,8 +45,8 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
-	public boolean addEdge(Integer e, V v1, V v2) {
-		throw new UnsupportedOperationException("Instead, use addChild(V parent, V child)");
+	public boolean addEdge(E e, V v1, V v2) {
+		return addChild(e, v1, v2);
 	}
 
 	/**
@@ -65,7 +64,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.ArchetypeGraph#areIncident(java.lang.Object, java.lang.Object)
 	 */
-	public boolean areIncident(V vertex, Integer edge) {
+	public boolean areIncident(V vertex, E edge) {
 		return delegate.areIncident(vertex, edge);
 	}
 
@@ -94,7 +93,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.ArchetypeGraph#findEdge(java.lang.Object, java.lang.Object)
 	 */
-	public Integer findEdge(V v1, V v2) {
+	public E findEdge(V v1, V v2) {
 		return delegate.findEdge(v1, v2);
 	}
 
@@ -103,7 +102,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getDest(java.lang.Object)
 	 */
-	public V getDest(Integer directed_edge) {
+	public V getDest(E directed_edge) {
 		return delegate.getDest(directed_edge);
 	}
 
@@ -119,7 +118,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.ArchetypeGraph#getEdges()
 	 */
-	public Collection<Integer> getEdges() {
+	public Collection<E> getEdges() {
 		return delegate.getEdges();
 	}
 
@@ -128,7 +127,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.util.EdgeType)
 	 */
-	public Collection<Integer> getEdges(EdgeType edgeType) {
+	public Collection<E> getEdges(EdgeType edgeType) {
 		return delegate.getEdges(edgeType);
 	}
 
@@ -137,7 +136,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getEdgeType(java.lang.Object)
 	 */
-	public EdgeType getEdgeType(Integer edge) {
+	public EdgeType getEdgeType(E edge) {
 		return delegate.getEdgeType(edge);
 	}
 
@@ -146,7 +145,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getEndpoints(java.lang.Object)
 	 */
-	public Pair<V> getEndpoints(Integer edge) {
+	public Pair<V> getEndpoints(E edge) {
 		return delegate.getEndpoints(edge);
 	}
 
@@ -155,7 +154,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.ArchetypeGraph#getIncidentEdges(java.lang.Object)
 	 */
-	public Collection<Integer> getIncidentEdges(V vertex) {
+	public Collection<E> getIncidentEdges(V vertex) {
 		return delegate.getIncidentEdges(vertex);
 	}
 
@@ -164,7 +163,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.ArchetypeGraph#getIncidentVertices(java.lang.Object)
 	 */
-	public Collection<V> getIncidentVertices(Integer edge) {
+	public Collection<V> getIncidentVertices(E edge) {
 		return delegate.getIncidentVertices(edge);
 	}
 
@@ -173,7 +172,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getInEdges(java.lang.Object)
 	 */
-	public Collection<Integer> getInEdges(V vertex) {
+	public Collection<E> getInEdges(V vertex) {
 		return delegate.getInEdges(vertex);
 	}
 
@@ -192,7 +191,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
 	 */
-	public V getOpposite(V vertex, Integer edge) {
+	public V getOpposite(V vertex, E edge) {
 		return delegate.getOpposite(vertex, edge);
 	}
 
@@ -201,7 +200,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getOutEdges(java.lang.Object)
 	 */
-	public Collection<Integer> getOutEdges(V vertex) {
+	public Collection<E> getOutEdges(V vertex) {
 		return delegate.getOutEdges(vertex);
 	}
 
@@ -219,7 +218,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#getSource(java.lang.Object)
 	 */
-	public V getSource(Integer directed_edge) {
+	public V getSource(E directed_edge) {
 		return delegate.getSource(directed_edge);
 	}
 
@@ -263,7 +262,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#isDest(java.lang.Object, java.lang.Object)
 	 */
-	public boolean isDest(V vertex, Integer edge) {
+	public boolean isDest(V vertex, E edge) {
 		return delegate.isDest(vertex, edge);
 	}
 
@@ -283,7 +282,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.Graph#isSource(java.lang.Object, java.lang.Object)
 	 */
-	public boolean isSource(V vertex, Integer edge) {
+	public boolean isSource(V vertex, E edge) {
 		return delegate.isSource(vertex, edge);
 	}
 
@@ -338,7 +337,7 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	 * @return
 	 * @see edu.uci.ics.graph.ArchetypeGraph#removeEdge(java.lang.Object)
 	 */
-	public boolean removeEdge(Integer edge) {
+	public boolean removeEdge(E edge) {
 		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
 
 	}
@@ -351,8 +350,12 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 	public boolean removeVertex(V vertex) {
 		return delegate.removeVertex(vertex);
 	}
-
+	
 	public boolean addChild(V parent, V child) {
+		return addChild(edgeFactory.create(), parent, child);
+	}
+
+	public boolean addChild(E edge, V parent, V child, EdgeType edgeType) {
 		Collection<V> vertices = delegate.getVertices();
 		if(vertices.contains(parent) == false) {
 			throw new IllegalArgumentException("Tree must already contain parent "+parent);
@@ -360,9 +363,19 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 		if(vertices.contains(child)) {
 			throw new IllegalArgumentException("Tree must not already contain child "+child);
 		}
-		return delegate.addEdge(edgeFactory.create(), parent, child);
+		return delegate.addEdge(edge, parent, child, edgeType);
 	}
 
+	public boolean addChild(E edge, V parent, V child) {
+		Collection<V> vertices = delegate.getVertices();
+		if(vertices.contains(parent) == false) {
+			throw new IllegalArgumentException("Tree must already contain parent "+parent);
+		}
+		if(vertices.contains(child)) {
+			throw new IllegalArgumentException("Tree must not already contain child "+child);
+		}
+		return delegate.addEdge(edge, parent, child);
+	}
 	public int getChildCount(V parent) {
 		return delegate.getSuccessors(parent).size();
 	}
@@ -396,6 +409,30 @@ public class SimpleSparseTree<V> implements Tree<V>, DirectedGraph<V,Integer>, G
 
 	public boolean removeChild(V orphan) {
 		return delegate.removeVertex(orphan);
+	}
+
+	public int getDepth(V v) {
+		return getPath(v).size();
+	}
+
+	public int getHeight() {
+		int height = 0;
+		for(V v : getVertices()) {
+			height = Math.max(height, getDepth(v));
+		}
+		return height;
+	}
+
+	public boolean isInternal(V v) {
+		return isLeaf(v) == false && isRoot(v) == false;
+	}
+
+	public boolean isLeaf(V v) {
+		return getChildren(v).size() == 0;
+	}
+
+	public boolean isRoot(V v) {
+		return getParent(v) == null;
 	}
 	
 
