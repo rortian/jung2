@@ -36,8 +36,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
+import org.apache.commons.collections15.functors.MapTransformer;
+import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
@@ -127,9 +128,6 @@ public class GraphEditorDemo extends JApplet implements Printable {
      */
     public GraphEditorDemo() {
         
-        // allows the precise setting of initial vertex locations
-//        vertexLocations = new DefaultSettableVertexLocationFunction<Number>();
-        
         // create a simple graph for the demo
         graph = new SimpleSparseGraph<Number,Number>();
 
@@ -140,13 +138,14 @@ public class GraphEditorDemo extends JApplet implements Printable {
         vv =  new VisualizationViewer<Number,Number>(layout);
         vv.setBackground(Color.white);
 
-        vv.getRenderContext().setVertexStringer(new Transformer<Number, String>() {
+        vv.getRenderContext().setVertexStringer(MapTransformer.<Number,String>getInstance(
+        		LazyMap.<Number,String>decorate(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
+        
+        vv.getRenderContext().setEdgeStringer(MapTransformer.<Number,String>getInstance(
+        		LazyMap.<Number,String>decorate(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
 
-            public String transform(Number v) {
-                return v.toString();
-            }});
-
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(vv.getRenderContext().getVertexStringer());
+        
 
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
