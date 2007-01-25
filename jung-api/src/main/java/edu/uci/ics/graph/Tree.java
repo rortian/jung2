@@ -7,6 +7,8 @@ public interface Tree<V,E> extends Graph<V,E> {
 	
 	V getRoot();
 	
+	void setRoot(V root);
+	
 	Collection<V> getChildren(V parent);
 	
 	V getParent(V child);
