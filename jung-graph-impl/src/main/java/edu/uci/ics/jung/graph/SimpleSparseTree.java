@@ -18,12 +18,9 @@ public class SimpleSparseTree<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
 	protected V root;
 
 	public SimpleSparseTree(Factory<DirectedGraph<V,E>> graphFactory, 
-			Factory<E> edgeFactory, 
-			V root) {
+			Factory<E> edgeFactory) {
 		this.delegate = graphFactory.create();
 		this.edgeFactory = edgeFactory;
-		this.root = root;
-		this.delegate.addVertex(root);
 	}
 	
 	/**
@@ -55,7 +52,12 @@ public class SimpleSparseTree<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
 	 * @see edu.uci.ics.graph.ArchetypeGraph#addVertex(java.lang.Object)
 	 */
 	public boolean addVertex(V vertex) {
-		throw new UnsupportedOperationException("Instead, use addChild(V parent, V child)");
+		if(root == null) {
+			this.root = vertex;
+			return delegate.addVertex(vertex);
+		} else {
+			throw new UnsupportedOperationException("Unless you are setting the root, use addChild(V parent, V child)");
+		}
 	}
 
 	/**
@@ -409,9 +411,13 @@ public class SimpleSparseTree<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
 	public V getRoot() {
 		return root;
 	}
+	
+	public void setRoot(V root) {
+		addVertex(root);
+	}
 
 	public boolean removeChild(V orphan) {
-		return delegate.removeVertex(orphan);
+		return removeVertex(orphan);
 	}
 
 	public int getDepth(V v) {

@@ -29,24 +29,26 @@ public class SimpleSparseTreeTest extends TestCase {
 			public Integer create() {
 				return i++;
 			}};
-		tree = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory, "Root");
+		tree = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory);
 	}
 	
 	public void testSimpleTree() {
-		tree.addChild("Root", "B");
-		tree.addChild("Root", "C");
+		tree.setRoot("A");
+		tree.addChild("A", "B");
+		tree.addChild("A", "C");
 	}
 	
 	public void testCreateLoop() {
 		try {
-			tree.addChild("Root", "Root");
+			tree.setRoot("A");
+			tree.addChild("A", "A");
 			fail("should not be able to addChild(v,v)");
 		} catch(IllegalArgumentException e) {
 			// all is well
 		}
 		try {
-			tree.addChild("Root", "B");
-			tree.addChild("B", "Root");
+			tree.addChild("A", "B");
+			tree.addChild("B", "A");
 			fail("should not allow loop");
 		} catch(IllegalArgumentException e) {
 			// all is well
@@ -54,8 +56,9 @@ public class SimpleSparseTreeTest extends TestCase {
 	}
 	
 	public void testHeight() {
-    	tree.addChild("Root", "V1");
-    	tree.addChild("Root", "V2");
+		tree.setRoot("V0");
+    	tree.addChild("V0", "V1");
+    	tree.addChild("V0", "V2");
     	tree.addChild("V1", "V4");
     	tree.addChild("V2", "V3");
     	tree.addChild("V2", "V5");

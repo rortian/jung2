@@ -97,7 +97,7 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory, "V0");
+        graph = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory);
 
         createTree();
         
@@ -107,6 +107,7 @@ public class TreeLayoutDemo extends JApplet {
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line());
         
+        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
         
@@ -151,6 +152,7 @@ public class TreeLayoutDemo extends JApplet {
      * 
      */
     private void createTree() {
+    	graph.setRoot("V0");
     	graph.addChild("V0", "V1");
     	graph.addChild("V0", "V2");
     	graph.addChild("V1", "V4");
@@ -167,6 +169,20 @@ public class TreeLayoutDemo extends JApplet {
        	graph.addChild("V10", "V14");
        	graph.addChild("V13", "V15");
        	graph.addChild("V13", "V16");
+       	
+//       	Thread t = new Thread() {
+//       		public void run() {
+//       			try {
+//					Thread.sleep(5000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//       			graph.setRoot("V6");
+//       			repaint();
+//       		}
+//       	};
+//       	t.start();
 
     
     }
