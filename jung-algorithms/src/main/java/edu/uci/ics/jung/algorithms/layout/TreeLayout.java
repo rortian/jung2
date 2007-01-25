@@ -31,10 +31,10 @@ import edu.uci.ics.graph.Tree;
  *  
  */
 
-public class TreeLayout<V> implements Layout<V,Integer> {
+public class TreeLayout<V,E> implements Layout<V,E> {
 
 	private Dimension size;
-	private Tree<V> graph;
+	private Tree<V,E> graph;
 	protected Map<V,Integer> basePositions = new HashMap<V,Integer>();
     
     protected Map<V, Point2D> locations = 
@@ -53,9 +53,8 @@ public class TreeLayout<V> implements Layout<V,Integer> {
     }
 
     private void getAtomics(V p, List<V> v) {
-    	Graph<V,Integer> g = getGraph();
-        for (V c : g.getSuccessors(p)) {
-            if (g.getSuccessors(c).size() == 0) {
+        for (V c : graph.getChildren(p)) {
+            if (graph.getChildren(c).size() == 0) {
                 v.add(c);
             } else {
                 getAtomics(c, v);
@@ -70,17 +69,17 @@ public class TreeLayout<V> implements Layout<V,Integer> {
 
     private V m_rootVertex;
 
-    public TreeLayout(Tree<V> g) {
+    public TreeLayout(Tree<V,E> g) {
     	this.graph = g;
         this.m_rootVertex = g.getRoot();
     }
 
-    public TreeLayout(Tree<V> g, int distx) {
+    public TreeLayout(Tree<V,E> g, int distx) {
         this.m_rootVertex = g.getRoot();
         this.distX = distx;
     }
 
-    public TreeLayout(Tree<V> g, int distx, int disty) {
+    public TreeLayout(Tree<V,E> g, int distx, int disty) {
         this.m_rootVertex = g.getRoot();
         this.distX = distx;
         this.distY = disty;
@@ -92,7 +91,7 @@ public class TreeLayout<V> implements Layout<V,Integer> {
 
     void buildTree() {
         this.m_currentPoint = new Point(this.getCurrentSize().width / 2, 20);
-        if (m_rootVertex != null && getGraph() != null) {
+        if (m_rootVertex != null && graph != null) {
             calculateDimensionX(m_rootVertex);
             buildTree(m_rootVertex, this.m_currentPoint.x);
         }
@@ -116,7 +115,7 @@ public class TreeLayout<V> implements Layout<V,Integer> {
             int sizeXofChild;
             int startXofChild;
 
-            for (V element : getGraph().getSuccessors(v)) {
+            for (V element : graph.getChildren(v)) {
                 sizeXofChild = this.basePositions.get(element);
                 startXofChild = lastX + sizeXofChild / 2;
                 buildTree(element, startXofChild);
@@ -128,10 +127,10 @@ public class TreeLayout<V> implements Layout<V,Integer> {
     private int calculateDimensionX(V v) {
 
         int size = 0;
-        int childrenNum = getGraph().getSuccessors(v).size();
+        int childrenNum = graph.getChildren(v).size();
 
         if (childrenNum != 0) {
-            for (V element : getGraph().getSuccessors(v)) {
+            for (V element : graph.getChildren(v)) {
                 size += calculateDimensionX(element) + distX;
             }
         }
@@ -143,9 +142,9 @@ public class TreeLayout<V> implements Layout<V,Integer> {
 
     public int getDepth(V v) {
         int depth = 0;
-        for (V c : getGraph().getSuccessors(v)) {
+        for (V c : graph.getChildren(v)) {
 
-            if (getGraph().getSuccessors(c).size() == 0) {
+            if (graph.getChildren(c).size() == 0) {
                 depth = 0;
             } else {
                 depth = Math.max(depth, getDepth(c));
@@ -187,7 +186,7 @@ public class TreeLayout<V> implements Layout<V,Integer> {
         this.m_rootVertex = rootVertex_;
     }
 
-	public Graph<V, Integer> getGraph() {
+	public Graph<V,E> getGraph() {
 		return graph;
 	}
 
@@ -209,8 +208,8 @@ public class TreeLayout<V> implements Layout<V,Integer> {
 	public void reset() {
 	}
 
-	public void setGraph(Graph<V,Integer> graph) {
-		this.graph = (Tree<V>)graph;
+	public void setGraph(Graph<V,E> graph) {
+		this.graph = (Tree<V,E>)graph;
 	}
 
 	public void setInitializer(Transformer<V, Point2D> initializer) {
