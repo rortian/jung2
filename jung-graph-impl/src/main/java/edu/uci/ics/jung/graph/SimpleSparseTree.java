@@ -348,6 +348,9 @@ public class SimpleSparseTree<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
 	 * @see edu.uci.ics.graph.ArchetypeGraph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
+		for(V v : getChildren(vertex)) {
+			removeVertex(v);
+		}
 		return delegate.removeVertex(vertex);
 	}
 	
