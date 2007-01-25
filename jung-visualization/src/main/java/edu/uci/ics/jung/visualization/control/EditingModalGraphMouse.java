@@ -27,6 +27,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected Factory<V> vertexFactory;
 	protected Factory<E> edgeFactory;
 	protected GraphMousePlugin editingPlugin;
+	protected GraphMousePlugin labelEditingPlugin;
 
 	/**
 	 * create an instance with default values
@@ -61,8 +62,10 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		rotatingPlugin = new RotatingGraphMousePlugin();
 		shearingPlugin = new ShearingGraphMousePlugin();
 		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
+		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
 
 		add(scalingPlugin);
+//		add(labelEditingPlugin);
 		setMode(Mode.EDITING);
 	}
 	public void setVertexLocations(Map<V,Point2D> vertexLocations) {
@@ -100,6 +103,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(editingPlugin);
 		add(pickingPlugin);
 		add(animatedPickingPlugin);
+		add(labelEditingPlugin);
 	}
 
 	/* (non-Javadoc)
@@ -112,6 +116,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		add(translatingPlugin);
 		add(rotatingPlugin);
 		add(shearingPlugin);
+		add(labelEditingPlugin);
 	}
 
 	protected void setEditingMode() {
@@ -120,6 +125,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(translatingPlugin);
 		remove(rotatingPlugin);
 		remove(shearingPlugin);
+		remove(labelEditingPlugin);
 		add(editingPlugin);
 	}
 
