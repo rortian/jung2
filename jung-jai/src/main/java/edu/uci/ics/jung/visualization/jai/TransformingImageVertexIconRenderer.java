@@ -30,6 +30,7 @@ import javax.media.jai.WarpPerspective;
 import javax.media.jai.operator.WarpDescriptor;
 import javax.swing.Icon;
 
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -54,7 +55,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         this.warpDescriptor = new WarpDescriptor();
     }
     
-    public void paintIconForVertex(RenderContext<V,E> rc, V v, int x, int y) {
+    public void paintIconForVertex(RenderContext<V,E> rc, V v, Layout<V,E> layout) {
 
         GraphicsDecorator g = rc.getGraphicsContext();
         TransformingGraphics g2d = (TransformingGraphics)g;
@@ -62,6 +63,11 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         // get the shape to be rendered
         Shape shape = rc.getVertexShapeFunction().transform(v);
         
+        Point2D p = layout.transform(v);
+        p = rc.getBasicTransformer().layoutTransform(p);
+        float x = (float)p.getX();
+        float y = (float)p.getY();
+
         // create a transform that translates to the location of
         // the vertex to be rendered
         AffineTransform xform = AffineTransform.getTranslateInstance(x,y);
@@ -81,8 +87,8 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
                     int imageWidth = image.getWidth(null);
                     int imageHeight = image.getHeight(null);
                     
-                    int xLoc = x - imageWidth / 2;
-                    int yLoc = y - imageHeight / 2;
+                    int xLoc = (int) (x - imageWidth / 2);
+                    int yLoc = (int) (y - imageHeight / 2);
                     Rectangle2D imageRectangle = new Rectangle2D.Double(xLoc, yLoc,
                             imageWidth, imageHeight);
                     
