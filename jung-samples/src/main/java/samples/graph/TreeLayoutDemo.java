@@ -25,9 +25,11 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Tree;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
+import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
 import edu.uci.ics.jung.graph.SimpleSparseTree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -61,7 +63,23 @@ public class TreeLayoutDemo extends JApplet {
     /**
      * the graph
      */
-    Tree<String> graph;
+    Tree<String,Integer> graph;
+    
+    Factory<DirectedGraph<String,Integer>> graphFactory = 
+    	new Factory<DirectedGraph<String,Integer>>() {
+
+			public DirectedGraph<String, Integer> create() {
+				return new SimpleDirectedSparseGraph<String,Integer>();
+			}};
+			
+	Factory<Integer> edgeFactory = new Factory<Integer>() {
+		int i=0;
+		public Integer create() {
+			return i++;
+		}};
+	
+			
+			
     
     Factory<String> vertexFactory = new Factory<String>() {
     	int i=0;
@@ -79,11 +97,11 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleSparseTree<String>("V0");
+        graph = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory, "V0");
 
         createTree();
         
-        Layout<String,Integer> layout = new TreeLayout<String>(graph);
+        Layout<String,Integer> layout = new TreeLayout<String,Integer>(graph);
 
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,400));
         vv.setBackground(Color.white);
