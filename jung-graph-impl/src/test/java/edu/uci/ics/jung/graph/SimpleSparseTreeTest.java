@@ -29,7 +29,7 @@ public class SimpleSparseTreeTest extends TestCase {
 			public Integer create() {
 				return i++;
 			}};
-		tree = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory);
+		tree = new SimpleRootedDirectedSparseTree<String,Integer>(graphFactory, edgeFactory);
 	}
 	
 	public void testSimpleTree() {
