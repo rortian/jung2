@@ -16,21 +16,27 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ConcurrentModificationException;
+import java.util.Collection;
 
 import javax.swing.JComponent;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.BasicTransformer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.transform.LensTransformer;
+import edu.uci.ics.jung.visualization.transform.MutableTransformer;
+import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
+import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
 /** 
  * PickingGraphMousePlugin supports the picking of graph elements
@@ -127,7 +133,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     /**
      * a Paintable to draw the rectangle used to pick multiple
      * Vertices
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson
      *
      */
     class LensPaintable implements Paintable {
@@ -325,24 +331,41 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         PickedState<V> pickedVertexState = vv.getPickedVertexState();
         
         Rectangle2D pickRectangle = new Rectangle2D.Double();
-        pickRectangle.setFrameFromDiagonal(
-        		vv.getRenderContext().getBasicTransformer().inverseViewTransform(down), 
-        		vv.getRenderContext().getBasicTransformer().inverseViewTransform(out));
+        pickRectangle.setFrameFromDiagonal(down,out);
+         
+        MutableTransformer mvt = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+//    	pickRectangle.setFrameFromDiagonal(mvt.inverseTransform(down), mvt.inverseTransform(out));
+
+        Shape pickShape = pickRectangle;
+        if(mvt instanceof LensTransformer) {
+        	pickRectangle.setFrameFromDiagonal(((MutableTransformerDecorator) mvt).getDelegate().inverseTransform(down), 
+        			((MutableTransformerDecorator) mvt).getDelegate().inverseTransform(out));
+//        	pickShape = ((LensTransformer)mvt).inverseTransform(pickShape);
+        } else {
+        	pickRectangle.setFrameFromDiagonal(mvt.inverseTransform(down), mvt.inverseTransform(out));
+        }
 
         if(pickedVertexState != null) {
             if(clear) {
             	pickedVertexState.clear();
             }
-            while(true) {
-                try {
-                	for(V v : layout.getGraph().getVertices()) {
-                        if(pickRectangle.contains(vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v)))) {
-                            pickedVertexState.pick(v, true);
-                        }
-                    }
-                    break;
-                } catch(ConcurrentModificationException cme) {}
+            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+
+            Collection<V> picked = pickSupport.getVertices(layout, pickShape);
+            for(V v : picked) {
+            	pickedVertexState.pick(v, true);
             }
+//            while(true) {
+//                try {
+//                	for(V v : layout.getGraph().getVertices()) {
+//                        if(pickShape.contains(//layout.transform(v))) {
+//                        		vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v)))) {
+//                            pickedVertexState.pick(v, true);
+//                        }
+//                    }
+//                    break;
+//                } catch(ConcurrentModificationException cme) {}
+//            }
         }
     }
 

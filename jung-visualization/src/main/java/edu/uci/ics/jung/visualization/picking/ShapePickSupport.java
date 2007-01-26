@@ -129,17 +129,17 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
             try {
                 for(V v : getFilteredVertices(layout)) {
 
-                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
+//                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
                     // transform the vertex location to screen coords
-                    Point2D p = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v));
+                    Point2D p = vv.getRenderContext().getBasicTransformer().transform(layout.transform(v));
                     if(p == null) continue;
                     AffineTransform xform = 
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
-                    shape = xform.createTransformedShape(shape);
+//                    shape = xform.createTransformedShape(shape);
                     // see if this vertex center is within the picking area rectangle
-                    Rectangle2D shapeBounds = shape.getBounds2D();
-                    Point2D shapeCenter = new Point2D.Double(shapeBounds.getCenterX(),shapeBounds.getCenterY());
-                    if(rectangle.contains(shapeCenter)) {
+//                    Rectangle2D shapeBounds = shape.getBounds2D();
+//                    Point2D shapeCenter = new Point2D.Double(shapeBounds.getCenterX(),shapeBounds.getCenterY());
+                    if(rectangle.contains(p)) {
                     	pickedVertices.add(v);
                     }
                 }
