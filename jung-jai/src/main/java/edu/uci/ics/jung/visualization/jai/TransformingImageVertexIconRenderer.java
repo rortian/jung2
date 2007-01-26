@@ -61,7 +61,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         TransformingGraphics g2d = (TransformingGraphics)g;
         boolean vertexHit = true;
         // get the shape to be rendered
-        Shape shape = rc.getVertexShapeFunction().transform(v);
+        Shape shape = rc.getVertexShapeTransformer().transform(v);
         
         Point2D p = layout.transform(v);
         p = rc.getBasicTransformer().layoutTransform(p);
@@ -76,8 +76,8 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         
         vertexHit = vertexHit(rc, shape);
         if (vertexHit) {
-        	if(rc.getVertexIconFunction() != null) {
-        		Icon icon = rc.getVertexIconFunction().transform(v);
+        	if(rc.getVertexIconTransformer() != null) {
+        		Icon icon = rc.getVertexIconTransformer().transform(v);
         		if(icon != null) {
         		
                     BufferedImage image = new BufferedImage(icon.getIconWidth(), 

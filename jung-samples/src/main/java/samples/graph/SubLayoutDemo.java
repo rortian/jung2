@@ -104,8 +104,8 @@ public class SubLayoutDemo extends JApplet {
         
         vv.setPickedVertexState(new ClusterListener<String,Number>(clusteringLayout));
         ps = vv.getPickedVertexState();
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), 
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), 
                 Color.red, Color.yellow));
         vv.setBackground(Color.white);
         

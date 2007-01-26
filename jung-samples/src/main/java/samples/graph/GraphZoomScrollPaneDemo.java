@@ -136,7 +136,7 @@ public class GraphZoomScrollPaneDemo {
         				Color.white, Color.blue,
         				vv.getPickedVertexState(),
         				false));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new ConstantTransformer(Color.lightGray));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.lightGray));
         
         // add my listeners for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -145,7 +145,7 @@ public class GraphZoomScrollPaneDemo {
 				return "E"+graph.getEndpoints(edge).toString();
 			}});
         
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
         vv.setForeground(Color.lightGray);

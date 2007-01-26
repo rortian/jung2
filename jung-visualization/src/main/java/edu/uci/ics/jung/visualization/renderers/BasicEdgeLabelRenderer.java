@@ -41,7 +41,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
 	public Component prepareRenderer(RenderContext<V,E> rc, EdgeLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, E edge) {
 		return rc.getEdgeLabelRenderer().<E>getEdgeLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getEdgeFontFunction().transform(edge), isSelected, edge);
+				rc.getEdgeFontTransformer().transform(edge), isSelected, edge);
 	}
     
     /**
@@ -131,7 +131,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         float distY = y2 - y1;
         double totalLength = Math.sqrt(distX * distX + distY * distY);
 
-        double closeness = rc.getEdgeLabelClosenessFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e)).doubleValue();
+        double closeness = rc.getEdgeLabelClosenessTransformer().transform(Context.<Graph<V,E>,E>getInstance(graph, e)).doubleValue();
 
         int posX = (int) (x1 + (closeness) * distX);
         int posY = (int) (y1 + (closeness) * distY);
@@ -144,7 +144,7 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         
         Dimension d = component.getPreferredSize();
 
-        Shape edgeShape = rc.getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
+        Shape edgeShape = rc.getEdgeShapeTransformer().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
         
         double parallelOffset = 1;
 

@@ -157,14 +157,14 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         
         Transformer<Number,Paint> vpf = 
             new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
-        vv.getRenderContext().setVertexFillPaintFunction(vpf);
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(vpf);
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
         final Transformer<Number,String> vertexStringerImpl = 
             new VertexStringerImpl<Number>(map);
-        vv.getRenderContext().setVertexStringer(vertexStringerImpl);
+        vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
         
@@ -179,8 +179,8 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         vertexImageShapeFunction.setIconMap(iconMap);
         vertexIconFunction.setIconMap(iconMap);
         
-        vv.getRenderContext().setVertexShapeFunction(vertexImageShapeFunction);
-        vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
+        vv.getRenderContext().setVertexShapeTransformer(vertexImageShapeFunction);
+        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
 
         
         // Get the pickedState and add a listener that will decorate the

@@ -116,12 +116,12 @@ public class GradientEdgePaintRenderer<V, E> extends BasicEdgeRenderer<V,E>
 		xF=x2;
 		yF=y2;
 		this.graph = graph;
-		Transformer<E,Paint> oldEdgeDrawPaintTransformer = rc.getEdgeDrawPaintFunction();
-		Transformer<E,Paint> oldEdgeFillPaintTransformer = rc.getEdgeFillPaintFunction();
-		rc.setEdgeDrawPaintFunction(this);
-		rc.setEdgeFillPaintFunction(this);
+		Transformer<E,Paint> oldEdgeDrawPaintTransformer = rc.getEdgeDrawPaintTransformer();
+		Transformer<E,Paint> oldEdgeFillPaintTransformer = rc.getEdgeFillPaintTransformer();
+		rc.setEdgeDrawPaintTransformer(this);
+		rc.setEdgeFillPaintTransformer(this);
 		super.drawSimpleEdge(rc, layout, e);
-		rc.setEdgeDrawPaintFunction(oldEdgeDrawPaintTransformer);
-		rc.setEdgeFillPaintFunction(oldEdgeFillPaintTransformer);
+		rc.setEdgeDrawPaintTransformer(oldEdgeDrawPaintTransformer);
+		rc.setEdgeFillPaintTransformer(oldEdgeFillPaintTransformer);
 	}
 }

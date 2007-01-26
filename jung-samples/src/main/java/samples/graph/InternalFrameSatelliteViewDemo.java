@@ -100,8 +100,8 @@ public class InternalFrameSatelliteViewDemo {
         Layout<String,Number> layout = new ISOMLayout<String,Number>(graph);
 
         vv = new VisualizationViewer<String,Number>(layout, new Dimension(600,600));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
 
         // add my listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -111,8 +111,8 @@ public class InternalFrameSatelliteViewDemo {
         satellite =
             new SatelliteVisualizationViewer<String,Number>(vv, layout, 
                     new Dimension(200,200));
-        satellite.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
-        satellite.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
+        satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
+        satellite.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
 
         JFrame frame = new JFrame();
         desktop = new JDesktopPane();

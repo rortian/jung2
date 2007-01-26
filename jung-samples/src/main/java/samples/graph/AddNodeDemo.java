@@ -88,7 +88,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         vv.setGraphMouse(new DefaultModalGraphMouse());
         
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller<Number>());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Number>());
         vv.setForeground(Color.white);
         getContentPane().add(vv);
         switchLayout = new JButton("Switch to SpringLayout");

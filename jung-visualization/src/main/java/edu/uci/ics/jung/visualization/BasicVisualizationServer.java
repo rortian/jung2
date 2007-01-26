@@ -178,8 +178,8 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		setPickedVertexState(new MultiPickedState<V>());
 		setPickedEdgeState(new MultiPickedState<E>());
         
-        renderContext.setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<V,E>(getPickedEdgeState(), Color.black, Color.cyan));
-        renderContext.setVertexFillPaintFunction(new PickableVertexPaintTransformer<V>(getPickedVertexState(), 
+        renderContext.setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<V,E>(getPickedEdgeState(), Color.black, Color.cyan));
+        renderContext.setVertexFillPaintTransformer(new PickableVertexPaintTransformer<V>(getPickedVertexState(), 
                 Color.red, Color.yellow));
 //        renderContext.setViewTransformer(viewTransformer);
 

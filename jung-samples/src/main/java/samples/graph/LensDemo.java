@@ -143,13 +143,13 @@ public class LensDemo extends JApplet {
 
         PickedState<String> ps = vv.getPickedVertexState();
         PickedState<Number> pes = vv.getPickedEdgeState();
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         
-        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeFunction();
+        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeTransformer();
         final Transformer<String,Shape> squares = 
         	new ConstantTransformer(new Rectangle2D.Float(-10,-10,20,20));
 
@@ -278,8 +278,8 @@ public class LensDemo extends JApplet {
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     visualizationModel.setGraphLayout(graphLayout);
-                    vv.getRenderContext().setVertexShapeFunction(ovals);
-                    vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+                    vv.getRenderContext().setVertexShapeTransformer(ovals);
+                    vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
                     vv.repaint();
                 }
             }});
@@ -289,8 +289,8 @@ public class LensDemo extends JApplet {
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     visualizationModel.setGraphLayout(gridLayout);
-                    vv.getRenderContext().setVertexShapeFunction(squares);
-                    vv.getRenderContext().setVertexStringer(new ConstantTransformer(null));
+                    vv.getRenderContext().setVertexShapeTransformer(squares);
+                    vv.getRenderContext().setVertexLabelTransformer(new ConstantTransformer(null));
                     vv.repaint();
                 }
             }});

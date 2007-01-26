@@ -57,7 +57,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getVertexFontFunction().transform(vertex), isSelected, vertex);
+				rc.getVertexFontTransformer().transform(vertex), isSelected, vertex);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
         Dimension d = component.getPreferredSize();
         AffineTransform xform = AffineTransform.getTranslateInstance(x, y);
         
-    	Shape shape = rc.getVertexShapeFunction().transform(v);
+    	Shape shape = rc.getVertexShapeTransformer().transform(v);
     	shape = xform.createTransformedShape(shape);
     	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
     		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();

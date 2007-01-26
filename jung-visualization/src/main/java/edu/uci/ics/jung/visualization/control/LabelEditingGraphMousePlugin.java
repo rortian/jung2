@@ -85,7 +85,7 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     		VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
     		GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
     		if(pickSupport != null) {
-    			Transformer<V,String> vs = vv.getRenderContext().getVertexStringer();
+    			Transformer<V,String> vs = vv.getRenderContext().getVertexLabelTransformer();
     			if(vs instanceof MapTransformer) {
     				Map<V,String> map = ((MapTransformer)vs).getMap();
     				Layout<V,E> layout = vv.getGraphLayout();
@@ -105,7 +105,7 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     					return;
     				}
     			}
-    			Transformer<E,String> es = vv.getRenderContext().getEdgeStringer();
+    			Transformer<E,String> es = vv.getRenderContext().getEdgeLabelTransformer();
     			if(es instanceof MapTransformer) {
     				Map<E,String> map = ((MapTransformer)es).getMap();
     				Layout<V,E> layout = vv.getGraphLayout();

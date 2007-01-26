@@ -75,18 +75,18 @@ public class UnicodeLabelDemo {
         createEdges(v);
         
         vv =  new VisualizationViewer<Integer,Number>(new FRLayout<Integer,Number>(graph));
-        vv.getRenderContext().setVertexStringer(new UnicodeVertexStringer<Integer>(v));
+        vv.getRenderContext().setVertexLabelTransformer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
         VertexIconShapeTransformer<Integer> vertexIconShapeFunction =
             new VertexIconShapeTransformer<Integer>(new EllipseVertexShapeTransformer<Integer>());
         DefaultVertexIconTransformer<Integer> vertexIconFunction = new DefaultVertexIconTransformer<Integer>();
-        vv.getRenderContext().setVertexShapeFunction(vertexIconShapeFunction);
-        vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
+        vv.getRenderContext().setVertexShapeTransformer(vertexIconShapeFunction);
+        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
         loadImages(v, vertexIconFunction.getIconMap());
         vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 

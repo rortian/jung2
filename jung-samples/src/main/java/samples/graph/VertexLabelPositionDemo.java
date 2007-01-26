@@ -101,14 +101,14 @@ public class VertexLabelPositionDemo extends JApplet {
 
         PickedState<String> ps = vv.getPickedVertexState();
         PickedState<Number> pes = vv.getPickedEdgeState();
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.W);
         
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         
-        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeFunction();
+        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeTransformer();
 
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());

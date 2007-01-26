@@ -73,11 +73,11 @@ public class ShortestPathDemo extends JPanel {
         final VisualizationViewer<String,Number> vv = new VisualizationViewer<String,Number>(layout);
         vv.setBackground(Color.WHITE);
 
-        vv.getRenderContext().setVertexDrawPaintFunction(new MyVertexDrawPaintFunction<String>());
-        vv.getRenderContext().setVertexFillPaintFunction(new MyVertexFillPaintFunction<String>());
-        vv.getRenderContext().setEdgeDrawPaintFunction(new MyEdgePaintFunction());
-        vv.getRenderContext().setEdgeStrokeFunction(new MyEdgeStrokeFunction());
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller<String>());
+        vv.getRenderContext().setVertexDrawPaintTransformer(new MyVertexDrawPaintFunction<String>());
+        vv.getRenderContext().setVertexFillPaintTransformer(new MyVertexFillPaintFunction<String>());
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new MyEdgePaintFunction());
+        vv.getRenderContext().setEdgeStrokeTransformer(new MyEdgeStrokeFunction());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
         vv.setGraphMouse(new DefaultModalGraphMouse());
         vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             

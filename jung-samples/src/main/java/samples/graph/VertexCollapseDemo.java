@@ -100,7 +100,7 @@ public class VertexCollapseDemo extends JApplet {
             new DefaultVisualizationModel(layout, preferredSize);
         vv =  new VisualizationViewer(visualizationModel, preferredSize);
         
-        vv.getRenderContext().setVertexShapeFunction(new ClusterVertexShapeFunction());
+        vv.getRenderContext().setVertexShapeTransformer(new ClusterVertexShapeFunction());
 
         vv.setBackground(Color.white);
         

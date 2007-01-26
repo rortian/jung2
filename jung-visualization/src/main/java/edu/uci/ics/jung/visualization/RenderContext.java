@@ -53,50 +53,58 @@ public interface RenderContext<V, E> {
 
     void setArrowPlacementTolerance(float arrow_placement_tolerance);
 
-    Transformer<Context<Graph<V,E>,E>,Shape> getEdgeArrowFunction();
+    Transformer<Context<Graph<V,E>,E>,Shape> getEdgeArrowTransformer();
 
-    void setEdgeArrowFunction(Transformer<Context<Graph<V,E>,E>,Shape> edgeArrowFunction);
+    void setEdgeArrowTransformer(Transformer<Context<Graph<V,E>,E>,Shape> edgeArrowTransformer);
 
     Predicate<Context<Graph<V,E>,E>> getEdgeArrowPredicate() ;
 
     void setEdgeArrowPredicate(Predicate<Context<Graph<V,E>,E>> edgeArrowPredicate);
 
-    Transformer<E,Font> getEdgeFontFunction();
+    Transformer<E,Font> getEdgeFontTransformer();
 
-    void setEdgeFontFunction(Transformer<E,Font> edgeFontFunction);
+    void setEdgeFontTransformer(Transformer<E,Font> edgeFontTransformer);
 
     Predicate<Context<Graph<V,E>,E>> getEdgeIncludePredicate();
 
     void setEdgeIncludePredicate(Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate);
 
-    Transformer<Context<Graph<V,E>,E>,Number> getEdgeLabelClosenessFunction();
+    Transformer<Context<Graph<V,E>,E>,Number> getEdgeLabelClosenessTransformer();
 
-    void setEdgeLabelClosenessFunction(
-    		Transformer<Context<Graph<V,E>,E>,Number> edgeLabelClosenessFunction);
+    void setEdgeLabelClosenessTransformer(
+    		Transformer<Context<Graph<V,E>,E>,Number> edgeLabelClosenessTransformer);
 
     EdgeLabelRenderer getEdgeLabelRenderer();
 
     void setEdgeLabelRenderer(EdgeLabelRenderer edgeLabelRenderer);
 
-    Transformer<E,Paint> getEdgeFillPaintFunction();
+    Transformer<E,Paint> getEdgeFillPaintTransformer();
 
-    void setEdgeFillPaintFunction(Transformer<E,Paint> edgePaintFunction);
+    void setEdgeFillPaintTransformer(Transformer<E,Paint> edgePaintTransformer);
 
-    Transformer<E,Paint> getEdgeDrawPaintFunction();
+    Transformer<E,Paint> getEdgeDrawPaintTransformer();
 
-    void setEdgeDrawPaintFunction(Transformer<E,Paint> edgeDrawPaintFunction);
+    void setEdgeDrawPaintTransformer(Transformer<E,Paint> edgeDrawPaintTransformer);
 
-    Transformer<Context<Graph<V,E>,E>,Shape> getEdgeShapeFunction();
+    Transformer<E,Paint> getArrowDrawPaintTransformer();
 
-    void setEdgeShapeFunction(Transformer<Context<Graph<V,E>,E>,Shape> edgeShapeFunction);
+    void setArrowDrawPaintTransformer(Transformer<E,Paint> arrowDrawPaintTransformer);
 
-    Transformer<E,String> getEdgeStringer();
+    Transformer<E,Paint> getArrowFillPaintTransformer();
 
-    void setEdgeStringer(Transformer<E,String> edgeStringer);
+    void setArrowFillPaintTransformer(Transformer<E,Paint> arrowFillPaintTransformer);
 
-    Transformer<E,Stroke> getEdgeStrokeFunction();
+    Transformer<Context<Graph<V,E>,E>,Shape> getEdgeShapeTransformer();
 
-    void setEdgeStrokeFunction(Transformer<E,Stroke> edgeStrokeFunction);
+    void setEdgeShapeTransformer(Transformer<Context<Graph<V,E>,E>,Shape> edgeShapeTransformer);
+
+    Transformer<E,String> getEdgeLabelTransformer();
+
+    void setEdgeLabelTransformer(Transformer<E,String> edgeStringer);
+
+    Transformer<E,Stroke> getEdgeStrokeTransformer();
+
+    void setEdgeStrokeTransformer(Transformer<E,Stroke> edgeStrokeTransformer);
     
     GraphicsDecorator getGraphicsContext();
     
@@ -123,13 +131,13 @@ public interface RenderContext<V, E> {
 
     void setScreenDevice(JComponent screenDevice);
 
-    Transformer<V,Font> getVertexFontFunction();
+    Transformer<V,Font> getVertexFontTransformer();
 
-    void setVertexFontFunction(Transformer<V,Font> vertexFontFunction);
+    void setVertexFontTransformer(Transformer<V,Font> vertexFontTransformer);
 
-    Transformer<V,Icon> getVertexIconFunction();
+    Transformer<V,Icon> getVertexIconTransformer();
 
-    void setVertexIconFunction(Transformer<V,Icon> vertexIconFunction);
+    void setVertexIconTransformer(Transformer<V,Icon> vertexIconTransformer);
 
     Predicate<Context<Graph<V,E>,V>> getVertexIncludePredicate();
 
@@ -139,25 +147,25 @@ public interface RenderContext<V, E> {
 
     void setVertexLabelRenderer(VertexLabelRenderer vertexLabelRenderer);
 
-    Transformer<V,Paint> getVertexFillPaintFunction();
+    Transformer<V,Paint> getVertexFillPaintTransformer();
 
-    void setVertexFillPaintFunction(Transformer<V,Paint> vertexFillPaintFunction);
+    void setVertexFillPaintTransformer(Transformer<V,Paint> vertexFillPaintTransformer);
 
-    Transformer<V,Paint> getVertexDrawPaintFunction();
+    Transformer<V,Paint> getVertexDrawPaintTransformer();
 
-    void setVertexDrawPaintFunction(Transformer<V,Paint> vertexDrawPaintFunction);
+    void setVertexDrawPaintTransformer(Transformer<V,Paint> vertexDrawPaintTransformer);
 
-    Transformer<V,Shape> getVertexShapeFunction();
+    Transformer<V,Shape> getVertexShapeTransformer();
 
-    void setVertexShapeFunction(Transformer<V,Shape> vertexShapeFunction);
+    void setVertexShapeTransformer(Transformer<V,Shape> vertexShapeTransformer);
 
-    Transformer<V,String> getVertexStringer();
+    Transformer<V,String> getVertexLabelTransformer();
 
-    void setVertexStringer(Transformer<V,String> vertexStringer);
+    void setVertexLabelTransformer(Transformer<V,String> vertexStringer);
 
-    Transformer<V,Stroke> getVertexStrokeFunction();
+    Transformer<V,Stroke> getVertexStrokeTransformer();
 
-    void setVertexStrokeFunction(Transformer<V,Stroke> vertexStrokeFunction);
+    void setVertexStrokeTransformer(Transformer<V,Stroke> vertexStrokeTransformer);
 
 //    MutableTransformer getViewTransformer();
 

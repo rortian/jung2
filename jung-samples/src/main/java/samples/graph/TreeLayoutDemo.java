@@ -105,9 +105,9 @@ public class TreeLayoutDemo extends JApplet {
 
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,400));
         vv.setBackground(Color.white);
-        vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line());
+        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
-        vv.getRenderContext().setVertexStringer(new ToStringLabeller());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
         

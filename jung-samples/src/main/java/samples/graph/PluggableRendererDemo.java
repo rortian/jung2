@@ -56,7 +56,6 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
@@ -282,21 +281,24 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
                     new PickableEdgePaintTransformer<Integer,Number>(
                             vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
         
-        vv.getRenderContext().setVertexFillPaintFunction(seedFillColor);
-        vv.getRenderContext().setVertexDrawPaintFunction(seedDrawColor);
-        vv.getRenderContext().setVertexStrokeFunction(vsh);
-        vv.getRenderContext().setVertexStringer(vs_none);
-        vv.getRenderContext().setVertexFontFunction(vff);
-        vv.getRenderContext().setVertexShapeFunction(vssa);
+        vv.getRenderContext().setVertexFillPaintTransformer(seedFillColor);
+        vv.getRenderContext().setVertexDrawPaintTransformer(seedDrawColor);
+        vv.getRenderContext().setVertexStrokeTransformer(vsh);
+        vv.getRenderContext().setVertexLabelTransformer(vs_none);
+        vv.getRenderContext().setVertexFontTransformer(vff);
+        vv.getRenderContext().setVertexShapeTransformer(vssa);
         vv.getRenderContext().setVertexIncludePredicate(show_vertex);
         
-        vv.getRenderContext().setEdgeDrawPaintFunction( edgeDrawPaint );
-        vv.getRenderContext().setEdgeStringer(es_none);
-        vv.getRenderContext().setEdgeFontFunction(eff);
-        vv.getRenderContext().setEdgeStrokeFunction(ewcs);
+        vv.getRenderContext().setEdgeDrawPaintTransformer( edgeDrawPaint );
+        vv.getRenderContext().setEdgeLabelTransformer(es_none);
+        vv.getRenderContext().setEdgeFontTransformer(eff);
+        vv.getRenderContext().setEdgeStrokeTransformer(ewcs);
         vv.getRenderContext().setEdgeIncludePredicate(show_edge);
-        vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<Integer,Number>());
+        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Integer,Number>());
         vv.getRenderContext().setEdgeArrowPredicate(show_arrow);
+        
+        vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.red));
+        vv.getRenderContext().setArrowDrawPaintTransformer(new ConstantTransformer(Color.green));
         JPanel jp = new JPanel();
         jp.setLayout(new BorderLayout());
         
@@ -609,16 +611,16 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         else if (source == v_labels)
         {
             if (source.isSelected())
-                vv.getRenderContext().setVertexStringer(vs);
+                vv.getRenderContext().setVertexLabelTransformer(vs);
             else
-                vv.getRenderContext().setVertexStringer(vs_none);
+                vv.getRenderContext().setVertexLabelTransformer(vs_none);
         }
         else if (source == e_labels)
         {
             if (source.isSelected())
-                vv.getRenderContext().setEdgeStringer(es);
+                vv.getRenderContext().setEdgeLabelTransformer(es);
             else
-                vv.getRenderContext().setEdgeStringer(es_none);
+                vv.getRenderContext().setEdgeLabelTransformer(es_none);
         }
         else if (source == e_uarrow_pred)
         {
@@ -649,13 +651,13 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         {
             if(source.isSelected())
             {
-                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<Integer,Number>());
+                vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Integer,Number>());
             }
         }
         else if (source == e_wedge)
         {
             if (source.isSelected())
-                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.Wedge<Integer,Number>(10));
+                vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Wedge<Integer,Number>(10));
         }
 //        else if (source == e_bent) 
 //        {
@@ -668,14 +670,14 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         {
             if(source.isSelected())
             {
-                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<Integer,Number>());
+                vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.QuadCurve<Integer,Number>());
             }
         }
         else if (source == e_cubic) 
         {
             if(source.isSelected())
             {
-                vv.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<Integer,Number>());
+                vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.CubicCurve<Integer,Number>());
             }
         }
        else if (source == e_show_d)
@@ -711,9 +713,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         else if (source == fill_edges)
         {
         	if(source.isSelected()) {
-        		vv.getRenderContext().setEdgeFillPaintFunction( edgeFillPaint );
+        		vv.getRenderContext().setEdgeFillPaintTransformer( edgeFillPaint );
         	} else {
-        		vv.getRenderContext().setEdgeFillPaintFunction( new ConstantTransformer(null) );
+        		vv.getRenderContext().setEdgeFillPaintTransformer( new ConstantTransformer(null) );
         	}
 //            edgePaint.useFill(source.isSelected());
         }

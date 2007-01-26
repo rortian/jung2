@@ -45,7 +45,7 @@ public class VertexLabelAsShapeRenderer<V,E>
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
-				rc.getVertexFontFunction().transform(vertex), isSelected, vertex);
+				rc.getVertexFontTransformer().transform(vertex), isSelected, vertex);
 	}
 
 	/**

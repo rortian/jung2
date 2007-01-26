@@ -129,8 +129,8 @@ public class PerspectiveTransformerDemo extends JApplet {
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
         vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         PickedState<Number> pes = vv.getPickedEdgeState();
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
-        vv.getRenderContext().setVertexShapeFunction(new Transformer<String,Shape>() {
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv.getRenderContext().setVertexShapeTransformer(new Transformer<String,Shape>() {
 
             public Shape transform(String v) {
                 return new Rectangle2D.Float(-10,-10,20,20);

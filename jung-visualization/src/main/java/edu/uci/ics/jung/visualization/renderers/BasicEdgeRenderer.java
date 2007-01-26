@@ -49,7 +49,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             !rc.getVertexIncludePredicate().evaluate(Context.<Graph<V,E>,V>getInstance(graph,v2)))
             return;
         
-        Stroke new_stroke = rc.getEdgeStrokeFunction().transform(e);
+        Stroke new_stroke = rc.getEdgeStrokeTransformer().transform(e);
         Stroke old_stroke = g2d.getStroke();
         if (new_stroke != null)
             g2d.setStroke(new_stroke);
@@ -86,8 +86,8 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         float y2 = (float) p2.getY();
         
         boolean isLoop = v1.equals(v2);
-        Shape s2 = rc.getVertexShapeFunction().transform(v2);
-        Shape edgeShape = rc.getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
+        Shape s2 = rc.getVertexShapeTransformer().transform(v2);
+        Shape edgeShape = rc.getEdgeShapeTransformer().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
         
         boolean edgeHit = true;
         boolean arrowHit = true;
@@ -133,13 +133,13 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             
             // get Paints for filling and drawing
             // (filling is done first so that drawing and label use same Paint)
-            Paint fill_paint = rc.getEdgeFillPaintFunction().transform(e); 
+            Paint fill_paint = rc.getEdgeFillPaintTransformer().transform(e); 
             if (fill_paint != null)
             {
                 g.setPaint(fill_paint);
                 g.fill(edgeShape);
             }
-            Paint draw_paint = rc.getEdgeDrawPaintFunction().transform(e);
+            Paint draw_paint = rc.getEdgeDrawPaintTransformer().transform(e);
             if (draw_paint != null)
             {
                 g.setPaint(draw_paint);
@@ -154,7 +154,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             if (rc.getEdgeArrowPredicate().evaluate(Context.<Graph<V,E>,E>getInstance(graph, e))) {
                 
                 Shape destVertexShape = 
-                    rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getSecond());
+                    rc.getVertexShapeTransformer().transform(graph.getEndpoints(e).getSecond());
 
                 AffineTransform xf = AffineTransform.getTranslateInstance(x2, y2);
                 destVertexShape = xf.createTransformedShape(destVertexShape);
@@ -165,14 +165,16 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     AffineTransform at = 
                         getArrowTransform(rc, new GeneralPath(edgeShape), destVertexShape);
                     if(at == null) return;
-                    Shape arrow = rc.getEdgeArrowFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
+                    Shape arrow = rc.getEdgeArrowTransformer().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
                     arrow = at.createTransformedShape(arrow);
-                    // note that arrows implicitly use the edge's draw paint
+                    g.setPaint(rc.getArrowFillPaintTransformer().transform(e));
                     g.fill(arrow);
+                    g.setPaint(rc.getArrowDrawPaintTransformer().transform(e));
+                    g.draw(arrow);
                 }
                 if (graph.getEdgeType(e) == EdgeType.UNDIRECTED) {
                     Shape vertexShape = 
-                        rc.getVertexShapeFunction().transform(graph.getEndpoints(e).getFirst());
+                        rc.getVertexShapeTransformer().transform(graph.getEndpoints(e).getFirst());
                     xf = AffineTransform.getTranslateInstance(x1, y1);
                     vertexShape = xf.createTransformedShape(vertexShape);
                     
@@ -181,9 +183,12 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     if(arrowHit) {
                         AffineTransform at = getReverseArrowTransform(rc, new GeneralPath(edgeShape), vertexShape, !isLoop);
                         if(at == null) return;
-                        Shape arrow = rc.getEdgeArrowFunction().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
+                        Shape arrow = rc.getEdgeArrowTransformer().transform(Context.<Graph<V,E>,E>getInstance(graph, e));
                         arrow = at.createTransformedShape(arrow);
+                        g.setPaint(rc.getArrowFillPaintTransformer().transform(e));
                         g.fill(arrow);
+                        g.setPaint(rc.getArrowDrawPaintTransformer().transform(e));
+                        g.draw(arrow);
                     }
                 }
             }

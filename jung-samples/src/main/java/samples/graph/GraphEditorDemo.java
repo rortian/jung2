@@ -138,13 +138,13 @@ public class GraphEditorDemo extends JApplet implements Printable {
         vv =  new VisualizationViewer<Number,Number>(layout);
         vv.setBackground(Color.white);
 
-        vv.getRenderContext().setVertexStringer(MapTransformer.<Number,String>getInstance(
+        vv.getRenderContext().setVertexLabelTransformer(MapTransformer.<Number,String>getInstance(
         		LazyMap.<Number,String>decorate(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
         
-        vv.getRenderContext().setEdgeStringer(MapTransformer.<Number,String>getInstance(
+        vv.getRenderContext().setEdgeLabelTransformer(MapTransformer.<Number,String>getInstance(
         		LazyMap.<Number,String>decorate(new HashMap<Number,String>(), new ToStringLabeller<Number>())));
 
-        vv.setVertexToolTipTransformer(vv.getRenderContext().getVertexStringer());
+        vv.setVertexToolTipTransformer(vv.getRenderContext().getVertexLabelTransformer());
         
 
         Container content = getContentPane();

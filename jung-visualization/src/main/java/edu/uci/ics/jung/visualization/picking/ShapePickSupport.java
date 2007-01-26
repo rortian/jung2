@@ -21,6 +21,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.collections15.Predicate;
 
@@ -95,7 +96,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
             try {
                 for(V v : getFilteredVertices(layout)) {
 
-                    Shape shape = vv.getRenderContext().getVertexShapeFunction().transform(v);
+                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
                     // transform the vertex location to screen coords
                     Point2D p = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v));
                     if(p == null) continue;
@@ -122,6 +123,31 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
         return closest;
     }
 
+    public Collection<V> getVertices(Layout<V, E> layout, Shape rectangle) {
+    	Set<V> pickedVertices = new HashSet<V>();
+        while(true) {
+            try {
+                for(V v : getFilteredVertices(layout)) {
+
+                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
+                    // transform the vertex location to screen coords
+                    Point2D p = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v));
+                    if(p == null) continue;
+                    AffineTransform xform = 
+                        AffineTransform.getTranslateInstance(p.getX(), p.getY());
+                    shape = xform.createTransformedShape(shape);
+                    // see if this vertex center is within the picking area rectangle
+                    Rectangle2D shapeBounds = shape.getBounds2D();
+                    Point2D shapeCenter = new Point2D.Double(shapeBounds.getCenterX(),shapeBounds.getCenterY());
+                    if(rectangle.contains(shapeCenter)) {
+                    	pickedVertices.add(v);
+                    }
+                }
+                break;
+            } catch(ConcurrentModificationException cme) {}
+        }
+        return pickedVertices;
+    }
     /**
      * return an edge whose shape intersects the 'pickArea' footprint of the passed
      * x,y, coordinates.
@@ -155,10 +181,10 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
                     AffineTransform xform = AffineTransform.getTranslateInstance(x1, y1);
 
                     Shape edgeShape = 
-                    	vv.getRenderContext().getEdgeShapeFunction().transform(Context.<Graph<V,E>,E>getInstance(vv.getGraphLayout().getGraph(),e));
+                    	vv.getRenderContext().getEdgeShapeTransformer().transform(Context.<Graph<V,E>,E>getInstance(vv.getGraphLayout().getGraph(),e));
                     if(isLoop) {
                         // make the loops proportional to the size of the vertex
-                        Shape s2 = vv.getRenderContext().getVertexShapeFunction().transform(v2);
+                        Shape s2 = vv.getRenderContext().getVertexShapeTransformer().transform(v2);
                         Rectangle2D s2Bounds = s2.getBounds2D();
                         xform.scale(s2Bounds.getWidth(),s2Bounds.getHeight());
                         // move the loop so that the nadir is centered in the vertex

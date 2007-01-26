@@ -167,9 +167,9 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         	new DefaultVertexIconTransformer<Number>();
         vertexImageShapeFunction.setIconMap(iconMap);
         vertexIconFunction.setIconMap(iconMap);
-        vv.getRenderContext().setVertexShapeFunction(vertexImageShapeFunction);
-        vv.getRenderContext().setVertexIconFunction(vertexIconFunction);
-        vv.getRenderContext().setVertexStringer(vertexStringerImpl);
+        vv.getRenderContext().setVertexShapeTransformer(vertexImageShapeFunction);
+        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
+        vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
         PickedState ps = vv.getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
 

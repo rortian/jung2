@@ -150,7 +150,7 @@ public class ShowLayouts extends JApplet {
 
         final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
         
-        vv.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer(vv.getPickedVertexState(), Color.red, Color.yellow));
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);

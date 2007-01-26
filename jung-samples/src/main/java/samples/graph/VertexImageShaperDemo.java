@@ -25,6 +25,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -152,17 +153,22 @@ public class VertexImageShaperDemo extends JApplet {
 
         Transformer<Number,Paint> vpf = 
             new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
-        vv.getRenderContext().setVertexFillPaintFunction(vpf);
-        vv.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(vpf);
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
         final Transformer<Number,String> vertexStringerImpl = 
             new VertexStringerImpl<Number,String>(map);
-        vv.getRenderContext().setVertexStringer(vertexStringerImpl);
+        vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
-        
+        vv.getRenderContext().setEdgeLabelTransformer(new Transformer<Number,String>() {
+        	URL url = getClass().getResource("/images/lightning-s.gif");
+			public String transform(Number input) {
+				
+				return "<html><img src="+url+" height=10 width=21>"+input.toString();
+			}});
         
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconShapeTransformer instead.
@@ -175,8 +181,8 @@ public class VertexImageShaperDemo extends JApplet {
         vertexIconShapeTransformer.setIconMap(iconMap);
         vertexIconTransformer.setIconMap(iconMap);
         
-        vv.getRenderContext().setVertexShapeFunction(vertexIconShapeTransformer);
-        vv.getRenderContext().setVertexIconFunction(vertexIconTransformer);
+        vv.getRenderContext().setVertexShapeTransformer(vertexIconShapeTransformer);
+        vv.getRenderContext().setVertexIconTransformer(vertexIconTransformer);
         
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
@@ -504,7 +510,7 @@ public class VertexImageShaperDemo extends JApplet {
         public void paintIconForVertex(RenderContext<V,E> rc, V v, int x, int y) {
             GraphicsDecorator g = rc.getGraphicsContext();
             boolean outlineImages = false;
-            Transformer<V,Icon> vertexIconFunction = rc.getVertexIconFunction();
+            Transformer<V,Icon> vertexIconFunction = rc.getVertexIconTransformer();
             
             if(vertexIconFunction instanceof DemoVertexIconTransformer) {
                 outlineImages = ((DemoVertexIconTransformer)vertexIconFunction).isOutlineImages();
@@ -513,7 +519,7 @@ public class VertexImageShaperDemo extends JApplet {
             if(icon == null || outlineImages) {
                 
                 Shape s = AffineTransform.getTranslateInstance(x,y).
-                    createTransformedShape(rc.getVertexShapeFunction().transform(v));
+                    createTransformedShape(rc.getVertexShapeTransformer().transform(v));
                 paintShapeForVertex(rc, v, s);
                 
             }

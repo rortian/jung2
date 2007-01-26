@@ -125,13 +125,13 @@ public class MultiViewDemo extends JApplet {
         vv2 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         vv3 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
-        vv1.getRenderContext().setEdgeShapeFunction(new EdgeShape.Line<String,Number>());
-        vv2.getRenderContext().setVertexShapeFunction(
+        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<String,Number>());
+        vv2.getRenderContext().setVertexShapeTransformer(
         		new ConstantTransformer(new Rectangle2D.Float(-6,-6,12,12)));
 
-        vv2.getRenderContext().setEdgeShapeFunction(new EdgeShape.QuadCurve<String,Number>());
+        vv2.getRenderContext().setEdgeShapeTransformer(new EdgeShape.QuadCurve<String,Number>());
         
-        vv3.getRenderContext().setEdgeShapeFunction(new EdgeShape.CubicCurve<String,Number>());
+        vv3.getRenderContext().setEdgeShapeTransformer(new EdgeShape.CubicCurve<String,Number>());
 
 //        transformer = vv1.getLayoutTransformer();
 //        vv2.setLayoutTransformer(transformer);
@@ -169,12 +169,12 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        vv1.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
-        vv2.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
-        vv3.getRenderContext().setEdgeDrawPaintFunction(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
-        vv1.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
-        vv2.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.blue, Color.cyan));
-        vv3.getRenderContext().setVertexFillPaintFunction(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv2.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv3.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
+        vv2.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(pvs, Color.blue, Color.cyan));
+        vv3.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
         
         // add default listener for ToolTips
         vv1.setVertexToolTipTransformer(new ToStringLabeller());
