@@ -5,11 +5,11 @@ import junit.framework.TestCase;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Tree;
+import edu.uci.ics.graph.Forest;
 
-public class SimpleSparseTreeTest extends TestCase {
+public class SimpleRootedDirectedSparseTreeTest extends TestCase {
 
-	Tree<String,Integer> tree;
+	Forest<String,Integer> tree;
 	Factory<DirectedGraph<String,Integer>> graphFactory;
 	Factory<Integer> edgeFactory;
 
