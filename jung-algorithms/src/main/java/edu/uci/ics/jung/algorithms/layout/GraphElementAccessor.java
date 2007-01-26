@@ -10,6 +10,10 @@
  */
 package edu.uci.ics.jung.algorithms.layout;
 
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+
 
 
 /**
@@ -26,6 +30,8 @@ public interface GraphElementAccessor<V, E>
      * by a <code>Layout</code>.
      */
     V getVertex(Layout<V,E> layout, double x, double y);
+    
+    Collection<V> getVertices(Layout<V,E> layout, Shape rectangle);
 
     /**
      * Returns an <code>Edge</code> which is associated with the 

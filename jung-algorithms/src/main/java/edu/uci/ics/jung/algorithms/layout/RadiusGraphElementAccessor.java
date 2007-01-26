@@ -10,10 +10,14 @@
  */
 package edu.uci.ics.jung.algorithms.layout;
 
+import java.awt.Shape;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import edu.uci.ics.graph.Graph;
 
@@ -78,6 +82,23 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
 		    } catch(ConcurrentModificationException cme) {}
 		}
 		return closest;
+	}
+	
+	public Collection<V> getVertices(Layout<V,E> layout, Shape rectangle) {
+		Set<V> pickedVertices = new HashSet<V>();
+		while(true) {
+		    try {
+                for(V v : layout.getGraph().getVertices()) {
+
+		            Point2D p = layout.transform(v);
+		            if(rectangle.contains(p)) {
+		            	pickedVertices.add(v);
+		            }
+		        }
+		        break;
+		    } catch(ConcurrentModificationException cme) {}
+		}
+		return pickedVertices;
 	}
 	
 	/**
