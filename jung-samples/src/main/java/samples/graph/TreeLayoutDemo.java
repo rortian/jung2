@@ -30,7 +30,7 @@ import edu.uci.ics.graph.Tree;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleSparseTree;
+import edu.uci.ics.jung.graph.SimpleRootedDirectedSparseTree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -55,7 +55,7 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
  * uses the FourPassImageShaper class to compute the Shape from
  * an image with transparent background.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  * 
  */
 public class TreeLayoutDemo extends JApplet {
@@ -97,7 +97,7 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory);
+        graph = new SimpleRootedDirectedSparseTree<String,Integer>(graphFactory, edgeFactory);
 
         createTree();
         

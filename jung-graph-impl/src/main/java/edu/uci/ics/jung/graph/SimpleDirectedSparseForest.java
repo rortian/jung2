@@ -9,7 +9,7 @@ import java.util.Set;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Tree;
+import edu.uci.ics.graph.Forest;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
@@ -21,7 +21,7 @@ import edu.uci.ics.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SimpleDirectedSparseForest<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
+public class SimpleDirectedSparseForest<V,E> implements Forest<V,E>, DirectedGraph<V,E> {
 	
 	protected Set<V> roots = new HashSet<V>();
 	protected DirectedGraph<V,E> delegate;
