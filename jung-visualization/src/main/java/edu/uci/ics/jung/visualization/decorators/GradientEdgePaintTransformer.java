@@ -25,7 +25,7 @@ import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.transform.Transformer;
+import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
 /**
  * Creates <code>GradientPaint</code> instances which can be used
@@ -43,7 +43,7 @@ public class GradientEdgePaintTransformer<V, E>
     protected Color c1;
     protected Color c2;
     protected VisualizationViewer<V,E> vv;
-    protected Transformer transformer;
+    protected BidirectionalTransformer transformer;
     protected Predicate<Context<Graph<V,E>,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
 
     public GradientEdgePaintTransformer(Color c1, Color c2, 

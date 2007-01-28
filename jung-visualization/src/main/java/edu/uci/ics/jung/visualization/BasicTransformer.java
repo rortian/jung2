@@ -9,12 +9,12 @@ import javax.swing.event.ChangeListener;
 import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
-import edu.uci.ics.jung.visualization.transform.Transformer;
+import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.ViewTransformer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
-public class BasicTransformer implements Transformer, LayoutTransformer, ViewTransformer,
+public class BasicTransformer implements BidirectionalTransformer, LayoutTransformer, ViewTransformer,
 	ChangeListener, ChangeEventSupport {
 
     protected ChangeEventSupport changeSupport =

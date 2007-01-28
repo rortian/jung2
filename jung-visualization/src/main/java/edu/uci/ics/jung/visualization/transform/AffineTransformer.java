@@ -27,7 +27,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public class AffineTransformer implements Transformer, ShapeTransformer {
+public class AffineTransformer implements BidirectionalTransformer, ShapeTransformer {
 
     protected AffineTransform inverse;
 

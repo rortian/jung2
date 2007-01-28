@@ -29,7 +29,7 @@ import javax.swing.JScrollBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.jung.visualization.transform.Transformer;
+import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.Intersector;
 
 
@@ -156,8 +156,8 @@ public class GraphZoomScrollPane extends JPanel {
             new Rectangle(0,0,d.width,d.height);
             		//-d.width/2, -d.height/2, 2*d.width, 2*d.height);
         
-        Transformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
-        Transformer layoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+        BidirectionalTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+        BidirectionalTransformer layoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
 
         Point2D h0 = new Point2D.Double(vvBounds.getMinX(), vvBounds.getCenterY());
         Point2D h1 = new Point2D.Double(vvBounds.getMaxX(), vvBounds.getCenterY());

@@ -18,7 +18,7 @@ import java.awt.geom.Point2D;
  * 
  * @author Tom Nelson - RABA Technologies
  */
-public interface Transformer {
+public interface BidirectionalTransformer {
     
     /**
      * convert the supplied graph coordinate to the 

@@ -16,7 +16,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 
 import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
-import edu.uci.ics.jung.visualization.transform.Transformer;
+import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
 
 /**
@@ -34,13 +34,13 @@ public class TransformingGraphics extends GraphicsDecorator {
     /**
      * the transformer to apply
      */
-    protected Transformer transformer;
+    protected BidirectionalTransformer transformer;
     
-    public TransformingGraphics(Transformer transformer) {
+    public TransformingGraphics(BidirectionalTransformer transformer) {
         this(transformer, null);
     }
     
-    public TransformingGraphics(Transformer transformer, Graphics2D delegate) {
+    public TransformingGraphics(BidirectionalTransformer transformer, Graphics2D delegate) {
         super(delegate);
         this.transformer = transformer;
     }
@@ -48,14 +48,14 @@ public class TransformingGraphics extends GraphicsDecorator {
     /**
      * @return Returns the transformer.
      */
-    public Transformer getTransformer() {
+    public BidirectionalTransformer getTransformer() {
         return transformer;
     }
     
     /**
      * @param transformer The transformer to set.
      */
-    public void setTransformer(Transformer transformer) {
+    public void setTransformer(BidirectionalTransformer transformer) {
         this.transformer = transformer;
     }
     

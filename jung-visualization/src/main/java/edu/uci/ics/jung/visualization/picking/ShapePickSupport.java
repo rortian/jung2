@@ -123,22 +123,20 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
         return closest;
     }
 
+    /**
+     * returns the vertices that are contained in the passed shape.
+     * The shape is in screen coordinates, and the graph vertices
+     * are transformed to screen coordinates before they are tested
+     * for inclusion
+     */
     public Collection<V> getVertices(Layout<V, E> layout, Shape rectangle) {
     	Set<V> pickedVertices = new HashSet<V>();
         while(true) {
             try {
                 for(V v : getFilteredVertices(layout)) {
-
-//                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
-                    // transform the vertex location to screen coords
+                	// transform to screen coordinates
                     Point2D p = vv.getRenderContext().getBasicTransformer().transform(layout.transform(v));
                     if(p == null) continue;
-                    AffineTransform xform = 
-                        AffineTransform.getTranslateInstance(p.getX(), p.getY());
-//                    shape = xform.createTransformedShape(shape);
-                    // see if this vertex center is within the picking area rectangle
-//                    Rectangle2D shapeBounds = shape.getBounds2D();
-//                    Point2D shapeCenter = new Point2D.Double(shapeBounds.getCenterX(),shapeBounds.getCenterY());
                     if(rectangle.contains(p)) {
                     	pickedVertices.add(v);
                     }

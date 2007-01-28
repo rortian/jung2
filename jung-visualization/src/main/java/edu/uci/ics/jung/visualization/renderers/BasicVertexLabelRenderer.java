@@ -22,7 +22,7 @@ import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
-import edu.uci.ics.jung.visualization.transform.Transformer;
+import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
@@ -88,7 +88,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	Shape shape = rc.getVertexShapeTransformer().transform(v);
     	shape = xform.createTransformedShape(shape);
     	if(rc.getGraphicsContext() instanceof TransformingGraphics) {
-    		Transformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
+    		BidirectionalTransformer transformer = ((TransformingGraphics)rc.getGraphicsContext()).getTransformer();
     		if(transformer instanceof ShapeTransformer) {
     			ShapeTransformer shapeTransformer = (ShapeTransformer)transformer;
     			shape = shapeTransformer.transform(shape);
