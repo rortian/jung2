@@ -16,6 +16,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -26,11 +27,11 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Tree;
+import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
+import edu.uci.ics.jung.graph.SimpleSparseForest;
 import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleRootedDirectedSparseTree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -63,7 +64,7 @@ public class TreeLayoutDemo extends JApplet {
     /**
      * the graph
      */
-    Tree<String,Integer> graph;
+    Graph<String,Integer> graph;
     
     Factory<DirectedGraph<String,Integer>> graphFactory = 
     	new Factory<DirectedGraph<String,Integer>>() {
@@ -97,11 +98,12 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleRootedDirectedSparseTree<String,Integer>(graphFactory, edgeFactory);
+        graph = new SimpleSparseForest<String,Integer>(graphFactory, edgeFactory);
 
         createTree();
         
-        Layout<String,Integer> layout = new TreeLayout<String,Integer>(graph);
+        Layout<String,Integer> layout = 
+        	new TreeLayout<String,Integer>(graph, Arrays.asList("A0","V0","B0"));
 
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,400));
         vv.setBackground(Color.white);
@@ -152,23 +154,39 @@ public class TreeLayoutDemo extends JApplet {
      * 
      */
     private void createTree() {
-    	graph.setRoot("V0");
-    	graph.addChild("V0", "V1");
-    	graph.addChild("V0", "V2");
-    	graph.addChild("V1", "V4");
-    	graph.addChild("V2", "V3");
-    	graph.addChild("V2", "V5");
-    	graph.addChild("V4", "V6");
-    	graph.addChild("V4", "V7");
-    	graph.addChild("V3", "V8");
-    	graph.addChild("V6", "V9");
-    	graph.addChild("V4", "V10");
-       	graph.addChild("V4", "V11");
-       	graph.addChild("V4", "V12");
-       	graph.addChild("V6", "V13");
-       	graph.addChild("V10", "V14");
-       	graph.addChild("V13", "V15");
-       	graph.addChild("V13", "V16");
+    	graph.addVertex("V0");
+    	graph.addEdge(edgeFactory.create(), "V0", "V1");
+    	graph.addEdge(edgeFactory.create(), "V0", "V2");
+    	graph.addEdge(edgeFactory.create(), "V1", "V4");
+    	graph.addEdge(edgeFactory.create(), "V2", "V3");
+    	graph.addEdge(edgeFactory.create(), "V2", "V5");
+    	graph.addEdge(edgeFactory.create(), "V4", "V6");
+    	graph.addEdge(edgeFactory.create(), "V4", "V7");
+    	graph.addEdge(edgeFactory.create(), "V3", "V8");
+    	graph.addEdge(edgeFactory.create(), "V6", "V9");
+    	graph.addEdge(edgeFactory.create(), "V4", "V10");
+       	graph.addEdge(edgeFactory.create(), "V4", "V11");
+       	graph.addEdge(edgeFactory.create(), "V4", "V12");
+       	graph.addEdge(edgeFactory.create(), "V6", "V13");
+       	graph.addEdge(edgeFactory.create(), "V10", "V14");
+       	graph.addEdge(edgeFactory.create(), "V13", "V15");
+       	graph.addEdge(edgeFactory.create(), "V13", "V16");
+       	
+       	graph.addVertex("A0");
+       	
+       	graph.addEdge(edgeFactory.create(), "A0", "A1");
+       	graph.addEdge(edgeFactory.create(), "A0", "A2");
+       	
+       	graph.addVertex("B0");
+    	graph.addEdge(edgeFactory.create(), "B0", "B1");
+    	graph.addEdge(edgeFactory.create(), "B0", "B2");
+    	graph.addEdge(edgeFactory.create(), "B1", "B4");
+    	graph.addEdge(edgeFactory.create(), "B2", "B3");
+    	graph.addEdge(edgeFactory.create(), "B2", "B5");
+    	graph.addEdge(edgeFactory.create(), "B4", "B6");
+    	graph.addEdge(edgeFactory.create(), "B4", "B7");
+    	graph.addEdge(edgeFactory.create(), "B3", "B8");
+    	graph.addEdge(edgeFactory.create(), "B6", "B9");
        	
 //       	Thread t = new Thread() {
 //       		public void run() {
