@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Tree;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
@@ -20,7 +19,7 @@ import edu.uci.ics.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SimpleRootedDirectedSparseTree<V,E> implements Tree<V,E>, DirectedGraph<V,E> {
+public class SimpleSparseTree<V,E> implements DirectedGraph<V,E> {
 	
 	protected DirectedGraph<V,E> delegate;
 	protected Factory<E> edgeFactory;
@@ -31,7 +30,7 @@ public class SimpleRootedDirectedSparseTree<V,E> implements Tree<V,E>, DirectedG
 	 * @param graphFactory must create a DirectedGraph to use as a delegate
 	 * @param edgeFactory must create unique edges to connect tree nodes
 	 */
-	public SimpleRootedDirectedSparseTree(Factory<DirectedGraph<V,E>> graphFactory, 
+	public SimpleSparseTree(Factory<DirectedGraph<V,E>> graphFactory, 
 			Factory<E> edgeFactory) {
 		this.delegate = graphFactory.create();
 		this.edgeFactory = edgeFactory;
