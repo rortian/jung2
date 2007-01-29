@@ -10,6 +10,7 @@
 
 package edu.uci.ics.jung.visualization.transform;
 
+import java.awt.Shape;
 import java.awt.geom.Point2D;
 
 /**
@@ -35,5 +36,9 @@ public interface BidirectionalTransformer {
      * @return the graph point
      */
     Point2D inverseTransform(Point2D p);
+    
+    Shape transform(Shape shape);
+    
+    Shape inverseTransform(Shape shape);
     
 }

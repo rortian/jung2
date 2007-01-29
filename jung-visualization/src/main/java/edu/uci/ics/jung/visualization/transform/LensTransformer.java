@@ -10,10 +10,13 @@ package edu.uci.ics.jung.visualization.transform;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * LensTransformer wraps a MutableAffineTransformer and modifies
@@ -204,14 +207,38 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     
     public double getDistanceFromCenter(Point2D p) {
     	
-    	Point2D center = new Point2D.Double(ellipse.getCenterX(),ellipse.getCenterY());
-//    	center = viewTransformer.viewTransform(center);
-    	double dist = center.distance(p);
-//    	System.err.println("ellipse width = "+ellipse.getWidth());
-//        double dx = ellipse.getCenterX()-p.getX();
-//        double dy = ellipse.getCenterY()-p.getY();
-//        dx *= getRatio();
-//        return Math.sqrt(dx*dx + dy*dy);
-        return dist;
+        double dx = ellipse.getCenterX()-p.getX();
+        double dy = ellipse.getCenterY()-p.getY();
+        dx *= getRatio();
+        return Math.sqrt(dx*dx + dy*dy);
     }
+    
+    /**
+     * return the supplied shape, translated to the coordinates
+     * that result from calling transform on its center
+     */
+    public Shape transform(Shape shape) {
+    	Rectangle2D bounds = shape.getBounds2D();
+    	Point2D center = new Point2D.Double(bounds.getCenterX(),bounds.getCenterY());
+    	Point2D newCenter = transform(center);
+    	double dx = newCenter.getX()-center.getX();
+    	double dy = newCenter.getY()-center.getY();
+    	AffineTransform at = AffineTransform.getTranslateInstance(dx,dy);
+    	return at.createTransformedShape(shape);
+    }
+    
+    /**
+     * return the supplied shape, translated to the coordinates
+     * that result from calling inverseTransform on its center
+     */
+    public Shape inverseTransform(Shape shape) {
+    	Rectangle2D bounds = shape.getBounds2D();
+    	Point2D center = new Point2D.Double(bounds.getCenterX(),bounds.getCenterY());
+    	Point2D newCenter = inverseTransform(center);
+    	double dx = newCenter.getX()-center.getX();
+    	double dy = newCenter.getY()-center.getY();
+    	AffineTransform at = AffineTransform.getTranslateInstance(dx,dy);
+    	return at.createTransformedShape(shape);
+    }
+
 }
