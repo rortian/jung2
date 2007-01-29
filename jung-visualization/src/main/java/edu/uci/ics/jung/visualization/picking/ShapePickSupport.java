@@ -142,13 +142,27 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
      */
     public Collection<V> getVertices(Layout<V, E> layout, Shape rectangle) {
     	Set<V> pickedVertices = new HashSet<V>();
+    	
+        if(vv.getRenderContext().getBasicTransformer().getViewTransformer() instanceof LensTransformer) {
+        	rectangle = ((LensTransformer)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(rectangle);
+        }
+
         while(true) {
             try {
                 for(V v : getFilteredVertices(layout)) {
-                	// transform to screen coordinates
-                    Point2D p = vv.getRenderContext().getBasicTransformer().transform(layout.transform(v));
+                    Point2D p = layout.transform(v);
                     if(p == null) continue;
-                    if(rectangle.contains(p)) {
+                    AffineTransform xform = 
+                        AffineTransform.getTranslateInstance(p.getX(), p.getY());
+                	// get the shape for this vertex
+                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
+                    // move the shape to the layout location
+                    shape = xform.createTransformedShape(shape);
+                    // transform the shape from graph to screen coordinates
+                    shape = vv.getRenderContext().getBasicTransformer().transform(shape);
+                    Point2D center = new Point2D.Double(shape.getBounds2D().getCenterX(),
+                    		shape.getBounds2D().getCenterY());
+                    if(rectangle.contains(center)) {
                     	pickedVertices.add(v);
                     }
                 }
