@@ -67,29 +67,22 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     private int distY = DEFAULT_DISTY;
     private transient Point m_currentPoint = new Point();
 
-//    private V m_rootVertex;
     private Collection<V> roots;
 
     public TreeLayout(Graph<V,E> g, Collection<V> roots) {
     	this.graph = g;
-//        this.m_rootVertex = g.getRoot();
         this.roots = roots;
-        buildTree();
     }
 
     public TreeLayout(Graph<V,E> g, Collection<V> roots, int distx) {
-//        this.m_rootVertex = g.getRoot();
         this.roots = roots;
         this.distX = distx;
-        buildTree();
     }
 
     public TreeLayout(Graph<V,E> g, Collection<V> roots, int distx, int disty) {
-//        this.m_rootVertex = g.getRoot();
         this.roots = roots;
         this.distX = distx;
         this.distY = disty;
-        buildTree();
     }
 
     public Dimension getCurrentSize() {
@@ -97,8 +90,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     }
 
     void buildTree() {
-//    	int division = this.getCurrentSize().width / (roots.size()+1);
-        this.m_currentPoint = new Point(50, 20);
+        this.m_currentPoint = new Point(0, 20);
         if (roots.size() > 0 && graph != null) {
        		calculateDimensionX(roots);
        		for(V v : roots) {
@@ -111,11 +103,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         for(V v : roots) {
         	width += basePositions.get(v);
         }
-//        setSize(new Dimension(width+100, 600));
-//        if (m_rootVertex != null && graph != null) {
-//            calculateDimensionX(m_rootVertex);
-//            buildTree(m_rootVertex, this.m_currentPoint.x);
-//        }
     }
 
     void buildTree(V v, int x) {
@@ -194,13 +181,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     }
 
     /**
-     * @return Returns the rootVertex_.
-     */
-    public V getRootVertex() {
-        return null;//m_rootVertex;
-    }
-
-    /**
      * ?
      * 
      * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
@@ -210,20 +190,12 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     }
     public void setSize(Dimension size) {
     	this.size = size;
-//        buildTree();
+        buildTree();
     }
 
     private void setCurrentPositionFor(V vertex) {
     	locations.get(vertex).setLocation(m_currentPoint);
     }
-
-    /**
-     * @param rootVertex_
-     *            The rootVertex_ to set.
-     */
-//    public void setRootVertex(V rootVertex_) {
-//        this.m_rootVertex = rootVertex_;
-//    }
 
 	public Graph<V,E> getGraph() {
 		return graph;

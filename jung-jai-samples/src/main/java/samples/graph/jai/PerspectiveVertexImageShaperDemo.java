@@ -375,7 +375,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
      * A simple implementation of VertexStringer that
      * gets Vertex labels from a Map  
      * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      *
      *
      */

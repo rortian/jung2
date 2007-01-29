@@ -71,7 +71,7 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
 
     /**
      * the background for the perspective projection
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      *
      *
      */

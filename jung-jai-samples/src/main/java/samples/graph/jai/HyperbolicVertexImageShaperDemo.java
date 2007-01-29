@@ -312,7 +312,7 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
      * A simple implementation of VertexStringer that
      * gets Vertex labels from a Map  
      * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      *
      *
      */
@@ -413,90 +413,6 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         }
     }
 
-    /**
-     * a simple Icon that draws a checkmark in the lower-right quadrant of its
-     * area. Used to draw a checkmark on Picked Vertices.
-     */
-//    public static class Checkmark implements Icon {
-//
-//            GeneralPath path = new GeneralPath();
-//            AffineTransform highlight = AffineTransform.getTranslateInstance(-1,-1);
-//            AffineTransform lowlight = AffineTransform.getTranslateInstance(1,1);
-//            AffineTransform shadow = AffineTransform.getTranslateInstance(2,2);
-//            Color color;
-//            public Checkmark() {
-//                this(Color.red);
-//            }
-//            public Checkmark(Color color) {
-//                this.color = color;
-//                path.moveTo(10,17);
-//                path.lineTo(13,20);
-//                path.lineTo(20,13);
-//            }
-//        public void paintIcon(Component c, Graphics g, int x, int y) {
-//            Shape shape = AffineTransform.getTranslateInstance(x, y).createTransformedShape(path);
-//            Graphics2D g2d = (Graphics2D)g;
-//            g2d.addRenderingHints(Collections.singletonMap(RenderingHints.KEY_ANTIALIASING, 
-//                    RenderingHints.VALUE_ANTIALIAS_ON));
-//            g2d.setStroke(new BasicStroke(4));
-//            g2d.setColor(Color.darkGray);
-//            g2d.draw(shadow.createTransformedShape(shape));
-//            g2d.setColor(Color.black);
-//            g2d.draw(lowlight.createTransformedShape(shape));
-//            g2d.setColor(Color.white);
-//            g2d.draw(highlight.createTransformedShape(shape));
-//            g2d.setColor(color);
-//            g2d.draw(shape);
-//        }
-//
-//        public int getIconWidth() {
-//            return 20;
-//        }
-//
-//        public int getIconHeight() {
-//            return 20;
-//        }
-//    }
-//   /**
-//     * An icon that is made up of a collection of Icons.
-//     * They are rendered in layers starting with the first
-//     * Icon added (from the constructor).
-//     * 
-//     * @author Tom Nelson - RABA Technologies
-//     *
-//     */
-//    public static class LayeredIcon extends ImageIcon {
-//
-//		/**
-//	      * 
-//	      */
-//	    private static final long serialVersionUID = -5584405933636083433L;
-//		Set<Icon> iconSet = new LinkedHashSet<Icon>();
-//
-//		public LayeredIcon(Image image) {
-//            super(image);
-//		}
-//
-//        public void paintIcon(Component c, Graphics g, int x, int y) {
-//            super.paintIcon(c, g, x, y);
-//            Dimension d = new Dimension(getIconWidth(), getIconHeight());
-//            for (Iterator iterator = iconSet.iterator(); iterator.hasNext();) {
-//                Icon icon = (Icon) iterator.next();
-//                 Dimension id = new Dimension(icon.getIconWidth(), icon.getIconHeight());
-//                 int dx = (d.width - id.width)/2;
-//                 int dy = (d.height - id.height)/2;
-//                icon.paintIcon(c, g, x+dx, y+dy);
-//            }
-//        }
-//
-//		public void add(Icon icon) {
-//			iconSet.add(icon);
-//		}
-//
-//		public boolean remove(Icon icon) {
-//			return iconSet.remove(icon);
-//		}
-//	}
 
     /**
      * a driver for this demo
