@@ -28,7 +28,7 @@ import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout.LengthFunction;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -69,7 +69,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
     public void init() {
 
         //create a graph
-        g = Graphs.<Number,Number>synchronizedDirectedGraph(new SimpleDirectedSparseGraph<Number,Number>());
+        g = Graphs.<Number,Number>synchronizedDirectedGraph(new DirectedSparseGraph<Number,Number>());
 
         //create a graphdraw
         layout = new FRLayout<Number,Number>(g);

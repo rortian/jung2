@@ -43,7 +43,7 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -320,7 +320,7 @@ public class PerspectiveTransformerDemo extends JApplet {
     private Graph<String,Number> generateVertexGrid(Map<String,Point2D> map,
             Dimension d, int interval) {
         int count = d.width/interval * d.height/interval;
-        Graph<String,Number> graph = new SimpleSparseGraph<String,Number>();
+        Graph<String,Number> graph = new SparseGraph<String,Number>();
         String[] v = new String[count];
         for(int i=0; i<count; i++) {
             int x = interval*i;

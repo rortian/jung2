@@ -32,8 +32,8 @@ import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleSparseForest;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -70,7 +70,7 @@ public class TreeLayoutDemo extends JApplet {
     	new Factory<DirectedGraph<String,Integer>>() {
 
 			public DirectedGraph<String, Integer> create() {
-				return new SimpleDirectedSparseGraph<String,Integer>();
+				return new DirectedSparseGraph<String,Integer>();
 			}};
 			
 	Factory<Integer> edgeFactory = new Factory<Integer>() {
@@ -98,7 +98,7 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleSparseForest<String,Integer>(graphFactory, edgeFactory);
+        graph = new SparseForest<String,Integer>(graphFactory, edgeFactory);
 
         createTree();
         

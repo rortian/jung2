@@ -30,7 +30,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -70,7 +70,7 @@ public class UnicodeLabelDemo {
     public UnicodeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph<Integer,Number>();
+        graph = new DirectedSparseGraph<Integer,Number>();
         Integer[] v = createVertices(10);
         createEdges(v);
         

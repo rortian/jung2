@@ -28,7 +28,7 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -57,7 +57,7 @@ public class ImageEdgeLabelDemo extends JApplet {
 	/**
      * the graph
      */
-    SimpleDirectedSparseGraph<Number, Number> graph;
+    DirectedSparseGraph<Number, Number> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -67,7 +67,7 @@ public class ImageEdgeLabelDemo extends JApplet {
     public ImageEdgeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph<Number,Number>();
+        graph = new DirectedSparseGraph<Number,Number>();
         createGraph(VERTEX_COUNT);
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);

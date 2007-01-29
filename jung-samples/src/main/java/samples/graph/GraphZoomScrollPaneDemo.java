@@ -29,7 +29,7 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -60,7 +60,7 @@ public class GraphZoomScrollPaneDemo {
     /**
      * the graph
      */
-    SimpleDirectedSparseGraph<String, Number> graph;
+    DirectedSparseGraph<String, Number> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -75,7 +75,7 @@ public class GraphZoomScrollPaneDemo {
     public GraphZoomScrollPaneDemo() {
         
         // create a simple graph for the demo
-        graph = new SimpleDirectedSparseGraph<String, Number>();
+        graph = new DirectedSparseGraph<String, Number>();
         String[] v = createVertices(10);
         createEdges(v);
         

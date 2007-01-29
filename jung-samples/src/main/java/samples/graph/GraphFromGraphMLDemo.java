@@ -25,7 +25,7 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.io.GraphMLFile;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -73,7 +73,7 @@ public class GraphFromGraphMLDemo {
         
     	Factory<Graph<Number,Number>> graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {
-    			return new SimpleDirectedSparseGraph<Number,Number>();
+    			return new DirectedSparseGraph<Number,Number>();
     		}
     	};
     	Factory<Number> vertexFactory = new Factory<Number>() {
