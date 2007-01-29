@@ -24,13 +24,13 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 @SuppressWarnings("serial")
-public class SimpleUndirectedSparseGraph<V,E> 
-    extends SimpleAbstractSparseGraph<V,E>
+public class UndirectedSparseGraph<V,E> 
+    extends AbstractSparseGraph<V,E>
     implements UndirectedGraph<V,E>, Serializable {
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
-    public SimpleUndirectedSparseGraph() {
+    public UndirectedSparseGraph() {
         vertices = new HashMap<V, Set<E>>();
         edges = new HashMap<E, Pair<V>>();
     }

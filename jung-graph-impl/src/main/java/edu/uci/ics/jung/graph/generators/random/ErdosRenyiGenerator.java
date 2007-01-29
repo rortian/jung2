@@ -17,7 +17,7 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.generators.GraphGenerator;
 
 
@@ -58,7 +58,7 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
      * an undirected edge with the probability specified by the constructor.
      */
 	public Graph<V,E> generateGraph() {
-        UndirectedGraph<V,E> g = new SimpleUndirectedSparseGraph<V,E>();
+        UndirectedGraph<V,E> g = new UndirectedSparseGraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	g.addVertex(vertexFactory.create());
         }

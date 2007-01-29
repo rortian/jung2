@@ -24,15 +24,15 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 @SuppressWarnings("serial")
-public class SimpleSparseGraph<V,E> 
-    extends SimpleAbstractSparseGraph<V,E>
+public class SparseGraph<V,E> 
+    extends AbstractSparseGraph<V,E>
     implements Graph<V,E>, Serializable
 {
     protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
     protected Set<E> directedEdges;
 
-    public SimpleSparseGraph()
+    public SparseGraph()
     {
         vertices = new HashMap<V, Pair<Set<E>>>();
         edges = new HashMap<E, Pair<V>>();

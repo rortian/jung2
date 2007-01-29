@@ -19,7 +19,7 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 
 
-public abstract class SimpleAbstractSparseGraph<V, E> implements Graph<V,E>
+public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
 {
     public int inDegree(V vertex)
     {

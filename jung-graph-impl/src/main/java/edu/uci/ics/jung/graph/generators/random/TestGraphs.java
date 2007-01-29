@@ -23,9 +23,9 @@ import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 
 
@@ -68,16 +68,16 @@ public class TestGraphs {
 	public static Graph<String, Number> createTestGraph(boolean isDirected) {
 
 		if (isDirected) {
-			SimpleDirectedSparseGraph<String, Number> g = 
-				new SimpleDirectedSparseGraph<String, Number>();
+			DirectedSparseGraph<String, Number> g = 
+				new DirectedSparseGraph<String, Number>();
 			for (int i = 0; i < pairs.length; i++) {
 				String[] pair = pairs[i];
 				createDirectedEdge(g, pair[0], pair[1], Integer.parseInt(pair[2]));
 			}
 			return g;
 		} else {
-			SimpleUndirectedSparseGraph<String, Number> g = 
-				new SimpleUndirectedSparseGraph<String, Number>();
+			UndirectedSparseGraph<String, Number> g = 
+				new UndirectedSparseGraph<String, Number>();
 			for (int i = 0; i < pairs.length; i++) {
 				String[] pair = pairs[i];
 				createUndirectedEdge(g, pair[0], pair[1], Integer.parseInt(pair[2]));
@@ -101,7 +101,7 @@ public class TestGraphs {
     public static Graph<String,Number> createChainPlusIsolates(int chain_length, int isolate_count)
     {
         Graph<String, Number> g = 
-            new SimpleUndirectedSparseGraph<String, Number>();
+            new UndirectedSparseGraph<String, Number>();
         if (chain_length > 0)
         {
             String[] v = new String[chain_length];
@@ -134,7 +134,7 @@ public class TestGraphs {
 		int maxNodesPerLayer,
 		double linkprob) {
 		DirectedGraph<String,Number> dag = 
-            new SimpleDirectedSparseGraph<String,Number>();
+            new DirectedSparseGraph<String,Number>();
 //		StringLabeller sl = StringLabeller.getLabeller(dag);
 		Set<String> previousLayers = new HashSet<String>();
 		Set<String> inThisLayer = new HashSet<String>();
@@ -199,8 +199,8 @@ public class TestGraphs {
 	 * @return the testgraph
 	 */
 	public static Graph<String,Number> getOneComponentGraph() {
-		SimpleUndirectedSparseGraph<String, Number> g = 
-			new SimpleUndirectedSparseGraph<String, Number>();
+		UndirectedSparseGraph<String, Number> g = 
+			new UndirectedSparseGraph<String, Number>();
 
 		// let's throw in a clique, too
 		for (int i = 1; i <= 10; i++) {
@@ -246,7 +246,7 @@ public class TestGraphs {
 	 */
 	public static Graph<String, Number> getDemoGraph() {
 		UndirectedGraph<String, Number> g = 
-            new SimpleUndirectedSparseGraph<String, Number>();
+            new UndirectedSparseGraph<String, Number>();
 
 		for (int i = 0; i < pairs.length; i++) {
 			String[] pair = pairs[i];
@@ -308,7 +308,7 @@ public class TestGraphs {
         Graph<V, E> ug = bag.generateGraph();
 
         // create a SparseGraph version of g
-        Graph<V, E> g = new SimpleSparseGraph<V, E>();
+        Graph<V, E> g = new SparseGraph<V, E>();
         for(V v : ug.getVertices()) {
         	g.addVertex(v);
         }
@@ -330,7 +330,7 @@ public class TestGraphs {
     
     public static Graph<Integer, Number> getSmallGraph() {
         Graph<Integer, Number> graph = 
-            new SimpleSparseGraph<Integer, Number>();
+            new SparseGraph<Integer, Number>();
         Integer[] v = new Integer[3];
         for (int i = 0; i < 3; i++) {
             v[i] = new Integer(i);

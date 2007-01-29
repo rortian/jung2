@@ -17,7 +17,7 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 
-public class SimpleSparseGraphTest extends TestCase {
+public class SparseGraphTest extends TestCase {
 
     Integer v0 = 0;
     Integer v1 = 1;
@@ -51,7 +51,7 @@ public class SimpleSparseGraphTest extends TestCase {
         seeds.add(5);
         graph = TestGraphs.generateMixedRandomGraph(vertexFactory, edgeFactory, 
         		new HashMap<Number,Number>(), vertexCount, seeds);
-        smallGraph = new SimpleSparseGraph<Integer,Number>();
+        smallGraph = new SparseGraph<Integer,Number>();
         smallGraph.addVertex(v0);
         smallGraph.addVertex(v1);
         smallGraph.addVertex(v2);

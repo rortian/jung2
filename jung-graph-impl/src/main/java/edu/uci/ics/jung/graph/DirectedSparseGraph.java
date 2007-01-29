@@ -26,13 +26,13 @@ import edu.uci.ics.graph.util.Pair;
 
 
 @SuppressWarnings("serial")
-public class SimpleDirectedSparseGraph<V,E> 
-    extends SimpleAbstractSparseGraph<V,E>
+public class DirectedSparseGraph<V,E> 
+    extends AbstractSparseGraph<V,E>
     implements DirectedGraph<V,E>, Serializable {
     protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
-    public SimpleDirectedSparseGraph() {
+    public DirectedSparseGraph() {
         vertices = new HashMap<V, Pair<Set<E>>>();
         edges = new HashMap<E, Pair<V>>();
     }

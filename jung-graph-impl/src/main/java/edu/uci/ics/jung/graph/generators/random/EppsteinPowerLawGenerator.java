@@ -16,7 +16,7 @@ import java.util.Random;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.generators.GraphGenerator;
 
 
@@ -54,7 +54,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
 
     protected Graph<V,E> initializeGraph() {
         Graph<V,E> graph = null;
-        graph = new SimpleUndirectedSparseGraph<V,E>();
+        graph = new UndirectedSparseGraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	graph.addVertex(vertexFactory.create());
         }

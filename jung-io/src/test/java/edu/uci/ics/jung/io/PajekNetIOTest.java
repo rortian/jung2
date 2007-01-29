@@ -38,9 +38,9 @@ import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 
 /**
@@ -64,17 +64,17 @@ public class PajekNetIOTest extends TestCase
     protected void setUp() {
     	directedGraphFactory = new Factory<DirectedGraph<Number,Number>>() {
     		public DirectedGraph<Number,Number> create() {
-    			return new SimpleDirectedSparseGraph<Number,Number>();
+    			return new DirectedSparseGraph<Number,Number>();
     		}
     	};
     	undirectedGraphFactory = new Factory<UndirectedGraph<Number,Number>>() {
     		public UndirectedGraph<Number,Number> create() {
-    			return new SimpleUndirectedSparseGraph<Number,Number>();
+    			return new UndirectedSparseGraph<Number,Number>();
     		}
     	};
     	graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {
-    			return new SimpleSparseGraph<Number,Number>();
+    			return new SparseGraph<Number,Number>();
     		}
     	};
     	vertexFactory = new Factory<Number>() {
@@ -285,7 +285,7 @@ public class PajekNetIOTest extends TestCase
 
     public void testMixedSaveLoadSave() throws IOException
     {
-        Graph<Number,Number> graph1 = new SimpleSparseGraph<Number,Number>();
+        Graph<Number,Number> graph1 = new SparseGraph<Number,Number>();
         for(int i=0; i<5; i++) {
         	graph1.addVertex(i);
         }

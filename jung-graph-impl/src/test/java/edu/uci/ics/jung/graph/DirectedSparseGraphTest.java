@@ -8,7 +8,7 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
-public class SimpleDirectedSparseGraphTest extends TestCase {
+public class DirectedSparseGraphTest extends TestCase {
 
     Integer v0 = new Integer(0);
     Integer v1 = new Integer(1);
@@ -23,7 +23,7 @@ public class SimpleDirectedSparseGraphTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        graph = new SimpleDirectedSparseGraph<Integer,Number>();
+        graph = new DirectedSparseGraph<Integer,Number>();
         graph.addEdge(e01, v0, v1);
         graph.addEdge(e10, v1, v0);
         graph.addEdge(e12, v1, v2);

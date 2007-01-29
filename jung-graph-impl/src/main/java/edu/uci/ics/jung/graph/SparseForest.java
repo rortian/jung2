@@ -20,7 +20,7 @@ import edu.uci.ics.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SimpleSparseForest<V,E> implements DirectedGraph<V,E> {
+public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	
 	protected Set<V> roots = new HashSet<V>();
 	protected DirectedGraph<V,E> delegate;
@@ -31,7 +31,7 @@ public class SimpleSparseForest<V,E> implements DirectedGraph<V,E> {
 	 * @param graphFactory must create a DirectedGraph to use as a delegate
 	 * @param edgeFactory must create unique edges to connect tree nodes
 	 */
-	public SimpleSparseForest(Factory<DirectedGraph<V,E>> graphFactory, 
+	public SparseForest(Factory<DirectedGraph<V,E>> graphFactory, 
 			Factory<E> edgeFactory) {
 		this.delegate = graphFactory.create();
 		this.edgeFactory = edgeFactory;

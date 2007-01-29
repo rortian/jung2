@@ -6,9 +6,9 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
 
-public class SimpleSparseTreeTest extends TestCase {
+public class SparseTreeTest extends TestCase {
 
-	SimpleSparseTree<String,Integer> tree;
+	SparseTree<String,Integer> tree;
 	Factory<DirectedGraph<String,Integer>> graphFactory;
 	Factory<Integer> edgeFactory;
 
@@ -21,14 +21,14 @@ public class SimpleSparseTreeTest extends TestCase {
 		graphFactory = new Factory<DirectedGraph<String,Integer>>() {
 
 			public DirectedGraph<String, Integer> create() {
-				return new SimpleDirectedSparseGraph<String,Integer>();
+				return new DirectedSparseGraph<String,Integer>();
 			}};
 		edgeFactory = new Factory<Integer>() {
 			int i=0;
 			public Integer create() {
 				return i++;
 			}};
-		tree = new SimpleSparseTree<String,Integer>(graphFactory, edgeFactory);
+		tree = new SparseTree<String,Integer>(graphFactory, edgeFactory);
 	}
 	
 	public void testSimpleTree() {

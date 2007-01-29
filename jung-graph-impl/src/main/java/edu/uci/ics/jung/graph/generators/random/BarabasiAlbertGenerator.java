@@ -23,7 +23,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.generators.EvolvingGraphGenerator;
 
 
@@ -153,7 +153,7 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
 //    	} else {
 //    		mGraph = new SimpleUndirectedSparseGraph<V,E>();
 //    	}
-    	mGraph = new SimpleSparseGraph<V,E>();
+    	mGraph = new SparseGraph<V,E>();
 
         vertex_index = new ArrayList<V>(2*init_vertices);
         index_vertex = new HashMap<V, Integer>(2*init_vertices);
