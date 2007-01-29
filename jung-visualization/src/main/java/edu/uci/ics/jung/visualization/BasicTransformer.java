@@ -1,21 +1,23 @@
 package edu.uci.ics.jung.visualization;
 
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
-import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.ViewTransformer;
+import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
 public class BasicTransformer implements BidirectionalTransformer, LayoutTransformer, ViewTransformer,
-	ChangeListener, ChangeEventSupport {
+	ShapeTransformer, ChangeListener, ChangeEventSupport {
 
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
@@ -41,7 +43,6 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
         this.viewTransformer.removeChangeListener(this);
         this.viewTransformer = transformer;
         this.viewTransformer.addChangeListener(this);
-//        renderContext.setViewTransformer(transformer);
     }
 
     /* (non-Javadoc)
@@ -69,78 +70,102 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 	}
 
 	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseTransform(java.awt.geom.Point2D)
      */
 	public Point2D inverseTransform(Point2D p) {
-	    return layoutTransformer.inverseTransform(inverseViewTransform(p));
+	    return inverseLayoutTransform(inverseViewTransform(p));
 	}
 	
 	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseViewTransform(java.awt.geom.Point2D)
      */
 	public Point2D inverseViewTransform(Point2D p) {
 	    return viewTransformer.inverseTransform(p);
 	}
 
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#inverseLayoutTransform(java.awt.geom.Point2D)
      */
     public Point2D inverseLayoutTransform(Point2D p) {
         return layoutTransformer.inverseTransform(p);
     }
 
 	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#transform(java.awt.geom.Point2D)
      */
 	public Point2D transform(Point2D p) {
-	    // transform with vv transform
-	    return viewTransformer.transform(layoutTransform(p));
+	    return viewTransform(layoutTransform(p));
 	}
     
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#viewTransform(java.awt.geom.Point2D)
      */
     public Point2D viewTransform(Point2D p) {
         return viewTransformer.transform(p);
     }
     
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#layoutTransform(java.awt.geom.Point2D)
      */
     public Point2D layoutTransform(Point2D p) {
         return layoutTransformer.transform(p);
     }
     
+	/* (non-Javadoc)
+     */
+	public Shape inverseTransform(Shape shape) {
+	    return inverseLayoutTransform(inverseViewTransform(shape));
+	}
+	
+	/* (non-Javadoc)
+     */
+	public Shape inverseViewTransform(Shape shape) {
+	    return viewTransformer.inverseTransform(shape);
+	}
+
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#addChangeListener(javax.swing.event.ChangeListener)
+     */
+    public Shape inverseLayoutTransform(Shape shape) {
+        return layoutTransformer.inverseTransform(shape);
+    }
+
+	/* (non-Javadoc)
+     */
+	public Shape transform(Shape shape) {
+	    return viewTransform(layoutTransform(shape));
+	}
+    
+    /* (non-Javadoc)
+     */
+    public Shape viewTransform(Shape shape) {
+        return viewTransformer.transform(shape);
+    }
+    
+    /* (non-Javadoc)
+     */
+    public Shape layoutTransform(Shape shape) {
+        return layoutTransformer.transform(shape);
+    }
+    
+    /* (non-Javadoc)
      */
     public void addChangeListener(ChangeListener l) {
         changeSupport.addChangeListener(l);
     }
     
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#removeChangeListener(javax.swing.event.ChangeListener)
      */
     public void removeChangeListener(ChangeListener l) {
         changeSupport.removeChangeListener(l);
     }
     
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getChangeListeners()
      */
     public ChangeListener[] getChangeListeners() {
         return changeSupport.getChangeListeners();
     }
 
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#fireStateChanged()
      */
     public void fireStateChanged() {
         changeSupport.fireStateChanged();
     }   
     
 	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#stateChanged(javax.swing.event.ChangeEvent)
      */
 	public void stateChanged(ChangeEvent e) {
 	    fireStateChanged();
