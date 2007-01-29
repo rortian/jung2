@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.importance.KStepMarkov;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 
 /**
@@ -39,7 +39,7 @@ public class TestKStepMarkov extends TestCase {
 
     protected void setUp()
     {
-        mGraph = new SimpleDirectedSparseGraph<Number,Number>();
+        mGraph = new DirectedSparseGraph<Number,Number>();
         mTransitionMatrix = new double[][]
            {{0.0, 0.5, 0.5},
             {1.0/3.0, 0.0, 2.0/3.0},

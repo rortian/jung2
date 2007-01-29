@@ -11,7 +11,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
 
 /**
  * 
@@ -23,7 +23,7 @@ public class VoltageRankerTest extends TestCase
     protected Graph<Number,Number> g;
     
     public void setUp() {
-        g = new SimpleSparseGraph<Number,Number>();
+        g = new SparseGraph<Number,Number>();
         for (int i = 0; i < 7; i++) {
         	g.addVertex(i);
         }

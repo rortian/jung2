@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.importance.HITS;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 
 /**
@@ -31,7 +31,7 @@ public class TestHITS extends TestCase {
     }
 
     protected void setUp() {
-        graph = new SimpleDirectedSparseGraph<Number,Number>();
+        graph = new DirectedSparseGraph<Number,Number>();
         for(int i=0; i<5; i++) {
         	graph.addVertex(i);
         }

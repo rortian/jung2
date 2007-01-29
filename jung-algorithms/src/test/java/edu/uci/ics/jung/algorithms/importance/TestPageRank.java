@@ -22,7 +22,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 /**
  * @author Scott White
@@ -54,7 +54,7 @@ public class TestPageRank extends TestCase {
     }
 
     public void testRanker() {
-    	graph = new SimpleDirectedSparseGraph<Integer,Integer>();
+    	graph = new DirectedSparseGraph<Integer,Integer>();
     	for(int i=0; i<4; i++) {
     		graph.addVertex(i);
     	}

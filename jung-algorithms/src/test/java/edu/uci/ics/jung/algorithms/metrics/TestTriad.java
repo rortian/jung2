@@ -3,12 +3,12 @@ package edu.uci.ics.jung.algorithms.metrics;
 import junit.framework.TestCase;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.metrics.TriadicCensus;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class TestTriad extends TestCase {
 
 	public void testConfigurationFromPaper() {
-		DirectedGraph<Character,Number> g = new SimpleDirectedSparseGraph<Character,Number>();
+		DirectedGraph<Character,Number> g = new DirectedSparseGraph<Character,Number>();
 		char u = 'u';
 		g.addVertex(u);
 		char v = 'v';
@@ -46,7 +46,7 @@ public class TestTriad extends TestCase {
 		// 2: 1(t, u, w)(u, v, w)
 		// 6: 1(t, u, v)
 		// 1: 1(u, v, w)
-		DirectedGraph<Character,Number> g = new SimpleDirectedSparseGraph<Character,Number>();
+		DirectedGraph<Character,Number> g = new DirectedSparseGraph<Character,Number>();
 		char u = 'u';
 		g.addVertex(u);
 		char v = 'v';
@@ -92,7 +92,7 @@ public class TestTriad extends TestCase {
 	}
 	
 	public void testThreeDotsThreeDashes() {
-		DirectedGraph<Character,Number> g = new SimpleDirectedSparseGraph<Character,Number>();
+		DirectedGraph<Character,Number> g = new DirectedSparseGraph<Character,Number>();
 		char u = 'u';
 		g.addVertex(u);
 		char v = 'v';
@@ -130,7 +130,7 @@ public class TestTriad extends TestCase {
 
 	/** **************Boring accounting for zero graphs*********** */
 	public void testNull() {
-		DirectedGraph<Character,Number> g = new SimpleDirectedSparseGraph<Character,Number>();
+		DirectedGraph<Character,Number> g = new DirectedSparseGraph<Character,Number>();
         long[] counts = TriadicCensus.getCounts(g);
 
 		// t looks like a hashtable for the twelve keys
@@ -140,7 +140,7 @@ public class TestTriad extends TestCase {
 	}
 
 	public void testOneVertex() {
-		DirectedGraph<Character,Number> g = new SimpleDirectedSparseGraph<Character,Number>();
+		DirectedGraph<Character,Number> g = new DirectedSparseGraph<Character,Number>();
 		g.addVertex('u');
         long[] counts = TriadicCensus.getCounts(g);
 
@@ -151,7 +151,7 @@ public class TestTriad extends TestCase {
 	}
 
 	public void testTwoVertices() {
-		DirectedGraph<Character,Number> g = new SimpleDirectedSparseGraph<Character,Number>();
+		DirectedGraph<Character,Number> g = new DirectedSparseGraph<Character,Number>();
 		char v1, v2;
 		g.addVertex(v1 = 'u');
 		g.addVertex(v2 = 'v');

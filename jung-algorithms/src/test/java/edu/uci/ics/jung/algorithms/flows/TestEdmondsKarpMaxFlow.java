@@ -22,7 +22,7 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 /**
  * @author Scott White, Joshua O'Madadhain, Tom Nelson
@@ -39,7 +39,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 
     public void testSanityChecks() 
     {
-        DirectedGraph<Number,Number> g = new SimpleDirectedSparseGraph<Number,Number>();
+        DirectedGraph<Number,Number> g = new DirectedSparseGraph<Number,Number>();
         Number source = new Integer(1);
         Number sink = new Integer(2);
         g.addVertex(source);
@@ -47,7 +47,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
         
         Number v = new Integer(3);
         
-        DirectedGraph<Number,Number> h = new SimpleDirectedSparseGraph<Number,Number>();
+        DirectedGraph<Number,Number> h = new DirectedSparseGraph<Number,Number>();
         Number w = new Integer(4);
         g.addVertex(w);
         
@@ -76,7 +76,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
     }
     
 	public void testSimpleFlow() {
-		DirectedGraph<Number,Number> graph = new SimpleDirectedSparseGraph<Number,Number>();
+		DirectedGraph<Number,Number> graph = new DirectedSparseGraph<Number,Number>();
 		Transformer<DirectedGraph<Number,Number>,Number> edgeFactory = new Transformer<DirectedGraph<Number,Number>,Number>() {
 			public Number transform(DirectedGraph<Number,Number> graph) {
 				return graph.getEdgeCount();
@@ -153,7 +153,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 	}
 
 	public void testAnotherSimpleFlow() {
-		DirectedGraph<Number,Number> graph = new SimpleDirectedSparseGraph<Number,Number>();
+		DirectedGraph<Number,Number> graph = new DirectedSparseGraph<Number,Number>();
 		Transformer<DirectedGraph<Number,Number>,Number> edgeFactory = new Transformer<DirectedGraph<Number,Number>,Number>() {
 			public Number transform(DirectedGraph<Number,Number> graph) {
 				return graph.getEdgeCount();

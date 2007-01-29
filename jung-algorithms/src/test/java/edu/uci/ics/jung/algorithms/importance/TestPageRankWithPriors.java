@@ -24,8 +24,8 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 
 /**
@@ -58,7 +58,7 @@ public class TestPageRankWithPriors extends TestCase {
     }
 
     public void testRanker() {
-    	graph = new SimpleDirectedSparseGraph<Integer,Integer>();
+    	graph = new DirectedSparseGraph<Integer,Integer>();
 
     	for(int i=0; i<4; i++) {
     		graph.addVertex(i);
@@ -101,7 +101,7 @@ public class TestPageRankWithPriors extends TestCase {
     public void test2() {
 
         UndirectedGraph<Integer,Integer> graph = 
-        	new SimpleUndirectedSparseGraph<Integer,Integer>();
+        	new UndirectedSparseGraph<Integer,Integer>();
         for(int i=0; i<10; i++) {
         	graph.addVertex(i);
         }
@@ -113,7 +113,7 @@ public class TestPageRankWithPriors extends TestCase {
         graph.addEdge(edgeFactory.create(), 5, 6);
         graph.addEdge(edgeFactory.create(), 6, 7);
 
-        DirectedGraph<Integer,Integer> dg = new SimpleDirectedSparseGraph<Integer,Integer>();
+        DirectedGraph<Integer,Integer> dg = new DirectedSparseGraph<Integer,Integer>();
         for(Integer v : graph.getVertices()) {
         	dg.addVertex(v);
         }

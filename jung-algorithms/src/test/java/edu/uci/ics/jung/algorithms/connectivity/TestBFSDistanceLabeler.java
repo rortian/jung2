@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**
  * @author Scott White, adapted to jung2 by Tom Nelson
@@ -30,7 +30,7 @@ public class TestBFSDistanceLabeler extends TestCase {
 	}
 
 	public void test() {
-        Graph<Number,Number> graph = new SimpleUndirectedSparseGraph<Number,Number>();
+        Graph<Number,Number> graph = new UndirectedSparseGraph<Number,Number>();
         for(int i=0; i<6; i++) {
         	graph.addVertex(i);
         }

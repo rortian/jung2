@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.importance.RandomWalkBetweenness;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**
  * @author Scott White
@@ -30,7 +30,7 @@ public class TestRandomWalkBetweenness extends TestCase {
     }
 
     public void testRanker() {
-        UndirectedGraph<Number,Number> graph = new SimpleUndirectedSparseGraph<Number,Number>();
+        UndirectedGraph<Number,Number> graph = new UndirectedSparseGraph<Number,Number>();
         for(int i=0; i<11; i++) {
         	graph.addVertex(i);
         }

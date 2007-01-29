@@ -16,7 +16,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 
 /**
@@ -33,7 +33,7 @@ public class TestBicomponentClusterer extends TestCase {
 
     public void testExtract0() throws Exception
     {
-        Graph<String,Number> graph = new SimpleUndirectedSparseGraph<String,Number>();
+        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         String[] v = {"0"};
         graph.addVertex(v[0]);
         
@@ -46,7 +46,7 @@ public class TestBicomponentClusterer extends TestCase {
 
     public void testExtractEdge() throws Exception
     {
-        Graph<String,Number> graph = new SimpleUndirectedSparseGraph<String,Number>();
+        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         String[] v = {"0","1"}; 
         graph.addVertex(v[0]);
         graph.addVertex(v[1]);
@@ -62,7 +62,7 @@ public class TestBicomponentClusterer extends TestCase {
     
     public void testExtractV() throws Exception
     {
-        Graph<String,Number> graph = new SimpleUndirectedSparseGraph<String,Number>();
+        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         String[] v = new String[3];
         for (int i = 0; i < 3; i++)
         {
@@ -111,7 +111,7 @@ public class TestBicomponentClusterer extends TestCase {
 	public void testExtract1() {
         String[] v = new String[6];
         int[][] edges1 = {{0,1}, {0,5}, {0,3}, {0,4}, {1,5}, {3,4}, {2,3}};
-        Graph<String,Number> graph = new SimpleUndirectedSparseGraph<String,Number>();
+        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         createEdges(v, edges1, graph);
         
 //		StringBuffer buffer= new StringBuffer();
@@ -156,7 +156,7 @@ public class TestBicomponentClusterer extends TestCase {
     public void testExtract2() {
         String[] v = new String[9];
         int[][] edges1 = {{0,2}, {0,4}, {1,0}, {2,1}, {3,0}, {4,3}, {5,3}, {6,7}, {6,8}, {8,7}};
-        Graph<String,Number> graph = new SimpleUndirectedSparseGraph<String,Number>();
+        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         createEdges(v, edges1, graph);
         
         

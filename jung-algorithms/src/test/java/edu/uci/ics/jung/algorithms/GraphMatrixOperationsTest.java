@@ -18,9 +18,9 @@ import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.SimpleDirectedSparseGraph;
-import edu.uci.ics.jung.graph.SimpleSparseGraph;
-import edu.uci.ics.jung.graph.SimpleUndirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**
  * 
@@ -55,17 +55,17 @@ public class GraphMatrixOperationsTest extends TestCase
     {
     	undirectedGraphFactory = new Factory<UndirectedGraph<String,String>>() {
     		public UndirectedGraph<String,String> create() {
-    			return new SimpleUndirectedSparseGraph<String,String>();
+    			return new UndirectedSparseGraph<String,String>();
     		}
     	};
     	directedGraphFactory = new Factory<DirectedGraph<String,String>>() {
     		public DirectedGraph<String,String> create() {
-    			return new SimpleDirectedSparseGraph<String,String>();
+    			return new DirectedSparseGraph<String,String>();
     		}
     	};
     	graphFactory = new Factory<Graph<String,String>>() {
     		public Graph<String,String> create() {
-    			return new SimpleSparseGraph<String,String>();
+    			return new SparseGraph<String,String>();
     		}
     	};
     	vertexFactory = new Factory<String>() {
@@ -78,7 +78,7 @@ public class GraphMatrixOperationsTest extends TestCase
     	};
 
 
-    	g = new SimpleDirectedSparseGraph<String,String>();
+    	g = new DirectedSparseGraph<String,String>();
     	weights = new HashMap<String,Number>();
         meo = new RealMatrixElementOperations(weights);
         // graph based on Weiss, _Data Structures and Algorithm Analysis_,
@@ -141,7 +141,7 @@ public class GraphMatrixOperationsTest extends TestCase
         Graph<String,String> g2 = 
         	GraphMatrixOperations.<String,String>square(g, edgeFactory, meo);
         
-        Graph<String,String> g3 = new SimpleSparseGraph<String,String>();
+        Graph<String,String> g3 = new SparseGraph<String,String>();
         for (String v : g.getVertices())
         {
         	g3.addVertex(v);
