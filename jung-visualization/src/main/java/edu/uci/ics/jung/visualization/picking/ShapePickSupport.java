@@ -12,6 +12,7 @@
 package edu.uci.ics.jung.visualization.picking;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
@@ -32,6 +33,7 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.visualization.VisualizationServer;
+import edu.uci.ics.jung.visualization.transform.LensTransformer;
 
 /**
  * ShapePickSupport provides access to Vertices and EdgeType based on
@@ -92,6 +94,12 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 
         V closest = null;
         double minDistance = Double.MAX_VALUE;
+        
+        if(vv.getRenderContext().getBasicTransformer().getViewTransformer() instanceof LensTransformer) {
+        	Point2D p = ((LensTransformer)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(new Point2D.Double(x,y));
+        	x = p.getX();
+        	y = p.getY();
+        }
         while(true) {
             try {
                 for(V v : getFilteredVertices(layout)) {
