@@ -73,25 +73,25 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
             int type = iterator.currentSegment(coords);
             switch(type) {
             case PathIterator.SEG_MOVETO:
-                Point2D p = transform(new Point2D.Float(coords[0], coords[1]));
+                Point2D p = _transform(new Point2D.Float(coords[0], coords[1]));
                 newPath.moveTo((float)p.getX(), (float)p.getY());
                 break;
                 
             case PathIterator.SEG_LINETO:
-                p = transform(new Point2D.Float(coords[0], coords[1]));
+                p = _transform(new Point2D.Float(coords[0], coords[1]));
                 newPath.lineTo((float)p.getX(), (float) p.getY());
                 break;
                 
             case PathIterator.SEG_QUADTO:
-                p = transform(new Point2D.Float(coords[0], coords[1]));
-                Point2D q = transform(new Point2D.Float(coords[2], coords[3]));
+                p = _transform(new Point2D.Float(coords[0], coords[1]));
+                Point2D q = _transform(new Point2D.Float(coords[2], coords[3]));
                 newPath.quadTo((float)p.getX(), (float)p.getY(), (float)q.getX(), (float)q.getY());
                 break;
                 
             case PathIterator.SEG_CUBICTO:
-                p = transform(new Point2D.Float(coords[0], coords[1]));
-                q = transform(new Point2D.Float(coords[2], coords[3]));
-                Point2D r = transform(new Point2D.Float(coords[4], coords[5]));
+                p = _transform(new Point2D.Float(coords[0], coords[1]));
+                q = _transform(new Point2D.Float(coords[2], coords[3]));
+                Point2D r = _transform(new Point2D.Float(coords[4], coords[5]));
                 newPath.curveTo((float)p.getX(), (float)p.getY(), 
                         (float)q.getX(), (float)q.getY(),
                         (float)r.getX(), (float)r.getY());
@@ -115,25 +115,25 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
             int type = iterator.currentSegment(coords);
             switch(type) {
             case PathIterator.SEG_MOVETO:
-                Point2D p = inverseTransform(new Point2D.Float(coords[0], coords[1]));
+                Point2D p = _inverseTransform(new Point2D.Float(coords[0], coords[1]));
                 newPath.moveTo((float)p.getX(), (float)p.getY());
                 break;
                 
             case PathIterator.SEG_LINETO:
-                p = inverseTransform(new Point2D.Float(coords[0], coords[1]));
+                p = _inverseTransform(new Point2D.Float(coords[0], coords[1]));
                 newPath.lineTo((float)p.getX(), (float) p.getY());
                 break;
                 
             case PathIterator.SEG_QUADTO:
-                p = inverseTransform(new Point2D.Float(coords[0], coords[1]));
-                Point2D q = inverseTransform(new Point2D.Float(coords[2], coords[3]));
+                p = _inverseTransform(new Point2D.Float(coords[0], coords[1]));
+                Point2D q = _inverseTransform(new Point2D.Float(coords[2], coords[3]));
                 newPath.quadTo((float)p.getX(), (float)p.getY(), (float)q.getX(), (float)q.getY());
                 break;
                 
             case PathIterator.SEG_CUBICTO:
-                p = inverseTransform(new Point2D.Float(coords[0], coords[1]));
-                q = inverseTransform(new Point2D.Float(coords[2], coords[3]));
-                Point2D r = inverseTransform(new Point2D.Float(coords[4], coords[5]));
+                p = _inverseTransform(new Point2D.Float(coords[0], coords[1]));
+                q = _inverseTransform(new Point2D.Float(coords[2], coords[3]));
+                Point2D r = _inverseTransform(new Point2D.Float(coords[4], coords[5]));
                 newPath.curveTo((float)p.getX(), (float)p.getY(), 
                         (float)q.getX(), (float)q.getY(),
                         (float)r.getX(), (float)r.getY());
@@ -150,7 +150,7 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
     /**
      * override base class transform to project the fisheye effect
      */
-    public Point2D transform(Point2D graphPoint) {
+    private Point2D _transform(Point2D graphPoint) {
         if(graphPoint == null) return null;
         Point2D viewCenter = getViewCenter();
         double viewRadius = getViewRadius();
@@ -187,7 +187,7 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
     /**
      * override base class to un-project the fisheye effect
      */
-    public Point2D inverseTransform(Point2D viewPoint) {
+    private Point2D _inverseTransform(Point2D viewPoint) {
     	
         viewPoint = delegate.inverseTransform(viewPoint);
         Point2D viewCenter = getViewCenter();
@@ -219,5 +219,4 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
         return translatedBack;
         //delegate.inverseTransform(translatedBack);
     }
-
 }
