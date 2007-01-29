@@ -24,7 +24,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 /**
  * a GraphMouse that accepts plugins for various mouse events.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */

@@ -41,7 +41,7 @@ import java.util.Map;
  * a complete wrapping of Graphics2D, useful as a base class.
  * @see TransformingGraphics as an example subclass
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */

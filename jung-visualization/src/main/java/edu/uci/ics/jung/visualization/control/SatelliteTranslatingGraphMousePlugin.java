@@ -22,7 +22,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * the satellite view cause translating of the main view
  * 
  * @see TranslatingGraphMousePlugin
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public class SatelliteTranslatingGraphMousePlugin extends

@@ -23,7 +23,7 @@ import java.awt.geom.Point2D;
  * while applying a non-affine hyperbolic filter in its transform and
  * inverseTransform methods.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */

@@ -51,7 +51,7 @@ import edu.uci.ics.jung.visualization.transform.shape.Intersector;
  * 
  * samples.graph.GraphZoomScrollPaneDemo shows the use of this component.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  * 
  */

@@ -27,7 +27,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * another.
  * 
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  * 
  */

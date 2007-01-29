@@ -21,7 +21,7 @@ import org.apache.commons.collections15.Transformer;
  * A simple, stateful VertexIconFunction.
  * Stores icons in a Map keyed on the Vertex
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */

@@ -21,7 +21,7 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
  * Also holds a nested class Point to serialize the
  * Vertex locations
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  */
 public interface PersistentLayout<V, E> extends Layout<V,E> {
     

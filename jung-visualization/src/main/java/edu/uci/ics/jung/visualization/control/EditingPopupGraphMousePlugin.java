@@ -48,7 +48,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
         final Layout<V,E> layout = vv.getGraphLayout();
         final Graph<V,E> graph = layout.getGraph();
         final Point2D p = e.getPoint();
-        final Point2D ivp = vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
+        final Point2D ivp = p;//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
         GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
         if(pickSupport != null) {
             

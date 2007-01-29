@@ -22,7 +22,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * satellite view cause shearing of the main view
  * 
  * @see ShearingGraphMousePlugin
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public class SatelliteShearingGraphMousePlugin extends ShearingGraphMousePlugin {

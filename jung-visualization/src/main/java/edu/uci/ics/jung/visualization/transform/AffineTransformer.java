@@ -25,7 +25,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  * another, by delegating to a wrapped AffineTransform (uniform)
  * and its inverse.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  */
 public class AffineTransformer implements BidirectionalTransformer, ShapeTransformer {
 

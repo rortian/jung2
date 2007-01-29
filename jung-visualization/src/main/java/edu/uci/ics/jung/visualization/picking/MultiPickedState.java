@@ -23,7 +23,7 @@ import java.util.Set;
  * The <code>Sets</code> are constructed so that their iterators
  * will traverse them in the order in which they are picked.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  * @author Joshua O'Madadhain
  * 
  */

@@ -19,7 +19,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
  * satellite view will cause scaling in the main view
  * 
  * @see ScalingGraphMousePlugin
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public class SatelliteScalingGraphMousePlugin extends ScalingGraphMousePlugin {

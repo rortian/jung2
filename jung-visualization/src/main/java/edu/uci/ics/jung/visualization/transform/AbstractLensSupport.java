@@ -74,7 +74,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
 
     /**
      * the background for the hyperbolic projection
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      *
      *
      */
@@ -105,7 +105,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
     
     /**
      * the background for the hyperbolic projection
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      *
      *
      */

@@ -20,7 +20,7 @@ import java.awt.event.KeyEvent;
  * an implementation of the AbstractModalGraphMouse that includes plugins for
  * manipulating a view that is using a LensTransformer.
  * 
- * @author Tom Nelson - RABA Techologies
+ * @author Tom Nelson 
  *
  */
 public class ModalLensGraphMouse extends AbstractModalGraphMouse implements

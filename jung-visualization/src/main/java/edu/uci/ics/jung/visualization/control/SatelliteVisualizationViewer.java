@@ -36,7 +36,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  * A rectangular shape in the satellite view shows the visible bounds of
  * the master view. 
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  * 
  */
@@ -235,7 +235,7 @@ public class SatelliteVisualizationViewer<V, E>
      * A four-sided shape that represents the visible part of the
      * master view and is drawn in the satellite view
      * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      *
      *
      */

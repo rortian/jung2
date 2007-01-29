@@ -25,7 +25,7 @@ import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
  * This is useful when you want to apply non-affine transformations
  * to the Graphics2D used to draw elements of the graph.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */

@@ -19,7 +19,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * the relative CrossoverScalingControl to achieve the
  * absolute value.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public class AbsoluteCrossoverScalingControl extends CrossoverScalingControl

@@ -28,7 +28,7 @@ import edu.uci.ics.jung.visualization.FourPassImageShaper;
  * vertex. Also applies a shaping function to images to extract the
  * shape of the opaque part of a transparent image.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  *
  */public class VertexIconShapeTransformer<V> implements Transformer<V,Shape> {

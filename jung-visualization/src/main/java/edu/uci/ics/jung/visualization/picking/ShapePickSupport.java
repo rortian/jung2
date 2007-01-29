@@ -37,7 +37,7 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
  * ShapePickSupport provides access to Vertices and EdgeType based on
  * their actual shapes. 
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson
  *
  */
 public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, PredicatedGraphCollections<V,E> {
@@ -95,14 +95,17 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
         while(true) {
             try {
                 for(V v : getFilteredVertices(layout)) {
-
-                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
-                    // transform the vertex location to screen coords
-                    Point2D p = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v));
+                    // get the layout location for this vertex
+                    Point2D p = layout.transform(v);
                     if(p == null) continue;
                     AffineTransform xform = 
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
+                	// get the shape for this vertex
+                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
+                    // move the shape to the layout location
                     shape = xform.createTransformedShape(shape);
+                    // transform the shape from graph to screen coordinates
+                    shape = vv.getRenderContext().getBasicTransformer().transform(shape);
                     // see if this vertex center is closest to the pick point
                     // among any other containing vertices
                     if(shape.contains(x, y)) {

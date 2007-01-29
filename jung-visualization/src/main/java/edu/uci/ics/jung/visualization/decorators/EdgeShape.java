@@ -227,7 +227,7 @@ public class EdgeShape<V,E>  {
 	 * An edge shape that renders as a loop with its nadir at the center of the
 	 * vertex. Parallel instances will overlap.
 	 * 
-     * @author Tom Nelson - RABA Technologies
+     * @author Tom Nelson 
      */
     public static class SimpleLoop<V,E> extends AbstractEdgeShapeTransformer<V,E> {
         

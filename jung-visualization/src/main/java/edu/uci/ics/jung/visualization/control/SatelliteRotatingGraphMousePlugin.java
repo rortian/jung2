@@ -20,7 +20,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * Mouse events in the SatelliteView that match the modifiers
  * will cause the Main view to rotate
  * @see RotatingGraphMousePlugin
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  */
 public class SatelliteRotatingGraphMousePlugin extends RotatingGraphMousePlugin {

@@ -16,7 +16,7 @@ import java.awt.geom.Point2D;
  * Provides methods to map points from one coordinate system to
  * another: graph to screen and screen to graph.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  */
 public interface BidirectionalTransformer {
     

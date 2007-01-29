@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
  * DefaultEdgeLabelRenderer is similar to the cell renderers
  * used by the JTable and JTree jfc classes.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  *
  * 
  */

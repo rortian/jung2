@@ -22,7 +22,7 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  * parameters given in the constructor, so that picked and
  * non-picked edges can be made to look different.
  * 
- * @author Tom Nelson - RABA Technologies
+ * @author Tom Nelson 
  * @author Joshua O'Madadhain
  * 
  */
