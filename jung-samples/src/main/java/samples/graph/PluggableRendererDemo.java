@@ -297,8 +297,8 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Integer,Number>());
         vv.getRenderContext().setEdgeArrowPredicate(show_arrow);
         
-        vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.red));
-        vv.getRenderContext().setArrowDrawPaintTransformer(new ConstantTransformer(Color.green));
+        vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
+        vv.getRenderContext().setArrowDrawPaintTransformer(new ConstantTransformer(Color.black));
         JPanel jp = new JPanel();
         jp.setLayout(new BorderLayout());
         
@@ -1106,7 +1106,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         protected void handlePopup(MouseEvent e) {
             final VisualizationViewer<Integer,Number> vv = 
                 (VisualizationViewer<Integer,Number>)e.getSource();
-            Point2D p = vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
+            Point2D p = e.getPoint();//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
             
             GraphElementAccessor<Integer,Number> pickSupport = vv.getPickSupport();
             if(pickSupport != null) {
