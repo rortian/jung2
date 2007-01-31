@@ -236,22 +236,32 @@ public class SubLayoutDemo extends JApplet {
         controls.add(zoomControls);
         controls.add(Box.createRigidArea(space));
         
+        JPanel clusterControls = new JPanel(new GridLayout(0,1));
+        clusterControls.setBorder(BorderFactory.createTitledBorder("Clustering"));
+        clusterControls.add(cluster);
+        clusterControls.add(uncluster);
+        heightConstrain(clusterControls);
+        controls.add(clusterControls);
+        controls.add(Box.createRigidArea(space));
+        
         JPanel layoutControls = new JPanel(new GridLayout(0,1));
-        layoutControls.setBorder(BorderFactory.createTitledBorder("Layouts"));
-        layoutControls.add(cluster);
-        layoutControls.add(uncluster);
-        layoutControls.add(new JLabel("Layout"));
+        layoutControls.setBorder(BorderFactory.createTitledBorder("Layout"));
         layoutControls.add(layoutTypeComboBox);
-        layoutControls.add(new JLabel("Sublayout"));
-        subLayoutTypeComboBox.setMaximumSize(new Dimension(subLayoutTypeComboBox.getPreferredSize().width,
-        		subLayoutTypeComboBox.getMinimumSize().height));
-        layoutControls.add(subLayoutTypeComboBox);
         heightConstrain(layoutControls);
         controls.add(layoutControls);
-        controls.add(Box.createRigidArea(space));
 
-        heightConstrain(modeBox);
-        controls.add(modeBox);
+        JPanel subLayoutControls = new JPanel(new GridLayout(0,1));
+        subLayoutControls.setBorder(BorderFactory.createTitledBorder("SubLayout"));
+        subLayoutControls.add(subLayoutTypeComboBox);
+        heightConstrain(subLayoutControls);
+        controls.add(subLayoutControls);
+        controls.add(Box.createRigidArea(space));
+        
+        JPanel modePanel = new JPanel(new GridLayout(1,1));
+        modePanel.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
+        modePanel.add(modeBox);
+        heightConstrain(modePanel);
+        controls.add(modePanel);
         controls.add(Box.createRigidArea(space));
 
         controls.add(help);
