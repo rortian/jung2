@@ -455,10 +455,6 @@ public class PajekNetReader<V,E> {
         
         boolean is_list = l_pred.evaluate(nextLine);
 
-        // default to always ok here
-        // TODO: Do we need some way to assert that parallel edges are
-        // not allowed in a graph? To do so here would require that it
-        // be part of the graph interface....
         boolean parallel_ok = g instanceof SimpleGraph == false;
         	//!PredicateUtils.enforcesNotParallel(g);
 
