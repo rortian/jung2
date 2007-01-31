@@ -224,27 +224,46 @@ public class SubLayoutDemo extends JApplet {
                 JOptionPane.showMessageDialog((JComponent)e.getSource(), instructions, "Help", JOptionPane.PLAIN_MESSAGE);
             }
         });
-
+        Dimension space = new Dimension(20,20);
         Box controls = Box.createVerticalBox();
+        controls.add(Box.createRigidArea(space));
+        
         JPanel zoomControls = new JPanel(new GridLayout(1,2));
         zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
-        JPanel layoutControls = new JPanel(new GridLayout(0,1));
-        layoutControls.setBorder(BorderFactory.createTitledBorder("Layouts"));
         zoomControls.add(plus);
         zoomControls.add(minus);
+        heightConstrain(zoomControls);
         controls.add(zoomControls);
+        controls.add(Box.createRigidArea(space));
+        
+        JPanel layoutControls = new JPanel(new GridLayout(0,1));
+        layoutControls.setBorder(BorderFactory.createTitledBorder("Layouts"));
         layoutControls.add(cluster);
         layoutControls.add(uncluster);
         layoutControls.add(new JLabel("Layout"));
         layoutControls.add(layoutTypeComboBox);
         layoutControls.add(new JLabel("Sublayout"));
+        subLayoutTypeComboBox.setMaximumSize(new Dimension(subLayoutTypeComboBox.getPreferredSize().width,
+        		subLayoutTypeComboBox.getMinimumSize().height));
         layoutControls.add(subLayoutTypeComboBox);
+        heightConstrain(layoutControls);
         controls.add(layoutControls);
+        controls.add(Box.createRigidArea(space));
+
+        heightConstrain(modeBox);
         controls.add(modeBox);
-        controls.add(Box.createGlue());
+        controls.add(Box.createRigidArea(space));
 
         controls.add(help);
+        controls.add(Box.createVerticalGlue());
         content.add(controls, BorderLayout.EAST);
+    }
+    
+    private void heightConstrain(Component component) {
+    	Dimension d = new Dimension(component.getMaximumSize().width,
+    			component.getMinimumSize().height);
+    	System.err.println(component+" contrained to "+d);
+    	component.setMaximumSize(d);
     }
     
     private Layout getLayoutFor(Class layoutClass, Graph graph) throws Exception {
