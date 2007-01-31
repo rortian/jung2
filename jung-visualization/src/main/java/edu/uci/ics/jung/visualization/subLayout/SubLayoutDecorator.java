@@ -10,6 +10,7 @@
 
 package edu.uci.ics.jung.visualization.subLayout;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -73,12 +74,21 @@ public class SubLayoutDecorator<V, E> extends LayoutEventBroadcaster<V,E> {
         }
     }
     
+    public void setLocation(V picked, Point2D pt) {
+        Point2D p = getLocationInSubLayout(picked);
+        if(p != null) {
+            p.setLocation(pt);
+        } else {
+            super.setLocation(picked, pt);
+        }
+        fireStateChanged();
+    }
     public void setLocation(V picked, double x, double y) {
         Point2D p = getLocationInSubLayout(picked);
         if(p != null) {
             p.setLocation(x, y);
         } else {
-            super.setLocation(picked, p);
+            super.setLocation(picked, new Point2D.Double(x,y));
         }
         fireStateChanged();
     }
