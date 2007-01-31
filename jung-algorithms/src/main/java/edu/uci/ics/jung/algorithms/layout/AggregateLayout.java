@@ -158,7 +158,10 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 				Point2D center = layouts.get(layout);
 				// transform by the layout itself, but offset to the
 				// center of the sublayout
-				AffineTransform at = AffineTransform.getTranslateInstance(-center.getX(),-center.getY());
+				Dimension d = layout.getSize();
+
+				AffineTransform at = 
+					AffineTransform.getTranslateInstance(-center.getX()+d.width/2,-center.getY()+d.height/2);
 				Point2D localLocation = at.transform(location, null);
 				layout.setLocation(v, localLocation);
 				wasInSublayout = true;
