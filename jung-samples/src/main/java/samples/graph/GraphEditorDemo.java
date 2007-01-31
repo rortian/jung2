@@ -119,6 +119,15 @@ public class GraphEditorDemo extends JApplet implements Printable {
         "<li>Mouse1+Shift+drag rotates the graph"+
         "<li>Mouse1+CTRL(or Command)+drag shears the graph"+
         "</ul>"+
+        "<h3>Annotation Mode:</h3>"+
+        "<ul>"+
+        "<li>Mouse1 begins drawing of a Rectangle"+
+        "<li>Mouse1+drag defines the Rectangle shape"+
+        "<li>Mouse1 release adds the Rectangle as an annotation"+
+        "<li>Mouse1+Shift begins drawing of an Ellipse"+
+        "<li>Mouse1+Shift+drag defines the Ellipse shape"+
+        "<li>Mouse1+Shift release adds the Ellipse as an annotation"+
+        "</ul>"+
         "</html>";
     
     /**
