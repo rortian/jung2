@@ -262,7 +262,6 @@ public class SubLayoutDemo extends JApplet {
     private void heightConstrain(Component component) {
     	Dimension d = new Dimension(component.getMaximumSize().width,
     			component.getMinimumSize().height);
-    	System.err.println(component+" contrained to "+d);
     	component.setMaximumSize(d);
     }
     
