@@ -59,24 +59,12 @@ public class GraphCollapser  {
 
                 if(cluster.contains(endpoints.getFirst())) {
                 	graph.addEdge(e, clusterGraph, endpoints.getSecond(), inGraph.getEdgeType(e));
-//                    if(inGraph.isDirected(e)) {
-//                        graph.addDirectedEdge(e, clusterGraph, endpoints.getSecond());
-//                    } else {
-//                        graph.addEdge(e, clusterGraph, endpoints.getSecond());
-//                    }
+
                 } else if(cluster.contains(endpoints.getSecond())) {
                 	graph.addEdge(e, endpoints.getFirst(), clusterGraph, inGraph.getEdgeType(e));
-//                    if(inGraph.isDirected(e)) {
-//                        graph.addDirectedEdge(e, endpoints.getFirst(), clusterGraph);
-//                    } else {
-//                        graph.addEdge(e, endpoints.getFirst(), clusterGraph);
-//                    }
+
                 } else {
-//                    if(inGraph.isDirected(e)) {
-//                        graph.addDirectedEdge(e, endpoints.getFirst(), endpoints.getSecond());
-//                    } else {
-                        graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond(), inGraph.getEdgeType(e));
-//                    }
+                	graph.addEdge(e,endpoints.getFirst(), endpoints.getSecond(), inGraph.getEdgeType(e));
                 }
             }
         }
@@ -98,11 +86,7 @@ public class GraphCollapser  {
             graph.addVertex(v);
             for(Object edge : clusterGraph.getIncidentEdges(v)) {
                 Pair endpoints = clusterGraph.getEndpoints(edge);
-//                if(clusterGraph.isDirected(edge)) {
-//                    graph.addDirectedEdge(edge, endpoints.getFirst(), endpoints.getSecond());
-//                } else {
-                    graph.addEdge(edge, endpoints.getFirst(), endpoints.getSecond(), clusterGraph.getEdgeType(edge));
-//                }
+                graph.addEdge(edge, endpoints.getFirst(), endpoints.getSecond(), clusterGraph.getEdgeType(edge));
             }
         }
         // add all the vertices from the current graph except for
@@ -128,27 +112,15 @@ public class GraphCollapser  {
                             Object originalV1 = originalGraph.getEndpoints(edge).getFirst();
                             Object newV1 = findVertex(graph, originalV1);
                             assert newV1 != null : "newV1 for "+originalV1+" was not found!";
-//                            if(inGraph.isDirected(edge)) {
-//                                graph.addDirectedEdge(edge, newV1, v2);
-//                            } else {
-                                graph.addEdge(edge, newV1, v2, inGraph.getEdgeType(edge));
-//                            }
+                            graph.addEdge(edge, newV1, v2, inGraph.getEdgeType(edge));
                         } else if(clusterGraph.equals(v2)) {
                             // i need a new v2
                             Object originalV2 = originalGraph.getEndpoints(edge).getSecond();
                             Object newV2 = findVertex(graph, originalV2);
                             assert newV2 != null : "newV2 for "+originalV2+" was not found!";
-//                            if(inGraph.isDirected(edge)) {
-//                                graph.addDirectedEdge(edge, v1, newV2);
-//                            } else {
-                                graph.addEdge(edge, v1, newV2, inGraph.getEdgeType(edge));
-//                            }
+                            graph.addEdge(edge, v1, newV2, inGraph.getEdgeType(edge));
                         } else {
-//                            if(inGraph.isDirected(edge)) {
-//                                graph.addDirectedEdge(edge, v1, v2);
-//                            } else {
-                                graph.addEdge(edge, v1, v2, inGraph.getEdgeType(edge));
-//                            }
+                        	graph.addEdge(edge, v1, v2, inGraph.getEdgeType(edge));
                         }
                     }
                 }
@@ -164,8 +136,6 @@ public class GraphCollapser  {
         for(Object v : vertices) {
             if(v instanceof Graph) {
                 Graph g = (Graph)v;
-//                Collection graphVertices = g.getVertices();
-//                if(graphVertices.contains(vertex)) {
                 if(contains(g, vertex)) {
                     return v;
                 }
@@ -206,11 +176,7 @@ public class GraphCollapser  {
                 Object v1 = endpoints.getFirst();
                 Object v2 = endpoints.getSecond();
                 if(picked.containsAll(endpoints)) {
-//                if(inGraph.isDirected(edge)) {
-//                    clusterGraph.addDirectedEdge(edge, v1, v2);
-//                } else {
                     clusterGraph.addEdge(edge, v1, v2, inGraph.getEdgeType(edge));
-//                }
                 }
             }
         }
