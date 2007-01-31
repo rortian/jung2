@@ -294,8 +294,20 @@ public class SubLayoutDemo extends JApplet {
     		// put the picked vertices into a new sublayout 
     		Collection<String> picked = ps.getPicked();
     		if(picked.size() > 1) {
-    			String firstVertex = picked.iterator().next();
-    			Point2D center = clusteringLayout.transform(firstVertex);
+    			Point2D center = new Point2D.Double();
+    			double x = 0;
+    			double y = 0;
+    			for(String vertex : picked) {
+    				Point2D p = clusteringLayout.transform(vertex);
+    				x += p.getX();
+    				y += p.getY();
+    			}
+    			x /= picked.size();
+    			y /= picked.size();
+				center.setLocation(x,y);
+
+//    			String firstVertex = picked.iterator().next();
+//    			Point2D center = clusteringLayout.transform(firstVertex);
     			Graph<String, Number> subGraph;
     			try {
     				subGraph = graph.getClass().newInstance();
