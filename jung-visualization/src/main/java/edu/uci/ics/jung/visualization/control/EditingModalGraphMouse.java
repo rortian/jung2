@@ -21,6 +21,8 @@ import javax.swing.plaf.basic.BasicIconFactory;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.jung.visualization.BasicTransformer;
+
 public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse 
 	implements ModalGraphMouse, ItemSelectable {
 
@@ -28,13 +30,16 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected Factory<E> edgeFactory;
 	protected GraphMousePlugin editingPlugin;
 	protected GraphMousePlugin labelEditingPlugin;
+	protected GraphMousePlugin annotatingPlugin;
+	protected BasicTransformer basicTransformer;
 
 	/**
 	 * create an instance with default values
 	 *
 	 */
-	public EditingModalGraphMouse(Factory<V> vertexFactory, Factory<E> edgeFactory) {
-		this(vertexFactory, edgeFactory, 1.1f, 1/1.1f);
+	public EditingModalGraphMouse(BasicTransformer basicTransformer, 
+			Factory<V> vertexFactory, Factory<E> edgeFactory) {
+		this(basicTransformer, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
 	}
 
 	/**
@@ -42,10 +47,12 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public EditingModalGraphMouse(Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
+	public EditingModalGraphMouse(BasicTransformer basicTransformer,
+			Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
 		super(in,out);
 		this.vertexFactory = vertexFactory;
 		this.edgeFactory = edgeFactory;
+		this.basicTransformer = basicTransformer;
 		loadPlugins();
 		setModeKeyListener(new ModeKeyAdapter(this));
 	}
@@ -63,6 +70,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		shearingPlugin = new ShearingGraphMousePlugin();
 		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
+		annotatingPlugin = new AnnotatingGraphMousePlugin(basicTransformer);
 
 		add(scalingPlugin);
 //		add(labelEditingPlugin);
@@ -86,6 +94,8 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 				setPickingMode();
 			} else if(mode == Mode.EDITING) {
 				setEditingMode();
+			} else if(mode == Mode.ANNOTATING) {
+				setAnnotatingMode();
 			}
 			if(modeBox != null) {
 				modeBox.setSelectedItem(mode);
@@ -101,6 +111,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(rotatingPlugin);
 		remove(shearingPlugin);
 		remove(editingPlugin);
+		remove(annotatingPlugin);
 		add(pickingPlugin);
 		add(animatedPickingPlugin);
 		add(labelEditingPlugin);
@@ -113,6 +124,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(pickingPlugin);
 		remove(animatedPickingPlugin);
 		remove(editingPlugin);
+		remove(annotatingPlugin);
 		add(translatingPlugin);
 		add(rotatingPlugin);
 		add(shearingPlugin);
@@ -126,15 +138,28 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(rotatingPlugin);
 		remove(shearingPlugin);
 		remove(labelEditingPlugin);
+		remove(annotatingPlugin);
 		add(editingPlugin);
 	}
+
+	protected void setAnnotatingMode() {
+		remove(pickingPlugin);
+		remove(animatedPickingPlugin);
+		remove(translatingPlugin);
+		remove(rotatingPlugin);
+		remove(shearingPlugin);
+		remove(labelEditingPlugin);
+		remove(editingPlugin);
+		add(annotatingPlugin);
+	}
+
 
 	/**
 	 * @return Returns the modeBox.
 	 */
 	public JComboBox getModeComboBox() {
 		if(modeBox == null) {
-			modeBox = new JComboBox(new Mode[]{Mode.TRANSFORMING, Mode.PICKING, Mode.EDITING});
+			modeBox = new JComboBox(new Mode[]{Mode.TRANSFORMING, Mode.PICKING, Mode.EDITING, Mode.ANNOTATING});
 			modeBox.addItemListener(getModeListener());
 		}
 		modeBox.setSelectedItem(mode);
@@ -210,16 +235,18 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
     	private char t = 't';
     	private char p = 'p';
     	private char e = 'e';
+    	private char a = 'a';
     	protected ModalGraphMouse graphMouse;
 
     	public ModeKeyAdapter(ModalGraphMouse graphMouse) {
 			this.graphMouse = graphMouse;
 		}
 
-		public ModeKeyAdapter(char t, char p, char e, ModalGraphMouse graphMouse) {
+		public ModeKeyAdapter(char t, char p, char e, char a, ModalGraphMouse graphMouse) {
 			this.t = t;
 			this.p = p;
 			this.e = e;
+			this.a = a;
 			this.graphMouse = graphMouse;
 		}
 		
@@ -234,6 +261,9 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			} else if(keyChar == e) {
 				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 				graphMouse.setMode(Mode.EDITING);
+			} else if(keyChar == a) {
+				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				graphMouse.setMode(Mode.ANNOTATING);
 			}
 		}
     }

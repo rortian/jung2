@@ -39,6 +39,6 @@ public interface ModalGraphMouse extends GraphMouse {
      *  @author Tom Nelson
      *  @version 1.0
      */
-    enum Mode { TRANSFORMING, PICKING, EDITING }
+    enum Mode { TRANSFORMING, PICKING, ANNOTATING, EDITING }
     
 }
