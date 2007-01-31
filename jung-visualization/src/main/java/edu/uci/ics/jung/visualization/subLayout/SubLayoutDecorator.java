@@ -10,7 +10,6 @@
 
 package edu.uci.ics.jung.visualization.subLayout;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -26,6 +25,7 @@ import edu.uci.ics.jung.visualization.layout.LayoutEventBroadcaster;
  * for location information
  * 
  * @author Tom Nelson
+ * @TODO remove, this is unused
  *
  *
  */
