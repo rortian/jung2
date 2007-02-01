@@ -31,6 +31,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected Factory<E> edgeFactory;
 	protected GraphMousePlugin editingPlugin;
 	protected GraphMousePlugin labelEditingPlugin;
+	protected GraphMousePlugin popupEditingPlugin;
 	protected GraphMousePlugin annotatingPlugin;
 	protected BasicTransformer basicTransformer;
 	protected RenderContext rc;
@@ -74,7 +75,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
 		annotatingPlugin = new AnnotatingGraphMousePlugin(rc);
-
+		popupEditingPlugin = new EditingPopupGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		add(scalingPlugin);
 //		add(labelEditingPlugin);
 		setMode(Mode.EDITING);
@@ -118,6 +119,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		add(pickingPlugin);
 		add(animatedPickingPlugin);
 		add(labelEditingPlugin);
+		add(popupEditingPlugin);
 	}
 
 	/* (non-Javadoc)
@@ -132,6 +134,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		add(rotatingPlugin);
 		add(shearingPlugin);
 		add(labelEditingPlugin);
+		add(popupEditingPlugin);
 	}
 
 	protected void setEditingMode() {
@@ -143,6 +146,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(labelEditingPlugin);
 		remove(annotatingPlugin);
 		add(editingPlugin);
+		add(popupEditingPlugin);
 	}
 
 	protected void setAnnotatingMode() {
@@ -153,6 +157,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		remove(shearingPlugin);
 		remove(labelEditingPlugin);
 		remove(editingPlugin);
+		remove(popupEditingPlugin);
 		add(annotatingPlugin);
 	}
 
