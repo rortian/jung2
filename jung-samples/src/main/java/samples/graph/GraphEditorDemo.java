@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,9 +43,11 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
@@ -52,6 +55,7 @@ import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
  * Shows how easy it is to create a graph editor with JUNG.
@@ -127,6 +131,8 @@ public class GraphEditorDemo extends JApplet implements Printable {
         "<li>Mouse1+Shift begins drawing of an Ellipse"+
         "<li>Mouse1+Shift+drag defines the Ellipse shape"+
         "<li>Mouse1+Shift release adds the Ellipse as an annotation"+
+        "<li>Mouse3 shows a popup to input text, which will become"+
+        "<li>a text annotation on the graph at the mouse location"+
         "</ul>"+
         "</html>";
     
@@ -163,7 +169,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
         Factory<Number> edgeFactory = new EdgeFactory(graph);
         
         final EditingModalGraphMouse<Number,Number> graphMouse = 
-        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext().getBasicTransformer(), vertexFactory, edgeFactory);
+        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), vertexFactory, edgeFactory);
         
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
@@ -172,7 +178,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
 
-        graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, vertexFactory, edgeFactory));
+//        graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, vertexFactory, edgeFactory));
         graphMouse.setMode(ModalGraphMouse.Mode.EDITING);
         
         final ScalingControl scaler = new CrossoverScalingControl();
