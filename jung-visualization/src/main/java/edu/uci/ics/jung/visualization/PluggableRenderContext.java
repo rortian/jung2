@@ -84,7 +84,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
     protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction = 
         DefaultParallelEdgeIndexFunction.<V,E>getInstance();
-//    protected MutableTransformer viewTransformer = new MutableAffineTransformer();
     
     protected BasicTransformer basicTransformer = new BasicTransformer();
     
@@ -122,8 +121,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected EdgeLabelRenderer edgeLabelRenderer = new DefaultEdgeLabelRenderer(Color.cyan);
     
     protected GraphicsDecorator graphicsContext;
-    
-//    protected final static EdgePredicate self_loop = SelfLoopEdgePredicate.getInstance();
     
     PluggableRenderContext() {
         this.setEdgeShapeTransformer(new EdgeShape.QuadCurve<V,E>());
@@ -507,20 +504,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.vertexDrawPaintTransformer = vertexDrawPaintTransformer;
     }
 
-//    /* (non-Javadoc)
-//     * @see edu.uci.ics.jung.visualization.RenderContext#getVertexShapeTransformer()
-//     */
-//    public Transformer<V,Shape> getVertexShapeTransformer() {
-//        return vertexShapeTransformer;
-//    }
-//
-//    /* (non-Javadoc)
-//     * @see edu.uci.ics.jung.visualization.RenderContext#setVertexShapeTransformer(edu.uci.ics.jung.visualization.decorators.VertexShapeTransformer)
-//     */
-//    public void setVertexShapeTransformer(Transformer<V,Shape> vertexShapeTransformer) {
-//        this.vertexShapeTransformer = vertexShapeTransformer;
-//    }
-
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexLabelTransformer()
      */
@@ -534,34 +517,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     public void setVertexLabelTransformer(Transformer<V,String> vertexLabelTransformer) {
         this.vertexLabelTransformer = vertexLabelTransformer;
     }
-
-//    /* (non-Javadoc)
-//     * @see edu.uci.ics.jung.visualization.RenderContext#getVertexStrokeTransformer()
-//     */
-//    public Transformer<V,Stroke> getVertexStrokeTransformer() {
-//        return vertexStrokeTransformer;
-//    }
-//
-//    /* (non-Javadoc)
-//     * @see edu.uci.ics.jung.visualization.RenderContext#setVertexStrokeTransformer(edu.uci.ics.jung.visualization.decorators.VertexStrokeTransformer)
-//     */
-//    public void setVertexStrokeTransformer(Transformer<V,Stroke> vertexStrokeTransformer) {
-//        this.vertexStrokeTransformer = vertexStrokeTransformer;
-//    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.RenderContext#getViewTransformer()
-     */
-//    public MutableTransformer getViewTransformer() {
-//        return viewTransformer;
-//    }
-
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.RenderContext#setViewTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
-     */
-//    public void setViewTransformer(MutableTransformer viewTransformer) {
-//        this.viewTransformer = viewTransformer;
-//    }
 
 	/**
 	 * @return the pickSupport
