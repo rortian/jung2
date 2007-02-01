@@ -152,7 +152,8 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	if(e.isPopupTrigger()) {
     		String annotation = JOptionPane.showInputDialog(vv,"Annotation:");
     		if(annotation != null && annotation.length() > 0) {
-    			annotationPaintable.add(down, annotation);
+    			Point2D p = vv.getRenderContext().getBasicTransformer().inverseTransform(down);
+    			annotationPaintable.add(p, annotation);
     		}
     	} else if(e.getModifiers() == additionalModifiers) {
     		rect = new Ellipse2D.Double();
