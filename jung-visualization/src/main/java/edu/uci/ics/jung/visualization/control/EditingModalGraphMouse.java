@@ -22,6 +22,7 @@ import javax.swing.plaf.basic.BasicIconFactory;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.visualization.BasicTransformer;
+import edu.uci.ics.jung.visualization.RenderContext;
 
 public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse 
 	implements ModalGraphMouse, ItemSelectable {
@@ -32,14 +33,15 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected GraphMousePlugin labelEditingPlugin;
 	protected GraphMousePlugin annotatingPlugin;
 	protected BasicTransformer basicTransformer;
+	protected RenderContext rc;
 
 	/**
 	 * create an instance with default values
 	 *
 	 */
-	public EditingModalGraphMouse(BasicTransformer basicTransformer, 
+	public EditingModalGraphMouse(RenderContext rc, 
 			Factory<V> vertexFactory, Factory<E> edgeFactory) {
-		this(basicTransformer, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
+		this(rc, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
 	}
 
 	/**
@@ -47,12 +49,13 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public EditingModalGraphMouse(BasicTransformer basicTransformer,
+	public EditingModalGraphMouse(RenderContext rc,
 			Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
 		super(in,out);
 		this.vertexFactory = vertexFactory;
 		this.edgeFactory = edgeFactory;
-		this.basicTransformer = basicTransformer;
+		this.rc = rc;
+		this.basicTransformer = rc.getBasicTransformer();
 		loadPlugins();
 		setModeKeyListener(new ModeKeyAdapter(this));
 	}
@@ -70,7 +73,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		shearingPlugin = new ShearingGraphMousePlugin();
 		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
-		annotatingPlugin = new AnnotatingGraphMousePlugin(basicTransformer);
+		annotatingPlugin = new AnnotatingGraphMousePlugin(rc);
 
 		add(scalingPlugin);
 //		add(labelEditingPlugin);

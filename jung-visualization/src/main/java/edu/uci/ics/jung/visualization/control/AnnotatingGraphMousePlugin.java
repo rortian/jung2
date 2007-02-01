@@ -24,12 +24,13 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
-import java.util.Collection;
-import java.util.HashSet;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
+import edu.uci.ics.jung.visualization.AnnotationPaintable;
 import edu.uci.ics.jung.visualization.BasicTransformer;
+import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 
@@ -71,13 +72,15 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     
     BasicTransformer basicTransformer;
     
+    RenderContext rc;
+    
     boolean added = false;
     
     /**
 	 * create an instance with default settings
 	 */
-	public AnnotatingGraphMousePlugin(BasicTransformer basicTransformer) {
-	    this(basicTransformer, InputEvent.BUTTON1_MASK, InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
+	public AnnotatingGraphMousePlugin(RenderContext rc) {
+	    this(rc, InputEvent.BUTTON1_MASK, InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
 	}
 
 	/**
@@ -85,13 +88,14 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * @param selectionModifiers for primary selection
 	 * @param addToSelectionModifiers for additional selection
 	 */
-    public AnnotatingGraphMousePlugin(BasicTransformer basicTransformer,
+    public AnnotatingGraphMousePlugin(RenderContext rc,
     		int selectionModifiers, int additionalModifiers) {
         super(selectionModifiers);
-        this.basicTransformer = basicTransformer;
+        this.rc = rc;
+        this.basicTransformer = rc.getBasicTransformer();
         this.additionalModifiers = additionalModifiers;
         this.lensPaintable = new LensPaintable();
-        this.annotationPaintable = new AnnotationPaintable();
+        this.annotationPaintable = new AnnotationPaintable(rc);
         this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
     }
     
@@ -109,33 +113,6 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         this.lensColor = lensColor;
     }
 
-    /**
-     * a Paintable to draw the rectangle used to pick multiple
-     * Vertices
-     * @author Tom Nelson
-     *
-     */
-    class AnnotationPaintable implements Paintable {
-    	Collection<Shape> shapes = new HashSet<Shape>();
-    	
-    	public void add(Shape shape) {
-    		shapes.add(shape);
-    	}
-        public void paint(Graphics g) {
-            Color oldColor = g.getColor();
-            g.setColor(lensColor);
-            for(Shape shape : shapes) {
-            	Shape s = basicTransformer.transform(shape);
-            	((Graphics2D)g).draw(s);
-            }
-            g.setColor(oldColor);
-        }
-
-        public boolean useTransform() {
-            return false;
-        }
-    }
-
     class LensPaintable implements Paintable {
 
         public void paint(Graphics g) {
@@ -149,7 +126,8 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             return false;
         }
     }
-	/**
+
+    /**
 	 * For primary modifiers (default, MouseButton1):
 	 * pick a single Vertex or Edge that
      * is under the mouse pointer. If no Vertex or edge is under
@@ -168,17 +146,23 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 */
     @SuppressWarnings("unchecked")
     public void mousePressed(MouseEvent e) {
-        VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-       down = e.getPoint();
-        if(e.getModifiers() == additionalModifiers) {
-        	rect = new Ellipse2D.Double();
-        	rect.setFrameFromDiagonal(down,down);
-        	vv.addPostRenderPaintable(lensPaintable);
-        } else if(e.getModifiers() == modifiers) {
-        	rect = new Rectangle2D.Double();
-        	rect.setFrameFromDiagonal(down,down);
-        	vv.addPostRenderPaintable(lensPaintable);
-        }
+    	VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
+    	down = e.getPoint();
+    	
+    	if(e.isPopupTrigger()) {
+    		String annotation = JOptionPane.showInputDialog("Annotation:");
+    		if(annotation != null && annotation.length() > 0) {
+    			annotationPaintable.add(down, annotation);
+    		}
+    	} else if(e.getModifiers() == additionalModifiers) {
+    		rect = new Ellipse2D.Double();
+    		rect.setFrameFromDiagonal(down,down);
+    		vv.addPostRenderPaintable(lensPaintable);
+    	} else if(e.getModifiers() == modifiers) {
+    		rect = new Rectangle2D.Double();
+    		rect.setFrameFromDiagonal(down,down);
+    		vv.addPostRenderPaintable(lensPaintable);
+    	}
     }
 
     /**
@@ -196,7 +180,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         		Ellipse2D arect = new Ellipse2D.Double();
         		arect.setFrameFromDiagonal(down,out);
         		Shape s = vv.getRenderContext().getBasicTransformer().inverseTransform(arect);
-        		annotationPaintable.add(s);
+        		annotationPaintable.add(s,Color.cyan);
         		if(added == false) {
         			vv.addPostRenderPaintable(annotationPaintable);
         			added = true;
@@ -208,7 +192,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         		Rectangle2D arect = new Rectangle2D.Double();
         		arect.setFrameFromDiagonal(down,out);
         		Shape s = vv.getRenderContext().getBasicTransformer().inverseTransform(arect);
-        		annotationPaintable.add(s);
+        		annotationPaintable.add(s,Color.red);
         		if(added == false) {
         			vv.addPostRenderPaintable(annotationPaintable);
         			added = true;
