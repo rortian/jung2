@@ -21,6 +21,8 @@ import java.awt.event.ItemListener;
 import java.awt.geom.Point2D;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -30,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -79,7 +80,7 @@ public class SubLayoutDemo extends JApplet {
         "<p>or by shift-clicking on multiple vertices."+
         "<p>After you select vertices, use the "+
         "<p>Cluster Picked button to cluster them using the "+
-        "<p>layout specified in the Sublayout combobox."+
+        "<p>layout and size specified in the Sublayout comboboxen."+
         "<p>Use the Uncluster All button to remove all"+
         "<p>clusters."+
         "<p>You can drag the cluster with the mouse." +
@@ -89,6 +90,8 @@ public class SubLayoutDemo extends JApplet {
      * the graph
      */
     Graph<String,Number> graph;
+    
+    Map<Graph<String,Number>,Dimension> sizes = new HashMap<Graph<String,Number>,Dimension>();
 
     Class[] layoutClasses = new Class[]{CircleLayout.class,SpringLayout.class,FRLayout.class,KKLayout.class};
     /**
@@ -97,6 +100,8 @@ public class SubLayoutDemo extends JApplet {
     VisualizationViewer<String,Number> vv;
 
     AggregateLayout<String,Number> clusteringLayout;
+    
+    Dimension subLayoutSize;
     
     PickedState<String> ps;
     
@@ -217,6 +222,35 @@ public class SubLayoutDemo extends JApplet {
 					subLayoutType = (Class)e.getItem();
 				}
 			}});
+        
+        JComboBox subLayoutDimensionComboBox = 
+        	new JComboBox(new Dimension[]{
+        			new Dimension(75,75),
+        			new Dimension(100,100),
+        			new Dimension(150,150),
+        			new Dimension(200,200),
+        			new Dimension(250,250),
+        			new Dimension(300,300)
+        	}	
+        	);
+        subLayoutDimensionComboBox.setRenderer(new DefaultListCellRenderer() {
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                String valueString = value.toString();
+                valueString = valueString.substring(valueString.lastIndexOf('['));
+                valueString = valueString.replaceAll("idth", "");
+                valueString = valueString.replaceAll("eight","");
+                return super.getListCellRendererComponent(list, valueString, index, isSelected,
+                        cellHasFocus);
+            }
+        });
+        subLayoutDimensionComboBox.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					subLayoutSize = (Dimension)e.getItem();
+				}
+			}});
+        subLayoutDimensionComboBox.setSelectedIndex(1);
 
         JButton help = new JButton("Help");
         help.addActionListener(new ActionListener() {
@@ -253,6 +287,7 @@ public class SubLayoutDemo extends JApplet {
         JPanel subLayoutControls = new JPanel(new GridLayout(0,1));
         subLayoutControls.setBorder(BorderFactory.createTitledBorder("SubLayout"));
         subLayoutControls.add(subLayoutTypeComboBox);
+        subLayoutControls.add(subLayoutDimensionComboBox);
         heightConstrain(subLayoutControls);
         controls.add(subLayoutControls);
         controls.add(Box.createRigidArea(space));
@@ -325,7 +360,7 @@ public class SubLayoutDemo extends JApplet {
 
     				Layout<String,Number> subLayout = getLayoutFor(subLayoutType, subGraph);
     				subLayout.setInitializer(vv.getGraphLayout());
-    				subLayout.setSize(new Dimension(100,100));
+    				subLayout.setSize(subLayoutSize);
     				clusteringLayout.put(subLayout,center);
     				vv.setGraphLayout(clusteringLayout);
 
