@@ -63,7 +63,13 @@ public class AnnotationPaintable implements Paintable {
             AffineTransform old = g2d.getTransform();
             AffineTransform base = new AffineTransform(old);
             AffineTransform xform = transformer.getTransform();
+
+            double rotation = transformer.getRotation();
+            // unrotate the annotation
+            AffineTransform unrotate = 
+            	AffineTransform.getRotateInstance(-rotation, p.getX(), p.getY());
             base.concatenate(xform);
+            base.concatenate(unrotate);
             g2d.setTransform(base);
             rc.getRendererPane().paintComponent(g, component, rc.getScreenDevice(), 
                     (int)p.getX(), (int)p.getY(),
