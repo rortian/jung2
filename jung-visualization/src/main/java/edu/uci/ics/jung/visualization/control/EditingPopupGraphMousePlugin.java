@@ -30,7 +30,7 @@ import edu.uci.ics.jung.visualization.picking.PickedState;
  */
 public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePlugin {
     
-//    protected Map<V,Point2D> vertexLocations;
+    protected Map<V,Point2D> vertexLocations;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
 
@@ -41,7 +41,15 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
         this.edgeFactory = edgeFactory;
     }
 
-    @SuppressWarnings({ "unchecked", "serial", "serial" })
+    public Map<V, Point2D> getVertexLocations() {
+		return vertexLocations;
+	}
+
+	public void setVertexLocations(Map<V, Point2D> vertexLocations) {
+		this.vertexLocations = vertexLocations;
+	}
+
+	@SuppressWarnings({ "unchecked", "serial", "serial" })
 	protected void handlePopup(MouseEvent e) {
         final VisualizationViewer<V,E> vv =
             (VisualizationViewer<V,E>)e.getSource();
@@ -109,7 +117,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                 popup.add(new AbstractAction("Create Vertex") {
                     public void actionPerformed(ActionEvent e) {
                         V newVertex = vertexFactory.create();
-//                        vertexLocations.put(newVertex, vv.getRenderContext().getBasicTransformer().inverseTransform(p));
+                        vertexLocations.put(newVertex, vv.getRenderContext().getBasicTransformer().inverseTransform(p));
                         Layout layout = vv.getGraphLayout();
                         for(V vertex : graph.getVertices()) {
                             layout.lock(vertex, true);

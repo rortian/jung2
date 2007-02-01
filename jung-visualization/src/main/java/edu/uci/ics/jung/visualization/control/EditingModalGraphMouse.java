@@ -82,6 +82,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	}
 	public void setVertexLocations(Map<V,Point2D> vertexLocations) {
 		((EditingGraphMousePlugin<V,E>)editingPlugin).setVertexLocations(vertexLocations);
+		((EditingPopupGraphMousePlugin<V,E>)popupEditingPlugin).setVertexLocations(vertexLocations);
 	}
 
 	/**
