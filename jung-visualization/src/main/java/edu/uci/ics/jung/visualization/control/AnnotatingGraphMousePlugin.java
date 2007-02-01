@@ -150,7 +150,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	down = e.getPoint();
     	
     	if(e.isPopupTrigger()) {
-    		String annotation = JOptionPane.showInputDialog("Annotation:");
+    		String annotation = JOptionPane.showInputDialog(vv,"Annotation:");
     		if(annotation != null && annotation.length() > 0) {
     			annotationPaintable.add(down, annotation);
     		}
