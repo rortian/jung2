@@ -12,10 +12,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
@@ -24,17 +29,18 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -78,9 +84,6 @@ public class TreeLayoutDemo extends JApplet {
 		public Integer create() {
 			return i++;
 		}};
-	
-			
-			
     
     Factory<String> vertexFactory = new Factory<String>() {
     	int i=0;
@@ -93,6 +96,8 @@ public class TreeLayoutDemo extends JApplet {
      */
     VisualizationViewer<String,Integer> vv;
     
+    VisualizationServer.Paintable rings = new Rings();
+    
     String root;
 
     public TreeLayoutDemo() {
@@ -102,13 +107,12 @@ public class TreeLayoutDemo extends JApplet {
 
         createTree();
         
-        Layout<String,Integer> layout = 
+        final TreeLayout<String,Integer> layout = 
         	new TreeLayout<String,Integer>(graph, Arrays.asList("A0","V0","B0"));
 
-        vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(800,400));
+        vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
-        
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -143,6 +147,20 @@ public class TreeLayoutDemo extends JApplet {
                 scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
+        
+        JToggleButton radial = new JToggleButton("Radial");
+        radial.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					layout.setRadial(true);
+					vv.addPreRenderPaintable(rings);
+				} else {
+					layout.setRadial(false);
+					vv.removePreRenderPaintable(rings);
+				}
+				vv.repaint();
+			}});
 
         JPanel scaleGrid = new JPanel(new GridLayout(1,0));
         scaleGrid.setBorder(BorderFactory.createTitledBorder("Zoom"));
@@ -150,10 +168,34 @@ public class TreeLayoutDemo extends JApplet {
         JPanel controls = new JPanel();
         scaleGrid.add(plus);
         scaleGrid.add(minus);
+        controls.add(radial);
         controls.add(scaleGrid);
         controls.add(modeBox);
 
         content.add(controls, BorderLayout.SOUTH);
+    }
+    
+    class Rings implements VisualizationServer.Paintable {
+
+		public void paint(Graphics g) {
+			g.setColor(Color.lightGray);
+		
+			Graphics2D g2d = (Graphics2D)g;
+			Point2D center = vv.getCenter();
+			center = vv.getRenderContext().getBasicTransformer().layoutTransform(center);
+			Ellipse2D ellipse = new Ellipse2D.Double();
+			for(int i=0; i<10; i++) {
+				ellipse.setFrameFromDiagonal(center.getX()-50*i, center.getY()-50*i, 
+						center.getX()+50*i, center.getY()+50*i);
+				g2d.draw(ellipse);
+			}
+			
+		}
+
+		public boolean useTransform() {
+			return true;
+		}
+    	
     }
     
     /**
@@ -171,17 +213,11 @@ public class TreeLayoutDemo extends JApplet {
     	graph.addEdge(edgeFactory.create(), "V3", "V8");
     	graph.addEdge(edgeFactory.create(), "V6", "V9");
     	graph.addEdge(edgeFactory.create(), "V4", "V10");
-       	graph.addEdge(edgeFactory.create(), "V4", "V11");
-       	graph.addEdge(edgeFactory.create(), "V4", "V12");
-       	graph.addEdge(edgeFactory.create(), "V6", "V13");
-       	graph.addEdge(edgeFactory.create(), "V10", "V14");
-       	graph.addEdge(edgeFactory.create(), "V13", "V15");
-       	graph.addEdge(edgeFactory.create(), "V13", "V16");
-       	
+    	
        	graph.addVertex("A0");
-       	
        	graph.addEdge(edgeFactory.create(), "A0", "A1");
        	graph.addEdge(edgeFactory.create(), "A0", "A2");
+       	graph.addEdge(edgeFactory.create(), "A0", "A3");
        	
        	graph.addVertex("B0");
     	graph.addEdge(edgeFactory.create(), "B0", "B1");
