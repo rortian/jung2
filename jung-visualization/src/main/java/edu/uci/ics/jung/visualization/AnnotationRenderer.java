@@ -12,7 +12,6 @@ package edu.uci.ics.jung.visualization;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.io.Serializable;
