@@ -11,8 +11,6 @@
  */
 package edu.uci.ics.jung.visualization.picking;
 
-import java.awt.Color;
-import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
@@ -33,7 +31,6 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.transform.LensTransformer;
 
 /**
  * ShapePickSupport provides access to Vertices and EdgeType based on
@@ -94,26 +91,22 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 
         V closest = null;
         double minDistance = Double.MAX_VALUE;
-        
-        if(vv.getRenderContext().getBasicTransformer().getViewTransformer() instanceof LensTransformer) {
-        	Point2D p = ((LensTransformer)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(new Point2D.Double(x,y));
-        	x = p.getX();
-        	y = p.getY();
-        }
+        Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(new Point2D.Double(x,y));
+        x = ip.getX();
+        y = ip.getY();
+
         while(true) {
             try {
                 for(V v : getFilteredVertices(layout)) {
-                    // get the layout location for this vertex
-                    Point2D p = layout.transform(v);
+                	
+                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
+                    // transform the vertex location to screen coords
+                    Point2D p = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v));
                     if(p == null) continue;
                     AffineTransform xform = 
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
-                	// get the shape for this vertex
-                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
-                    // move the shape to the layout location
                     shape = xform.createTransformedShape(shape);
-                    // transform the shape from graph to screen coordinates
-                    shape = vv.getRenderContext().getBasicTransformer().transform(shape);
+
                     // see if this vertex center is closest to the pick point
                     // among any other containing vertices
                     if(shape.contains(x, y)) {
@@ -143,26 +136,17 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
     public Collection<V> getVertices(Layout<V, E> layout, Shape rectangle) {
     	Set<V> pickedVertices = new HashSet<V>();
     	
-        if(vv.getRenderContext().getBasicTransformer().getViewTransformer() instanceof LensTransformer) {
-        	rectangle = ((LensTransformer)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(rectangle);
-        }
+    	// remove the view transform from the rectangle
+    	rectangle = vv.getRenderContext().getBasicTransformer().inverseViewTransform(rectangle);
 
         while(true) {
             try {
                 for(V v : getFilteredVertices(layout)) {
                     Point2D p = layout.transform(v);
                     if(p == null) continue;
-                    AffineTransform xform = 
-                        AffineTransform.getTranslateInstance(p.getX(), p.getY());
-                	// get the shape for this vertex
-                    Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
-                    // move the shape to the layout location
-                    shape = xform.createTransformedShape(shape);
-                    // transform the shape from graph to screen coordinates
-                    shape = vv.getRenderContext().getBasicTransformer().transform(shape);
-                    Point2D center = new Point2D.Double(shape.getBounds2D().getCenterX(),
-                    		shape.getBounds2D().getCenterY());
-                    if(rectangle.contains(center)) {
+
+                    p = vv.getRenderContext().getBasicTransformer().layoutTransform(p);
+                    if(rectangle.contains(p)) {
                     	pickedVertices.add(v);
                     }
                 }
@@ -176,6 +160,10 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
      * x,y, coordinates.
      */
     public E getEdge(Layout<V, E> layout, double x, double y) {
+
+        Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(new Point2D.Double(x,y));
+        x = ip.getX();
+        y = ip.getY();
 
         // as a Line has no area, we can't always use edgeshape.contains(point) so we
         // make a small rectangular pickArea around the point and check if the
@@ -226,8 +214,8 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
                     // transform the edge to its location and dimensions
                     edgeShape = xform.createTransformedShape(edgeShape);
 
-                    vv.getRenderContext().getGraphicsContext().setPaint(Color.red);
-                    vv.getRenderContext().getGraphicsContext().draw(edgeShape);
+//                    vv.getRenderContext().getGraphicsContext().setPaint(Color.red);
+//                    vv.getRenderContext().getGraphicsContext().draw(edgeShape);
                     // because of the transform, the edgeShape is now a GeneralPath
                     // see if this edge is the closest of any that intersect
                     if(edgeShape.intersects(pickArea)) {
