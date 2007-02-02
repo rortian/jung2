@@ -14,6 +14,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.algorithms.layout.PolarPoint;
 import edu.uci.ics.jung.visualization.transform.MagnifyTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -164,7 +165,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
         dx *= ratio;
         Point2D pointFromCenter = new Point2D.Double(dx, dy);
         
-        PolarPoint polar = cartesianToPolar(pointFromCenter);
+        PolarPoint polar = PolarPoint.cartesianToPolar(pointFromCenter);
         double theta = polar.getTheta();
         double radius = polar.getRadius();
         if(radius > viewRadius) return viewPoint;
@@ -173,7 +174,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
         radius *= mag;
         
         radius = Math.min(radius, viewRadius);
-        Point2D projectedPoint = polarToCartesian(theta, radius);
+        Point2D projectedPoint = PolarPoint.polarToCartesian(theta, radius);
         projectedPoint.setLocation(projectedPoint.getX()/ratio, projectedPoint.getY());
         Point2D translatedBack = new Point2D.Double(projectedPoint.getX()+viewCenter.getX(),
                 projectedPoint.getY()+viewCenter.getY());
@@ -196,7 +197,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
 
         Point2D pointFromCenter = new Point2D.Double(dx, dy);
         
-        PolarPoint polar = cartesianToPolar(pointFromCenter);
+        PolarPoint polar = PolarPoint.cartesianToPolar(pointFromCenter);
 
         double radius = polar.getRadius();
         if(radius > viewRadius) return viewPoint;
@@ -205,7 +206,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
         double mag = magnification;
         radius /= mag;
         polar.setRadius(radius);
-        Point2D projectedPoint = polarToCartesian(polar);
+        Point2D projectedPoint = PolarPoint.polarToCartesian(polar);
         projectedPoint.setLocation(projectedPoint.getX()/ratio, projectedPoint.getY());
         Point2D translatedBack = new Point2D.Double(projectedPoint.getX()+viewCenter.getX(),
                 projectedPoint.getY()+viewCenter.getY());
