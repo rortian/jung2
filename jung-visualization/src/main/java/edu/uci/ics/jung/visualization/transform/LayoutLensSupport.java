@@ -12,9 +12,11 @@ package edu.uci.ics.jung.visualization.transform;
 
 import java.awt.Dimension;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
+import edu.uci.ics.jung.visualization.picking.LayoutLensShapePickSupport;
 /**
  * A class to make it easy to add an 
  * examining lens to a jung graph application. See HyperbolicTransformerDemo
@@ -27,6 +29,8 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E> 
     implements LensSupport {
 
+	GraphElementAccessor<V,E> pickSupport;
+	
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
         this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getBasicTransformer().getLayoutTransformer()),
                 new ModalLensGraphMouse());
@@ -40,6 +44,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.lensTransformer = lensTransformer;
+        this.pickSupport = vv.getPickSupport();
 
         Dimension d = vv.getSize();
         if(d.width <= 0 || d.height <= 0) {
@@ -55,8 +60,8 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
+        vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
         vv.getRenderContext().getBasicTransformer().setLayoutTransformer(lensTransformer);
-//        vv.setViewTransformer(new MutableAffineTransformer());
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
@@ -65,14 +70,12 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
     }
     
     public void deactivate() {
-//        if(savedViewTransformer != null) {
-//            vv.setViewTransformer(savedViewTransformer);
-//        }
         if(lensTransformer != null) {
             vv.removePreRenderPaintable(lens);
             vv.removePostRenderPaintable(lensControls);
             vv.getRenderContext().getBasicTransformer().setLayoutTransformer(lensTransformer.getDelegate());
         }
+        vv.getRenderContext().setPickSupport(pickSupport);
         vv.setToolTipText(defaultToolTipText);
         vv.setGraphMouse(graphMouse);
         vv.repaint();

@@ -10,9 +10,12 @@ package edu.uci.ics.jung.visualization.transform.shape;
 
 import java.awt.Dimension;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.picking.LayoutLensShapePickSupport;
+import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
@@ -31,7 +34,8 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     protected RenderContext<V,E> renderContext;
     GraphicsDecorator lensGraphicsDecorator;
     GraphicsDecorator savedGraphicsDecorator;
-    
+	GraphElementAccessor<V,E> pickSupport;
+
 //    public ViewLensSupport(VisualizationViewer<V,E> vv) {
 //        this(vv, new HyperbolicShapeTransformer(vv, vv.getViewTransformer()),
 //                new ModalLensGraphMouse());
@@ -41,6 +45,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.renderContext = vv.getRenderContext();
+        this.pickSupport = renderContext.getPickSupport();
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensTransformer = lensTransformer;
         Dimension d = vv.getSize();
@@ -56,6 +61,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
         lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getViewTransformer());
         vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
@@ -69,6 +75,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     public void deactivate() {
 //    	savedViewTransformer.setTransform(lensTransformer.getDelegate().getTransform());
 //        vv.setViewTransformer(savedViewTransformer);
+    	renderContext.setPickSupport(pickSupport);
         vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
