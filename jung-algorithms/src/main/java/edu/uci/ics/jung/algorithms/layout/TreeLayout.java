@@ -11,7 +11,6 @@
 package edu.uci.ics.jung.algorithms.layout;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,11 +47,11 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     public static int DEFAULT_DISTX = 50;
     public static int DEFAULT_DISTY = 50;
     
-    protected Map<V,Point2D> radialLocations =
-    	LazyMap.decorate(new HashMap<V, Point2D>(),
-    			new Transformer<V,Point2D>() {
-					public Point2D transform(V arg0) {
-						return new Point2D.Double();
+    protected Map<V,PolarPoint> polarLocations =
+    	LazyMap.decorate(new HashMap<V, PolarPoint>(),
+    			new Transformer<V,PolarPoint>() {
+					public PolarPoint transform(V arg0) {
+						return new PolarPoint();
 					}});
 
     public List<V> getAtomics(V p) {
@@ -249,14 +248,34 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 	}
+	
+	public Point2D getCenter() {
+		return new Point2D.Double(size.getWidth()/2,size.getHeight()/2);
+	}
 
 	public void setLocation(V v, Point2D location) {
-		locations.get(v).setLocation(location);
+		if(radial) {
+			Point2D c = getCenter();
+			Point2D pv = new Point2D.Double(location.getX()-c.getX(),location.getY()-c.getY());
+			PolarPoint newLocation = PolarPoint.cartesianToPolar(pv);
+			polarLocations.get(v).setLocation(newLocation);
+		} else {
+			locations.get(v).setLocation(location);
+		}
+	}
+	
+	public Map<V,PolarPoint> getPolarLocations() {
+		return polarLocations;
 	}
 
 	public Point2D transform(V v) {
 		if(radial) {
-			return radialLocations.get(v);
+			PolarPoint pp = polarLocations.get(v);
+			double centerX = getSize().getWidth()/2;
+			double centerY = getSize().getHeight()/2;
+			Point2D cartesian = PolarPoint.polarToCartesian(pp);
+			cartesian.setLocation(cartesian.getX()+centerX,cartesian.getY()+centerY);
+			return cartesian;
 		} else {
 			return locations.get(v);
 		}
@@ -277,61 +296,14 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 		double maxx = max.getX();
 		double maxy = max.getY();
 		maxx = Math.max(maxx, size.width);
-//		maxy += 50;
 		double theta = 2*Math.PI/maxx;
 
 		double deltaRadius = size.width/2/maxy;
-		AffineTransform xlate = AffineTransform.getTranslateInstance(size.width/2,size.height/2);
 		for(Map.Entry<V, Point2D> entry : locations.entrySet()) {
 			V v = entry.getKey();
 			Point2D p = entry.getValue();
-			System.err.println("for "+v+" cartesian is "+p);
 			PolarPoint polarPoint = new PolarPoint(p.getX()*theta, (p.getY()-50)*deltaRadius);
-			System.err.println("polar is "+polarPoint);
-			Point2D cartesian = polarToCartesian(polarPoint);
-			System.err.println("moved to "+cartesian);
-			radialLocations.put(v, xlate.transform(cartesian, null));
+			polarLocations.put(v, polarPoint);
 		}
 	}
-	
-    protected static class PolarPoint extends Point2D.Double {
-        public PolarPoint(double theta, double radius) {
-            super(theta, radius);
-        }
-        public double getTheta() { return getX(); }
-        public double getRadius() { return getY(); }
-        public void setTheta(double theta) { setLocation(theta, getRadius()); }
-        public void setRadius(double radius) { setLocation(getTheta(), radius); }
-    }
-    
-    /**
-     * Returns the result of converting <code>polar</code> to Cartesian coordinates.
-     */
-    protected Point2D polarToCartesian(PolarPoint polar) {
-        return polarToCartesian(polar.getTheta(), polar.getRadius());
-    }
-    
-    /**
-     * Returns the result of converting <code>(theta, radius)</code> to Cartesian coordinates.
-     */
-     protected Point2D polarToCartesian(double theta, double radius) {
-        return new Point2D.Double(radius*Math.cos(theta), radius*Math.sin(theta));
-    }
-    
-    /**
-     * Returns the result of converting <code>point</code> to polar coordinates.
-     */
-    protected PolarPoint cartesianToPolar(Point2D point) {
-        return cartesianToPolar(point.getX(), point.getY());
-    }
-    
-    /**
-     * Returns the result of converting <code>(x, y)</code> to polar coordinates.
-     */
-    protected PolarPoint cartesianToPolar(double x, double y) {
-        double theta = Math.atan2(y,x);
-        double radius = Math.sqrt(x*x+y*y);
-        return new PolarPoint(theta, radius);
-    }
-
 }
