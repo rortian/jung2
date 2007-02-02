@@ -51,6 +51,7 @@ import javax.swing.JRadioButton;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
@@ -203,10 +204,10 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected SeedDrawColor<Integer> seedDrawColor;//vcf;
     protected EdgeWeightStrokeFunction<Number> ewcs;
     protected VertexStrokeHighlight<Integer,Number> vsh;
-    protected org.apache.commons.collections15.Transformer<Integer,String> vs;
-    protected org.apache.commons.collections15.Transformer<Integer,String> vs_none;
-    protected org.apache.commons.collections15.Transformer<Number,String> es;
-    protected org.apache.commons.collections15.Transformer<Number,String> es_none;
+    protected Transformer<Integer,String> vs;
+    protected Transformer<Integer,String> vs_none;
+    protected Transformer<Number,String> es;
+    protected Transformer<Number,String> es_none;
     protected VertexFontTransformer<Integer> vff;
 //    protected VertexFontTransformer<Integer> vertexBold;
     protected EdgeFontTransformer<Number> eff;
@@ -722,7 +723,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         vv.repaint();
     }
     
-    private final class SeedDrawColor<V> implements org.apache.commons.collections15.Transformer<V,Paint>
+    private final class SeedDrawColor<V> implements Transformer<V,Paint>
     {
         protected PickedInfo<V> pi;
         protected final static float dark_value = 0.8f;
@@ -767,7 +768,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 //        }
     }
     
-    private final class SeedFillColor<V> implements org.apache.commons.collections15.Transformer<V,Paint>
+    private final class SeedFillColor<V> implements Transformer<V,Paint>
     {
         protected PickedInfo<V> pi;
         protected final static float dark_value = 0.8f;
@@ -813,7 +814,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
 
     private final static class EdgeWeightStrokeFunction<E>
-    implements org.apache.commons.collections15.Transformer<E,Stroke>
+    implements Transformer<E,Stroke>
     {
         protected static final Stroke basic = new BasicStroke(1);
         protected static final Stroke heavy = new BasicStroke(2);
@@ -857,7 +858,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
     
     private final static class VertexStrokeHighlight<V,E> implements
-    org.apache.commons.collections15.Transformer<V,Stroke>
+    Transformer<V,Stroke>
     {
         protected boolean highlight = false;
         protected Stroke heavy = new BasicStroke(5);
@@ -902,7 +903,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
     
     private final static class VertexFontTransformer<V> 
-    	implements org.apache.commons.collections15.Transformer<V,Font>
+    	implements Transformer<V,Font>
     {
         protected boolean bold = false;
         Font f = new Font("Helvetica", Font.PLAIN, 12);
@@ -923,7 +924,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
 
     private final static class EdgeFontTransformer<E> 
-        implements org.apache.commons.collections15.Transformer<E,Font>
+        implements Transformer<E,Font>
 {
     protected boolean bold = false;
     Font f = new Font("Helvetica", Font.PLAIN, 12);
@@ -1014,22 +1015,20 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
      */
     private final static class VertexShapeSizeAspect<V,E>
     extends AbstractVertexShapeTransformer <V>
-    implements
-    //VertexSizeFunction<V>, VertexAspectRatioFunction<V>, 
-    org.apache.commons.collections15.Transformer<V,Shape>
-    {
+    implements Transformer<V,Shape>  {
+    	
         protected boolean stretch = false;
         protected boolean scale = false;
         protected boolean funny_shapes = false;
         protected Map<V,Number> voltages;
         protected Graph<V,E> graph;
-        protected AffineTransform scaleTransform = new AffineTransform();
+//        protected AffineTransform scaleTransform = new AffineTransform();
         
         public VertexShapeSizeAspect(Graph<V,E> graphIn, Map<V,Number> voltagesIn)
         {
         	this.graph = graphIn;
             this.voltages = voltagesIn;
-            setSizeTransformer(new org.apache.commons.collections15.Transformer<V,Integer>() {
+            setSizeTransformer(new Transformer<V,Integer>() {
 
 				public Integer transform(V v) {
 		            if (scale)
@@ -1038,7 +1037,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 		                return 20;
 
 				}});
-            setAspectRatioTransformer(new org.apache.commons.collections15.Transformer<V,Float>() {
+            setAspectRatioTransformer(new Transformer<V,Float>() {
 
 				public Float transform(V v) {
 		            if (stretch) {
@@ -1153,7 +1152,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     }
     
     public class VoltageTips<V,E>
-    	implements org.apache.commons.collections15.Transformer<V,String> {
+    	implements Transformer<V,String> {
         
         public String transform(V vertex) {
            return "Voltage:"+voltages.get(vertex);
@@ -1162,11 +1161,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     
     public class GradientPickedEdgePaintFunction<V,E> extends GradientEdgePaintTransformer<V,E> 
     {
-        private org.apache.commons.collections15.Transformer<E,Paint> defaultFunc;
+        private Transformer<E,Paint> defaultFunc;
         protected boolean fill_edge = false;
         Predicate<Context<Graph<V,E>,E>> selfLoop = new SelfLoopEdgePredicate<V,E>();
         
-        public GradientPickedEdgePaintFunction(org.apache.commons.collections15.Transformer<E,Paint> defaultEdgePaintFunction, 
+        public GradientPickedEdgePaintFunction(Transformer<E,Paint> defaultEdgePaintFunction, 
                 VisualizationViewer<V,E> vv) 
         {
             super(Color.WHITE, Color.BLACK, vv);
