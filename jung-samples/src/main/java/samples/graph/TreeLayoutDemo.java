@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -22,6 +23,10 @@ import java.awt.event.ItemListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -36,6 +41,7 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.layout.PolarPoint;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseForest;
@@ -96,9 +102,11 @@ public class TreeLayoutDemo extends JApplet {
      */
     VisualizationViewer<String,Integer> vv;
     
-    VisualizationServer.Paintable rings = new Rings();
+    VisualizationServer.Paintable rings;
     
     String root;
+    
+    TreeLayout<String,Integer> layout;
 
     public TreeLayoutDemo() {
         
@@ -107,9 +115,7 @@ public class TreeLayoutDemo extends JApplet {
 
         createTree();
         
-        final TreeLayout<String,Integer> layout = 
-        	new TreeLayout<String,Integer>(graph, Arrays.asList("A0","V0","B0"));
-
+        layout = new TreeLayout<String,Integer>(graph, Arrays.asList("A0","V0","B0"));
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
@@ -117,7 +123,8 @@ public class TreeLayoutDemo extends JApplet {
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
         vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
-        
+        rings = new Rings();
+
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
@@ -176,18 +183,35 @@ public class TreeLayoutDemo extends JApplet {
     }
     
     class Rings implements VisualizationServer.Paintable {
+    	
+    	Collection<Double> depths;
+    	
+    	public Rings() {
+    		depths = getDepths();
+    	}
+    	
+    	private Collection<Double> getDepths() {
+    		Set<Double> depths = new HashSet<Double>();
+    		Map<String,PolarPoint> polarLocations = layout.getPolarLocations();
+    		for(String v : graph.getVertices()) {
+    			PolarPoint pp = polarLocations.get(v);
+    			depths.add(pp.getRadius());
+    		}
+    		return depths;
+    	}
 
 		public void paint(Graphics g) {
 			g.setColor(Color.lightGray);
 		
 			Graphics2D g2d = (Graphics2D)g;
-			Point2D center = vv.getCenter();
-			center = vv.getRenderContext().getBasicTransformer().layoutTransform(center);
+			Point2D center = layout.getCenter();
+
 			Ellipse2D ellipse = new Ellipse2D.Double();
-			for(int i=0; i<10; i++) {
-				ellipse.setFrameFromDiagonal(center.getX()-50*i, center.getY()-50*i, 
-						center.getX()+50*i, center.getY()+50*i);
-				g2d.draw(ellipse);
+			for(double d : depths) {
+				ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d, 
+						center.getX()+d, center.getY()+d);
+				Shape shape = vv.getRenderContext().getBasicTransformer().getLayoutTransformer().transform(ellipse);
+				g2d.draw(shape);
 			}
 			
 		}
