@@ -22,7 +22,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -115,7 +114,7 @@ public class TreeLayoutDemo extends JApplet {
 
         createTree();
         
-        layout = new TreeLayout<String,Integer>(graph, Arrays.asList("A0","V0","B0"));
+        layout = new TreeLayout<String,Integer>(graph);
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
@@ -213,13 +212,11 @@ public class TreeLayoutDemo extends JApplet {
 				Shape shape = vv.getRenderContext().getBasicTransformer().getLayoutTransformer().transform(ellipse);
 				g2d.draw(shape);
 			}
-			
 		}
 
 		public boolean useTransform() {
 			return true;
 		}
-    	
     }
     
     /**

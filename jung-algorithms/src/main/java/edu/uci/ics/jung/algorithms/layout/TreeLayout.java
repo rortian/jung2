@@ -77,20 +77,30 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 
     private Collection<V> roots;
 
-    public TreeLayout(Graph<V,E> g, Collection<V> roots) {
+    public TreeLayout(Graph<V,E> g) {
     	this.graph = g;
-        this.roots = roots;
+        this.roots = getRoots(g);
     }
 
-    public TreeLayout(Graph<V,E> g, Collection<V> roots, int distx) {
-        this.roots = roots;
+    public TreeLayout(Graph<V,E> g, int distx) {
+        this.roots = getRoots(g);
         this.distX = distx;
     }
 
-    public TreeLayout(Graph<V,E> g, Collection<V> roots, int distx, int disty) {
-        this.roots = roots;
+    public TreeLayout(Graph<V,E> g, int distx, int disty) {
+        this.roots = getRoots(g);
         this.distX = distx;
         this.distY = disty;
+    }
+    
+    private Collection<V> getRoots(Graph<V,E> graph) {
+    	Set<V> roots = new HashSet<V>();
+    	for(V v : graph.getVertices()) {
+    		if(graph.getPredecessors(v).size() == 0) {
+    			roots.add(v);
+    		}
+    	}
+    	return roots;
     }
 
     public Dimension getCurrentSize() {
