@@ -14,7 +14,6 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.picking.LayoutLensShapePickSupport;
 import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
@@ -32,14 +31,10 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     implements LensSupport {
     
     protected RenderContext<V,E> renderContext;
-    GraphicsDecorator lensGraphicsDecorator;
-    GraphicsDecorator savedGraphicsDecorator;
-	GraphElementAccessor<V,E> pickSupport;
+    protected GraphicsDecorator lensGraphicsDecorator;
+    protected GraphicsDecorator savedGraphicsDecorator;
+    protected GraphElementAccessor<V,E> pickSupport;
 
-//    public ViewLensSupport(VisualizationViewer<V,E> vv) {
-//        this(vv, new HyperbolicShapeTransformer(vv, vv.getViewTransformer()),
-//                new ModalLensGraphMouse());
-//    }
     public ViewLensSupport(VisualizationViewer<V,E> vv, 
     		LensTransformer lensTransformer,
             ModalGraphMouse lensGraphMouse) {

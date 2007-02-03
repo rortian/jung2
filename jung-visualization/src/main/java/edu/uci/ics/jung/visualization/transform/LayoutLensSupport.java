@@ -29,7 +29,7 @@ import edu.uci.ics.jung.visualization.picking.LayoutLensShapePickSupport;
 public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E> 
     implements LensSupport {
 
-	GraphElementAccessor<V,E> pickSupport;
+	protected GraphElementAccessor<V,E> pickSupport;
 	
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
         this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getBasicTransformer().getLayoutTransformer()),
