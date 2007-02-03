@@ -29,7 +29,6 @@ import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
 import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
-import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
@@ -226,7 +225,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setEdgeIncludePredicate(Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate) {
         this.edgeIncludePredicate = edgeIncludePredicate;
-        updateState(pickSupport, vertexIncludePredicate, edgeIncludePredicate);
     }
 
     /* (non-Javadoc)
@@ -459,7 +457,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setVertexIncludePredicate(Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate) {
         this.vertexIncludePredicate = vertexIncludePredicate;
-        updateState(pickSupport, vertexIncludePredicate, edgeIncludePredicate);
     }
 
     /* (non-Javadoc)
@@ -530,22 +527,8 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 	 */
 	public void setPickSupport(GraphElementAccessor<V, E> pickSupport) {
 		this.pickSupport = pickSupport;
-		updateState(pickSupport, vertexIncludePredicate, edgeIncludePredicate);
 	}
 	
-	private void updateState(GraphElementAccessor gae, 
-			Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate,
-			Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate) {
-		
-		if(gae instanceof PredicatedGraphCollections) {
-			PredicatedGraphCollections fgea =
-				(PredicatedGraphCollections)gae;
-			fgea.setVertexIncludePredicate(vertexIncludePredicate);
-			fgea.setEdgeIncludePredicate(edgeIncludePredicate);
-		}
-		
-	}
-
 	/**
 	 * @return the basicTransformer
 	 */
