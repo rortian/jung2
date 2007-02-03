@@ -121,7 +121,7 @@ public class VertexLabelAsShapeDemo extends JApplet {
         
         JComboBox modeBox = graphMouse.getModeComboBox();
         modeBox.addItemListener(graphMouse.getModeListener());
-        graphMouse.setMode(ModalGraphMouse.Mode.PICKING);
+        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         
         final ScalingControl scaler = new CrossoverScalingControl();
 
