@@ -55,6 +55,10 @@ import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
  * could be used to form the vertex collections to be collapsed,
  * perhaps some common characteristic of those vertex objects.
  * 
+ * Note that the collection types don't use generics in this
+ * demo, because the vertices are of two types: String for plain
+ * vertices, and Graph<String,Number> for the collapsed vertices.
+ * 
  * @author Tom Nelson
  * 
  */
