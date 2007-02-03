@@ -23,13 +23,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.collections15.Predicate;
+import org.apache.commons.collections15.functors.TruePredicate;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.algorithms.layout.PredicatedGraphCollections;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 
 /**
@@ -39,12 +39,12 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
  * @author Tom Nelson
  *
  */
-public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, PredicatedGraphCollections<V,E> {
+public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 
+	public static enum Style { LOWEST, CENTERED, HIGHEST };
     protected float pickSize;
     protected VisualizationServer<V,E> vv;
-    protected Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate;
-    protected Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate;
+    protected Style style = Style.CENTERED;
     
     /**
      * Create an instance.
@@ -60,10 +60,6 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
         this.pickSize = pickSize;
     }
     
-    public ShapePickSupport(float pickSize) {
-        this.pickSize = pickSize;
-    }
-            
     /**
      * Create an instance.
      * The pickSize footprint defaults to 2.
@@ -74,14 +70,20 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
     }
     
     /**
-     * Create an instance.
-     * The pickSize footprint defaults to 2.
-     */
-    public ShapePickSupport() {
-        this(2);
-    }
+	 * @return the style
+	 */
+	public Style getStyle() {
+		return style;
+	}
 
-    /** 
+	/**
+	 * @param style the style to set
+	 */
+	public void setStyle(Style style) {
+		this.style = style;
+	}
+
+	/** 
      * Iterates over Vertices, checking to see if x,y is contained in the
      * Vertex's Shape. If (x,y) is contained in more than one vertex, use
      * the vertex whose center is closest to the pick point.
@@ -100,25 +102,36 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
                 for(V v : getFilteredVertices(layout)) {
                 	
                     Shape shape = vv.getRenderContext().getVertexShapeTransformer().transform(v);
-                    // transform the vertex location to screen coords
-                    Point2D p = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v));
+                    // get the vertex location
+                    Point2D p = layout.transform(v);
                     if(p == null) continue;
-                    AffineTransform xform = 
-                        AffineTransform.getTranslateInstance(p.getX(), p.getY());
-                    shape = xform.createTransformedShape(shape);
+                    // transform the vertex location to screen coords
+                    p = vv.getRenderContext().getBasicTransformer().layoutTransform(p);
+                    
+                    double ox = x - p.getX();
+                    double oy = y - p.getY();
 
-                    // see if this vertex center is closest to the pick point
-                    // among any other containing vertices
-                    if(shape.contains(x, y)) {
-
-                        Rectangle2D bounds = shape.getBounds2D();
-                        double dx = bounds.getCenterX() - x;
-                        double dy = bounds.getCenterY() - y;
-                        double dist = dx * dx + dy * dy;
-                        if (dist < minDistance) {
-                            minDistance = dist;
-                            closest = v;
-                        }
+                    if(shape.contains(ox, oy)) {
+                    	
+                    	if(style == Style.LOWEST) {
+                    		// return the first match
+                    		return v;
+                    	} else if(style == Style.HIGHEST) {
+                    		// will return the last match
+                    		closest = v;
+                    	} else {
+                    		
+                    		// return the vertex closest to the
+                    		// center of a vertex shape
+	                        Rectangle2D bounds = shape.getBounds2D();
+	                        double dx = bounds.getCenterX() - ox;
+	                        double dy = bounds.getCenterY() - oy;
+	                        double dist = dx * dx + dy * dy;
+	                        if (dist < minDistance) {
+	                        	minDistance = dist;
+	                        	closest = v;
+	                        }
+                    	}
                     }
                 }
                 break;
@@ -155,6 +168,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
         }
         return pickedVertices;
     }
+    
     /**
      * return an edge whose shape intersects the 'pickArea' footprint of the passed
      * x,y, coordinates.
@@ -214,8 +228,6 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
                     // transform the edge to its location and dimensions
                     edgeShape = xform.createTransformedShape(edgeShape);
 
-//                    vv.getRenderContext().getGraphicsContext().setPaint(Color.red);
-//                    vv.getRenderContext().getGraphicsContext().draw(edgeShape);
                     // because of the transform, the edgeShape is now a GeneralPath
                     // see if this edge is the closest of any that intersect
                     if(edgeShape.intersects(pickArea)) {
@@ -248,34 +260,71 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 		}
 		return closest;
     }
-    
+
     public Collection<V> getFilteredVertices(Layout<V,E> layout) {
-    	Collection<V> unfiltered = layout.getGraph().getVertices();
-    	Collection<V> filtered = new HashSet<V>();
-    	for(V v : unfiltered) {
-    		if(isVertexRendered(Context.<Graph<V,E>,V>getInstance(layout.getGraph(),v))) {
-    			filtered.add(v);
+    	if(verticesAreFiltered()) {
+    		Collection<V> unfiltered = layout.getGraph().getVertices();
+    		Collection<V> filtered = new HashSet<V>();
+    		for(V v : unfiltered) {
+    			if(isVertexRendered(Context.<Graph<V,E>,V>getInstance(layout.getGraph(),v))) {
+    				filtered.add(v);
+    			}
     		}
+    		return filtered;
+    	} else {
+    		return layout.getGraph().getVertices();
     	}
-    	return filtered;
+    }
+
+    public Collection<E> getFilteredEdges(Layout<V,E> layout) {
+    	if(edgesAreFiltered()) {
+    		Collection<E> unfiltered = layout.getGraph().getEdges();
+    		Collection<E> filtered = new HashSet<E>();
+    		for(E e : unfiltered) {
+    			if(isEdgeRendered(Context.<Graph<V,E>,E>getInstance(layout.getGraph(),e))) {
+    				filtered.add(e);
+    			}
+    		}
+    		return filtered;
+    	} else {
+    		return layout.getGraph().getEdges();
+    	}
     }
     
-    public Collection<E> getFilteredEdges(Layout<V,E> layout) {
-    	Collection<E> unfiltered = layout.getGraph().getEdges();
-    	Collection<E> filtered = new HashSet<E>();
-    	for(E e : unfiltered) {
-    		if(isEdgeRendered(Context.<Graph<V,E>,E>getInstance(layout.getGraph(),e))) {
-    			filtered.add(e);
-    		}
-    	}
-    	return filtered;
+    /**
+     * quick test to allow optimization of getFilteredVertices
+     * method
+     * @return
+     */
+    protected boolean verticesAreFiltered() {
+		Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate =
+			vv.getRenderContext().getVertexIncludePredicate();
+		return vertexIncludePredicate != null &&
+			vertexIncludePredicate instanceof TruePredicate == false;
+    }
+    
+    /**
+     * quick test to allow optimization of getFilteredEdges method
+     * @return
+     */
+    protected boolean edgesAreFiltered() {
+		Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate =
+			vv.getRenderContext().getEdgeIncludePredicate();
+		return edgeIncludePredicate != null &&
+			edgeIncludePredicate instanceof TruePredicate == false;
     }
     
 	protected boolean isVertexRendered(Context<Graph<V,E>,V> context) {
+		Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate =
+			vv.getRenderContext().getVertexIncludePredicate();
 		return vertexIncludePredicate == null || vertexIncludePredicate.evaluate(context);
 	}
 	
 	protected boolean isEdgeRendered(Context<Graph<V,E>,E> context) {
+		Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate =
+			vv.getRenderContext().getVertexIncludePredicate();
+		Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate =
+			vv.getRenderContext().getEdgeIncludePredicate();
 		Graph<V,E> g = context.graph;
 		E e = context.element;
 		boolean edgeTest = edgeIncludePredicate == null || edgeIncludePredicate.evaluate(context);
@@ -286,37 +335,6 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E>, Predic
 			(vertexIncludePredicate.evaluate(Context.<Graph<V,E>,V>getInstance(g,v1)) && 
 					vertexIncludePredicate.evaluate(Context.<Graph<V,E>,V>getInstance(g,v2)));
 		return edgeTest && endpointsTest;
-	}
-
-
-	/**
-	 * @return the edgeIncludePredicate
-	 */
-	public Predicate<Context<Graph<V,E>,E>> getEdgeIncludePredicate() {
-		return edgeIncludePredicate;
-	}
-
-	/**
-	 * @param edgeIncludePredicate the edgeIncludePredicate to set
-	 */
-	public void setEdgeIncludePredicate(
-			Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate) {
-		this.edgeIncludePredicate = edgeIncludePredicate;
-	}
-
-	/**
-	 * @return the vertexIncludePredicate
-	 */
-	public Predicate<Context<Graph<V,E>,V>> getVertexIncludePredicate() {
-		return vertexIncludePredicate;
-	}
-
-	/**
-	 * @param vertexIncludePredicate the vertexIncludePredicate to set
-	 */
-	public void setVertexIncludePredicate(
-			Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate) {
-		this.vertexIncludePredicate = vertexIncludePredicate;
 	}
 
 	/**
