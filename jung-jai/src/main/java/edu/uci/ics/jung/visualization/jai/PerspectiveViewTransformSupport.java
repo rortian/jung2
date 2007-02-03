@@ -10,8 +10,10 @@ package edu.uci.ics.jung.visualization.jai;
 
 import javax.media.jai.PerspectiveTransform;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
@@ -27,15 +29,17 @@ import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTransformSupport<V,E>
     implements PerspectiveTransformSupport {
     
-	protected RenderContext renderContext;
+	protected RenderContext<V,E> renderContext;
     protected Renderer<V,E> renderer;
     protected GraphicsDecorator lensGraphicsDecorator;
     protected GraphicsDecorator savedGraphicsDecorator;
-    
+    protected GraphElementAccessor<V,E> pickSupport;
+
     public PerspectiveViewTransformSupport(VisualizationViewer<V,E> vv) {
         super(vv);
         this.renderer = vv.getRenderer();
         this.renderContext = vv.getRenderContext();
+        this.pickSupport = renderContext.getPickSupport();
         perspectiveTransformer = 
             new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getBasicTransformer().getViewTransformer());
         savedGraphicsDecorator = renderContext.getGraphicsContext();
@@ -44,6 +48,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
         vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer);
         vv.getRenderContext().setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
@@ -52,6 +57,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
     }
 
     public void deactivate() {
+    	renderContext.setPickSupport(pickSupport);
         vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);

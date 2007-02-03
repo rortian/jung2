@@ -12,10 +12,12 @@ package edu.uci.ics.jung.visualization.jai;
 
 import java.awt.Dimension;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
+import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
 import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
@@ -39,6 +41,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     protected GraphicsDecorator savedGraphicsDecorator;
     protected Renderer<V,E> renderer;
     protected Renderer<V,E> transformingRenderer;
+    protected GraphElementAccessor<V,E> pickSupport;
     
     static final String instructions = 
         "<html><center>Mouse-Drag the Lens center to move it<p>"+
@@ -58,6 +61,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.renderContext = vv.getRenderContext();
+        this.pickSupport = renderContext.getPickSupport();
         this.renderer = vv.getRenderer();
         this.transformingRenderer = new BasicRenderer<V,E>();
         this.transformingRenderer.setVertexRenderer(new TransformingImageVertexIconRenderer<V,E>());
@@ -82,6 +86,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
         lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getViewTransformer());
         vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
@@ -95,6 +100,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     
     public void deactivate() {
 //        vv.setViewTransformer(savedViewTransformer);
+    	renderContext.setPickSupport(pickSupport);
     	vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);

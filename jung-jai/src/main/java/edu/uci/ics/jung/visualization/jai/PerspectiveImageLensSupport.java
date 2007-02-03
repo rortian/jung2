@@ -12,8 +12,10 @@ package edu.uci.ics.jung.visualization.jai;
 
 import javax.media.jai.PerspectiveTransform;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
 import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -32,6 +34,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     protected GraphicsDecorator savedGraphicsDecorator;
     protected Renderer<V,E> renderer;
     protected Renderer<V,E> transformingRenderer;
+	protected GraphElementAccessor<V,E> pickSupport;
     
     static final String instructions = "";
     
@@ -41,6 +44,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     public PerspectiveImageLensSupport(VisualizationViewer<V,E> vv) {
         super(vv);
         this.renderContext = vv.getRenderContext();
+        this.pickSupport = renderContext.getPickSupport();
         this.renderer = vv.getRenderer();
         this.transformingRenderer = new BasicRenderer<V,E>();
         this.perspectiveTransformer = 
@@ -49,12 +53,12 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
         this.lensGraphicsDecorator = new TransformingGraphics(perspectiveTransformer);
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
 
-//        Dimension d = vv.getSize();
         this.renderer = vv.getRenderer();
     }
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
         vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer);
         vv.getRenderContext().setGraphicsContext(lensGraphicsDecorator);
         vv.setRenderer(transformingRenderer);
@@ -64,6 +68,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     }
     
     public void deactivate() {
+    	renderContext.setPickSupport(pickSupport);
         vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);

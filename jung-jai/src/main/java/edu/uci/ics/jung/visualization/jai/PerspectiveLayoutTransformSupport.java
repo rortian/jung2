@@ -12,7 +12,9 @@ package edu.uci.ics.jung.visualization.jai;
 
 import javax.media.jai.PerspectiveTransform;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.picking.LayoutLensShapePickSupport;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 /**
  * A class to make it easy to add a Perspective projection
@@ -26,6 +28,7 @@ import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveTransformSupport<V,E> 
     implements PerspectiveTransformSupport {
 
+	protected GraphElementAccessor<V,E> pickSupport;
     /**
      * @param vv the VisualizationViewer to work on
      */
@@ -33,10 +36,12 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
         super(vv);
         perspectiveTransformer = 
             new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getBasicTransformer().getLayoutTransformer());
+        this.pickSupport = vv.getPickSupport();
    }
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
+        vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
         vv.getRenderContext().getBasicTransformer().setLayoutTransformer(perspectiveTransformer);
         vv.getRenderContext().getBasicTransformer().setViewTransformer(new MutableAffineTransformer());
         vv.addPreRenderPaintable(lens);
@@ -45,6 +50,7 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
     }
     
     public void deactivate() {
+        vv.getRenderContext().setPickSupport(pickSupport);
         if(savedViewTransformer != null) {
             vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
         }
