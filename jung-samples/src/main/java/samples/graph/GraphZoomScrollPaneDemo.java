@@ -28,7 +28,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -88,7 +88,7 @@ public class GraphZoomScrollPaneDemo {
             System.err.println("Can't load \""+imageLocation+"\"");
         }
         final ImageIcon icon = sandstoneIcon;
-        vv =  new VisualizationViewer<String,Number>(new FRLayout<String,Number>(graph));
+        vv =  new VisualizationViewer<String,Number>(new KKLayout<String,Number>(graph));
         
         if(icon != null) {
             vv.addPreRenderPaintable(new VisualizationViewer.Paintable(){
