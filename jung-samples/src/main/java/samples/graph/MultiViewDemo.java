@@ -55,7 +55,6 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
-import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
  * Demonstrates 3 views of one graph in one model with one layout.
