@@ -40,9 +40,10 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
         this.renderer = vv.getRenderer();
         this.renderContext = vv.getRenderContext();
         this.pickSupport = renderContext.getPickSupport();
-        perspectiveTransformer = 
-            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getBasicTransformer().getViewTransformer());
-        savedGraphicsDecorator = renderContext.getGraphicsContext();
+        this.perspectiveTransformer = 
+            new PerspectiveShapeTransformer(new PerspectiveTransform(), 
+            		vv.getRenderContext().getBasicTransformer().getViewTransformer());
+        this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensGraphicsDecorator = new TransformingGraphics(perspectiveTransformer);
     }
     
@@ -58,7 +59,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
 
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
-        vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);
         vv.setToolTipText(defaultToolTipText);

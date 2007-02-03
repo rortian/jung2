@@ -19,7 +19,6 @@ import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
-import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 
 /**
@@ -34,7 +33,6 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 public abstract class AbstractPerspectiveTransformSupport<V,E> implements PerspectiveTransformSupport {
 
     protected VisualizationViewer<V,E> vv;
-    protected MutableTransformer savedViewTransformer;
     protected PerspectiveShapeTransformer perspectiveTransformer;
     protected Lens lens;
     protected String defaultToolTipText;
@@ -51,7 +49,6 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
      */
     public AbstractPerspectiveTransformSupport(VisualizationViewer<V,E> vv) {
         this.vv = vv;
-        this.savedViewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
         this.defaultToolTipText = vv.getToolTipText();
     }
 
@@ -101,7 +98,7 @@ public abstract class AbstractPerspectiveTransformSupport<V,E> implements Perspe
         }
 
         public boolean useTransform() {
-            return false;
+            return true;
         }
     }
 }

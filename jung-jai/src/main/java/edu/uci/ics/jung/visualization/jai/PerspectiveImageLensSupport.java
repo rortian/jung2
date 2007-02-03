@@ -69,7 +69,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
-        vv.getRenderContext().getBasicTransformer().setViewTransformer(savedViewTransformer);
+        vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);
         vv.setRenderer(renderer);

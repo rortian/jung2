@@ -99,7 +99,6 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     }
     
     public void deactivate() {
-//        vv.setViewTransformer(savedViewTransformer);
     	renderContext.setPickSupport(pickSupport);
     	vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
