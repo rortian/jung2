@@ -126,7 +126,7 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         final VisualizationViewer<String,Number> vv1 = 
             new VisualizationViewer<String,Number>(vm, preferredSize1);
         final SatelliteVisualizationViewer<String,Number> vv2 = 
-            new SatelliteVisualizationViewer<String,Number>(vv1, vm, preferredSize2);
+            new SatelliteVisualizationViewer<String,Number>(vv1, preferredSize2);
         vv1.setBackground(Color.white);
         vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
         vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(), Color.red, Color.yellow));

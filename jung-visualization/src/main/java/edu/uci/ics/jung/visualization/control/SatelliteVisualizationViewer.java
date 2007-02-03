@@ -21,7 +21,6 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
@@ -53,8 +52,8 @@ public class SatelliteVisualizationViewer<V, E>
      * @param layout
      * @param renderer
      */
-    public SatelliteVisualizationViewer(VisualizationViewer<V,E> master, Layout<V,E> layout) {
-        this(master, new DefaultVisualizationModel<V,E>(layout));
+    public SatelliteVisualizationViewer(VisualizationViewer<V,E> master) {
+        this(master, master.getModel());
     }
 
     /**
@@ -62,26 +61,29 @@ public class SatelliteVisualizationViewer<V, E>
      * @param renderer
      * @param preferredSize
      */
-    public SatelliteVisualizationViewer(VisualizationViewer<V,E> master, Layout<V,E> layout,
+    public SatelliteVisualizationViewer(VisualizationViewer<V,E> master,
             Dimension preferredSize) {
-        this(master, new DefaultVisualizationModel<V,E>(layout, preferredSize), preferredSize);
+        this(master, master.getModel(), preferredSize);
     }
 
     /**
+     * used internally, as the sattellite should always share the model of
+     * the master
      * @param model
      * @param renderer
      */
-    public SatelliteVisualizationViewer(VisualizationViewer<V,E> master, VisualizationModel<V,E> model) {
+    protected SatelliteVisualizationViewer(VisualizationViewer<V,E> master, VisualizationModel<V,E> model) {
         this(master, model, new Dimension(300,300));
     }
 
     /**
+     * Used internally, as the satellite should always share the model of the master
      * @param master the master view
      * @param model
      * @param renderer
      * @param preferredSize
      */
-    public SatelliteVisualizationViewer(VisualizationViewer<V,E> master, VisualizationModel<V,E> model,
+    protected SatelliteVisualizationViewer(VisualizationViewer<V,E> master, VisualizationModel<V,E> model,
             Dimension preferredSize) {
         super(model, preferredSize);
         this.master = master;
@@ -108,7 +110,6 @@ public class SatelliteVisualizationViewer<V, E>
         // share the picked state of the master
         setPickedVertexState(master.getPickedVertexState());
         setPickedEdgeState(master.getPickedEdgeState());
-//        setPickSupport(new ShapePickSupport());
     }
 
     /**

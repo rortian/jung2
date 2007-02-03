@@ -109,8 +109,7 @@ public class InternalFrameSatelliteViewDemo {
         vv.setGraphMouse(graphMouse);
 
         satellite =
-            new SatelliteVisualizationViewer<String,Number>(vv, layout, 
-                    new Dimension(200,200));
+            new SatelliteVisualizationViewer<String,Number>(vv, new Dimension(200,200));
         satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
         satellite.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
 
