@@ -13,14 +13,10 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -30,13 +26,9 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.TransformerUtils;
-
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -44,7 +36,6 @@ import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
@@ -61,6 +52,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class VertexLabelPositionDemo extends JApplet {
 
     /**
@@ -91,9 +83,6 @@ public class VertexLabelPositionDemo extends JApplet {
         ((FRLayout)graphLayout).setMaxIterations(1000);
 
         Dimension preferredSize = new Dimension(600,600);
-        Map<String,Point2D> map = new HashMap<String,Point2D>();
-        Transformer<String,Point2D> vlf =
-        	TransformerUtils.mapTransformer(map);
         
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
@@ -108,8 +97,6 @@ public class VertexLabelPositionDemo extends JApplet {
         
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         
-        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeTransformer();
-
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
         
@@ -125,9 +112,7 @@ public class VertexLabelPositionDemo extends JApplet {
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
         
-        final ScalingControl crossoverScaler = new CrossoverScalingControl();
-        final ScalingControl layoutScaler = new LayoutScalingControl();
-        scaler = crossoverScaler;
+        final ScalingControl scaler = new CrossoverScalingControl();
 
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
@@ -170,8 +155,6 @@ public class VertexLabelPositionDemo extends JApplet {
         JPanel controls = new JPanel();
         JPanel zoomControls = new JPanel(new GridLayout(2,1));
         zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
-        JPanel hyperControls = new JPanel(new GridLayout(3,2));
-        hyperControls.setBorder(BorderFactory.createTitledBorder("Examiner Lens"));
         zoomControls.add(plus);
         zoomControls.add(minus);
         
@@ -180,22 +163,6 @@ public class VertexLabelPositionDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
 
-    private Graph<String,Number> generateVertexGrid(Map<String,Point2D> vlf,
-            Dimension d, int interval) {
-        int count = d.width/interval * d.height/interval;
-        Graph<String,Number> graph = new SparseGraph<String,Number>();
-        for(int i=0; i<count; i++) {
-            int x = interval*i;
-            int y = x / d.width * interval;
-            x %= d.width;
-            
-            Point2D location = new Point2D.Float(x, y);
-            String vertex = "v"+i;
-            vlf.put(vertex, location);
-            graph.addVertex(vertex);
-        }
-        return graph;
-    }
     /**
      * a driver for this demo
      */
