@@ -52,8 +52,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
         this.vv = vv;
         this.graphMouse = vv.getGraphMouse();
         this.defaultToolTipText = vv.getToolTipText();
-
-        this.lensGraphMouse = lensGraphMouse;//new ModalLensGraphMouse();
+        this.lensGraphMouse = lensGraphMouse;
     }
 
     public void activate(boolean state) {
