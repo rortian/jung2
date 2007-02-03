@@ -129,15 +129,12 @@ public class TreeLayoutDemo extends JApplet {
         content.add(panel);
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
-//        graphMouse.add(new PickingGraphMousePlugin());
-//        graphMouse.add(new ScalingGraphMousePlugin(new ViewScalingControl(), InputEvent.CTRL_MASK));
-//        graphMouse.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
 
         vv.setGraphMouse(graphMouse);
         
         JComboBox modeBox = graphMouse.getModeComboBox();
         modeBox.addItemListener(graphMouse.getModeListener());
-        graphMouse.setMode(ModalGraphMouse.Mode.PICKING);
+        graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
 
         final ScalingControl scaler = new CrossoverScalingControl();
 
