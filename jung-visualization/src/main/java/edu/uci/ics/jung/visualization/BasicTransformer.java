@@ -27,8 +27,6 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
     
     protected MutableTransformer layoutTransformer =
         new MutableAffineTransformer(new AffineTransform());
-    
-    
 
     public BasicTransformer() {
 		super();
@@ -139,6 +137,11 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
      */
     public Shape layoutTransform(Shape shape) {
         return layoutTransformer.transform(shape);
+    }
+    
+    public void setToIdentity() {
+    	layoutTransformer.setToIdentity();
+    	viewTransformer.setToIdentity();
     }
     
     /* (non-Javadoc)
