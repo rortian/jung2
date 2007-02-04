@@ -157,9 +157,11 @@ public class TreeLayoutDemo extends JApplet {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
 					layout.setRadial(true);
+					vv.getRenderContext().getBasicTransformer().setToIdentity();
 					vv.addPreRenderPaintable(rings);
 				} else {
 					layout.setRadial(false);
+					vv.getRenderContext().getBasicTransformer().setToIdentity();
 					vv.removePreRenderPaintable(rings);
 				}
 				vv.repaint();
