@@ -71,6 +71,15 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
         return this.getIncidentEdges(vertex).size();
     }
 
+    public int numIncident(E edge)
+    {
+        Pair<V> incident = this.getEndpoints(edge);
+        if (incident.getFirst() == incident.getSecond())
+            return 1;
+        else
+            return 2;
+    }
+    
     public V getOpposite(V vertex, E edge)
     {
         Pair<V> incident = this.getEndpoints(edge); 

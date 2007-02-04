@@ -47,5 +47,7 @@ public interface ArchetypeGraph<V, E>
     int degree(V vertex); // getIncidentEdges(v).size()
     
     int numNeighbors(V vertex); // getNeighbors(v).size()
+    
+    int numIncident(E edge); // getIncidentVertices(v).size()
 
 }

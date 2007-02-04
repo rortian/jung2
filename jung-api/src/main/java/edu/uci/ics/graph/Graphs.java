@@ -418,6 +418,11 @@ public class Graphs {
 			return delegate.isSource(vertex, edge);
 		}
 		
+        public int numIncident(E edge)
+        {
+            return delegate.numIncident(edge);
+        }
+        
 	}
 	
 	static class SynchronizedGraph<V,E> extends SynchronizedAbstractGraph<V,E> implements Serializable {
@@ -796,6 +801,10 @@ public class Graphs {
 			return delegate.isSource(vertex, edge);
 		}
 
+        public int numIncident(E edge)
+        {
+            return delegate.numIncident(edge);
+        }
 	}
 	
 	static class UnmodifiableGraph<V,E> extends UnmodifiableAbstractGraph<V,E> implements Serializable {

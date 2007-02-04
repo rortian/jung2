@@ -556,4 +556,10 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	public Collection<V> getRoots() {
 		return roots;
 	}
+
+    public int numIncident(E edge)
+    {
+        // all edges in a forest connect exactly 2 vertices
+        return 2;
+    }
 }
