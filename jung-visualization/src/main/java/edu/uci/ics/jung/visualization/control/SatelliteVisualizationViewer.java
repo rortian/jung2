@@ -21,6 +21,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
@@ -98,11 +99,11 @@ public class SatelliteVisualizationViewer<V, E>
         // get a copy of the current layout transform
         // it may have been scaled to fit the graph
         AffineTransform modelLayoutTransform =
-            new AffineTransform(master.getRenderContext().getBasicTransformer().getLayoutTransformer().getTransform());
+            new AffineTransform(master.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).getTransform());
         
         // I want no layout transformations in the satellite view
         // this resets the auto-scaling that occurs in the super constructor
-        getRenderContext().getBasicTransformer().setLayoutTransformer(new MutableAffineTransformer(modelLayoutTransform));
+        getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, new MutableAffineTransformer(modelLayoutTransform));
         
         // make sure the satellite listens for changes in the master
         master.addChangeListener(this);
@@ -139,7 +140,7 @@ public class SatelliteVisualizationViewer<V, E>
 
         AffineTransform oldXform = g2d.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
-        newXform.concatenate(getRenderContext().getBasicTransformer().getViewTransformer().getTransform());
+        newXform.concatenate(getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW).getTransform());
         
         g2d.setTransform(newXform);
 
@@ -250,9 +251,10 @@ public class SatelliteVisualizationViewer<V, E>
             this.master = master;
         }
         public void paint(Graphics g) {
-            ShapeTransformer masterViewTransformer = master.getRenderContext().getBasicTransformer().getViewTransformer();
-            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getLayoutTransformer();
-            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+            ShapeTransformer masterViewTransformer = 
+            	master.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
+            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
 
             Shape lens = master.getBounds();
             lens = masterViewTransformer.inverseTransform(lens);

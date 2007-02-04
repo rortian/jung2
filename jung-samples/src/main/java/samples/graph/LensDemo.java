@@ -55,6 +55,7 @@ import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -179,19 +180,19 @@ public class LensDemo extends JApplet {
         
         hyperbolicViewSupport = 
             new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv, 
-            		vv.getRenderContext().getBasicTransformer().getViewTransformer()), 
+            		vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)), 
                     new ModalLensGraphMouse());
         hyperbolicLayoutSupport = 
             new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv, 
-            		vv.getRenderContext().getBasicTransformer().getLayoutTransformer()),
+            		vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse());
         magnifyViewSupport = 
             new ViewLensSupport<String,Number>(vv, new MagnifyShapeTransformer(vv,
-            		vv.getRenderContext().getBasicTransformer().getViewTransformer()),
+            		vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         magnifyLayoutSupport = 
             new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv, 
-            		vv.getRenderContext().getBasicTransformer().getLayoutTransformer()),
+            		vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         hyperbolicLayoutSupport.getLensTransformer().setEllipse(hyperbolicViewSupport.getLensTransformer().getEllipse());
         magnifyViewSupport.getLensTransformer().setEllipse(hyperbolicLayoutSupport.getLensTransformer().getEllipse());

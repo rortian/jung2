@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -70,7 +71,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
             Shape shape = rc.getVertexShapeTransformer().transform(v);
             
             Point2D p = layout.transform(v);
-            p = rc.getBasicTransformer().layoutTransform(p);
+            p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
 
             float x = (float)p.getX();
             float y = (float)p.getY();
@@ -99,7 +100,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
                     0,0,
                     d.width,d.height);
         }
-        return rc.getBasicTransformer().getViewTransformer().transform(s).intersects(deviceRectangle);
+        return rc.getBasicTransformer().getTransformer(Layer.VIEW).transform(s).intersects(deviceRectangle);
     }
 
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {

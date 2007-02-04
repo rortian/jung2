@@ -190,9 +190,9 @@ public interface RenderContext<V, E> {
         
     }
     
-    BasicTransformer getBasicTransformer();
+    MultiLayerTransformer getBasicTransformer();
     
-    void setBasicTransformer(BasicTransformer basicTransformer);
+    void setBasicTransformer(MultiLayerTransformer basicTransformer);
     
 	/**
 	 * @return the pickSupport

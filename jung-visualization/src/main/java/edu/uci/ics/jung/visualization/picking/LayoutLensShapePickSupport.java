@@ -27,6 +27,7 @@ import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 
 /**
@@ -144,7 +145,7 @@ public class LayoutLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
      */
     public E getEdge(Layout<V, E> layout, double x, double y) {
 
-        Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(new Point2D.Double(x,y));
+        Point2D ip = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 
@@ -163,8 +164,8 @@ public class LayoutLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                     V v1 = pair.getFirst();
                     V v2 = pair.getSecond();
                     boolean isLoop = v1.equals(v2);
-                    Point2D p1 = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v1));
-                    Point2D p2 = vv.getRenderContext().getBasicTransformer().layoutTransform(layout.transform(v2));
+                    Point2D p1 = vv.getRenderContext().getBasicTransformer().transform(Layer.LAYOUT, layout.transform(v1));
+                    Point2D p2 = vv.getRenderContext().getBasicTransformer().transform(Layer.LAYOUT, layout.transform(v2));
                     if(p1 == null || p2 == null) continue;
                     float x1 = (float) p1.getX();
                     float y1 = (float) p1.getY();

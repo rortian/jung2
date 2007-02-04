@@ -84,7 +84,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction = 
         DefaultParallelEdgeIndexFunction.<V,E>getInstance();
     
-    protected BasicTransformer basicTransformer = new BasicTransformer();
+    protected MultiLayerTransformer basicTransformer = new BasicTransformer();
     
 	/**
 	 * pluggable support for picking graph elements by
@@ -532,14 +532,14 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 	/**
 	 * @return the basicTransformer
 	 */
-	public BasicTransformer getBasicTransformer() {
+	public MultiLayerTransformer getBasicTransformer() {
 		return basicTransformer;
 	}
 
 	/**
 	 * @param basicTransformer the basicTransformer to set
 	 */
-	public void setBasicTransformer(BasicTransformer basicTransformer) {
+	public void setBasicTransformer(MultiLayerTransformer basicTransformer) {
 		this.basicTransformer = basicTransformer;
 	}
 

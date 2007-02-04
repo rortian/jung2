@@ -29,7 +29,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import edu.uci.ics.jung.visualization.AnnotationPaintable;
-import edu.uci.ics.jung.visualization.BasicTransformer;
+import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
@@ -70,7 +70,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
      */
     protected Color lensColor = Color.cyan;
     
-    BasicTransformer basicTransformer;
+    MultiLayerTransformer basicTransformer;
     
     RenderContext rc;
     

@@ -27,6 +27,7 @@ import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
 
@@ -71,7 +72,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
 
         V closest = null;
         double minDistance = Double.MAX_VALUE;
-        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(new Point2D.Double(x,y));
+        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 
@@ -127,7 +128,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
     	Set<V> pickedVertices = new HashSet<V>();
     	
 //    	 remove the view transform from the rectangle
-    	rectangle = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(rectangle);
+    	rectangle = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(rectangle);
 
         while(true) {
             try {
@@ -160,7 +161,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
      */
     public E getEdge(Layout<V, E> layout, double x, double y) {
 
-        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getViewTransformer()).getDelegate().inverseTransform(new Point2D.Double(x,y));
+        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 

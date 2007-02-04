@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
@@ -111,7 +112,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 
 					public void run() {
 						for (int i = 0; i < 10; i++) {
-							vv.getRenderContext().getBasicTransformer().getLayoutTransformer().translate(dx, dy);
+							vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).translate(dx, dy);
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException ex) {

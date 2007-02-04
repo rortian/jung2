@@ -34,6 +34,7 @@ import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.generators.random.EppsteinPowerLawGenerator;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -95,8 +96,8 @@ public class ShortestPathDemo extends JPanel {
                         String v2 = mGraph.getEndpoints(e).getSecond();
                         Point2D p1 = layout.transform(v1);
                         Point2D p2 = layout.transform(v2);
-                        p1 = vv.getRenderContext().getBasicTransformer().layoutTransform(p1);
-                        p2 = vv.getRenderContext().getBasicTransformer().layoutTransform(p2);
+                        p1 = vv.getRenderContext().getBasicTransformer().transform(Layer.LAYOUT, p1);
+                        p2 = vv.getRenderContext().getBasicTransformer().transform(Layer.LAYOUT, p2);
                         Renderer<String,Number> renderer = vv.getRenderer();
                         renderer.renderEdge(
                                 vv.getRenderContext(),

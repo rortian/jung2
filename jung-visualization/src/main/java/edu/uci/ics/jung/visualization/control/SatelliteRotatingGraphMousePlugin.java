@@ -13,6 +13,7 @@ package edu.uci.ics.jung.visualization.control;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -45,7 +46,8 @@ public class SatelliteRotatingGraphMousePlugin extends RotatingGraphMousePlugin 
                 VisualizationViewer vvMaster = 
                     ((SatelliteVisualizationViewer)vv).getMaster();
                 
-                MutableTransformer modelTransformerMaster = vvMaster.getRenderContext().getBasicTransformer().getLayoutTransformer();
+                MutableTransformer modelTransformerMaster = 
+                	vvMaster.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
 
                 // rotate
                 vv.setCursor(cursor);
@@ -60,7 +62,7 @@ public class SatelliteRotatingGraphMousePlugin extends RotatingGraphMousePlugin 
                 Point2D v2 = new Point2D.Double(center.getX()-q.getX(), center.getY()-q.getY());
                 double theta = angleBetween(v1, v2);
                 modelTransformerMaster.rotate(-theta, 
-                        vvMaster.getRenderContext().getBasicTransformer().inverseViewTransform(vvMaster.getCenter()));
+                        vvMaster.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, vvMaster.getCenter()));
                 down.x = e.getX();
                 down.y = e.getY();
             } 

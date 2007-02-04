@@ -14,6 +14,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -49,7 +50,8 @@ public class SatelliteTranslatingGraphMousePlugin extends
                 VisualizationViewer vvMaster = 
                     ((SatelliteVisualizationViewer)vv).getMaster();
                 
-                MutableTransformer modelTransformerMaster = vvMaster.getRenderContext().getBasicTransformer().getLayoutTransformer();
+                MutableTransformer modelTransformerMaster = 
+                	vvMaster.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
                 vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                 try {
                     Point2D q = vv.getRenderContext().getBasicTransformer().inverseTransform(down);

@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -47,7 +48,8 @@ public class SatelliteShearingGraphMousePlugin extends ShearingGraphMousePlugin 
                 VisualizationViewer vvMaster = 
                     ((SatelliteVisualizationViewer)vv).getMaster();
                 
-                MutableTransformer modelTransformerMaster = vvMaster.getRenderContext().getBasicTransformer().getLayoutTransformer();
+                MutableTransformer modelTransformerMaster = 
+                	vvMaster.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
 
                 vv.setCursor(cursor);
                 Point2D q = down;

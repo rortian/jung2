@@ -11,6 +11,7 @@ package edu.uci.ics.jung.visualization.jai;
 import javax.media.jai.PerspectiveTransform;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
@@ -42,7 +43,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
         this.pickSupport = renderContext.getPickSupport();
         this.perspectiveTransformer = 
             new PerspectiveShapeTransformer(new PerspectiveTransform(), 
-            		vv.getRenderContext().getBasicTransformer().getViewTransformer());
+            		vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW));
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensGraphicsDecorator = new TransformingGraphics(perspectiveTransformer);
     }
@@ -50,7 +51,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
         renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer);
+        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, perspectiveTransformer);
         vv.getRenderContext().setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
         vv.setToolTipText(instructions);
@@ -59,7 +60,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
 
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
-        vv.getRenderContext().getBasicTransformer().setViewTransformer(perspectiveTransformer.getDelegate());
+        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, perspectiveTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);
         vv.setToolTipText(defaultToolTipText);

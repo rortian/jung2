@@ -28,6 +28,7 @@ import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -78,8 +79,8 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         V v2 = endpoints.getSecond();
         Point2D p1 = layout.transform(v1);
         Point2D p2 = layout.transform(v2);
-        p1 = rc.getBasicTransformer().layoutTransform(p1);
-        p2 = rc.getBasicTransformer().layoutTransform(p2);
+        p1 = rc.getBasicTransformer().transform(Layer.LAYOUT, p1);
+        p2 = rc.getBasicTransformer().transform(Layer.LAYOUT, p2);
         float x1 = (float) p1.getX();
         float y1 = (float) p1.getY();
         float x2 = (float) p2.getX();
@@ -121,7 +122,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         
         edgeShape = xform.createTransformedShape(edgeShape);
         
-        MutableTransformer vt = rc.getBasicTransformer().getViewTransformer();
+        MutableTransformer vt = rc.getBasicTransformer().getTransformer(Layer.VIEW);
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -159,7 +160,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                 AffineTransform xf = AffineTransform.getTranslateInstance(x2, y2);
                 destVertexShape = xf.createTransformedShape(destVertexShape);
                 
-                arrowHit = rc.getBasicTransformer().getViewTransformer().transform(destVertexShape).intersects(deviceRectangle);
+                arrowHit = rc.getBasicTransformer().getTransformer(Layer.VIEW).transform(destVertexShape).intersects(deviceRectangle);
                 if(arrowHit) {
                     
                     AffineTransform at = 
@@ -178,7 +179,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     xf = AffineTransform.getTranslateInstance(x1, y1);
                     vertexShape = xf.createTransformedShape(vertexShape);
                     
-                    arrowHit = rc.getBasicTransformer().getViewTransformer().transform(vertexShape).intersects(deviceRectangle);
+                    arrowHit = rc.getBasicTransformer().getTransformer(Layer.VIEW).transform(vertexShape).intersects(deviceRectangle);
                     
                     if(arrowHit) {
                         AffineTransform at = getReverseArrowTransform(rc, new GeneralPath(edgeShape), vertexShape, !isLoop);

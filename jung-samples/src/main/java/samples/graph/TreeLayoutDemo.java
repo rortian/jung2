@@ -45,6 +45,7 @@ import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -208,7 +209,7 @@ public class TreeLayoutDemo extends JApplet {
 			for(double d : depths) {
 				ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d, 
 						center.getX()+d, center.getY()+d);
-				Shape shape = vv.getRenderContext().getBasicTransformer().getLayoutTransformer().transform(ellipse);
+				Shape shape = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
 				g2d.draw(shape);
 			}
 		}

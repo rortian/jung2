@@ -21,6 +21,7 @@ import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
@@ -46,8 +47,8 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
 
         Point2D p1 = layout.transform(v1);
         Point2D p2 = layout.transform(v2);
-        p1 = rc.getBasicTransformer().layoutTransform(p1);
-        p2 = rc.getBasicTransformer().layoutTransform(p2);
+        p1 = rc.getBasicTransformer().transform(Layer.LAYOUT, p1);
+        p2 = rc.getBasicTransformer().transform(Layer.LAYOUT, p2);
         float x1 = (float) p1.getX();
         float y1 = (float) p1.getY();
         float x2 = (float) p2.getX();

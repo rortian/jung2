@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -82,7 +83,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
         boolean accepted = checkModifiers(e);
         if(accepted) {
-            MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+            MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
             vv.setCursor(cursor);
             try {
                 Point2D q = viewTransformer.inverseTransform(down);

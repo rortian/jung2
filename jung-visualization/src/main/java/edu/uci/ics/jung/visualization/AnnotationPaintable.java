@@ -28,7 +28,7 @@ public class AnnotationPaintable implements Paintable {
 	
 	public AnnotationPaintable(RenderContext rc) {
 		this.rc = rc;
-		MutableTransformer mt = rc.getBasicTransformer().getLayoutTransformer();
+		MutableTransformer mt = rc.getBasicTransformer().getTransformer(Layer.LAYOUT);
 		if(mt instanceof AffineTransformer) {
 			transformer = (AffineTransformer)mt;
 		} else if(mt instanceof LensTransformer) {

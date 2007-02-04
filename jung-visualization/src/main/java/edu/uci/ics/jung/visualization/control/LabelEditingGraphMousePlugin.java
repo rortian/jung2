@@ -25,6 +25,7 @@ import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 /** 
@@ -112,7 +113,7 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     				// p is the screen point for the mouse event
     				Point2D p = e.getPoint();
     				// take away the view transform
-    				Point2D ip = vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
+    				Point2D ip = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, p);
     				E edge = pickSupport.getEdge(layout, ip.getX(), ip.getY());
     				if(edge != null) {
     					String newLabel = JOptionPane.showInputDialog("New Edge Label for "+edge);

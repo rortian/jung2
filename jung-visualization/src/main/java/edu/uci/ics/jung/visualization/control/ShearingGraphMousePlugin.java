@@ -27,6 +27,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -132,7 +133,7 @@ public class ShearingGraphMousePlugin extends AbstractGraphMousePlugin
         boolean accepted = checkModifiers(e);
         if(accepted) {
             MutableTransformer modelTransformer = 
-            	vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+            	vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
             vv.setCursor(cursor);
             Point2D q = down;
             Point2D p = e.getPoint();

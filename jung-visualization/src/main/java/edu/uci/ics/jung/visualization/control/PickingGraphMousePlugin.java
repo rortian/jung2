@@ -28,6 +28,7 @@ import javax.swing.JComponent;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -187,7 +188,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                     // q is transformed by the layout transformer only
                     Point2D q = layout.transform(vertex);
                     // transform the mouse point to graph coordinate system
-                    Point2D gp = vv.getRenderContext().getBasicTransformer().inverseLayoutTransform(ip);
+                    Point2D gp = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.LAYOUT, ip);
 
                     offsetx = (float) (gp.getX()-q.getX());
                     offsety = (float) (gp.getY()-q.getY());
@@ -217,7 +218,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                         // q is transformed by the layout transformer only
                         Point2D q = layout.transform(vertex);
                         // translate mouse point to graph coord system
-                        Point2D gp = vv.getRenderContext().getBasicTransformer().inverseLayoutTransform(ip);
+                        Point2D gp = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.LAYOUT, ip);
 
                         offsetx = (float) (gp.getX()-q.getX());
                         offsety = (float) (gp.getY()-q.getY());

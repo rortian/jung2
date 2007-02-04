@@ -13,6 +13,7 @@ package edu.uci.ics.jung.visualization.jai;
 import javax.media.jai.PerspectiveTransform;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.picking.LayoutLensShapePickSupport;
 /**
@@ -35,14 +36,14 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
         super(vv);
         this.perspectiveTransformer = 
             new PerspectiveShapeTransformer(new PerspectiveTransform(), 
-            		vv.getRenderContext().getBasicTransformer().getLayoutTransformer());
+            		vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT));
         this.pickSupport = vv.getPickSupport();
    }
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
         vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getBasicTransformer().setLayoutTransformer(perspectiveTransformer);
+        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, perspectiveTransformer);
         vv.addPreRenderPaintable(lens);
         vv.setToolTipText(instructions);
         vv.repaint();
@@ -52,7 +53,7 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
         vv.getRenderContext().setPickSupport(pickSupport);
         if(perspectiveTransformer != null) {
             vv.removePreRenderPaintable(lens);
-            vv.getRenderContext().getBasicTransformer().setLayoutTransformer(perspectiveTransformer.getDelegate());
+            vv.getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, perspectiveTransformer.getDelegate());
         }
         vv.setToolTipText(defaultToolTipText);
         vv.repaint();

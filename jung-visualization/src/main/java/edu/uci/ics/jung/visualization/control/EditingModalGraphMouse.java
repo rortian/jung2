@@ -21,7 +21,7 @@ import javax.swing.plaf.basic.BasicIconFactory;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.jung.visualization.BasicTransformer;
+import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
 
 public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse 
@@ -33,7 +33,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected GraphMousePlugin labelEditingPlugin;
 	protected GraphMousePlugin popupEditingPlugin;
 	protected GraphMousePlugin annotatingPlugin;
-	protected BasicTransformer basicTransformer;
+	protected MultiLayerTransformer basicTransformer;
 	protected RenderContext rc;
 
 	/**

@@ -9,6 +9,16 @@
  */
 package edu.uci.ics.jung.visualization.renderers;
 
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.CNTR;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.E;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.N;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.NE;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.NW;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.S;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.SE;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.SW;
+import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.W;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -20,6 +30,7 @@ import java.awt.geom.Rectangle2D;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
@@ -74,7 +85,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
         	return;
         }
         Point2D pt = layout.transform(v);
-        pt = rc.getBasicTransformer().layoutTransform(pt);
+        pt = rc.getBasicTransformer().transform(Layer.LAYOUT, pt);
 
         float x = (float) pt.getX();
         float y = (float) pt.getY();

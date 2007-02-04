@@ -35,7 +35,7 @@ public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E>
             float scalex = (float)width/d.width;
             float scaley = (float)height/d.height;
             try {
-            renderContext.getBasicTransformer().getViewTransformer().scale(scalex, scaley, center);
+            renderContext.getBasicTransformer().getTransformer(Layer.VIEW).scale(scalex, scaley, center);
 
             BufferedImage bi = new BufferedImage(width, height,
                     BufferedImage.TYPE_INT_RGB);
@@ -45,7 +45,7 @@ public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E>
             return bi;
 
             } finally {
-            	renderContext.getBasicTransformer().getViewTransformer().setToIdentity();
+            	renderContext.getBasicTransformer().getTransformer(Layer.VIEW).setToIdentity();
             }
         }
 

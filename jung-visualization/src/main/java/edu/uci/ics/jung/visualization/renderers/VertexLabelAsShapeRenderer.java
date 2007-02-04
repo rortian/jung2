@@ -22,6 +22,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -70,7 +71,7 @@ public class VertexLabelAsShapeRenderer<V,E>
         int v_offset = -d.height / 2;
         
         Point2D p = layout.transform(v);
-        p = rc.getBasicTransformer().layoutTransform(p);
+        p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
 
         int x = (int)p.getX();
         int y = (int)p.getY();

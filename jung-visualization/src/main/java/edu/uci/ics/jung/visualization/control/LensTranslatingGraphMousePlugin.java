@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
@@ -60,7 +61,7 @@ implements MouseListener, MouseMotionListener {
      */
     public void mousePressed(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
-        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -68,8 +69,8 @@ implements MouseListener, MouseMotionListener {
         boolean accepted = checkModifiers(e);
         if(accepted) {
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-            testViewCenter(vv.getRenderContext().getBasicTransformer().getLayoutTransformer(), p);
-            testViewCenter(vv.getRenderContext().getBasicTransformer().getViewTransformer(), p);
+            testViewCenter(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT), p);
+            testViewCenter(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW), p);
             vv.repaint();
         }
         super.mousePressed(e);
@@ -141,7 +142,7 @@ implements MouseListener, MouseMotionListener {
      */
     public void mouseDragged(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
-        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -149,18 +150,18 @@ implements MouseListener, MouseMotionListener {
         boolean accepted = checkModifiers(e);
 
         if(accepted ) {
-            MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+            MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             if(dragOnLens) {
                 setViewCenter(modelTransformer, p);
-                setViewCenter(vv.getRenderContext().getBasicTransformer().getViewTransformer(), p);
+                setViewCenter(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW), p);
                 e.consume();
                 vv.repaint();
 
             } else if(dragOnEdge) {
 
                 setViewRadius(modelTransformer, p);
-                setViewRadius(vv.getRenderContext().getBasicTransformer().getViewTransformer(), p);
+                setViewRadius(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW), p);
                 e.consume();
                 vv.repaint();
                 

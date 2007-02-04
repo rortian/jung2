@@ -13,6 +13,7 @@ package edu.uci.ics.jung.visualization.control;
 
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -32,7 +33,7 @@ public class ViewScalingControl implements ScalingControl {
 	 * mouse wheel motion.
 	 */
     public void scale(VisualizationViewer vv, float amount, Point2D from) {
-        MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getViewTransformer();
+        MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
         viewTransformer.scale(amount, amount, from);
         vv.repaint();
     }

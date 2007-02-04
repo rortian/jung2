@@ -13,6 +13,7 @@ package edu.uci.ics.jung.visualization.transform;
 import java.awt.Dimension;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
@@ -32,7 +33,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
 	protected GraphElementAccessor<V,E> pickSupport;
 	
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getBasicTransformer().getLayoutTransformer()),
+        this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT)),
                 new ModalLensGraphMouse());
     }
     /**
@@ -61,7 +62,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
             lensControls = new LensControls(lensTransformer);
         }
         vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getBasicTransformer().setLayoutTransformer(lensTransformer);
+        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, lensTransformer);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
@@ -73,7 +74,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensTransformer != null) {
             vv.removePreRenderPaintable(lens);
             vv.removePostRenderPaintable(lensControls);
-            vv.getRenderContext().getBasicTransformer().setLayoutTransformer(lensTransformer.getDelegate());
+            vv.getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, lensTransformer.getDelegate());
         }
         vv.getRenderContext().setPickSupport(pickSupport);
         vv.setToolTipText(defaultToolTipText);

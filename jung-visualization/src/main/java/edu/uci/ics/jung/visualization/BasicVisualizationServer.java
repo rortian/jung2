@@ -300,7 +300,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
         		scale = scaley;
         }
         // set scale to show the entire graph layout
-        renderContext.getBasicTransformer().getViewTransformer().setScale(scale, scale, new Point2D.Float());
+        renderContext.getBasicTransformer().getTransformer(Layer.VIEW).setScale(scale, scale, new Point2D.Float());
     }
 	
 	/* (non-Javadoc)
@@ -371,7 +371,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		AffineTransform oldXform = g2d.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
         newXform.concatenate(
-        		renderContext.getBasicTransformer().getViewTransformer().getTransform());
+        		renderContext.getBasicTransformer().getTransformer(Layer.VIEW).getTransform());
 //        		viewTransformer.getTransform());
 		
         g2d.setTransform(newXform);

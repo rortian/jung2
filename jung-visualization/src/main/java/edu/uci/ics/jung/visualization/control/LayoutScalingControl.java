@@ -13,6 +13,7 @@ package edu.uci.ics.jung.visualization.control;
 
 import java.awt.geom.Point2D;
 
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -31,8 +32,8 @@ public class LayoutScalingControl implements ScalingControl {
 	 */
     public void scale(VisualizationViewer vv, float amount, Point2D from) {
         
-        Point2D ivtfrom = vv.getRenderContext().getBasicTransformer().inverseViewTransform(from);
-        MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+        Point2D ivtfrom = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, from);
+        MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
         modelTransformer.scale(amount, amount, ivtfrom);
         vv.repaint();
     }

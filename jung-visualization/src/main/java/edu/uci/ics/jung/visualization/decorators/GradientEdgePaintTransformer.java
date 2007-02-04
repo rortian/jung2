@@ -24,6 +24,7 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
@@ -52,7 +53,7 @@ public class GradientEdgePaintTransformer<V, E>
         this.c1 = c1;
         this.c2 = c2;
         this.vv = vv;
-        this.transformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+        this.transformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
     }
     
     public Paint transform(E e)

@@ -11,6 +11,7 @@ package edu.uci.ics.jung.visualization.transform.shape;
 import java.awt.Dimension;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -49,7 +50,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
 
     }
     public void activate() {
-    	lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getViewTransformer());
+    	lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW));
         if(lens == null) {
             lens = new Lens(lensTransformer);
         }
@@ -57,8 +58,8 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
             lensControls = new LensControls(lensTransformer);
         }
         renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
-        lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getViewTransformer());
-        vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer);
+        lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW));
+        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
@@ -71,7 +72,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
 //    	savedViewTransformer.setTransform(lensTransformer.getDelegate().getTransform());
 //        vv.setViewTransformer(savedViewTransformer);
     	renderContext.setPickSupport(pickSupport);
-        vv.getRenderContext().getBasicTransformer().setViewTransformer(lensTransformer.getDelegate());
+        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);

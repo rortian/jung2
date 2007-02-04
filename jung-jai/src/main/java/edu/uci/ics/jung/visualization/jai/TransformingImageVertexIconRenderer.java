@@ -31,6 +31,7 @@ import javax.media.jai.operator.WarpDescriptor;
 import javax.swing.Icon;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -64,7 +65,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         Shape shape = rc.getVertexShapeTransformer().transform(v);
         
         Point2D p = layout.transform(v);
-        p = rc.getBasicTransformer().layoutTransform(p);
+        p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
         float x = (float)p.getX();
         float y = (float)p.getY();
 

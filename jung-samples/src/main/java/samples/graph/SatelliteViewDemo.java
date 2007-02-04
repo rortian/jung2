@@ -39,6 +39,7 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
@@ -227,9 +228,9 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             this.master = master;
         }
         public void paint(Graphics g) {
-            ShapeTransformer masterViewTransformer = master.getRenderContext().getBasicTransformer().getViewTransformer();
-            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getLayoutTransformer();
-            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getLayoutTransformer();
+            ShapeTransformer masterViewTransformer = master.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
+            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
 
             Rectangle rect = master.getBounds();
             GeneralPath path = new GeneralPath();
