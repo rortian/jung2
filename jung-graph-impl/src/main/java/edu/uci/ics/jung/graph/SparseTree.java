@@ -3,11 +3,14 @@ package edu.uci.ics.jung.graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Tree;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
@@ -19,11 +22,12 @@ import edu.uci.ics.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseTree<V,E> implements DirectedGraph<V,E> {
+public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
 	
 	protected DirectedGraph<V,E> delegate;
 	protected Factory<E> edgeFactory;
 	protected V root;
+    protected Map<V, Integer> vertex_depths;
 
 	/**
 	 * create an instance with passed values.
@@ -34,6 +38,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 			Factory<E> edgeFactory) {
 		this.delegate = graphFactory.create();
 		this.edgeFactory = edgeFactory;
+        this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
 	/**
@@ -81,6 +86,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 	public boolean addVertex(V vertex) {
 		if(root == null) {
 			this.root = vertex;
+            vertex_depths.put(vertex, 0);
 			return delegate.addVertex(vertex);
 		} else {
 			throw new UnsupportedOperationException("Unless you are setting the root, use addChild(V parent, V child)");
@@ -381,7 +387,10 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 	public boolean removeVertex(V vertex) {
 		for(V v : getChildren(vertex)) {
 			removeVertex(v);
+            vertex_depths.remove(v);
 		}
+        
+        // recalculate height
 		return delegate.removeVertex(vertex);
 	}
 	
@@ -416,6 +425,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 		if(vertices.contains(child)) {
 			throw new IllegalArgumentException("Tree must not already contain child "+child);
 		}
+        vertex_depths.put(child, vertex_depths.get(parent) + 1);
 		return delegate.addEdge(edge, parent, child, edgeType);
 	}
 
@@ -435,6 +445,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 		if(vertices.contains(child)) {
 			throw new IllegalArgumentException("Tree must not already contain child "+child);
 		}
+        vertex_depths.put(child, vertex_depths.get(parent) + 1);
 		return delegate.addEdge(edge, parent, child);
 	}
 	
@@ -516,7 +527,10 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 	 * @return the depth to the passed node.
 	 */
 	public int getDepth(V v) {
-		return getPath(v).size();
+        return this.vertex_depths.get(v);
+//        return getPath(v).size() - 1;
+        // the below definition was incorrect: it should have been getPath(v).size() - 1
+//		return getPath(v).size();
 	}
 
 	/**
@@ -560,4 +574,10 @@ public class SparseTree<V,E> implements DirectedGraph<V,E> {
 	public Collection<V> getRoots() {
 		return Collections.singleton(getRoot());
 	}
+
+    public int numIncident(E edge)
+    {
+        // all edges in a tree connect exactly 2 vertices
+        return 2;
+    }
 }

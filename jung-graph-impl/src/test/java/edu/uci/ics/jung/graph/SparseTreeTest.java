@@ -54,25 +54,58 @@ public class SparseTreeTest extends TestCase {
 		}
 	}
 	
-	public void testHeight() {
+	public void testHeightAndDepth() {
 		tree.addVertex("V0");
+        assertEquals(tree.getHeight(), 0);
+        assertEquals(tree.getDepth("V0"), 0);
     	tree.addEdge(edgeFactory.create(), "V0", "V1");
+        assertEquals(tree.getHeight(), 1);
+        assertEquals(tree.getDepth("V1"), 1);
     	tree.addEdge(edgeFactory.create(), "V0", "V2");
+        assertEquals(tree.getHeight(), 1);
+        assertEquals(tree.getDepth("V2"), 1);
     	tree.addEdge(edgeFactory.create(), "V1", "V4");
+        assertEquals(tree.getHeight(), 2);
+        assertEquals(tree.getDepth("V4"), 2);
     	tree.addEdge(edgeFactory.create(), "V2", "V3");
+        assertEquals(tree.getHeight(), 2);
+        assertEquals(tree.getDepth("V3"), 2);
     	tree.addEdge(edgeFactory.create(), "V2", "V5");
+        assertEquals(tree.getHeight(), 2);
+        assertEquals(tree.getDepth("V5"), 2);
     	tree.addEdge(edgeFactory.create(), "V4", "V6");
+        assertEquals(tree.getHeight(), 3);
+        assertEquals(tree.getDepth("V6"), 3);
     	tree.addEdge(edgeFactory.create(), "V4", "V7");
+        assertEquals(tree.getHeight(), 3);
+        assertEquals(tree.getDepth("V7"), 3);
     	tree.addEdge(edgeFactory.create(), "V3", "V8");
+        assertEquals(tree.getHeight(), 3);
+        assertEquals(tree.getDepth("V8"), 3);
     	tree.addEdge(edgeFactory.create(), "V6", "V9");
+        assertEquals(tree.getHeight(), 4);
+        assertEquals(tree.getDepth("V9"), 4);
     	tree.addEdge(edgeFactory.create(), "V4", "V10");
+        assertEquals(tree.getHeight(), 4);
+        assertEquals(tree.getDepth("V10"), 3);
        	tree.addEdge(edgeFactory.create(), "V4", "V11");
+        assertEquals(tree.getHeight(), 4);
+        assertEquals(tree.getDepth("V11"), 3);
        	tree.addEdge(edgeFactory.create(), "V4", "V12");
+        assertEquals(tree.getHeight(), 4);
+        assertEquals(tree.getDepth("V12"), 3);
        	tree.addEdge(edgeFactory.create(), "V6", "V13");
+        assertEquals(tree.getHeight(), 4);
+        assertEquals(tree.getDepth("V13"), 4);
        	tree.addEdge(edgeFactory.create(), "V10", "V14");
+        assertEquals(tree.getHeight(), 4);
+        assertEquals(tree.getDepth("V14"), 4);
        	tree.addEdge(edgeFactory.create(), "V13", "V15");
+        assertEquals(tree.getHeight(), 5);
+        assertEquals(tree.getDepth("V15"), 5);
        	tree.addEdge(edgeFactory.create(), "V13", "V16");
-       	assertEquals(tree.getHeight(), 6);
+       	assertEquals(tree.getHeight(), 5);
+        assertEquals(tree.getDepth("V16"), 5);
 
 	}
 	
