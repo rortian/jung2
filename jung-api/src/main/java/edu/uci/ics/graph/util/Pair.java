@@ -33,8 +33,11 @@ public final class Pair<T> implements Collection<T>
 
     public Pair(T value1, T value2) 
     {
+    	if(value1 == null || value2 == null) 
+    		throw new IllegalArgumentException("Pair cannot contain null values");
         first = value1;
         second = value2;
+        
 //        assert first != null && second != null : "Both inputs must be non-null";
     }
     
@@ -45,6 +48,8 @@ public final class Pair<T> implements Collection<T>
      */
     public Pair(Collection<T> values) 
     {
+    	if(values.contains(null)) 
+    		throw new IllegalArgumentException("Pair cannot contain null values");
     	if (values.size() == 2)
         {
             Iterator<T> iter = values.iterator();
