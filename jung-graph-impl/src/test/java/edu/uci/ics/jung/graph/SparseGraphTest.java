@@ -99,6 +99,16 @@ public class SparseGraphTest extends TestCase {
         graph.addEdge(edgeFactory.create(), 0, 1);
         assertEquals(graph.getEdgeCount(), edgeCount+1);
     }
+    
+    public void testNullEndpoint() {
+    	try {
+    		graph.addEdge(edgeFactory.create(), new Pair<Number>(1,null));
+    		fail("should not be able to add an edge with a null endpoint");
+    	} catch(IllegalArgumentException e) {
+    		// all is well
+    	}
+    }
+
 
     public void testRemoveEdge() {
     	List<Number> edgeList = new ArrayList<Number>(graph.getEdges());

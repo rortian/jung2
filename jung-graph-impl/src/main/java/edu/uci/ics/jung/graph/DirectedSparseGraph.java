@@ -153,6 +153,9 @@ public class DirectedSparseGraph<V,E>
      * the specified edge is 
      */
     public boolean addEdge(E edge, V source, V dest, EdgeType edgeType) {
+    	if(source == null || dest == null) 
+    		throw new IllegalArgumentException("edge endpoints may not contain null values");
+
     	if(edgeType != EdgeType.DIRECTED) throw new IllegalArgumentException();
         if (edges.containsKey(edge)) {
             Pair<V> endpoints = edges.get(edge);

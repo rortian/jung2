@@ -103,6 +103,15 @@ public class UndirectedSparseGraphTest extends TestCase {
         assertTrue(edge == e12 || edge == e21);
     }
 
+    public void testNullEndpoint() {
+    	try {
+    		graph.addEdge(.99, new Pair<Integer>(1,null));
+    		fail("should not be able to add an edge with a null endpoint");
+    	} catch(IllegalArgumentException e) {
+    		// all is well
+    	}
+    }
+
     public void testGetEndpoints() {
         Pair<Integer> endpoints = graph.getEndpoints(e01);
         assertTrue((endpoints.getFirst() == v0 && endpoints.getSecond() == v1) ||

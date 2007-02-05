@@ -68,6 +68,8 @@ public class UndirectedSparseGraph<V,E>
     }
     
     public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
+    	if(v1 == null || v2 == null) 
+    		throw new IllegalArgumentException("edge endpoints may not contain null values");
     	if(edgeType != EdgeType.UNDIRECTED) throw new IllegalArgumentException();
         if (edges.containsKey(edge))
             return false;
