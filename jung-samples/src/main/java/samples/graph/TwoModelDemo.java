@@ -102,7 +102,7 @@ public class TwoModelDemo extends JApplet {
 //        // share the view transformer between the two models
 //        vv2.setViewTransformer(vv1.getViewTransformer());
         
-        vv2.getRenderContext().setBasicTransformer(vv1.getRenderContext().getMultiLayerTransformer());
+        vv2.getRenderContext().setMultiLayerTransformer(vv1.getRenderContext().getMultiLayerTransformer());
         vv2.getRenderContext().getMultiLayerTransformer().addChangeListener(vv1);
 
         vv1.setBackground(Color.white);

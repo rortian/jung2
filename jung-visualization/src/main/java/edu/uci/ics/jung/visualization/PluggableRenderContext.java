@@ -539,7 +539,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 	/**
 	 * @param basicTransformer the basicTransformer to set
 	 */
-	public void setBasicTransformer(MultiLayerTransformer basicTransformer) {
+	public void setMultiLayerTransformer(MultiLayerTransformer basicTransformer) {
 		this.multiLayerTransformer = basicTransformer;
 	}
 

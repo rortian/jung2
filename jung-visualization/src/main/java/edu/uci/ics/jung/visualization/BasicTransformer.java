@@ -8,15 +8,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
-import edu.uci.ics.jung.visualization.transform.LayoutTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
-import edu.uci.ics.jung.visualization.transform.ViewTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
-public class BasicTransformer implements BidirectionalTransformer, LayoutTransformer, ViewTransformer,
+public class BasicTransformer implements BidirectionalTransformer, 
 	ShapeTransformer, ChangeListener, ChangeEventSupport, MultiLayerTransformer {
 
     protected ChangeEventSupport changeSupport =
@@ -34,25 +32,19 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 		layoutTransformer.addChangeListener(this);
 	}
 
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setViewTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
-     */
     /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#setViewTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
 	 */
-    public void setViewTransformer(MutableTransformer transformer) {
+    protected void setViewTransformer(MutableTransformer transformer) {
         this.viewTransformer.removeChangeListener(this);
         this.viewTransformer = transformer;
         this.viewTransformer.addChangeListener(this);
     }
 
     /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setLayoutTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#setLayoutTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
 	 */
-    public void setLayoutTransformer(MutableTransformer transformer) {
+    protected void setLayoutTransformer(MutableTransformer transformer) {
         this.layoutTransformer.removeChangeListener(this);
         this.layoutTransformer = transformer;
         this.layoutTransformer.addChangeListener(this);
@@ -62,19 +54,17 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#getLayoutTransformer()
 	 */
-	public MutableTransformer getLayoutTransformer() {
+	protected MutableTransformer getLayoutTransformer() {
 		return layoutTransformer;
 	}
 
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#getViewTransformer()
 	 */
-	public MutableTransformer getViewTransformer() {
+	protected MutableTransformer getViewTransformer() {
 		return viewTransformer;
 	}
 
-	/* (non-Javadoc)
-     */
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#inverseTransform(java.awt.geom.Point2D)
 	 */
@@ -83,25 +73,19 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 	}
 	
 	/* (non-Javadoc)
-     */
-	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#inverseViewTransform(java.awt.geom.Point2D)
 	 */
-	public Point2D inverseViewTransform(Point2D p) {
+	protected Point2D inverseViewTransform(Point2D p) {
 	    return viewTransformer.inverseTransform(p);
 	}
 
     /* (non-Javadoc)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#inverseLayoutTransform(java.awt.geom.Point2D)
 	 */
-    public Point2D inverseLayoutTransform(Point2D p) {
+    protected Point2D inverseLayoutTransform(Point2D p) {
         return layoutTransformer.inverseTransform(p);
     }
 
-	/* (non-Javadoc)
-     */
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#transform(java.awt.geom.Point2D)
 	 */
@@ -110,25 +94,19 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 	}
     
     /* (non-Javadoc)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#viewTransform(java.awt.geom.Point2D)
 	 */
-    public Point2D viewTransform(Point2D p) {
+    protected Point2D viewTransform(Point2D p) {
         return viewTransformer.transform(p);
     }
     
     /* (non-Javadoc)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#layoutTransform(java.awt.geom.Point2D)
 	 */
-    public Point2D layoutTransform(Point2D p) {
+    protected Point2D layoutTransform(Point2D p) {
         return layoutTransformer.transform(p);
     }
     
-	/* (non-Javadoc)
-     */
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#inverseTransform(java.awt.Shape)
 	 */
@@ -137,25 +115,19 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 	}
 	
 	/* (non-Javadoc)
-     */
-	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#inverseViewTransform(java.awt.Shape)
 	 */
-	public Shape inverseViewTransform(Shape shape) {
+	protected Shape inverseViewTransform(Shape shape) {
 	    return viewTransformer.inverseTransform(shape);
 	}
 
     /* (non-Javadoc)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#inverseLayoutTransform(java.awt.Shape)
 	 */
-    public Shape inverseLayoutTransform(Shape shape) {
+    protected Shape inverseLayoutTransform(Shape shape) {
         return layoutTransformer.inverseTransform(shape);
     }
 
-	/* (non-Javadoc)
-     */
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#transform(java.awt.Shape)
 	 */
@@ -164,20 +136,16 @@ public class BasicTransformer implements BidirectionalTransformer, LayoutTransfo
 	}
     
     /* (non-Javadoc)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#viewTransform(java.awt.Shape)
 	 */
-    public Shape viewTransform(Shape shape) {
+    protected Shape viewTransform(Shape shape) {
         return viewTransformer.transform(shape);
     }
     
     /* (non-Javadoc)
-     */
-    /* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#layoutTransform(java.awt.Shape)
 	 */
-    public Shape layoutTransform(Shape shape) {
+    protected Shape layoutTransform(Shape shape) {
         return layoutTransformer.transform(shape);
     }
     

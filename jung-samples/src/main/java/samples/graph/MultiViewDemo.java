@@ -139,8 +139,8 @@ public class MultiViewDemo extends JApplet {
 //        vv2.setViewTransformer(vv1.getViewTransformer());
 //        vv3.setViewTransformer(vv1.getViewTransformer());
         
-        vv2.getRenderContext().setBasicTransformer(vv1.getRenderContext().getMultiLayerTransformer());
-        vv3.getRenderContext().setBasicTransformer(vv1.getRenderContext().getMultiLayerTransformer());
+        vv2.getRenderContext().setMultiLayerTransformer(vv1.getRenderContext().getMultiLayerTransformer());
+        vv3.getRenderContext().setMultiLayerTransformer(vv1.getRenderContext().getMultiLayerTransformer());
 
         vv1.getRenderContext().getMultiLayerTransformer().addChangeListener(vv1);
         vv2.getRenderContext().getMultiLayerTransformer().addChangeListener(vv2);

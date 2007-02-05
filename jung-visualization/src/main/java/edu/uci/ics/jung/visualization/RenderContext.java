@@ -192,7 +192,7 @@ public interface RenderContext<V, E> {
     
     MultiLayerTransformer getMultiLayerTransformer();
     
-    void setBasicTransformer(MultiLayerTransformer basicTransformer);
+    void setMultiLayerTransformer(MultiLayerTransformer basicTransformer);
     
 	/**
 	 * @return the pickSupport
