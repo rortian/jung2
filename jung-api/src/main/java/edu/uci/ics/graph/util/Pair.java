@@ -35,9 +35,9 @@ public final class Pair<T> implements Collection<T>
 
     public Pair(T value1, T value2) 
     {
-        assert value1 != null && value2 != null : "Both inputs must be non-null";
         first = value1;
         second = value2;
+        assert first != null && second != null : "Both inputs must be non-null";
 //        list.add(value1);
 //        list.add(value2);
 //        delegate = Collections.unmodifiableList(list);
@@ -50,14 +50,22 @@ public final class Pair<T> implements Collection<T>
      */
     public Pair(Collection<T> values) 
     {
-        if (values.size() == 2)
+        if (values.size() == 1)
+        {
+            Iterator<T> iter = values.iterator();
+            first = iter.next();
+            second = first;
+            assert first != null && second != null : "Both inputs must be non-null";
+        }
+        else if (values.size() == 2)
         {
             Iterator<T> iter = values.iterator();
             first = iter.next();
             second = iter.next();
-        }
+            assert first != null && second != null : "Both inputs must be non-null";
+       }
         else
-            throw new IllegalArgumentException("Pair may only be created from a Collection of 2 elements");
+            throw new IllegalArgumentException("Pair may only be created from a Collection of exaclty 1 or 2 elements");
         
 //    	if(values.size() == 1 || values.size() == 2) {
 //    		list.addAll(values);
@@ -123,11 +131,18 @@ public final class Pair<T> implements Collection<T>
     /**
      * @see java.lang.Object#hashCode()
      */
+//    public int hashCode() 
+//    {
+//        // FIXME: do we need something more robust here?
+//        return first.hashCode() + second.hashCode();
+////        return delegate.hashCode();
+//    }
     public int hashCode() 
     {
-        // FIXME: do we need something more robust here?
-        return first.hashCode() + second.hashCode();
-//        return delegate.hashCode();
+    	int hashCode = 1;
+	    hashCode = 31*hashCode + (first==null ? 0 : first.hashCode());
+	    hashCode = 31*hashCode + (second==null ? 0 : second.hashCode());
+    	return hashCode;
     }
     
     /**
