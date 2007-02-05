@@ -45,14 +45,7 @@ public final class Pair<T> implements Collection<T>
      */
     public Pair(Collection<T> values) 
     {
-        if (values.size() == 1)
-        {
-            Iterator<T> iter = values.iterator();
-            first = iter.next();
-            second = first;
-//            assert first != null && second != null : "Both inputs must be non-null";
-        }
-        else if (values.size() == 2)
+    	if (values.size() == 2)
         {
             Iterator<T> iter = values.iterator();
             first = iter.next();
@@ -60,7 +53,7 @@ public final class Pair<T> implements Collection<T>
 //            assert first != null && second != null : "Both inputs must be non-null";
        }
         else
-            throw new IllegalArgumentException("Pair may only be created from a Collection of exaclty 1 or 2 elements");
+            throw new IllegalArgumentException("Pair may only be created from a Collection of exactly 2 elements");
         
     }
 
