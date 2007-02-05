@@ -19,6 +19,7 @@ import org.apache.commons.collections15.map.LazyMap;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 
@@ -193,8 +194,16 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     }
 
     public void calcAttraction(E e) {
-        V v1 = getGraph().getIncidentVertices(e).iterator().next();
-        V v2 = getGraph().getOpposite(v1, e);
+    	Pair<V> endpoints = getGraph().getEndpoints(e);
+        V v1 = endpoints.getFirst();
+        V v2 = endpoints.getSecond();
+        boolean v1_locked = isLocked(v1);
+        boolean v2_locked = isLocked(v2);
+        
+        if(v1_locked && v2_locked) {
+        	// both locked, do nothing
+        	return;
+        }
         Point2D p1 = getLocation(v1);
         Point2D p2 = getLocation(v2);
         if(p1 == null || p2 == null) return;
@@ -209,13 +218,16 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         if (Double.isNaN(force)) { throw new IllegalArgumentException(
                 "Unexpected mathematical result in FRLayout:calcPositions [force]"); }
 
-        FRVertexData fvd1 = getFRData(v1);
-        FRVertexData fvd2 = getFRData(v2);
-
-        fvd1.decrementDisp((xDelta / deltaLength) * force,
-                (yDelta / deltaLength) * force);
-        fvd2.incrementDisp((xDelta / deltaLength) * force,
-                (yDelta / deltaLength) * force);
+        double dx = (xDelta / deltaLength) * force;
+        double dy = (yDelta / deltaLength) * force;
+        if(v1_locked == false) {
+        	FRVertexData fvd1 = getFRData(v1);
+        	fvd1.decrementDisp(dx, dy);
+        }
+        if(v2_locked == false) {
+        	FRVertexData fvd2 = getFRData(v2);
+        	fvd2.incrementDisp(dx, dy);
+        }
     }
 
     public void calcRepulsion(V v1) {
