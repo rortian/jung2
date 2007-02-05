@@ -99,11 +99,11 @@ public class SatelliteVisualizationViewer<V, E>
         // get a copy of the current layout transform
         // it may have been scaled to fit the graph
         AffineTransform modelLayoutTransform =
-            new AffineTransform(master.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).getTransform());
+            new AffineTransform(master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getTransform());
         
         // I want no layout transformations in the satellite view
         // this resets the auto-scaling that occurs in the super constructor
-        getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, new MutableAffineTransformer(modelLayoutTransform));
+        getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, new MutableAffineTransformer(modelLayoutTransform));
         
         // make sure the satellite listens for changes in the master
         master.addChangeListener(this);
@@ -140,7 +140,7 @@ public class SatelliteVisualizationViewer<V, E>
 
         AffineTransform oldXform = g2d.getTransform();
         AffineTransform newXform = new AffineTransform(oldXform);
-        newXform.concatenate(getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW).getTransform());
+        newXform.concatenate(getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getTransform());
         
         g2d.setTransform(newXform);
 
@@ -252,9 +252,9 @@ public class SatelliteVisualizationViewer<V, E>
         }
         public void paint(Graphics g) {
             ShapeTransformer masterViewTransformer = 
-            	master.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
-            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
-            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+            	master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
+            ShapeTransformer masterLayoutTransformer = master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
+            ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
 
             Shape lens = master.getBounds();
             lens = masterViewTransformer.inverseTransform(lens);

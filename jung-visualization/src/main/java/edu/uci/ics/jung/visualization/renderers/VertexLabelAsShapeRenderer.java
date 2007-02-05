@@ -71,7 +71,7 @@ public class VertexLabelAsShapeRenderer<V,E>
         int v_offset = -d.height / 2;
         
         Point2D p = layout.transform(v);
-        p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
+        p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
 
         int x = (int)p.getX();
         int y = (int)p.getY();

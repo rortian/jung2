@@ -71,7 +71,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
             Shape shape = rc.getVertexShapeTransformer().transform(v);
             
             Point2D p = layout.transform(v);
-            p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
+            p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
 
             float x = (float)p.getX();
             float y = (float)p.getY();
@@ -100,7 +100,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
                     0,0,
                     d.width,d.height);
         }
-        return rc.getBasicTransformer().getTransformer(Layer.VIEW).transform(s).intersects(deviceRectangle);
+        return rc.getMultiLayerTransformer().getTransformer(Layer.VIEW).transform(s).intersects(deviceRectangle);
     }
 
     protected void paintShapeForVertex(RenderContext<V,E> rc, V v, Shape shape) {

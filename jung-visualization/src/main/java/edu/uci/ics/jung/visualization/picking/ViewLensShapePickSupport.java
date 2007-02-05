@@ -72,7 +72,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
 
         V closest = null;
         double minDistance = Double.MAX_VALUE;
-        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(new Point2D.Double(x,y));
+        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 
@@ -88,7 +88,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
                     shape = xform.createTransformedShape(shape);
                     
-                    shape = vv.getRenderContext().getBasicTransformer().transform(shape);
+                    shape = vv.getRenderContext().getMultiLayerTransformer().transform(shape);
                     
                     // see if this vertex center is closest to the pick point
                     // among any other containing vertices
@@ -128,7 +128,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
     	Set<V> pickedVertices = new HashSet<V>();
     	
 //    	 remove the view transform from the rectangle
-    	rectangle = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(rectangle);
+    	rectangle = ((MutableTransformerDecorator)vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(rectangle);
 
         while(true) {
             try {
@@ -142,7 +142,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
                     shape = xform.createTransformedShape(shape);
                     
-                    shape = vv.getRenderContext().getBasicTransformer().transform(shape);
+                    shape = vv.getRenderContext().getMultiLayerTransformer().transform(shape);
                     Rectangle2D bounds = shape.getBounds2D();
                     p.setLocation(bounds.getCenterX(),bounds.getCenterY());
 
@@ -161,7 +161,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
      */
     public E getEdge(Layout<V, E> layout, double x, double y) {
 
-        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(new Point2D.Double(x,y));
+        Point2D ip = ((MutableTransformerDecorator)vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)).getDelegate().inverseTransform(new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 
@@ -216,7 +216,7 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                     // transform the edge to its location and dimensions
                     edgeShape = xform.createTransformedShape(edgeShape);
                     
-                    edgeShape = vv.getRenderContext().getBasicTransformer().transform(edgeShape);
+                    edgeShape = vv.getRenderContext().getMultiLayerTransformer().transform(edgeShape);
 
                     // because of the transform, the edgeShape is now a GeneralPath
                     // see if this edge is the closest of any that intersect

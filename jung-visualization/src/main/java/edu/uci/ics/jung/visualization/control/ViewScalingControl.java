@@ -33,7 +33,7 @@ public class ViewScalingControl implements ScalingControl {
 	 * mouse wheel motion.
 	 */
     public void scale(VisualizationViewer vv, float amount, Point2D from) {
-        MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
+        MutableTransformer viewTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
         viewTransformer.scale(amount, amount, from);
         vv.repaint();
     }

@@ -49,7 +49,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
         this.renderer = vv.getRenderer();
         this.transformingRenderer = new BasicRenderer<V,E>();
         this.perspectiveTransformer = 
-            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW));
+            new PerspectiveShapeTransformer(new PerspectiveTransform(), vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
         this.transformingRenderer.setVertexRenderer(new TransformingImageVertexIconRenderer<V,E>());
         this.lensGraphicsDecorator = new TransformingGraphics(perspectiveTransformer);
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
@@ -60,7 +60,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
         renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, perspectiveTransformer);
+        vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, perspectiveTransformer);
         vv.getRenderContext().setGraphicsContext(lensGraphicsDecorator);
         vv.setRenderer(transformingRenderer);
         vv.addPreRenderPaintable(lens);
@@ -70,7 +70,7 @@ public class PerspectiveImageLensSupport<V,E> extends AbstractPerspectiveTransfo
     
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
-        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, perspectiveTransformer.getDelegate());
+        vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, perspectiveTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);
         vv.setRenderer(renderer);

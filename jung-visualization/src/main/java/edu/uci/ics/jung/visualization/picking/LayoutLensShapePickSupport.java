@@ -81,7 +81,7 @@ public class LayoutLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                     Point2D p = layout.transform(v);
                     if(p == null) continue;
                     // transform the vertex location to screen coords
-                    p = vv.getRenderContext().getBasicTransformer().transform(p);
+                    p = vv.getRenderContext().getMultiLayerTransformer().transform(p);
                     AffineTransform xform = 
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
                     shape = xform.createTransformedShape(shape);
@@ -129,7 +129,7 @@ public class LayoutLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                     Point2D p = layout.transform(v);
                     if(p == null) continue;
 
-                    p = vv.getRenderContext().getBasicTransformer().transform(p);
+                    p = vv.getRenderContext().getMultiLayerTransformer().transform(p);
                     if(rectangle.contains(p)) {
                     	pickedVertices.add(v);
                     }
@@ -145,7 +145,7 @@ public class LayoutLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
      */
     public E getEdge(Layout<V, E> layout, double x, double y) {
 
-        Point2D ip = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, new Point2D.Double(x,y));
+        Point2D ip = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 
@@ -164,8 +164,8 @@ public class LayoutLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                     V v1 = pair.getFirst();
                     V v2 = pair.getSecond();
                     boolean isLoop = v1.equals(v2);
-                    Point2D p1 = vv.getRenderContext().getBasicTransformer().transform(Layer.LAYOUT, layout.transform(v1));
-                    Point2D p2 = vv.getRenderContext().getBasicTransformer().transform(Layer.LAYOUT, layout.transform(v2));
+                    Point2D p1 = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, layout.transform(v1));
+                    Point2D p2 = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, layout.transform(v2));
                     if(p1 == null || p2 == null) continue;
                     float x1 = (float) p1.getX();
                     float y1 = (float) p1.getY();

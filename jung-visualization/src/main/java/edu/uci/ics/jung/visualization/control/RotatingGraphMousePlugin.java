@@ -136,7 +136,7 @@ public class RotatingGraphMousePlugin extends AbstractGraphMousePlugin
         boolean accepted = checkModifiers(e);
         if(accepted) {
             MutableTransformer modelTransformer =
-                vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+                vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
             // rotate
             vv.setCursor(cursor);
             
@@ -146,7 +146,7 @@ public class RotatingGraphMousePlugin extends AbstractGraphMousePlugin
             Point2D v1 = new Point2D.Double(center.getX()-p.getX(), center.getY()-p.getY());
             Point2D v2 = new Point2D.Double(center.getX()-q.getX(), center.getY()-q.getY());
             double theta = angleBetween(v1, v2);
-            modelTransformer.rotate(theta, vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, center));
+            modelTransformer.rotate(theta, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, center));
             down.x = e.getX();
             down.y = e.getY();
         

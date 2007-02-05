@@ -61,7 +61,7 @@ implements MouseListener, MouseMotionListener {
      */
     public void mousePressed(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
-        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
+        MutableTransformer vt = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -69,8 +69,8 @@ implements MouseListener, MouseMotionListener {
         boolean accepted = checkModifiers(e);
         if(accepted) {
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-            testViewCenter(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT), p);
-            testViewCenter(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW), p);
+            testViewCenter(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT), p);
+            testViewCenter(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW), p);
             vv.repaint();
         }
         super.mousePressed(e);
@@ -142,7 +142,7 @@ implements MouseListener, MouseMotionListener {
      */
     public void mouseDragged(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
-        MutableTransformer vt = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
+        MutableTransformer vt = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }
@@ -150,18 +150,18 @@ implements MouseListener, MouseMotionListener {
         boolean accepted = checkModifiers(e);
 
         if(accepted ) {
-            MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+            MutableTransformer modelTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
             vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             if(dragOnLens) {
                 setViewCenter(modelTransformer, p);
-                setViewCenter(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW), p);
+                setViewCenter(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW), p);
                 e.consume();
                 vv.repaint();
 
             } else if(dragOnEdge) {
 
                 setViewRadius(modelTransformer, p);
-                setViewRadius(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW), p);
+                setViewRadius(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW), p);
                 e.consume();
                 vv.repaint();
                 

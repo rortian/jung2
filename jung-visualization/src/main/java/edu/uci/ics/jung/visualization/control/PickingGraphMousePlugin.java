@@ -188,7 +188,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                     // q is transformed by the layout transformer only
                     Point2D q = layout.transform(vertex);
                     // transform the mouse point to graph coordinate system
-                    Point2D gp = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.LAYOUT, ip);
+                    Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.LAYOUT, ip);
 
                     offsetx = (float) (gp.getX()-q.getX());
                     offsety = (float) (gp.getY()-q.getY());
@@ -218,7 +218,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                         // q is transformed by the layout transformer only
                         Point2D q = layout.transform(vertex);
                         // translate mouse point to graph coord system
-                        Point2D gp = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.LAYOUT, ip);
+                        Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.LAYOUT, ip);
 
                         offsetx = (float) (gp.getX()-q.getX());
                         offsety = (float) (gp.getY()-q.getY());
@@ -277,8 +277,8 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
             if(vertex != null) {
                 Point p = e.getPoint();
-                Point2D graphPoint = vv.getRenderContext().getBasicTransformer().inverseTransform(p);
-                Point2D graphDown = vv.getRenderContext().getBasicTransformer().inverseTransform(down);
+                Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p);
+                Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
                 Layout<V,E> layout = vv.getGraphLayout();
                 double dx = graphPoint.getX()-graphDown.getX();
                 double dy = graphPoint.getY()-graphDown.getY();

@@ -56,7 +56,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		this.vertexFactory = vertexFactory;
 		this.edgeFactory = edgeFactory;
 		this.rc = rc;
-		this.basicTransformer = rc.getBasicTransformer();
+		this.basicTransformer = rc.getMultiLayerTransformer();
 		loadPlugins();
 		setModeKeyListener(new ModeKeyAdapter(this));
 	}

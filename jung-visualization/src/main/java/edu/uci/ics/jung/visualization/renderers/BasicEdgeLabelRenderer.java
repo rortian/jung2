@@ -47,8 +47,8 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
 
         Point2D p1 = layout.transform(v1);
         Point2D p2 = layout.transform(v2);
-        p1 = rc.getBasicTransformer().transform(Layer.LAYOUT, p1);
-        p2 = rc.getBasicTransformer().transform(Layer.LAYOUT, p2);
+        p1 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p1);
+        p2 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p2);
         float x1 = (float) p1.getX();
         float y1 = (float) p1.getY();
         float x2 = (float) p2.getX();

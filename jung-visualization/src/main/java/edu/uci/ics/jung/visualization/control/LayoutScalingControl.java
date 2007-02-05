@@ -32,8 +32,8 @@ public class LayoutScalingControl implements ScalingControl {
 	 */
     public void scale(VisualizationViewer vv, float amount, Point2D from) {
         
-        Point2D ivtfrom = vv.getRenderContext().getBasicTransformer().inverseTransform(Layer.VIEW, from);
-        MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+        Point2D ivtfrom = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, from);
+        MutableTransformer modelTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
         modelTransformer.scale(amount, amount, ivtfrom);
         vv.repaint();
     }

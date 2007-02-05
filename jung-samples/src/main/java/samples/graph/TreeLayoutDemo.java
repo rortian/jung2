@@ -158,11 +158,11 @@ public class TreeLayoutDemo extends JApplet {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
 					layout.setRadial(true);
-					vv.getRenderContext().getBasicTransformer().setToIdentity();
+					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.addPreRenderPaintable(rings);
 				} else {
 					layout.setRadial(false);
-					vv.getRenderContext().getBasicTransformer().setToIdentity();
+					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.removePreRenderPaintable(rings);
 				}
 				vv.repaint();
@@ -209,7 +209,7 @@ public class TreeLayoutDemo extends JApplet {
 			for(double d : depths) {
 				ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d, 
 						center.getX()+d, center.getY()+d);
-				Shape shape = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
+				Shape shape = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
 				g2d.draw(shape);
 			}
 		}

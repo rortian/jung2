@@ -133,7 +133,7 @@ public class ShearingGraphMousePlugin extends AbstractGraphMousePlugin
         boolean accepted = checkModifiers(e);
         if(accepted) {
             MutableTransformer modelTransformer = 
-            	vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+            	vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
             vv.setCursor(cursor);
             Point2D q = down;
             Point2D p = e.getPoint();

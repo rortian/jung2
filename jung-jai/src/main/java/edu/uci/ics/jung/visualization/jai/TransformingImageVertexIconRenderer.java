@@ -65,7 +65,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         Shape shape = rc.getVertexShapeTransformer().transform(v);
         
         Point2D p = layout.transform(v);
-        p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
+        p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
         float x = (float)p.getX();
         float y = (float)p.getY();
 

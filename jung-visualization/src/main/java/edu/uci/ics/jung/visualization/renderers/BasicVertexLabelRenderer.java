@@ -85,7 +85,7 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
         	return;
         }
         Point2D pt = layout.transform(v);
-        pt = rc.getBasicTransformer().transform(Layer.LAYOUT, pt);
+        pt = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, pt);
 
         float x = (float) pt.getX();
         float y = (float) pt.getY();

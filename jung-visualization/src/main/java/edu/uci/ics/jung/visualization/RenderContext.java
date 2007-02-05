@@ -190,7 +190,7 @@ public interface RenderContext<V, E> {
         
     }
     
-    MultiLayerTransformer getBasicTransformer();
+    MultiLayerTransformer getMultiLayerTransformer();
     
     void setBasicTransformer(MultiLayerTransformer basicTransformer);
     

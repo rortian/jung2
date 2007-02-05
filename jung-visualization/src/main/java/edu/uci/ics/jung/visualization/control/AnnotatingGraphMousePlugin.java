@@ -92,7 +92,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     		int selectionModifiers, int additionalModifiers) {
         super(selectionModifiers);
         this.rc = rc;
-        this.basicTransformer = rc.getBasicTransformer();
+        this.basicTransformer = rc.getMultiLayerTransformer();
         this.additionalModifiers = additionalModifiers;
         this.lensPaintable = new LensPaintable();
         this.annotationPaintable = new AnnotationPaintable(rc);
@@ -152,7 +152,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	if(e.isPopupTrigger()) {
     		String annotation = JOptionPane.showInputDialog(vv,"Annotation:");
     		if(annotation != null && annotation.length() > 0) {
-    			Point2D p = vv.getRenderContext().getBasicTransformer().inverseTransform(down);
+    			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
     			annotationPaintable.add(p, annotation);
     		}
     	} else if(e.getModifiers() == additionalModifiers) {
@@ -180,7 +180,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         		Point2D out = e.getPoint();
         		Ellipse2D arect = new Ellipse2D.Double();
         		arect.setFrameFromDiagonal(down,out);
-        		Shape s = vv.getRenderContext().getBasicTransformer().inverseTransform(arect);
+        		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
         		annotationPaintable.add(s,Color.cyan);
         		if(added == false) {
         			vv.addPostRenderPaintable(annotationPaintable);
@@ -192,7 +192,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         		Point2D out = e.getPoint();
         		Rectangle2D arect = new Rectangle2D.Double();
         		arect.setFrameFromDiagonal(down,out);
-        		Shape s = vv.getRenderContext().getBasicTransformer().inverseTransform(arect);
+        		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
         		annotationPaintable.add(s,Color.red);
         		if(added == false) {
         			vv.addPostRenderPaintable(annotationPaintable);

@@ -110,10 +110,10 @@ public class GraphZoomScrollPane extends JPanel {
             previous = hval;
             if(dh != 0 && scrollBarsMayControlAdjusting) {
                 // get the uniform scale of all transforms
-                float layoutScale = (float) vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).getScale();
+                float layoutScale = (float) vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale();
                 dh *= layoutScale;
                 AffineTransform at = AffineTransform.getTranslateInstance(dh, 0);
-                vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).preConcatenate(at);
+                vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).preConcatenate(at);
             }
         }
     }
@@ -133,10 +133,10 @@ public class GraphZoomScrollPane extends JPanel {
             if(dv != 0 && scrollBarsMayControlAdjusting) {
             
                 // get the uniform scale of all transforms
-                float layoutScale = (float) vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).getScale();
+                float layoutScale = (float) vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale();
                 dv *= layoutScale;
                 AffineTransform at = AffineTransform.getTranslateInstance(0, dv);
-                vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).preConcatenate(at);
+                vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).preConcatenate(at);
             }
         }
     }
@@ -156,8 +156,8 @@ public class GraphZoomScrollPane extends JPanel {
             new Rectangle(0,0,d.width,d.height);
             		//-d.width/2, -d.height/2, 2*d.width, 2*d.height);
         
-        BidirectionalTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
-        BidirectionalTransformer layoutTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+        BidirectionalTransformer viewTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
+        BidirectionalTransformer layoutTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
 
         Point2D h0 = new Point2D.Double(vvBounds.getMinX(), vvBounds.getCenterY());
         Point2D h1 = new Point2D.Double(vvBounds.getMaxX(), vvBounds.getCenterY());

@@ -33,7 +33,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
 	protected GraphElementAccessor<V,E> pickSupport;
 	
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT)),
+        this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                 new ModalLensGraphMouse());
     }
     /**
@@ -62,7 +62,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
             lensControls = new LensControls(lensTransformer);
         }
         vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, lensTransformer);
+        vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, lensTransformer);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
@@ -74,7 +74,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensTransformer != null) {
             vv.removePreRenderPaintable(lens);
             vv.removePostRenderPaintable(lensControls);
-            vv.getRenderContext().getBasicTransformer().setTransformer(Layer.LAYOUT, lensTransformer.getDelegate());
+            vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, lensTransformer.getDelegate());
         }
         vv.getRenderContext().setPickSupport(pickSupport);
         vv.setToolTipText(defaultToolTipText);

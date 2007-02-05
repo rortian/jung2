@@ -80,7 +80,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     }
     
     public void activate() {
-    	lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW));
+    	lensTransformer.setDelegate(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
         if(lens == null) {
             lens = new Lens(lensTransformer);
         }
@@ -88,8 +88,8 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
             lensControls = new LensControls(lensTransformer);
         }
         renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
-        lensTransformer.setDelegate(vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW));
-        vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, lensTransformer);
+        lensTransformer.setDelegate(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
+        vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.setRenderer(transformingRenderer);
         vv.addPreRenderPaintable(lens);
@@ -101,7 +101,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
-    	vv.getRenderContext().getBasicTransformer().setTransformer(Layer.VIEW, lensTransformer.getDelegate());
+    	vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer.getDelegate());
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);

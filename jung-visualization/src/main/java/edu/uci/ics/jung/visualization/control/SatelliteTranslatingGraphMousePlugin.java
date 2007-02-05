@@ -51,11 +51,11 @@ public class SatelliteTranslatingGraphMousePlugin extends
                     ((SatelliteVisualizationViewer)vv).getMaster();
                 
                 MutableTransformer modelTransformerMaster = 
-                	vvMaster.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
+                	vvMaster.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
                 vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
                 try {
-                    Point2D q = vv.getRenderContext().getBasicTransformer().inverseTransform(down);
-                    Point2D p = vv.getRenderContext().getBasicTransformer().inverseTransform(e.getPoint());
+                    Point2D q = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
+                    Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint());
                     float dx = (float) (p.getX()-q.getX());
                     float dy = (float) (p.getY()-q.getY());
                     

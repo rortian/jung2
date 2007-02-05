@@ -48,7 +48,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         Shape shape = rc.getVertexShapeTransformer().transform(v);
         
         Point2D p = layout.transform(v);
-        p = rc.getBasicTransformer().transform(Layer.LAYOUT, p);
+        p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
         float x = (float)p.getX();
         float y = (float)p.getY();
         // create a transform that translates to the location of
@@ -89,7 +89,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         }
 //        System.err.println("shape bounds "+rc.getBasicTransformer().getViewTransformer().transform(s).getBounds());
 //        System.err.println("deviceRect "+deviceRectangle);
-        MutableTransformer vt = rc.getBasicTransformer().getTransformer(Layer.VIEW);
+        MutableTransformer vt = rc.getMultiLayerTransformer().getTransformer(Layer.VIEW);
         if(vt instanceof LensTransformer) {
         	vt = ((LensTransformer)vt).getDelegate();
         }

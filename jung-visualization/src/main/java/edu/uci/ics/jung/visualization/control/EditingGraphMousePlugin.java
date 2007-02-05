@@ -127,7 +127,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
 
                     V newVertex = vertexFactory.create();
                     	new Integer(graph.getVertexCount());
-                    vertexLocations.put(newVertex, vv.getRenderContext().getBasicTransformer().inverseTransform(e.getPoint()));
+                    vertexLocations.put(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
                         layout.lock(lockVertex,true);

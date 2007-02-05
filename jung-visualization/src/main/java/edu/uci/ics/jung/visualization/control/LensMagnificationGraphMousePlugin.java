@@ -84,8 +84,8 @@ public class LensMagnificationGraphMousePlugin extends AbstractGraphMousePlugin
         float delta = this.delta;
         if(accepted == true) {
             VisualizationViewer vv = (VisualizationViewer)e.getSource();
-            MutableTransformer modelTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT);
-            MutableTransformer viewTransformer = vv.getRenderContext().getBasicTransformer().getTransformer(Layer.VIEW);
+            MutableTransformer modelTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
+            MutableTransformer viewTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
             int amount = e.getWheelRotation();
             if(amount < 0) {
                 delta = -delta;

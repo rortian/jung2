@@ -104,7 +104,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 			if (vertex != null) {
 				Layout<V,E> layout = vv.getGraphLayout();
 				Point2D q = layout.transform(vertex);
-				Point2D lvc = vv.getRenderContext().getBasicTransformer().inverseTransform(vv.getCenter());
+				Point2D lvc = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(vv.getCenter());
 				final double dx = (lvc.getX() - q.getX()) / 10;
 				final double dy = (lvc.getY() - q.getY()) / 10;
 
@@ -112,7 +112,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 
 					public void run() {
 						for (int i = 0; i < 10; i++) {
-							vv.getRenderContext().getBasicTransformer().getTransformer(Layer.LAYOUT).translate(dx, dy);
+							vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).translate(dx, dy);
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException ex) {
