@@ -16,11 +16,24 @@ import java.util.Collection;
 import java.util.Collections;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 
 public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
 {
+	public boolean addEdge(E edge, Collection<V> vertices) {
+		return addEdge(edge, 
+				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices)
+				);
+	}
+
+	public boolean addEdge(E edge, Collection<V> vertices, EdgeType edgeType) {
+		return addEdge(edge, 
+				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices),
+				edgeType);
+	}
+	
     public int inDegree(V vertex)
     {
         return this.getInEdges(vertex).size();
@@ -103,16 +116,6 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
         return Collections.unmodifiableCollection(incident);
     }
     
-	public boolean addEdge(E edge, Collection<V> vertices) {
-		Pair<V> pair = null;
-		if(vertices instanceof Pair) {
-			pair = (Pair<V>)vertices;
-		} else {
-			pair = new Pair<V>(vertices);
-		}
-		return addEdge(edge, pair.getFirst(), pair.getSecond());
-	}
-
     public String toString() {
     	StringBuffer sb = new StringBuffer("Vertices:");
     	for(V v : getVertices()) {

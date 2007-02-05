@@ -70,12 +70,20 @@ public class UndirectedSparseGraph<V,E>
         return true;
     }
     
-    public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
-    	if(v1 == null || v2 == null) 
-    		throw new IllegalArgumentException("edge endpoints may not be null");
+    public boolean addEdge(E e, V v1, V v2) {
+        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
+    }
+
+	public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
     	if(edgeType != EdgeType.UNDIRECTED) throw new IllegalArgumentException();
-        if (edges.containsKey(edge))
-            return false;
+		return addEdge(edge, new Pair<V>(v1, v2));
+	}
+    
+    public boolean addEdge(E edge, Pair<V> endpoints) {
+    	
+        edges.put(edge, endpoints);
+        V v1 = endpoints.getFirst();
+        V v2 = endpoints.getSecond();
         
         if (!vertices.containsKey(v1))
             this.addVertex(v1);
@@ -83,10 +91,12 @@ public class UndirectedSparseGraph<V,E>
         if (!vertices.containsKey(v2))
             this.addVertex(v2);
 
-        Pair<V> endpoints = new Pair<V>(v1, v2);
-        edges.put(edge, endpoints);
         vertices.get(v1).add(edge);
         vertices.get(v2).add(edge);        
+
+        if (edges.containsKey(edge))
+            return false;
+        
         return true;
     }
 
@@ -162,10 +172,6 @@ public class UndirectedSparseGraph<V,E>
 
     public EdgeType getEdgeType(E edge) {
         return EdgeType.UNDIRECTED;
-    }
-
-    public boolean addEdge(E e, V v1, V v2) {
-        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
     }
 
 	public Collection<E> getEdges(EdgeType edgeType) {

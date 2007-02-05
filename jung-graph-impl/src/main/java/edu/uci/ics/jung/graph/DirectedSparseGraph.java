@@ -149,6 +149,7 @@ public class DirectedSparseGraph<V,E>
     public boolean addEdge(E edge, V source, V dest) {
         return addEdge(edge, source, dest, EdgeType.DIRECTED);
     }
+
     /**
      * Adds <code>edge</code> to the graph.  Also adds 
      * <code>source</code> and <code>dest</code> to the graph if they
@@ -156,20 +157,18 @@ public class DirectedSparseGraph<V,E>
      * the specified edge is 
      */
     public boolean addEdge(E edge, V source, V dest, EdgeType edgeType) {
-    	if(source == null || dest == null) 
-    		throw new IllegalArgumentException("edge endpoints may not be null");
+    	return addEdge(edge, new Pair<V>(source, dest), edgeType);
+    }
 
+	public boolean addEdge(E edge, Pair<V> endpoints, EdgeType edgeType) {
     	if(edgeType != EdgeType.DIRECTED) throw new IllegalArgumentException();
-        if (edges.containsKey(edge)) {
-            Pair<V> endpoints = edges.get(edge);
-            Pair<V> new_endpoints = new Pair<V>(source, dest);
-            if (!endpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("EdgeType " + edge + 
-                        " exists in this graph with endpoints " + source + ", " + dest);
-            } else {
-                return false;
-            }
-        }
+    	return addEdge(edge, endpoints);
+	}
+
+	public boolean addEdge(E edge, Pair<V> endpoints) {
+        edges.put(edge, endpoints);
+        V source = endpoints.getFirst();
+        V dest = endpoints.getSecond();
         
         if (!vertices.containsKey(source))
             this.addVertex(source);
@@ -177,14 +176,25 @@ public class DirectedSparseGraph<V,E>
         if (!vertices.containsKey(dest))
             this.addVertex(dest);
         
-        Pair<V> endpoints = new Pair<V>(source, dest);
-        edges.put(edge, endpoints);
         vertices.get(source).getSecond().add(edge);        
         vertices.get(dest).getFirst().add(edge);        
-        
-        return true;
-    }
 
+        if (edges.containsKey(edge)) {
+            Pair<V> existingEndpoints = edges.get(edge);
+            Pair<V> new_endpoints = new Pair<V>(source, dest);
+            if (!existingEndpoints.equals(new_endpoints)) {
+                throw new IllegalArgumentException("EdgeType " + edge + 
+                        " exists in this graph with endpoints " + source + ", " + dest);
+            } else {
+                return false;
+            }
+        }
+        
+       
+        return true;
+	}
+
+    
     public V getSource(E edge) {
         return this.getEndpoints(edge).getFirst();
     }
