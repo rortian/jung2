@@ -13,7 +13,7 @@ package edu.uci.ics.graph;
 
 import java.util.Collection;
 
-public interface ArchetypeGraph<V, E>
+public interface HyperGraph<V, E>
 {
     Collection<E> getEdges();
     
@@ -49,5 +49,8 @@ public interface ArchetypeGraph<V, E>
     int numNeighbors(V vertex); // getNeighbors(v).size()
     
     int numIncident(E edge); // getIncidentVertices(v).size()
+    
+    boolean addEdge(E edge, Collection<V> vertices);
+
 
 }
