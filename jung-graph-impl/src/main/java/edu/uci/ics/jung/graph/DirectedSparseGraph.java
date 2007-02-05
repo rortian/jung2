@@ -46,6 +46,9 @@ public class DirectedSparseGraph<V,E>
     }
 
     public boolean addVertex(V vertex) {
+    	if(vertex == null) {
+    		throw new IllegalArgumentException("vertex may not be null");
+    	}
         if (!vertices.containsKey(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new HashSet<E>(), new HashSet<E>()));
             return true;
@@ -154,7 +157,7 @@ public class DirectedSparseGraph<V,E>
      */
     public boolean addEdge(E edge, V source, V dest, EdgeType edgeType) {
     	if(source == null || dest == null) 
-    		throw new IllegalArgumentException("edge endpoints may not contain null values");
+    		throw new IllegalArgumentException("edge endpoints may not be null");
 
     	if(edgeType != EdgeType.DIRECTED) throw new IllegalArgumentException();
         if (edges.containsKey(edge)) {

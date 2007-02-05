@@ -25,6 +25,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
  
     public boolean addEdge(H hyperedge, Collection<V> to_attach)
     {
+    	if(to_attach.contains(null)) throw new IllegalArgumentException("cannot add an edge with a null enpoint");
         if (edges.containsKey(hyperedge))
             return false;
         edges.put(hyperedge, new HashSet<V>(to_attach));
@@ -87,6 +88,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
     
     public boolean addVertex(V vertex)
     {
+    	if(vertex == null) throw new IllegalArgumentException("cannot add a null vertex");
         if (vertices.containsKey(vertex))
             return false;
         vertices.put(vertex, new HashSet<H>());

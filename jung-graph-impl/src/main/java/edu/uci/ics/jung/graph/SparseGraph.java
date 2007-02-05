@@ -85,7 +85,7 @@ public class SparseGraph<V,E>
     
     public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
     	if(v1 == null || v2 == null) 
-    		throw new IllegalArgumentException("edge endpoints may not contain null values");
+    		throw new IllegalArgumentException("edge endpoints may not be null");
         if (edges.containsKey(edge)) {
             Pair<V> endpoints = edges.get(edge);
             Pair<V> new_endpoints = new Pair<V>(v1, v2);
