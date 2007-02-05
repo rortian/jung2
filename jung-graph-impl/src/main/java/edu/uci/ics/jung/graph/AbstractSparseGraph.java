@@ -102,6 +102,17 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
         
         return Collections.unmodifiableCollection(incident);
     }
+    
+	public boolean addEdge(E edge, Collection<V> vertices) {
+		Pair<V> pair = null;
+		if(vertices instanceof Pair) {
+			pair = (Pair<V>)vertices;
+		} else {
+			pair = new Pair<V>(vertices);
+		}
+		return addEdge(edge, pair.getFirst(), pair.getSecond());
+	}
+
     public String toString() {
     	StringBuffer sb = new StringBuffer("Vertices:");
     	for(V v : getVertices()) {

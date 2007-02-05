@@ -75,7 +75,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	 * 
 	 * @param vertex the tree root to add
 	 * @return true if this call mutates the underlying graph
-	 * @see edu.uci.ics.graph.ArchetypeGraph#addVertex(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#addVertex(java.lang.Object)
 	 */
 	public boolean addVertex(V vertex) {
 		setRoot(vertex);
@@ -86,7 +86,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	 * @param vertex
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#areIncident(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#areIncident(java.lang.Object, java.lang.Object)
 	 */
 	public boolean areIncident(V vertex, E edge) {
 		return delegate.areIncident(vertex, edge);
@@ -96,7 +96,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#areNeighbors(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#areNeighbors(java.lang.Object, java.lang.Object)
 	 */
 	public boolean areNeighbors(V v1, V v2) {
 		return delegate.areNeighbors(v1, v2);
@@ -105,7 +105,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#degree(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#degree(java.lang.Object)
 	 */
 	public int degree(V vertex) {
 		return delegate.degree(vertex);
@@ -115,7 +115,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#findEdge(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
 	 */
 	public E findEdge(V v1, V v2) {
 		return delegate.findEdge(v1, v2);
@@ -132,7 +132,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getEdgeCount()
+	 * @see edu.uci.ics.graph.Graph#getEdgeCount()
 	 */
 	public int getEdgeCount() {
 		return delegate.getEdgeCount();
@@ -140,7 +140,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getEdges()
+	 * @see edu.uci.ics.graph.Graph#getEdges()
 	 */
 	public Collection<E> getEdges() {
 		return delegate.getEdges();
@@ -176,7 +176,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getIncidentEdges(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#getIncidentEdges(java.lang.Object)
 	 */
 	public Collection<E> getIncidentEdges(V vertex) {
 		return delegate.getIncidentEdges(vertex);
@@ -185,7 +185,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getIncidentVertices(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#getIncidentVertices(java.lang.Object)
 	 */
 	public Collection<V> getIncidentVertices(E edge) {
 		return delegate.getIncidentVertices(edge);
@@ -203,7 +203,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getNeighbors(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#getNeighbors(java.lang.Object)
 	 */
 	public Collection<V> getNeighbors(V vertex) {
 		return delegate.getNeighbors(vertex);
@@ -257,7 +257,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getVertexCount()
+	 * @see edu.uci.ics.graph.Graph#getVertexCount()
 	 */
 	public int getVertexCount() {
 		return delegate.getVertexCount();
@@ -265,7 +265,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#getVertices()
+	 * @see edu.uci.ics.graph.Graph#getVertices()
 	 */
 	public Collection<V> getVertices() {
 		return delegate.getVertices();
@@ -323,7 +323,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#numNeighbors(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#numNeighbors(java.lang.Object)
 	 */
 	public int numNeighbors(V vertex) {
 		return delegate.numNeighbors(vertex);
@@ -359,7 +359,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#removeEdge(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
 		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
@@ -371,7 +371,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	 * passed node.
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.ArchetypeGraph#removeVertex(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
 		for(V v : getChildren(vertex)) {
@@ -562,4 +562,15 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
         // all edges in a forest connect exactly 2 vertices
         return 2;
     }
+    
+	public boolean addEdge(E edge, Collection<V> vertices) {
+		Pair<V> pair = null;
+		if(vertices instanceof Pair) {
+			pair = (Pair<V>)vertices;
+		} else {
+			pair = new Pair<V>(vertices);
+		}
+		return addEdge(edge, pair.getFirst(), pair.getSecond());
+	}
+
 }

@@ -214,4 +214,5 @@ public class DirectedSparseGraph<V,E>
 	public int getVertexCount() {
 		return vertices.keySet().size();
 	}
+
 }

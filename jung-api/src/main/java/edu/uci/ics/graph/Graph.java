@@ -18,7 +18,7 @@ import edu.uci.ics.graph.util.Pair;
 
 
 
-public interface Graph<V,E> extends ArchetypeGraph<V,E>
+public interface Graph<V,E> extends HyperGraph<V,E>
 {
     Collection<E> getInEdges(V vertex);
     

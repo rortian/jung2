@@ -16,14 +16,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Hypergraph;
+import edu.uci.ics.graph.HyperGraph;
 
-public class SetHypergraph<V,H> implements Hypergraph<V,H>
+public class SetHypergraph<V,H> implements HyperGraph<V,H>
 {
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedges
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets
  
-    public boolean addHyperedge(H hyperedge, Collection<V> to_attach)
+    public boolean addEdge(H hyperedge, Collection<V> to_attach)
     {
         if (edges.containsKey(hyperedge))
             return false;
