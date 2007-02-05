@@ -23,7 +23,9 @@ import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
+import edu.uci.ics.graph.Forest;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.Tree;
 
 /**
  * @author Karlheinz Toni
@@ -78,16 +80,19 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     private Collection<V> roots;
 
     public TreeLayout(Graph<V,E> g) {
-    	this.graph = g;
-        this.roots = getRoots(g);
+    	this(g, DEFAULT_DISTX, DEFAULT_DISTY);
     }
 
     public TreeLayout(Graph<V,E> g, int distx) {
-        this.roots = getRoots(g);
-        this.distX = distx;
+        this(g, distx, DEFAULT_DISTY);
     }
 
     public TreeLayout(Graph<V,E> g, int distx, int disty) {
+    	
+    	assert g instanceof Tree || g instanceof Forest : 
+    		"Graph must be a Tree or a Forest";
+    	
+    	this.graph = g;
         this.roots = getRoots(g);
         this.distX = distx;
         this.distY = disty;
