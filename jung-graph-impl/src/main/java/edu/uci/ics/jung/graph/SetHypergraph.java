@@ -16,9 +16,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.HyperGraph;
+import edu.uci.ics.graph.Hypergraph;
 
-public class SetHypergraph<V,H> implements HyperGraph<V,H>
+public class SetHypergraph<V,H> implements Hypergraph<V,H>
 {
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedges
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets
