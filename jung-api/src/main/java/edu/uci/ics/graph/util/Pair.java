@@ -41,6 +41,21 @@ public final class Pair<T> implements Collection<T>
         list.add(value2);
         delegate = Collections.unmodifiableList(list);
     }
+    
+    /**
+     * create a Pair from the passed Collection.
+     * The size of the Collection must be 1 or 2.
+     * @param values
+     */
+    public Pair(Collection<T> values) 
+    {
+    	if(values.size() == 1 || values.size() == 2) {
+    		list.addAll(values);
+    		delegate = Collections.unmodifiableList(list);
+    	} else {
+    		throw new IllegalArgumentException("Pair may only be created from a Collection of 1 or 2 elements");
+    	}
+    }
 
     /**
      * Returns the first constructor argument.
