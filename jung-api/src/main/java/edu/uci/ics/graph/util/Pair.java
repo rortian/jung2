@@ -28,8 +28,6 @@ import java.util.Iterator;
 
 public final class Pair<T> implements Collection<T> 
 {
-//    private List<T> list = new ArrayList<T>(2);
-//    private final List<T> delegate;
     private T first;
     private T second;
 
@@ -37,10 +35,7 @@ public final class Pair<T> implements Collection<T>
     {
         first = value1;
         second = value2;
-        assert first != null && second != null : "Both inputs must be non-null";
-//        list.add(value1);
-//        list.add(value2);
-//        delegate = Collections.unmodifiableList(list);
+//        assert first != null && second != null : "Both inputs must be non-null";
     }
     
     /**
@@ -55,25 +50,18 @@ public final class Pair<T> implements Collection<T>
             Iterator<T> iter = values.iterator();
             first = iter.next();
             second = first;
-            assert first != null && second != null : "Both inputs must be non-null";
+//            assert first != null && second != null : "Both inputs must be non-null";
         }
         else if (values.size() == 2)
         {
             Iterator<T> iter = values.iterator();
             first = iter.next();
             second = iter.next();
-            assert first != null && second != null : "Both inputs must be non-null";
+//            assert first != null && second != null : "Both inputs must be non-null";
        }
         else
             throw new IllegalArgumentException("Pair may only be created from a Collection of exaclty 1 or 2 elements");
         
-//    	if(values.size() == 1 || values.size() == 2) {
-//    		list.addAll(values);
-//    		delegate = Collections.unmodifiableList(list);
-//    	} 
-//        else {
-//    		throw new IllegalArgumentException("Pair may only be created from a Collection of 1 or 2 elements");
-//    	}
     }
 
     /**
@@ -81,7 +69,6 @@ public final class Pair<T> implements Collection<T>
      */
     public T getFirst() 
     {
-//        return delegate.get(0);
         return first;
     }
     
@@ -90,7 +77,6 @@ public final class Pair<T> implements Collection<T>
      */
     public T getSecond() 
     {
-//        return delegate.get(1);
         return second;
     }
     
@@ -102,41 +88,22 @@ public final class Pair<T> implements Collection<T>
             return true;
 
         if (o instanceof Pair) {
-            Pair tt = (Pair) o;
-            Object first = tt.getFirst();
-            Object second = tt.getSecond();
-            return ((first == this.first || first.equals(this.first)) &&
-                    (second == this.second || second.equals(this.second)));
+            Pair otherPair = (Pair) o;
+            Object otherFirst = otherPair.getFirst();
+            Object otherSecond = otherPair.getSecond();
+            return 
+            	(this.first  == otherFirst  || 
+            			(this.first != null  && this.first.equals(otherFirst)))   
+            			
+            			&&
+            			
+                (this.second == otherSecond || 
+                		(this.second != null && this.second.equals(otherSecond)));
         } else {
             return false;
         }
-
-        
-        // FIXME: should we allow other types of Collections?
-//        if (!(o instanceof Pair))
-//            return false;
-
-        
-//        Iterator<T> e1 = delegate.iterator();
-//        Iterator e2 = ((Pair) o).iterator();
-//        while(e1.hasNext() && e2.hasNext()) {
-//            T o1 = e1.next();
-//            Object o2 = e2.next();
-//            if (!(o1==null ? o2==null : o1.equals(o2)))
-//                return false;
-//        }
-//        return !(e1.hasNext() || e2.hasNext());
     }
     
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-//    public int hashCode() 
-//    {
-//        // FIXME: do we need something more robust here?
-//        return first.hashCode() + second.hashCode();
-////        return delegate.hashCode();
-//    }
     public int hashCode() 
     {
     	int hashCode = 1;
@@ -151,7 +118,6 @@ public final class Pair<T> implements Collection<T>
     public String toString()
     {
         return "<" + first.toString() + ", " + second.toString() + ">";
-//        return delegate.toString();
     }
 
     public boolean add(T o) {
@@ -161,17 +127,14 @@ public final class Pair<T> implements Collection<T>
 
     public boolean addAll(Collection<? extends T> c) {
         throw new UnsupportedOperationException("Pairs cannot be mutated");
-//        return delegate.addAll(c);
     }
 
     public void clear() {
         throw new UnsupportedOperationException("Pairs cannot be mutated");
-//        delegate.clear();
     }
 
     public boolean contains(Object o) {
         return (first == o || first.equals(o) || second == o || second.equals(o));
-//        return delegate.contains(o);
     }
 
     public boolean containsAll(Collection<?> c) {
@@ -181,12 +144,10 @@ public final class Pair<T> implements Collection<T>
         Object c_first = iter.next();
         Object c_second = iter.next();
         return this.contains(c_first) && this.contains(c_second);
-//        return delegate.containsAll(c);
     }
 
     public boolean isEmpty() {
         return false;
-//        return delegate.isEmpty();
     }
 
     public Iterator<T> iterator() {
@@ -195,22 +156,18 @@ public final class Pair<T> implements Collection<T>
 
     public boolean remove(Object o) {
         throw new UnsupportedOperationException("Pairs cannot be mutated");
-//        return delegate.remove(o);
     }
 
     public boolean removeAll(Collection<?> c) {
         throw new UnsupportedOperationException("Pairs cannot be mutated");
-//        return delegate.removeAll(c);
     }
 
     public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException("Pairs cannot be mutated");
-//        return delegate.retainAll(c);
     }
 
     public int size() {
         return 2;
-//        return delegate.size();
     }
 
     public Object[] toArray() {
@@ -218,8 +175,6 @@ public final class Pair<T> implements Collection<T>
         to_return[0] = first;
         to_return[1] = second;
         return to_return;
-        
-//        return delegate.toArray();
     }
 
     public <S> S[] toArray(S[] a) {
@@ -235,7 +190,6 @@ public final class Pair<T> implements Collection<T>
         if (to_return.length > 2)
             to_return[2] = null;
         return to_return;
-//        return delegate.<S>toArray(a);
     }
     
     private class PairIterator implements Iterator
