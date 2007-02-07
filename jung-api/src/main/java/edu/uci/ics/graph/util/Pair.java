@@ -37,25 +37,22 @@ public final class Pair<T> implements Collection<T>
     		throw new IllegalArgumentException("Pair cannot contain null values");
         first = value1;
         second = value2;
-        
-//        assert first != null && second != null : "Both inputs must be non-null";
     }
     
     /**
-     * create a Pair from the passed Collection.
-     * The size of the Collection must be 1 or 2.
+     * Creates a Pair from the passed Collection.
+     * The size of the Collection must be 2.
      * @param values
      */
     public Pair(Collection<T> values) 
     {
-    	if(values.contains(null)) 
-    		throw new IllegalArgumentException("Pair cannot contain null values");
     	if (values.size() == 2)
         {
+            if(values.contains(null)) 
+                throw new IllegalArgumentException("Pair cannot contain null values");
             Iterator<T> iter = values.iterator();
             first = iter.next();
             second = iter.next();
-//            assert first != null && second != null : "Both inputs must be non-null";
        }
         else
             throw new IllegalArgumentException("Pair may only be created from a Collection of exactly 2 elements");
@@ -120,7 +117,6 @@ public final class Pair<T> implements Collection<T>
 
     public boolean add(T o) {
         throw new UnsupportedOperationException("Pairs cannot be mutated");
-//        return delegate.add(o);
     }
 
     public boolean addAll(Collection<? extends T> c) {
