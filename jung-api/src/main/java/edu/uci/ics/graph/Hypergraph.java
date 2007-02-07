@@ -46,9 +46,9 @@ public interface Hypergraph<V, E>
     
     int degree(V vertex); // getIncidentEdges(v).size()
     
-    int numNeighbors(V vertex); // getNeighbors(v).size()
+    int getNeighborCount(V vertex); // getNeighbors(v).size()
     
-    int numIncident(E edge); // getIncidentVertices(v).size()
+    int getIncidentCount(E edge); // getIncidentVertices(v).size()
     
     boolean addEdge(E edge, Collection<V> vertices);
 

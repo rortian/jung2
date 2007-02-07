@@ -141,12 +141,12 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
         return vertices.get(vertex).size();
     }
     
-    public int numNeighbors(V vertex)
+    public int getNeighborCount(V vertex)
     {
         return getNeighbors(vertex).size();
     }
     
-    public int numIncident(H edge)
+    public int getIncidentCount(H edge)
     {
         return edges.get(edge).size();
     }

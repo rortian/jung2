@@ -329,10 +329,10 @@ public class Graphs {
 		/**
 		 * @param vertex
 		 * @return
-		 * @see edu.uci.ics.graph.Hypergraph#numNeighbors(java.lang.Object)
+		 * @see edu.uci.ics.graph.Hypergraph#getNeighborCount(java.lang.Object)
 		 */
-		public synchronized int numNeighbors(V vertex) {
-			return delegate.numNeighbors(vertex);
+		public synchronized int getNeighborCount(V vertex) {
+			return delegate.getNeighborCount(vertex);
 		}
 
 		/**
@@ -418,9 +418,9 @@ public class Graphs {
 			return delegate.isSource(vertex, edge);
 		}
 		
-        public int numIncident(E edge)
+        public int getIncidentCount(E edge)
         {
-            return delegate.numIncident(edge);
+            return delegate.getIncidentCount(edge);
         }
 
 		/**
@@ -722,10 +722,10 @@ public class Graphs {
 		/**
 		 * @param vertex
 		 * @return
-		 * @see edu.uci.ics.graph.Hypergraph#numNeighbors(java.lang.Object)
+		 * @see edu.uci.ics.graph.Hypergraph#getNeighborCount(java.lang.Object)
 		 */
-		public int numNeighbors(V vertex) {
-			return delegate.numNeighbors(vertex);
+		public int getNeighborCount(V vertex) {
+			return delegate.getNeighborCount(vertex);
 		}
 
 		/**
@@ -811,9 +811,9 @@ public class Graphs {
 			return delegate.isSource(vertex, edge);
 		}
 
-        public int numIncident(E edge)
+        public int getIncidentCount(E edge)
         {
-            return delegate.numIncident(edge);
+            return delegate.getIncidentCount(edge);
         }
 
 		/**

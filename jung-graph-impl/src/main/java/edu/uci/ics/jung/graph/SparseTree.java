@@ -334,10 +334,10 @@ public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#numNeighbors(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#getNeighborCount(java.lang.Object)
 	 */
-	public int numNeighbors(V vertex) {
-		return delegate.numNeighbors(vertex);
+	public int getNeighborCount(V vertex) {
+		return delegate.getNeighborCount(vertex);
 	}
 
 	/**
@@ -575,7 +575,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
 		return Collections.singleton(getRoot());
 	}
 
-    public int numIncident(E edge)
+    public int getIncidentCount(E edge)
     {
         // all edges in a tree connect exactly 2 vertices
         return 2;
