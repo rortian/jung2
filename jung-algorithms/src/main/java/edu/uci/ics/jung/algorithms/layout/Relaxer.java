@@ -1,4 +1,4 @@
-package edu.uci.ics.jung.visualization.layout;
+package edu.uci.ics.jung.algorithms.layout;
 
 public interface Relaxer {
 	

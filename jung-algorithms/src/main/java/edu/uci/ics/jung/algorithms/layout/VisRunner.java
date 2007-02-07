@@ -1,4 +1,4 @@
-package edu.uci.ics.jung.visualization.layout;
+package edu.uci.ics.jung.algorithms.layout;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 
@@ -36,11 +36,12 @@ public class VisRunner implements Relaxer, Runnable {
 	
 	public void prerelax() {
 		manualSuspend = true;
-
+		long time = System.currentTimeMillis();
 		long timeNow = System.currentTimeMillis();
 		while (System.currentTimeMillis() - timeNow < 500 && !process.done()) {
 			process.step();
 		}
+		System.err.println("time was "+(System.currentTimeMillis()-time));
 		manualSuspend = false;
 	}
 	
