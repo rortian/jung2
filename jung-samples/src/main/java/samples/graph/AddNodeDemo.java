@@ -129,7 +129,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         try {
 
             if (g.getVertexCount() < 100) {
-//            	layout.lock(true);
+            	layout.lock(true);
                 //add a vertex
                 Integer v1 = new Integer(g.getVertexCount());
 
@@ -150,7 +150,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
                 layout.initialize();
                 relaxer.resume();
-//                layout.lock(false);
+                layout.lock(false);
             } else {
             	done = true;
             }
