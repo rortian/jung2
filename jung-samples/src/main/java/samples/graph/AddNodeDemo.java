@@ -26,13 +26,14 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Graphs;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout2;
+import edu.uci.ics.jung.algorithms.layout.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout.LengthFunction;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.layout.Relaxer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /*
@@ -72,7 +73,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         g = Graphs.<Number,Number>synchronizedDirectedGraph(new DirectedSparseGraph<Number,Number>());
 
         //create a graphdraw
-        layout = new FRLayout<Number,Number>(g);
+        layout = new FRLayout2<Number,Number>(g);
 //        ((FRLayout)layout).setMaxIterations(200);
         
         vv = new VisualizationViewer<Number,Number>(layout, new Dimension(600,600));
@@ -128,7 +129,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         try {
 
             if (g.getVertexCount() < 100) {
-            	layout.lock(true);
+//            	layout.lock(true);
                 //add a vertex
                 Integer v1 = new Integer(g.getVertexCount());
 
@@ -149,7 +150,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
                 layout.initialize();
                 relaxer.resume();
-                layout.lock(false);
+//                layout.lock(false);
             } else {
             	done = true;
             }
