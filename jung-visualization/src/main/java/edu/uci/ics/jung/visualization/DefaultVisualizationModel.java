@@ -17,9 +17,9 @@ import javax.swing.event.EventListenerList;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.Relaxer;
+import edu.uci.ics.jung.algorithms.layout.VisRunner;
 import edu.uci.ics.jung.visualization.layout.LayoutEventBroadcaster;
-import edu.uci.ics.jung.visualization.layout.Relaxer;
-import edu.uci.ics.jung.visualization.layout.VisRunner;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
