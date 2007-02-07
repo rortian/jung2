@@ -182,6 +182,13 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     	Pair<V> endpoints = getGraph().getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
+        boolean v1_locked = isLocked(v1);
+        boolean v2_locked = isLocked(v2);
+        
+        if(v1_locked && v2_locked) {
+        	// both locked, do nothing
+        	return;
+        }
         Point2D p1 = getLocation(v1);
         Point2D p2 = getLocation(v2);
         if(p1 == null || p2 == null) return;
@@ -197,19 +204,34 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         double dx = xDelta * force;
         double dy = yDelta * force;
         Point2D fvd1 = frVertexData.get(v1);
-        fvd1.setLocation(fvd1.getX()-dx, fvd1.getY()-dy);
         Point2D fvd2 = frVertexData.get(v2);
-        fvd2.setLocation(fvd2.getX()+dx, fvd2.getY()+dy);
+        if(v2_locked) {
+        	// double the offset for v1, as v2 will not be moving in
+        	// the opposite direction
+        	fvd1.setLocation(fvd1.getX()-2*dx, fvd1.getY()-2*dy);
+        } else {
+        	fvd1.setLocation(fvd1.getX()-dx, fvd1.getY()-dy);
+        }
+        if(v1_locked) {
+        	// double the offset for v2, as v1 will not be moving in
+        	// the opposite direction
+        	fvd2.setLocation(fvd2.getX()+2*dx, fvd2.getY()+2*dy);
+        } else {
+        	fvd2.setLocation(fvd2.getX()+dx, fvd2.getY()+dy);
+        }
     }
 
     public void calcRepulsion(V v1) {
         Point2D fvd1 = frVertexData.get(v1);
         if(fvd1 == null) return;
         fvd1.setLocation(0, 0);
+        boolean v1_locked = isLocked(v1);
 
         try {
             for(V v2 : getGraph().getVertices()) {
 
+                boolean v2_locked = isLocked(v2);
+            	if (v1_locked && v2_locked) continue;
                 if (v1 != v2) {
                     Point2D p1 = getLocation(v1);
                     Point2D p2 = getLocation(v2);
@@ -221,10 +243,19 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
                     
                     double force = (repulsion_constant * repulsion_constant);// / deltaLength;
                     
+                    double forceOverDeltaLength = force / deltaLength;
+                    
                     assert Double.isNaN(force) == false : "Unexpected mathematical result in FRLayout:calcPositions [repulsion]";
                     
-                    fvd1.setLocation(fvd1.getX()+(xDelta / deltaLength) * force,
-                    		fvd1.getY()+(yDelta / deltaLength) * force);
+                    if(v2_locked) {
+                    	// double the offset for v1, as v2 will not be moving in
+                    	// the opposite direction
+                    	fvd1.setLocation(fvd1.getX()+2 * xDelta * forceOverDeltaLength,
+                    		fvd1.getY()+ 2 * yDelta * forceOverDeltaLength);
+                    } else {
+                    	fvd1.setLocation(fvd1.getX()+xDelta * forceOverDeltaLength,
+                        		fvd1.getY()+yDelta * forceOverDeltaLength);
+                    }
                 }
             }
         } catch(ConcurrentModificationException cme) {
