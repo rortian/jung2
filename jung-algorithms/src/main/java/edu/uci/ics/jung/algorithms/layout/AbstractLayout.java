@@ -36,9 +36,6 @@ import edu.uci.ics.graph.Graph;
  */
 abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 
-//    protected ChangeEventSupport changeSupport =
-//        new DefaultChangeEventSupport(this);
-
     /**
      * a set of vertices that should not move in relation to the
      * other vertices
@@ -223,13 +220,11 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	public void setLocation(V picked, double x, double y) {
 		Point2D coord = getCoordinates(picked);
 		coord.setLocation(x, y);
-//        fireStateChanged();
 	}
 
 	public void setLocation(V picked, Point2D p) {
 		Point2D coord = getCoordinates(picked);
 		coord.setLocation(p);
-//        fireStateChanged();
 	}
 
 	/**
@@ -245,43 +240,4 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 			lock(v, lock);
 		}
 	}
-
-    /**
-     * Adds a <code>ChangeListener</code>.
-     * @param l the listener to be added
-     */
-//    public void addChangeListener(ChangeListener l) {
-//        changeSupport.addChangeListener(l);
-//    }
-//    
-//    /**
-//     * Removes a ChangeListener.
-//     * @param l the listener to be removed
-//     */
-//    public void removeChangeListener(ChangeListener l) {
-//        changeSupport.removeChangeListener(l);
-//    }
-    
-//    /**
-//     * Returns an array of all the <code>ChangeListener</code>s added
-//     * with addChangeListener().
-//     *
-//     * @return all of the <code>ChangeListener</code>s added or an empty
-//     *         array if no listeners have been added
-//     */
-//    public ChangeListener[] getChangeListeners() {
-//        return changeSupport.getChangeListeners();
-//    }
-//
-//    /**
-//     * Notifies all listeners that have registered interest for
-//     * notification on this event type.  The event instance 
-//     * is lazily created.
-//     * The primary listeners will be views that need to be repainted
-//     * because of changes in this model instance
-//     * @see EventListenerList
-//     */
-//    public void fireStateChanged() {
-//        changeSupport.fireStateChanged();
-//    }   
 }
