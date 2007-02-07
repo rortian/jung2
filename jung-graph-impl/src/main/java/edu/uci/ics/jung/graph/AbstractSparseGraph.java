@@ -54,12 +54,12 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
         return this.getSuccessors(v1).contains(v2);
     }
 
-    public int numPredecessors(V vertex)
+    public int getPredecessorCount(V vertex)
     {
         return this.getPredecessors(vertex).size();
     }
 
-    public int numSuccessors(V vertex)
+    public int getSuccessorCount(V vertex)
     {
         return this.getSuccessors(vertex).size();
     }

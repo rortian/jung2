@@ -332,19 +332,19 @@ public class SparseForest<V,E> implements DirectedGraph<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#numPredecessors(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#getPredecessorCount(java.lang.Object)
 	 */
-	public int numPredecessors(V vertex) {
-		return delegate.numPredecessors(vertex);
+	public int getPredecessorCount(V vertex) {
+		return delegate.getPredecessorCount(vertex);
 	}
 
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#numSuccessors(java.lang.Object)
+	 * @see edu.uci.ics.graph.Graph#getSuccessorCount(java.lang.Object)
 	 */
-	public int numSuccessors(V vertex) {
-		return delegate.numSuccessors(vertex);
+	public int getSuccessorCount(V vertex) {
+		return delegate.getSuccessorCount(vertex);
 	}
 
 	/**

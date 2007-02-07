@@ -42,8 +42,8 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     int outDegree(V vertex); // calculate from get{In,Out}Edges
     boolean isPredecessor(V v1, V v2); // v1.get{Prede,Suc}cessors.contains(v2)
     boolean isSuccessor(V v1, V v2); // v1.get{Prede,Suc}cessors.contains(v2)
-    int numPredecessors(V vertex); // get{Prede,Suc}cessors().size()
-    int numSuccessors(V vertex); // getSuccessors().size()
+    int getPredecessorCount(V vertex); // get{Prede,Suc}cessors().size()
+    int getSuccessorCount(V vertex); // getSuccessors().size()
     
     // methods from DirectedGraph
     V getSource(E directed_edge);
