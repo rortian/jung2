@@ -8,11 +8,10 @@
  * Created on Apr 14, 2005
  */
 
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.annotations;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Paint;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
@@ -35,16 +34,10 @@ public class AnnotationRenderer extends JLabel implements
 
      protected static Border noFocusBorder = new EmptyBorder(0,0,0,0); 
     
-     protected Paint annotationColor = Color.blue;
-     public AnnotationRenderer() {
-         this(Color.blue);
-     }
-     
     /**
      * Creates a default table cell renderer.
      */
-    public AnnotationRenderer(Paint annotationColor) {
-        this.annotationColor = annotationColor;
+    public AnnotationRenderer() {
         setOpaque(true);
         setBorder(noFocusBorder);
     }

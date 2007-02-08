@@ -9,7 +9,7 @@
  * Created on Mar 8, 2005
  *
  */
-package edu.uci.ics.jung.visualization.control;
+package edu.uci.ics.jung.visualization.annotations;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -20,7 +20,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
@@ -28,19 +27,15 @@ import java.awt.geom.RectangularShape;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import edu.uci.ics.jung.visualization.AnnotationPaintable;
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 
 /** 
- * PickingGraphMousePlugin supports the picking of graph elements
- * with the mouse. MouseButtonOne picks a single vertex
- * or edge, and MouseButtonTwo adds to the set of selected Vertices
- * or EdgeType. If a Vertex is selected and the mouse is dragged while
- * on the selected Vertex, then that Vertex will be repositioned to
- * follow the mouse until the button is released.
+ * AnnotatingGraphMousePlugin can create Shape and Text annotations
+ * in a layer of the graph visualization.
  * 
  * @author Tom Nelson
  */
@@ -54,27 +49,40 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     protected int additionalModifiers;
     
     /**
-     * used to draw a rectangle to contain picked vertices
+     * used to draw a Shape annotation
      */
-    protected RectangularShape rect = new Rectangle2D.Float();
+    protected RectangularShape rectangularShape = new Rectangle2D.Float();
     
     /**
-     * the Paintable for the lens picking rectangle
+     * the Paintable for the Shape annotation
      */
     protected Paintable lensPaintable;
     
+    /**
+     * a Paintable to store all Annotations
+     */
     protected AnnotationPaintable annotationPaintable;
     
     /**
-     * color for the picking rectangle
+     * color for annotations
      */
-    protected Color lensColor = Color.cyan;
+    protected Color annotationColor = Color.black;
     
-    MultiLayerTransformer basicTransformer;
+    /**
+     * holds rendering transforms
+     */
+    protected MultiLayerTransformer basicTransformer;
     
-    RenderContext rc;
+    /**
+     * holds rendering settings
+     */
+    protected RenderContext rc;
     
-    boolean added = false;
+    /**
+     * set to true when the AnnotationPaintable has been
+     * added to the view component
+     */
+    protected boolean added = false;
     
     /**
 	 * create an instance with default settings
@@ -102,23 +110,28 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     /**
      * @return Returns the lensColor.
      */
-    public Color getLensColor() {
-        return lensColor;
+    public Color getAnnotationColor() {
+        return annotationColor;
     }
 
     /**
      * @param lensColor The lensColor to set.
      */
-    public void setLensColor(Color lensColor) {
-        this.lensColor = lensColor;
+    public void setAnnotationColor(Color lensColor) {
+        this.annotationColor = lensColor;
     }
 
+    /**
+     * the Paintable that draws a Shape annotation
+     * only while it is being created
+     * 
+     */
     class LensPaintable implements Paintable {
 
         public void paint(Graphics g) {
             Color oldColor = g.getColor();
-            g.setColor(lensColor);
-            ((Graphics2D)g).draw(rect);
+            g.setColor(annotationColor);
+            ((Graphics2D)g).draw(rectangularShape);
             g.setColor(oldColor);
         }
 
@@ -128,20 +141,11 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     }
 
     /**
-	 * For primary modifiers (default, MouseButton1):
-	 * pick a single Vertex or Edge that
-     * is under the mouse pointer. If no Vertex or edge is under
-     * the pointer, unselect all picked Vertices and edges, and
-     * set up to draw a rectangle for multiple selection
-     * of contained Vertices.
-     * For additional selection (default Shift+MouseButton1):
-     * Add to the selection, a single Vertex or Edge that is
-     * under the mouse pointer. If a previously picked Vertex
-     * or Edge is under the pointer, it is un-picked.
-     * If no vertex or Edge is under the pointer, set up
-     * to draw a multiple selection rectangle (as above)
-     * but do not unpick previously picked elements.
-	 * 
+     * Sets the location for an Annotation.
+     * Will either pop up a dialog to prompt for text
+     * input for a text annotation, or begin the process
+     * of drawing a Shape annotation
+     * 
 	 * @param e the event
 	 */
     @SuppressWarnings("unchecked")
@@ -150,50 +154,55 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	down = e.getPoint();
     	
     	if(e.isPopupTrigger()) {
-    		String annotation = JOptionPane.showInputDialog(vv,"Annotation:");
-    		if(annotation != null && annotation.length() > 0) {
+    		String annotationString = JOptionPane.showInputDialog(vv,"Annotation:");
+    		if(annotationString != null && annotationString.length() > 0) {
     			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
-    			annotationPaintable.add(p, annotation);
+    			Annotation<String> annotation =
+    				new Annotation<String>(annotationString, annotationColor, p);
+    			annotationPaintable.add(annotation);
     		}
-    	} else if(e.getModifiers() == additionalModifiers) {
-    		rect = new Ellipse2D.Double();
-    		rect.setFrameFromDiagonal(down,down);
-    		vv.addPostRenderPaintable(lensPaintable);
+//    	} else if(e.getModifiers() == additionalModifiers) {
+//    		rect = new Ellipse2D.Double();
+//    		rect.setFrameFromDiagonal(down,down);
+//    		vv.addPostRenderPaintable(lensPaintable);
     	} else if(e.getModifiers() == modifiers) {
-    		rect = new Rectangle2D.Double();
-    		rect.setFrameFromDiagonal(down,down);
+//    		rectangularShape = new Rectangle2D.Double();
+    		rectangularShape.setFrameFromDiagonal(down,down);
     		vv.addPostRenderPaintable(lensPaintable);
     	}
     }
 
     /**
-	 * If the mouse is dragging a rectangle, pick the
-	 * Vertices contained in that rectangle
+	 * Completes the process of adding a Shape annotation
+	 * and removed the transient paintable
 	 * 
-	 * clean up settings from mousePressed
 	 */
     @SuppressWarnings("unchecked")
     public void mouseReleased(MouseEvent e) {
         VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-        if(e.getModifiers() == additionalModifiers) {
+//        if(e.getModifiers() == additionalModifiers) {
+//        	if(down != null) {
+//        		Point2D out = e.getPoint();
+//        		Ellipse2D arect = new Ellipse2D.Double();
+//        		arect.setFrameFromDiagonal(down,out);
+//        		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
+//        		annotationPaintable.add(s,Color.cyan);
+//        		if(added == false) {
+//        			vv.addPostRenderPaintable(annotationPaintable);
+//        			added = true;
+//        		}
+//        	} 
+//        } else 
+        if(e.getModifiers() == modifiers) {
         	if(down != null) {
         		Point2D out = e.getPoint();
-        		Ellipse2D arect = new Ellipse2D.Double();
+        		RectangularShape arect = (RectangularShape)rectangularShape.clone();
         		arect.setFrameFromDiagonal(down,out);
         		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
-        		annotationPaintable.add(s,Color.cyan);
-        		if(added == false) {
-        			vv.addPostRenderPaintable(annotationPaintable);
-        			added = true;
-        		}
-        	} 
-        } else if(e.getModifiers() == modifiers) {
-        	if(down != null) {
-        		Point2D out = e.getPoint();
-        		Rectangle2D arect = new Rectangle2D.Double();
-        		arect.setFrameFromDiagonal(down,out);
-        		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
-        		annotationPaintable.add(s,Color.red);
+        		Annotation<Shape> annotation =
+        			new Annotation<Shape>(s, annotationColor, out);
+        		annotationPaintable.add(annotation);
+//        		annotationPaintable.add(s,Color.red);
         		if(added == false) {
         			vv.addPostRenderPaintable(annotationPaintable);
         			added = true;
@@ -205,23 +214,22 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     }
     
     /**
-	 * If the mouse is over a picked vertex, drag all picked
-	 * vertices with the mouse.
-	 * If the mouse is not over a Vertex, draw the rectangle
-	 * to select multiple Vertices
+	 * Draws the transient Paintable that will become
+	 * a Shape annotation when the mouse button is
+	 * released
 	 * 
 	 */
     @SuppressWarnings("unchecked")
     public void mouseDragged(MouseEvent e) {
     	Point2D out = e.getPoint();
     	if(e.getModifiers() == additionalModifiers) {
-            rect.setFrameFromDiagonal(down,out);
+            rectangularShape.setFrameFromDiagonal(down,out);
     		
     	} else if(e.getModifiers() == modifiers) {
-            rect.setFrameFromDiagonal(down,out);
+            rectangularShape.setFrameFromDiagonal(down,out);
     		
     	}
-        rect.setFrameFromDiagonal(down,out);
+        rectangularShape.setFrameFromDiagonal(down,out);
     }
     
      public void mouseClicked(MouseEvent e) {
@@ -239,5 +247,19 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 
     public void mouseMoved(MouseEvent e) {
     }
+
+	/**
+	 * @return the rect
+	 */
+	public RectangularShape getRectangularShape() {
+		return rectangularShape;
+	}
+
+	/**
+	 * @param rect the rect to set
+	 */
+	public void setRectangularShape(RectangularShape rect) {
+		this.rectangularShape = rect;
+	}
 
  }
