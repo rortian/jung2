@@ -15,11 +15,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
@@ -48,34 +50,28 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  */
 public class AnnotationsDemo<V, E> extends JApplet {
 
-//    static final String instructions = 
-//        "<html>"+
-//        "<b><h2><center>Instructions for Mouse Listeners</center></h2></b>"+
-//        "<p>There are two modes, Transforming and Picking."+
-//        "<p>The modes are selected with a combo box."+
-//        
-//        "<p><p><b>Transforming Mode:</b>"+
-//        "<ul>"+
-//        "<li>Mouse1+drag pans the graph"+
-//        "<li>Mouse1+Shift+drag rotates the graph"+
-//        "<li>Mouse1+CTRL(or Command)+drag shears the graph"+
-//        "</ul>"+
-//        
-//        "<b>Picking Mode:</b>"+
-//        "<ul>"+
-//        "<li>Mouse1 on a Vertex selects the vertex"+
-//        "<li>Mouse1 elsewhere unselects all Vertices"+
-//        "<li>Mouse1+Shift on a Vertex adds/removes Vertex selection"+
-//        "<li>Mouse1+drag on a Vertex moves all selected Vertices"+
-//        "<li>Mouse1+drag elsewhere selects Vertices in a region"+
-//        "<li>Mouse1+Shift+drag adds selection of Vertices in a new region"+
-//        "<li>Mouse1+CTRL on a Vertex selects the vertex and centers the display on it"+
-//        "</ul>"+
-//       "<b>Both Modes:</b>"+
-//       "<ul>"+
-//        "<li>Mousewheel scales with a crossover value of 1.0.<p>"+
-//        "     - scales the graph layout when the combined scale is greater than 1<p>"+
-//        "     - scales the graph view when the combined scale is less than 1";
+    static final String instructions = 
+        "<html>"+
+        "<b><h2><center>Instructions for Annotations</center></h2></b>"+
+        "<p>The Annotation Controls allow you to select:"+
+        "<ul>"+
+        "<li>Shape"+
+        "<li>Color"+
+        "<li>Fill (or outline)"+
+        "<li>Above or below (UPPER/LOWER) the graph display"+
+        "</ul>"+
+        "<p>Mouse Button one press starts a Shape,"+
+        "<p>drag and release to complete."+
+        "<p>Mouse Button three pops up an input dialog"+
+        "<p>for text. This will create a text annotation."+
+        "<p>You may use html for multi-line, etc."+
+        "<p>You may even use an image tag and image url"+
+        "<p>to put an image in the annotation."+
+        "<p><p>"+
+        "<p>To remove an annotation, shift-click on it"+
+        "<p>in the Annotations mode."+
+        "<p>If there is overlap, the Annotation with center"+
+        "<p>closest to the mouse point will be removed.";
     
     JDialog helpDialog;
     
@@ -122,7 +118,7 @@ public class AnnotationsDemo<V, E> extends JApplet {
         panel.add(gzsp);
         
         helpDialog = new JDialog();
-//        helpDialog.getContentPane().add(new JLabel(instructions));
+        helpDialog.getContentPane().add(new JLabel(instructions));
         
         RenderContext rc = vv.getRenderContext();
         AnnotatingGraphMousePlugin annotatingPlugin =
@@ -161,12 +157,30 @@ public class AnnotationsDemo<V, E> extends JApplet {
         });
 
         JPanel controls = new JPanel();
-        controls.add(plus);
-        controls.add(minus);
-        controls.add(graphMouse.getModeComboBox());
-        controls.add(graphMouse.getShapeBox());
-        controls.add(graphMouse.getColorChooserButton());
-        controls.add(help);
+        JPanel zoomControls = new JPanel();
+        zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
+        zoomControls.add(plus);
+        zoomControls.add(minus);
+        controls.add(zoomControls);
+        
+        JPanel modeControls = new JPanel();
+        modeControls.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
+        modeControls.add(graphMouse.getModeComboBox());
+        controls.add(modeControls);
+        
+        JPanel annotationControls = new JPanel();
+        annotationControls.setBorder(BorderFactory.createTitledBorder("Annotation Controls"));
+        
+        annotationControls.add(graphMouse.getShapeBox());
+        annotationControls.add(graphMouse.getColorChooserButton());
+        annotationControls.add(graphMouse.getFillButton());
+        annotationControls.add(graphMouse.getLayerBox());
+        controls.add(annotationControls);
+        
+        JPanel helpControls = new JPanel();
+        helpControls.setBorder(BorderFactory.createTitledBorder("Help"));
+        helpControls.add(help);
+        controls.add(helpControls);
         content.add(panel);
         content.add(controls, BorderLayout.SOUTH);
     }

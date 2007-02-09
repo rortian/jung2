@@ -9,8 +9,11 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.swing.JComponent;
 
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -22,13 +25,14 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 public class AnnotationPaintable implements Paintable {
 	
 	protected Set<Annotation> annotations = new HashSet<Annotation>();
-    protected AnnotationRenderer annotationRenderer = new AnnotationRenderer();
+    protected AnnotationRenderer annotationRenderer;
 
-	RenderContext rc;
-	AffineTransformer transformer;
+	protected RenderContext rc;
+	protected AffineTransformer transformer;
 	
-	public AnnotationPaintable(RenderContext rc) {
+	public AnnotationPaintable(RenderContext rc, AnnotationRenderer annotationRenderer) {
 		this.rc = rc;
+		this.annotationRenderer = annotationRenderer;
 		MutableTransformer mt = rc.getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
 		if(mt instanceof AffineTransformer) {
 			transformer = (AffineTransformer)mt;
@@ -41,7 +45,18 @@ public class AnnotationPaintable implements Paintable {
 		annotations.add(annotation);
 	}
 	
-    public void paint(Graphics g) {
+	public void remove(Annotation annotation) {
+		annotations.remove(annotation);
+	}
+	
+    /**
+	 * @return the annotations
+	 */
+	public Set<Annotation> getAnnotations() {
+		return Collections.unmodifiableSet(annotations);
+	}
+
+	public void paint(Graphics g) {
     	Graphics2D g2d = (Graphics2D)g;
         Color oldColor = g.getColor();
         for(Annotation annotation : annotations) {
@@ -51,12 +66,21 @@ public class AnnotationPaintable implements Paintable {
             	Paint paint = annotation.getPaint();
             	Shape s = transformer.transform(shape);
             	g2d.setPaint(paint);
-            	g2d.draw(s);
+            	if(annotation.isFill()) {
+            		g2d.fill(s);
+            	} else {
+            		g2d.draw(s);
+            	}
         	} else if(ann instanceof String) {
             	Point2D p = annotation.getLocation();
             	String label = (String)ann;
                 Component component = prepareRenderer(rc, annotationRenderer, label);
                 component.setForeground((Color)annotation.getPaint());
+                if(annotation.isFill()) {
+                	((JComponent)component).setOpaque(true);
+                	component.setBackground((Color)annotation.getPaint());
+                	component.setForeground(Color.black);
+                }
                 Dimension d = component.getPreferredSize();
                 AffineTransform old = g2d.getTransform();
                 AffineTransform base = new AffineTransform(old);

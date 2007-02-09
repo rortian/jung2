@@ -61,12 +61,20 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     /**
      * a Paintable to store all Annotations
      */
-    protected AnnotationPaintable annotationPaintable;
+//    protected AnnotationPaintable annotationPaintable;
+    protected AnnotationManager annotationManager;
     
     /**
      * color for annotations
      */
-    protected Color annotationColor = Color.black;
+    protected Color annotationColor = Color.cyan;
+    
+    /**
+     * layer for annotations
+     */
+    protected Annotation.Layer layer = Annotation.Layer.LOWER;
+    
+    protected boolean fill;
     
     /**
      * holds rendering transforms
@@ -88,7 +96,8 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * create an instance with default settings
 	 */
 	public AnnotatingGraphMousePlugin(RenderContext rc) {
-	    this(rc, InputEvent.BUTTON1_MASK, InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
+	    this(rc, InputEvent.BUTTON1_MASK, 
+	    		InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
 	}
 
 	/**
@@ -103,7 +112,8 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         this.basicTransformer = rc.getMultiLayerTransformer();
         this.additionalModifiers = additionalModifiers;
         this.lensPaintable = new LensPaintable();
-        this.annotationPaintable = new AnnotationPaintable(rc);
+//        this.annotationPaintable = new AnnotationPaintable(rc);
+        this.annotationManager = new AnnotationManager(rc);
         this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
     }
     
@@ -153,15 +163,24 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
     	down = e.getPoint();
     	
+		if(added == false) {
+			vv.addPreRenderPaintable(annotationManager.getLowerAnnotationPaintable());
+			vv.addPostRenderPaintable(annotationManager.getUpperAnnotationPaintable());
+			added = true;
+		}
+
+    	
     	if(e.isPopupTrigger()) {
     		String annotationString = JOptionPane.showInputDialog(vv,"Annotation:");
     		if(annotationString != null && annotationString.length() > 0) {
     			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
     			Annotation<String> annotation =
-    				new Annotation<String>(annotationString, annotationColor, p);
-    			annotationPaintable.add(annotation);
+    				new Annotation<String>(annotationString, layer, annotationColor, fill, p);
+    			annotationManager.add(layer, annotation);
     		}
-//    	} else if(e.getModifiers() == additionalModifiers) {
+    	} else if(e.getModifiers() == additionalModifiers) {
+    		Annotation annotation = annotationManager.getAnnotation(down);
+    		annotationManager.remove(annotation);
 //    		rect = new Ellipse2D.Double();
 //    		rect.setFrameFromDiagonal(down,down);
 //    		vv.addPostRenderPaintable(lensPaintable);
@@ -200,13 +219,10 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         		arect.setFrameFromDiagonal(down,out);
         		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
         		Annotation<Shape> annotation =
-        			new Annotation<Shape>(s, annotationColor, out);
-        		annotationPaintable.add(annotation);
+        			new Annotation<Shape>(s, layer, annotationColor, fill, out);
+        		annotationManager.add(layer, annotation);
+//        		annotationPaintable.add(annotation);
 //        		annotationPaintable.add(s,Color.red);
-        		if(added == false) {
-        			vv.addPostRenderPaintable(annotationPaintable);
-        			added = true;
-        		}
         	}
         }
         down = null;
@@ -260,6 +276,34 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 */
 	public void setRectangularShape(RectangularShape rect) {
 		this.rectangularShape = rect;
+	}
+
+	/**
+	 * @return the layer
+	 */
+	public Annotation.Layer getLayer() {
+		return layer;
+	}
+
+	/**
+	 * @param layer the layer to set
+	 */
+	public void setLayer(Annotation.Layer layer) {
+		this.layer = layer;
+	}
+
+	/**
+	 * @return the fill
+	 */
+	public boolean isFill() {
+		return fill;
+	}
+
+	/**
+	 * @param fill the fill to set
+	 */
+	public void setFill(boolean fill) {
+		this.fill = fill;
 	}
 
  }

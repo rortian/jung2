@@ -27,6 +27,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JToggleButton;
 import javax.swing.plaf.basic.BasicIconFactory;
 
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
@@ -278,6 +279,7 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
     
     public JButton getColorChooserButton() {
     	final JButton colorChooser = new JButton("Color");
+    	colorChooser.setForeground(annotatingPlugin.getAnnotationColor());
     	colorChooser.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -288,6 +290,33 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			}});
     	return colorChooser;
     }
+    
+    public JComboBox getLayerBox() {
+    	final JComboBox layerBox = new JComboBox(
+    			new Annotation.Layer[] {
+    			Annotation.Layer.LOWER, Annotation.Layer.UPPER
+    			});
+    	layerBox.addItemListener(new ItemListener() {
 
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					annotatingPlugin.setLayer((Annotation.Layer)e.getItem());
+				}
+				
+			}});
+
+    	return layerBox;
+    }
+
+    public JToggleButton getFillButton() {
+    	JToggleButton fillButton = new JToggleButton("Fill");
+    	fillButton.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent e) {
+				annotatingPlugin.setFill(e.getStateChange() == ItemEvent.SELECTED);
+				
+			}});
+    	return fillButton;
+    }
 }
 
