@@ -63,7 +63,7 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.visualization.layout.VisRunner;
+import edu.uci.ics.jung.algorithms.layout.VisRunner;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
