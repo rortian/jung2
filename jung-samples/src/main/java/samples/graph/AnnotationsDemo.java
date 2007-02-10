@@ -35,6 +35,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.annotations.AnnotatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.annotations.AnnotatingModalGraphMouse;
+import edu.uci.ics.jung.visualization.annotations.AnnotationControls;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -168,14 +169,13 @@ public class AnnotationsDemo<V, E> extends JApplet {
         modeControls.add(graphMouse.getModeComboBox());
         controls.add(modeControls);
         
-        JPanel annotationControls = new JPanel();
-        annotationControls.setBorder(BorderFactory.createTitledBorder("Annotation Controls"));
+        JPanel annotationControlPanel = new JPanel();
+        annotationControlPanel.setBorder(BorderFactory.createTitledBorder("Annotation Controls"));
         
-        annotationControls.add(graphMouse.getShapeBox());
-        annotationControls.add(graphMouse.getColorChooserButton());
-        annotationControls.add(graphMouse.getFillButton());
-        annotationControls.add(graphMouse.getLayerBox());
-        controls.add(annotationControls);
+        AnnotationControls annotationControls = new AnnotationControls(annotatingPlugin);
+        
+        annotationControlPanel.add(annotationControls.getAnnotationsToolBar());
+        controls.add(annotationControlPanel);
         
         JPanel helpControls = new JPanel();
         helpControls.setBorder(BorderFactory.createTitledBorder("Help"));

@@ -28,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
 import javax.swing.plaf.basic.BasicIconFactory;
 
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
@@ -247,76 +248,6 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 				graphMouse.setMode(Mode.ANNOTATING);
 			}
 		}
-    }
-    
-    public JComboBox getShapeBox() {
-    	JComboBox shapeBox = new JComboBox(
-    			new Shape[] {
-    					new Rectangle2D.Double(),
-    					new RoundRectangle2D.Double(0,0,0,0,50,50),
-    					new Ellipse2D.Double()
-    			});
-    	shapeBox.setRenderer(new DefaultListCellRenderer() {
-    		public Component getListCellRendererComponent(JList list, Object value,
-    			int index, boolean isSelected, boolean hasFocus) {
-    			String valueString = value.toString();
-    			valueString = valueString.substring(0,valueString.indexOf("2D"));
-    			valueString = valueString.substring(valueString.lastIndexOf('.')+1);
-    			return super.getListCellRendererComponent(list, valueString, index,
-    					isSelected, hasFocus);
-    		}
-    	});
-    	shapeBox.addItemListener(new ItemListener() {
-
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					annotatingPlugin.setRectangularShape((RectangularShape)e.getItem());
-				}
-				
-			}});
-    	return shapeBox;
-    }
-    
-    public JButton getColorChooserButton() {
-    	final JButton colorChooser = new JButton("Color");
-    	colorChooser.setForeground(annotatingPlugin.getAnnotationColor());
-    	colorChooser.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				Color color = JColorChooser.showDialog(colorChooser, "Annotation Color", 
-						colorChooser.getForeground());
-				annotatingPlugin.setAnnotationColor(color);
-				colorChooser.setForeground(color);
-			}});
-    	return colorChooser;
-    }
-    
-    public JComboBox getLayerBox() {
-    	final JComboBox layerBox = new JComboBox(
-    			new Annotation.Layer[] {
-    			Annotation.Layer.LOWER, Annotation.Layer.UPPER
-    			});
-    	layerBox.addItemListener(new ItemListener() {
-
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.SELECTED) {
-					annotatingPlugin.setLayer((Annotation.Layer)e.getItem());
-				}
-				
-			}});
-
-    	return layerBox;
-    }
-
-    public JToggleButton getFillButton() {
-    	JToggleButton fillButton = new JToggleButton("Fill");
-    	fillButton.addItemListener(new ItemListener() {
-
-			public void itemStateChanged(ItemEvent e) {
-				annotatingPlugin.setFill(e.getStateChange() == ItemEvent.SELECTED);
-				
-			}});
-    	return fillButton;
     }
 }
 
