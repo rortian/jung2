@@ -52,6 +52,8 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     
     private double repulsion_constant;
     
+    private double max_dimension;
+    
     public FRLayout(Graph<V, E> g) {
         super(g);
     }
@@ -59,6 +61,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     public FRLayout(Graph<V, E> g, Dimension d) {
         super(g, new RandomLocationTransformer<V>(d), d);
         initialize();
+        max_dimension = Math.max(d.height, d.width);
     }
     
     /* (non-Javadoc)
@@ -68,6 +71,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 	public void setSize(Dimension size) {
 		setInitializer(new RandomLocationTransformer<V>(size));
 		super.setSize(size);
+        max_dimension = Math.max(size.height, size.width);
 	}
 
 	public void setAttractionMultiplier(double attraction) {
@@ -287,7 +291,8 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
      * <tt>MAX_ITERATIONS</tt>.
      */
     public boolean done() {
-        if (currentIteration > mMaxIterations) { 
+        if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension) 
+        { 
             return true; 
         } 
         return false;

@@ -51,6 +51,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     
     private double repulsion_constant;
     
+    private double max_dimension;
+    
     private Rectangle2D innerBounds = new Rectangle2D.Double();
     
     public FRLayout2(Graph<V, E> g) {
@@ -59,6 +61,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     
     public FRLayout2(Graph<V, E> g, Dimension d) {
         super(g, new RandomLocationTransformer<V>(d), d);
+        max_dimension = Math.max(d.height, d.width);
         initialize();
     }
     
@@ -71,6 +74,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
 		super.setSize(size);
 		double t = size.width/50.0;
 		innerBounds.setFrameFromDiagonal(t,t,size.width-t,size.height-t);
+        max_dimension = Math.max(size.height, size.width);
 	}
 
 	public void setAttractionMultiplier(double attraction) {
@@ -210,15 +214,15 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         	// the opposite direction
         	fvd1.setLocation(fvd1.getX()-2*dx, fvd1.getY()-2*dy);
         } else {
-        	fvd1.setLocation(fvd1.getX()-dx, fvd1.getY()-dy);
+        fvd1.setLocation(fvd1.getX()-dx, fvd1.getY()-dy);
         }
         if(v1_locked) {
         	// double the offset for v2, as v1 will not be moving in
         	// the opposite direction
         	fvd2.setLocation(fvd2.getX()+2*dx, fvd2.getY()+2*dy);
         } else {
-        	fvd2.setLocation(fvd2.getX()+dx, fvd2.getY()+dy);
-        }
+        fvd2.setLocation(fvd2.getX()+dx, fvd2.getY()+dy);
+    }
     }
 
     public void calcRepulsion(V v1) {
@@ -255,8 +259,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
                     } else {
                     	fvd1.setLocation(fvd1.getX()+xDelta * forceOverDeltaLength,
                         		fvd1.getY()+yDelta * forceOverDeltaLength);
-                    }
                 }
+            }
             }
         } catch(ConcurrentModificationException cme) {
             calcRepulsion(v1);
@@ -283,7 +287,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
      * <tt>MAX_ITERATIONS</tt>.
      */
     public boolean done() {
-        if (currentIteration > mMaxIterations) { 
+        if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension) { 
             return true; 
         } 
         return false;
