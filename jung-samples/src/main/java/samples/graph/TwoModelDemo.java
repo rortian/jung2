@@ -23,10 +23,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -77,7 +78,7 @@ public class TwoModelDemo extends JApplet {
         
         // create a simple graph for the demo
         // both models will share one graph
-        graph = TestGraphs.getOneComponentGraph();
+        graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
         
         // create two layouts for the one graph, one layout for each model
         Layout<String,Number> layout1 = new FRLayout<String,Number>(graph);

@@ -41,6 +41,7 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
+import edu.uci.ics.jung.algorithms.layout.RadialTreeLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseForest;
@@ -107,6 +108,8 @@ public class TreeLayoutDemo extends JApplet {
     String root;
     
     TreeLayout<String,Integer> layout;
+    
+    RadialTreeLayout<String,Integer> radialLayout;
 
     public TreeLayoutDemo() {
         
@@ -116,6 +119,8 @@ public class TreeLayoutDemo extends JApplet {
         createTree();
         
         layout = new TreeLayout<String,Integer>(graph);
+        radialLayout = new RadialTreeLayout<String,Integer>(graph);
+        radialLayout.setSize(new Dimension(600,600));
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
@@ -157,11 +162,13 @@ public class TreeLayoutDemo extends JApplet {
 
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
-					layout.setRadial(true);
+//					layout.setRadial(true);
+					vv.setGraphLayout(radialLayout);
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.addPreRenderPaintable(rings);
 				} else {
-					layout.setRadial(false);
+//					layout.setRadial(false);
+					vv.setGraphLayout(layout);
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.removePreRenderPaintable(rings);
 				}
@@ -191,7 +198,7 @@ public class TreeLayoutDemo extends JApplet {
     	
     	private Collection<Double> getDepths() {
     		Set<Double> depths = new HashSet<Double>();
-    		Map<String,PolarPoint> polarLocations = layout.getPolarLocations();
+    		Map<String,PolarPoint> polarLocations = radialLayout.getPolarLocations();
     		for(String v : graph.getVertices()) {
     			PolarPoint pp = polarLocations.get(v);
     			depths.add(pp.getRadius());
@@ -203,7 +210,7 @@ public class TreeLayoutDemo extends JApplet {
 			g.setColor(Color.lightGray);
 		
 			Graphics2D g2d = (Graphics2D)g;
-			Point2D center = layout.getCenter();
+			Point2D center = radialLayout.getCenter();
 
 			Ellipse2D ellipse = new Ellipse2D.Double();
 			for(double d : depths) {

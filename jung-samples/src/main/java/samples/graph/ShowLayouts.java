@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
@@ -37,7 +38,10 @@ import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -126,6 +130,13 @@ public class ShowLayouts extends JApplet {
             (Graph<? extends Object,? extends Object>[])
             new Graph<?,?>[graph_names.length];
         
+    	Factory<Graph<Integer,Number>> graphFactory =
+    		new Factory<Graph<Integer,Number>>() {
+    		public Graph<Integer,Number> create() {
+    			return new SparseGraph<Integer,Number>();
+    		}
+    	};
+
     	Factory<Integer> vertexFactory = new Factory<Integer>() {
     			int count;
 				public Integer create() {
@@ -138,13 +149,14 @@ public class ShowLayouts extends JApplet {
 				}};
 
             
-        g_array[0] = TestGraphs.createTestGraph(false);
-        g_array[1] = TestGraphs.generateMixedRandomGraph(vertexFactory, edgeFactory, new HashMap(), 20, true, new HashSet());
-        g_array[2] = TestGraphs.getDemoGraph();
-        g_array[3] = TestGraphs.createDirectedAcyclicGraph(4, 4, 0.3);
-        g_array[4] = TestGraphs.getOneComponentGraph();
-        g_array[5] = TestGraphs.createChainPlusIsolates(18, 5);
-        g_array[6] = TestGraphs.createChainPlusIsolates(0, 20);
+        g_array[0] = TestGraphs.createTestGraph(new UndirectedSparseGraph());
+        g_array[1] = TestGraphs.generateMixedRandomGraph(graphFactory, 
+        		vertexFactory, edgeFactory, new HashMap(), 20, true, new HashSet());
+        g_array[2] = TestGraphs.getDemoGraph(new UndirectedSparseGraph<String,Number>());
+        g_array[3] = TestGraphs.createDirectedAcyclicGraph(new DirectedSparseGraph(),4, 4, 0.3);
+        g_array[4] = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph());
+        g_array[5] = TestGraphs.createChainPlusIsolates(new UndirectedSparseGraph(), 18, 5);
+        g_array[6] = TestGraphs.createChainPlusIsolates(new UndirectedSparseGraph(), 0, 20);
 
         Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
 
@@ -239,6 +251,7 @@ public class ShowLayouts extends JApplet {
         layouts.add(FRLayout.class);
         layouts.add(CircleLayout.class);
         layouts.add(SpringLayout.class);
+        layouts.add(SpringLayout2.class);
         layouts.add(ISOMLayout.class);
         return (Class[]) layouts.toArray(new Class[0]);
     }

@@ -27,7 +27,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
 import edu.uci.ics.jung3d.algorithms.layout.SpringLayout;
@@ -40,8 +41,8 @@ import edu.uci.ics.jung3d.visualization.VisualizationViewer;
  */
 public class GraphDemo extends JPanel {
 
-	Graph<String,Number> demoGraph = TestGraphs.getDemoGraph();
-	Graph<String,Number> oneComponentGraph = TestGraphs.getOneComponentGraph();
+	Graph<String,Number> demoGraph = TestGraphs.getDemoGraph(new UndirectedSparseGraph<String,Number>());
+	Graph<String,Number> oneComponentGraph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
 	Map<String,Graph> graphMap = new HashMap<String,Graph>();
 	Map<String,Class> layoutMap = new HashMap<String,Class>();
 	JComboBox layoutBox, graphBox;
@@ -50,7 +51,7 @@ public class GraphDemo extends JPanel {
 		super(new BorderLayout());
 		final VisualizationViewer<String,Number> vv = new VisualizationViewer<String,Number>();
 		Graph<String,Number> graph = //TestGraphs.getOneComponentGraph();
-			TestGraphs.getDemoGraph();
+			TestGraphs.getDemoGraph(new UndirectedSparseGraph<String,Number>());
 		vv.getRenderContext().setVertexStringer(new ToStringLabeller<String>());
 		Layout<String,Number> layout = new SpringLayout<String,Number>(graph);
 		vv.setGraphLayout(layout);

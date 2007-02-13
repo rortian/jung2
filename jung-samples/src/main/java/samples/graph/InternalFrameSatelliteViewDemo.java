@@ -25,9 +25,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -95,7 +96,7 @@ public class InternalFrameSatelliteViewDemo {
     public InternalFrameSatelliteViewDemo() {
         
         // create a simple graph for the demo
-        graph = TestGraphs.getOneComponentGraph();
+        graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
 
         Layout<String,Number> layout = new ISOMLayout<String,Number>(graph);
 

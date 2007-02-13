@@ -32,9 +32,10 @@ import javax.swing.JTextArea;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -109,7 +110,7 @@ public class MultiViewDemo extends JApplet {
     public MultiViewDemo() {
         
         // create a simple graph for the demo
-        graph = TestGraphs.getOneComponentGraph();
+        graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
         
         // create one layout for the graph
         FRLayout<String,Number> layout = new FRLayout<String,Number>(graph);

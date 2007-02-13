@@ -27,7 +27,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,12 +56,13 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -326,6 +326,12 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
      * returns the resultant graph.
      */
     public Graph<Integer,Number> getGraph() {
+    	Factory<Graph<Integer,Number>> graphFactory =
+    		new Factory<Graph<Integer,Number>>() {
+    		public Graph<Integer,Number> create() {
+    			return new SparseGraph<Integer,Number>();
+    		}
+    	};
     	Factory<Integer> vertexFactory = 
     		new Factory<Integer>() {
     			int count;
@@ -339,7 +345,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 					return count++;
 				}};
         Graph<Integer,Number> g = 
-        	TestGraphs.<Integer,Number>generateMixedRandomGraph(vertexFactory, edgeFactory,
+        	TestGraphs.<Integer,Number>generateMixedRandomGraph(graphFactory, vertexFactory, edgeFactory,
         		edge_weight, 20, false, seedVertices);
         vs = new NumberVertexValueStringer<Integer>(voltages);
         es = new NumberEdgeValueStringer<Number>(edge_weight);

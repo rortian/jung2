@@ -18,8 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -40,7 +41,7 @@ public class PersistentLayoutDemo {
     /**
      * the graph
      */
-	Graph<String, Number> graph = TestGraphs.getOneComponentGraph();
+	Graph<String, Number> graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
 
     /**
      * the name of the file where the layout is saved

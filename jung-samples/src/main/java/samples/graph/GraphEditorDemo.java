@@ -12,7 +12,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,19 +42,16 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.annotations.AnnotationControls;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.EditingPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
  * Shows how easy it is to create a graph editor with JUNG.
@@ -178,7 +174,6 @@ public class GraphEditorDemo extends JApplet implements Printable {
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
 
-//        graphMouse.add(new EditingPopupGraphMousePlugin<Number,Number>(vertexLocations, vertexFactory, edgeFactory));
         graphMouse.setMode(ModalGraphMouse.Mode.EDITING);
         
         final ScalingControl scaler = new CrossoverScalingControl();
@@ -202,11 +197,13 @@ public class GraphEditorDemo extends JApplet implements Printable {
                 JOptionPane.showMessageDialog(vv, instructions);
             }});
 
+        AnnotationControls annotationControls = new AnnotationControls(graphMouse.getAnnotatingPlugin());
         JPanel controls = new JPanel();
         controls.add(plus);
         controls.add(minus);
         JComboBox modeBox = graphMouse.getModeComboBox();
         controls.add(modeBox);
+        controls.add(annotationControls.getAnnotationsToolBar());
         controls.add(help);
         content.add(controls, BorderLayout.SOUTH);
     }

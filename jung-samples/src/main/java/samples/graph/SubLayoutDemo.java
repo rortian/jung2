@@ -38,13 +38,14 @@ import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -115,7 +116,7 @@ public class SubLayoutDemo extends JApplet {
     public SubLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = TestGraphs.getOneComponentGraph();
+        graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
 
         // ClusteringLayout is a decorator class that delegates
         // to another layout, but can also sepately manage the

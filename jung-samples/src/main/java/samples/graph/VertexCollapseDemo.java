@@ -32,9 +32,10 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -94,7 +95,7 @@ public class VertexCollapseDemo extends JApplet {
         
         // create a simple graph for the demo
         graph = 
-            TestGraphs.getOneComponentGraph();
+            TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
         collapser = new GraphCollapser(graph);
         
         layout = new FRLayout(graph);

@@ -31,9 +31,10 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
+import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.generators.random.EppsteinPowerLawGenerator;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -278,7 +279,8 @@ public class ShortestPathDemo extends JPanel {
 	Graph<String,Number> getGraph() {
 
 		Graph<String,Number> g =
-			new EppsteinPowerLawGenerator<String,Number>(new VertexFactory(), new EdgeFactory(), 26, 50, 50).generateGraph();
+			new EppsteinPowerLawGenerator<String,Number>(
+					new GraphFactory(), new VertexFactory(), new EdgeFactory(), 26, 50, 50).generateGraph();
 		Set<String> removeMe = new HashSet<String>();
 		for (String v : g.getVertices()) {
             if ( g.degree(v) == 0 ) {
@@ -289,6 +291,12 @@ public class ShortestPathDemo extends JPanel {
 			g.removeVertex(v);
 		}
 		return g;
+	}
+	
+	static class GraphFactory implements Factory<Graph<String,Number>> {
+		public Graph<String,Number> create() {
+			return new SparseGraph<String,Number>();
+		}
 	}
 	
 	static class VertexFactory implements Factory<String> {
