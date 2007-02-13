@@ -3,7 +3,6 @@ package edu.uci.ics.jung.graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +14,6 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
 
 public class SparseGraphTest extends TestCase {
 
@@ -49,8 +47,25 @@ public class SparseGraphTest extends TestCase {
         Set<Number> seeds = new HashSet<Number>();
         seeds.add(1);
         seeds.add(5);
-        graph = TestGraphs.generateMixedRandomGraph(vertexFactory, edgeFactory, 
-        		new HashMap<Number,Number>(), vertexCount, seeds);
+        graph = new SparseGraph<Number,Number>();
+        graph.addEdge(1, 0, 1);
+        graph.addEdge(2, 1, 2);
+        graph.addEdge(3, 0, 2);
+        graph.addEdge(4, 2, 1);
+        graph.addEdge(5, 3, 1);
+        graph.addEdge(6, 0, 4, EdgeType.DIRECTED);
+        graph.addEdge(7, 0, 5, EdgeType.DIRECTED);
+        graph.addEdge(8, 5, 1, EdgeType.DIRECTED);
+        graph.addEdge(9, 6, 1, EdgeType.DIRECTED);
+        graph.addEdge(10, 4, 3, EdgeType.DIRECTED);
+        graph.addEdge(11, 2, 7);
+        graph.addEdge(12, 1, 5);
+        graph.addEdge(13, 2, 6);
+        graph.addEdge(14, 6, 4);
+        graph.addEdge(15, 7, 8);
+        graph.addEdge(16, 8, 3);
+        graph.addEdge(17, 5, 7);
+
         smallGraph = new SparseGraph<Integer,Number>();
         smallGraph.addVertex(v0);
         smallGraph.addVertex(v1);
