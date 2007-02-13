@@ -7,7 +7,8 @@ import java.util.Set;
 import junit.framework.TestCase;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.graph.generators.random.TestGraphs;
+import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 public class FRLayoutTest extends TestCase {
 	
@@ -15,7 +16,7 @@ public class FRLayoutTest extends TestCase {
 
 	public void testFRLayout() {
 		
-		Graph<String,Number> graph = TestGraphs.getOneComponentGraph();
+		Graph<String,Number> graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
 
 		Layout<String,Number> layout = new FRLayout<String,Number>(graph);
 		layout.setSize(new Dimension(600,600));
