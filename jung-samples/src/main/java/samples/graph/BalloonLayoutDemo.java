@@ -159,7 +159,7 @@ public class BalloonLayoutDemo extends JApplet {
             }
         });
         
-        JToggleButton radial = new JToggleButton("Radial");
+        JToggleButton radial = new JToggleButton("Balloon");
         radial.addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent e) {
