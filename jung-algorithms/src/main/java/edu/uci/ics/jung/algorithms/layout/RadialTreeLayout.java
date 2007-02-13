@@ -112,20 +112,6 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
     	return size;
     }
 
-//    /**
-//	 * @return the radial
-//	 */
-//	public boolean isRadial() {
-//		return radial;
-//	}
-
-//	/**
-//	 * @param radial the radial to set
-//	 */
-//	public void setRadial(boolean radial) {
-//		this.radial = radial;
-//	}
-
 	void buildTree() {
         this.m_currentPoint = new Point(0, 20);
         if (roots.size() > 0 && graph != null) {
@@ -267,16 +253,10 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 	}
 
 	public void setLocation(V v, Point2D location) {
-//		if(radial) {
-		System.err.print(v+" location from "+location);
 			Point2D c = getCenter();
 			Point2D pv = new Point2D.Double(location.getX()-c.getX(),location.getY()-c.getY());
 			PolarPoint newLocation = PolarPoint.cartesianToPolar(pv);
-			System.err.println(" to polar "+newLocation);
 			polarLocations.get(v).setLocation(newLocation);
-//		} else {
-//			locations.get(v).setLocation(location);
-//		}
 	}
 	
 	public Map<V,PolarPoint> getPolarLocations() {
