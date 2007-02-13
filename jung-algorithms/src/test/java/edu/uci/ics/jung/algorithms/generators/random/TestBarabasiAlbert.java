@@ -1,4 +1,4 @@
-package edu.uci.ics.jung.graph.generators.random;
+package edu.uci.ics.jung.algorithms.generators.random;
 
 /**
  * @author W. Giordano, Scott White
@@ -13,6 +13,8 @@ import junit.framework.TestSuite;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
+import edu.uci.ics.jung.graph.SparseGraph;
 
 
 public class TestBarabasiAlbert extends TestCase {
@@ -30,6 +32,13 @@ public class TestBarabasiAlbert extends TestCase {
         int random_seed = 0;
         int num_tests = 10;
         int num_timesteps = 10;
+        
+        Factory<Graph<Integer,Number>> graphFactory =
+        	new Factory<Graph<Integer,Number>>() {
+        	public Graph<Integer,Number> create() {
+        		return new SparseGraph<Integer,Number>();
+        	}
+        };
     	Factory<Integer> vertexFactory = 
     		new Factory<Integer>() {
     			int count;
@@ -44,7 +53,7 @@ public class TestBarabasiAlbert extends TestCase {
 				}};
 
 	    BarabasiAlbertGenerator<Integer,Number> generator = 
-            new BarabasiAlbertGenerator<Integer,Number>(vertexFactory, edgeFactory,
+            new BarabasiAlbertGenerator<Integer,Number>(graphFactory, vertexFactory, edgeFactory,
             		init_vertices,edges_to_add_per_timestep,random_seed, new HashSet<Integer>());
 	    for (int i = 1; i <= num_tests; i++) {
 	        

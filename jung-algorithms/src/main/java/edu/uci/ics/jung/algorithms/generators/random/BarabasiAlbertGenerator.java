@@ -7,7 +7,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.graph.generators.random;
+package edu.uci.ics.jung.algorithms.generators.random;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +23,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.graph.SparseGraph;
-import edu.uci.ics.jung.graph.generators.EvolvingGraphGenerator;
+import edu.uci.ics.jung.algorithms.generators.EvolvingGraphGenerator;
 
 
 /**
@@ -81,14 +80,10 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
     protected Map<V,Integer> index_vertex;
     protected boolean directed;
     protected boolean parallel;
+    protected Factory<Graph<V,E>> graphFactory;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
-//    /**
-//     * Tags the initial "seed" vertices that the graph starts with
-//     */
-//    public final static Object SEED = "edu.uci.ics.jung.random.generators.BarabasiAlbertGenerator.SEED";
-
     /**
      * Constructs a new instance of the generator.
      * @param init_vertices     number of unconnected 'seed' vertices that the graph should start with
@@ -98,7 +93,8 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
      * @param parallel  specifies whether the algorithm permits parallel edges
      * @param seed  random number seed
      */
-    public BarabasiAlbertGenerator(Factory<V> vertexFactory, Factory<E> edgeFactory, 
+    public BarabasiAlbertGenerator(Factory<Graph<V,E>> graphFactory,
+    		Factory<V> vertexFactory, Factory<E> edgeFactory, 
     		int init_vertices, int numEdgesToAttach, 
             boolean directed, boolean parallel, int seed, Set<V> seedVertices)
     {
@@ -112,6 +108,7 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
                     "number of vertices must be >= number of edges to attach at each time step");
         mNumEdgesToAttachPerStep = numEdgesToAttach;
         mRandom = new Random(seed);
+        this.graphFactory = graphFactory;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         this.init_vertices = init_vertices;
@@ -127,11 +124,12 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
      * new vertex to pre-existing vertices at each time step
      * @param seed  random number seed
      */
-    public BarabasiAlbertGenerator(Factory<V> vertexFactory, Factory<E> edgeFactory,
+    public BarabasiAlbertGenerator(Factory<Graph<V,E>> graphFactory,
+    		Factory<V> vertexFactory, Factory<E> edgeFactory,
     		int init_vertices, int numEdgesToAttach, int seed, 
             Set<V> seedVertices) 
     {
-        this(vertexFactory, edgeFactory, init_vertices, numEdgesToAttach, false, false, seed, seedVertices);
+        this(graphFactory, vertexFactory, edgeFactory, init_vertices, numEdgesToAttach, false, false, seed, seedVertices);
     }
 
     /**
@@ -141,19 +139,15 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
      * @param numEdgesToAttach the number of edges that should be attached from the
      * new vertex to pre-existing vertices at each time step
      */
-    public BarabasiAlbertGenerator(Factory<V> vertexFactory, Factory<E> edgeFactory,
+    public BarabasiAlbertGenerator(Factory<Graph<V,E>> graphFactory, 
+    		Factory<V> vertexFactory, Factory<E> edgeFactory,
     		int init_vertices, int numEdgesToAttach, Set<V> seedVertices) {
-        this(vertexFactory, edgeFactory, init_vertices, numEdgesToAttach, (int) System.currentTimeMillis(), seedVertices);
+        this(graphFactory, vertexFactory, edgeFactory, init_vertices, numEdgesToAttach, (int) System.currentTimeMillis(), seedVertices);
     }
     
     private void initialize(Set<V> seedVertices) {
     	
-//    	if(directed) {
-//    		mGraph = new SimpleDirectedSparseGraph<V, E>();
-//    	} else {
-//    		mGraph = new SimpleUndirectedSparseGraph<V,E>();
-//    	}
-    	mGraph = new SparseGraph<V,E>();
+    	mGraph = graphFactory.create();
 
         vertex_index = new ArrayList<V>(2*init_vertices);
         index_vertex = new HashMap<V, Integer>(2*init_vertices);

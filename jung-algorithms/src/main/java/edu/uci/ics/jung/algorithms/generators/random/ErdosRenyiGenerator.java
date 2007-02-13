@@ -7,7 +7,7 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.graph.generators.random;
+package edu.uci.ics.jung.algorithms.generators.random;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,7 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-import edu.uci.ics.jung.graph.generators.GraphGenerator;
-
+import edu.uci.ics.jung.algorithms.generators.GraphGenerator;
 
 /**
  * Random Generator of Erdos-Renyi "binomial model"
@@ -29,6 +27,7 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
     private int mNumVertices;
     private double mEdgeConnectionProbability;
     private Random mRandom;
+    Factory<UndirectedGraph<V,E>> graphFactory;
     Factory<V> vertexFactory;
     Factory<E> edgeFactory;
 
@@ -37,7 +36,8 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
      * @param numVertices number of vertices graph should have
      * @param p Connection's probability between 2 vertices
      */
-	public ErdosRenyiGenerator(Factory<V> vertexFactory, Factory<E> edgeFactory,
+	public ErdosRenyiGenerator(Factory<UndirectedGraph<V,E>> graphFactory,
+			Factory<V> vertexFactory, Factory<E> edgeFactory,
 			int numVertices,double p)
     {
         if (numVertices <= 0) {
@@ -47,6 +47,7 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
         if (p < 0 || p > 1) {
             throw new IllegalArgumentException("p must be between 0 and 1.");
         }
+        this.graphFactory = graphFactory;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         mEdgeConnectionProbability = p;
@@ -58,7 +59,8 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
      * an undirected edge with the probability specified by the constructor.
      */
 	public Graph<V,E> generateGraph() {
-        UndirectedGraph<V,E> g = new UndirectedSparseGraph<V,E>();
+        UndirectedGraph<V,E> g = graphFactory.create();
+//        	new UndirectedSparseGraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	g.addVertex(vertexFactory.create());
         }

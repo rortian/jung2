@@ -7,7 +7,7 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.graph.generators.random;
+package edu.uci.ics.jung.algorithms.generators.random;
 
 import junit.framework.Assert;
 import junit.framework.Test;
@@ -17,12 +17,15 @@ import junit.framework.TestSuite;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
+import edu.uci.ics.jung.graph.SparseGraph;
 
 /**
  * @author Scott White
  */
 public class TestEppsteinPowerLawGenerator extends TestCase {
 	
+	Factory<Graph<Integer,Number>> graphFactory;
 	Factory<Integer> vertexFactory;
 	Factory<Number> edgeFactory;
 
@@ -31,6 +34,11 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
 	}
 
 	protected void setUp() {
+		graphFactory = new Factory<Graph<Integer,Number>>() {
+			public Graph<Integer,Number> create() {
+				return new SparseGraph<Integer,Number>();
+			}
+		};
 		vertexFactory = new Factory<Integer>() {
 			int count;
 			public Integer create() {
@@ -50,7 +58,7 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
 
         for (int r=0; r<10; r++) {
             EppsteinPowerLawGenerator generator = 
-            	new EppsteinPowerLawGenerator(vertexFactory, edgeFactory, 10,40,r);
+            	new EppsteinPowerLawGenerator(graphFactory, vertexFactory, edgeFactory, 10,40,r);
             generator.setSeed(2);
 
             Graph graph = (Graph) generator.generateGraph();

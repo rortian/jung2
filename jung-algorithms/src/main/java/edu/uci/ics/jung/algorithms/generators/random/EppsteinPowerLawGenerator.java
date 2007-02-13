@@ -7,7 +7,7 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.graph.generators.random;
+package edu.uci.ics.jung.algorithms.generators.random;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,7 @@ import java.util.Random;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-import edu.uci.ics.jung.graph.generators.GraphGenerator;
-
-
+import edu.uci.ics.jung.algorithms.generators.GraphGenerator;
 
 /**
  * Graph generator that generates undirected sparse graphs with power-law distributions.
@@ -32,6 +29,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
     private int mNumIterations;
     private double mMaxDegree;
     private Random mRandom;
+    private Factory<Graph<V,E>> graphFactory;
     private Factory<V> vertexFactory;
     private Factory<E> edgeFactory;
 
@@ -42,8 +40,10 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
      * @param r the model parameter. The larger the value for this parameter the better the graph's degree
      * distribution will approximate a power-law.
      */
-    public EppsteinPowerLawGenerator(Factory<V> vertexFactory, Factory<E> edgeFactory, 
+    public EppsteinPowerLawGenerator(Factory<Graph<V,E>> graphFactory,
+    		Factory<V> vertexFactory, Factory<E> edgeFactory, 
     		int numVertices, int numEdges, int r) {
+    	this.graphFactory = graphFactory;
     	this.vertexFactory = vertexFactory;
     	this.edgeFactory = edgeFactory;
         mNumVertices = numVertices;
@@ -54,7 +54,8 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
 
     protected Graph<V,E> initializeGraph() {
         Graph<V,E> graph = null;
-        graph = new UndirectedSparseGraph<V,E>();
+        graph = graphFactory.create();
+        	//new UndirectedSparseGraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	graph.addVertex(vertexFactory.create());
         }

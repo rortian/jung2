@@ -1,4 +1,4 @@
-package edu.uci.ics.jung.graph.generators.random;
+package edu.uci.ics.jung.algorithms.generators.random;
 
 /**
  * @author W. Giordano, Scott White
@@ -7,12 +7,16 @@ package edu.uci.ics.jung.graph.generators.random;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.jung.algorithms.generators.random.ErdosRenyiGenerator;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 import junit.framework.*;
 
 
 public class TestErdosRenyi extends TestCase {
 	
+	Factory<UndirectedGraph<String,Number>> graphFactory;
 	Factory<String> vertexFactory;
 	Factory<Number> edgeFactory;
 
@@ -21,6 +25,11 @@ public class TestErdosRenyi extends TestCase {
 	}
 
 	protected void setUp() {
+		graphFactory = new Factory<UndirectedGraph<String,Number>>() {
+			public UndirectedGraph<String,Number> create() {
+				return new UndirectedSparseGraph<String,Number>();
+			}
+		};
 		vertexFactory = new Factory<String>() {
 			int count;
 			public String create() {
@@ -42,7 +51,7 @@ public class TestErdosRenyi extends TestCase {
         int total = 0;
 		for (int i = 1; i <= 10; i++) {
 			ErdosRenyiGenerator<String,Number> generator = 
-				new ErdosRenyiGenerator<String,Number>(vertexFactory, edgeFactory,
+				new ErdosRenyiGenerator<String,Number>(graphFactory, vertexFactory, edgeFactory,
 					numVertices,0.1);
             generator.setSeed(0);
 
