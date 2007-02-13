@@ -45,5 +45,10 @@ public class PolarPoint extends Point2D.Double {
 		double radius = Math.sqrt(x*x+y*y);
 		return new PolarPoint(theta, radius);
 	}
+	
+	public String toString() {
+		String superString = super.toString();
+		return superString.replace("Point2D", "PolarPoint2D");
+	}
 
 }
