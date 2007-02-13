@@ -165,11 +165,9 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
 			Point2D c = getCenter(v);
 			Point2D pv = new Point2D.Double(location.getX()-c.getX(),location.getY()-c.getY());
 			PolarPoint newLocation = PolarPoint.cartesianToPolar(pv);
-			System.err.println(" to polar "+newLocation);
 			polarLocations.get(v).setLocation(newLocation);
 			
 			Point2D center = getCenter(v);
-			System.err.println("center for "+v+" is "+center);
 			pv.setLocation(pv.getX()+center.getX(), pv.getY()+center.getY());
 			locations.put(v, pv);
 	}
