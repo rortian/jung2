@@ -88,7 +88,16 @@ public class ViewLensShapePickSupport<V, E> extends ShapePickSupport<V,E>
                         AffineTransform.getTranslateInstance(p.getX(), p.getY());
                     shape = xform.createTransformedShape(shape);
                     
-                    shape = vv.getRenderContext().getMultiLayerTransformer().transform(shape);
+                    // use the LAYOUT transform to move the shape center without
+                    // modifying the actual shape
+                    Point2D lp = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, p);
+                    AffineTransform xlate = AffineTransform.getTranslateInstance(
+                    		lp.getX()-p.getX(),lp.getY()-p.getY());
+                    shape = xlate.createTransformedShape(shape);
+                    // now use the VIEW transform to modify the actual shape
+                    
+                    shape = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.VIEW, shape);
+                    	//vv.getRenderContext().getMultiLayerTransformer().transform(shape);
                     
                     // see if this vertex center is closest to the pick point
                     // among any other containing vertices
