@@ -25,9 +25,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -87,7 +87,7 @@ public class AnnotationsDemo<V, E> extends JApplet {
     public AnnotationsDemo() {
         
         // create a simple graph for the demo
-        Graph<String, Number> graph = TestGraphs.getOneComponentGraph(new UndirectedSparseGraph<String,Number>());
+        Graph<String, Number> graph = TestGraphs.getOneComponentGraph();
         
         // the preferred sizes for the two views
         Dimension preferredSize1 = new Dimension(600,600);

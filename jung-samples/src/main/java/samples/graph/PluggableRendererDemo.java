@@ -56,13 +56,14 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.jung.algorithms.generators.random.TestGraphs;
+import edu.uci.ics.jung.algorithms.generators.random.MixedRandomGraphGenerator;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -345,7 +346,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 					return count++;
 				}};
         Graph<Integer,Number> g = 
-        	TestGraphs.<Integer,Number>generateMixedRandomGraph(graphFactory, vertexFactory, edgeFactory,
+        	MixedRandomGraphGenerator.<Integer,Number>generateMixedRandomGraph(graphFactory, vertexFactory, edgeFactory,
         		edge_weight, 20, false, seedVertices);
         vs = new NumberVertexValueStringer<Integer>(voltages);
         es = new NumberEdgeValueStringer<Number>(edge_weight);
