@@ -36,7 +36,7 @@ import edu.uci.ics.graph.Graph;
  * the filter code, with minor modifications. It demonstrates how to walk through the
  * filter process.
  * <pre>
- * Graph g = {@link edu.uci.ics.jung.utils.TestGraphs#createTestGraph(boolean) TestGraphs.createTestGraph}( true );                   
+ * Graph g = {@link edu.uci.ics.jung.util.TestGraphs#createTestGraph(boolean) TestGraphs.createTestGraph}( true );                   
  * // creates a graph.
  * EdgeWeightLabeller ewl = {@link edu.uci.ics.jung.graph.decorators.EdgeWeightLabeller#getLabeller EdgeWeightLabeller.getLabeller( g );}
  * // links each edge to a weight.
