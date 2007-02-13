@@ -30,10 +30,10 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 
 	protected Factory<V> vertexFactory;
 	protected Factory<E> edgeFactory;
-	protected GraphMousePlugin editingPlugin;
-	protected GraphMousePlugin labelEditingPlugin;
-	protected GraphMousePlugin popupEditingPlugin;
-	protected GraphMousePlugin annotatingPlugin;
+	protected EditingGraphMousePlugin<V,E> editingPlugin;
+	protected LabelEditingGraphMousePlugin<V,E> labelEditingPlugin;
+	protected EditingPopupGraphMousePlugin<V,E> popupEditingPlugin;
+	protected AnnotatingGraphMousePlugin annotatingPlugin;
 	protected MultiLayerTransformer basicTransformer;
 	protected RenderContext rc;
 
@@ -278,5 +278,32 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		}
     }
 
+	/**
+	 * @return the annotatingPlugin
+	 */
+	public AnnotatingGraphMousePlugin getAnnotatingPlugin() {
+		return annotatingPlugin;
+	}
+
+	/**
+	 * @return the editingPlugin
+	 */
+	public EditingGraphMousePlugin<V, E> getEditingPlugin() {
+		return editingPlugin;
+	}
+
+	/**
+	 * @return the labelEditingPlugin
+	 */
+	public LabelEditingGraphMousePlugin<V, E> getLabelEditingPlugin() {
+		return labelEditingPlugin;
+	}
+
+	/**
+	 * @return the popupEditingPlugin
+	 */
+	public EditingPopupGraphMousePlugin<V, E> getPopupEditingPlugin() {
+		return popupEditingPlugin;
+	}
 }
 
