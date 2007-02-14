@@ -20,12 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -33,16 +30,15 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.BalloonLayout;
-import edu.uci.ics.jung.algorithms.layout.PolarPoint;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseForest;
@@ -53,9 +49,15 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.transform.LensSupport;
+import edu.uci.ics.jung.visualization.transform.MutableTransformer;
+import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
+import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer;
+import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
 
 /**
  * Demonstrates the use of images to represent graph vertices.
@@ -111,7 +113,11 @@ public class BalloonLayoutDemo extends JApplet {
     TreeLayout<String,Integer> layout;
     
     BalloonLayout<String,Integer> radialLayout;
-
+    /**
+     * provides a Hyperbolic lens for the view
+     */
+    LensSupport hyperbolicViewSupport;
+    
     public BalloonLayoutDemo() {
         
         // create a simple graph for the demo
@@ -131,7 +137,7 @@ public class BalloonLayoutDemo extends JApplet {
         vv.setVertexToolTipTransformer(new ToStringLabeller());
         vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
         rings = new Rings(radialLayout);
-
+        
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
@@ -139,12 +145,23 @@ public class BalloonLayoutDemo extends JApplet {
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
 
         vv.setGraphMouse(graphMouse);
+        vv.addKeyListener(graphMouse.getModeKeyListener());
         
+        hyperbolicViewSupport = 
+            new ViewLensSupport<String,Integer>(vv, new HyperbolicShapeTransformer(vv, 
+            		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)), 
+                    new ModalLensGraphMouse());
+
+
+        graphMouse.addItemListener(hyperbolicViewSupport.getGraphMouse().getModeListener());
+
         JComboBox modeBox = graphMouse.getModeComboBox();
         modeBox.addItemListener(graphMouse.getModeListener());
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
 
         final ScalingControl scaler = new CrossoverScalingControl();
+        
+        vv.scaleToLayout(scaler);
 
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
@@ -164,18 +181,26 @@ public class BalloonLayoutDemo extends JApplet {
 
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
-//					layout.setRadial(true);
+
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.setGraphLayout(radialLayout);
+					vv.scaleToLayout(scaler);
 					vv.addPreRenderPaintable(rings);
 				} else {
-//					layout.setRadial(false);
+
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.setGraphLayout(layout);
+					vv.scaleToLayout(scaler);
 					vv.removePreRenderPaintable(rings);
 				}
 				vv.repaint();
 			}});
+        final JRadioButton hyperView = new JRadioButton("Hyperbolic View");
+        hyperView.addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent e) {
+                hyperbolicViewSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
+            }
+        });
 
         JPanel scaleGrid = new JPanel(new GridLayout(1,0));
         scaleGrid.setBorder(BorderFactory.createTitledBorder("Zoom"));
@@ -186,7 +211,7 @@ public class BalloonLayoutDemo extends JApplet {
         controls.add(radial);
         controls.add(scaleGrid);
         controls.add(modeBox);
-
+        controls.add(hyperView);
         content.add(controls, BorderLayout.SOUTH);
     }
     
@@ -201,7 +226,7 @@ public class BalloonLayoutDemo extends JApplet {
     	}
     	
 		public void paint(Graphics g) {
-			g.setColor(Color.lightGray);
+			g.setColor(Color.gray);
 		
 			Graphics2D g2d = (Graphics2D)g;
 
@@ -210,9 +235,19 @@ public class BalloonLayoutDemo extends JApplet {
 				Double radius = layout.getRadii().get(v);
 				if(radius == null) continue;
 				Point2D p = layout.transform(v);
-				ellipse.setFrameFromDiagonal(p.getX()-radius, p.getY()-radius, 
-						p.getX()+radius, p.getY()+radius);
-				Shape shape = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
+				ellipse.setFrame(-radius, -radius, 2*radius, 2*radius);
+				AffineTransform at = AffineTransform.getTranslateInstance(p.getX(), p.getY());
+				Shape shape = at.createTransformedShape(ellipse);
+				
+				MutableTransformer viewTransformer =
+					vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
+				
+				if(viewTransformer instanceof MutableTransformerDecorator) {
+					shape = vv.getRenderContext().getMultiLayerTransformer().transform(shape);
+				} else {
+					shape = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT,shape);
+				}
+
 				g2d.draw(shape);
 			}
 		}
@@ -271,21 +306,21 @@ public class BalloonLayoutDemo extends JApplet {
        	graph.addEdge(edgeFactory.create(), "D1", "G7");
        	
        	
-       	graph.addVertex("K0");
-       	graph.addEdge(edgeFactory.create(), "K0", "K1");
-       	graph.addEdge(edgeFactory.create(), "K0", "K2");
-       	graph.addEdge(edgeFactory.create(), "K0", "K3");
-       	
-       	graph.addVertex("J0");
-    	graph.addEdge(edgeFactory.create(), "J0", "J1");
-    	graph.addEdge(edgeFactory.create(), "J0", "J2");
-    	graph.addEdge(edgeFactory.create(), "J1", "J4");
-    	graph.addEdge(edgeFactory.create(), "J2", "J3");
-    	graph.addEdge(edgeFactory.create(), "J2", "J5");
-    	graph.addEdge(edgeFactory.create(), "J4", "J6");
-    	graph.addEdge(edgeFactory.create(), "J4", "J7");
-    	graph.addEdge(edgeFactory.create(), "J3", "J8");
-    	graph.addEdge(edgeFactory.create(), "J6", "B9");
+//       	graph.addVertex("K0");
+//       	graph.addEdge(edgeFactory.create(), "K0", "K1");
+//       	graph.addEdge(edgeFactory.create(), "K0", "K2");
+//       	graph.addEdge(edgeFactory.create(), "K0", "K3");
+//       	
+//       	graph.addVertex("J0");
+//    	graph.addEdge(edgeFactory.create(), "J0", "J1");
+//    	graph.addEdge(edgeFactory.create(), "J0", "J2");
+//    	graph.addEdge(edgeFactory.create(), "J1", "J4");
+//    	graph.addEdge(edgeFactory.create(), "J2", "J3");
+////    	graph.addEdge(edgeFactory.create(), "J2", "J5");
+////    	graph.addEdge(edgeFactory.create(), "J4", "J6");
+////    	graph.addEdge(edgeFactory.create(), "J4", "J7");
+////    	graph.addEdge(edgeFactory.create(), "J3", "J8");
+////    	graph.addEdge(edgeFactory.create(), "J6", "B9");
 
        	
     }
