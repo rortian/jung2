@@ -73,10 +73,12 @@ public class EdgeShape<V,E>  {
         	E e = context.element;
             
             Pair<V> endpoints = graph.getEndpoints(e);
-            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
-            if (isLoop)
-                return simpleLoop.transform(context);
-
+            if(endpoints != null) {
+            	boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            	if (isLoop) {
+            		return simpleLoop.transform(context);
+            	}
+            }
             return instance;
         }
     }
