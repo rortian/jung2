@@ -166,7 +166,18 @@ implements MouseListener, MouseMotionListener {
                 vv.repaint();
                 
             } else {
-                super.mouseDragged(e);
+            	
+            	MutableTransformer mt = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
+                Point2D iq = vt.inverseTransform(down);
+                iq = mt.inverseTransform(iq);
+                Point2D ip = vt.inverseTransform(e.getPoint());
+                ip = mt.inverseTransform(ip);
+                float dx = (float) (ip.getX()-iq.getX());
+                float dy = (float) (ip.getY()-iq.getY());
+                
+                modelTransformer.translate(dx, dy);
+                down.x = e.getX();
+                down.y = e.getY();
             }
         }
     }
