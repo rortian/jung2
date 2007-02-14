@@ -137,6 +137,9 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         vv1.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv1.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         
+        ScalingControl vv2Scaler = new CrossoverScalingControl();
+        vv2.scaleToLayout(vv2Scaler);
+        
         viewGrid = new ViewGrid(vv2, vv1);
 
         // add default listener for ToolTips

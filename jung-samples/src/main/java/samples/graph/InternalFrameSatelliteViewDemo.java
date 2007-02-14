@@ -113,6 +113,9 @@ public class InternalFrameSatelliteViewDemo {
         satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
         satellite.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
 
+        ScalingControl satelliteScaler = new CrossoverScalingControl();
+        satellite.scaleToLayout(satelliteScaler);
+        
         JFrame frame = new JFrame();
         desktop = new JDesktopPane();
         Container content = frame.getContentPane();
