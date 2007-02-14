@@ -41,6 +41,15 @@ public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
+	public SparseTree(DirectedGraph<V,E> graph, 
+			Factory<E> edgeFactory) {
+		assert graph.getVertexCount() == 0 :
+			"Passed DirectedGraph must be empty";
+		this.delegate = graph;
+		this.edgeFactory = edgeFactory;
+        this.vertex_depths = new HashMap<V, Integer>();
+	}
+	
 	/**
 	 * Add an edge to the tree, connecting v1, the parent and v2, the child.
 	 * v1 must already exist in the tree, and v2 must not already exist
