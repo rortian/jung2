@@ -14,6 +14,7 @@ package edu.uci.ics.jung.visualization.control;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.Layer;
+import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -53,7 +54,7 @@ public class CrossoverScalingControl implements ScalingControl {
 	/**
      * @see edu.uci.ics.jung.visualization.control.ScalingControl#scale(VisualizationViewer, float, Point2D)
      */
-	public void scale(VisualizationViewer vv, float amount, Point2D at) {
+	public void scale(VisualizationServer vv, float amount, Point2D at) {
 	        
 	    MutableTransformer layoutTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
 	    MutableTransformer viewTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
