@@ -204,27 +204,12 @@ public class RadialTreeLensDemo extends JApplet {
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
         rings = new Rings();
-		vv.addPostRenderPaintable(rings);
+		vv.addPreRenderPaintable(rings);
 
         hyperbolicViewSupport = 
             new ViewLensSupport<String,Integer>(vv, new HyperbolicShapeTransformer(vv, 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)), 
                     new ModalLensGraphMouse());
-//        hyperbolicLayoutSupport = 
-//            new LayoutLensSupport<String,Integer>(vv, new HyperbolicTransformer(vv, 
-//            		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
-//                    new ModalLensGraphMouse());
-//        magnifyViewSupport = 
-//            new ViewLensSupport<String,Integer>(vv, new MagnifyShapeTransformer(vv,
-//            		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)),
-//                    new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
-//        magnifyLayoutSupport = 
-//            new LayoutLensSupport<String,Integer>(vv, new MagnifyTransformer(vv, 
-//            		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
-//                    new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
-//        hyperbolicLayoutSupport.getLensTransformer().setEllipse(hyperbolicViewSupport.getLensTransformer().getEllipse());
-//        magnifyViewSupport.getLensTransformer().setEllipse(hyperbolicLayoutSupport.getLensTransformer().getEllipse());
-//        magnifyLayoutSupport.getLensTransformer().setEllipse(magnifyViewSupport.getLensTransformer().getEllipse());
         
         final ScalingControl scaler = new CrossoverScalingControl();
 
@@ -241,65 +226,16 @@ public class RadialTreeLensDemo extends JApplet {
             }
         });
         
-//        ButtonGroup radio = new ButtonGroup();
-//        JRadioButton normal = new JRadioButton("None");
-//        normal.addItemListener(new ItemListener() {
-//            public void itemStateChanged(ItemEvent e) {
-//                if(e.getStateChange() == ItemEvent.SELECTED) {
-//                    if(hyperbolicViewSupport != null) {
-//                        hyperbolicViewSupport.deactivate();
-//                    }
-//                    if(hyperbolicLayoutSupport != null) {
-//                        hyperbolicLayoutSupport.deactivate();
-//                    }
-//                    if(magnifyViewSupport != null) {
-//                        magnifyViewSupport.deactivate();
-//                    }
-//                    if(magnifyLayoutSupport != null) {
-//                        magnifyLayoutSupport.deactivate();
-//                    }
-//                }
-//            }
-//        });
-
         final JRadioButton hyperView = new JRadioButton("Hyperbolic View");
         hyperView.addItemListener(new ItemListener(){
             public void itemStateChanged(ItemEvent e) {
                 hyperbolicViewSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
             }
         });
-//        final JRadioButton hyperModel = new JRadioButton("Hyperbolic Layout");
-//        hyperModel.addItemListener(new ItemListener(){
-//            public void itemStateChanged(ItemEvent e) {
-//                hyperbolicLayoutSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-//            }
-//        });
-//        final JRadioButton magnifyView = new JRadioButton("Magnified View");
-//        magnifyView.addItemListener(new ItemListener(){
-//            public void itemStateChanged(ItemEvent e) {
-//                magnifyViewSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-//            }
-//        });
-//        final JRadioButton magnifyModel = new JRadioButton("Magnified Layout");
-//        magnifyModel.addItemListener(new ItemListener(){
-//            public void itemStateChanged(ItemEvent e) {
-//                magnifyLayoutSupport.activate(e.getStateChange() == ItemEvent.SELECTED);
-//            }
-//        });
+
         JLabel modeLabel = new JLabel("     Mode Menu >>");
         modeLabel.setUI(new VerticalLabelUI(false));
-//        radio.add(normal);
-//        radio.add(hyperModel);
-//        radio.add(hyperView);
-//        radio.add(magnifyModel);
-//        radio.add(magnifyView);
-//        normal.setSelected(true);
-        
-//        graphMouse.addItemListener(hyperbolicLayoutSupport.getGraphMouse().getModeListener());
         graphMouse.addItemListener(hyperbolicViewSupport.getGraphMouse().getModeListener());
-//        graphMouse.addItemListener(magnifyLayoutSupport.getGraphMouse().getModeListener());
-//        graphMouse.addItemListener(magnifyViewSupport.getGraphMouse().getModeListener());
-        
         
         JMenuBar menubar = new JMenuBar();
         menubar.add(graphMouse.getModeMenu());
@@ -314,14 +250,7 @@ public class RadialTreeLensDemo extends JApplet {
         zoomControls.add(plus);
         zoomControls.add(minus);
         
-//        hyperControls.add(normal);
-//        hyperControls.add(new JLabel());
-//
-//        hyperControls.add(hyperModel);
-//        hyperControls.add(magnifyModel);
-        
         hyperControls.add(hyperView);
-//        hyperControls.add(magnifyView);
         
         controls.add(zoomControls);
         controls.add(hyperControls);
