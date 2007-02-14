@@ -61,7 +61,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
         lensTransformer.setDelegate(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
-        vv.addPreRenderPaintable(lens);
+        vv.prependPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
         vv.setToolTipText(instructions);

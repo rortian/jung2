@@ -63,7 +63,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         }
         vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, lensTransformer);
-        vv.addPreRenderPaintable(lens);
+        vv.prependPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
         vv.setToolTipText(instructions);
