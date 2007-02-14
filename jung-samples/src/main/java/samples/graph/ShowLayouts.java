@@ -113,7 +113,7 @@ public class ShowLayouts extends JApplet {
                 Layout l = (Layout) o;
                 l.setInitializer(vv.getGraphLayout());
 //                vv.getModel().stop();
-                vv.setGraphLayout(l, false);
+                vv.setGraphLayout(l);
 //                vv.getModel().restart();
             }
             catch (Exception e)

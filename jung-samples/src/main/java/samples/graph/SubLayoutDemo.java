@@ -198,7 +198,7 @@ public class SubLayoutDemo extends JApplet {
 						Layout<String,Number> layout = getLayoutFor(clazz, graph);
 						layout.setInitializer(vv.getGraphLayout());
 						clusteringLayout.setDelegate(layout);
-						vv.setGraphLayout(clusteringLayout, false);
+						vv.setGraphLayout(clusteringLayout);
 					} catch(Exception ex) {
 						ex.printStackTrace();
 					}
