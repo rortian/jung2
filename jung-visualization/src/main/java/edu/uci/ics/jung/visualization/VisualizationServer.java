@@ -86,7 +86,7 @@ public interface VisualizationServer<V, E> {
      * @param layout the new layout to set
      * @param scaleToLayout whether to scale the view to show the whole layout
      */
-    void setGraphLayout(Layout<V, E> layout, boolean scaleToLayout);
+//    void setGraphLayout(Layout<V, E> layout, boolean scaleToLayout);
 
     /**
      * Returns the current graph layout.
@@ -234,6 +234,8 @@ public interface VisualizationServer<V, E> {
     RenderContext<V, E> getRenderContext();
 
     void setRenderContext(RenderContext<V, E> renderContext);
+    
+    void repaint();
     
     /**
      * an interface for the preRender and postRender

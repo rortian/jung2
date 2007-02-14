@@ -32,6 +32,7 @@ import javax.swing.event.ChangeListener;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
@@ -187,7 +188,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		
 		setPreferredSize(preferredSize);
 		renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        scaleToLayout(model.getGraphLayout().getSize());
+//        scaleToLayout(model.getGraphLayout().getSize());
 
         renderContext.getMultiLayerTransformer().addChangeListener(this);
 	}
@@ -273,35 +274,45 @@ public class BasicVisualizationServer<V, E> extends JPanel
      * @see edu.uci.ics.jung.visualization.VisualizationServer#setGraphLayout(edu.uci.ics.jung.visualization.layout.Layout)
      */
     public void setGraphLayout(Layout<V,E> layout) {
-        setGraphLayout(layout, true);
+//        setGraphLayout(layout, true);
+	    Dimension viewSize = getSize();
+	    model.setGraphLayout(layout, viewSize);
     }
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#setGraphLayout(edu.uci.ics.jung.visualization.layout.Layout, boolean)
      */
-	public void setGraphLayout(Layout<V,E> layout, boolean scaleToLayout) {
-
-	    Dimension viewSize = getSize();
-	    model.setGraphLayout(layout, viewSize);
-        if(scaleToLayout) scaleToLayout(layout.getSize());
-	}
+//	public void setGraphLayout(Layout<V,E> layout, boolean scaleToLayout) {
+//
+//	    Dimension viewSize = getSize();
+//	    model.setGraphLayout(layout, viewSize);
+//        if(scaleToLayout) scaleToLayout(layout.getSize());
+//	}
 	
-	public void scaleToLayout() {
-		scaleToLayout(getModel().getGraphLayout().getSize());
-	}
+//	public void scaleToLayout() {
+//		scaleToLayout(getModel().getGraphLayout().getSize());
+//	}
     
-    protected void scaleToLayout(Dimension layoutSize) {
-        Dimension viewSize = getSize();
-        float scalex = (float)viewSize.width/layoutSize.width;
-        float scaley = (float)viewSize.height/layoutSize.height;
-        float scale = 1;
-        if(scalex - 1 < scaley - 1) {
-        		scale = scalex;
-        } else {
-        		scale = scaley;
-        }
-        // set scale to show the entire graph layout
-        renderContext.getMultiLayerTransformer().getTransformer(Layer.VIEW).setScale(scale, scale, new Point2D.Float());
+    public void scaleToLayout(ScalingControl scaler) {
+		Dimension vd = getSize();
+		Dimension ld = getGraphLayout().getSize();
+		if(vd.equals(ld) == false) {
+			scaler.scale(this, (float)(vd.getWidth()/ld.getWidth()), new Point2D.Double());
+		}
     }
+	
+//    protected void scaleToLayout(Dimension layoutSize) {
+//        Dimension viewSize = getSize();
+//        float scalex = (float)viewSize.width/layoutSize.width;
+//        float scaley = (float)viewSize.height/layoutSize.height;
+//        float scale = 1;
+//        if(scalex - 1 < scaley - 1) {
+//        		scale = scalex;
+//        } else {
+//        		scale = scaley;
+//        }
+//        // set scale to show the entire graph layout
+//        renderContext.getMultiLayerTransformer().getTransformer(Layer.VIEW).setScale(scale, scale, new Point2D.Float());
+//    }
 	
 	/* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#getGraphLayout()
@@ -446,6 +457,16 @@ public class BasicVisualizationServer<V, E> extends JPanel
     }
     
     /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#addPreRenderPaintable(edu.uci.ics.jung.visualization.BasicPaintable)
+     */
+    public void prependPreRenderPaintable(Paintable paintable) {
+        if(preRenderers == null) {
+            preRenderers = new ArrayList<Paintable>();
+        }
+        preRenderers.add(0,paintable);
+    }
+    
+    /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#removePreRenderPaintable(edu.uci.ics.jung.visualization.BasicPaintable)
      */
     public void removePreRenderPaintable(Paintable paintable) {
@@ -462,6 +483,16 @@ public class BasicVisualizationServer<V, E> extends JPanel
             postRenderers = new ArrayList<Paintable>();
         }
         postRenderers.add(paintable);
+    }
+    
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#addPostRenderPaintable(edu.uci.ics.jung.visualization.BasicVisualizationServer.Paintable)
+     */
+    public void prependPostRenderPaintable(Paintable paintable) {
+        if(postRenderers == null) {
+            postRenderers = new ArrayList<Paintable>();
+        }
+        postRenderers.add(0,paintable);
     }
     
     /* (non-Javadoc)
@@ -586,6 +617,5 @@ public class BasicVisualizationServer<V, E> extends JPanel
      */
     public void setRenderContext(RenderContext<V,E> renderContext) {
         this.renderContext = renderContext;
-//        renderContext.setViewTransformer(getViewTransformer());
     }
 }
