@@ -113,9 +113,13 @@ public class EdgeShape<V,E>  {
         	Graph<V,E> graph = context.graph;
         	E e = context.element;
             Pair<V> endpoints = graph.getEndpoints(e);
-            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
-            if (isLoop)
-                return loop.transform(context);
+            if(endpoints != null) {
+            	boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            	if (isLoop) {
+            		return loop.transform(context);
+            	}
+            }
+            
             int index = 1;
             if(parallelEdgeIndexFunction != null) {
                 index = parallelEdgeIndexFunction.getIndex(graph, e);
@@ -160,9 +164,12 @@ public class EdgeShape<V,E>  {
         	Graph<V,E> graph = context.graph;
         	E e = context.element;
             Pair<V> endpoints = graph.getEndpoints(e);
-            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
-            if (isLoop)
-                return loop.transform(context);
+            if(endpoints != null) {
+            	boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            	if (isLoop) {
+            		return loop.transform(context);
+            	}
+            }
             
             int index = 1;
             if(parallelEdgeIndexFunction != null) {
@@ -208,9 +215,12 @@ public class EdgeShape<V,E>  {
         	Graph<V,E> graph = context.graph;
         	E e = context.element;
            Pair<V> endpoints = graph.getEndpoints(e);
-           boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
-           if (isLoop)
-                return loop.transform(context);
+           if(endpoints != null) {
+        	   boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+        	   if (isLoop) {
+        		   return loop.transform(context);
+        	   }
+           }
            
            int index = 1;
            if(parallelEdgeIndexFunction != null) {
@@ -315,10 +325,13 @@ public class EdgeShape<V,E>  {
         	E e = context.element;
         
             Pair<V> endpoints = graph.getEndpoints(e);
-            boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
-            if (isLoop)
-                return Loop.instance;
-            else if (graph.getEdgeType(e) == EdgeType.DIRECTED)
+            if(endpoints != null) {
+            	boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            	if (isLoop) {
+            		return Loop.instance;
+            	}
+            }
+            if (graph.getEdgeType(e) == EdgeType.DIRECTED)
                 return triangle;
             else
                 return bowtie;
