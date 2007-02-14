@@ -71,25 +71,41 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     	}
     	return roots;
     }
-
-    public Dimension getCurrentSize() {
-    	return size;
-    }
     
-    protected void setPolars(List<V> vertices, double parentRadius) {
-    	for(V parent : vertices) {
-    		setPolars(parent, parentRadius);
+    protected void setRootPolars(List<V> roots) {
+    	if(roots.size() == 0) {
+    		// do nothing
+    	} else if(roots.size() == 1) {
+    		// its a Tree
+    		V root = roots.get(0);
+    		setRootPolar(root);
+    		setPolars(new ArrayList<V>(getChildren(root)),
+    				getCenter(), getSize().width/2);
+    	} else {
+    		// its a Forest
+    		setPolars(roots, getCenter(), getSize().width/2);
     	}
     }
     
-    protected void setPolars(V parent, double parentRadius) {
-    	// for each child of parent:
-    	List<V> kids = new ArrayList<V>(getChildren(parent));
+    protected void setRootPolar(V root) {
+    	PolarPoint pp = new PolarPoint(0,0);
+    	Point2D p = getCenter();
+    	polarLocations.put(root, pp);
+    	locations.put(root, p);
+    }
+    
+
+    protected void setPolars(List<V> kids, Point2D parentLocation, double parentRadius) {
+
     	int childCount = kids.size();
-    	double rand = Math.random();
-    	double angle = Math.PI / 2 * (1 - 2.0/childCount);
+    	if(childCount == 0) return;
+    	// handle the 1-child case with 0 limit on angle.
+    	double angle = Math.max(0, Math.PI / 2 * (1 - 2.0/childCount));
     	double childRadius = parentRadius*Math.cos(angle) / (1 + Math.cos(angle));
     	double radius = parentRadius - childRadius;
+
+    	double rand = Math.random();
+
     	for(int i=0; i< childCount; i++) {
     		V child = kids.get(i);
     		double theta = i* 2*Math.PI/childCount + rand;
@@ -99,10 +115,10 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     		polarLocations.put(child, pp);
     		
     		Point2D p = PolarPoint.polarToCartesian(pp);
-    		Point2D parentLocation = locations.get(parent);
+//    		Point2D parentLocation = locations.get(parent);
     		p.setLocation(p.getX()+parentLocation.getX(), p.getY()+parentLocation.getY());
     		locations.put(child, p);
-    		setPolars(child, childRadius);
+    		setPolars(new ArrayList<V>(getChildren(child)), p, childRadius);
     	}
     }
 
@@ -116,7 +132,7 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     }
     public void setSize(Dimension size) {
     	this.size = size;
-    	setPolars(new ArrayList<V>(roots), size.width/2);
+    	setRootPolars(new ArrayList<V>(roots));
     }
 
 	public Graph<V,E> getGraph() {
