@@ -8,7 +8,7 @@
  * http://jung.sourceforge.net/license.txt for a description.
  */
 
-package edu.uci.ics.jung.visualization.contrib;
+package edu.uci.ics.jung.visualization.decorators;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;

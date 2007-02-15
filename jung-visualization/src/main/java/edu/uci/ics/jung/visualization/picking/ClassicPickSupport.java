@@ -25,7 +25,7 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
-class ClassicPickSupport<V,E> extends RadiusPickSupport<V,E> implements GraphElementAccessor<V,E> {
+public class ClassicPickSupport<V,E> extends RadiusPickSupport<V,E> implements GraphElementAccessor<V,E> {
     
     public ClassicPickSupport()
     {
