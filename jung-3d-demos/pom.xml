@@ -11,7 +11,7 @@
   <version>2.0a</version>
   <url>http://maven.apache.org</url>
   <build>
-   	  <plugins>
+   	<plugins>
  	  <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
