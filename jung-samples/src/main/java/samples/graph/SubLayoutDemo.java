@@ -59,10 +59,11 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /**
- * Demonstrates the Cluster, CircularCluster, and ClusteringLayout
- * classes. In this demo, vertices are visually clustered as they
- * are selected. The cluster is formed in a circle centered at the
- * location of the first vertex selected.
+ * Demonstrates the AggregateLayout
+ * class. In this demo, vertices are visually clustered as they
+ * are selected. The cluster is formed in a new Layout centered at the
+ * middle locations of the selected vertices. The size and layout
+ * algorithm for each new cluster is selectable.
  * 
  * @author Tom Nelson
  * 

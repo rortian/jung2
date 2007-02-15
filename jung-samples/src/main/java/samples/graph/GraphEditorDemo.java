@@ -54,7 +54,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
 /**
- * Shows how easy it is to create a graph editor with JUNG.
+ * Shows how  to create a graph editor with JUNG.
  * Mouse modes and actions are explained in the help text.
  * The application version of GraphEditorDemo provides a
  * File menu with an option to save the visible graph as

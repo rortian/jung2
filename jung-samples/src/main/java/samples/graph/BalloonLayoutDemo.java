@@ -60,17 +60,9 @@ import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer
 import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
 
 /**
- * Demonstrates the use of images to represent graph vertices.
- * The images are supplied via the VertexShapeFunction so that
- * both the image and its shape can be utilized.
- * 
- * The images used in this demo (courtesy of slashdot.org) are
- * rectangular but with a transparent background. When vertices
- * are represented by these images, it looks better if the actual
- * shape of the opaque part of the image is computed so that the
- * edge arrowheads follow the visual shape of the image. This demo
- * uses the FourPassImageShaper class to compute the Shape from
- * an image with transparent background.
+ * Demonstrates the visualization of a Tree using TreeLayout
+ * and BalloonLayout. An examiner lens performing a hyperbolic
+ * transformation of the view is also included.
  * 
  * @author Tom Nelson
  * 
@@ -215,8 +207,6 @@ public class BalloonLayoutDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
-    
-    
     class Rings implements VisualizationServer.Paintable {
     	
     	BalloonLayout<String,Integer> layout;
@@ -266,15 +256,6 @@ public class BalloonLayoutDemo extends JApplet {
        	graph.addEdge(edgeFactory.create(), "A0", "B0");
        	graph.addEdge(edgeFactory.create(), "A0", "B1");
        	graph.addEdge(edgeFactory.create(), "A0", "B2");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B3");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B4");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B5");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B6");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B7");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B8");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B9");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B10");
-//       	graph.addEdge(edgeFactory.create(), "A0", "B11");
        	
        	graph.addEdge(edgeFactory.create(), "B0", "C0");
        	graph.addEdge(edgeFactory.create(), "B0", "C1");
@@ -283,7 +264,7 @@ public class BalloonLayoutDemo extends JApplet {
 
        	graph.addEdge(edgeFactory.create(), "C2", "H0");
        	graph.addEdge(edgeFactory.create(), "C2", "H1");
-//       	
+
        	graph.addEdge(edgeFactory.create(), "B1", "D0");
        	graph.addEdge(edgeFactory.create(), "B1", "D1");
        	graph.addEdge(edgeFactory.create(), "B1", "D2");
@@ -291,7 +272,7 @@ public class BalloonLayoutDemo extends JApplet {
        	graph.addEdge(edgeFactory.create(), "B2", "E0");
        	graph.addEdge(edgeFactory.create(), "B2", "E1");
        	graph.addEdge(edgeFactory.create(), "B2", "E2");
-//
+
        	graph.addEdge(edgeFactory.create(), "D0", "F0");
        	graph.addEdge(edgeFactory.create(), "D0", "F1");
        	graph.addEdge(edgeFactory.create(), "D0", "F2");
@@ -305,7 +286,7 @@ public class BalloonLayoutDemo extends JApplet {
        	graph.addEdge(edgeFactory.create(), "D1", "G6");
        	graph.addEdge(edgeFactory.create(), "D1", "G7");
        	
-       	
+       	// uncomment this to make it a Forest:
 //       	graph.addVertex("K0");
 //       	graph.addEdge(edgeFactory.create(), "K0", "K1");
 //       	graph.addEdge(edgeFactory.create(), "K0", "K2");
@@ -324,7 +305,6 @@ public class BalloonLayoutDemo extends JApplet {
 
        	
     }
-
 
     /**
      * a driver for this demo

@@ -35,7 +35,6 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -67,7 +66,6 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.LensMagnificationGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
@@ -75,21 +73,14 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
-import edu.uci.ics.jung.visualization.transform.LayoutLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
-import edu.uci.ics.jung.visualization.transform.MagnifyTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer;
-import edu.uci.ics.jung.visualization.transform.shape.MagnifyShapeTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
 
 /**
- * Demonstrates the use of <code>HyperbolicTransform</code>
- * and <code>MagnifyTransform</code>
- * applied to either the model (graph layout) or the view
- * (VisualizationViewer)
- * The hyperbolic transform is applied in an elliptical lens
- * that affects that part of the visualization.
+ * Shows a RadialTreeLayout view of a Forest.
+ * A hyperbolic projection lens may also be applied
+ * to the view
  * 
  * @author Tom Nelson
  * 

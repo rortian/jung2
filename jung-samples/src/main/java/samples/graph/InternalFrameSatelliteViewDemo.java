@@ -39,6 +39,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
 /**
+ * Similar to the SatelliteViewDemo, but using JInternalFrame
  * 
  * @author Tom Nelson
  * 

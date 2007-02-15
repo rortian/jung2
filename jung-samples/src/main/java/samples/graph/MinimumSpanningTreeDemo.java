@@ -28,9 +28,6 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Tree;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
@@ -39,7 +36,6 @@ import edu.uci.ics.jung.algorithms.shortestpath.PrimMinimumSpanningTree;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -57,8 +53,12 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
- * Demonstrates a single graph with 2 layouts in 2 views.
- * They share picking, transforms, and a pluggable renderer
+ * Demonstrates a single graph with 3 layouts in 3 views.
+ * The first view is an undirected graph using KKLayout
+ * The second view show a TreeLayout view of a MinimumSpanningTree
+ * of the first graph. The third view shows the complete graph
+ * of the first view, using the layout positions of the 
+ * MinimumSpanningTree tree view.
  * 
  * @author Tom Nelson
  * 

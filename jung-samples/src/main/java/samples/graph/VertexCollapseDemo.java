@@ -173,6 +173,7 @@ public class VertexCollapseDemo extends JApplet {
                     vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
                     layout.setLocation(clusterGraph, cp);
+                    vv.getPickedVertexState().clear();
                     vv.repaint();
                 }
             }});
@@ -189,7 +190,8 @@ public class VertexCollapseDemo extends JApplet {
                         vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
-                    vv.repaint();
+                    vv.getPickedVertexState().clear();
+                   vv.repaint();
                 }
             }});
         

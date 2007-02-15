@@ -57,18 +57,8 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
 /**
- * Demonstrates the use of images to represent graph vertices.
- * The images are supplied via the VertexShapeFunction so that
- * both the image and its shape can be utilized.
- * 
- * The images used in this demo (courtesy of slashdot.org) are
- * rectangular but with a transparent background. When vertices
- * are represented by these images, it looks better if the actual
- * shape of the opaque part of the image is computed so that the
- * edge arrowheads follow the visual shape of the image. This demo
- * uses the FourPassImageShaper class to compute the Shape from
- * an image with transparent background.
- * 
+ * Shoes a TreeLayout and RadialTreeLayout view of a
+ * Forest.
  * @author Tom Nelson
  * 
  */

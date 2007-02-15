@@ -41,13 +41,7 @@ import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsideP
 
 
 /**
- * Demonstrates the use of <code>GraphZoomScrollPane</code>.
- * This class shows the <code>VisualizationViewer</code> zooming
- * and panning capabilities, using horizontal and
- * vertical scrollbars.
- *
- * <p>This demo also shows ToolTips on graph vertices and edges,
- * and a key listener to change graph mouse modes.</p>
+ * Visualizes a graph from a GraphML file
  * 
  * @author Tom Nelson
  * 
