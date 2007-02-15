@@ -11,10 +11,7 @@
 package edu.uci.ics.jung.algorithms.layout;
 
 import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-
-
 
 /**
  * Interface for coordinate-based selection of graph components.

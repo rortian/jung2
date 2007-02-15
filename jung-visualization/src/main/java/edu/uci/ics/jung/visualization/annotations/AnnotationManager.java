@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2005, the JUNG Project and the Regents of the University of
+ * California All rights reserved.
+ *
+ * This software is open-source under the BSD license; see either "license.txt"
+ * or http://jung.sourceforge.net/license.txt for a description.
+ *
+ * 
+ */
 package edu.uci.ics.jung.visualization.annotations;
 
 import java.awt.Component;
@@ -16,6 +25,13 @@ import edu.uci.ics.jung.visualization.transform.AffineTransformer;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
+/**
+ * handles the selection of annotations, and the support for the
+ * tools to draw them at specific layers.
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ */
 public class AnnotationManager {
 	
     protected AnnotationRenderer annotationRenderer = new AnnotationRenderer();

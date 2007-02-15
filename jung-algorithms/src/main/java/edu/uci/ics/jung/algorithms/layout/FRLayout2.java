@@ -23,8 +23,10 @@ import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 
 /**
+ * an attempt to optimize the FRLayout algorithm
  * Implements the Fruchterman-Reingold algorithm for node layout.
  * 
+ * @author Tom Nelson
  * @author Scott White, Yan-Biao Boey, Danyel Fisher
  */
 public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeContext {

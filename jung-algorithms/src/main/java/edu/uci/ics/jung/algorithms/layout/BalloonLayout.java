@@ -27,6 +27,8 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Tree;
 
 /**
+ * implements the balloon layout for the supplied Tree
+ * or Forest.
  * 
  * @author Tom Nelson 
  *  

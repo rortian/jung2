@@ -5,7 +5,7 @@
  * This software is open-source under the BSD license; see either "license.txt"
  * or http://jung.sourceforge.net/license.txt for a description.
  *
- * Created on Apr 14, 2005
+ * 
  */
 
 package edu.uci.ics.jung.visualization.annotations;

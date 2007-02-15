@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2003, the JUNG Project and the Regents of the University of
+ * California All rights reserved.
+ * 
+ * This software is open-source under the BSD license; see either "license.txt"
+ * or http://jung.sourceforge.net/license.txt for a description.
+ * 
+ * 
+ * 
+ */
 package edu.uci.ics.jung.algorithms.layout;
 
 import java.awt.Dimension;
@@ -11,6 +21,16 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 
+/**
+ * Allows multiple layouts to be combined and manipulated
+ * as one layout. The relaxer thread will step each layout
+ * in sequence.
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ * @param <V>
+ * @param <E>
+ */
 public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 
 	protected Layout<V,E> delegate;

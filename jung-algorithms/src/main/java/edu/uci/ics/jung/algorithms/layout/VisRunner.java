@@ -1,7 +1,25 @@
+/*
+ * Copyright (c) 2005, the JUNG Project and the Regents of the University of
+ * California All rights reserved.
+ *
+ * This software is open-source under the BSD license; see either "license.txt"
+ * or http://jung.sourceforge.net/license.txt for a description.
+ *
+ * 
+ */
 package edu.uci.ics.jung.algorithms.layout;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 
+/**
+ * 
+ * implementation of a relaxer thread for layouts.
+ * extracted from the VisualizationModel in previous
+ * versions of jung
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ */
 public class VisRunner implements Relaxer, Runnable {
 	
 	protected boolean running;
@@ -36,12 +54,11 @@ public class VisRunner implements Relaxer, Runnable {
 	
 	public void prerelax() {
 		manualSuspend = true;
-//		long time = System.currentTimeMillis();
 		long timeNow = System.currentTimeMillis();
 		while (System.currentTimeMillis() - timeNow < 500 && !process.done()) {
 			process.step();
 		}
-//		System.err.println("time was "+(System.currentTimeMillis()-time));
+		System.err.println("time was "+(System.currentTimeMillis()-timeNow));
 		manualSuspend = false;
 	}
 	

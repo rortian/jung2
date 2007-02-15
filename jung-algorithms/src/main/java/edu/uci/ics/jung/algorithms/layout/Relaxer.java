@@ -1,5 +1,11 @@
 package edu.uci.ics.jung.algorithms.layout;
 
+/**
+ * interface for operating the relax iterations on a layout
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ */
 public interface Relaxer {
 	
 	/**

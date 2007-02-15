@@ -29,10 +29,10 @@ import edu.uci.ics.graph.Tree;
 
 /**
  * 
+ * a radial layout for Tree or Forest graphs
  * @author Tom Nelson 
  *  
  */
-
 public class RadialTreeLayout<V,E> implements Layout<V,E> {
 
 	private Dimension size;

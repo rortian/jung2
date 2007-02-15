@@ -1,8 +1,24 @@
+/*
+* Copyright (c) 2003, the JUNG Project and the Regents of the University 
+* of California
+* All rights reserved.
+*
+* This software is open-source under the BSD license; see either
+* "license.txt" or
+* http://jung.sourceforge.net/license.txt for a description.
+*/
 package edu.uci.ics.jung.algorithms.layout;
 
 import java.awt.geom.Point2D;
 
-
+/**
+ * allows creation of points in polar coordinates.
+ * also allows conversions between polar and cartesian
+ * coordinates.
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ */
 public class PolarPoint extends Point2D.Double {
 	
 	public PolarPoint() {

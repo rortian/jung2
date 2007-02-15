@@ -9,6 +9,15 @@ import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Tree;
 import edu.uci.ics.graph.util.Pair;
 
+/**
+ * For the input Graph, creates a MinimumSpanningTree
+ * using Prim's algorithm.
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ * @param <V>
+ * @param <E>
+ */
 public class PrimMinimumSpanningTree<V,E> {
 	
 	protected Graph<V,E> graph;
@@ -18,7 +27,9 @@ public class PrimMinimumSpanningTree<V,E> {
 	
 	public PrimMinimumSpanningTree(Graph<V, E> graph, Tree<V,E> tree, 
 			V root, Map<E, Double> weights) {
-		super();
+		
+		assert tree.getVertexCount() == 0 :
+			"Supplied Tree must be empty";
 		this.graph = graph;
 		this.tree = tree;
 		this.weights = weights;
