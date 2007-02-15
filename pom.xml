@@ -4,8 +4,19 @@
   <groupId>jung.app</groupId>
   <artifactId>app</artifactId>
   <packaging>pom</packaging>
-  <version>2.0</version>
+  <version>2.0a</version>
   <name>jung2</name>
+  <url>http://jung.sourceforge.net</url>
+  <licenses>
+    <license>
+      <name>The BSD License</name>
+      <url>http://jung.sourceforge.net/license.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://jung.cvs.sourceforge.net/jung/</url>
+  </scm>
 
   <build>
      <plugins>
@@ -37,12 +48,9 @@
     <module>jung-visualization</module>
     <module>jung-algorithms</module>
     <module>jung-io</module>
-    <!-- uncomment if you have Java Advanced Imaging installed 
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
-    -->
-    <!-- uncomment if you have Java3d installed
     <module>jung-3d</module>
-    -->
+    <module>jung-3d-demos</module>
   </modules>
 </project>
