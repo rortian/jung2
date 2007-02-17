@@ -19,18 +19,23 @@ import java.awt.geom.Point2D;
  * @author Tom Nelson - tomnelson@dev.java.net
  *
  */
-public class PolarPoint extends Point2D.Double {
+public class PolarPoint {
+//extends Point2D.Double {
+	double theta;
+	double radius;
 	
 	public PolarPoint() {
 		this(0,0);
 	}
 	public PolarPoint(double theta, double radius) {
-		super(theta, radius);
+		this.theta = theta;
+		this.radius = radius;
+//		super(theta, radius);
 	}
-	public double getTheta() { return getX(); }
-	public double getRadius() { return getY(); }
-	public void setTheta(double theta) { setLocation(theta, getRadius()); }
-	public void setRadius(double radius) { setLocation(getTheta(), radius); }
+	public double getTheta() { return theta; }
+	public double getRadius() { return radius; }
+	public void setTheta(double theta) { this.theta = theta; }
+	public void setRadius(double radius) { this.radius = radius; }
 
 	/**
 	 * Returns the result of converting <code>polar</code> to Cartesian coordinates.
@@ -65,6 +70,11 @@ public class PolarPoint extends Point2D.Double {
 	public String toString() {
 		String superString = super.toString();
 		return superString.replace("Point2D", "PolarPoint2D");
+	}
+	
+	public void setLocation(PolarPoint p) {
+		this.theta = p.getTheta();
+		this.radius = p.getRadius();
 	}
 
 }

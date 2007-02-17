@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.Tree;
+import edu.uci.ics.graph.Forest;
+import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 /**
@@ -21,37 +22,37 @@ import edu.uci.ics.graph.util.Pair;
 public class PrimMinimumSpanningTree<V,E> {
 	
 	protected Graph<V,E> graph;
-	protected Tree<V,E> tree;
+	protected Forest<V,E> forest;
 	protected Map<E,Double> weights;
-	protected Set<E> unfinishedEdges = new HashSet<E>();
 	
-	public PrimMinimumSpanningTree(Graph<V, E> graph, Tree<V,E> tree, 
+	public PrimMinimumSpanningTree(Graph<V, E> graph, Forest<V,E> forest, 
 			V root, Map<E, Double> weights) {
 		
-		assert tree.getVertexCount() == 0 :
-			"Supplied Tree must be empty";
+		assert forest.getVertexCount() == 0 :
+			"Supplied Forest must be empty";
 		this.graph = graph;
-		this.tree = tree;
+		this.forest = forest;
 		this.weights = weights;
-		this.unfinishedEdges.addAll(graph.getEdges());
-		this.tree.addVertex(root);
-		updateTree(tree.getVertices());
+		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
+//		this.unfinishedEdges.addAll(graph.getEdges());
+		this.forest.addVertex(root);
+		updateForest(forest.getVertices(), unfinishedEdges);
 	}
 	
-	public Tree<V,E> getTree() {
-		return tree;
+	public Forest<V,E> getForest() {
+		return forest;
 	}
 	
-	protected void updateTree(Collection<V> tv) {
+	protected void updateForest(Collection<V> tv, Collection<E> unfinishedEdges) {
 		double minCost = Double.MAX_VALUE;
 		E nextEdge = null;
 		V nextVertex = null;
 		V currentVertex = null;
 		for(E e : unfinishedEdges) {
 			
-			if(tree.getEdges().contains(e)) continue;
+			if(forest.getEdges().contains(e)) continue;
 			// find the lowest cost edge, get its opposite endpoint,
-			// and then update tree from its Successors
+			// and then update forest from its Successors
 			Pair<V> endpoints = graph.getEndpoints(e);
 			V first = endpoints.getFirst();
 			V second = endpoints.getSecond();
@@ -63,12 +64,28 @@ public class PrimMinimumSpanningTree<V,E> {
 					nextVertex = second;
 				}
 			}
+			if(graph.getEdgeType(e) == EdgeType.UNDIRECTED &&
+					tv.contains(second) == true && tv.contains(first) == false) {
+				if(weights.get(e) < minCost) {
+					minCost = weights.get(e);
+					nextEdge = e;
+					currentVertex = second;
+					nextVertex = first;
+				}
+			}
 		}
 		
 		if(nextVertex != null && nextEdge != null) {
 			unfinishedEdges.remove(nextEdge);
-			tree.addEdge(nextEdge, currentVertex, nextVertex);
-			updateTree(tree.getVertices());
+			forest.addEdge(nextEdge, currentVertex, nextVertex);
+			updateForest(forest.getVertices(), unfinishedEdges);
+		}
+		Collection<V> leftovers = new HashSet<V>(graph.getVertices());
+		leftovers.removeAll(forest.getVertices());
+		if(leftovers.size() > 0) {
+			V anotherRoot = leftovers.iterator().next();
+			forest.addVertex(anotherRoot);
+			updateForest(forest.getVertices(), unfinishedEdges);
 		}
 	}
 }
