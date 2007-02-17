@@ -60,7 +60,6 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     /**
      * a Paintable to store all Annotations
      */
-//    protected AnnotationPaintable annotationPaintable;
     protected AnnotationManager annotationManager;
     
     /**
@@ -180,14 +179,11 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	} else if(e.getModifiers() == additionalModifiers) {
     		Annotation annotation = annotationManager.getAnnotation(down);
     		annotationManager.remove(annotation);
-//    		rect = new Ellipse2D.Double();
-//    		rect.setFrameFromDiagonal(down,down);
-//    		vv.addPostRenderPaintable(lensPaintable);
     	} else if(e.getModifiers() == modifiers) {
-//    		rectangularShape = new Rectangle2D.Double();
     		rectangularShape.setFrameFromDiagonal(down,down);
     		vv.addPostRenderPaintable(lensPaintable);
     	}
+    	vv.repaint();
     }
 
     /**
@@ -198,20 +194,15 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     @SuppressWarnings("unchecked")
     public void mouseReleased(MouseEvent e) {
         VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-//        if(e.getModifiers() == additionalModifiers) {
-//        	if(down != null) {
-//        		Point2D out = e.getPoint();
-//        		Ellipse2D arect = new Ellipse2D.Double();
-//        		arect.setFrameFromDiagonal(down,out);
-//        		Shape s = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(arect);
-//        		annotationPaintable.add(s,Color.cyan);
-//        		if(added == false) {
-//        			vv.addPostRenderPaintable(annotationPaintable);
-//        			added = true;
-//        		}
-//        	} 
-//        } else 
-        if(e.getModifiers() == modifiers) {
+    	if(e.isPopupTrigger()) {
+    		String annotationString = JOptionPane.showInputDialog(vv,"Annotation:");
+    		if(annotationString != null && annotationString.length() > 0) {
+    			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
+    			Annotation<String> annotation =
+    				new Annotation<String>(annotationString, layer, annotationColor, fill, p);
+    			annotationManager.add(layer, annotation);
+    		}
+    	} else if(e.getModifiers() == modifiers) {
         	if(down != null) {
         		Point2D out = e.getPoint();
         		RectangularShape arect = (RectangularShape)rectangularShape.clone();
@@ -220,12 +211,11 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         		Annotation<Shape> annotation =
         			new Annotation<Shape>(s, layer, annotationColor, fill, out);
         		annotationManager.add(layer, annotation);
-//        		annotationPaintable.add(annotation);
-//        		annotationPaintable.add(s,Color.red);
         	}
         }
         down = null;
         vv.removePostRenderPaintable(lensPaintable);
+        vv.repaint();
     }
     
     /**
@@ -236,6 +226,8 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 */
     @SuppressWarnings("unchecked")
     public void mouseDragged(MouseEvent e) {
+        VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
+
     	Point2D out = e.getPoint();
     	if(e.getModifiers() == additionalModifiers) {
             rectangularShape.setFrameFromDiagonal(down,out);
@@ -245,6 +237,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     		
     	}
         rectangularShape.setFrameFromDiagonal(down,out);
+        vv.repaint();
     }
     
      public void mouseClicked(MouseEvent e) {
