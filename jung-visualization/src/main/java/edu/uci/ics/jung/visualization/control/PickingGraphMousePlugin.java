@@ -299,6 +299,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                 }
             }
             if(vertex != null) e.consume();
+            vv.repaint();
         }
     }
     

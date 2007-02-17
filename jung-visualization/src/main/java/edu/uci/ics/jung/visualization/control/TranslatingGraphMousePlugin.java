@@ -99,6 +99,7 @@ public class TranslatingGraphMousePlugin extends AbstractGraphMousePlugin
             }
         
             e.consume();
+            vv.repaint();
         }
     }
 

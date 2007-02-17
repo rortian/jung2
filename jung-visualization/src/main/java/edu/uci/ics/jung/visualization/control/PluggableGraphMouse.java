@@ -94,7 +94,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseListeners[i].mouseClicked(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mousePressed(MouseEvent e) {
@@ -103,7 +103,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseListeners[i].mousePressed(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mouseReleased(MouseEvent e) {
@@ -112,7 +112,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseListeners[i].mouseReleased(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mouseEntered(MouseEvent e) {
@@ -121,7 +121,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseListeners[i].mouseEntered(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mouseExited(MouseEvent e) {
@@ -130,7 +130,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseListeners[i].mouseExited(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mouseDragged(MouseEvent e) {
@@ -139,7 +139,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseMotionListeners[i].mouseDragged(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mouseMoved(MouseEvent e) {
@@ -148,7 +148,7 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseMotionListeners[i].mouseMoved(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
     
     public void mouseWheelMoved(MouseWheelEvent e) {
@@ -157,6 +157,6 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
             mouseWheelListeners[i].mouseWheelMoved(e);
             if(e.isConsumed()) break;
         }
-        ((Component) e.getSource()).repaint();
+//        ((Component) e.getSource()).repaint();
     }
 }
