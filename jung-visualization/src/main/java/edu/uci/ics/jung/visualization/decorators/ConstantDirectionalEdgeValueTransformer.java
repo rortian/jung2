@@ -14,8 +14,8 @@ package edu.uci.ics.jung.visualization.decorators;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
+import edu.uci.ics.jung.algorithms.util.Context;
 
 
 /**

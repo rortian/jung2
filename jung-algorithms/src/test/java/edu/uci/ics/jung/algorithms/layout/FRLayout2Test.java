@@ -7,6 +7,8 @@ import java.util.Set;
 import junit.framework.TestCase;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
+import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 
 public class FRLayout2Test extends TestCase {

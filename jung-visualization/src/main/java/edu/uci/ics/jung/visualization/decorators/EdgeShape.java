@@ -18,10 +18,10 @@ import java.awt.geom.Line2D;
 import java.awt.geom.QuadCurve2D;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.jung.algorithms.layout.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
 
@@ -295,6 +295,7 @@ public class EdgeShape<V,E>  {
             x += x*count/2;
             y += y*count/2;
             instance.setFrame(x,y,diam,diam);
+//            System.err.println("instance is "+instance.getBounds());
             return instance;
         }
     }

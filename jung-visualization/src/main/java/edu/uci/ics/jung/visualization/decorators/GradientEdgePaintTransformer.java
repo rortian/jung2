@@ -19,10 +19,10 @@ import java.awt.geom.Point2D;
 import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;

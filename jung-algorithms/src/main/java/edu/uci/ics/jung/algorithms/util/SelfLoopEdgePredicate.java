@@ -3,7 +3,6 @@ package edu.uci.ics.jung.algorithms.util;
 import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 
 
