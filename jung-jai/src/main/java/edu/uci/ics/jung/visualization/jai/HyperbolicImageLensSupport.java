@@ -21,10 +21,12 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.picking.ViewLensShapePickSupport;
 import edu.uci.ics.jung.visualization.renderers.BasicRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.renderers.ReshapingEdgeRenderer;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer;
+import edu.uci.ics.jung.visualization.transform.shape.TransformingFlatnessGraphics;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 /**
  * A class to make it easy to add a Hyperbolic projection
@@ -43,7 +45,9 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     protected Renderer<V,E> renderer;
     protected Renderer<V,E> transformingRenderer;
     protected GraphElementAccessor<V,E> pickSupport;
-    
+    protected Renderer.Edge savedEdgeRenderer;
+    protected Renderer.Edge reshapingEdgeRenderer;
+
     static final String instructions = 
         "<html><center>Mouse-Drag the Lens center to move it<p>"+
         "Mouse-Drag the Lens edge to resize it<p>"+
@@ -69,13 +73,15 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensTransformer = lensTransformer;
+        this.savedEdgeRenderer = vv.getRenderer().getEdgeRenderer();
+        this.reshapingEdgeRenderer = new ReshapingEdgeRenderer<V,E>();
 
         Dimension d = vv.getSize();
         if(d.width == 0 || d.height == 0) {
             d = vv.getPreferredSize();
         }
         lensTransformer.setViewRadius(d.width/5);
-        this.lensGraphicsDecorator = new TransformingGraphics(lensTransformer);
+        this.lensGraphicsDecorator = new TransformingFlatnessGraphics(lensTransformer);
 
     }
     
@@ -92,6 +98,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
         vv.setRenderer(transformingRenderer);
+        vv.getRenderer().setEdgeRenderer(reshapingEdgeRenderer);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
