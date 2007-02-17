@@ -9,14 +9,16 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.graph.util;
+package edu.uci.ics.jung.algorithms.layout.util;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.util.Pair;
 
 /**
  * A class which creates and maintains indices for parallel edges.
@@ -50,30 +52,66 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements ParallelEdgeIndexF
     {
         Integer index = edge_index.get(e);
         if(index == null) {
-        	index = getIndexInternal(graph, e);
+        	Pair<V> endpoints = graph.getEndpoints(e);
+        	V u = endpoints.getFirst();
+        	V v = endpoints.getSecond();
+        	if(u.equals(v)) {
+        		index = getIndex(graph, e, v);
+        	} else {
+        		index = getIndex(graph, e, u, v);
+        	}
+//        	index = getIndexInternal(graph, e);
         }
         return index.intValue();
     }
 
-    protected Integer getIndexInternal(Graph<V,E> graph, E e) {
-        Pair<V> endpoints = graph.getEndpoints(e);
-        V u = endpoints.getFirst();
-        V v = endpoints.getSecond();
-        Collection<E> commonEdgeSet = new HashSet<E>(graph.getIncidentEdges(u));
-        commonEdgeSet.retainAll(graph.getIncidentEdges(v));
-        int count = 0;
-        for(E other : commonEdgeSet) {
-            if (e.equals(other) == false && 
-            			graph.getEndpoints(other).getFirst().equals(u)) {
-                edge_index.put(other, new Integer(count));
-                count++;
-            }
-        }
-        Integer index = new Integer(count);
-        edge_index.put((E)e, index);
-        
-        return index;
+    protected int getIndex(Graph<V,E> graph, E e, V v, V u) {
+    	Collection<E> commonEdgeSet = new HashSet<E>(graph.getIncidentEdges(u));
+    	commonEdgeSet.retainAll(graph.getIncidentEdges(v));
+    	for(Iterator<E> iterator=commonEdgeSet.iterator(); iterator.hasNext(); ) {
+    		E edge = iterator.next();
+    		Pair<V> ep = graph.getEndpoints(edge);
+    		V first = ep.getFirst();
+    		V second = ep.getSecond();
+    		// remove loops
+    		if(first.equals(second) == true) {
+    			iterator.remove();
+    		}
+    		// remove edges in opposite direction
+    		if(first.equals(v) == false) {
+    			iterator.remove();
+    		}
+    	}
+    	int count=0;
+    	for(E other : commonEdgeSet) {
+    		if(e.equals(other) == false) {
+    			edge_index.put(other, count);
+    			count++;
+    		}
+    	}
+    	edge_index.put(e, count);
+    	return count;
+     }
+    
+    protected int getIndex(Graph<V,E> graph, E e, V v) {
+    	Collection<E> commonEdgeSet = new HashSet<E>();
+    	for(E another : graph.getIncidentEdges(v)) {
+    		V u = graph.getOpposite(v, another);
+    		if(u.equals(v)) {
+    			commonEdgeSet.add(another);
+    		}
+    	}
+    	int count=0;
+    	for(E other : commonEdgeSet) {
+    		if(e.equals(other) == false) {
+    			edge_index.put(other, count);
+    			count++;
+    		}
+    	}
+    	edge_index.put(e, count);
+    	return count;
     }
+
     
     /**
      * Resets the indices for this edge and its parallel edges.
@@ -81,9 +119,10 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements ParallelEdgeIndexF
      * has been added or removed.
      * @param e
      */
-    public void reset(Graph<V,E> graph, E e)
-    {
-        getIndexInternal(graph, e);
+    public void reset(Graph<V,E> graph, E e) {
+    	Pair<V> endpoints = graph.getEndpoints(e);
+        getIndex(graph, e, endpoints.getFirst());
+        getIndex(graph, e, endpoints.getFirst(), endpoints.getSecond());
     }
     
     /**

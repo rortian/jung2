@@ -1,4 +1,4 @@
-package edu.uci.ics.graph.util;
+package edu.uci.ics.jung.algorithms.util;
 
 
 public class Context<G,E> {
