@@ -23,7 +23,7 @@ import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
+import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 

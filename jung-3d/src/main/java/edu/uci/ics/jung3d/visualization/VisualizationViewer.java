@@ -1,17 +1,9 @@
 /*
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * Copyright (c) 2003, the JUNG Project and the Regents of the University of
+ * California All rights reserved.
+ * 
+ * This software is open-source under the BSD license; see either "license.txt"
+ * or http://jung.sourceforge.net/license.txt for a description.
  */
 package edu.uci.ics.jung3d.visualization;
 
@@ -60,10 +52,10 @@ import com.sun.j3d.utils.picking.behaviors.PickingCallback;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.algorithms.layout.VisRunner;
+import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
+import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
