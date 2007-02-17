@@ -23,9 +23,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
+import edu.uci.ics.graph.Forest;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Tree;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
@@ -34,8 +36,10 @@ import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.algorithms.shortestpath.PrimMinimumSpanningTree;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
@@ -69,7 +73,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
      * the graph
      */
     Graph<String,Number> graph;
-    Tree<String,Number> tree;
+    Forest<String,Number> tree;
 
     /**
      * the visual components and renderers for the graph
@@ -92,19 +96,27 @@ public class MinimumSpanningTreeDemo extends JApplet {
      */
     public MinimumSpanningTreeDemo() {
         
+    	Factory<Tree<String,Number>> treeFactory =
+    		new Factory<Tree<String,Number>>() {
+
+				public Tree<String, Number> create() {
+					return new SparseTree<String,Number>(new DirectedSparseGraph<String,Number>(), null);
+				}};
         // create a simple graph for the demo
         // both models will share one graph
         graph = 
-        	new UndirectedSparseGraph<String, Number>();
-        String[] v = createVertices(10);
-        createEdges(v);
+        	TestGraphs.getDemoGraph();
+//        	new DirectedSparseGraph<String, Number>();
+//        String[] v = createVertices(10);
+//        createEdges(v);
         
-        PrimMinimumSpanningTree<String,Number> prim = new PrimMinimumSpanningTree<String,Number>(graph, 
-        		new SparseTree<String,Number>(new DirectedSparseGraph<String,Number>(), null),
-        		"V0",
+        PrimMinimumSpanningTree<String,Number> prim = new PrimMinimumSpanningTree<String,Number>(graph,
+        		new SparseForest<String,Number>(treeFactory),
+        		"a",
+//        		"V0",
         		LazyMap.decorate(new HashMap<Number,Double>(), new ConstantTransformer(1.0)));
         
-        tree = prim.getTree();
+        tree = prim.getForest();
         
         // create two layouts for the one graph, one layout for each model
         Layout<String,Number> layout0 = new KKLayout<String,Number>(graph);
@@ -127,9 +139,10 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv1.setRenderContext(vv2.getRenderContext());
         
         vv0.getRenderContext().setMultiLayerTransformer(vv1.getRenderContext().getMultiLayerTransformer());
-        vv0.getRenderContext().getMultiLayerTransformer().addChangeListener(vv1);
         vv2.getRenderContext().setMultiLayerTransformer(vv1.getRenderContext().getMultiLayerTransformer());
-        vv2.getRenderContext().getMultiLayerTransformer().addChangeListener(vv1);
+        vv0.getRenderContext().getMultiLayerTransformer().addChangeListener(vv1);
+        vv1.getRenderContext().getMultiLayerTransformer().addChangeListener(vv2);
+        vv2.getRenderContext().getMultiLayerTransformer().addChangeListener(vv0);
         vv2.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
         vv0.addChangeListener(vv1);

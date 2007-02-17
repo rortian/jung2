@@ -40,11 +40,13 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.Tree;
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
 import edu.uci.ics.jung.algorithms.layout.RadialTreeLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.SparseForest;
+import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
@@ -74,8 +76,17 @@ public class TreeLayoutDemo extends JApplet {
 
 			public DirectedGraph<String, Integer> create() {
 				return new DirectedSparseGraph<String,Integer>();
-			}};
+			}
+		};
 			
+	Factory<Tree<String,Integer>> treeFactory =
+		new Factory<Tree<String,Integer>> () {
+
+		public Tree<String, Integer> create() {
+			return new SparseTree<String,Integer>(graphFactory, edgeFactory);
+		}
+	};
+	
 	Factory<Integer> edgeFactory = new Factory<Integer>() {
 		int i=0;
 		public Integer create() {
@@ -104,7 +115,7 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SparseForest<String,Integer>(graphFactory, edgeFactory);
+        graph = new SparseForest<String,Integer>(treeFactory);
 
         createTree();
         
