@@ -599,5 +599,9 @@ public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
 		}
 		return addEdge(edge, pair.getFirst(), pair.getSecond());
 	}
+	
+	public String toString() {
+		return "Tree of "+delegate.toString();
+	}
 
 }
