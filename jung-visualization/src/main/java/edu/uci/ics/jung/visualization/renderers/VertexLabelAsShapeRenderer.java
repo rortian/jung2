@@ -20,8 +20,8 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Context;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;

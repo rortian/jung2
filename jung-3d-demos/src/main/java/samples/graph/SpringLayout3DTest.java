@@ -13,7 +13,7 @@ import javax.vecmath.Point3d;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
-import edu.uci.ics.jung.algorithms.layout.VisRunner;
+import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
 import edu.uci.ics.jung3d.algorithms.layout.SpringLayout;
