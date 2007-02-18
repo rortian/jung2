@@ -133,13 +133,12 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                         layout.lock(lockVertex,true);
                     }
                     graph.addVertex(newVertex);
-//                    vv.getModel().restart();
                     for(V lockVertex : graph.getVertices()) {
                         layout.lock(lockVertex, false);
                     }
-                    vv.repaint();
                 }
             }
+            vv.repaint();
         }
     }
     
@@ -187,6 +186,9 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                     transformArrowShape(down, e.getPoint());
                 }
             }
+            VisualizationViewer<V,E> vv =
+                (VisualizationViewer<V,E>)e.getSource();
+            vv.repaint();
         }
     }
     
