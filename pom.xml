@@ -48,9 +48,13 @@
     <module>jung-visualization</module>
     <module>jung-algorithms</module>
     <module>jung-io</module>
+<!-- uncomment these if you have Java Advanced Imaging installed
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
+-->
+<!-- uncomment these if you have Java3d installed
     <module>jung-3d</module>
     <module>jung-3d-demos</module>
+-->
   </modules>
 </project>
