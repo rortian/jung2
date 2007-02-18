@@ -24,8 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,12 +43,14 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.FourPassImageShaper;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -163,12 +165,12 @@ public class VertexImageShaperDemo extends JApplet {
         vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
-        vv.getRenderContext().setEdgeLabelTransformer(new Transformer<Number,String>() {
-        	URL url = getClass().getResource("/images/lightning-s.gif");
-			public String transform(Number input) {
-				
-				return "<html><img src="+url+" height=10 width=21>"+input.toString();
-			}});
+//        vv.getRenderContext().setEdgeLabelTransformer(new Transformer<Number,String>() {
+//        	URL url = getClass().getResource("/images/lightning-s.gif");
+//			public String transform(Number input) {
+//				
+//				return "<html><img src="+url+" height=10 width=21>"+input.toString();
+//			}});
         
         // For this demo only, I use a special class that lets me turn various
         // features on and off. For a real application, use VertexIconShapeTransformer instead.
@@ -507,7 +509,13 @@ public class VertexImageShaperDemo extends JApplet {
      *
      */
     class DemoRenderer<V,E> extends BasicVertexRenderer<V,E> {
-        public void paintIconForVertex(RenderContext<V,E> rc, V v, int x, int y) {
+        public void paintIconForVertex(RenderContext<V,E> rc, V v, Layout<V,E> layout) {
+        	
+            Point2D p = layout.transform(v);
+            p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
+            float x = (float)p.getX();
+            float y = (float)p.getY();
+
             GraphicsDecorator g = rc.getGraphicsContext();
             boolean outlineImages = false;
             Transformer<V,Icon> vertexIconFunction = rc.getVertexIconTransformer();
@@ -521,11 +529,10 @@ public class VertexImageShaperDemo extends JApplet {
                 Shape s = AffineTransform.getTranslateInstance(x,y).
                     createTransformedShape(rc.getVertexShapeTransformer().transform(v));
                 paintShapeForVertex(rc, v, s);
-                
             }
             if(icon != null) {
-                int xLoc = x - icon.getIconWidth()/2;
-                int yLoc = y - icon.getIconHeight()/2;
+                int xLoc = (int) (x - icon.getIconWidth()/2);
+                int yLoc = (int) (y - icon.getIconHeight()/2);
                 icon.paintIcon(rc.getScreenDevice(), g.getDelegate(), xLoc, yLoc);
             }
         }
