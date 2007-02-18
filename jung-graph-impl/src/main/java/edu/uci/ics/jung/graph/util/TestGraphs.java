@@ -219,8 +219,8 @@ public class TestGraphs {
 		// let's throw in a clique, too
 		for (int i = 1; i <= 10; i++) {
 			for (int j = i + 1; j <= 10; j++) {
-				String i1 = "clique" + i;
-				String i2 = "clique" + j;
+				String i1 = "c" + i;
+				String i2 = "c" + j;
 				createEdge(g, i1, i2, i + j);
 			}
 		}
@@ -230,8 +230,8 @@ public class TestGraphs {
 			for (int j = i + 1; j <= 20; j++) {
 				if (Math.random() > 0.6)
 					continue;
-				String i1 = "partial" + i;
-				String i2 = "partial" + j;
+				String i1 = "p" + i;
+				String i2 = "p" + j;
 				createEdge(g, i1, i2, i + j);
 			}
 		}
