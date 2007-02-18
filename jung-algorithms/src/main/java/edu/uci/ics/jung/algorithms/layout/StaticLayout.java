@@ -24,6 +24,10 @@ public class StaticLayout<V, E> extends AbstractLayout<V,E> {
         super(graph, initializer, size);
     }
     
+    public StaticLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer) {
+        super(graph, initializer);
+    }
+    
     public void initialize() {}
 
 	public void reset() {}
