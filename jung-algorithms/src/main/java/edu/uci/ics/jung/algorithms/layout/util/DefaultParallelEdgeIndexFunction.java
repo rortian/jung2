@@ -60,7 +60,6 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements ParallelEdgeIndexF
         	} else {
         		index = getIndex(graph, e, u, v);
         	}
-//        	index = getIndexInternal(graph, e);
         }
         return index.intValue();
     }
