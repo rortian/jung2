@@ -12,20 +12,20 @@ import edu.uci.ics.graph.util.Pair;
 
 /**
  * For the input Graph, creates a MinimumSpanningTree
- * using Prim's algorithm.
+ * using a variation of Prim's algorithm.
  * 
  * @author Tom Nelson - tomnelson@dev.java.net
  *
  * @param <V>
  * @param <E>
  */
-public class PrimMinimumSpanningTree<V,E> {
+public class MinimumSpanningForest<V,E> {
 	
 	protected Graph<V,E> graph;
 	protected Forest<V,E> forest;
 	protected Map<E,Double> weights;
 	
-	public PrimMinimumSpanningTree(Graph<V, E> graph, Forest<V,E> forest, 
+	public MinimumSpanningForest(Graph<V, E> graph, Forest<V,E> forest, 
 			V root, Map<E, Double> weights) {
 		
 		assert forest.getVertexCount() == 0 :
@@ -35,7 +35,9 @@ public class PrimMinimumSpanningTree<V,E> {
 		this.weights = weights;
 		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
 //		this.unfinishedEdges.addAll(graph.getEdges());
-		this.forest.addVertex(root);
+		if(graph.getVertices().contains(root)) {
+			this.forest.addVertex(root);
+		}
 		updateForest(forest.getVertices(), unfinishedEdges);
 	}
 	
