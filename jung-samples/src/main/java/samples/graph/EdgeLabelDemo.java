@@ -110,7 +110,7 @@ public class EdgeLabelDemo extends JApplet {
         
         Transformer<Number,String> stringer = new Transformer<Number,String>(){
             public String transform(Number e) {
-                return "EdgeType:"+graph.getEndpoints(e).toString();
+                return "Edge:"+graph.getEndpoints(e).toString();
             }
         };
         vv.getRenderContext().setEdgeLabelTransformer(stringer);
