@@ -20,7 +20,7 @@ import java.awt.geom.QuadCurve2D;
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
-import edu.uci.ics.jung.algorithms.layout.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
