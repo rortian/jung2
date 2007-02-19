@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.algorithms.layout.util;
+package edu.uci.ics.graph.util;
 
 import edu.uci.ics.graph.Graph;
 
