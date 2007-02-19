@@ -12,18 +12,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -34,17 +30,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.Icon;
 import javax.swing.JApplet;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.plaf.basic.BasicLabelUI;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
@@ -137,19 +128,6 @@ public class RadialTreeLensDemo extends JApplet {
      * provides a Hyperbolic lens for the view
      */
     LensSupport hyperbolicViewSupport;
-    /**
-     * provides a magnification lens for the view
-     */
-//    LensSupport magnifyViewSupport;
-    
-    /**
-     * provides a Hyperbolic lens for the model
-     */
-//    LensSupport hyperbolicLayoutSupport;
-    /**
-     * provides a magnification lens for the model
-     */
-//    LensSupport magnifyLayoutSupport;
     
     ScalingControl scaler;
     
@@ -236,116 +214,28 @@ public class RadialTreeLensDemo extends JApplet {
             }
         });
 
-        JLabel modeLabel = new JLabel("     Mode Menu >>");
-        modeLabel.setUI(new VerticalLabelUI(false));
         graphMouse.addItemListener(hyperbolicViewSupport.getGraphMouse().getModeListener());
         
         JMenuBar menubar = new JMenuBar();
         menubar.add(graphMouse.getModeMenu());
         gzsp.setCorner(menubar);
-        
 
-        Box controls = Box.createHorizontalBox();
+        JPanel controls = new JPanel();
         JPanel zoomControls = new JPanel(new GridLayout(2,1));
         zoomControls.setBorder(BorderFactory.createTitledBorder("Zoom"));
         JPanel hyperControls = new JPanel(new GridLayout(3,2));
         hyperControls.setBorder(BorderFactory.createTitledBorder("Examiner Lens"));
         zoomControls.add(plus);
         zoomControls.add(minus);
-        
+        JPanel modeControls = new JPanel(new BorderLayout());
+        modeControls.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
+        modeControls.add(graphMouse.getModeComboBox());
         hyperControls.add(hyperView);
         
         controls.add(zoomControls);
         controls.add(hyperControls);
-        controls.add(modeLabel);
+        controls.add(modeControls);
         content.add(controls, BorderLayout.SOUTH);
-    }
-
-    static class VerticalLabelUI extends BasicLabelUI
-    {
-    	static {
-    		labelUI = new VerticalLabelUI(false);
-    	}
-    	
-    	protected boolean clockwise;
-    	VerticalLabelUI( boolean clockwise )
-    	{
-    		super();
-    		this.clockwise = clockwise;
-    	}
-    	
-
-        public Dimension getPreferredSize(JComponent c) 
-        {
-        	Dimension dim = super.getPreferredSize(c);
-        	return new Dimension( dim.height, dim.width );
-        }	
-
-        private static Rectangle paintIconR = new Rectangle();
-        private static Rectangle paintTextR = new Rectangle();
-        private static Rectangle paintViewR = new Rectangle();
-        private static Insets paintViewInsets = new Insets(0, 0, 0, 0);
-
-    	public void paint(Graphics g, JComponent c) 
-        {
-
-        	
-            JLabel label = (JLabel)c;
-            String text = label.getText();
-            Icon icon = (label.isEnabled()) ? label.getIcon() : label.getDisabledIcon();
-
-            if ((icon == null) && (text == null)) {
-                return;
-            }
-
-            FontMetrics fm = g.getFontMetrics();
-            paintViewInsets = c.getInsets(paintViewInsets);
-
-            paintViewR.x = paintViewInsets.left;
-            paintViewR.y = paintViewInsets.top;
-        	
-        	// Use inverted height & width
-            paintViewR.height = c.getWidth() - (paintViewInsets.left + paintViewInsets.right);
-            paintViewR.width = c.getHeight() - (paintViewInsets.top + paintViewInsets.bottom);
-
-            paintIconR.x = paintIconR.y = paintIconR.width = paintIconR.height = 0;
-            paintTextR.x = paintTextR.y = paintTextR.width = paintTextR.height = 0;
-
-            String clippedText = 
-                layoutCL(label, fm, text, icon, paintViewR, paintIconR, paintTextR);
-
-        	Graphics2D g2 = (Graphics2D) g;
-        	AffineTransform tr = g2.getTransform();
-        	if( clockwise )
-        	{
-    	    	g2.rotate( Math.PI / 2 ); 
-        		g2.translate( 0, - c.getWidth() );
-        	}
-        	else
-        	{
-    	    	g2.rotate( - Math.PI / 2 ); 
-        		g2.translate( - c.getHeight(), 0 );
-        	}
-
-        	if (icon != null) {
-                icon.paintIcon(c, g, paintIconR.x, paintIconR.y);
-            }
-
-            if (text != null) {
-                int textX = paintTextR.x;
-                int textY = paintTextR.y + fm.getAscent();
-
-                if (label.isEnabled()) {
-                    paintEnabledText(label, g, clippedText, textX, textY);
-                }
-                else {
-                    paintDisabledText(label, g, clippedText, textX, textY);
-                }
-            }
-        	
-        	
-        	g2.setTransform( tr );
-        }
     }
 
     private void createTree() {
