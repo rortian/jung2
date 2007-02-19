@@ -32,6 +32,7 @@ import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -179,9 +180,18 @@ public class GraphZoomScrollPaneDemo {
             }
         });
 
+        JButton reset = new JButton("reset");
+        reset.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).setToIdentity();
+				vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).setToIdentity();
+			}});
+
         JPanel controls = new JPanel();
         controls.add(plus);
         controls.add(minus);
+        controls.add(reset);
         content.add(controls, BorderLayout.SOUTH);
 
         frame.pack();
