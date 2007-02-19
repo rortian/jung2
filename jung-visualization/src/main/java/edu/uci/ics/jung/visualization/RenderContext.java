@@ -15,8 +15,8 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.util.EdgeType;
+import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
-import edu.uci.ics.jung.algorithms.layout.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
