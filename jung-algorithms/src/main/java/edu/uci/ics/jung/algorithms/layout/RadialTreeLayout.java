@@ -89,7 +89,7 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 
     public RadialTreeLayout(Graph<V,E> g, int distx, int disty) {
     	
-    	if(g instanceof Tree == false || g instanceof Forest == false) { 
+    	if(g instanceof Tree == false && g instanceof Forest == false) { 
     		throw new IllegalArgumentException("Graph must be a Tree or a Forest");
     	}
     	
