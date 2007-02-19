@@ -38,7 +38,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 	private Dimension size;
 	private Graph<V,E> graph;
 	protected Map<V,Integer> basePositions = new HashMap<V,Integer>();
-//	boolean radial;
     
     protected Map<V, Point2D> locations = 
     	LazyMap.decorate(new HashMap<V, Point2D>(),
@@ -49,13 +48,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     public static int DEFAULT_DISTX = 50;
     public static int DEFAULT_DISTY = 50;
     
-//    protected Map<V,PolarPoint> polarLocations =
-//    	LazyMap.decorate(new HashMap<V, PolarPoint>(),
-//    			new Transformer<V,PolarPoint>() {
-//					public PolarPoint transform(V arg0) {
-//						return new PolarPoint();
-//					}});
-
     public List<V> getAtomics(V p) {
         List<V> v = new ArrayList<V>();
         getAtomics(p, v);
@@ -89,9 +81,9 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 
     public TreeLayout(Graph<V,E> g, int distx, int disty) {
     	
-    	assert g instanceof Tree || g instanceof Forest : 
-    		"Graph must be a Tree or a Forest";
-    	
+    	if(g instanceof Tree == false || g instanceof Forest == false) {
+    		throw new IllegalArgumentException("Graph must be a Tree or a Forest");
+    	}
     	this.graph = g;
         this.roots = getRoots(g);
         this.distX = distx;
@@ -112,20 +104,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     	return size;
     }
 
-//    /**
-//	 * @return the radial
-//	 */
-//	public boolean isRadial() {
-//		return radial;
-//	}
-//
-//	/**
-//	 * @param radial the radial to set
-//	 */
-//	public void setRadial(boolean radial) {
-//		this.radial = radial;
-//	}
-
 	void buildTree() {
         this.m_currentPoint = new Point(0, 20);
         if (roots.size() > 0 && graph != null) {
@@ -140,7 +118,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         for(V v : roots) {
         	width += basePositions.get(v);
         }
-//        setRadialLocations();
     }
 
     void buildTree(V v, int x) {
@@ -269,31 +246,11 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 	}
 
 	public void setLocation(V v, Point2D location) {
-//		if(radial) {
-//			Point2D c = getCenter();
-//			Point2D pv = new Point2D.Double(location.getX()-c.getX(),location.getY()-c.getY());
-//			PolarPoint newLocation = PolarPoint.cartesianToPolar(pv);
-//			polarLocations.get(v).setLocation(newLocation);
-//		} else {
 			locations.get(v).setLocation(location);
-//		}
 	}
 	
-//	public Map<V,PolarPoint> getPolarLocations() {
-//		return polarLocations;
-//	}
-
 	public Point2D transform(V v) {
-//		if(radial) {
-//			PolarPoint pp = polarLocations.get(v);
-//			double centerX = getSize().getWidth()/2;
-//			double centerY = getSize().getHeight()/2;
-//			Point2D cartesian = PolarPoint.polarToCartesian(pp);
-//			cartesian.setLocation(cartesian.getX()+centerX,cartesian.getY()+centerY);
-//			return cartesian;
-//		} else {
 			return locations.get(v);
-//		}
 	}
 	
 	private Point2D getMaxXY() {
@@ -305,20 +262,4 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 		}
 		return new Point2D.Double(maxx,maxy);
 	}
-	
-//	private void setRadialLocations() {
-//		Point2D max = getMaxXY();
-//		double maxx = max.getX();
-//		double maxy = max.getY();
-//		maxx = Math.max(maxx, size.width);
-//		double theta = 2*Math.PI/maxx;
-//
-//		double deltaRadius = size.width/2/maxy;
-//		for(Map.Entry<V, Point2D> entry : locations.entrySet()) {
-//			V v = entry.getKey();
-//			Point2D p = entry.getValue();
-//			PolarPoint polarPoint = new PolarPoint(p.getX()*theta, (p.getY()-50)*deltaRadius);
-//			polarLocations.put(v, polarPoint);
-//		}
-//	}
 }

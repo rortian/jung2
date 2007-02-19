@@ -58,8 +58,9 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
 
     public BalloonLayout(Graph<V,E> g) {
     	
-    	assert g instanceof Tree || g instanceof Forest : 
-    		"Graph must be a Tree or a Forest";
+    	if( g instanceof Tree == false || g instanceof Forest == false) { 
+    		throw new IllegalArgumentException("Graph must be a Tree or a Forest");
+    	}
     	this.graph = g;
         this.roots = getRoots(g);
     }

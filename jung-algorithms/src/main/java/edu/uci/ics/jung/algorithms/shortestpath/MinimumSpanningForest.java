@@ -1,9 +1,12 @@
 package edu.uci.ics.jung.algorithms.shortestpath;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Forest;
@@ -25,16 +28,48 @@ public class MinimumSpanningForest<V,E> {
 	protected Forest<V,E> forest;
 	protected Map<E,Double> weights;
 	
+	/**
+	 * create a Forest from the supplied Graph and supplied Factory, which
+	 * is used to create a new, empty Forest. If non-null, the supplied root
+	 * will be used as the root of the tree/forest. If the supplied root is
+	 * null, or not present in the Graph, then an arbitary Graph vertex
+	 * will be selected as the root.
+	 * If the Minimum Spanning Tree does not include all vertices of the
+	 * Graph, then a leftover vertex is selected as a root, and another
+	 * tree is created
+	 * @param graph
+	 * @param factory
+	 * @param root
+	 * @param weights
+	 */
+	public MinimumSpanningForest(Graph<V, E> graph, Factory<Forest<V,E>> factory, 
+			V root, Map<E, Double> weights) {
+		this(graph, factory.create(), root, weights);
+	}
+	
+	/**
+	 * create a forest from the supplied graph, populating the
+	 * supplied Forest, which must be empty. 
+	 * If the supplied root is null, or not present in the Graph,
+	 * then an arbitary Graph vertex will be selected as the root.
+	 * If the Minimum Spanning Tree does not include all vertices of the
+	 * Graph, then a leftover vertex is selected as a root, and another
+	 * tree is created
+	 * @param graph the Graph to find MST in
+	 * @param forest the Forest to populate. Must be empty
+	 * @param root first Tree root, may be null
+	 * @param weights edge weights, may be null
+	 */
 	public MinimumSpanningForest(Graph<V, E> graph, Forest<V,E> forest, 
 			V root, Map<E, Double> weights) {
 		
-		assert forest.getVertexCount() == 0 :
-			"Supplied Forest must be empty";
+		if(forest.getVertexCount() != 0) {
+			throw new IllegalArgumentException("Supplied Forest must be empty");
+		}
 		this.graph = graph;
 		this.forest = forest;
-		this.weights = weights;
+		this.weights = (weights != null) ? weights : new HashMap<E,Double>();
 		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
-//		this.unfinishedEdges.addAll(graph.getEdges());
 		if(graph.getVertices().contains(root)) {
 			this.forest.addVertex(root);
 		}
