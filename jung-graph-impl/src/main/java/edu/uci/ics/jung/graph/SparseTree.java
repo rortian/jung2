@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.graph.Forest;
 import edu.uci.ics.graph.Tree;
 import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
@@ -604,4 +605,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
 		return "Tree of "+delegate.toString();
 	}
 
+	public Collection<Tree<V, E>> getTrees() {
+		return Collections.<Tree<V,E>>singleton(this);
+	}
 }
