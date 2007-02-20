@@ -71,19 +71,16 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 
     private Collection<V> roots;
 
-    public TreeLayout(Graph<V,E> g) {
+    public TreeLayout(Forest<V,E> g) {
     	this(g, DEFAULT_DISTX, DEFAULT_DISTY);
     }
 
-    public TreeLayout(Graph<V,E> g, int distx) {
+    public TreeLayout(Forest<V,E> g, int distx) {
         this(g, distx, DEFAULT_DISTY);
     }
 
-    public TreeLayout(Graph<V,E> g, int distx, int disty) {
+    public TreeLayout(Forest<V,E> g, int distx, int disty) {
     	
-    	if(g instanceof Tree == false && g instanceof Forest == false) {
-    		throw new IllegalArgumentException("Graph must be a Tree or a Forest");
-    	}
     	this.graph = g;
         this.roots = getRoots(g);
         this.distX = distx;

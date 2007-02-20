@@ -56,11 +56,8 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     
     private Collection<V> roots;
 
-    public BalloonLayout(Graph<V,E> g) {
+    public BalloonLayout(Forest<V,E> g) {
     	
-    	if( g instanceof Tree == false && g instanceof Forest == false) { 
-    		throw new IllegalArgumentException("Graph must be a Tree or a Forest");
-    	}
     	this.graph = g;
         this.roots = getRoots(g);
     }

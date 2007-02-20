@@ -79,19 +79,15 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 
     private Collection<V> roots;
 
-    public RadialTreeLayout(Graph<V,E> g) {
+    public RadialTreeLayout(Forest<V,E> g) {
     	this(g, DEFAULT_DISTX, DEFAULT_DISTY);
     }
 
-    public RadialTreeLayout(Graph<V,E> g, int distx) {
+    public RadialTreeLayout(Forest<V,E> g, int distx) {
         this(g, distx, DEFAULT_DISTY);
     }
 
-    public RadialTreeLayout(Graph<V,E> g, int distx, int disty) {
-    	
-    	if(g instanceof Tree == false && g instanceof Forest == false) { 
-    		throw new IllegalArgumentException("Graph must be a Tree or a Forest");
-    	}
+    public RadialTreeLayout(Forest<V,E> g, int distx, int disty) {
     	
     	this.graph = g;
         this.roots = getRoots(g);
