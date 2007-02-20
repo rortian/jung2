@@ -20,7 +20,7 @@ package edu.uci.ics.graph;
  * 
  * @author Joshua O'Madadhain
  */
-public interface Tree<V,E> extends Graph<V,E>
+public interface Tree<V,E> extends Forest<V,E>
 {
     public int getDepth(V vertex);
     
