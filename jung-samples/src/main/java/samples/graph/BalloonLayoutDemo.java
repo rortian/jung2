@@ -37,7 +37,7 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.Forest;
 import edu.uci.ics.graph.Tree;
 import edu.uci.ics.jung.algorithms.layout.BalloonLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
@@ -74,7 +74,7 @@ public class BalloonLayoutDemo extends JApplet {
     /**
      * the graph
      */
-	Graph<String,Integer> graph;
+	Forest<String,Integer> graph;
 
 	Factory<DirectedGraph<String,Integer>> graphFactory = 
 		new Factory<DirectedGraph<String,Integer>>() {
