@@ -429,7 +429,7 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
 		 */
-		public boolean addEdge(E hyperedge, Collection<V> vertices) {
+		public boolean addEdge(E hyperedge, Collection<? extends V> vertices) {
 			return delegate.addEdge(hyperedge, vertices);
 		}
         
@@ -822,7 +822,7 @@ public class Graphs {
 		 * @return
 		 * @see edu.uci.ics.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
 		 */
-		public boolean addEdge(E hyperedge, Collection<V> vertices) {
+		public boolean addEdge(E hyperedge, Collection<? extends V> vertices) {
 			return delegate.addEdge(hyperedge, vertices);
 		}
 	}

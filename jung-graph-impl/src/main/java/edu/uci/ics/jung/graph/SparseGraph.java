@@ -87,13 +87,13 @@ public class SparseGraph<V,E>
     	return addEdge(edge, new Pair<V>(v1, v2), edgeType);
     }
 
-    public boolean addEdge(E edge, Pair<V> endpoints) {
+    public boolean addEdge(E edge, Pair<? extends V> endpoints) {
     	return addEdge(edge, endpoints, EdgeType.UNDIRECTED);
     }
     
-    public boolean addEdge(E edge, Pair<V> endpoints, EdgeType edgeType) {
+    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
     	
-        edges.put(edge, endpoints);
+        edges.put(edge, new Pair<V>(endpoints));
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         
@@ -276,4 +276,5 @@ public class SparseGraph<V,E>
 	public int getVertexCount() {
 		return vertices.keySet().size();
 	}
+
 }

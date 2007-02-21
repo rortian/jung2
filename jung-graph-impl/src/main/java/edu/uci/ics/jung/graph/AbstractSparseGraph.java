@@ -20,19 +20,22 @@ import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.graph.util.Pair;
 
 
-public abstract class AbstractSparseGraph<V, E> implements Graph<V,E>
-{
-	public boolean addEdge(E edge, Collection<V> vertices) {
+public abstract class AbstractSparseGraph<V, E> implements Graph<V,E> {
+	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		return addEdge(edge, 
 				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices)
 				);
 	}
 
-	public boolean addEdge(E edge, Collection<V> vertices, EdgeType edgeType) {
+	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType edgeType) {
 		return addEdge(edge, 
 				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices),
 				edgeType);
 	}
+	
+	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints);
+	
+	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType);
 	
     public int inDegree(V vertex)
     {

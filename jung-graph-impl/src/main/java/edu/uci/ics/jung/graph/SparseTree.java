@@ -23,7 +23,7 @@ import edu.uci.ics.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
+public class SparseTree<V,E> implements Tree<V,E> {
 	
 	protected DirectedGraph<V,E> delegate;
 	protected Factory<E> edgeFactory;
@@ -591,7 +591,7 @@ public class SparseTree<V,E> implements DirectedGraph<V,E>, Tree<V,E> {
         return 2;
     }
     
-	public boolean addEdge(E edge, Collection<V> vertices) {
+	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		Pair<V> pair = null;
 		if(vertices instanceof Pair) {
 			pair = (Pair<V>)vertices;

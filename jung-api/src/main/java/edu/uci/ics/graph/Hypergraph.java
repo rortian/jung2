@@ -50,7 +50,7 @@ public interface Hypergraph<V, E>
     
     int getIncidentCount(E edge); // getIncidentVertices(v).size()
     
-    boolean addEdge(E edge, Collection<V> vertices);
+    boolean addEdge(E edge, Collection<? extends V> vertices);
 
 
 }

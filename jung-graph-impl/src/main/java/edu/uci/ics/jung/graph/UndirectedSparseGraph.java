@@ -79,9 +79,14 @@ public class UndirectedSparseGraph<V,E>
 		return addEdge(edge, new Pair<V>(v1, v2));
 	}
     
-    public boolean addEdge(E edge, Pair<V> endpoints) {
+    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
+    	if(edgeType != EdgeType.UNDIRECTED) throw new IllegalArgumentException();
+		return addEdge(edge, endpoints);
+    }
     	
-        edges.put(edge, endpoints);
+    public boolean addEdge(E edge, Pair<? extends V> endpoints) {
+    	
+        edges.put(edge, new Pair<V>(endpoints));
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         

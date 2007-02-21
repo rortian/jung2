@@ -160,13 +160,13 @@ public class DirectedSparseGraph<V,E>
     	return addEdge(edge, new Pair<V>(source, dest), edgeType);
     }
 
-	public boolean addEdge(E edge, Pair<V> endpoints, EdgeType edgeType) {
+	public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
     	if(edgeType != EdgeType.DIRECTED) throw new IllegalArgumentException();
     	return addEdge(edge, endpoints);
 	}
 
-	public boolean addEdge(E edge, Pair<V> endpoints) {
-        edges.put(edge, endpoints);
+	public boolean addEdge(E edge, Pair<? extends V> endpoints) {
+        edges.put(edge, new Pair<V>(endpoints));
         V source = endpoints.getFirst();
         V dest = endpoints.getSecond();
         

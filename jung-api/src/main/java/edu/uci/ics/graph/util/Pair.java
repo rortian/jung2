@@ -44,13 +44,13 @@ public final class Pair<T> implements Collection<T>
      * The size of the Collection must be 2.
      * @param values
      */
-    public Pair(Collection<T> values) 
+    public Pair(Collection<? extends T> values) 
     {
     	if (values.size() == 2)
         {
             if(values.contains(null)) 
                 throw new IllegalArgumentException("Pair cannot contain null values");
-            Iterator<T> iter = values.iterator();
+            Iterator<? extends T> iter = values.iterator();
             first = iter.next();
             second = iter.next();
        }

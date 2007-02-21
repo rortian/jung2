@@ -718,7 +718,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
         return 2;
     }
     
-	public boolean addEdge(E edge, Collection<V> vertices) {
+	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		Pair<V> pair = null;
 		if(vertices instanceof Pair) {
 			pair = (Pair<V>)vertices;
@@ -730,6 +730,10 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 
 	public Collection<Tree<V, E>> getTrees() {
 		return trees;
+	}
+	
+	public void addTree(Tree<V,E> tree) {
+		this.trees.add(tree);
 	}
 	
 	public String toString() {

@@ -23,7 +23,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedges
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets
  
-    public boolean addEdge(H hyperedge, Collection<V> to_attach)
+    public boolean addEdge(H hyperedge, Collection<? extends V> to_attach)
     {
     	if(to_attach.contains(null)) throw new IllegalArgumentException("cannot add an edge with a null enpoint");
         if (edges.containsKey(hyperedge))
