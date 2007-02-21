@@ -9,15 +9,6 @@
  */
 package edu.uci.ics.jung.visualization.renderers;
 
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.CNTR;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.E;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.N;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.NE;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.NW;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.S;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.SE;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.SW;
-import static edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position.W;
 
 import java.awt.Component;
 import java.awt.Dimension;
