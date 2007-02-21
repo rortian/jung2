@@ -20,7 +20,7 @@ import edu.uci.ics.graph.Graph;
  * A ClusterSet where each cluster is a set of vertices
  * @author Scott White
  */
-public class VertexClusterSet<V,E> extends ClusterSet<V,E,V> {
+public class VertexClusterSet<V,E> extends ClusterSet<V,E> {
 
     /**
      * Constructs and initializes the set
@@ -59,8 +59,8 @@ public class VertexClusterSet<V,E> extends ClusterSet<V,E,V> {
      * @param anotherGraph a new graph whose vertices are equivalent to those in the original graph
      * @return a new cluster set for the specified graph
      */
-    public ClusterSet<V,E,V> createEquivalentClusterSet(Graph<V,E> anotherGraph) {
-        ClusterSet<V,E,V> newClusterSet = new VertexClusterSet<V,E>(anotherGraph);
+    public ClusterSet<V,E> createEquivalentClusterSet(Graph<V,E> anotherGraph) {
+        ClusterSet<V,E> newClusterSet = new VertexClusterSet<V,E>(anotherGraph);
         for (Iterator<Set<V>> cIt=iterator();cIt.hasNext();) {
             Set<V> cluster = cIt.next();
             Set<V> newCluster = new HashSet<V>();

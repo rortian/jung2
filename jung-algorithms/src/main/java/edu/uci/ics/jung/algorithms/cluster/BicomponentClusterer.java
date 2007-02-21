@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 
@@ -31,7 +33,8 @@ import edu.uci.ics.graph.UndirectedGraph;
  * 
  * @author Joshua O'Madadhain
  */
-public class BicomponentClusterer<V,E> implements GraphClusterer<V,E,V> 
+public class BicomponentClusterer<V,E> implements Transformer<Graph<V,E>,ClusterSet<V,E>>
+//GraphClusterer<V,E> 
 {
     protected Map<V,Number> dfs_num;
     protected Map<V,Number> high;
@@ -50,14 +53,14 @@ public class BicomponentClusterer<V,E> implements GraphClusterer<V,E,V>
     * @param theGraph the graph whose bicomponents are to be extracted
     * @return the <code>ClusterSet</code> of bicomponents
     */
-    public ClusterSet<V,E,V> extract(Graph<V,E> theGraph) 
+    public ClusterSet<V,E> transform(Graph<V,E> theGraph) 
     {
 
     	if((theGraph instanceof UndirectedGraph) == false) {
     		throw new IllegalArgumentException("Algorithm currently only handles undirected graphs.");
     	}
         
-        ClusterSet<V,E,V> bicomponents = new VertexClusterSet<V,E>(theGraph);
+        ClusterSet<V,E> bicomponents = new VertexClusterSet<V,E>(theGraph);
 
         if (theGraph.getVertices().isEmpty())
             return bicomponents;
@@ -123,7 +126,7 @@ public class BicomponentClusterer<V,E> implements GraphClusterer<V,E,V>
      * have saved myself a few days.  JRTOM)</p>
      * 
      */
-    protected void findBiconnectedComponents(Graph<V,E> g, V v, ClusterSet<V,E,V> bicomponents)
+    protected void findBiconnectedComponents(Graph<V,E> g, V v, ClusterSet<V,E> bicomponents)
     {
         int v_dfs_num = converse_depth;
         dfs_num.put(v, v_dfs_num);

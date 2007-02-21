@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.Forest;
@@ -26,7 +28,8 @@ public class MinimumSpanningForest<V,E> {
 	
 	protected Graph<V,E> graph;
 	protected Forest<V,E> forest;
-	protected Map<E,Double> weights;
+	protected Map<E,Double> weights = LazyMap.decorate(new HashMap<E,Double>(),
+			new ConstantTransformer(1));
 	
 	/**
 	 * create a Forest from the supplied Graph and supplied Factory, which
@@ -68,7 +71,9 @@ public class MinimumSpanningForest<V,E> {
 		}
 		this.graph = graph;
 		this.forest = forest;
-		this.weights = (weights != null) ? weights : new HashMap<E,Double>();
+		if(weights != null) {
+			this.weights = weights;
+		}
 		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
 		if(graph.getVertices().contains(root)) {
 			this.forest.addVertex(root);
