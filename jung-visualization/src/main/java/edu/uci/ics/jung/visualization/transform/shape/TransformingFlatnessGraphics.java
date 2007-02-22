@@ -43,8 +43,8 @@ public class TransformingFlatnessGraphics extends TransformingGraphics {
     
     public void draw(Shape s, float flatness) {
         Shape shape = null;
-        if(transformer instanceof HyperbolicTransformer) {
-            shape = ((HyperbolicShapeTransformer)transformer).transform(s, flatness);
+        if(transformer instanceof ShapeFlatnessTransformer) {
+            shape = ((ShapeFlatnessTransformer)transformer).transform(s, flatness);
         } else {
             shape = ((ShapeTransformer)transformer).transform(s);
         }

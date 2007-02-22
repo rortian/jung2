@@ -30,7 +30,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  *
  */
 public class HyperbolicShapeTransformer extends HyperbolicTransformer 
-    implements ShapeTransformer {
+    implements ShapeFlatnessTransformer {
 
     /**
      * Create an instance, setting values from the passed component

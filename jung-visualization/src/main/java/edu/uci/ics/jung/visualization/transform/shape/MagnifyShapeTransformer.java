@@ -29,7 +29,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  *
  */
 public class MagnifyShapeTransformer extends MagnifyTransformer 
-    implements ShapeTransformer {
+    implements ShapeFlatnessTransformer {
 
     /**
      * Create an instance, setting values from the passed component
@@ -50,7 +50,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
     
     /**
      * Transform the supplied shape with the overridden transform
-     * method so that the shape is distorted by the hyperbolic 
+     * method so that the shape is distorted by the magnify 
      * transform.
      * @param shape a shape to transform
      * @return a GeneralPath for the transformed shape
