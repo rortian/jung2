@@ -27,7 +27,6 @@ import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingFlatnessGraphics;
-import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 /**
  * A class to make it easy to add a Hyperbolic projection
  * examining lens to a jung graph application. See HyperbolicTransforerDemo
