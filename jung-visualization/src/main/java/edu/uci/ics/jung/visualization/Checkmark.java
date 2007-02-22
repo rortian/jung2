@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.util.Collections;
@@ -39,6 +40,7 @@ public class Checkmark implements Icon {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.addRenderingHints(Collections.singletonMap(RenderingHints.KEY_ANTIALIASING, 
 				RenderingHints.VALUE_ANTIALIAS_ON));
+		Stroke stroke = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(4));
 		g2d.setColor(Color.darkGray);
 		g2d.draw(shadow.createTransformedShape(shape));
@@ -48,6 +50,7 @@ public class Checkmark implements Icon {
 		g2d.draw(highlight.createTransformedShape(shape));
 		g2d.setColor(color);
 		g2d.draw(shape);
+		g2d.setStroke(stroke);
 	}
 
 	public int getIconWidth() {
