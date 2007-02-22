@@ -262,6 +262,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         edge = null;
         rect.setFrame(0,0,0,0);
         vv.removePostRenderPaintable(lensPaintable);
+        vv.repaint();
     }
     
     /**
