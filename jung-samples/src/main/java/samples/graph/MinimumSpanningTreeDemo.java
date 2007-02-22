@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
@@ -186,6 +188,30 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv1.setVertexToolTipTransformer(new ToStringLabeller());
         vv2.setVertexToolTipTransformer(new ToStringLabeller());
         
+        vv0.setLayout(new BorderLayout());
+        vv1.setLayout(new BorderLayout());
+        vv2.setLayout(new BorderLayout());
+        
+        Font font = vv0.getFont().deriveFont(Font.BOLD, 16);
+        JLabel vv0Label = new JLabel("<html>Original Graph<p>using KKLayout");
+        vv0Label.setFont(font);
+        JLabel vv1Label = new JLabel("Minimum Spanning Trees");
+        vv1Label.setFont(font);
+        JLabel vv2Label = new JLabel("Original Graph using TreeLayout");
+        vv2Label.setFont(font);
+        JPanel flow0 = new JPanel();
+        flow0.setOpaque(false);
+        JPanel flow1 = new JPanel();
+        flow1.setOpaque(false);
+        JPanel flow2 = new JPanel();
+        flow2.setOpaque(false);
+        flow0.add(vv0Label);
+        flow1.add(vv1Label);
+        flow2.add(vv2Label);
+        vv0.add(flow0, BorderLayout.NORTH);
+        vv1.add(flow1, BorderLayout.NORTH);
+        vv2.add(flow2, BorderLayout.NORTH);
+        
 //        vv2.getRenderContext().setEdgeDrawPaintTransformer(new Transformer<Number,Paint>() {
 //
 //			public Paint transform(Number e) {
@@ -251,7 +277,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         controls.add(modePanel);
         content.add(controls, BorderLayout.SOUTH);
     }
-
+    
     /**
      * a driver for this demo
      */
