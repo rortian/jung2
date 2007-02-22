@@ -1,5 +1,14 @@
              Quick intro to building Jung2 jars with maven2
 
+Ensure that you have a JDK of at least version 1.5. Ensure that your
+JAVA_HOME variable is set to the location of the JDK. On a Windows
+platform, you may have a separate JRE (Java Runtime Environment) and
+JDK (Java Development Kit). The JRE has no capability to compile
+Java source files, so you must have a JDK installed. If your
+JAVA_HOME variable is set to the location of the JRE, and not the
+location of the JDK, you will be unable to compile.
+
+
 
 ***********    Get Maven   *************
 
