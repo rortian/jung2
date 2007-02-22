@@ -20,6 +20,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.collections15.Predicate;
@@ -265,7 +266,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     public Collection<V> getFilteredVertices(Layout<V,E> layout) {
     	if(verticesAreFiltered()) {
     		Collection<V> unfiltered = layout.getGraph().getVertices();
-    		Collection<V> filtered = new HashSet<V>();
+    		Collection<V> filtered = new LinkedHashSet<V>();
     		for(V v : unfiltered) {
     			if(isVertexRendered(Context.<Graph<V,E>,V>getInstance(layout.getGraph(),v))) {
     				filtered.add(v);
@@ -280,7 +281,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     public Collection<E> getFilteredEdges(Layout<V,E> layout) {
     	if(edgesAreFiltered()) {
     		Collection<E> unfiltered = layout.getGraph().getEdges();
-    		Collection<E> filtered = new HashSet<E>();
+    		Collection<E> filtered = new LinkedHashSet<E>();
     		for(E e : unfiltered) {
     			if(isEdgeRendered(Context.<Graph<V,E>,E>getInstance(layout.getGraph(),e))) {
     				filtered.add(e);
