@@ -11,13 +11,13 @@ package edu.uci.ics.jung.algorithms.cluster;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.graph.UndirectedGraph;
 
 /**
@@ -33,9 +33,7 @@ import edu.uci.ics.graph.UndirectedGraph;
  * 
  * @author Joshua O'Madadhain
  */
-public class BicomponentClusterer<V,E> implements Transformer<Graph<V,E>,ClusterSet<V,E>>
-//GraphClusterer<V,E> 
-{
+public class BicomponentClusterer<V,E> implements Transformer<UndirectedGraph<V,E>,Set<Set<V>>> {
     protected Map<V,Number> dfs_num;
     protected Map<V,Number> high;
     protected Map<V,V> parents;
@@ -53,14 +51,10 @@ public class BicomponentClusterer<V,E> implements Transformer<Graph<V,E>,Cluster
     * @param theGraph the graph whose bicomponents are to be extracted
     * @return the <code>ClusterSet</code> of bicomponents
     */
-    public ClusterSet<V,E> transform(Graph<V,E> theGraph) 
+    public Set<Set<V>> transform(UndirectedGraph<V,E> theGraph) 
     {
 
-    	if((theGraph instanceof UndirectedGraph) == false) {
-    		throw new IllegalArgumentException("Algorithm currently only handles undirected graphs.");
-    	}
-        
-        ClusterSet<V,E> bicomponents = new VertexClusterSet<V,E>(theGraph);
+    	Set<Set<V>> bicomponents = new LinkedHashSet<Set<V>>();
 
         if (theGraph.getVertices().isEmpty())
             return bicomponents;
@@ -89,7 +83,7 @@ public class BicomponentClusterer<V,E> implements Transformer<Graph<V,E>,Cluster
                 {
                     Set<V> s = new HashSet<V>();
                     s.add(v);
-                    bicomponents.addCluster(s);
+                    bicomponents.add(s);
                 }
             }
         }
@@ -126,7 +120,7 @@ public class BicomponentClusterer<V,E> implements Transformer<Graph<V,E>,Cluster
      * have saved myself a few days.  JRTOM)</p>
      * 
      */
-    protected void findBiconnectedComponents(Graph<V,E> g, V v, ClusterSet<V,E> bicomponents)
+    protected void findBiconnectedComponents(UndirectedGraph<V,E> g, V v, Set<Set<V>> bicomponents)
     {
         int v_dfs_num = converse_depth;
         dfs_num.put(v, v_dfs_num);
@@ -157,7 +151,7 @@ public class BicomponentClusterer<V,E> implements Transformer<Graph<V,E>,Cluster
                         bicomponent.addAll(g.getIncidentVertices(e));
                     }
                     while (e != vw);
-                    bicomponents.addCluster(bicomponent);
+                    bicomponents.add(bicomponent);
                 }
                 high.put(v, Math.max(w_high, high.get(v).intValue()));
             }

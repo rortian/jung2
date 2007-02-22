@@ -9,13 +9,16 @@
 */
 package edu.uci.ics.jung.algorithms.cluster;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.graph.Graph;
+import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 
@@ -33,7 +36,7 @@ public class TestBicomponentClusterer extends TestCase {
 
     public void testExtract0() throws Exception
     {
-        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
+        UndirectedGraph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         String[] v = {"0"};
         graph.addVertex(v[0]);
         
@@ -46,7 +49,7 @@ public class TestBicomponentClusterer extends TestCase {
 
     public void testExtractEdge() throws Exception
     {
-        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
+        UndirectedGraph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         String[] v = {"0","1"}; 
         graph.addVertex(v[0]);
         graph.addVertex(v[1]);
@@ -62,7 +65,7 @@ public class TestBicomponentClusterer extends TestCase {
     
     public void testExtractV() throws Exception
     {
-        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
+        UndirectedGraph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         String[] v = new String[3];
         for (int i = 0; i < 3; i++)
         {
@@ -111,7 +114,7 @@ public class TestBicomponentClusterer extends TestCase {
 	public void testExtract1() {
         String[] v = new String[6];
         int[][] edges1 = {{0,1}, {0,5}, {0,3}, {0,4}, {1,5}, {3,4}, {2,3}};
-        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
+        UndirectedGraph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         createEdges(v, edges1, graph);
         
 //		StringBuffer buffer= new StringBuffer();
@@ -156,7 +159,7 @@ public class TestBicomponentClusterer extends TestCase {
     public void testExtract2() {
         String[] v = new String[9];
         int[][] edges1 = {{0,2}, {0,4}, {1,0}, {2,1}, {3,0}, {4,3}, {5,3}, {6,7}, {6,8}, {8,7}};
-        Graph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
+        UndirectedGraph<String,Number> graph = new UndirectedSparseGraph<String,Number>();
         createEdges(v, edges1, graph);
         
         
@@ -213,10 +216,10 @@ public class TestBicomponentClusterer extends TestCase {
         testComponents(graph, v, c);
 	}
 
-    public void testComponents(Graph<String,Number> graph, String[] vertices, Set[] c)
+    public void testComponents(UndirectedGraph<String,Number> graph, String[] vertices, Set[] c)
     {
         BicomponentClusterer<String,Number> finder = new BicomponentClusterer<String,Number>();
-        ClusterSet<String,Number> bicomponents = finder.transform(graph);
+        Set<Set<String>> bicomponents = finder.transform(graph);
         
         // check number of components
         assertEquals(bicomponents.size(), c.length);
@@ -236,11 +239,12 @@ public class TestBicomponentClusterer extends TestCase {
 //        System.out.println();
         
         // make sure that each set in c[] is found in bicomponents
+        List<Set<String>> clusterList = new ArrayList(bicomponents);
         boolean found = false;
         for (int i = 0; i < c.length; i++)
         {
             for (int j = 0; j < bicomponents.size(); j++)
-                if (bicomponents.getCluster(j).equals(c[i]))
+                if (clusterList.get(j).equals(c[i]))
                 {
                     found = true;
                     break;
@@ -249,9 +253,14 @@ public class TestBicomponentClusterer extends TestCase {
         }
         
         // make sure that each vertex is represented in >=1 element of bicomponents 
+        Set<String> collapsedSet = new HashSet<String>();
+        for(Set<String> set : bicomponents) {
+        	collapsedSet.addAll(set);
+        }
         for (String v : graph.getVertices())
         {
-            assertFalse(bicomponents.getClusters(v).isEmpty());
+        	assertTrue(collapsedSet.contains(v));
+//        	assertFalse(((LinkedHashSet)vset).get(v).isEmpty());
         }
     }
     
