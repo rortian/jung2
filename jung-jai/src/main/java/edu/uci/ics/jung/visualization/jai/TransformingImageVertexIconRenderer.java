@@ -121,7 +121,6 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         	} else {
         		paintShapeForVertex(rc, v, shape);
         	}
-//    		labelVertex(rc, v, rc.getVertexStringer().transform(v), x, y);
         }
     }
     
@@ -214,12 +213,6 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
             System.err.println("matrix[0][0] = "+matrix[0][0]);
            return null;
         }
-//        System.err.println("quadx1="+quadx1+", quady1="+quady1+
-//                ", quadx2="+quadx2+", quady2="+quady2+
-//                ", quadx3="+quadx3+", quady3="+quady3+
-//                ", quadx4="+quadx4+", quady4="+quady4);
-//        
-//        System.err.println("perspectiveTransform "+perspectiveTransform);
         
         WarpPerspective warp = new WarpPerspective(perspectiveTransform);
         ParameterBlock pm = new ParameterBlock();
