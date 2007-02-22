@@ -30,7 +30,6 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
@@ -63,8 +62,8 @@ public class ReshapingEdgeRenderer<V,E> extends BasicEdgeRenderer<V,E>
         
         float flatness = 0;
         MutableTransformer transformer = rc.getMultiLayerTransformer().getTransformer(Layer.VIEW);
-        if(transformer instanceof HyperbolicTransformer) {
-            HyperbolicTransformer ht = (HyperbolicTransformer)transformer;
+        if(transformer instanceof LensTransformer) {
+            LensTransformer ht = (LensTransformer)transformer;
             Ellipse2D hyperEllipse = ht.getEllipse();
             if(hyperEllipse.contains(x1,y1) || hyperEllipse.contains(x2,y2)) {
                 flatness = .05f;
