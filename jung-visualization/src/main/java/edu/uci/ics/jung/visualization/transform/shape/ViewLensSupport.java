@@ -37,8 +37,8 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
     protected GraphicsDecorator lensGraphicsDecorator;
     protected GraphicsDecorator savedGraphicsDecorator;
     protected GraphElementAccessor<V,E> pickSupport;
-    protected Renderer.Edge savedEdgeRenderer;
-    protected Renderer.Edge reshapingEdgeRenderer;
+    protected Renderer.Edge<V,E> savedEdgeRenderer;
+    protected Renderer.Edge<V,E> reshapingEdgeRenderer;
 
     public ViewLensSupport(VisualizationViewer<V,E> vv, 
     		LensTransformer lensTransformer,
