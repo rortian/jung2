@@ -58,7 +58,7 @@ public class VisRunner implements Relaxer, Runnable {
 		while (System.currentTimeMillis() - timeNow < 500 && !process.done()) {
 			process.step();
 		}
-		System.err.println("time was "+(System.currentTimeMillis()-timeNow));
+//		System.err.println("time was "+(System.currentTimeMillis()-timeNow));
 		manualSuspend = false;
 	}
 	
