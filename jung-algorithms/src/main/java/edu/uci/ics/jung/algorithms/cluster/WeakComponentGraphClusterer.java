@@ -35,6 +35,10 @@ public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>,
 
 	private Factory<Graph<V,E>> graphFactory;
 	
+    public WeakComponentGraphClusterer() {
+    	this(null);
+	}
+
     public WeakComponentGraphClusterer(Factory<Graph<V, E>> graphFactory) {
 		this.graphFactory = graphFactory;
 	}
@@ -51,7 +55,16 @@ public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>,
         HashSet<V> unvisitedVertices = new HashSet<V>(graph.getVertices());
 
         while (!unvisitedVertices.isEmpty()) {
-        	Graph<V,E> cluster = graphFactory.create();
+        	Graph<V, E> cluster;
+        	if(graphFactory != null) {
+        		cluster = graphFactory.create();
+        	} else {
+        		try {
+        			cluster = (Graph<V,E>)graph.getClass().newInstance();
+        		} catch (Exception e1) {
+        			throw new RuntimeException(e1);
+        		}
+        	}
             V root = unvisitedVertices.iterator().next();
             unvisitedVertices.remove(root);
             cluster.addVertex(root);
