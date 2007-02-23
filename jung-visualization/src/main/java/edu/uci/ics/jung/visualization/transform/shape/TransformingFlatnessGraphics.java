@@ -10,13 +10,11 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Shape;
 
-import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
+import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 
 
 /**

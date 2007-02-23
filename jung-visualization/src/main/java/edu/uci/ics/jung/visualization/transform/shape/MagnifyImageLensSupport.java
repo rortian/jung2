@@ -24,7 +24,6 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.renderers.ReshapingEdgeRenderer;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
-import edu.uci.ics.jung.visualization.transform.MagnifyTransformer;
 /**
  * A class to make it easy to add a Hyperbolic projection
  * examining lens to a jung graph application. See HyperbolicTransforerDemo
