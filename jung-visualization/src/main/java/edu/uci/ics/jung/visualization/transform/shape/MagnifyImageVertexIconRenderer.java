@@ -11,8 +11,6 @@
 package edu.uci.ics.jung.visualization.transform.shape;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -68,27 +66,9 @@ public class MagnifyImageVertexIconRenderer<V,E> extends BasicVertexRenderer<V,E
                     
                     int xLoc = (int) (x - imageWidth / 2);
                     int yLoc = (int) (y - imageHeight / 2);
-                    Rectangle2D imageRectangle = new Rectangle2D.Double(xLoc, yLoc,
-                            imageWidth, imageHeight);
-                    
-                    Shape perspectiveShape = 
-                        ((ShapeTransformer) g2d.getTransformer()).transform(imageRectangle);
-                    
-                    // see if the transformer will affect the imageRectangle
-                    if(imageRectangle.equals(perspectiveShape.getBounds2D()) == false) {
-                        Shape clipShape = 
-                            ((ShapeTransformer) g2d.getTransformer()).transform(shape);
 
-                        Rectangle sb = perspectiveShape.getBounds();
-                        Shape clip = g2d.getClip();
-                        g2d.clip(clipShape);
-                        g2d.drawImage(image.getScaledInstance(sb.width, sb.height, Image.SCALE_SMOOTH), 
-                        		sb.x, sb.y, null);
-                        g2d.setClip(clip);
-                    } else {
-                        g2d.drawImage(image, AffineTransform.getTranslateInstance(xLoc,
+                    g2d.drawImage(image, AffineTransform.getTranslateInstance(xLoc,
                                 yLoc), null);
-                    }
 
         		} else {
         			paintShapeForVertex(rc, v, shape);
