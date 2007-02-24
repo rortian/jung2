@@ -77,7 +77,8 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
             d = vv.getPreferredSize();
         }
         lensTransformer.setViewRadius(d.width/5);
-        this.lensGraphicsDecorator = new TransformingFlatnessGraphics(lensTransformer);
+        this.lensGraphicsDecorator = new MagnifyIconGraphics(lensTransformer);
+        	//new TransformingFlatnessGraphics(lensTransformer);
 
     }
     
