@@ -182,7 +182,7 @@ public class VertexCollapseDemo extends JApplet {
         expand.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Collection picked = vv.getPickedVertexState().getPicked();
+                Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
                 for(Object v : picked) {
                     if(v instanceof Graph) {
                         
