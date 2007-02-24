@@ -213,5 +213,60 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
 //        return delegate.inverseTransform(translatedBack);
         return translatedBack;
     }
+    /**
+     * magnify the shape, without considering the Lens
+     * @param shape
+     * @return
+     */
+    public Shape magnify(Shape shape) {
+        return magnify(shape, 0);
+    }
+    public Shape magnify(Shape shape, float flatness) {
+        GeneralPath newPath = new GeneralPath();
+        float[] coords = new float[6];
+        PathIterator iterator = null;
+        if(flatness == 0) {
+            iterator = shape.getPathIterator(null);
+        } else {
+            iterator = shape.getPathIterator(null, flatness);
+        }
+        for( ;
+            iterator.isDone() == false;
+            iterator.next()) {
+            int type = iterator.currentSegment(coords);
+            switch(type) {
+            case PathIterator.SEG_MOVETO:
+                Point2D p = magnify(new Point2D.Float(coords[0], coords[1]));
+                newPath.moveTo((float)p.getX(), (float)p.getY());
+                break;
+                
+            case PathIterator.SEG_LINETO:
+                p = magnify(new Point2D.Float(coords[0], coords[1]));
+                newPath.lineTo((float)p.getX(), (float) p.getY());
+                break;
+                
+            case PathIterator.SEG_QUADTO:
+                p = magnify(new Point2D.Float(coords[0], coords[1]));
+                Point2D q = magnify(new Point2D.Float(coords[2], coords[3]));
+                newPath.quadTo((float)p.getX(), (float)p.getY(), (float)q.getX(), (float)q.getY());
+                break;
+                
+            case PathIterator.SEG_CUBICTO:
+                p = magnify(new Point2D.Float(coords[0], coords[1]));
+                q = magnify(new Point2D.Float(coords[2], coords[3]));
+                Point2D r = magnify(new Point2D.Float(coords[4], coords[5]));
+                newPath.curveTo((float)p.getX(), (float)p.getY(), 
+                        (float)q.getX(), (float)q.getY(),
+                        (float)r.getX(), (float)r.getY());
+                break;
+                
+            case PathIterator.SEG_CLOSE:
+                newPath.closePath();
+                break;
+                    
+            }
+        }
+        return newPath;
+    }
 
 }
