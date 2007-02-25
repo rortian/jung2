@@ -31,7 +31,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * Running time: O(|V| + |E|) where |V| is the number of vertices and |E| is the number of edges.
  * @author Scott White
  */
-public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>, Set<Graph<V,E>>> {
+public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>, Collection<Graph<V,E>>> {
 
 	private Factory<Graph<V,E>> graphFactory;
 	
@@ -48,7 +48,7 @@ public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>,
      * @param graph the graph whose weak components are to be extracted
      * @return the list of weak components
      */
-    public Set<Graph<V,E>> transform(Graph<V,E> graph) {
+    public Collection<Graph<V,E>> transform(Graph<V,E> graph) {
 
         Set<Graph<V,E>> clusterSet = new HashSet<Graph<V,E>>();
 
