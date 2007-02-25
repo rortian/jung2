@@ -188,8 +188,8 @@ public class VertexImageShaperDemo extends JApplet {
         vv.getRenderContext().setVertexShapeTransformer(vertexIconShapeTransformer);
         vv.getRenderContext().setVertexIconTransformer(vertexIconTransformer);
         
-        
-        vv.addPostRenderPaintable(new BoundingRectanglePaintable(vv.getRenderContext(), vv.getGraphLayout()));
+        // un-comment for RStar Tree visual testing
+        //vv.addPostRenderPaintable(new BoundingRectanglePaintable(vv.getRenderContext(), vv.getGraphLayout()));
 
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
