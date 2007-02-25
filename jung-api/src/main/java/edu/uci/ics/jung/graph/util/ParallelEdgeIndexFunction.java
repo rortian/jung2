@@ -9,9 +9,9 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.graph.util;
+package edu.uci.ics.jung.graph.util;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

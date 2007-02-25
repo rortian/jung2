@@ -23,17 +23,27 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.TransformingGraphics;
 
+/**
+ * uses a flatness argument to break edges into
+ * smaller segments. This produces a more detailed
+ * transformation of the edge shape
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ * @param <V>
+ * @param <E>
+ */
 public class ReshapingEdgeRenderer<V,E> extends BasicEdgeRenderer<V,E>
 	implements Renderer.Edge<V,E> {
 

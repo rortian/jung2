@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.graph;
+package edu.uci.ics.jung.graph;
 
 /**
  * Defines the operations available to a tree.

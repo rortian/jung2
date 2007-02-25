@@ -9,8 +9,8 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

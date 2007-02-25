@@ -2,8 +2,8 @@ package edu.uci.ics.jung.algorithms.util;
 
 import org.apache.commons.collections15.Predicate;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 
 public class SelfLoopEdgePredicate<V,E> implements Predicate<Context<Graph<V,E>,E>> {

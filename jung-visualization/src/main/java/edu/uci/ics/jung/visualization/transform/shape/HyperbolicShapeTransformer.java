@@ -21,7 +21,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
  * HyperbolicShapeTransformer extends HyperbolicTransformer and
- * adds implementations for methods in ShapeTransformer.
+ * adds implementations for methods in ShapeFlatnessTransformer.
  * It modifies the shapes (Vertex, Edge, and Arrowheads) so that
  * they are distorted by the hyperbolic transformation
  * 

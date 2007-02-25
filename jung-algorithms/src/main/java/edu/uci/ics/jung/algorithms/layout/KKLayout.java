@@ -17,12 +17,12 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.GraphStatistics;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Implements the Kamada-Kawai algorithm for node layout.

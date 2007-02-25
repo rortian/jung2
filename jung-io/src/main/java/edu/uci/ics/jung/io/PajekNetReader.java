@@ -27,12 +27,12 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.functors.OrPredicate;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.SimpleGraph;
-import edu.uci.ics.graph.UndirectedGraph;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SimpleGraph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 
 /**

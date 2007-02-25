@@ -22,9 +22,9 @@ import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Forest;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.Tree;
+import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Tree;
 
 /**
  * implements the balloon layout for the supplied Tree

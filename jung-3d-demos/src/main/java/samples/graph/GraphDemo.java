@@ -26,7 +26,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;

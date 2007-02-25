@@ -11,8 +11,8 @@ package edu.uci.ics.jung.visualization.renderers;
 
 import java.awt.Dimension;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.RenderContext;
 
 /**

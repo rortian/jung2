@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Hypergraph;
 
 public class SetHypergraph<V,H> implements Hypergraph<V,H>
 {

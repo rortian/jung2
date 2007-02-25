@@ -16,7 +16,7 @@ import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 public class StaticLayout<V, E> extends AbstractLayout<V,E> {
 	

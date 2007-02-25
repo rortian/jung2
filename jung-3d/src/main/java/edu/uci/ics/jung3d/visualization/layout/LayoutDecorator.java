@@ -15,8 +15,8 @@ import javax.vecmath.Point3f;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;
 
 /**

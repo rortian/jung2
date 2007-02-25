@@ -10,10 +10,10 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.Forest;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * For the input Graph, creates a MinimumSpanningTree

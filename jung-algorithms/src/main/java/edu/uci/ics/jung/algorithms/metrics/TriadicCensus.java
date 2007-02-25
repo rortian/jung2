@@ -16,8 +16,8 @@ import java.util.Set;
 
 import org.apache.commons.collections15.CollectionUtils;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

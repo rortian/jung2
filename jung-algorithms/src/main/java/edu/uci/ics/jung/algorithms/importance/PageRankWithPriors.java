@@ -14,10 +14,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * Algorithm that extends the PageRank algorithm by incorporating root nodes (priors). Whereas in PageRank

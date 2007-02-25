@@ -28,9 +28,9 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ChainedTransformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;

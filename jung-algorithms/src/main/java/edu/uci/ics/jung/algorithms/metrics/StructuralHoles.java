@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.metrics;
 
 import java.util.Map;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Calculates some of the measures from Burt's text "Structural Holes: The Social Structure of Competition".

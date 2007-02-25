@@ -32,7 +32,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 

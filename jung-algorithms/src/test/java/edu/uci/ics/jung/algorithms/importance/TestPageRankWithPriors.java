@@ -19,13 +19,13 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedGraph;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 
 /**

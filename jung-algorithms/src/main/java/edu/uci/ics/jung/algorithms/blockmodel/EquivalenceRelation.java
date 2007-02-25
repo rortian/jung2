@@ -14,7 +14,7 @@ package edu.uci.ics.jung.algorithms.blockmodel;
 
 import java.util.*;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

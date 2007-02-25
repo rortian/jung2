@@ -51,11 +51,11 @@ import com.sun.j3d.utils.picking.PickTool;
 import com.sun.j3d.utils.picking.behaviors.PickingCallback;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.algorithms.util.Context;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;

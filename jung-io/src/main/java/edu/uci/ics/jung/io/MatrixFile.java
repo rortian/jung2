@@ -29,10 +29,10 @@ import cern.colt.list.DoubleArrayList;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import corejava.Format;
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.GraphMatrixOperations;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 
 /**
  * Basic I/O handler for ascii matrix files. An ascii matrix is simply

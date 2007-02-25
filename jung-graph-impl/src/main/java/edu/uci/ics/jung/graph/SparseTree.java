@@ -9,11 +9,8 @@ import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Forest;
-import edu.uci.ics.graph.Tree;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * An implementation of the Tree<V,E> interface that delegates to
@@ -63,7 +60,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param v2 the child node
 	 * @param edgeType should be EdgeType.DIRECTED
 	 * @return true if this call mutates the underlying graph
-	 * @see edu.uci.ics.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.graph.util.EdgeType)
+	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 		return addChild(e, v1, v2, edgeType);
@@ -78,7 +75,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param v1 the parent node
 	 * @param v2 the child node
 	 * @return true if this call mutates the underlying graph
-	 * @see edu.uci.ics.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
 	public boolean addEdge(E e, V v1, V v2) {
 		return addChild(e, v1, v2);
@@ -90,7 +87,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * 
 	 * @param vertex the tree root to set
 	 * @return true if this call mutates the underlying graph
-	 * @see edu.uci.ics.graph.Graph#addVertex(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#addVertex(java.lang.Object)
 	 * @throws an UnsupportedOperationException if the root was previously set
 	 */
 	public boolean addVertex(V vertex) {
@@ -107,7 +104,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param vertex
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#areIncident(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#areIncident(java.lang.Object, java.lang.Object)
 	 */
 	public boolean areIncident(V vertex, E edge) {
 		return delegate.areIncident(vertex, edge);
@@ -117,7 +114,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#areNeighbors(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#areNeighbors(java.lang.Object, java.lang.Object)
 	 */
 	public boolean areNeighbors(V v1, V v2) {
 		return delegate.areNeighbors(v1, v2);
@@ -126,7 +123,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#degree(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#degree(java.lang.Object)
 	 */
 	public int degree(V vertex) {
 		return delegate.degree(vertex);
@@ -136,7 +133,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
 	 */
 	public E findEdge(V v1, V v2) {
 		return delegate.findEdge(v1, v2);
@@ -145,7 +142,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param directed_edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getDest(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getDest(java.lang.Object)
 	 */
 	public V getDest(E directed_edge) {
 		return delegate.getDest(directed_edge);
@@ -153,7 +150,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getEdgeCount()
+	 * @see edu.uci.ics.jung.graph.Graph#getEdgeCount()
 	 */
 	public int getEdgeCount() {
 		return delegate.getEdgeCount();
@@ -161,7 +158,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getEdges()
+	 * @see edu.uci.ics.jung.graph.Graph#getEdges()
 	 */
 	public Collection<E> getEdges() {
 		return delegate.getEdges();
@@ -170,7 +167,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param edgeType
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getEdges(edu.uci.ics.graph.util.EdgeType)
+	 * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	public Collection<E> getEdges(EdgeType edgeType) {
 		return delegate.getEdges(edgeType);
@@ -179,7 +176,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getEdgeType(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getEdgeType(java.lang.Object)
 	 */
 	public EdgeType getEdgeType(E edge) {
 		return delegate.getEdgeType(edge);
@@ -188,7 +185,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getEndpoints(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getEndpoints(java.lang.Object)
 	 */
 	public Pair<V> getEndpoints(E edge) {
 		return delegate.getEndpoints(edge);
@@ -197,7 +194,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getIncidentEdges(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getIncidentEdges(java.lang.Object)
 	 */
 	public Collection<E> getIncidentEdges(V vertex) {
 		return delegate.getIncidentEdges(vertex);
@@ -206,7 +203,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getIncidentVertices(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getIncidentVertices(java.lang.Object)
 	 */
 	public Collection<V> getIncidentVertices(E edge) {
 		return delegate.getIncidentVertices(edge);
@@ -215,7 +212,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getInEdges(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getInEdges(java.lang.Object)
 	 */
 	public Collection<E> getInEdges(V vertex) {
 		return delegate.getInEdges(vertex);
@@ -224,7 +221,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getNeighbors(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getNeighbors(java.lang.Object)
 	 */
 	public Collection<V> getNeighbors(V vertex) {
 		return delegate.getNeighbors(vertex);
@@ -234,7 +231,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param vertex
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
 	 */
 	public V getOpposite(V vertex, E edge) {
 		return delegate.getOpposite(vertex, edge);
@@ -243,7 +240,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getOutEdges(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getOutEdges(java.lang.Object)
 	 */
 	public Collection<E> getOutEdges(V vertex) {
 		return delegate.getOutEdges(vertex);
@@ -252,7 +249,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getPredecessors(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getPredecessors(java.lang.Object)
 	 */
 	public Collection<V> getPredecessors(V vertex) {
 		return delegate.getPredecessors(vertex);
@@ -261,7 +258,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param directed_edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getSource(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getSource(java.lang.Object)
 	 */
 	public V getSource(E directed_edge) {
 		return delegate.getSource(directed_edge);
@@ -270,7 +267,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getSuccessors(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getSuccessors(java.lang.Object)
 	 */
 	public Collection<V> getSuccessors(V vertex) {
 		return delegate.getSuccessors(vertex);
@@ -278,7 +275,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getVertexCount()
+	 * @see edu.uci.ics.jung.graph.Graph#getVertexCount()
 	 */
 	public int getVertexCount() {
 		return delegate.getVertexCount();
@@ -286,7 +283,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 
 	/**
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getVertices()
+	 * @see edu.uci.ics.jung.graph.Graph#getVertices()
 	 */
 	public Collection<V> getVertices() {
 		return delegate.getVertices();
@@ -295,7 +292,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#inDegree(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#inDegree(java.lang.Object)
 	 */
 	public int inDegree(V vertex) {
 		return delegate.inDegree(vertex);
@@ -305,7 +302,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param vertex
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#isDest(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#isDest(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isDest(V vertex, E edge) {
 		return delegate.isDest(vertex, edge);
@@ -315,7 +312,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isPredecessor(V v1, V v2) {
 		return delegate.isPredecessor(v1, v2);
@@ -325,7 +322,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param vertex
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#isSource(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#isSource(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isSource(V vertex, E edge) {
 		return delegate.isSource(vertex, edge);
@@ -335,7 +332,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isSuccessor(V v1, V v2) {
 		return delegate.isSuccessor(v1, v2);
@@ -344,7 +341,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getNeighborCount(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getNeighborCount(java.lang.Object)
 	 */
 	public int getNeighborCount(V vertex) {
 		return delegate.getNeighborCount(vertex);
@@ -353,7 +350,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getPredecessorCount(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getPredecessorCount(java.lang.Object)
 	 */
 	public int getPredecessorCount(V vertex) {
 		return delegate.getPredecessorCount(vertex);
@@ -362,7 +359,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#getSuccessorCount(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#getSuccessorCount(java.lang.Object)
 	 */
 	public int getSuccessorCount(V vertex) {
 		return delegate.getSuccessorCount(vertex);
@@ -371,7 +368,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#outDegree(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#outDegree(java.lang.Object)
 	 */
 	public int outDegree(V vertex) {
 		return delegate.outDegree(vertex);
@@ -380,7 +377,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#removeEdge(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
 		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
@@ -392,7 +389,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * passed node.
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.graph.Graph#removeVertex(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Graph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
 		for(V v : getChildren(vertex)) {
@@ -607,5 +604,10 @@ public class SparseTree<V,E> implements Tree<V,E> {
 
 	public Collection<Tree<V, E>> getTrees() {
 		return Collections.<Tree<V,E>>singleton(this);
+	}
+
+	public void addTree(Tree<V, E> tree) {
+		// TODO Auto-generated method stub
+		
 	}
 }

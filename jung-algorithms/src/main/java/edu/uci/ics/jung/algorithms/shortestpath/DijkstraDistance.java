@@ -19,10 +19,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.util.BasicMapEntry;
 import edu.uci.ics.jung.algorithms.util.ConstantMap;
 import edu.uci.ics.jung.algorithms.util.MapBinaryHeap;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * <p>Calculates distances in a specified graph, using  

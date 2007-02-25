@@ -9,7 +9,7 @@
  */
 package edu.uci.ics.jung.algorithms.importance;
 
-import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 
 
 /**

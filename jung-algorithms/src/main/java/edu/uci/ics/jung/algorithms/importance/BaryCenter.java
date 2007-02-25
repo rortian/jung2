@@ -11,8 +11,8 @@ package edu.uci.ics.jung.algorithms.importance;
 
 import java.util.Iterator;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.graph.util;
+package edu.uci.ics.jung.graph.util;
 
 import java.util.Collection;
 import java.util.Iterator;

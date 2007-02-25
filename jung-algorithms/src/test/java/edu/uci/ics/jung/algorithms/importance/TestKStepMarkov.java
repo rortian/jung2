@@ -18,8 +18,8 @@ import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.importance.KStepMarkov;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 

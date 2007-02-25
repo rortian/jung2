@@ -11,7 +11,7 @@ package edu.uci.ics.jung.algorithms.generators;
 
 import java.util.Set;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

@@ -12,6 +12,12 @@ package edu.uci.ics.jung.visualization.util;
 
 import javax.swing.event.ChangeListener;
 
+/**
+ * the implementing class provides support for ChangeEvents.
+ * 
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ */
 public interface ChangeEventSupport {
 
     void addChangeListener(ChangeListener l);

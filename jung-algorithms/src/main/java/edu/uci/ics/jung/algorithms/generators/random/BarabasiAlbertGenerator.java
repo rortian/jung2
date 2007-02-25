@@ -20,10 +20,10 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.generators.EvolvingGraphGenerator;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 
 /**

@@ -21,8 +21,8 @@ import java.util.Map;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeProcess;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Abstract class for algorithms that rank nodes or edges by some "importance" metric. Provides a common set of

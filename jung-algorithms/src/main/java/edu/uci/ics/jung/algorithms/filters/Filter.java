@@ -9,7 +9,7 @@
 */
 package edu.uci.ics.jung.algorithms.filters;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 

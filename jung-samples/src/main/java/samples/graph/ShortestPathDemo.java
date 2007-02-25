@@ -28,13 +28,13 @@ import javax.swing.SwingConstants;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;

@@ -119,11 +119,9 @@ public class MagnifyTransformer extends LensTransformer implements MutableTransf
     public Point2D magnify(Point2D graphPoint) {
         if(graphPoint == null) return null;
         Point2D viewCenter = getViewCenter();
-//        double viewRadius = getViewRadius();
         double ratio = getRatio();
         // transform the point from the graph to the view
         Point2D viewPoint = graphPoint;
-        	//delegate.transform(graphPoint);
         // calculate point from center
         double dx = viewPoint.getX() - viewCenter.getX();
         double dy = viewPoint.getY() - viewCenter.getY();
@@ -134,7 +132,6 @@ public class MagnifyTransformer extends LensTransformer implements MutableTransf
         PolarPoint polar = PolarPoint.cartesianToPolar(pointFromCenter);
         double theta = polar.getTheta();
         double radius = polar.getRadius();
-//        if(radius > viewRadius) return viewPoint;
         
         double mag = magnification;
         radius *= mag;

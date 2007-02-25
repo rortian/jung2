@@ -19,9 +19,9 @@ import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
-import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.GraphMatrixOperations;
 import edu.uci.ics.jung.algorithms.Indexer;
+import edu.uci.ics.jung.graph.DirectedGraph;
 
 /**
  * @author Scott White and Joshua O'Madadhain

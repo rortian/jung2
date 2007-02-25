@@ -22,9 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.filters.Filter;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * A filter used to extract the k-neighborhood around one or more root node(s)

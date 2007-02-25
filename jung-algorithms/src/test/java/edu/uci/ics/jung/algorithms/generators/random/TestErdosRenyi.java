@@ -6,9 +6,9 @@ package edu.uci.ics.jung.algorithms.generators.random;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.generators.random.ErdosRenyiGenerator;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 import junit.framework.*;

@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.DirectedGraph;
 
 public class SparseTreeTest extends TestCase {
 

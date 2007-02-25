@@ -23,9 +23,9 @@ import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Forest;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.Tree;
+import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Tree;
 
 /**
  * @author Karlheinz Toni
@@ -36,7 +36,7 @@ import edu.uci.ics.graph.Tree;
 public class TreeLayout<V,E> implements Layout<V,E> {
 
 	private Dimension size;
-	private Graph<V,E> graph;
+	private Forest<V,E> graph;
 	protected Map<V,Integer> basePositions = new HashMap<V,Integer>();
     
     protected Map<V, Point2D> locations = 
@@ -87,13 +87,12 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         this.distY = disty;
     }
     
-    private Collection<V> getRoots(Graph<V,E> graph) {
+    private Collection<V> getRoots(Forest<V,E> forest) {
     	Set<V> roots = new HashSet<V>();
-    	for(V v : graph.getVertices()) {
-    		if(graph.getPredecessors(v).size() == 0) {
-    			roots.add(v);
-    		}
+    	for(Tree<V,E> tree : forest.getTrees()) {
+    			roots.add(tree.getRoot());
     	}
+    	System.err.println("roots = "+roots);
     	return roots;
     }
 
@@ -232,7 +231,11 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 	}
 
 	public void setGraph(Graph<V,E> graph) {
-		this.graph = graph;
+		if(graph instanceof Forest) {
+			this.graph = (Forest<V,E>)graph;
+		} else {
+			throw new IllegalArgumentException("graph must be a Forest");
+		}
 	}
 
 	public void setInitializer(Transformer<V, Point2D> initializer) {

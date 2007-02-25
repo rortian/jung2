@@ -25,13 +25,10 @@ import edu.uci.ics.jung.visualization.renderers.ReshapingEdgeRenderer;
 import edu.uci.ics.jung.visualization.transform.AbstractLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 /**
- * A class to make it easy to add a Hyperbolic projection
- * examining lens to a jung graph application. See HyperbolicTransforerDemo
- * for an example of how to use it.
+ * Changes various visualization settings to activate or deactivate an
+ * examining lens for a jung graph application. 
  * 
  * @author Tom Nelson
- *
- *
  */
 public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     
@@ -65,7 +62,8 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         this.pickSupport = renderContext.getPickSupport();
         this.renderer = vv.getRenderer();
         this.transformingRenderer = new BasicRenderer<V,E>();
-        this.transformingRenderer.setVertexRenderer(new MagnifyImageVertexIconRenderer<V,E>());
+//        this.transformingRenderer.setVertexRenderer(new BasicVertexRenderer<V,E>());
+        		//new MagnifyImageVertexIconRenderer<V,E>());
         
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensTransformer = lensTransformer;
@@ -94,7 +92,7 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         lensTransformer.setDelegate(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
-        vv.setRenderer(transformingRenderer);
+//        vv.setRenderer(transformingRenderer);
         vv.getRenderer().setEdgeRenderer(reshapingEdgeRenderer);
         vv.addPreRenderPaintable(lens);
         vv.addPostRenderPaintable(lensControls);
@@ -109,7 +107,8 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         vv.removePreRenderPaintable(lens);
         vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);
-        vv.setRenderer(renderer);
+//        vv.setRenderer(renderer);
+        vv.getRenderer().setEdgeRenderer(savedEdgeRenderer);
         vv.setToolTipText(defaultToolTipText);
         vv.setGraphMouse(graphMouse);
         vv.repaint();

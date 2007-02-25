@@ -3,6 +3,8 @@ package edu.uci.ics.graph.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.uci.ics.jung.graph.util.Pair;
+
 import junit.framework.TestCase;
 
 public class PairTest extends TestCase {

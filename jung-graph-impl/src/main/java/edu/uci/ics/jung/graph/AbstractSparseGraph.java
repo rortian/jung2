@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 
 public abstract class AbstractSparseGraph<V, E> implements Graph<V,E> {

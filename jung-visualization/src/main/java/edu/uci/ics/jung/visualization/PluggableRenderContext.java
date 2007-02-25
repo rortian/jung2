@@ -24,11 +24,11 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.functors.TruePredicate;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.DefaultParallelEdgeIndexFunction;
-import edu.uci.ics.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.util.Context;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.DefaultParallelEdgeIndexFunction;
+import edu.uci.ics.jung.graph.util.ParallelEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;

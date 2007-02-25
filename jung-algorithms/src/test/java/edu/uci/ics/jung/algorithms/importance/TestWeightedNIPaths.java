@@ -19,8 +19,8 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 /**

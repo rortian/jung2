@@ -1,4 +1,4 @@
-package edu.uci.ics.graph;
+package edu.uci.ics.jung.graph;
 
 /**
  * SimpleGraph is a marker interface intended to mean that

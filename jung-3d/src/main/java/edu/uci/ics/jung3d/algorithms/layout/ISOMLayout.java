@@ -22,8 +22,8 @@ import javax.vecmath.Vector3f;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Implements a self-organizing map layout algorithm, based on Meyer's

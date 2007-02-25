@@ -41,10 +41,10 @@ import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
@@ -63,6 +63,7 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
+import edu.uci.ics.jung.visualization.layout.BoundingRectanglePaintable;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -160,6 +161,7 @@ public class VertexImageShaperDemo extends JApplet {
 
         vv.setBackground(Color.white);
         
+        
         final Transformer<Number,String> vertexStringerImpl = 
             new VertexStringerImpl<Number,String>(map);
         vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
@@ -186,6 +188,9 @@ public class VertexImageShaperDemo extends JApplet {
         vv.getRenderContext().setVertexShapeTransformer(vertexIconShapeTransformer);
         vv.getRenderContext().setVertexIconTransformer(vertexIconTransformer);
         
+        
+        vv.addPostRenderPaintable(new BoundingRectanglePaintable(vv.getRenderContext(), vv.getGraphLayout()));
+
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
         PickedState<Number> ps = vv.getPickedVertexState();

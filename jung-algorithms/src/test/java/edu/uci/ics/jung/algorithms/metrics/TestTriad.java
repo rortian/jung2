@@ -1,8 +1,8 @@
 package edu.uci.ics.jung.algorithms.metrics;
 
 import junit.framework.TestCase;
-import edu.uci.ics.graph.DirectedGraph;
 import edu.uci.ics.jung.algorithms.metrics.TriadicCensus;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 
 public class TestTriad extends TestCase {

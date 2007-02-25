@@ -13,7 +13,7 @@ package edu.uci.ics.jung3d.visualization.layout;
 import javax.swing.event.ChangeListener;
 import javax.vecmath.Point3f;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 import edu.uci.ics.jung3d.algorithms.layout.Layout;

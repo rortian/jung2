@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Labels each node in the graph according to the BFS distance from the start node(s). If nodes are unreachable, then

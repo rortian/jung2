@@ -21,9 +21,9 @@ import org.apache.commons.collections15.functors.ChainedTransformer;
 import org.apache.commons.collections15.functors.CloneTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.LayoutDecorator;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.util.Caching;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;

@@ -10,10 +10,10 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.Tree;
-import edu.uci.ics.graph.util.EdgeType;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * For the input Graph, creates a MinimumSpanningTree
@@ -63,6 +63,9 @@ public class PrimMinimumSpanningTree<V,E> {
 		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
 		if(graph.getVertices().contains(root)) {
 			this.tree.addVertex(root);
+		} else if(graph.getVertexCount() > 0) {
+			// pick an arbitrary vertex to make root
+			this.tree.addVertex(graph.getVertices().iterator().next());
 		}
 		updateTree(tree.getVertices(), unfinishedEdges);
 	}

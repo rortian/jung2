@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedGraph;
 
 
 /**

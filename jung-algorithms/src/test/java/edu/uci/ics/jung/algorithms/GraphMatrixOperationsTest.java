@@ -15,11 +15,11 @@ import org.apache.commons.collections15.Factory;
 
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**

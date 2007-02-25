@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.graph;
+package edu.uci.ics.jung.graph;
 
 import java.util.Collection;
 
@@ -36,7 +36,6 @@ public interface Hypergraph<V, E>
     boolean removeVertex(V vertex);
     
     boolean removeEdge(E edge);
-    
     
     // "optional" methods (semantic sugar for operations which can be defined in terms of above operations)
 

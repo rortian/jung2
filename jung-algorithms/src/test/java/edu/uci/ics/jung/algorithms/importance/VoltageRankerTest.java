@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
 /**

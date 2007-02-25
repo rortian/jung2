@@ -19,8 +19,8 @@ import java.util.Stack;
 import org.apache.commons.collections15.Buffer;
 import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 
 /**
  * Computes betweenness centrality for each vertex and edge in the graph. The result is that each vertex

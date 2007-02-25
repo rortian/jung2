@@ -18,7 +18,7 @@ import java.util.Stack;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.UndirectedGraph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 
 /**
  * Finds all biconnected components (bicomponents) of an undirected graph.  

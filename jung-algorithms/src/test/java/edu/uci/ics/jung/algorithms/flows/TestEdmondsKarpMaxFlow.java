@@ -20,9 +20,9 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
  * @author Scott White, Joshua O'Madadhain, Tom Nelson

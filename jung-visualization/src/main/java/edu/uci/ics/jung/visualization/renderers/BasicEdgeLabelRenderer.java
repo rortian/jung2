@@ -16,10 +16,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
@@ -103,9 +103,11 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         
         xform.translate(-d.width/2, -(d.height/2-parallelOffset));
         g.setTransform(xform);
-        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), 
-                0, 0,
-                d.width, d.height, true);
+        g.draw(component, rc.getRendererPane(), 0, 0, d.width, d.height, true);
+
+//        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), 
+//                0, 0,
+//                d.width, d.height, true);
         g.setTransform(old);
     }
 

@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedGraph;
 
 
 

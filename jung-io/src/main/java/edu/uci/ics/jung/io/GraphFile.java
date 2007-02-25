@@ -13,7 +13,7 @@
  */
 package edu.uci.ics.jung.io;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 
 /**

@@ -15,8 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 public class ShortestPathUtils
 {

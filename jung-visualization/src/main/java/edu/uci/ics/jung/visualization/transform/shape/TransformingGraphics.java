@@ -10,8 +10,6 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -20,8 +18,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
-
-import javax.swing.Icon;
 
 import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
@@ -132,10 +128,6 @@ public class TransformingGraphics extends GraphicsDecorator {
             image = img;
         }
          return delegate.drawImage(image, at, observer);
-    }
-
-    public void draw(Icon icon, Component c, Shape clip, int x, int y) {
-    	icon.paintIcon(c, delegate, x, y);
     }
 
     /**

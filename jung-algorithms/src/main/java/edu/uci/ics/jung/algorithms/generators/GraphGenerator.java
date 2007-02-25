@@ -9,7 +9,7 @@
 */
 package edu.uci.ics.jung.algorithms.generators;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * An interface for algorithms that generate graphs

@@ -21,9 +21,9 @@ import org.apache.commons.collections15.Buffer;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
-import edu.uci.ics.graph.DirectedGraph;
-import edu.uci.ics.graph.util.EdgeType;
 import edu.uci.ics.jung.algorithms.IterativeProcess;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 
 
 /**

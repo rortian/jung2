@@ -13,8 +13,8 @@ import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.importance.RandomWalkBetweenness;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**

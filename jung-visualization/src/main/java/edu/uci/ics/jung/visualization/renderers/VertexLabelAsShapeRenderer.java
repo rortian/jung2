@@ -19,9 +19,9 @@ import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
@@ -76,8 +76,9 @@ public class VertexLabelAsShapeRenderer<V,E>
         int x = (int)p.getX();
         int y = (int)p.getY();
 
-        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), x+h_offset, y+v_offset,
-                d.width, d.height, true);
+        g.draw(component, rc.getRendererPane(), x+h_offset, y+v_offset, d.width, d.height, true);
+//        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), x+h_offset, y+v_offset,
+//                d.width, d.height, true);
 
         Dimension size = component.getPreferredSize();
         Rectangle bounds = new Rectangle(-size.width/2, -size.height/2, size.width, size.height);

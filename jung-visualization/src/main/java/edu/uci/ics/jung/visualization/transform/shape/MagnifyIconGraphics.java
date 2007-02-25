@@ -10,13 +10,11 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
@@ -25,11 +23,8 @@ import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 
 
 /**
- * subclassed to pass certain operations thru the transformer
- * before the base class method is applied
- * This is useful when you want to apply non-affine transformations
- * to the Graphics2D used to draw elements of the graph.
- * 
+ * Subclassed to apply a magnification transform to an icon.
+ *  
  * @author Tom Nelson 
  *
  *

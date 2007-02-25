@@ -14,7 +14,7 @@ import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * A generalized interface is a mechanism for returning (x,y) coordinates 

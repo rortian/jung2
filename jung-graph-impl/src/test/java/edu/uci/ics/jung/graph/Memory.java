@@ -1,7 +1,6 @@
 package edu.uci.ics.jung.graph;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.util.Pair;
+import edu.uci.ics.jung.graph.util.Pair;
 
 public class Memory {
 	

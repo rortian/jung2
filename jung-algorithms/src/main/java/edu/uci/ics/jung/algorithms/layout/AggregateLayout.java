@@ -18,8 +18,8 @@ import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Allows multiple layouts to be combined and manipulated
@@ -152,7 +152,7 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 
 	/**
 	 * @param graph
-	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setGraph(edu.uci.ics.graph.Graph)
+	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setGraph(edu.uci.ics.jung.graph.Graph)
 	 */
 	public void setGraph(Graph<V, E> graph) {
 		delegate.setGraph(graph);

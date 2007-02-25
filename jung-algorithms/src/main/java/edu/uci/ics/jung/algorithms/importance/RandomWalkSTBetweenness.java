@@ -12,9 +12,9 @@ package edu.uci.ics.jung.algorithms.importance;
 import org.apache.commons.collections15.BidiMap;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.GraphMatrixOperations;
 import edu.uci.ics.jung.algorithms.Indexer;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 
 
 /**

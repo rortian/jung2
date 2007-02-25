@@ -29,18 +29,18 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import edu.uci.ics.graph.Forest;
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.Tree;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.RadialTreeLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
-import edu.uci.ics.jung.algorithms.shortestpath.MinimumSpanningForest;
+import edu.uci.ics.jung.algorithms.shortestpath.MinimumSpanningForest2;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
+import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -110,8 +110,8 @@ public class MinimumSpanningTreeDemo extends JApplet {
         graph = 
         	TestGraphs.getDemoGraph();
         
-        MinimumSpanningForest<String,Number> prim = new MinimumSpanningForest<String,Number>(graph,
-        		new SparseForest<String,Number>(treeFactory),
+        MinimumSpanningForest2<String,Number> prim = new MinimumSpanningForest2<String,Number>(graph,
+        		new SparseForest<String,Number>(treeFactory), treeFactory,
         		"xxx",
 //        		"V0",
         		LazyMap.decorate(new HashMap<Number,Double>(), new ConstantTransformer(1.0)));

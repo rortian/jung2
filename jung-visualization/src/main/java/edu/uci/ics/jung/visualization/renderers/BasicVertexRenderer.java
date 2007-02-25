@@ -20,12 +20,11 @@ import java.awt.geom.Point2D;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -66,9 +65,8 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         		Icon icon = rc.getVertexIconTransformer().transform(v);
         		if(icon != null) {
         		
-        			int xLoc = (int) (x - icon.getIconWidth()/2);
-        			int yLoc = (int) (y - icon.getIconHeight()/2);
-        			icon.paintIcon(rc.getScreenDevice(), g.getDelegate(), xLoc, yLoc);
+           			g.draw(icon, rc.getScreenDevice(), shape, (int)x, (int)y);
+
         		} else {
         			paintShapeForVertex(rc, v, shape);
         		}

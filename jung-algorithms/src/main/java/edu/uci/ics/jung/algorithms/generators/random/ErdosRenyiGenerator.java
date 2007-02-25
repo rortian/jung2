@@ -15,9 +15,9 @@ import java.util.Random;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Graph;
-import edu.uci.ics.graph.UndirectedGraph;
 import edu.uci.ics.jung.algorithms.generators.GraphGenerator;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 
 /**
  * Random Generator of Erdos-Renyi "binomial model"

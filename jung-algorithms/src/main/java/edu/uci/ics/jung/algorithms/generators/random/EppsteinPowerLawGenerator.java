@@ -15,8 +15,8 @@ import java.util.Random;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.graph.Graph;
 import edu.uci.ics.jung.algorithms.generators.GraphGenerator;
+import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Graph generator that generates undirected sparse graphs with power-law distributions.
