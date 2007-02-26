@@ -29,11 +29,11 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 public class LensMagnificationGraphMousePlugin extends AbstractGraphMousePlugin
     implements MouseWheelListener {
 
-    protected float floor = .5f;
+    protected float floor = 1.0f;
     
-    protected float ceiling = .9f;
+    protected float ceiling = 5.0f;
     
-    protected float delta = .02f;
+    protected float delta = .2f;
     
 	/**
 	 * create an instance with default zoom in/out values
@@ -51,7 +51,7 @@ public class LensMagnificationGraphMousePlugin extends AbstractGraphMousePlugin
     }
     
     public LensMagnificationGraphMousePlugin(int modifiers) {
-        this(modifiers, .5f, .9f, .02f);
+        this(modifiers, 1.0f, 4.0f, .2f);
     }
     public LensMagnificationGraphMousePlugin(int modifiers, float floor, float ceiling, float delta) {
         super(modifiers);
