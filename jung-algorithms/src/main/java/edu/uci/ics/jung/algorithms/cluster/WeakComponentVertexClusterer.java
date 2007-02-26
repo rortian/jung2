@@ -14,12 +14,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.collections15.Buffer;
-import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.Pair;
 
 
 
