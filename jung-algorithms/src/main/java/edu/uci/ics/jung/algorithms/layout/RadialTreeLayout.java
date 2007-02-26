@@ -25,7 +25,6 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.Tree;
 
 /**
  * 
