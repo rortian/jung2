@@ -1,21 +1,15 @@
 package edu.uci.ics.jung.algorithms.shortestpath;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.cluster.WeakComponentGraphClusterer;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * For the input Graph, creates a MinimumSpanningTree
@@ -30,8 +24,8 @@ public class MinimumSpanningForest2<V,E> {
 	
 	protected Graph<V,E> graph;
 	protected Forest<V,E> forest;
-	protected Map<E,Double> weights = LazyMap.decorate(new HashMap<E,Double>(),
-			new ConstantTransformer(1));
+	protected Transformer<E,Double> weights = 
+		(Transformer<E,Double>)new ConstantTransformer<Double>(1.0);
 	
 	/**
 	 * create a Forest from the supplied Graph and supplied Factory, which
@@ -50,8 +44,10 @@ public class MinimumSpanningForest2<V,E> {
 	public MinimumSpanningForest2(Graph<V, E> graph, 
 			Factory<Forest<V,E>> factory, 
 			Factory<Tree<V,E>> treeFactory,
-			V root, Map<E, Double> weights) {
-		this(graph, factory.create(), treeFactory, root, weights);
+			Transformer<E, Double> weights) {
+		this(graph, factory.create(), 
+				treeFactory, 
+				weights);
 	}
 	
 	/**
@@ -70,7 +66,7 @@ public class MinimumSpanningForest2<V,E> {
 	public MinimumSpanningForest2(Graph<V, E> graph, 
 			Forest<V,E> forest, 
 			Factory<Tree<V,E>> treeFactory,
-			V root, Map<E, Double> weights) {
+			Transformer<E, Double> weights) {
 		
 		if(forest.getVertexCount() != 0) {
 			throw new IllegalArgumentException("Supplied Forest must be empty");
@@ -87,8 +83,8 @@ public class MinimumSpanningForest2<V,E> {
 		
 		for(Graph<V,E> component : components) {
 			PrimMinimumSpanningTree<V,E> mst = 
-				new PrimMinimumSpanningTree<V,E>(component, treeFactory, null, weights);
-			forest.getTrees().add(mst.getTree());
+				new PrimMinimumSpanningTree<V,E>(treeFactory, weights);
+			forest.getTrees().add(mst.transform(component));
 		}
 	}
 	
