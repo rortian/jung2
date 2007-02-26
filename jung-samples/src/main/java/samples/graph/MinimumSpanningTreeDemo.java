@@ -79,6 +79,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
     VisualizationViewer<String,Number> vv0;
     VisualizationViewer<String,Number> vv1;
     VisualizationViewer<String,Number> vv2;
+//    VisualizationViewer<String,Number> vv3;
     
     /**
      * the normal transformer
@@ -88,6 +89,9 @@ public class MinimumSpanningTreeDemo extends JApplet {
     Dimension preferredSize = new Dimension(300,300);
     Dimension preferredLayoutSize = new Dimension(400,400);
     Dimension preferredSizeRect = new Dimension(500,250);
+    
+//	VisualizationServer.Paintable rings;
+
     /**
      * create an instance of a simple graph in two views with controls to
      * demo the zoom features.
@@ -112,7 +116,11 @@ public class MinimumSpanningTreeDemo extends JApplet {
         layout0.setSize(preferredLayoutSize);
         Layout<String,Number> layout1 = new TreeLayout<String,Number>(tree);
         Layout<String,Number> layout2 = new StaticLayout<String,Number>(graph, layout1);
-        Layout<String,Number> layout3 = new RadialTreeLayout<String,Number>(tree);
+        Layout<String,Number> radial = new RadialTreeLayout<String,Number>(tree);
+        radial.setSize(new Dimension(600,600));
+        Layout<String,Number> layout3 = new StaticLayout<String,Number>(graph, radial);
+        	
+//        	new RadialTreeLayout<String,Number>(tree));
 
         // create the two models, each with a different layout
         VisualizationModel<String,Number> vm0 =
@@ -121,26 +129,37 @@ public class MinimumSpanningTreeDemo extends JApplet {
             new DefaultVisualizationModel<String,Number>(layout1, preferredSizeRect);
         VisualizationModel<String,Number> vm2 = 
             new DefaultVisualizationModel<String,Number>(layout2, preferredSizeRect);
-
+        VisualizationModel<String,Number> vm3 =
+        	new DefaultVisualizationModel<String,Number>(layout3, new Dimension(600,600));
+        	
         // create the two views, one for each model
         // they share the same renderer
         vv0 = new VisualizationViewer<String,Number>(vm0, preferredSize);
         vv1 = new VisualizationViewer<String,Number>(vm1, preferredSizeRect);
         vv2 = new VisualizationViewer<String,Number>(vm2, preferredSizeRect);
+//        vv3 = new VisualizationViewer<String,Number>(vm3, preferredSize);
+//        
+//        rings = new Rings(vv3, (RadialTreeLayout<String,Number>)radial);
+//		vv3.addPreRenderPaintable(rings);
+
 
         vv1.setRenderContext(vv2.getRenderContext());
         
         vv1.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
         vv2.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
+//        vv3.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
 
         vv2.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
+//        vv3.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
         vv0.addChangeListener(vv1);
         vv1.addChangeListener(vv2);
+//        vv2.addChangeListener(vv3);
         
         vv0.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv2.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-
+//        vv3.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        
         Color back = Color.decode("0xffffbb");
         vv0.setBackground(back);
         vv1.setBackground(back);
@@ -152,17 +171,21 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv1.setForeground(Color.darkGray);
         vv2.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         vv2.setForeground(Color.darkGray);
+//        vv3.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
+//        vv3.setForeground(Color.darkGray);
         
         // share one PickedState between the two views
         PickedState<String> ps = new MultiPickedState<String>();
         vv0.setPickedVertexState(ps);
         vv1.setPickedVertexState(ps);
         vv2.setPickedVertexState(ps);
+//        vv3.setPickedVertexState(ps);
 
         PickedState<Number> pes = new MultiPickedState<Number>();
         vv0.setPickedEdgeState(pes);
         vv1.setPickedEdgeState(pes);
         vv2.setPickedEdgeState(pes);
+//        vv3.setPickedEdgeState(pes);
 
         
         // set an edge paint function that will show picking for edges
@@ -172,6 +195,9 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
         vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(),
                 Color.red, Color.yellow));
+//        vv3.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv3.getPickedVertexState(),
+//                Color.red, Color.yellow));
+        
         // add default listeners for ToolTips
         vv0.setVertexToolTipTransformer(new ToStringLabeller());
         vv1.setVertexToolTipTransformer(new ToStringLabeller());
@@ -214,6 +240,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         panel.add(new GraphZoomScrollPane(vv0), BorderLayout.WEST);
         grid.add(new GraphZoomScrollPane(vv1));
         grid.add(new GraphZoomScrollPane(vv2));
+//        panel.add(new GraphZoomScrollPane(vv3), BorderLayout.EAST);
         panel.add(grid);
 
         content.add(panel);
@@ -227,6 +254,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv0.setGraphMouse(gm0);
         vv1.setGraphMouse(gm1);
         vv2.setGraphMouse(gm2);
+//        vv3.setGraphMouse(gm3);
 
         // create zoom buttons for scaling the transformer that is
         // shared between the two models.
@@ -235,6 +263,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv0.scaleToLayout(scaler);
         vv1.scaleToLayout(scaler);
         vv2.scaleToLayout(scaler);
+//        vv3.scaleToLayout(scaler);
 
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
@@ -256,7 +285,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         modePanel.setBorder(BorderFactory.createTitledBorder("Mouse Mode"));
         gm1.getModeComboBox().addItemListener(gm2.getModeListener());
         gm1.getModeComboBox().addItemListener(gm0.getModeListener());
-        gm3.getModeComboBox().addItemListener(gm0.getModeListener());
+        gm1.getModeComboBox().addItemListener(gm3.getModeListener());
         modePanel.add(gm1.getModeComboBox());
 
         JPanel controls = new JPanel();
@@ -267,6 +296,50 @@ public class MinimumSpanningTreeDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
+//    class Rings implements VisualizationServer.Paintable {
+//    	
+//    	Collection<Double> depths;
+//    	RadialTreeLayout<String,Number> radialLayout;
+//    	VisualizationViewer<String,Number> vv;
+//    	
+//    	
+//    	public Rings(VisualizationViewer<String,Number> vv, RadialTreeLayout<String,Number> layout) {
+//    		this.vv = vv;
+//    		this.radialLayout = layout;
+//    		depths = getDepths();
+//    	}
+//    	
+//    	private Collection<Double> getDepths() {
+//    		Set<Double> depths = new HashSet<Double>();
+//    		Map<String,PolarPoint> polarLocations = radialLayout.getPolarLocations();
+//    		for(String v : graph.getVertices()) {
+//    			PolarPoint pp = polarLocations.get(v);
+//    			depths.add(pp.getRadius());
+//    		}
+//    		return depths;
+//    	}
+//
+//		public void paint(Graphics g) {
+//			g.setColor(Color.gray);
+//			Graphics2D g2d = (Graphics2D)g;
+//			Point2D center = radialLayout.getCenter();
+//
+//			Ellipse2D ellipse = new Ellipse2D.Double();
+//			for(double d : depths) {
+//				ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d, 
+//						center.getX()+d, center.getY()+d);
+//				Shape shape = 
+////					vv.getRenderContext().getMultiLayerTransformer().transform(ellipse);
+//					vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
+//				g2d.draw(shape);
+//			}
+//		}
+//
+//		public boolean useTransform() {
+//			return true;
+//		}
+//    }
+
     /**
      * a driver for this demo
      */
