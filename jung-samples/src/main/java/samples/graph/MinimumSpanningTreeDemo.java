@@ -16,7 +16,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -25,9 +24,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -35,12 +33,10 @@ import edu.uci.ics.jung.algorithms.layout.RadialTreeLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.algorithms.shortestpath.MinimumSpanningForest2;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
-import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -99,22 +95,15 @@ public class MinimumSpanningTreeDemo extends JApplet {
      */
     public MinimumSpanningTreeDemo() {
         
-    	Factory<Tree<String,Number>> treeFactory =
-    		new Factory<Tree<String,Number>>() {
-
-				public Tree<String, Number> create() {
-					return new SparseTree<String,Number>(new DirectedSparseGraph<String,Number>(), null);
-				}};
         // create a simple graph for the demo
         // both models will share one graph
         graph = 
         	TestGraphs.getDemoGraph();
         
-        MinimumSpanningForest2<String,Number> prim = new MinimumSpanningForest2<String,Number>(graph,
-        		new SparseForest<String,Number>(treeFactory), treeFactory,
-        		"xxx",
-//        		"V0",
-        		LazyMap.decorate(new HashMap<Number,Double>(), new ConstantTransformer(1.0)));
+        MinimumSpanningForest2<String,Number> prim = 
+        	new MinimumSpanningForest2<String,Number>(graph,
+        		new SparseForest<String,Number>(), SparseTree.<String,Number>Factory(),
+        		(Transformer<Number,Double>)new ConstantTransformer(1.0));
         
         tree = prim.getForest();
         

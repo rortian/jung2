@@ -88,7 +88,7 @@ public class BalloonLayoutDemo extends JApplet {
 		new Factory<Tree<String,Integer>> () {
 
 		public Tree<String, Integer> create() {
-			return new SparseTree<String,Integer>(graphFactory, edgeFactory);
+			return new SparseTree<String,Integer>(graphFactory);
 		}
 	};
 
