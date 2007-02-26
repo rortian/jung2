@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -28,7 +30,16 @@ import edu.uci.ics.jung.graph.util.Pair;
 public class DirectedSparseGraph<V,E> 
     extends AbstractSparseGraph<V,E>
     implements DirectedGraph<V,E>, Serializable {
-    protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
+
+	public static final <V,E> Factory<DirectedGraph<V,E>> Factory() {
+		return new Factory<DirectedGraph<V,E>> () {
+			public DirectedGraph<V,E> create() {
+				return new DirectedSparseGraph<V,E>();
+			}
+		};
+	}
+
+	protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
     public DirectedSparseGraph() {

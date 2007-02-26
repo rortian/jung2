@@ -17,17 +17,13 @@ public class SparseTreeTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		graphFactory = new Factory<DirectedGraph<String,Integer>>() {
-
-			public DirectedGraph<String, Integer> create() {
-				return new DirectedSparseGraph<String,Integer>();
-			}};
+		graphFactory = DirectedSparseGraph.<String,Integer>Factory();
 		edgeFactory = new Factory<Integer>() {
 			int i=0;
 			public Integer create() {
 				return i++;
 			}};
-		tree = new SparseTree<String,Integer>(graphFactory, edgeFactory);
+		tree = new SparseTree<String,Integer>(graphFactory);
 	}
 	
 	public void testSimpleTree() {

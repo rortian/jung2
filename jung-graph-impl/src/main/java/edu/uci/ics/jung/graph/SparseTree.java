@@ -22,8 +22,15 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 public class SparseTree<V,E> implements Tree<V,E> {
 	
+	public static final <V,E> Factory<Tree<V,E>> Factory() {
+		return new Factory<Tree<V,E>> () {
+			public Tree<V,E> create() {
+				return new SparseTree<V,E>(new DirectedSparseGraph<V,E>());
+			}
+		};
+	}
+
 	protected DirectedGraph<V,E> delegate;
-	protected Factory<E> edgeFactory;
 	protected V root;
     protected Map<V, Integer> vertex_depths;
 
@@ -32,19 +39,15 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param graphFactory must create a DirectedGraph to use as a delegate
 	 * @param edgeFactory must create unique edges to connect tree nodes
 	 */
-	public SparseTree(Factory<DirectedGraph<V,E>> graphFactory, 
-			Factory<E> edgeFactory) {
+	public SparseTree(Factory<DirectedGraph<V,E>> graphFactory) {
 		this.delegate = graphFactory.create();
-		this.edgeFactory = edgeFactory;
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
-	public SparseTree(DirectedGraph<V,E> graph, 
-			Factory<E> edgeFactory) {
+	public SparseTree(DirectedGraph<V,E> graph) {
 		assert graph.getVertexCount() == 0 :
 			"Passed DirectedGraph must be empty";
 		this.delegate = graph;
-		this.edgeFactory = edgeFactory;
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
@@ -410,9 +413,9 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param child the new child to add to the tree as a child of parent
 	 * @return whether this call mutates the underlying graph
 	 */
-	public boolean addChild(V parent, V child) {
-		return addChild(edgeFactory.create(), parent, child);
-	}
+//	public boolean addChild(V parent, V child) {
+//		return addChild(edgeFactory.create(), parent, child);
+//	}
 
 	/**
 	 * add the passed child node as a child of parent.

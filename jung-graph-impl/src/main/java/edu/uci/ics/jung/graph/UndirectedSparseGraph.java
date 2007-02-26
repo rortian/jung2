@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -26,6 +28,16 @@ import edu.uci.ics.jung.graph.util.Pair;
 public class UndirectedSparseGraph<V,E> 
     extends AbstractSparseGraph<V,E>
     implements UndirectedGraph<V,E>, Serializable {
+	
+	public static final <V,E> Factory<UndirectedGraph<V,E>> Factory() {
+		return new Factory<UndirectedGraph<V,E>> () {
+
+			public UndirectedGraph<V,E> create() {
+				return new UndirectedSparseGraph<V,E>();
+			}
+		};
+	}
+
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
