@@ -31,7 +31,7 @@ public class DirectedSparseGraph<V,E>
     extends AbstractSparseGraph<V,E>
     implements DirectedGraph<V,E>, Serializable {
 
-	public static final <V,E> Factory<DirectedGraph<V,E>> Factory() {
+	public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
 		return new Factory<DirectedGraph<V,E>> () {
 			public DirectedGraph<V,E> create() {
 				return new DirectedSparseGraph<V,E>();

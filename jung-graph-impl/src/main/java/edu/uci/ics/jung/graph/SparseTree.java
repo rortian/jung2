@@ -22,7 +22,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 public class SparseTree<V,E> implements Tree<V,E> {
 	
-	public static final <V,E> Factory<Tree<V,E>> Factory() {
+	public static final <V,E> Factory<Tree<V,E>> getFactory() {
 		return new Factory<Tree<V,E>> () {
 			public Tree<V,E> create() {
 				return new SparseTree<V,E>(new DirectedSparseGraph<V,E>());

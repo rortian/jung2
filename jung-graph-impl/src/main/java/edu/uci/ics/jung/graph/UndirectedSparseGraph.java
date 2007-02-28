@@ -29,7 +29,7 @@ public class UndirectedSparseGraph<V,E>
     extends AbstractSparseGraph<V,E>
     implements UndirectedGraph<V,E>, Serializable {
 	
-	public static final <V,E> Factory<UndirectedGraph<V,E>> Factory() {
+	public static final <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
 		return new Factory<UndirectedGraph<V,E>> () {
 
 			public UndirectedGraph<V,E> create() {

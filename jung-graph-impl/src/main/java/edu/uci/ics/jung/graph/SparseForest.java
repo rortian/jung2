@@ -26,7 +26,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	protected Factory<Tree<V,E>> treeFactory;
 
 	public SparseForest() {
-		this.treeFactory = SparseTree.<V,E>Factory();
+		this.treeFactory = SparseTree.<V,E>getFactory();
 	}
 	/**
 	 * create an instance with passed values.

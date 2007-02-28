@@ -17,7 +17,7 @@ public class SparseTreeTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		graphFactory = DirectedSparseGraph.<String,Integer>Factory();
+		graphFactory = DirectedSparseGraph.<String,Integer>getFactory();
 		edgeFactory = new Factory<Integer>() {
 			int i=0;
 			public Integer create() {

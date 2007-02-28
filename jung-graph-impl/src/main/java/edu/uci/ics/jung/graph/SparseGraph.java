@@ -29,7 +29,7 @@ public class SparseGraph<V,E>
     extends AbstractSparseGraph<V,E>
     implements Graph<V,E>, Serializable {
 	
-	public static final <V,E> Factory<Graph<V,E>> Factory() { 
+	public static final <V,E> Factory<Graph<V,E>> getFactory() { 
 		return new Factory<Graph<V,E>> () {
 			public Graph<V,E> create() {
 				return new SparseGraph<V,E>();
