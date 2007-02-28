@@ -30,6 +30,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -108,6 +109,28 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             Rectangle2D s2Bounds = s2.getBounds2D();
             xform.scale(s2Bounds.getWidth(),s2Bounds.getHeight());
             xform.translate(0, -edgeShape.getBounds2D().getWidth()/2);
+        } else if(rc.getEdgeShapeTransformer() instanceof EdgeShape.Orthogonal) {
+            float dx = x2-x1;
+            float dy = y2-y1;
+            int index = 0;
+//            if(edgeShape instanceof ParallelRendering) {
+//            	ParallelEdgeIndexFunction<V,E> peif = 
+//            		((ParallelRendering)edgeShape).getParallelEdgeIndexFunction();
+//            	index = peif.getIndex(graph, e);
+//            	index += 20;
+//            }
+            GeneralPath gp = new GeneralPath();
+            gp.moveTo(0,0);// the xform will do the translation to x1,y1
+            if(dx > dy) {
+            	gp.lineTo(dx+index, 0);
+            	gp.lineTo(dx+index, dy);
+            } else {
+            	gp.lineTo(dx, index);
+            	gp.lineTo(dx, dy+index);
+            }
+            edgeShape = gp;
+//            System.err.println("its a gp:["+0+","+0+"],["+dx+","+0+"],["+dx+","+dy+"]");
+        	
         } else {
             // this is a normal edge. Rotate it to the angle between
             // vertex endpoints, then scale it to the distance between
