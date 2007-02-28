@@ -1,0 +1,199 @@
+package edu.uci.ics.jung.graph;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import junit.framework.TestCase;
+
+import org.apache.commons.collections15.Factory;
+
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
+
+public class OrderedSparseGraphTest extends TestCase {
+
+    Integer v0 = 0;
+    Integer v1 = 1;
+    Integer v2 = 2;
+    Number e01 = .1;
+    Number e10 = .2;
+    Number e12 = .3;
+    Number e21 = .4;
+
+    Factory<Number> vertexFactory = new Factory<Number>() {
+    	int v=0;
+		public Number create() {
+			return v++;
+		}
+    };
+    Factory<Number> edgeFactory = new Factory<Number>() {
+    	int e=0;
+		public Number create() {
+			return e++;
+		}
+    };
+    
+    Graph<Number,Number> graph;
+    int vertexCount = 50;
+    Graph<Integer,Number> smallGraph;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        Set<Number> seeds = new HashSet<Number>();
+        seeds.add(1);
+        seeds.add(5);
+        graph = new OrderedSparseGraph<Number,Number>();
+        graph.addEdge(4, 2, 1);
+        graph.addEdge(5, 3, 1);
+        graph.addEdge(6, 0, 4, EdgeType.DIRECTED);
+        graph.addEdge(7, 0, 5, EdgeType.DIRECTED);
+        graph.addEdge(1, 0, 1);
+        graph.addEdge(2, 1, 2);
+        graph.addEdge(3, 0, 2);
+        graph.addEdge(8, 5, 1, EdgeType.DIRECTED);
+        graph.addEdge(9, 6, 1, EdgeType.DIRECTED);
+        graph.addEdge(10, 4, 3, EdgeType.DIRECTED);
+        graph.addEdge(16, 8, 3);
+        graph.addEdge(17, 5, 7);
+        graph.addEdge(11, 2, 7);
+        graph.addEdge(12, 1, 5);
+        graph.addEdge(13, 2, 6);
+        graph.addEdge(14, 6, 4);
+        graph.addEdge(15, 7, 8);
+
+        smallGraph = new SparseGraph<Integer,Number>();
+        smallGraph.addVertex(v0);
+        smallGraph.addVertex(v1);
+        smallGraph.addVertex(v2);
+        smallGraph.addEdge(e01, v0, v1);
+        smallGraph.addEdge(e10, v1, v0);
+        smallGraph.addEdge(e12, v1, v2);
+        smallGraph.addEdge(e21, v2, v1, EdgeType.DIRECTED);
+
+    }
+
+    public void testGetEdges() {
+        assertEquals(smallGraph.getEdgeCount(), 4);
+        System.err.println("getEdges()="+graph.getEdges());
+    }
+
+    public void testGetVertices() {
+        assertEquals(smallGraph.getVertexCount(), 3);
+        System.err.println("getVertices()="+graph.getVertices());
+    }
+
+    public void testAddVertex() {
+        int count = graph.getVertexCount();
+        graph.addVertex(count);
+        assertEquals(graph.getVertexCount(), count+1);
+    }
+
+    public void testRemoveEndVertex() {
+        int vertexCount = graph.getVertexCount();
+        int edgeCount = graph.getEdgeCount();
+        Collection<Number> incident = graph.getIncidentEdges(vertexCount-1);
+        graph.removeVertex(vertexCount-1);
+        assertEquals(vertexCount-1, graph.getVertexCount());
+        assertEquals(edgeCount - incident.size(), graph.getEdgeCount());
+    }
+
+    public void testRemoveMiddleVertex() {
+        int vertexCount = graph.getVertexCount();
+        int edgeCount = graph.getEdgeCount();
+        Collection<Number> incident = graph.getIncidentEdges(vertexCount/2);
+        graph.removeVertex(vertexCount/2);
+        assertEquals(vertexCount-1, graph.getVertexCount());
+        assertEquals(edgeCount - incident.size(), graph.getEdgeCount());
+    }
+
+    public void testAddEdge() {
+        int edgeCount = graph.getEdgeCount();
+        graph.addEdge(edgeFactory.create(), 0, 1);
+        assertEquals(graph.getEdgeCount(), edgeCount+1);
+    }
+    
+    public void testNullEndpoint() {
+    	try {
+    		graph.addEdge(edgeFactory.create(), new Pair<Number>(1,null));
+    		fail("should not be able to add an edge with a null endpoint");
+    	} catch(IllegalArgumentException e) {
+    		// all is well
+    	}
+    }
+
+
+    public void testRemoveEdge() {
+    	List<Number> edgeList = new ArrayList<Number>(graph.getEdges());
+        int edgeCount = graph.getEdgeCount();
+        graph.removeEdge(edgeList.get(edgeList.size()/2));
+        assertEquals(graph.getEdgeCount(), edgeCount-1);
+    }
+
+    public void testGetInOutEdges() {
+    	for(Number v : graph.getVertices()) {
+    		Collection<Number> incident = graph.getIncidentEdges(v);
+    		Collection<Number> in = graph.getInEdges(v);
+    		Collection<Number> out = graph.getOutEdges(v);
+    		assertTrue(incident.containsAll(in));
+    		assertTrue(incident.containsAll(out));
+    		for(Number e : in) {
+    			if(out.contains(e)) {
+    				assertTrue(graph.getEdgeType(e) == EdgeType.UNDIRECTED);
+    			}
+    		}
+    		for(Number e : out) {
+    			if(in.contains(e)) {
+    				assertTrue(graph.getEdgeType(e) == EdgeType.UNDIRECTED);
+    			}
+    		}
+    	}
+    	
+        assertEquals(smallGraph.getInEdges(v1).size(), 4);
+        assertEquals(smallGraph.getOutEdges(v1).size(), 3);
+        assertEquals(smallGraph.getOutEdges(v0).size(), 2);
+    }
+
+    public void testGetPredecessors() {
+        assertTrue(smallGraph.getPredecessors(v0).containsAll(Collections.singleton(v1)));
+    }
+
+    public void testGetSuccessors() {
+        assertTrue(smallGraph.getPredecessors(v1).contains(v0));
+        assertTrue(smallGraph.getPredecessors(v1).contains(v2));
+    }
+
+    public void testGetNeighbors() {
+        Collection neighbors = smallGraph.getNeighbors(v1);
+        assertTrue(neighbors.contains(v0));
+        assertTrue(neighbors.contains(v2));
+    }
+
+    public void testGetIncidentEdges() {
+        assertEquals(smallGraph.getIncidentEdges(v0).size(), 2);
+    }
+
+    public void testFindEdge() {
+        Number edge = smallGraph.findEdge(v1, v2);
+        assertTrue(edge == e12 || edge == e21);
+    }
+
+    public void testGetEndpoints() {
+        Pair<Integer> endpoints = smallGraph.getEndpoints(e01);
+        assertTrue((endpoints.getFirst() == v0 && endpoints.getSecond() == v1) ||
+                endpoints.getFirst() == v1 && endpoints.getSecond() == v0);
+    }
+
+    public void testIsDirected() {
+        for(Number edge : smallGraph.getEdges()) {
+        	if(edge == e21) {
+        		assertEquals(smallGraph.getEdgeType(edge), EdgeType.DIRECTED);
+        	} else {
+        		assertEquals(smallGraph.getEdgeType(edge), EdgeType.UNDIRECTED);
+        	}
+        }
+    }
+}
