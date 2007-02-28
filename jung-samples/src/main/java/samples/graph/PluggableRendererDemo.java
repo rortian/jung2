@@ -182,6 +182,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected JRadioButton e_bent;
     protected JRadioButton e_wedge;
     protected JRadioButton e_quad;
+    protected JRadioButton e_ortho;
     protected JRadioButton e_cubic;
     protected JCheckBox e_labels;
     protected JCheckBox font;
@@ -463,17 +464,21 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         e_quad.addActionListener(this);
         e_cubic = new JRadioButton("cubic curve");
         e_cubic.addActionListener(this);
+        e_ortho = new JRadioButton("orthogonal");
+        e_ortho.addActionListener(this);
         ButtonGroup bg_shape = new ButtonGroup();
         bg_shape.add(e_line);
 //        bg.add(e_bent);
         bg_shape.add(e_wedge);
         bg_shape.add(e_quad);
+        bg_shape.add(e_ortho);
         bg_shape.add(e_cubic);
         shape_panel.add(e_line);
 //        shape_panel.add(e_bent);
         shape_panel.add(e_wedge);
         shape_panel.add(e_quad);
         shape_panel.add(e_cubic);
+        shape_panel.add(e_ortho);
         fill_edges = new JCheckBox("fill edge shapes");
         fill_edges.setSelected(false);
         fill_edges.addActionListener(this);
@@ -660,6 +665,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
             {
                 vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Integer,Number>());
             }
+        }
+        else if (source == e_ortho)
+        {
+            if (source.isSelected())
+                vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Orthogonal<Integer,Number>());
         }
         else if (source == e_wedge)
         {
