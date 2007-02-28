@@ -16,6 +16,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
@@ -51,6 +52,8 @@ public class EdgeShape<V,E>  {
      * other
      */
     protected static SimpleLoop simpleLoop = new SimpleLoop();
+    
+    protected static Box box = new Box();
 
     /**
      * An edge shape that renders as a straight line between
@@ -76,7 +79,7 @@ public class EdgeShape<V,E>  {
             if(endpoints != null) {
             	boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
             	if (isLoop) {
-            		return simpleLoop.transform(context);
+            		return loop.transform(context);
             	}
             }
             return instance;
@@ -102,8 +105,19 @@ public class EdgeShape<V,E>  {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
             loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
         }
+        
+        
 
         /**
+		 * @return the parallelEdgeIndexFunction
+		 */
+		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+			return parallelEdgeIndexFunction;
+		}
+
+
+
+		/**
          * Get the shape for this edge, returning either the
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
@@ -155,6 +169,13 @@ public class EdgeShape<V,E>  {
         }
 
        /**
+		 * @return the parallelEdgeIndexFunction
+		 */
+		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+			return parallelEdgeIndexFunction;
+		}
+
+	/**
          * Get the shape for this edge, returning either the
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
@@ -206,6 +227,13 @@ public class EdgeShape<V,E>  {
        }
 
         /**
+		 * @return the parallelEdgeIndexFunction
+		 */
+		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+			return parallelEdgeIndexFunction;
+		}
+
+		/**
          * Get the shape for this edge, returning either the
          * shared instance or, in the case of self-loop edges, the
          * Loop shared instance.
@@ -277,6 +305,14 @@ public class EdgeShape<V,E>  {
 
 
         /**
+		 * @return the parallelEdgeIndexFunction
+		 */
+		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+			return parallelEdgeIndexFunction;
+		}
+
+
+		/**
          * Get the shape for this edge, modifying the diameter in the
          * case of parallel edges, so they do not overlap
          */
@@ -295,7 +331,6 @@ public class EdgeShape<V,E>  {
             x += x*count/2;
             y += y*count/2;
             instance.setFrame(x,y,diam,diam);
-//            System.err.println("instance is "+instance.getBounds());
             return instance;
         }
     }
@@ -339,8 +374,105 @@ public class EdgeShape<V,E>  {
         }
     }
     
+    /**
+     * An edge shape that renders as a loop with its nadir at the
+     * center of the vertex. Parallel instances will not overlap.
+     */
+    public static class Box<V,E>
+           extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+        
+        /**
+         * singleton instance of the Loop shape
+         */
+        private static Rectangle2D instance = new Rectangle2D.Float();
+        
+        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+
+        public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+            this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
+        }
+
+        /**
+		 * @return the parallelEdgeIndexFunction
+		 */
+		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+			return parallelEdgeIndexFunction;
+		}
+
+		/**
+         * Get the shape for this edge, modifying the diameter in the
+         * case of parallel edges, so they do not overlap
+         */
+        public Shape transform(Context<Graph<V,E>,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.element;
+            int count = 1;
+            if(parallelEdgeIndexFunction != null) {
+                count = parallelEdgeIndexFunction.getIndex(graph, e);
+            }
+            
+            float x = -.5f;
+            float y = -.5f;
+            float diam = 1.f;
+            diam += diam*count/2;
+            x += x*count/2;
+            y += y*count/2;
+            instance.setFrame(x,y,diam,diam);
+            return instance;
+        }
+    }
+
+
+    /**
+     * An edge shape that renders as a bent-line between the
+     * vertex endpoints.
+     */
+    public static class Orthogonal<V,E> 
+             extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+        
+        /**
+         * singleton instance of the BentLine shape
+         */
+        private static Line2D instance = new Line2D.Float(0.0f, 0.0f, 1.0f, 0.0f);
+        
+        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+
+        @SuppressWarnings("unchecked")
+		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+            this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
+            box.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
+        }
+
+        /**
+		 * @return the parallelEdgeIndexFunction
+		 */
+		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+			return parallelEdgeIndexFunction;
+		}
+
+		/**
+         * Get the shape for this edge, returning either the
+         * shared instance or, in the case of self-loop edges, the
+         * Loop shared instance.
+         */
+        @SuppressWarnings("unchecked")
+		public Shape transform(Context<Graph<V,E>,E> context) {
+        	Graph<V,E> graph = context.graph;
+        	E e = context.element;
+            Pair<V> endpoints = graph.getEndpoints(e);
+            if(endpoints != null) {
+            	boolean isLoop = endpoints.getFirst().equals(endpoints.getSecond());
+            	if (isLoop) {
+            		return box.transform(context);
+            	}
+            }
+            return instance;
+        }
+    }
+    
     public static interface ParallelRendering<V,E> {
         void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> peif);
+        ParallelEdgeIndexFunction<V,E> getParallelEdgeIndexFunction();
     }
 }
     
