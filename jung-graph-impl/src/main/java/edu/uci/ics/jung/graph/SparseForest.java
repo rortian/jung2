@@ -505,7 +505,12 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
-		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
+		boolean wasThere = false;
+		for(Tree tree : trees) {
+			wasThere |= tree.removeEdge(edge);
+		}
+		return wasThere;
+//		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
 
 	}
 
@@ -519,7 +524,9 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	public boolean removeVertex(V vertex) {
 		boolean wasThere = false;
 		for(Tree<V,E> tree : trees) {
-			wasThere |= tree.removeVertex(vertex);
+			if(tree.getVertices().contains(vertex)) {
+				wasThere |= tree.removeVertex(vertex);
+			}
 		}
 		return wasThere;
 	}
