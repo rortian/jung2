@@ -10,7 +10,6 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
-import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
@@ -25,22 +24,11 @@ import edu.uci.ics.jung.graph.util.Pair;
 public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree<V,E>> {
 	
 	protected Factory<Tree<V,E>> treeFactory;
-	protected V root;
 	protected Transformer<E,Double> weights = 
 		(Transformer<E,Double>)new ConstantTransformer(1.0);
 	
-	public PrimMinimumSpanningTree(Factory<Tree<V,E>> factory, 
-			V root) {
-		this(factory, root, null);
-	}
-
 	public PrimMinimumSpanningTree(Factory<Tree<V,E>> factory) {
-		this(factory, null, null);
-	}
-
-	public PrimMinimumSpanningTree(Factory<Tree<V,E>> factory, 
-			Transformer<E, Double> weights) {
-		this(factory, null, weights);
+		this(factory, null);
 	}
 
 	/**
@@ -50,9 +38,8 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
 	 * @param weights
 	 */
 	public PrimMinimumSpanningTree(Factory<Tree<V,E>> factory, 
-			V root, Transformer<E, Double> weights) {
+			Transformer<E, Double> weights) {
 		this.treeFactory = factory;
-		this.root = root;
 		if(weights != null) {
 			this.weights = weights;
 		}
@@ -60,16 +47,11 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
 	
 	/**
 	 * @param graph the Graph to find MST in
-	 * @param forest the Forest to populate. Must be empty
-	 * @param root first Tree root, may be null
-	 * @param weights edge weights, may be null
 	 */
-//	public PrimMinimumSpanningTree(Graph<V, E> graph, Tree<V,E> tree, 
-//			V root, Transformer<E, Double> weights) {
-		
     public Tree<V,E> transform(Graph<V,E> graph) {
 		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
 		Tree<V,E> tree = treeFactory.create();
+		V root = findRoot(graph);
 		if(graph.getVertices().contains(root)) {
 			tree.addVertex(root);
 		} else if(graph.getVertexCount() > 0) {
@@ -80,10 +62,15 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
 		
 		return tree;
 	}
-	
-//	public Tree<V,E> getTree() {
-//		return tree;
-//	}
+    
+    protected V findRoot(Graph<V,E> graph) {
+    	for(V v : graph.getVertices()) {
+    		if(graph.getInEdges(v).size() == 0) {
+    			return v;
+    		}
+    	}
+    	return null;
+    }
 	
 	protected void updateTree(Tree<V,E> tree, Graph<V,E> graph, Collection<E> unfinishedEdges) {
 		Collection<V> tv = tree.getVertices();
@@ -99,16 +86,14 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
 			Pair<V> endpoints = graph.getEndpoints(e);
 			V first = endpoints.getFirst();
 			V second = endpoints.getSecond();
-			if(tv.contains(first) == true && tv.contains(second) == false) {
+			if((tv.contains(first) == true && tv.contains(second) == false)) {
 				if(weights.transform(e) < minCost) {
 					minCost = weights.transform(e);
 					nextEdge = e;
 					currentVertex = first;
 					nextVertex = second;
 				}
-			}
-			if(graph.getEdgeType(e) == EdgeType.UNDIRECTED &&
-					tv.contains(second) == true && tv.contains(first) == false) {
+			} else if((tv.contains(second) == true && tv.contains(first) == false)) {
 				if(weights.transform(e) < minCost) {
 					minCost = weights.transform(e);
 					nextEdge = e;
