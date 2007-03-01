@@ -28,7 +28,8 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.DefaultParallelEdgeIndexFunction;
-import edu.uci.ics.jung.graph.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
+import edu.uci.ics.jung.graph.util.IncidentEdgeIndexFunction;
 import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTransformer;
 import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
@@ -81,8 +82,11 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     protected Transformer<E,Paint> arrowDrawPaintTransformer =
         new ConstantTransformer(Color.black);
     
-    protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction = 
+    protected EdgeIndexFunction<V,E> parallelEdgeIndexFunction = 
         DefaultParallelEdgeIndexFunction.<V,E>getInstance();
+    
+    protected EdgeIndexFunction<V,E> incidentEdgeIndexFunction = 
+        IncidentEdgeIndexFunction.<V,E>getInstance();
     
     protected MultiLayerTransformer multiLayerTransformer = new BasicTransformer();
     
@@ -296,8 +300,11 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setEdgeShapeTransformer(Transformer<Context<Graph<V,E>,E>,Shape> edgeShapeTransformer) {
         this.edgeShapeTransformer = edgeShapeTransformer;
-        if(edgeShapeTransformer instanceof EdgeShape.ParallelRendering) {
-            ((EdgeShape.ParallelRendering<V,E>)edgeShapeTransformer).setParallelEdgeIndexFunction(this.parallelEdgeIndexFunction);
+        if(edgeShapeTransformer instanceof EdgeShape.Orthogonal) {
+        	((EdgeShape.IndexedRendering<V, E>)edgeShapeTransformer).setEdgeIndexFunction(this.incidentEdgeIndexFunction);
+        } else 
+        if(edgeShapeTransformer instanceof EdgeShape.IndexedRendering) {
+            ((EdgeShape.IndexedRendering<V,E>)edgeShapeTransformer).setEdgeIndexFunction(this.parallelEdgeIndexFunction);
         }
     }
 
@@ -348,7 +355,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getParallelEdgeIndexTransformer()
      */
-    public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+    public EdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
         return parallelEdgeIndexFunction;
     }
 
@@ -356,7 +363,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      * @see edu.uci.ics.jung.visualization.RenderContext#setParallelEdgeIndexFunction(edu.uci.ics.graph.util.ParallelEdgeIndexFunction)
      */
     public void setParallelEdgeIndexFunction(
-            ParallelEdgeIndexFunction<V, E> parallelEdgeIndexFunction) {
+            EdgeIndexFunction<V, E> parallelEdgeIndexFunction) {
         this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
     }
 

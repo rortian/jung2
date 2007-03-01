@@ -17,7 +17,7 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
@@ -110,10 +110,10 @@ public interface RenderContext<V, E> {
     
     void setGraphicsContext(GraphicsDecorator graphicsContext);
 
-    ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction();
+    EdgeIndexFunction<V, E> getParallelEdgeIndexFunction();
 
     void setParallelEdgeIndexFunction(
-            ParallelEdgeIndexFunction<V, E> parallelEdgeIndexFunction);
+            EdgeIndexFunction<V, E> parallelEdgeIndexFunction);
 
     PickedState<E> getPickedEdgeState();
 

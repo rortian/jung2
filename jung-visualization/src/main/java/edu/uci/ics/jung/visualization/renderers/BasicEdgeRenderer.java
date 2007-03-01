@@ -26,11 +26,13 @@ import javax.swing.JComponent;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape.IndexedRendering;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -113,21 +115,47 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             float dx = x2-x1;
             float dy = y2-y1;
             int index = 0;
-//            if(edgeShape instanceof ParallelRendering) {
-//            	ParallelEdgeIndexFunction<V,E> peif = 
-//            		((ParallelRendering)edgeShape).getParallelEdgeIndexFunction();
-//            	index = peif.getIndex(graph, e);
-//            	index += 20;
-//            }
+            if(rc.getEdgeShapeTransformer() instanceof IndexedRendering) {
+            	EdgeIndexFunction<V,E> peif = 
+            		((IndexedRendering)rc.getEdgeShapeTransformer()).getEdgeIndexFunction();
+            	index = peif.getIndex(graph, e);
+            	index *= 20;
+            }
             GeneralPath gp = new GeneralPath();
             gp.moveTo(0,0);// the xform will do the translation to x1,y1
-            if(dx > dy) {
-            	gp.lineTo(dx+index, 0);
-            	gp.lineTo(dx+index, dy);
+            if(x1 > x2) {
+            	if(y1 > y2) {
+            		gp.lineTo(0, index);
+            		gp.lineTo(dx-index, index);
+            		gp.lineTo(dx-index, dy);
+            		gp.lineTo(dx, dy);
+            	} else {
+            		gp.lineTo(0, -index);
+            		gp.lineTo(dx-index, -index);
+            		gp.lineTo(dx-index, dy);
+            		gp.lineTo(dx, dy);
+            	}
+
             } else {
-            	gp.lineTo(dx, index);
-            	gp.lineTo(dx, dy+index);
+            	if(y1 > y2) {
+            		gp.lineTo(0, index);
+            		gp.lineTo(dx+index, index);
+            		gp.lineTo(dx+index, dy);
+            		gp.lineTo(dx, dy);
+            		
+            	} else {
+            		gp.lineTo(0, -index);
+            		gp.lineTo(dx+index, -index);
+            		gp.lineTo(dx+index, dy);
+            		gp.lineTo(dx, dy);
+            		
+            	}
+            	
             }
+//            	gp.lineTo(0, dy-index);
+//            	gp.lineTo(dx+index, 0);
+//            	gp.lineTo(dx+index, dy);
+
             edgeShape = gp;
 //            System.err.println("its a gp:["+0+","+0+"],["+dx+","+0+"],["+dx+","+dy+"]");
         	

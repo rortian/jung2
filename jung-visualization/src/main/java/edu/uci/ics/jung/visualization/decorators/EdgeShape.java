@@ -22,7 +22,7 @@ import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
-import edu.uci.ics.jung.graph.util.ParallelEdgeIndexFunction;
+import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
 import edu.uci.ics.jung.visualization.ArrowFactory;
 
 
@@ -91,19 +91,19 @@ public class EdgeShape<V,E>  {
      * vertex endpoints.
      */
     public static class BentLine<V,E> 
-             extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+             extends AbstractEdgeShapeTransformer<V,E> implements IndexedRendering<V,E> {
         
         /**
          * singleton instance of the BentLine shape
          */
         private static GeneralPath instance = new GeneralPath();
         
-        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+        protected EdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
         @SuppressWarnings("unchecked")
-		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+		public void setEdgeIndexFunction(EdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
-            loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
+            loop.setEdgeIndexFunction(parallelEdgeIndexFunction);
         }
         
         
@@ -111,7 +111,7 @@ public class EdgeShape<V,E>  {
         /**
 		 * @return the parallelEdgeIndexFunction
 		 */
-		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+		public EdgeIndexFunction<V, E> getEdgeIndexFunction() {
 			return parallelEdgeIndexFunction;
 		}
 
@@ -153,25 +153,25 @@ public class EdgeShape<V,E>  {
      * endpoints.
      */
     public static class QuadCurve<V,E>
-           extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+           extends AbstractEdgeShapeTransformer<V,E> implements IndexedRendering<V,E> {
         
         /**
          * singleton instance of the QuadCurve shape
          */
         private static QuadCurve2D instance = new QuadCurve2D.Float();
         
-        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+        protected EdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
         @SuppressWarnings("unchecked")
-		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+		public void setEdgeIndexFunction(EdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
-            loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
+            loop.setEdgeIndexFunction(parallelEdgeIndexFunction);
         }
 
        /**
 		 * @return the parallelEdgeIndexFunction
 		 */
-		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+		public EdgeIndexFunction<V, E> getEdgeIndexFunction() {
 			return parallelEdgeIndexFunction;
 		}
 
@@ -211,25 +211,25 @@ public class EdgeShape<V,E>  {
      * giving a 'spiral' effect.
      */
     public static class CubicCurve<V,E> 
-         extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+         extends AbstractEdgeShapeTransformer<V,E> implements IndexedRendering<V,E> {
         
         /**
          * singleton instance of the CubicCurve edge shape
          */
         private static CubicCurve2D instance = new CubicCurve2D.Float();
         
-        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+        protected EdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
         @SuppressWarnings("unchecked")
-		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+		public void setEdgeIndexFunction(EdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
-            loop.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
+            loop.setEdgeIndexFunction(parallelEdgeIndexFunction);
        }
 
         /**
 		 * @return the parallelEdgeIndexFunction
 		 */
-		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+		public EdgeIndexFunction<V, E> getEdgeIndexFunction() {
 			return parallelEdgeIndexFunction;
 		}
 
@@ -290,16 +290,16 @@ public class EdgeShape<V,E>  {
      * center of the vertex. Parallel instances will not overlap.
      */
     public static class Loop<V,E>
-           extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+           extends AbstractEdgeShapeTransformer<V,E> implements IndexedRendering<V,E> {
         
         /**
          * singleton instance of the Loop shape
          */
         private static Ellipse2D instance = new Ellipse2D.Float();
         
-        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+        protected EdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
-        public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+        public void setEdgeIndexFunction(EdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
         }
 
@@ -307,7 +307,7 @@ public class EdgeShape<V,E>  {
         /**
 		 * @return the parallelEdgeIndexFunction
 		 */
-		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+		public EdgeIndexFunction<V, E> getEdgeIndexFunction() {
 			return parallelEdgeIndexFunction;
 		}
 
@@ -379,23 +379,23 @@ public class EdgeShape<V,E>  {
      * center of the vertex. Parallel instances will not overlap.
      */
     public static class Box<V,E>
-           extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+           extends AbstractEdgeShapeTransformer<V,E> implements IndexedRendering<V,E> {
         
         /**
          * singleton instance of the Loop shape
          */
         private static Rectangle2D instance = new Rectangle2D.Float();
         
-        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+        protected EdgeIndexFunction<V,E> parallelEdgeIndexFunction;
 
-        public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
+        public void setEdgeIndexFunction(EdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
             this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
         }
 
         /**
 		 * @return the parallelEdgeIndexFunction
 		 */
-		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
+		public EdgeIndexFunction<V, E> getEdgeIndexFunction() {
 			return parallelEdgeIndexFunction;
 		}
 
@@ -428,26 +428,26 @@ public class EdgeShape<V,E>  {
      * vertex endpoints.
      */
     public static class Orthogonal<V,E> 
-             extends AbstractEdgeShapeTransformer<V,E> implements ParallelRendering<V,E> {
+             extends AbstractEdgeShapeTransformer<V,E> implements IndexedRendering<V,E> {
         
         /**
          * singleton instance of the BentLine shape
          */
         private static Line2D instance = new Line2D.Float(0.0f, 0.0f, 1.0f, 0.0f);
         
-        protected ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction;
+        protected EdgeIndexFunction<V,E> edgeIndexFunction;
 
         @SuppressWarnings("unchecked")
-		public void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> parallelEdgeIndexFunction) {
-            this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
-            box.setParallelEdgeIndexFunction(parallelEdgeIndexFunction);
+		public void setEdgeIndexFunction(EdgeIndexFunction<V,E> edgeIndexFunction) {
+            this.edgeIndexFunction = edgeIndexFunction;
+            box.setEdgeIndexFunction(edgeIndexFunction);
         }
 
         /**
 		 * @return the parallelEdgeIndexFunction
 		 */
-		public ParallelEdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
-			return parallelEdgeIndexFunction;
+		public EdgeIndexFunction<V, E> getEdgeIndexFunction() {
+			return edgeIndexFunction;
 		}
 
 		/**
@@ -470,9 +470,9 @@ public class EdgeShape<V,E>  {
         }
     }
     
-    public static interface ParallelRendering<V,E> {
-        void setParallelEdgeIndexFunction(ParallelEdgeIndexFunction<V,E> peif);
-        ParallelEdgeIndexFunction<V,E> getParallelEdgeIndexFunction();
+    public static interface IndexedRendering<V,E> {
+        void setEdgeIndexFunction(EdgeIndexFunction<V,E> peif);
+        EdgeIndexFunction<V,E> getEdgeIndexFunction();
     }
 }
     
