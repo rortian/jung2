@@ -26,6 +26,17 @@ public class SparseTreeTest extends TestCase {
 		tree = new SparseTree<String,Integer>(graphFactory);
 	}
 	
+	public void testRemoveVertex() {
+		tree.addVertex("A");
+		tree.addEdge(edgeFactory.create(), "A", "B");
+		tree.addEdge(edgeFactory.create(), "A", "C");
+		tree.addEdge(edgeFactory.create(), "B", "E");
+		tree.addEdge(edgeFactory.create(), "B", "F");
+		System.err.println("tree is "+tree);
+		tree.removeVertex("B");
+		System.err.println("tree now "+tree);
+	}
+	
 	public void testSimpleTree() {
 		tree.addVertex("A");
 		tree.addEdge(edgeFactory.create(), "A", "B");
