@@ -33,6 +33,10 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	protected DirectedGraph<V,E> delegate;
 	protected V root;
     protected Map<V, Integer> vertex_depths;
+    
+    public SparseTree() {
+    	this(DirectedSparseGraph.<V,E>getFactory());
+    }
 
 	/**
 	 * create an instance with passed values.
@@ -383,7 +387,10 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
-		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
+		return delegate.removeEdge(edge);
+//		Pair<V> endpoints = delegate.getEndpoints(edge);
+//		return delegate.removeVertex(endpoints.getSecond());
+//		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
 
 	}
 
