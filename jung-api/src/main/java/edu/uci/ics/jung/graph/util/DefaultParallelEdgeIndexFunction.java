@@ -32,7 +32,7 @@ import edu.uci.ics.jung.graph.Graph;
  * @author Tom Nelson
  *
  */
-public class DefaultParallelEdgeIndexFunction<V,E> implements ParallelEdgeIndexFunction<V,E>
+public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<V,E>
 {
     protected Map<E, Integer> edge_index = new HashMap<E, Integer>();
     
