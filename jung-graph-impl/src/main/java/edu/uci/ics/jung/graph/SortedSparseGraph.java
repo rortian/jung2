@@ -25,14 +25,14 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 @SuppressWarnings("serial")
-public class NaturalOrderedSparseGraph<V,E> 
+public class SortedSparseGraph<V,E> 
     extends AbstractSparseGraph<V,E>
     implements Graph<V,E>, Serializable {
 	
 	public static final <V,E> Factory<Graph<V,E>> getFactory() { 
 		return new Factory<Graph<V,E>> () {
 			public Graph<V,E> create() {
-				return new NaturalOrderedSparseGraph<V,E>();
+				return new SortedSparseGraph<V,E>();
 			}
 		};
 	}
@@ -40,7 +40,7 @@ public class NaturalOrderedSparseGraph<V,E>
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
     protected Set<E> directedEdges;
 
-    public NaturalOrderedSparseGraph()
+    public SortedSparseGraph()
     {
         vertices = new TreeMap<V, Pair<Set<E>>>();
         edges = new TreeMap<E, Pair<V>>();
