@@ -14,8 +14,10 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class NaturalOrderedSparseGraphTest extends TestCase {
+public class SortedSparseGraphTest extends TestCase {
 
+	class Foo {}
+	class Bar {}
     Integer v0 = 0;
     Integer v1 = 1;
     Integer v2 = 2;
@@ -46,7 +48,7 @@ public class NaturalOrderedSparseGraphTest extends TestCase {
         Set<Number> seeds = new HashSet<Number>();
         seeds.add(1);
         seeds.add(5);
-        graph = new NaturalOrderedSparseGraph<Number,Number>();
+        graph = new SortedSparseGraph<Number,Number>();
         graph.addEdge(4, 2, 1);
         graph.addEdge(5, 3, 1);
         graph.addEdge(6, 0, 4, EdgeType.DIRECTED);
@@ -73,6 +75,16 @@ public class NaturalOrderedSparseGraphTest extends TestCase {
         smallGraph.addEdge(e10, v1, v0);
         smallGraph.addEdge(e12, v1, v2);
         smallGraph.addEdge(e21, v2, v1, EdgeType.DIRECTED);
+        
+        Graph<Foo,Bar> fooBar = new SortedSparseGraph<Foo,Bar>();
+        try {
+        	fooBar.addVertex(new Foo());
+        	fooBar.addVertex(new Foo());
+        	fooBar.addEdge(new Bar(), new Foo(), new Foo());
+        	fail("should have thrown an exception as Foo Bar are not Comparable");
+        } catch(Exception ex) {
+        	// all is well
+        }
 
     }
 
