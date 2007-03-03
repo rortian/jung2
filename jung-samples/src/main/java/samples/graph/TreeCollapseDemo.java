@@ -126,7 +126,7 @@ public class TreeCollapseDemo extends JApplet {
     public TreeCollapseDemo() {
 
         // create a simple graph for the demo
-        graph = new SparseForest<String,Integer>(treeFactory);
+        graph = new SparseForest<String,Integer>();
 
         createTree();
 

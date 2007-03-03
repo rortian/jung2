@@ -124,7 +124,7 @@ public class BalloonLayoutDemo extends JApplet {
     public BalloonLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SparseForest<String,Integer>(treeFactory);
+        graph = new SparseForest<String,Integer>();
 
         createTree();
         

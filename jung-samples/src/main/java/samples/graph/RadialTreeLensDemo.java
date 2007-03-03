@@ -140,7 +140,7 @@ public class RadialTreeLensDemo extends JApplet {
         
         // create a simple graph for the demo
         // create a simple graph for the demo
-        graph = new SparseForest<String,Integer>(treeFactory);
+        graph = new SparseForest<String,Integer>();
 
         createTree();
         

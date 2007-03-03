@@ -115,7 +115,7 @@ public class TreeLayoutDemo extends JApplet {
     public TreeLayoutDemo() {
         
         // create a simple graph for the demo
-        graph = new SparseForest<String,Integer>(treeFactory);
+        graph = new SparseForest<String,Integer>();
 
         createTree();
         
