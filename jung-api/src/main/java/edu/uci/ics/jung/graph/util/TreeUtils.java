@@ -14,7 +14,7 @@ public class TreeUtils {
 		return subTree;
 	}
 	
-	private static <V,E> void growSubTree(Forest<V,E> tree, Forest<V,E> subTree, V root) {
+	public static <V,E> void growSubTree(Forest<V,E> tree, Forest<V,E> subTree, V root) {
 		if(tree.getSuccessorCount(root) > 0) {
 			Collection<E> edges = tree.getOutEdges(root);
 			for(E e : edges) {
