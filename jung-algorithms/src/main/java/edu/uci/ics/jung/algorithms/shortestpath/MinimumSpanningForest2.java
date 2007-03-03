@@ -10,6 +10,7 @@ import edu.uci.ics.jung.algorithms.cluster.WeakComponentGraphClusterer;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.graph.util.TreeUtils;
 
 /**
  * For the input Graph, creates a MinimumSpanningTree
@@ -84,7 +85,8 @@ public class MinimumSpanningForest2<V,E> {
 		for(Graph<V,E> component : components) {
 			PrimMinimumSpanningTree<V,E> mst = 
 				new PrimMinimumSpanningTree<V,E>(treeFactory, weights);
-			forest.getTrees().add(mst.transform(component));
+			TreeUtils.addSubTree(forest, mst.transform(component), null, null);
+//			forest.getTrees().add(mst.transform(component));
 		}
 	}
 	
