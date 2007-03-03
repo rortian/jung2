@@ -2,15 +2,12 @@ package edu.uci.ics.jung.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
+import edu.uci.ics.jung.graph.util.TreeUtils;
 
 /**
  * An implementation of the Forest<V,E> interface that aggregates 
@@ -20,23 +17,15 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
+public class SparseForest<V,E> implements Forest<V,E> {
 	
-	protected Set<Tree<V,E>> trees = new HashSet<Tree<V,E>>();
-	protected Factory<Tree<V,E>> treeFactory;
+	protected DirectedGraph<V,E> delegate;
 
 	public SparseForest() {
-		this.treeFactory = SparseTree.<V,E>getFactory();
+		this(new DirectedSparseGraph<V,E>());
 	}
-	/**
-	 * create an instance with passed values.
-	 * @param graphFactory must create a DirectedGraph to use as a delegate
-	 * @param edgeFactory must create unique edges to connect tree nodes
-	 */
-	public SparseForest(
-			Factory<Tree<V,E>> treeFactory
-			) {
-		this.treeFactory = treeFactory;
+	public SparseForest(DirectedGraph<V,E> delegate) {
+		this.delegate = delegate;
 	}
 	
 	/**
@@ -54,7 +43,13 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
-		return addChild(e, v1, v2, edgeType);
+		if(delegate.getVertices().contains(v1) == false) {
+			throw new IllegalArgumentException("Tree must already contain "+v1);
+		}
+		if(delegate.getVertices().contains(v2)) {
+			throw new IllegalArgumentException("Tree must not already contain "+v2);
+		}
+		return delegate.addEdge(e, v1, v2, edgeType);
 	}
 
 	/**
@@ -69,7 +64,13 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
 	public boolean addEdge(E e, V v1, V v2) {
-		return addChild(e, v1, v2);
+		if(delegate.getVertices().contains(v1) == false) {
+			throw new IllegalArgumentException("Tree must already contain "+v1);
+		}
+		if(delegate.getVertices().contains(v2)) {
+			throw new IllegalArgumentException("Tree must not already contain "+v2);
+		}
+		return delegate.addEdge(e, v1, v2);
 	}
 
 	/**
@@ -91,187 +92,122 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#areIncident(java.lang.Object, java.lang.Object)
 	 */
 	public boolean areIncident(V vertex, E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.areIncident(vertex, edge)) return true;
-		}
-		return false;
+		return delegate.areIncident(vertex, edge);
 	}
+
 
 	/**
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#areNeighbors(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#areNeighbors(java.lang.Object, java.lang.Object)
 	 */
 	public boolean areNeighbors(V v1, V v2) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.areNeighbors(v1, v2)) return true;
-		}
-		return false;
+		return delegate.areNeighbors(v1, v2);
 	}
-
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#degree(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#degree(java.lang.Object)
 	 */
 	public int degree(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.degree(vertex);
-			}
-		}
-		return 0;
+		return delegate.degree(vertex);
 	}
-
 	/**
 	 * @param v1
 	 * @param v2
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#findEdge(java.lang.Object, java.lang.Object)
 	 */
 	public E findEdge(V v1, V v2) {
-		for(Tree<V,E> tree : trees) {
-			E e = tree.findEdge(v1, v2);
-			if(e != null) return e;
-		}
-		return null;
+		return delegate.findEdge(v1, v2);
 	}
-
 	/**
 	 * @param directed_edge
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getDest(java.lang.Object)
 	 */
 	public V getDest(E directed_edge) {
-		for(Tree<V,E> tree : trees) {
-			V v = tree.getDest(directed_edge);
-			if(v != null) return v;
-		}
-		return null;
+		return delegate.getDest(directed_edge);
 	}
-
 	/**
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEdgeCount()
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getEdgeCount()
 	 */
 	public int getEdgeCount() {
-		int count=0;
-		for(Tree<V,E> tree : trees) {
-			count += tree.getEdgeCount();
-		}
-		return count;
+		return delegate.getEdgeCount();
 	}
-
 	/**
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEdges()
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getEdges()
 	 */
 	public Collection<E> getEdges() {
-		Collection<E> edges = new HashSet<E>();
-		for(Tree<V,E> tree : trees) {
-			edges.addAll(tree.getEdges());
-		}
-		return edges;
+		return delegate.getEdges();
 	}
-
 	/**
 	 * @param edgeType
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	public Collection<E> getEdges(EdgeType edgeType) {
-		Collection<E> edges = new HashSet<E>();
-		for(Tree<V,E> tree : trees) {
-			edges.addAll(tree.getEdges(edgeType));
-		}
-		return edges;
+		return delegate.getEdges(edgeType);
 	}
-
 	/**
 	 * @param edge
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getEdgeType(java.lang.Object)
 	 */
 	public EdgeType getEdgeType(E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(edge)) {
-				return tree.getEdgeType(edge);
-			}
-		}
-		return null;
+		return delegate.getEdgeType(edge);
 	}
-
 	/**
 	 * @param edge
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getEndpoints(java.lang.Object)
 	 */
 	public Pair<V> getEndpoints(E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(edge)) {
-				return tree.getEndpoints(edge);
-			}
-		}
-		return null;
+		return delegate.getEndpoints(edge);
 	}
-
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getIncidentEdges(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentEdges(java.lang.Object)
 	 */
 	public Collection<E> getIncidentEdges(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getIncidentEdges(vertex);
-			}
-		}
-		return null;
+		return delegate.getIncidentEdges(vertex);
 	}
-
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getIncidentVertices(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentVertices(java.lang.Object)
 	 */
 	public Collection<V> getIncidentVertices(E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(edge)) {
-				return tree.getIncidentVertices(edge);
-			}
-		}
-		return null;
+		return delegate.getIncidentVertices(edge);
 	}
-
 	/**
 	 * @param vertex
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getInEdges(java.lang.Object)
 	 */
 	public Collection<E> getInEdges(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getInEdges(vertex);
-			}
-		}
-		return Collections.EMPTY_SET;
+		return delegate.getInEdges(vertex);
 	}
-
 	/**
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getNeighbors(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getNeighborCount(java.lang.Object)
+	 */
+	public int getNeighborCount(V vertex) {
+		return delegate.getNeighborCount(vertex);
+	}
+	/**
+	 * @param vertex
+	 * @return
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getNeighbors(java.lang.Object)
 	 */
 	public Collection<V> getNeighbors(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getNeighbors(vertex);
-			}
-		}
-		return Collections.EMPTY_SET;
+		return delegate.getNeighbors(vertex);
 	}
-
 	/**
 	 * @param vertex
 	 * @param edge
@@ -279,110 +215,78 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
 	 */
 	public V getOpposite(V vertex, E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(edge)) {
-				return tree.getOpposite(vertex, edge);
-			}
-		}
-		return null;
+		return delegate.getOpposite(vertex, edge);
 	}
-
 	/**
 	 * @param vertex
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getOutEdges(java.lang.Object)
 	 */
 	public Collection<E> getOutEdges(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getOutEdges(vertex);
-			}
-		}
-		return Collections.EMPTY_SET;
+		return delegate.getOutEdges(vertex);
 	}
-
+	/**
+	 * @param vertex
+	 * @return
+	 * @see edu.uci.ics.jung.graph.Graph#getPredecessorCount(java.lang.Object)
+	 */
+	public int getPredecessorCount(V vertex) {
+		return delegate.getPredecessorCount(vertex);
+	}
 	/**
 	 * @param vertex
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getPredecessors(java.lang.Object)
 	 */
 	public Collection<V> getPredecessors(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getPredecessors(vertex);
-			}
-		}
-		return Collections.EMPTY_SET;
+		return delegate.getPredecessors(vertex);
 	}
-
 	/**
 	 * @param directed_edge
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getSource(java.lang.Object)
 	 */
 	public V getSource(E directed_edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(directed_edge)) {
-				return tree.getSource(directed_edge);
-			}
-		}
-		return null;
+		return delegate.getSource(directed_edge);
 	}
-
+	/**
+	 * @param vertex
+	 * @return
+	 * @see edu.uci.ics.jung.graph.Graph#getSuccessorCount(java.lang.Object)
+	 */
+	public int getSuccessorCount(V vertex) {
+		return delegate.getSuccessorCount(vertex);
+	}
 	/**
 	 * @param vertex
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getSuccessors(java.lang.Object)
 	 */
 	public Collection<V> getSuccessors(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getSuccessors(vertex);
-			}
-		}
-		return Collections.EMPTY_SET;
+		return delegate.getSuccessors(vertex);
 	}
-
 	/**
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getVertexCount()
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getVertexCount()
 	 */
 	public int getVertexCount() {
-		int count = 0;
-	
-		for(Tree<V,E> tree : trees) {
-			count += tree.getVertexCount();
-		}
-		return count;
+		return delegate.getVertexCount();
 	}
-
 	/**
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getVertices()
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getVertices()
 	 */
 	public Collection<V> getVertices() {
-		
-		Collection<V> vertices = new HashSet<V>();
-		for(Tree<V,E> tree : trees) {
-			vertices.addAll(tree.getVertices());
-		}
-		return vertices;
+		return delegate.getVertices();
 	}
-
 	/**
 	 * @param vertex
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#inDegree(java.lang.Object)
 	 */
 	public int inDegree(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.inDegree(vertex);
-			}
-		}
-		return 0;
+		return delegate.inDegree(vertex);
 	}
-
 	/**
 	 * @param vertex
 	 * @param edge
@@ -390,14 +294,8 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#isDest(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isDest(V vertex, E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(edge)) {
-				return tree.isDest(vertex, edge);
-			}
-		}
-		return false;
+		return delegate.isDest(vertex, edge);
 	}
-
 	/**
 	 * @param v1
 	 * @param v2
@@ -405,14 +303,8 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isPredecessor(V v1, V v2) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(v1)) {
-				return tree.isPredecessor(v1, v2);
-			}
-		}
-		return false;
+		return delegate.isPredecessor(v1, v2);
 	}
-
 	/**
 	 * @param vertex
 	 * @param edge
@@ -420,14 +312,8 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#isSource(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isSource(V vertex, E edge) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getEdges().contains(edge)) {
-				return tree.isSource(vertex, edge);
-			}
-		}
-		return false;
+		return delegate.isSource(vertex, edge);
 	}
-
 	/**
 	 * @param v1
 	 * @param v2
@@ -435,195 +321,37 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @see edu.uci.ics.jung.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isSuccessor(V v1, V v2) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(v1)) {
-				return tree.isSuccessor(v1, v2);
-			}
-		}
-		return false;
+		return delegate.isSuccessor(v1, v2);
 	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getNeighborCount(java.lang.Object)
-	 */
-	public int getNeighborCount(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getNeighborCount(vertex);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getPredecessorCount(java.lang.Object)
-	 */
-	public int getPredecessorCount(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getPredecessorCount(vertex);
-			}
-		}
-		return 0;
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getSuccessorCount(java.lang.Object)
-	 */
-	public int getSuccessorCount(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return tree.getSuccessorCount(vertex);
-			}
-		}
-		return 0;
-	}
-
 	/**
 	 * @param vertex
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#outDegree(java.lang.Object)
 	 */
 	public int outDegree(V vertex) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				return outDegree(vertex);
-			}
-		}
-		return 0;
+		return delegate.outDegree(vertex);
 	}
-
 	/**
 	 * @param edge
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#removeEdge(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
-		boolean wasThere = false;
-		for(Tree tree : trees) {
-			wasThere |= tree.removeEdge(edge);
-		}
-		return wasThere;
-//		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
-
+		Pair<V> endpoints = delegate.getEndpoints(edge);
+		return removeVertex(endpoints.getSecond());
+//		return delegate.removeEdge(edge);
 	}
-
 	/**
-	 * remove the passed node, and all nodes that are descendants of the
-	 * passed node.
 	 * @param vertex
 	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#removeVertex(java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
-		boolean wasThere = false;
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(vertex)) {
-				wasThere |= tree.removeVertex(vertex);
-			}
+		for(V v : delegate.getSuccessors(vertex)) {
+			removeVertex(v);
 		}
-		return wasThere;
+		return delegate.removeVertex(vertex);
 	}
-	
-	/**
-		for(Tree<V,E> tree : trees) {
-		for(Tree<V,E> tree : trees) {
-	 * add the passed child node as a child of parent.
-	 * parent must exist in the tree, and child must not already exist.
-	 * the connecting edge will be dynamically created by the 
-	 * edgeFactory member
-	 * @param parent the existing parent to attach the child to
-	 * @param child the new child to add to the tree as a child of parent
-	 * @return whether this call mutates the underlying graph
-	 */
-//	public boolean addChild(V parent, V child) {
-//		boolean added = false;
-//		for(Tree<V,E> tree : trees) {
-//			if(tree.getVertices().contains(parent)) {
-//				added |= tree.addChild(parent, child);
-//			}
-//		}
-//		return added;
-////		return addChild(edgeFactory.create(), parent, child);
-//	}
-
-	/**
-	 * add the passed child node as a child of parent.
-	 * parent must exist in the tree, and child must not already exist.
-	 * 
-	 * @param edge the unique edge to connect the parent and child nodes
-	 * @param parent the existing parent to attach the child to
-	 * @param child the new child to add to the tree as a child of parent
-	 * @param edgeType must be EdgeType.DIRECTED or the underlying graph may throw an exception
-	 * @return whether this call mutates the underlying graph
-	 */
-	public boolean addChild(E edge, V parent, V child, EdgeType edgeType) {
-
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(parent)) {
-				return tree.addEdge(edge, parent, child, edgeType);
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * add the passed child node as a child of parent.
-	 * parent must exist in the tree, and child must not already exist
-	 * @param edge the unique edge to connect the parent and child nodes
-	 * @param parent the existing parent to attach the child to
-	 * @param child the new child to add to the tree as a child of parent
-	 * @return whether this call mutates the underlying graph
-	 */
-	public boolean addChild(E edge, V parent, V child) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(parent)) {
-				tree.addEdge(edge, parent, child);
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * get the number of children of the passed parent node
-	 */
-	public int getChildCount(V parent) {
-		return getChildren(parent).size();
-	}
-
-	/**
-	 * get the immediate children nodes of the passed parent
-	 */
-	public Collection<V> getChildren(V parent) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(parent)) {
-				return tree.getSuccessors(parent);
-			}
-		}
-		return Collections.emptySet();
-	}
-
-	/**
-	 * get the single parent node of the passed child
-	 */
-	public V getParent(V child) {
-		for(Tree<V,E> tree : trees) {
-			if(tree.getVertices().contains(child)) {
-				Collection<V> predecessors = tree.getPredecessors(child);
-				if(predecessors.size() != 0) {
-					return predecessors.iterator().next();
-				}
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * returns an ordered list of the nodes beginning at the root
 	 * and ending at the passed child node, including all intermediate
@@ -641,6 +369,14 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 		}
 		return list;
 	}
+	
+	public V getParent(V child) {
+		Collection<V> parents = delegate.getPredecessors(child);
+		if(parents.size() > 0) {
+			return parents.iterator().next();
+		}
+		return null;
+	}
 
 	/**
 	 * getter for the root of the tree
@@ -656,9 +392,7 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 	 * @param root the initial tree root
 	 */
 	public void setRoot(V root) {
-		Tree<V,E> tree = treeFactory.create();
-		tree.addVertex(root);
-		trees.add(tree);
+		delegate.addVertex(root);
 	}
 
 	/**
@@ -712,6 +446,9 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 		return getChildren(v).size() == 0;
 	}
 
+	public Collection<V> getChildren(V v) {
+		return delegate.getSuccessors(v);
+	}
 	/**
 	 * computes whether the passed node is a root node
 	 * (has no children)
@@ -734,21 +471,35 @@ public class SparseForest<V,E> implements DirectedGraph<V,E>, Forest<V,E> {
 		}
 		return addEdge(edge, pair.getFirst(), pair.getSecond());
 	}
+	
+	public Collection<V> getRoots() {
+		Collection<V> roots = new HashSet<V>();
+		for(V v : delegate.getVertices()) {
+			if(delegate.getPredecessorCount(v) == 0) {
+				roots.add(v);
+			}
+		}
+		return roots;
+	}
 
 	public Collection<Tree<V, E>> getTrees() {
+		Collection<Tree<V,E>> trees = new HashSet<Tree<V,E>>();
+		for(V v : getRoots()) {
+			Tree<V,E> tree = new SparseTree<V,E>();
+			tree.addVertex(v);
+			TreeUtils.growSubTree(this, tree, v);
+			trees.add(tree);
+		}
 		return trees;
 	}
 	
 	public void addTree(Tree<V,E> tree) {
-		this.trees.add(tree);
+		TreeUtils.addSubTree(this, tree, null, null);
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		for(Tree tree : trees) {
-			sb.append(tree.toString()+"\n");
-		}
-		return sb.toString();
+		
+		return delegate.toString();
 	}
 
 }
