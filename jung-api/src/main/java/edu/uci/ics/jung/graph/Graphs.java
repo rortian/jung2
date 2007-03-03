@@ -84,6 +84,14 @@ public class Graphs {
 		return new UnmodifiableUndirectedGraph<V,E>(graph);
 	}
 	
+	public static <V,E> UnmodifiableTree<V,E> unmodifiableTree(Tree<V,E> tree) {
+		return new UnmodifiableTree<V,E>(tree);
+	}
+	
+	public static <V,E> UnmodifiableForest<V,E> unmodifiableForest(Forest<V,E> forest) {
+		return new UnmodifiableForest<V,E>(forest);
+	}
+	
 	
 	static abstract class SynchronizedAbstractGraph<V,E> implements Graph<V,E>, Serializable {
 		protected Graph<V,E> delegate;
@@ -860,6 +868,40 @@ public class Graphs {
 		implements UndirectedGraph<V,E>, Serializable {
 		private UnmodifiableUndirectedGraph(UndirectedGraph<V,E> delegate) {
 			super(delegate);
+		}
+	}
+	
+	static class UnmodifiableForest<V,E> extends UnmodifiableGraph<V,E>
+		implements Forest<V,E>, Serializable {
+		private UnmodifiableForest(Forest<V,E> delegate) {
+			super(delegate);
+		}
+
+		public Collection<Tree<V, E>> getTrees() {
+			return ((Forest<V,E>)delegate).getTrees();
+		}
+	}
+	
+	static class UnmodifiableTree<V,E> extends UnmodifiableForest<V,E>
+	     implements Tree<V,E>, Serializable {
+		private UnmodifiableTree(Tree<V,E> delegate) {
+			super(delegate);
+		}
+
+		public int getDepth(V vertex) {
+			return ((Tree<V,E>)delegate).getDepth(vertex);
+		}
+
+		public int getHeight() {
+			return ((Tree<V,E>)delegate).getHeight();
+		}
+
+		public V getRoot() {
+			return ((Tree<V,E>)delegate).getRoot();
+		}
+
+		public Collection<Tree<V, E>> getTrees() {
+			return ((Tree<V,E>)delegate).getTrees();
 		}
 	}
 
