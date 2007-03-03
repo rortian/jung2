@@ -8,6 +8,6 @@ package edu.uci.ics.jung.graph;
  * @author Tom Nelson - tomnelson@dev.java.net
  *
  */
-public interface SimpleGraph {
+public interface SimpleGraph<V,E> extends Graph<V,E> {
 
 }
