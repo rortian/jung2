@@ -193,7 +193,7 @@ public class TreeCollapseDemo extends JApplet {
 				vv.repaint();
 			}});
 
-             JButton collapse = new JButton("Collapse");
+        JButton collapse = new JButton("Collapse");
         collapse.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -232,15 +232,6 @@ public class TreeCollapseDemo extends JApplet {
                 }
             }});
 
-        JButton reset = new JButton("Reset");
-        reset.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                layout.setGraph(graph);
-                vv.repaint();
-            }});
-
-
         JPanel scaleGrid = new JPanel(new GridLayout(1,0));
         scaleGrid.setBorder(BorderFactory.createTitledBorder("Zoom"));
 
@@ -252,7 +243,6 @@ public class TreeCollapseDemo extends JApplet {
         controls.add(modeBox);
         controls.add(collapse);
         controls.add(expand);
-        controls.add(reset);
         content.add(controls, BorderLayout.SOUTH);
     }
 
