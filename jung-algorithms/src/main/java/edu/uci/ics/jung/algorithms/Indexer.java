@@ -40,4 +40,22 @@ public class Indexer {
 		}
 		return map;
 	}
+	/**
+	 * Returns a <code>BidiMap</code> mapping each element of the collection to its
+	 * index as encountered while iterating over the collection. The purpose
+	 * of the index operation is to supply an O(1) replacement operation for the
+	 * O(n) <code>indexOf(element)</code> method of a <code>List</code>
+	 * @param <T>
+	 * @param collection
+	 * @param start start index
+	 * @return
+	 */
+	public static <T> BidiMap<T,Integer> create(Collection<T> collection, int start) {
+		BidiMap<T,Integer> map = new DualHashBidiMap<T,Integer>();
+		int i=start;
+		for(T t : collection) {
+			map.put(t,i++);
+		}
+		return map;
+	}
 }
