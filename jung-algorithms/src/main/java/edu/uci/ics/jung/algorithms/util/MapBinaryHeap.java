@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
@@ -38,8 +39,8 @@ public class MapBinaryHeap<T>
     extends AbstractCollection<T> 
     implements Collection<T>
 {
-	private Vector<T> heap;            // holds the heap as an implicit binary tree
-    private HashMap<T,Integer> object_indices; // maps each object in the heap to its index in the heap
+	private Vector<T> heap = new Vector<T>();            // holds the heap as an implicit binary tree
+    private Map<T,Integer> object_indices = new HashMap<T,Integer>(); // maps each object in the heap to its index in the heap
     private Comparator<T> comp;
     private final static int TOP = 0;   // the index of the top of the heap
 
@@ -70,6 +71,7 @@ public class MapBinaryHeap<T>
      */
     public MapBinaryHeap(Collection<T> c)
     {
+    	this();
         addAll(c);
     }
     
