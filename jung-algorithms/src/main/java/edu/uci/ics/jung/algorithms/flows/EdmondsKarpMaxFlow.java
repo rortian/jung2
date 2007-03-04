@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.Buffer;
+import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
@@ -61,7 +62,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
     private Map<V,Number> parentCapacityMap = new HashMap<V,Number>();
     private Map<E,Number> edgeCapacityMap;
     private Map<E,Number> edgeFlowMap;
-    private Transformer<DirectedGraph<V,E>,E> edgeFactory;
+    private Factory<E> edgeFactory;
 
     /**
      * Constructs a new instance of the algorithm solver for a given graph, source, and sink.
@@ -76,7 +77,10 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
      */
     public EdmondsKarpMaxFlow(DirectedGraph<V,E> directedGraph, V source, V sink, 
     		Map<E,Number> edgeCapacityMap, Map<E,Number> edgeFlowMap,
-    		Transformer<DirectedGraph<V,E>,E> edgeFactory) {
+    		Factory<E> edgeFactory) {
+    	System.err.println("edgeFlowMap="+edgeFlowMap);
+    	System.err.println("edges="+directedGraph.getEdges());
+    	System.err.println("edgeCapacityMap="+edgeCapacityMap);
     	
     	if(directedGraph.getVertices().contains(source) == false ||
     			directedGraph.getVertices().contains(sink) == false) {
@@ -258,7 +262,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
             V destination = mFlowGraph.getDest(edge);
 
             if(mFlowGraph.isPredecessor(source, destination) == false) {
-            	E backEdge = edgeFactory.transform(mFlowGraph);
+            	E backEdge = edgeFactory.create();
             	mFlowGraph.addEdge(backEdge, destination, source, EdgeType.DIRECTED);
                 residualCapacityMap.put(backEdge, 0);
             }
