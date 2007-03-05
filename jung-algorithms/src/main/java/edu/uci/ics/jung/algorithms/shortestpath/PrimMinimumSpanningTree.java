@@ -9,7 +9,6 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
@@ -21,13 +20,13 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V>
  * @param <E>
  */
-public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree<V,E>> {
+public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Graph<V,E>> {
 	
-	protected Factory<Tree<V,E>> treeFactory;
+	protected Factory<? extends Graph<V,E>> treeFactory;
 	protected Transformer<E,Double> weights = 
 		(Transformer<E,Double>)new ConstantTransformer(1.0);
 	
-	public PrimMinimumSpanningTree(Factory<Tree<V,E>> factory) {
+	public PrimMinimumSpanningTree(Factory<? extends Graph<V,E>> factory) {
 		this(factory, null);
 	}
 
@@ -37,7 +36,7 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
 	 * @param root
 	 * @param weights
 	 */
-	public PrimMinimumSpanningTree(Factory<Tree<V,E>> factory, 
+	public PrimMinimumSpanningTree(Factory<? extends Graph<V,E>> factory, 
 			Transformer<E, Double> weights) {
 		this.treeFactory = factory;
 		if(weights != null) {
@@ -48,9 +47,9 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
 	/**
 	 * @param graph the Graph to find MST in
 	 */
-    public Tree<V,E> transform(Graph<V,E> graph) {
+    public Graph<V,E> transform(Graph<V,E> graph) {
 		Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
-		Tree<V,E> tree = treeFactory.create();
+		Graph<V,E> tree = treeFactory.create();
 		V root = findRoot(graph);
 		if(graph.getVertices().contains(root)) {
 			tree.addVertex(root);
@@ -77,7 +76,7 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
     	return null;
     }
 	
-	protected void updateTree(Tree<V,E> tree, Graph<V,E> graph, Collection<E> unfinishedEdges) {
+	protected void updateTree(Graph<V,E> tree, Graph<V,E> graph, Collection<E> unfinishedEdges) {
 		Collection<V> tv = tree.getVertices();
 		double minCost = Double.MAX_VALUE;
 		E nextEdge = null;
