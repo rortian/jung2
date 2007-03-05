@@ -44,7 +44,7 @@ public class MinimumSpanningForest2<V,E> {
 	 */
 	public MinimumSpanningForest2(Graph<V, E> graph, 
 			Factory<Forest<V,E>> factory, 
-			Factory<Tree<V,E>> treeFactory,
+			Factory<? extends Graph<V,E>> treeFactory,
 			Transformer<E, Double> weights) {
 		this(graph, factory.create(), 
 				treeFactory, 
@@ -66,7 +66,7 @@ public class MinimumSpanningForest2<V,E> {
 	 */
 	public MinimumSpanningForest2(Graph<V, E> graph, 
 			Forest<V,E> forest, 
-			Factory<Tree<V,E>> treeFactory,
+			Factory<? extends Graph<V,E>> treeFactory,
 			Transformer<E, Double> weights) {
 		
 		if(forest.getVertexCount() != 0) {
@@ -85,7 +85,11 @@ public class MinimumSpanningForest2<V,E> {
 		for(Graph<V,E> component : components) {
 			PrimMinimumSpanningTree<V,E> mst = 
 				new PrimMinimumSpanningTree<V,E>(treeFactory, weights);
-			TreeUtils.addSubTree(forest, mst.transform(component), null, null);
+			Graph<V,E> subTree = mst.transform(component);
+			if(subTree instanceof Tree) {
+		
+				TreeUtils.addSubTree(forest, (Tree<V,E>)subTree, null, null);
+			}
 //			forest.getTrees().add(mst.transform(component));
 		}
 	}

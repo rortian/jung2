@@ -3,6 +3,7 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 import junit.framework.TestCase;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -20,7 +21,7 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		PrimMinimumSpanningTree pmst = 
 			new PrimMinimumSpanningTree(SparseTree.<String,Integer>getFactory());
 		
-		Tree<String,Integer> mst = pmst.transform(tree);
+		Graph<String,Integer> mst = pmst.transform(tree);
 		System.err.println("mst = "+mst);
 		
 //		assertEquals(tree.getVertices(), mst.getVertices());
@@ -37,7 +38,7 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		PrimMinimumSpanningTree pmst = 
 			new PrimMinimumSpanningTree(SparseTree.<String,Integer>getFactory());
 		
-		Tree<String,Integer> mst = pmst.transform(graph);
+		Graph<String,Integer> mst = pmst.transform(graph);
 		System.err.println("mst = "+mst);
 		
 	}
@@ -51,7 +52,7 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		PrimMinimumSpanningTree pmst = 
 			new PrimMinimumSpanningTree(SparseTree.<String,Integer>getFactory());
 		
-		Tree<String,Integer> mst = pmst.transform(graph);
+		Graph<String,Integer> mst = pmst.transform(graph);
 		System.err.println("mst = "+mst);
 		
 	}
