@@ -69,6 +69,11 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Tree
     			return v;
     		}
     	}
+    	// if there is no obvious root, pick any vertex
+    	if(graph.getVertexCount() > 0) {
+    		return graph.getVertices().iterator().next();
+    	}
+    	// this graph has no vertices
     	return null;
     }
 	
