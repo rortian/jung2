@@ -181,6 +181,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
                 break;
             }
             
+            // TODO should this call g.getOutEdges(v) instead?
             for (E e : getIncidentEdges(v) )
             {
                 for (V w : g.getIncidentVertices(e))
