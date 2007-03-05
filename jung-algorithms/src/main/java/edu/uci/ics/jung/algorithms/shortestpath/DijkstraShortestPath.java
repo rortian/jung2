@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.jung.graph.Graph;
 
 /**
@@ -30,6 +32,7 @@ import edu.uci.ics.jung.graph.Graph;
  * by the iterator) by nondecreasing distance from <code>source</code>.</p>
  * 
  * @author Joshua O'Madadhain
+ * @author Tom Nelson converted to jung2
  * @see DijkstraDistance
  */
 public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements ShortestPath<V,E>
@@ -44,7 +47,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * @param nev   the class responsible for returning weights for edges
      * @param cached    specifies whether the results are to be cached
      */
-    public DijkstraShortestPath(Graph<V,E> g, Map<E,Number> nev, boolean cached)
+    public DijkstraShortestPath(Graph<V,E> g, Transformer<E,Number> nev, boolean cached)
     {
         super(g, nev, cached);
     }
@@ -57,7 +60,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * @param g     the graph on which distances will be calculated
      * @param nev   the class responsible for returning weights for edges
      */
-    public DijkstraShortestPath(Graph<V,E> g, Map<E,Number> nev)
+    public DijkstraShortestPath(Graph<V,E> g, Transformer<E,Number> nev)
     {
         super(g, nev);
     }
@@ -105,13 +108,13 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      */
 	public E getIncomingEdge(V source, V target)
 	{
-//        if (source.getGraph() != g)
-//            throw new IllegalArgumentException("Specified source vertex " + 
-//                    source + " is not part of graph " + g);
-
-//        if (target.getGraph() != g)
-//            throw new IllegalArgumentException("Specified target vertex " + 
-//                    target + " is not part of graph " + g);
+        if (g.getVertices().contains(source) == false)
+            throw new IllegalArgumentException("Specified source vertex " + 
+                    source + " is not part of graph " + g);
+//
+        if (g.getVertices().contains(target) == false)
+            throw new IllegalArgumentException("Specified target vertex " + 
+                    target + " is not part of graph " + g);
 
         Set<V> targets = new HashSet<V>();
         targets.add(target);
@@ -150,15 +153,17 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * If either vertex is not in the graph for which this instance
      * was created, throws <code>IllegalArgumentException</code>.
      */
-	public List getPath(V source, V target)
+	public List<E> getPath(V source, V target)
 	{
+		if(g.getVertices().contains(source) == false) 
 //        if (source.getGraph() != g)
-//            throw new IllegalArgumentException("Specified source vertex " + 
-//                    source + " is not part of graph " + g);
+            throw new IllegalArgumentException("Specified source vertex " + 
+                    source + " is not part of graph " + g);
 //
+		if(g.getVertices().contains(target) == false) 
 //        if (target.getGraph() != g)
-//            throw new IllegalArgumentException("Specified target vertex " + 
-//                    target + " is not part of graph " + g);
+            throw new IllegalArgumentException("Specified target vertex " + 
+                    target + " is not part of graph " + g);
         
         LinkedList<E> path = new LinkedList<E>();
 
@@ -201,9 +206,9 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      */
 	public LinkedHashMap<V,E> getIncomingEdgeMap(V source, int numDests)
 	{
-//        if (source.getGraph() != g)
-//            throw new IllegalArgumentException("Specified source vertex " + 
-//                    source + " is not part of graph " + g);
+        if (g.getVertices().contains(source) == false)
+            throw new IllegalArgumentException("Specified source vertex " + 
+                    source + " is not part of graph " + g);
 
         if (numDests < 1 || numDests > g.getVertexCount())
             throw new IllegalArgumentException("numDests must be >= 1 " + 

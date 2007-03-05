@@ -19,6 +19,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
+
 import edu.uci.ics.jung.algorithms.util.BasicMapEntry;
 import edu.uci.ics.jung.algorithms.util.ConstantMap;
 import edu.uci.ics.jung.algorithms.util.MapBinaryHeap;
@@ -57,14 +60,14 @@ import edu.uci.ics.jung.graph.Graph;
  * when appropriate so that the distances can be recalculated.</p>
  * 
  * @author Joshua O'Madadhain
+ * @author Tom Nelson converted to jung2
  */
 public class DijkstraDistance<V,E> implements Distance<V>
 {
     protected Graph<V,E> g;
-    protected Map<E,Number> nev;// = new HashMap<E,Number>();
+    protected Transformer<E,Number> nev;
     protected Map<V,SourceData> sourceMap;   // a map of source vertices to an instance of SourceData
     protected boolean cached;
-//    protected static final NumberEdgeValue dev = new ConstantEdgeValue(new Integer(1));
     protected final Map<E,Number> dev = new ConstantMap<E,Number>(new Integer(1));
     protected double max_distance;
     protected int max_targets;
@@ -79,8 +82,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param nev   the class responsible for returning weights for edges
      * @param cached    specifies whether the results are to be cached
      */
-    public DijkstraDistance(Graph<V,E> g, Map<E,Number> nev, boolean cached)
-    {
+    public DijkstraDistance(Graph<V,E> g, Transformer<E,Number> nev, boolean cached) {
         this.g = g;
         this.nev = nev;
         this.sourceMap = new HashMap<V,SourceData>();
@@ -97,8 +99,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param g     the graph on which distances will be calculated
      * @param nev   the class responsible for returning weights for edges
      */
-    public DijkstraDistance(Graph<V,E> g, Map<E,Number> nev)
-    {
+    public DijkstraDistance(Graph<V,E> g, Transformer<E,Number> nev) {
         this(g, nev, true);
     }
     
@@ -109,9 +110,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * 
      * @param g     the graph on which distances will be calculated
      */ 
-    public DijkstraDistance(Graph<V,E> g)
-    {
-        this(g, new ConstantMap<E,Number>(1), true);
+    public DijkstraDistance(Graph<V,E> g) {
+        this(g, new ConstantTransformer(1), true);
     }
 
     /**
@@ -122,9 +122,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param g     the graph on which distances will be calculated
      * @param cached    specifies whether the results are to be cached
      */ 
-    public DijkstraDistance(Graph<V,E> g, boolean cached)
-    {
-        this(g, new ConstantMap<E,Number>(1), cached);
+    public DijkstraDistance(Graph<V,E> g, boolean cached) {
+        this(g, new ConstantTransformer(1), cached);
     }
     
     /**
@@ -150,17 +149,13 @@ public class DijkstraDistance<V,E> implements Distance<V>
         SourceData sd = getSourceData(source);
 
         Set<V> to_get = new HashSet<V>();
-        if (targets != null)
-        {
+        if (targets != null) {
             to_get.addAll(targets);
             Set<V> existing_dists = sd.distances.keySet();
-            existing_dists.removeAll(targets);
-//            for (Iterator iter = targets.iterator(); iter.hasNext(); )
-//            {
-//                Object o = iter.next();
-//                if (existing_dists.contains(o))
-//                    to_get.remove(o);
-//            }
+            for(V o : targets) {
+                if (existing_dists.contains(o))
+                    to_get.remove(o);
+            }
         }
         
         // if we've exceeded the max distance or max # of distances we're willing to calculate, or
@@ -192,7 +187,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
                 {
                     if (!sd.distances.containsKey(w))
                     {
-                        double edge_weight = nev.get(e).doubleValue();
+                        double edge_weight = nev.transform(e).doubleValue();
                         if (edge_weight < 0)
                             throw new IllegalArgumentException("Edges weights must be non-negative");
                         double new_dist = v_dist + edge_weight;
@@ -233,7 +228,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      */
     protected Collection<E> getIncidentEdges(V v)
     {
-            return g.getIncidentEdges(v);
+            return g.getOutEdges(v);
+//            g.getIncidentEdges(v);
 
     }
 
@@ -249,7 +245,13 @@ public class DijkstraDistance<V,E> implements Distance<V>
      */
     public Number getDistance(V source, V target)
     {
-
+        if (g.getVertices().contains(target) == false)
+            throw new IllegalArgumentException("Specified target vertex " + 
+                    target + " is not part of graph " + g);
+        if (g.getVertices().contains(source) == false)
+            throw new IllegalArgumentException("Specified source vertex " + 
+                    source + " is not part of graph " + g);
+        
         Set<V> targets = new HashSet<V>();
         targets.add(target);
         Map<V,Number> distanceMap = getDistanceMap(source, targets);
@@ -259,15 +261,16 @@ public class DijkstraDistance<V,E> implements Distance<V>
 
     public Map<V,Number> getDistanceMap(V source, Collection<V> targets)
     {
-
-        if (targets.size() > max_targets)
+       if (g.getVertices().contains(source) == false)
+            throw new IllegalArgumentException("Specified source vertex " + 
+                    source + " is not part of graph " + g);
+       if (targets.size() > max_targets)
             throw new IllegalArgumentException("size of target set exceeds maximum " +
                     "number of targets allowed: " + this.max_targets);
         
         Map<V,Number> distanceMap = 
         	singleSourceShortestPath(source, targets, 
         			(int)Math.min(g.getVertexCount(), max_targets));
-        
         if (!cached)
             reset(source);
         
@@ -317,6 +320,11 @@ public class DijkstraDistance<V,E> implements Distance<V>
     public LinkedHashMap<V,Number> getDistanceMap(V source, int numDests)
     {
 
+    	if(g.getVertices().contains(source) == false) {
+            throw new IllegalArgumentException("Specified source vertex " + 
+                    source + " is not part of graph " + g);
+    		
+    	}
         if (numDests < 1 || numDests > g.getVertexCount())
             throw new IllegalArgumentException("numDests must be >= 1 " + 
                 "and <= g.numVertices()");
