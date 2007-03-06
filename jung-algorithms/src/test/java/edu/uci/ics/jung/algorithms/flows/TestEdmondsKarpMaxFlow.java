@@ -20,6 +20,7 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
@@ -124,7 +125,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 				graph,
 				0,
 				5,
-				edgeCapacityMap,
+				MapTransformer.<Number,Number>getInstance(edgeCapacityMap),
 				edgeFlowMap,
 				edgeFactory);
 		ek.evaluate();
@@ -202,7 +203,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 				graph,
 				0,
 				5,
-				edgeCapacityMap,
+				MapTransformer.<Number,Number>getInstance(edgeCapacityMap),
 				edgeFlowMap,
 				edgeFactory);
 		ek.evaluate();

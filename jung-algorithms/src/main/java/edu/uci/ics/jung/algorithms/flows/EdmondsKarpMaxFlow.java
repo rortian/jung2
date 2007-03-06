@@ -60,7 +60,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
     private Map<E,Number> residualCapacityMap = new HashMap<E,Number>();
     private Map<V,V> parentMap = new HashMap<V,V>();
     private Map<V,Number> parentCapacityMap = new HashMap<V,Number>();
-    private Map<E,Number> edgeCapacityMap;
+    private Transformer<E,Number> edgeCapacityTransformer;
     private Map<E,Number> edgeFlowMap;
     private Factory<E> edgeFactory;
 
@@ -71,16 +71,13 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
      * @param directedGraph the flow graph
      * @param source the source vertex
      * @param sink the sink vertex
-     * @param edgeCapacityMap the map that stores the capacity for each edge.
+     * @param edgeCapacityTransformer the transformer that gets the capacity for each edge.
      * @param edgeFlowMap the map where the solver will place the value of the flow for each edge
      * @param edgeFactory used to create new edge instances for backEdges
      */
     public EdmondsKarpMaxFlow(DirectedGraph<V,E> directedGraph, V source, V sink, 
-    		Map<E,Number> edgeCapacityMap, Map<E,Number> edgeFlowMap,
+    		Transformer<E,Number> edgeCapacityTransformer, Map<E,Number> edgeFlowMap,
     		Factory<E> edgeFactory) {
-    	System.err.println("edgeFlowMap="+edgeFlowMap);
-    	System.err.println("edges="+directedGraph.getEdges());
-    	System.err.println("edgeCapacityMap="+edgeCapacityMap);
     	
     	if(directedGraph.getVertices().contains(source) == false ||
     			directedGraph.getVertices().contains(sink) == false) {
@@ -94,7 +91,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         this.source = source;
         this.target = sink;
         this.edgeFlowMap = edgeFlowMap;
-        this.edgeCapacityMap = edgeCapacityMap;
+        this.edgeCapacityTransformer = edgeCapacityTransformer;
         this.edgeFactory = edgeFactory;
         try {
 			mFlowGraph = directedGraph.getClass().newInstance();
@@ -251,7 +248,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
 
         for (int eIdx=0;eIdx< edgeList.size();eIdx++) {
             E edge = edgeList.get(eIdx);
-            Number capacity = edgeCapacityMap.get(edge);
+            Number capacity = edgeCapacityTransformer.transform(edge);
 
             if (capacity == null) {
                 throw new IllegalArgumentException("Edge capacities must be provided in map passed to ctor");
@@ -272,7 +269,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
     protected void finalizeIterations() {
 
         for (E currentEdge : mFlowGraph.getEdges()) {
-            Number capacity = edgeCapacityMap.get(currentEdge);
+            Number capacity = edgeCapacityTransformer.transform(currentEdge);
             
             Number residualCapacity = residualCapacityMap.get(currentEdge);
             if (capacity != null) {
@@ -284,7 +281,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         Set<E> backEdges = new HashSet<E>();
         for (E currentEdge: mFlowGraph.getEdges()) {
         	
-            if (edgeCapacityMap.get(currentEdge) == null) {
+            if (edgeCapacityTransformer.transform(currentEdge) == null) {
                 backEdges.add(currentEdge);
             } else {
                 residualCapacityMap.remove(currentEdge);
