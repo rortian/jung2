@@ -365,6 +365,9 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     public void setParallelEdgeIndexFunction(
             EdgeIndexFunction<V, E> parallelEdgeIndexFunction) {
         this.parallelEdgeIndexFunction = parallelEdgeIndexFunction;
+        // reset the edge shape transformer, as the parallel edge index function
+        // is used by it
+        this.setEdgeShapeTransformer(getEdgeShapeTransformer());
     }
 
     /* (non-Javadoc)
