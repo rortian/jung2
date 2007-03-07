@@ -52,6 +52,28 @@ public class Graphs {
 	}
 	
 	/**
+	 * return a synchronized Forest backed by the passed Forest
+	 * @param <V>
+	 * @param <E>
+	 * @param graph
+	 * @return
+	 */
+	public static <V,E> SynchronizedForest<V,E> synchronizedForest(Forest<V,E> forest) {
+		return new SynchronizedForest<V,E>(forest);
+	}
+	
+	/**
+	 * return a synchronized Tree backed by the passed Tree
+	 * @param <V>
+	 * @param <E>
+	 * @param graph
+	 * @return
+	 */
+	public static <V,E> SynchronizedTree<V,E> synchronizedTree(Tree<V,E> tree) {
+		return new SynchronizedTree<V,E>(tree);
+	}
+	
+	/**
 	 * return an unmodifiable Graph backed by the passed Graph
 	 * @param <V>
 	 * @param <E>
@@ -455,10 +477,6 @@ public class Graphs {
 		private SynchronizedUndirectedGraph(UndirectedGraph<V,E> delegate) {
 			super(delegate);
 		}
-//	    public boolean addEdge(E e, V v1, V v2, boolean directed) {
-//	        throw new UnsupportedOperationException("Cannot add a directed edge to an undirected graph");
-//	    }
-
 	}
 	
 	static class SynchronizedDirectedGraph<V,E> extends SynchronizedAbstractGraph<V,E> 
@@ -468,20 +486,50 @@ public class Graphs {
 			super(delegate);
 		}
 
-		public V getDest(E directed_edge) {
+		public synchronized V getDest(E directed_edge) {
 			return ((DirectedGraph<V,E>)delegate).getDest(directed_edge);
 		}
 
-		public V getSource(E directed_edge) {
+		public synchronized V getSource(E directed_edge) {
 			return ((DirectedGraph<V,E>)delegate).getSource(directed_edge);
 		}
 
-		public boolean isDest(V vertex, E edge) {
+		public synchronized boolean isDest(V vertex, E edge) {
 			return ((DirectedGraph<V,E>)delegate).isDest(vertex, edge);
 		}
 
-		public boolean isSource(V vertex, E edge) {
+		public synchronized boolean isSource(V vertex, E edge) {
 			return ((DirectedGraph<V,E>)delegate).isSource(vertex, edge);
+		}
+	}
+	
+	static class SynchronizedTree<V,E> extends SynchronizedForest<V,E> implements Tree<V,E> {
+
+		public SynchronizedTree(Tree<V, E> delegate) {
+			super(delegate);
+		}
+
+		public synchronized int getDepth(V vertex) {
+			return ((Tree<V,E>)delegate).getDepth(vertex);
+		}
+
+		public synchronized int getHeight() {
+			return ((Tree<V,E>)delegate).getHeight();
+		}
+
+		public synchronized V getRoot() {
+			return ((Tree<V,E>)delegate).getRoot();
+		}
+	}
+	
+	static class SynchronizedForest<V,E> extends SynchronizedDirectedGraph<V,E> implements Forest<V,E> {
+
+		public SynchronizedForest(Forest<V, E> delegate) {
+			super(delegate);
+		}
+
+		public synchronized Collection<Tree<V, E>> getTrees() {
+			return ((Forest<V,E>)delegate).getTrees();
 		}
 	}
 	
