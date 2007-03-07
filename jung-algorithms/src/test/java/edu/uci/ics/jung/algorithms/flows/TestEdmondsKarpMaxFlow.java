@@ -19,7 +19,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -53,25 +52,25 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
         Number w = new Integer(4);
         g.addVertex(w);
         
-        EdmondsKarpMaxFlow ek = new EdmondsKarpMaxFlow(g, source, sink, null, null, null);
+        EdmondsKarpMaxFlow<Number,Number> ek = null;
         
         try
         {
-            ek = new EdmondsKarpMaxFlow(g, source, source, null, null, null);
+            ek = new EdmondsKarpMaxFlow<Number,Number>(g, source, source, null, null, null);
             fail("source and sink vertices not distinct");
         }
         catch (IllegalArgumentException iae) {}
 
         try
         {
-            ek = new EdmondsKarpMaxFlow(h, source, w, null, null, null);
+            ek = new EdmondsKarpMaxFlow<Number,Number>(h, source, w, null, null, null);
             fail("source and sink vertices not both part of specified graph");
         }
         catch (IllegalArgumentException iae) {}
 
         try
         {
-            ek = new EdmondsKarpMaxFlow(g, source, v, null, null, null);
+            ek = new EdmondsKarpMaxFlow<Number,Number>(g, source, v, null, null, null);
             fail("source and sink vertices not both part of specified graph");
         }
         catch (IllegalArgumentException iae) {}
@@ -198,8 +197,8 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 		graph.addEdge(edgeFactory.create(),4,5,EdgeType.DIRECTED);
 		edgeCapacityMap.put(8,1);
 
-		EdmondsKarpMaxFlow ek =
-			new EdmondsKarpMaxFlow(
+		EdmondsKarpMaxFlow<Number,Number> ek =
+			new EdmondsKarpMaxFlow<Number,Number>(
 				graph,
 				0,
 				5,
