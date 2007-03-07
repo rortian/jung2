@@ -32,7 +32,7 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
     private EdgeType default_directed;
     private Factory<V> vertexFactory;
     private Factory<E> edgeFactory;
-    private Factory<Graph<V,E>> graphFactory;
+    private Factory<? extends Graph<V,E>> graphFactory;
     private Map<String,String> graphAttributes = new HashMap<String,String>();
 
     private Map<E,Map<String,String>> edgeAttributes =
@@ -49,7 +49,7 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
     /**
      * The default constructor
      */
-    public GraphMLFileHandler(Factory<Graph<V,E>> graphFactory, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+    public GraphMLFileHandler(Factory<? extends Graph<V,E>> graphFactory, Factory<V> vertexFactory, Factory<E> edgeFactory) {
     	this.graphFactory = graphFactory;
     	this.vertexFactory = vertexFactory;
     	this.edgeFactory = edgeFactory;

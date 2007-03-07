@@ -82,7 +82,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
     /**
      * Default constructor which uses default GraphMLFileHandler to parse the graph
      */
-    public GraphMLFile(Factory<Graph<V,E>> graphFactory, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+    public GraphMLFile(Factory<? extends Graph<V,E>> graphFactory, Factory<V> vertexFactory, Factory<E> edgeFactory) {
     	this(new GraphMLFileHandler<V,E>(graphFactory, vertexFactory, edgeFactory));
     }
 
