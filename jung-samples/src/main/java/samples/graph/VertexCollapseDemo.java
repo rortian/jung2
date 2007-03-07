@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -29,11 +30,13 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -43,9 +46,11 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
+import edu.uci.ics.jung.visualization.util.PredicatedParallelEdgeIndexFunction;
 
 
 /**
@@ -73,6 +78,12 @@ public class VertexCollapseDemo extends JApplet {
         "<p>Select a 'collapsed' vertex and use the Expand button"+
         "<p>to restore the collapsed vertices."+
         "<p>The Restore button will restore the original graph."+
+        "<p>If you select 2 (and only 2) vertices, then press"+
+        "<p>the Compress Edges button, parallel edges between"+
+        "<p>those two vertices will no longer be expanded."+
+        "<p>If you select 2 (and only 2) vertices, then press"+
+        "<p>the Expand Edges button, parallel edges between"+
+        "<p>those two vertices will be expanded."+
         "<p>You can drag the vertices with the mouse." +
         "<p>Use the 'Picking'/'Transforming' combo-box to switch"+
         "<p>between picking and transforming mode.</html>";
@@ -105,6 +116,18 @@ public class VertexCollapseDemo extends JApplet {
         vv =  new VisualizationViewer(visualizationModel, preferredSize);
         
         vv.getRenderContext().setVertexShapeTransformer(new ClusterVertexShapeFunction());
+        
+        final PredicatedParallelEdgeIndexFunction eif = PredicatedParallelEdgeIndexFunction.getInstance();
+        final Set exclusions = new HashSet();
+        eif.setPredicate(new Predicate() {
+
+			public boolean evaluate(Object e) {
+				
+				return exclusions.contains(e);
+			}});
+        
+        
+        vv.getRenderContext().setParallelEdgeIndexFunction(eif);
 
         vv.setBackground(Color.white);
         
@@ -178,6 +201,38 @@ public class VertexCollapseDemo extends JApplet {
                 }
             }});
         
+        JButton compressEdges = new JButton("Compress Edges");
+        compressEdges.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				Collection picked = vv.getPickedVertexState().getPicked();
+				if(picked.size() == 2) {
+					Pair pair = new Pair(picked);
+					Graph graph = layout.getGraph();
+					Collection edges = new HashSet(graph.getIncidentEdges(pair.getFirst()));
+					edges.retainAll(graph.getIncidentEdges(pair.getSecond()));
+					exclusions.addAll(edges);
+					vv.repaint();
+				}
+				
+			}});
+        
+        JButton expandEdges = new JButton("Expand Edges");
+        expandEdges.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				Collection picked = vv.getPickedVertexState().getPicked();
+				if(picked.size() == 2) {
+					Pair pair = new Pair(picked);
+					Graph graph = layout.getGraph();
+					Collection edges = new HashSet(graph.getIncidentEdges(pair.getFirst()));
+					edges.retainAll(graph.getIncidentEdges(pair.getSecond()));
+					exclusions.removeAll(edges);
+					vv.repaint();
+				}
+				
+			}});
+        
         JButton expand = new JButton("Expand");
         expand.addActionListener(new ActionListener() {
 
@@ -200,6 +255,7 @@ public class VertexCollapseDemo extends JApplet {
 
             public void actionPerformed(ActionEvent e) {
                 layout.setGraph(graph);
+                exclusions.clear();
                 vv.repaint();
             }});
         
@@ -220,6 +276,8 @@ public class VertexCollapseDemo extends JApplet {
         collapseControls.setBorder(BorderFactory.createTitledBorder("Picked"));
         collapseControls.add(collapse);
         collapseControls.add(expand);
+        collapseControls.add(compressEdges);
+        collapseControls.add(expandEdges);
         collapseControls.add(reset);
         controls.add(collapseControls);
         controls.add(modeBox);
