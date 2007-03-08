@@ -32,6 +32,23 @@
      </plugins>
   </build>
 
+    <reporting>
+        <plugins>
+            <plugin> <!-- generates aggergated javadoc for root project -->
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>2.0</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <links>
+                        <link>http://java.sun.com/javaee/5/docs/api</link>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                    </links>
+                </configuration>
+            </plugin>
+       </plugins>
+   </reporting>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -48,13 +65,16 @@
     <module>jung-visualization</module>
     <module>jung-algorithms</module>
     <module>jung-io</module>
-<!-- uncomment these if you have Java Advanced Imaging installed
+<!-- uncomment if you have jai installed
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
 -->
-<!-- uncomment these if you have Java3d installed
+<!-- uncomment if you have java3d installed
     <module>jung-3d</module>
     <module>jung-3d-demos</module>
 -->
+    <module>jung-awt-rendering</module>
+    <module>jung-swt-rendering</module>
+    <module>jung-swt-samples</module>
   </modules>
 </project>
