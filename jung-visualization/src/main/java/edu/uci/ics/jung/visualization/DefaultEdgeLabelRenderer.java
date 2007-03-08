@@ -109,7 +109,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
     * @param edge  the <code>Edge</code>
     * @return the default label renderer
     */
-    public <E> Component getEdgeLabelRendererComponent(JComponent vv, Object value,
+    public <E> Component getEdgeLabelRendererComponent(ScreenDevice vv, Object value,
             Font font, boolean isSelected, E edge) {
         
         super.setForeground(vv.getForeground());
@@ -141,15 +141,16 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * for more information.
      */
     public boolean isOpaque() { 
-        Color back = getBackground();
-        Component p = getParent(); 
-        if (p != null) { 
-            p = p.getParent(); 
-        }
-        boolean colorMatch = (back != null) && (p != null) && 
-        back.equals(p.getBackground()) && 
-        p.isOpaque();
-        return !colorMatch && super.isOpaque(); 
+//        Color back = getBackground();
+//        Component p = getParent(); 
+//        if (p != null) { 
+//            p = p.getParent(); 
+//        }
+//        boolean colorMatch = (back != null) && (p != null) && 
+//        back.equals(p.getBackground()) && 
+//        p.isOpaque();
+//        return !colorMatch && super.isOpaque();
+    	return false;
     }
 
     /**

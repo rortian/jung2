@@ -68,8 +68,8 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
     public void mousePressed(MouseEvent e) {
 		if (e.getModifiers() == modifiers) {
 			VisualizationViewer<V,E> vv = (VisualizationViewer) e.getSource();
-			GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
-			PickedState<V> pickedVertexState = vv.getPickedVertexState();
+			GraphElementAccessor<V, E> pickSupport = vv.getServer().getPickSupport();
+			PickedState<V> pickedVertexState = vv.getServer().getPickedVertexState();
             Layout<V,E> layout = vv.getGraphLayout();
 			if (pickSupport != null && pickedVertexState != null) {
 				// p is the screen point for the mouse event

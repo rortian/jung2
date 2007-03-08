@@ -24,14 +24,13 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.io.GraphMLFile;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -58,7 +57,7 @@ public class GraphFromGraphMLDemo {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<Number, Number> vv;
+    VisualizationComponent<Number, Number> vv;
     
     /**
      * create an instance of a simple graph with controls to
@@ -67,8 +66,11 @@ public class GraphFromGraphMLDemo {
      */
     public GraphFromGraphMLDemo(String filename) {
         
-    	Factory<DirectedGraph<Number,Number>> graphFactory = 
-    		DirectedSparseGraph.<Number,Number>getFactory();
+    	Factory<Graph<Number,Number>> graphFactory = new Factory<Graph<Number,Number>>() {
+    		public Graph<Number,Number> create() {
+    			return new DirectedSparseGraph<Number,Number>();
+    		}
+    	};
     	Factory<Number> vertexFactory = new Factory<Number>() {
     		int n = 0;
     		public Number create() { return n++; }
@@ -81,14 +83,14 @@ public class GraphFromGraphMLDemo {
     	
         // create a simple graph for the demo
         graph = file.load(filename);
-        vv =  new VisualizationViewer<Number,Number>(new FRLayout<Number,Number>(graph));
+        vv =  new VisualizationComponent<Number,Number>(new FRLayout<Number,Number>(graph));
 
         vv.addGraphMouseListener(new TestGraphMouseListener<Number>());
         vv.getRenderer().setVertexRenderer(
         		new GradientVertexRenderer<Number,Number>(
         				Color.white, Color.red, 
         				Color.white, Color.blue,
-        				vv.getPickedVertexState(),
+        				vv.getServer().getPickedVertexState(),
         				false));
         
         // add my listeners for ToolTips
@@ -125,13 +127,13 @@ public class GraphFromGraphMLDemo {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
 

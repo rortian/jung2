@@ -81,15 +81,15 @@ public class ScalingGraphMousePlugin extends AbstractGraphMousePlugin
             int amount = e.getWheelRotation();
             if(zoomAtMouse) {
                 if(amount > 0) {
-                    scaler.scale(vv, in, mouse);
+                    scaler.scale(vv.getServer(), in, mouse);
                 } else if(amount < 0) {
-                    scaler.scale(vv, out, mouse);
+                    scaler.scale(vv.getServer(), out, mouse);
                 }
             } else {
                 if(amount > 0) {
-                    scaler.scale(vv, in, center);
+                    scaler.scale(vv.getServer(), in, center);
                 } else if(amount < 0) {
-                    scaler.scale(vv, out, center);
+                    scaler.scale(vv.getServer(), out, center);
                 }
             }
             e.consume();

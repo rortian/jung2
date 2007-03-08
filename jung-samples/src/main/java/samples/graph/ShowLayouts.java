@@ -42,6 +42,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -159,9 +160,9 @@ public class ShowLayouts extends JApplet {
 
         Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
 
-        final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
+        final VisualizationComponent vv = new VisualizationComponent(new FRLayout(g));
         
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer(vv.getServer().getPickedVertexState(), Color.red, Color.yellow));
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
         vv.setGraphMouse(graphMouse);
@@ -171,13 +172,13 @@ public class ShowLayouts extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         JButton reset = new JButton("reset");

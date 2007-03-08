@@ -67,18 +67,17 @@ public class CrossoverScalingControl implements ScalingControl {
 	    Point2D transformedAt = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, at);
 	    
         if((scale*amount - crossover)*(scale*amount - crossover) < 0.001) {
-            // close to the control point, return both transformers to a scale of sqrt crossover value
+            // close to the control point, return both transformers to a scale of 1.0
             layoutTransformer.scale(inverseModelScale, inverseModelScale, transformedAt);
             viewTransformer.scale(inverseViewScale, inverseViewScale, at);
         } else if(scale*amount < crossover) {
-            // scale the viewTransformer, return the layoutTransformer to sqrt crossover value
+            // scale the viewTransformer, return the layoutTransformer to 1.0
 	        viewTransformer.scale(amount, amount, at);
 	        layoutTransformer.scale(inverseModelScale, inverseModelScale, transformedAt);
 	    } else {
-            // scale the layoutTransformer, return the viewTransformer to crossover value
+            // scale the layoutTransformer, return the viewTransformer to 1.0
 	        layoutTransformer.scale(amount, amount, transformedAt);
 	        viewTransformer.scale(inverseViewScale, inverseViewScale, at);
 	    }
-	    vv.repaint();
 	}
 }

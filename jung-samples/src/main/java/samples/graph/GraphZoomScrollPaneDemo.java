@@ -31,9 +31,11 @@ import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
+import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -66,7 +68,7 @@ public class GraphZoomScrollPaneDemo {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String, Number> vv;
+    VisualizationComponent<String, Number> vv;
     
     /**
      * create an instance of a simple graph with controls to
@@ -89,10 +91,10 @@ public class GraphZoomScrollPaneDemo {
             System.err.println("Can't load \""+imageLocation+"\"");
         }
         final ImageIcon icon = sandstoneIcon;
-        vv =  new VisualizationViewer<String,Number>(new KKLayout<String,Number>(graph));
+        vv =  new VisualizationComponent<String,Number>(new KKLayout<String,Number>(graph));
         
         if(icon != null) {
-            vv.addPreRenderPaintable(new VisualizationViewer.Paintable(){
+            vv.getServer().addPreRenderPaintable(new VisualizationServer.Paintable(){
                 public void paint(Graphics g) {
                     Dimension d = vv.getSize();
                     g.drawImage(icon.getImage(),0,0,d.width,d.height,vv);
@@ -100,7 +102,7 @@ public class GraphZoomScrollPaneDemo {
                 public boolean useTransform() { return false; }
             });
         }
-        vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
+        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
             int x;
             int y;
             Font font;
@@ -135,7 +137,7 @@ public class GraphZoomScrollPaneDemo {
         		new GradientVertexRenderer<String,Number>(
         				Color.white, Color.red, 
         				Color.white, Color.blue,
-        				vv.getPickedVertexState(),
+        				vv.getServer().getPickedVertexState(),
         				false));
         vv.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.lightGray));
         vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
@@ -170,13 +172,13 @@ public class GraphZoomScrollPaneDemo {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
 

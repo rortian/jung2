@@ -36,7 +36,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
+import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
@@ -72,7 +74,7 @@ public class ShortestPathDemo extends JPanel {
 		setBackground(Color.WHITE);
 		// show graph
         final Layout<String,Number> layout = new FRLayout<String,Number>(mGraph);
-        final VisualizationViewer<String,Number> vv = new VisualizationViewer<String,Number>(layout);
+        final VisualizationComponent<String,Number> vv = new VisualizationComponent<String,Number>(layout);
         vv.setBackground(Color.WHITE);
 
         vv.getRenderContext().setVertexDrawPaintTransformer(new MyVertexDrawPaintFunction<String>());
@@ -81,7 +83,7 @@ public class ShortestPathDemo extends JPanel {
         vv.getRenderContext().setEdgeStrokeTransformer(new MyEdgeStrokeFunction());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
         vv.setGraphMouse(new DefaultModalGraphMouse());
-        vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
+        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
             
             public boolean useTransform() {
                 return true;

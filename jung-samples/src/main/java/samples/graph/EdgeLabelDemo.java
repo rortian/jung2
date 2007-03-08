@@ -43,9 +43,10 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -80,7 +81,7 @@ public class EdgeLabelDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<Integer,Number> vv;
+    VisualizationComponent<Integer,Number> vv;
     
     /**
      */
@@ -102,7 +103,7 @@ public class EdgeLabelDemo extends JApplet {
         createEdges(v);
         
         Layout<Integer,Number> layout = new CircleLayout<Integer,Number>(graph);
-        vv =  new VisualizationViewer<Integer,Number>(layout, new Dimension(600,400));
+        vv =  new VisualizationComponent<Integer,Number>(layout, new Dimension(600,400));
         vv.setBackground(Color.white);
 
         vertexLabelRenderer = vv.getRenderContext().getVertexLabelRenderer();
@@ -114,8 +115,8 @@ public class EdgeLabelDemo extends JApplet {
             }
         };
         vv.getRenderContext().setEdgeLabelTransformer(stringer);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getServer().getPickedVertexState(), Color.red, Color.yellow));
         // add my listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
         
@@ -130,13 +131,13 @@ public class EdgeLabelDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         

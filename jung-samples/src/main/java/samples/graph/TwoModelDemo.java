@@ -28,9 +28,10 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -58,8 +59,8 @@ public class TwoModelDemo extends JApplet {
     /**
      * the visual components and renderers for the graph
      */
-    VisualizationViewer<String,Number> vv1;
-    VisualizationViewer<String,Number> vv2;
+    VisualizationComponent<String,Number> vv1;
+    VisualizationComponent<String,Number> vv2;
     
     /**
      * the normal transformer
@@ -91,9 +92,9 @@ public class TwoModelDemo extends JApplet {
 
         // create the two views, one for each model
         // they share the same renderer
-        vv1 = new VisualizationViewer<String,Number>(vm1, preferredSize);
-        vv2 = new VisualizationViewer<String,Number>(vm2, preferredSize);
-        vv1.setRenderContext(vv2.getRenderContext());
+        vv1 = new VisualizationComponent<String,Number>(vm1, preferredSize);
+        vv2 = new VisualizationComponent<String,Number>(vm2, preferredSize);
+        vv1.getServer().setRenderContext(vv2.getRenderContext());
         
         // share the model transformer between the two models
 //        layoutTransformer = vv1.getLayoutTransformer();
@@ -110,15 +111,15 @@ public class TwoModelDemo extends JApplet {
         
         // share one PickedState between the two views
         PickedState<String> ps = new MultiPickedState<String>();
-        vv1.setPickedVertexState(ps);
-        vv2.setPickedVertexState(ps);
+        vv1.getServer().setPickedVertexState(ps);
+        vv2.getServer().setPickedVertexState(ps);
         PickedState<Number> pes = new MultiPickedState<Number>();
-        vv1.setPickedEdgeState(pes);
-        vv2.setPickedEdgeState(pes);
+        vv1.getServer().setPickedEdgeState(pes);
+        vv2.getServer().setPickedEdgeState(pes);
         
         // set an edge paint function that will show picking for edges
-        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
-        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(),
+        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getServer().getPickedEdgeState(), Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getServer().getPickedVertexState(),
                 Color.red, Color.yellow));
         // add default listeners for ToolTips
         vv1.setVertexToolTipTransformer(new ToStringLabeller());
@@ -146,13 +147,13 @@ public class TwoModelDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv1, 1.1f, vv1.getCenter());
+                scaler.scale(vv1.getServer(), 1.1f, vv1.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv1, 1/1.1f, vv1.getCenter());
+                scaler.scale(vv1.getServer(), 1/1.1f, vv1.getCenter());
             }
         });
         

@@ -12,6 +12,7 @@ import java.awt.Component;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
+import edu.uci.ics.jung.visualization.ScreenDevice;
 
 /**
  * MagnifyTransformer wraps a MutableAffineTransformer and modifies
@@ -35,7 +36,7 @@ public class MagnifyTransformer extends LensTransformer implements MutableTransf
      * and registering to listen for size changes on the component
      * @param component
      */
-    public MagnifyTransformer(Component component) {
+    public MagnifyTransformer(ScreenDevice component) {
         this(component, new MutableAffineTransformer());
     }
     /**
@@ -43,7 +44,7 @@ public class MagnifyTransformer extends LensTransformer implements MutableTransf
      * @param component
      * @param delegate
      */
-    public MagnifyTransformer(Component component, MutableTransformer delegate) {
+    public MagnifyTransformer(ScreenDevice component, MutableTransformer delegate) {
     		super(component, delegate);
         this.magnification = 3.f;
    }

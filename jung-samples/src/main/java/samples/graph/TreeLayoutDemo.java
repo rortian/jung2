@@ -47,10 +47,11 @@ import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.Tree;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -102,7 +103,7 @@ public class TreeLayoutDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String,Integer> vv;
+    VisualizationComponent<String,Integer> vv;
     
     VisualizationServer.Paintable rings;
     
@@ -122,7 +123,7 @@ public class TreeLayoutDemo extends JApplet {
         layout = new TreeLayout<String,Integer>(graph);
         radialLayout = new RadialTreeLayout<String,Integer>(graph);
         radialLayout.setSize(new Dimension(600,600));
-        vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
+        vv =  new VisualizationComponent<String,Integer>(layout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Orthogonal());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
@@ -148,13 +149,13 @@ public class TreeLayoutDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         
@@ -166,12 +167,12 @@ public class TreeLayoutDemo extends JApplet {
 //					layout.setRadial(true);
 					vv.setGraphLayout(radialLayout);
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.addPreRenderPaintable(rings);
+					vv.getServer().addPreRenderPaintable(rings);
 				} else {
 //					layout.setRadial(false);
 					vv.setGraphLayout(layout);
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.removePreRenderPaintable(rings);
+					vv.getServer().removePreRenderPaintable(rings);
 				}
 				vv.repaint();
 			}});

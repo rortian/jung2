@@ -25,6 +25,7 @@ import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.ScreenDevice;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
@@ -65,7 +66,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         		Icon icon = rc.getVertexIconTransformer().transform(v);
         		if(icon != null) {
         		
-           			g.draw(icon, rc.getScreenDevice(), shape, (int)x, (int)y);
+           			g.draw(icon, shape, (int)x, (int)y);
 
         		} else {
         			paintShapeForVertex(rc, v, shape);
@@ -77,7 +78,7 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
     }
     
     protected boolean vertexHit(RenderContext<V,E> rc, Shape s) {
-        JComponent vv = rc.getScreenDevice();
+        ScreenDevice vv = rc.getScreenDevice();
         Rectangle deviceRectangle = null;
         if(vv != null) {
             Dimension d = vv.getSize();

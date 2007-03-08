@@ -90,7 +90,7 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      * @param vertex  the <code>Vertex</code>
      * @return the default label renderer
      */
-    public <V> Component getVertexLabelRendererComponent(JComponent vv, Object value,
+    public <V> Component getVertexLabelRendererComponent(ScreenDevice vv, Object value,
             Font font, boolean isSelected, V vertex) {
         
         super.setForeground(vv.getForeground());
@@ -121,15 +121,16 @@ public class DefaultVertexLabelRenderer extends JLabel implements
      * for more information.
      */
     public boolean isOpaque() { 
-        Color back = getBackground();
-        Component p = getParent(); 
-        if (p != null) { 
-            p = p.getParent(); 
-        }
-        boolean colorMatch = (back != null) && (p != null) && 
-        back.equals(p.getBackground()) && 
-        p.isOpaque();
-        return !colorMatch && super.isOpaque(); 
+//        Color back = getBackground();
+//        Component p = getParent(); 
+//        if (p != null) { 
+//            p = p.getParent(); 
+//        }
+//        boolean colorMatch = (back != null) && (p != null) && 
+//        back.equals(p.getBackground()) && 
+//        p.isOpaque();
+//        return !colorMatch && super.isOpaque();
+    	return false;
     }
 
     /**

@@ -8,7 +8,6 @@
  */
 package edu.uci.ics.jung.visualization.transform;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
@@ -17,6 +16,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+
+import edu.uci.ics.jung.visualization.ScreenDevice;
 
 /**
  * LensTransformer wraps a MutableAffineTransformer and modifies
@@ -54,10 +55,10 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @param component
      * @param delegate
      */
-    public LensTransformer(Component component, MutableTransformer delegate) {
+    public LensTransformer(ScreenDevice component, MutableTransformer delegate) {
     		super(delegate);
         setComponent(component);
-        component.addComponentListener(new ComponentListenerImpl());
+        component.addScreenDeviceListener(new ComponentListenerImpl());
    }
     
     /**
@@ -65,12 +66,12 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * declared private so it can't be overridden
      * @param component
      */
-    private void setComponent(Component component) {
+    private void setComponent(ScreenDevice component) {
 //    	this.viewTransformer = (ViewTransformer)component;
         Dimension d = component.getSize();
-        if(d.width <= 0 || d.height <= 0) {
-            d = component.getPreferredSize();
-        }
+//        if(d.width <= 0 || d.height <= 0) {
+//            d = component.getPreferredSize();
+//        }
         float ewidth = d.width/1.5f;
         float eheight = d.height/1.5f;
         ellipse.setFrame(d.width/2-ewidth/2, d.height/2-eheight/2, ewidth, eheight);
@@ -144,9 +145,9 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     /**
      * react to size changes on a component
      */
-    protected class ComponentListenerImpl extends ComponentAdapter {
-        public void componentResized(ComponentEvent e) {
-            setComponent(e.getComponent());
+    protected class ComponentListenerImpl implements ScreenDevice.ScreenDeviceListener {
+        public void screenResized(ScreenDevice e) {
+            setComponent(e);
          }
     }
     

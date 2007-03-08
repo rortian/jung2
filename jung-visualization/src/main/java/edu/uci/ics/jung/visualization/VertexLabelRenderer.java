@@ -37,6 +37,6 @@ public interface VertexLabelRenderer {
      *				valid value
      * @param	vertex  the vertex for the label being drawn.
      */
-    <T> Component getVertexLabelRendererComponent(JComponent vv, Object value,
+    <T> Component getVertexLabelRendererComponent(ScreenDevice vv, Object value,
 					   Font font, boolean isSelected, T vertex);
 }

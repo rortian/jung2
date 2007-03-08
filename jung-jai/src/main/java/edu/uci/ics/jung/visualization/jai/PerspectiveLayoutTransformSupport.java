@@ -37,14 +37,14 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
         this.perspectiveTransformer = 
             new PerspectiveShapeTransformer(new PerspectiveTransform(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT));
-        this.pickSupport = vv.getPickSupport();
+        this.pickSupport = vv.getServer().getPickSupport();
    }
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
-        vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, perspectiveTransformer);
-        vv.addPreRenderPaintable(lens);
+        vv.getServer().getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv.getServer()));
+        vv.getServer().getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, perspectiveTransformer);
+        vv.getServer().addPreRenderPaintable(lens);
         vv.setToolTipText(instructions);
         vv.repaint();
     }
@@ -52,7 +52,7 @@ public class PerspectiveLayoutTransformSupport<V,E> extends AbstractPerspectiveT
     public void deactivate() {
         vv.getRenderContext().setPickSupport(pickSupport);
         if(perspectiveTransformer != null) {
-            vv.removePreRenderPaintable(lens);
+            vv.getServer().removePreRenderPaintable(lens);
             vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, perspectiveTransformer.getDelegate());
         }
         vv.setToolTipText(defaultToolTipText);

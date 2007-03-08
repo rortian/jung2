@@ -49,11 +49,13 @@ import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.FourPassImageShaper;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -100,7 +102,7 @@ public class VertexImageShaperDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<Number, Number> vv;
+    VisualizationComponent<Number, Number> vv;
     
     /**
      * some icon names to use
@@ -146,7 +148,7 @@ public class VertexImageShaperDemo extends JApplet {
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);
         layout.setMaxIterations(100);
-        vv =  new VisualizationViewer<Number, Number>(layout, new Dimension(400,400));
+        vv =  new VisualizationComponent<Number, Number>(layout, new Dimension(400,400));
         
         // This demo uses a special renderer to turn outlines on and off.
         // you do not need to do this in a real application.
@@ -154,9 +156,9 @@ public class VertexImageShaperDemo extends JApplet {
         vv.getRenderer().setVertexRenderer(new DemoRenderer<Number,Number>());
 
         Transformer<Number,Paint> vpf = 
-            new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
+            new PickableVertexPaintTransformer<Number>(vv.getServer().getPickedVertexState(), Color.white, Color.yellow);
         vv.getRenderContext().setVertexFillPaintTransformer(vpf);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
@@ -192,10 +194,10 @@ public class VertexImageShaperDemo extends JApplet {
 
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
-        PickedState<Number> ps = vv.getPickedVertexState();
+        PickedState<Number> ps = vv.getServer().getPickedVertexState();
         ps.addItemListener(new PickWithIconListener<Number>(vertexIconTransformer));
         
-        vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
+        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
             int x;
             int y;
             Font font;
@@ -240,13 +242,13 @@ public class VertexImageShaperDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
 
@@ -537,7 +539,7 @@ public class VertexImageShaperDemo extends JApplet {
             if(icon != null) {
                 int xLoc = (int) (x - icon.getIconWidth()/2);
                 int yLoc = (int) (y - icon.getIconHeight()/2);
-                icon.paintIcon(rc.getScreenDevice(), g.getDelegate(), xLoc, yLoc);
+                icon.paintIcon(null, g.getDelegate(), xLoc, yLoc);
             }
         }
     }

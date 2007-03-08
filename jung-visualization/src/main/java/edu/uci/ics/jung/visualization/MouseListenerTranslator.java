@@ -26,16 +26,16 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
  */
 public class MouseListenerTranslator<V, E> extends MouseAdapter {
 
-	private VisualizationViewer<V,E> vv;
+	private VisualizationServer<V,E> vs;
 	private GraphMouseListener<V> gel;
 
 	/**
 	 * @param gel
 	 * @param vv
 	 */
-	public MouseListenerTranslator(GraphMouseListener<V> gel, VisualizationViewer<V,E> vv) {
+	public MouseListenerTranslator(GraphMouseListener<V> gel, VisualizationServer<V,E> vs) {
 		this.gel = gel;
-		this.vv = vv;
+		this.vs = vs;
 	}
 	
 	/**
@@ -49,8 +49,8 @@ public class MouseListenerTranslator<V, E> extends MouseAdapter {
 	    // adjust for scale and offset in the VisualizationViewer
 	    Point2D p = point;
 	    	//vv.getRenderContext().getBasicTransformer().inverseViewTransform(point);
-	    GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
-        Layout<V,E> layout = vv.getGraphLayout();
+	    GraphElementAccessor<V,E> pickSupport = vs.getPickSupport();
+        Layout<V,E> layout = vs.getGraphLayout();
 	    V v = null;
 	    if(pickSupport != null) {
 	        v = pickSupport.getVertex(layout, p.getX(), p.getY());

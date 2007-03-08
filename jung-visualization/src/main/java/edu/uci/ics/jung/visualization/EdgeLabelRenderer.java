@@ -10,6 +10,7 @@
 
 package edu.uci.ics.jung.visualization;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -37,7 +38,7 @@ public interface EdgeLabelRenderer {
      *				valid value
      * @param	vertex  the vertex for the label being drawn.
      */
-    <T> Component getEdgeLabelRendererComponent(JComponent vv, Object value,
+    <T> Component getEdgeLabelRendererComponent(ScreenDevice sd, Object value,
 					   Font font, boolean isSelected, T edge);
     
     boolean isRotateEdgeLabels();

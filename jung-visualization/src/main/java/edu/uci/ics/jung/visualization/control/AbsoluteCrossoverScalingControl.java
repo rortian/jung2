@@ -44,6 +44,6 @@ public class AbsoluteCrossoverScalingControl extends CrossoverScalingControl
         layoutTransformer.scale(inverseModelScale, inverseModelScale, transformedAt);
         viewTransformer.scale(inverseViewScale, inverseViewScale, at);
 
-        super.scale(vv, amount, at);
+        super.scale(vv.getServer(), amount, at);
     }
 }

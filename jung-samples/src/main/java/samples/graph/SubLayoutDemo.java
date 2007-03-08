@@ -46,9 +46,10 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -98,7 +99,7 @@ public class SubLayoutDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String,Number> vv;
+    VisualizationComponent<String,Number> vv;
 
     AggregateLayout<String,Number> clusteringLayout;
     
@@ -127,11 +128,11 @@ public class SubLayoutDemo extends JApplet {
         Dimension preferredSize = new Dimension(600,600);
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(clusteringLayout, preferredSize);
-        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        vv =  new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
         
-        ps = vv.getPickedVertexState();
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), 
+        ps = vv.getServer().getPickedVertexState();
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.red));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getServer().getPickedVertexState(), 
                 Color.red, Color.yellow));
         vv.setBackground(Color.white);
         
@@ -158,13 +159,13 @@ public class SubLayoutDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         

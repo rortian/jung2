@@ -32,6 +32,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Graphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
@@ -54,7 +55,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
 
 	private Graph<Number,Number> g = null;
 
-    private VisualizationViewer<Number,Number> vv = null;
+    private VisualizationComponent<Number,Number> vv = null;
 
     private AbstractLayout<Number,Number> layout = null;
 
@@ -76,7 +77,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         layout = new FRLayout2<Number,Number>(g);
 //        ((FRLayout)layout).setMaxIterations(200);
         
-        vv = new VisualizationViewer<Number,Number>(layout, new Dimension(600,600));
+        vv = new VisualizationComponent<Number,Number>(layout, new Dimension(600,600));
 
         JRootPane rp = this.getRootPane();
         rp.putClientProperty("defeatSystemEventQueueCheck", Boolean.TRUE);

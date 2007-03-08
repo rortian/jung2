@@ -26,6 +26,7 @@ import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.ScreenDevice;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
@@ -92,7 +93,7 @@ public class GradientVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
     }
     
     protected boolean vertexHit(RenderContext<V,E> rc, Shape s) {
-        JComponent vv = rc.getScreenDevice();
+        ScreenDevice vv = rc.getScreenDevice();
         Rectangle deviceRectangle = null;
         if(vv != null) {
             Dimension d = vv.getSize();

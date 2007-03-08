@@ -162,8 +162,8 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     	down = e.getPoint();
     	
 		if(added == false) {
-			vv.addPreRenderPaintable(annotationManager.getLowerAnnotationPaintable());
-			vv.addPostRenderPaintable(annotationManager.getUpperAnnotationPaintable());
+			vv.getServer().addPreRenderPaintable(annotationManager.getLowerAnnotationPaintable());
+			vv.getServer().addPostRenderPaintable(annotationManager.getUpperAnnotationPaintable());
 			added = true;
 		}
 
@@ -181,7 +181,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     		annotationManager.remove(annotation);
     	} else if(e.getModifiers() == modifiers) {
     		rectangularShape.setFrameFromDiagonal(down,down);
-    		vv.addPostRenderPaintable(lensPaintable);
+    		vv.getServer().addPostRenderPaintable(lensPaintable);
     	}
     	vv.repaint();
     }
@@ -214,7 +214,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         	}
         }
         down = null;
-        vv.removePostRenderPaintable(lensPaintable);
+        vv.getServer().removePostRenderPaintable(lensPaintable);
         vv.repaint();
     }
     

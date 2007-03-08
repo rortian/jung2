@@ -101,9 +101,9 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     	Point p = null;
     	if(position == Position.AUTO) {
     		Dimension vvd = rc.getScreenDevice().getSize();
-    		if(vvd.width == 0 || vvd.height == 0) {
-    			vvd = rc.getScreenDevice().getPreferredSize();
-    		}
+//    		if(vvd.width == 0 || vvd.height == 0) {
+//    			vvd = rc.getScreenDevice().getPreferredSize();
+//    		}
     		p = getAnchorPoint(bounds, d, positioner.getPosition(x, y, vvd));
     	} else {
     		p = getAnchorPoint(bounds, d, position);

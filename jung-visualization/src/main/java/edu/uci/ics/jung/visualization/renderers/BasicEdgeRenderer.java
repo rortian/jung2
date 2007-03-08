@@ -31,6 +31,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.ScreenDevice;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape.IndexedRendering;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
@@ -96,7 +97,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         boolean edgeHit = true;
         boolean arrowHit = true;
         Rectangle deviceRectangle = null;
-        JComponent vv = rc.getScreenDevice();
+        ScreenDevice vv = rc.getScreenDevice();
         if(vv != null) {
             Dimension d = vv.getSize();
             deviceRectangle = new Rectangle(0,0,d.width,d.height);

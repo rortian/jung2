@@ -29,10 +29,11 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
@@ -81,8 +82,8 @@ public class InternalFrameSatelliteViewDemo {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String,Number> vv;
-    VisualizationViewer<String,Number> satellite;
+    VisualizationComponent<String,Number> vv;
+    SatelliteVisualizationViewer<String,Number> satellite;
     
     JInternalFrame dialog;
     
@@ -100,9 +101,9 @@ public class InternalFrameSatelliteViewDemo {
 
         Layout<String,Number> layout = new ISOMLayout<String,Number>(graph);
 
-        vv = new VisualizationViewer<String,Number>(layout, new Dimension(600,600));
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv = new VisualizationComponent<String,Number>(layout, new Dimension(600,600));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getServer().getPickedVertexState(), Color.red, Color.yellow));
 
         // add my listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -111,8 +112,8 @@ public class InternalFrameSatelliteViewDemo {
 
         satellite =
             new SatelliteVisualizationViewer<String,Number>(vv, new Dimension(200,200));
-        satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
-        satellite.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
+        satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(satellite.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        satellite.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(satellite.getServer().getPickedVertexState(), Color.red, Color.yellow));
 
         ScalingControl satelliteScaler = new CrossoverScalingControl();
         satellite.scaleToLayout(satelliteScaler);
@@ -143,13 +144,13 @@ public class InternalFrameSatelliteViewDemo {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         JButton dismiss = new JButton("Dismiss");

@@ -51,10 +51,11 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.Tree;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -110,7 +111,7 @@ public class TreeCollapseDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String,Integer> vv;
+    VisualizationComponent<String,Integer> vv;
 
     VisualizationServer.Paintable rings;
 
@@ -138,7 +139,7 @@ public class TreeCollapseDemo extends JApplet {
         //layout1 = new FRLayout(graph);
         radialLayout = new RadialTreeLayout<String,Integer>(graph);
         radialLayout.setSize(new Dimension(600,600));
-        vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
+        vv =  new VisualizationComponent<String,Integer>(layout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
@@ -165,13 +166,13 @@ public class TreeCollapseDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
 
@@ -183,12 +184,12 @@ public class TreeCollapseDemo extends JApplet {
 //					layout.setRadial(true);
 					vv.setGraphLayout(radialLayout);
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.addPreRenderPaintable(rings);
+					vv.getServer().addPreRenderPaintable(rings);
 				} else {
 //					layout.setRadial(false);
 					vv.setGraphLayout(layout);
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.removePreRenderPaintable(rings);
+					vv.getServer().removePreRenderPaintable(rings);
 				}
 				vv.repaint();
 			}});
@@ -197,7 +198,7 @@ public class TreeCollapseDemo extends JApplet {
         collapse.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Collection picked =new HashSet(vv.getPickedVertexState().getPicked());
+                Collection picked =new HashSet(vv.getServer().getPickedVertexState().getPicked());
                 if(picked.size() == 1) {
                 	Object root = picked.iterator().next();
                     Forest inGraph = (Forest)layout.getGraph();
@@ -212,7 +213,7 @@ public class TreeCollapseDemo extends JApplet {
 						e1.printStackTrace();
 					}
 
-                    vv.getPickedVertexState().clear();
+                    vv.getServer().getPickedVertexState().clear();
                     vv.repaint();
                 }
             }});
@@ -221,13 +222,13 @@ public class TreeCollapseDemo extends JApplet {
         expand.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Collection picked = vv.getPickedVertexState().getPicked();
+                Collection picked = vv.getServer().getPickedVertexState().getPicked();
                 for(Object v : picked) {
                     if(v instanceof Forest) {
                         Forest inGraph = (Forest)layout.getGraph();
             			collapser.expand(inGraph, (Forest)v);
                     }
-                    vv.getPickedVertexState().clear();
+                    vv.getServer().getPickedVertexState().clear();
                    vv.repaint();
                 }
             }});

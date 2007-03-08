@@ -54,10 +54,11 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.LensMagnificationGraphMousePlugin;
@@ -105,7 +106,7 @@ public class LensDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String,Number> vv;
+    VisualizationComponent<String,Number> vv;
 
     /**
      * provides a Hyperbolic lens for the view
@@ -149,10 +150,10 @@ public class LensDemo extends JApplet {
         
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
-        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        vv =  new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
 
-        PickedState<String> ps = vv.getPickedVertexState();
-        PickedState<Number> pes = vv.getPickedEdgeState();
+        PickedState<String> ps = vv.getServer().getPickedVertexState();
+        PickedState<Number> pes = vv.getServer().getPickedEdgeState();
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
         vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
@@ -179,19 +180,19 @@ public class LensDemo extends JApplet {
         vv.addKeyListener(graphMouse.getModeKeyListener());
         
         hyperbolicViewSupport = 
-            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv, 
+            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv.getRenderContext().getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)), 
                     new ModalLensGraphMouse());
         hyperbolicLayoutSupport = 
-            new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv, 
+            new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv.getRenderContext().getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse());
         magnifyViewSupport = 
-            new ViewLensSupport<String,Number>(vv, new MagnifyShapeTransformer(vv,
+            new ViewLensSupport<String,Number>(vv, new MagnifyShapeTransformer(vv.getRenderContext().getScreenDevice(),
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         magnifyLayoutSupport = 
-            new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv, 
+            new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv.getRenderContext().getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         hyperbolicLayoutSupport.getLensTransformer().setEllipse(hyperbolicViewSupport.getLensTransformer().getEllipse());
@@ -203,13 +204,13 @@ public class LensDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         

@@ -84,7 +84,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
                     BufferedImage image = new BufferedImage(icon.getIconWidth(), 
                             icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
                     Graphics2D ig = image.createGraphics();
-                    icon.paintIcon(rc.getScreenDevice(), ig, 0, 0);
+                    icon.paintIcon(null, ig, 0, 0);
                     int imageWidth = image.getWidth(null);
                     int imageHeight = image.getHeight(null);
                     

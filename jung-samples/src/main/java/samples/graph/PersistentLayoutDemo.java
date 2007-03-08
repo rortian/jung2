@@ -20,8 +20,9 @@ import javax.swing.JPanel;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.PersistentLayout;
@@ -50,7 +51,7 @@ public class PersistentLayoutDemo {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<String,Number> vv;
+    VisualizationComponent<String,Number> vv;
     
     PersistentLayout<String,Number> persistentLayout;
 
@@ -67,7 +68,7 @@ public class PersistentLayoutDemo {
         persistentLayout = 
             new PersistentLayoutImpl<String,Number>(new FRLayout<String,Number>(graph));
 
-        vv = new VisualizationViewer<String,Number>(persistentLayout);
+        vv = new VisualizationComponent<String,Number>(persistentLayout);
         
         // add my listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());

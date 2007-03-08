@@ -99,9 +99,9 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             final VisualizationViewer<V,E> vv =
                 (VisualizationViewer<V,E>)e.getSource();
             final Point2D p = e.getPoint();//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
-            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+            GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
             if(pickSupport != null) {
-            	Graph<V,E> graph = vv.getModel().getGraphLayout().getGraph();
+            	Graph<V,E> graph = vv.getServer().getModel().getGraphLayout().getGraph();
             	// set default edge type
             	if(graph instanceof DirectedGraph) {
             		edgeIsDirected = EdgeType.DIRECTED;
@@ -109,26 +109,26 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             		edgeIsDirected = EdgeType.UNDIRECTED;
             	}
             	
-                final V vertex = pickSupport.getVertex(vv.getModel().getGraphLayout(), p.getX(), p.getY());
+                final V vertex = pickSupport.getVertex(vv.getServer().getModel().getGraphLayout(), p.getX(), p.getY());
                 if(vertex != null) { // get ready to make an edge
                     startVertex = vertex;
                     down = e.getPoint();
                     transformEdgeShape(down, down);
-                    vv.addPostRenderPaintable(edgePaintable);
+                    vv.getServer().addPostRenderPaintable(edgePaintable);
                     if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0
-                    		&& vv.getModel().getGraphLayout().getGraph() instanceof UndirectedGraph == false) {
+                    		&& vv.getServer().getModel().getGraphLayout().getGraph() instanceof UndirectedGraph == false) {
                         edgeIsDirected = EdgeType.DIRECTED;
                     }
                     if(edgeIsDirected == EdgeType.DIRECTED) {
                         transformArrowShape(down, e.getPoint());
-                        vv.addPostRenderPaintable(arrowPaintable);
+                        vv.getServer().addPostRenderPaintable(arrowPaintable);
                     }
                 } else { // make a new vertex
 
                     V newVertex = vertexFactory.create();
                     	new Integer(graph.getVertexCount());
                     vertexLocations.put(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
-                    Layout<V,E> layout = vv.getModel().getGraphLayout();
+                    Layout<V,E> layout = vv.getServer().getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
                         layout.lock(lockVertex,true);
                     }
@@ -154,8 +154,8 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             final VisualizationViewer<V,E> vv =
                 (VisualizationViewer<V,E>)e.getSource();
             final Point2D p = e.getPoint();//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
-            Layout<V,E> layout = vv.getModel().getGraphLayout();
-            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+            Layout<V,E> layout = vv.getServer().getModel().getGraphLayout();
+            GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
             if(pickSupport != null) {
                 final V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
                 if(vertex != null && startVertex != null) {
@@ -169,8 +169,8 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
             startVertex = null;
             down = null;
             edgeIsDirected = EdgeType.UNDIRECTED;
-            vv.removePostRenderPaintable(edgePaintable);
-            vv.removePostRenderPaintable(arrowPaintable);
+            vv.getServer().removePostRenderPaintable(edgePaintable);
+            vv.getServer().removePostRenderPaintable(arrowPaintable);
         }
     }
 

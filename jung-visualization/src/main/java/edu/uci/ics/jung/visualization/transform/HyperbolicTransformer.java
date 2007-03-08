@@ -8,10 +8,10 @@
  */
 package edu.uci.ics.jung.visualization.transform;
 
-import java.awt.Component;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
+import edu.uci.ics.jung.visualization.ScreenDevice;
 
 /**
  * HyperbolicTransformer wraps a MutableAffineTransformer and modifies
@@ -37,7 +37,7 @@ public class HyperbolicTransformer extends LensTransformer implements MutableTra
      * and registering to listen for size changes on the component
      * @param component
      */
-    public HyperbolicTransformer(Component component) {
+    public HyperbolicTransformer(ScreenDevice component) {
         this(component, new MutableAffineTransformer());
     }
     /**
@@ -45,7 +45,7 @@ public class HyperbolicTransformer extends LensTransformer implements MutableTra
      * @param component
      * @param delegate
      */
-    public HyperbolicTransformer(Component component, MutableTransformer delegate) {
+    public HyperbolicTransformer(ScreenDevice component, MutableTransformer delegate) {
     		super(component, delegate);
    }
     

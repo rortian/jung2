@@ -63,9 +63,10 @@ import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -226,7 +227,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected Map<Integer,Number> voltages = new HashMap<Integer,Number>();
     protected Map<Integer,Number> transparency = new HashMap<Integer,Number>();
     
-    protected VisualizationViewer<Integer,Number> vv;
+    protected VisualizationComponent<Integer,Number> vv;
     protected DefaultModalGraphMouse gm;
 //    protected Transformer affineTransformer;
     protected Set<Integer> seedVertices = new HashSet<Integer>();
@@ -252,9 +253,9 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         
         Layout<Integer,Number> layout = new FRLayout<Integer,Number>(g);
 //        layout.setSize(new Dimension(5000,5000));
-        vv = new VisualizationViewer<Integer,Number>(layout);
+        vv = new VisualizationComponent<Integer,Number>(layout);
 
-        PickedState<Integer> picked_state = vv.getPickedVertexState();
+        PickedState<Integer> picked_state = vv.getServer().getPickedVertexState();
 
 //        affineTransformer = vv.getLayoutTransformer();
         self_loop = new SelfLoopEdgePredicate<Integer,Number>();
@@ -277,11 +278,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         edgeDrawPaint = 
             new GradientPickedEdgePaintFunction<Integer,Number>(
                     new PickableEdgePaintTransformer<Integer,Number>(
-                            vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
+                            vv.getServer().getPickedEdgeState(),Color.black,Color.cyan), vv);
         edgeFillPaint = 
             new GradientPickedEdgePaintFunction<Integer,Number>(
                     new PickableEdgePaintTransformer<Integer,Number>(
-                            vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
+                            vv.getServer().getPickedEdgeState(),Color.black,Color.cyan), vv);
         
         vv.getRenderContext().setVertexFillPaintTransformer(seedFillColor);
         vv.getRenderContext().setVertexDrawPaintTransformer(seedDrawColor);
@@ -533,13 +534,13 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
 
@@ -1119,11 +1120,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
          */
         @SuppressWarnings("unchecked")
         protected void handlePopup(MouseEvent e) {
-            final VisualizationViewer<Integer,Number> vv = 
-                (VisualizationViewer<Integer,Number>)e.getSource();
+            final VisualizationComponent<Integer,Number> vv = 
+                (VisualizationComponent<Integer,Number>)e.getSource();
             Point2D p = e.getPoint();//vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
             
-            GraphElementAccessor<Integer,Number> pickSupport = vv.getPickSupport();
+            GraphElementAccessor<Integer,Number> pickSupport = vv.getServer().getPickSupport();
             if(pickSupport != null) {
                 final Integer v = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
                 if(v != null) {
@@ -1203,7 +1204,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         
         protected Color getColor2(E e)
         {
-            return vv.getPickedEdgeState().isPicked(e)? Color.CYAN : c2;
+            return vv.getServer().getPickedEdgeState().isPicked(e)? Color.CYAN : c2;
         }
         
 //        public Paint getFillPaint(E e)

@@ -50,10 +50,10 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
     
     public void activate() {
         lens = new Lens(perspectiveTransformer, vv.getSize());
-        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
-        vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, perspectiveTransformer);
-        vv.getRenderContext().setGraphicsContext(lensGraphicsDecorator);
-        vv.addPreRenderPaintable(lens);
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv.getServer()));
+        vv.getServer().getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, perspectiveTransformer);
+        vv.getServer().getRenderContext().setGraphicsContext(lensGraphicsDecorator);
+        vv.getServer().addPreRenderPaintable(lens);
         vv.setToolTipText(instructions);
         vv.repaint();
     }
@@ -61,7 +61,7 @@ public class PerspectiveViewTransformSupport<V,E> extends AbstractPerspectiveTra
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, perspectiveTransformer.getDelegate());
-        vv.removePreRenderPaintable(lens);
+        vv.getServer().removePreRenderPaintable(lens);
         vv.getRenderContext().setGraphicsContext(savedGraphicsDecorator);
         vv.setToolTipText(defaultToolTipText);
         vv.repaint();

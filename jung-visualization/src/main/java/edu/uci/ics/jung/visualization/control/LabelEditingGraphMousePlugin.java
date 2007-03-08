@@ -84,7 +84,7 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void mouseClicked(MouseEvent e) {
     	if(e.getModifiers() == modifiers && e.getClickCount() == 2) {
     		VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-    		GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+    		GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
     		if(pickSupport != null) {
     			Transformer<V,String> vs = vv.getRenderContext().getVertexLabelTransformer();
     			if(vs instanceof MapTransformer) {

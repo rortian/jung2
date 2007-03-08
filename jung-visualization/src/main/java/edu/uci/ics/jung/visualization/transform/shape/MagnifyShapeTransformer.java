@@ -15,6 +15,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
+import edu.uci.ics.jung.visualization.ScreenDevice;
 import edu.uci.ics.jung.visualization.transform.MagnifyTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -35,7 +36,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
      * Create an instance, setting values from the passed component
      * and registering to listen for size changes on the component.
      */
-    public MagnifyShapeTransformer(Component component) {
+    public MagnifyShapeTransformer(ScreenDevice component) {
         this(component, null);
     }
     
@@ -44,7 +45,7 @@ public class MagnifyShapeTransformer extends MagnifyTransformer
      * and registering to listen for size changes on the component,
      * with a possibly shared transform <code>delegate</code>.
      */
-    public MagnifyShapeTransformer(Component component, MutableTransformer delegate) {
+    public MagnifyShapeTransformer(ScreenDevice component, MutableTransformer delegate) {
         super(component, delegate);
    }
     

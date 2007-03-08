@@ -33,8 +33,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -63,7 +64,7 @@ public class UnicodeLabelDemo {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<Integer,Number> vv;
+    VisualizationComponent<Integer,Number> vv;
     
     boolean showLabels;
     
@@ -74,7 +75,7 @@ public class UnicodeLabelDemo {
         Integer[] v = createVertices(10);
         createEdges(v);
         
-        vv =  new VisualizationViewer<Integer,Number>(new FRLayout<Integer,Number>(graph));
+        vv =  new VisualizationComponent<Integer,Number>(new FRLayout<Integer,Number>(graph));
         vv.getRenderContext().setVertexLabelTransformer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
@@ -85,8 +86,8 @@ public class UnicodeLabelDemo {
         vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
         loadImages(v, vertexIconFunction.getIconMap());
         vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getServer().getPickedVertexState(), Color.white,  Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 
@@ -108,13 +109,13 @@ public class UnicodeLabelDemo {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
 

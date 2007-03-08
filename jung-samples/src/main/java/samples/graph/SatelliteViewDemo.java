@@ -38,14 +38,15 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.awt.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.SatelliteVisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
@@ -124,15 +125,15 @@ public class SatelliteViewDemo<V, E> extends JApplet {
             new DefaultVisualizationModel<String,Number>(layout, preferredSize1);
         
         // create 2 views that share the same model
-        final VisualizationViewer<String,Number> vv1 = 
-            new VisualizationViewer<String,Number>(vm, preferredSize1);
+        final VisualizationComponent<String,Number> vv1 = 
+            new VisualizationComponent<String,Number>(vm, preferredSize1);
         final SatelliteVisualizationViewer<String,Number> vv2 = 
             new SatelliteVisualizationViewer<String,Number>(vv1, preferredSize2);
         vv1.setBackground(Color.white);
-        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.cyan));
-        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(), Color.red, Color.yellow));
-        vv2.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv2.getPickedEdgeState(), Color.black, Color.cyan));
-        vv2.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv2.getPickedVertexState(), Color.red, Color.yellow));
+        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getServer().getPickedVertexState(), Color.red, Color.yellow));
+        vv2.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv2.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        vv2.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv2.getServer().getPickedVertexState(), Color.red, Color.yellow));
         vv1.getRenderer().setVertexRenderer(new GradientVertexRenderer<String,Number>(Color.red, Color.white, true));
         vv1.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv1.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
@@ -171,13 +172,13 @@ public class SatelliteViewDemo<V, E> extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv1, 1.1f, vv1.getCenter());
+                scaler.scale(vv1.getServer(), 1.1f, vv1.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv1, 1/1.1f, vv1.getCenter());
+                scaler.scale(vv1.getServer(), 1/1.1f, vv1.getCenter());
             }
         });
         
@@ -209,9 +210,9 @@ public class SatelliteViewDemo<V, E> extends JApplet {
     
     protected void showGrid(VisualizationViewer vv, boolean state) {
     		if(state == true) {
-    			vv.addPreRenderPaintable(viewGrid);
+    			vv.getServer().addPreRenderPaintable(viewGrid);
     		} else {
-    			vv.removePreRenderPaintable(viewGrid);
+    			vv.getServer().removePreRenderPaintable(viewGrid);
     		}
         vv.repaint();
     }

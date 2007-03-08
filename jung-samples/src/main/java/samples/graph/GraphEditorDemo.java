@@ -44,9 +44,10 @@ import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.annotations.AnnotationControls;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -80,7 +81,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationViewer<Number,Number> vv;
+    VisualizationComponent<Number,Number> vv;
     
     Map<Number,Point2D> vertexLocations = new HashMap<Number,Point2D>();
     
@@ -146,7 +147,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
         	TransformerUtils.mapTransformer(vertexLocations),
         	new Dimension(600,600));
         
-        vv =  new VisualizationViewer<Number,Number>(layout);
+        vv =  new VisualizationComponent<Number,Number>(layout);
         vv.setBackground(Color.white);
 
         vv.getRenderContext().setVertexLabelTransformer(MapTransformer.<Number,String>getInstance(
@@ -180,13 +181,13 @@ public class GraphEditorDemo extends JApplet implements Printable {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv, 1/1.1f, vv.getCenter());
+                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
             }
         });
         

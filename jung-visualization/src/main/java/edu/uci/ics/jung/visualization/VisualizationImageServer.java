@@ -20,17 +20,18 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 
 @SuppressWarnings("serial")
 public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E> {
-
+	protected Dimension preferredSize;
+	
     public VisualizationImageServer(Layout<V,E> layout, Dimension preferredSize) {
         super(layout, preferredSize);
-        setSize(preferredSize);
-        addNotify();
+        this.preferredSize = preferredSize;
+//        addNotify();
     }
     
     public Image getImage(Point2D center, Dimension d) {
         
-            int width = getWidth();
-            int height = getHeight();
+            int width = preferredSize.width;
+            int height = preferredSize.height;
             
             float scalex = (float)width/d.width;
             float scaley = (float)height/d.height;
@@ -40,7 +41,7 @@ public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E>
             BufferedImage bi = new BufferedImage(width, height,
                     BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = bi.createGraphics();
-            paint(graphics);
+            renderGraph(graphics);
             graphics.dispose();
             return bi;
 
