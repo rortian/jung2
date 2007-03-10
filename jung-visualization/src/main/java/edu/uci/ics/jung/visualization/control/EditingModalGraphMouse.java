@@ -1,14 +1,9 @@
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.ItemSelectable;
-import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.util.Map;
 
@@ -23,7 +18,12 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.annotations.AnnotatingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.KeyEvent;
+import edu.uci.ics.jung.visualization.event.KeyListener;
 
 public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse 
 	implements ModalGraphMouse, ItemSelectable {
@@ -69,7 +69,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected void loadPlugins() {
 		pickingPlugin = new PickingGraphMousePlugin();
 		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-		translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
+		translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
 		scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		rotatingPlugin = new RotatingGraphMousePlugin();
 		shearingPlugin = new ShearingGraphMousePlugin();
@@ -241,7 +241,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		return modeMenu;
 	}
 	
-    public static class ModeKeyAdapter extends KeyAdapter {
+    public static class ModeKeyAdapter implements KeyListener {
     	private char t = 't';
     	private char p = 'p';
     	private char e = 'e';
@@ -263,19 +263,22 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		public void keyTyped(KeyEvent event) {
 			char keyChar = event.getKeyChar();
 			if(keyChar == t) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				graphMouse.setMode(Mode.TRANSFORMING);
 			} else if(keyChar == p) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.HAND_CURSOR));
 				graphMouse.setMode(Mode.PICKING);
 			} else if(keyChar == e) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 				graphMouse.setMode(Mode.EDITING);
 			} else if(keyChar == a) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 				graphMouse.setMode(Mode.ANNOTATING);
 			}
 		}
+
+		public void keyPressed(KeyEvent keyEvent) {}
+		public void keyReleased(KeyEvent keyEvent) {}
     }
 
 	/**

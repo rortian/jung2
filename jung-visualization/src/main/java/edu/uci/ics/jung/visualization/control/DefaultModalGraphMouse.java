@@ -11,12 +11,13 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.ItemSelectable;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.KeyEvent;
+import edu.uci.ics.jung.visualization.event.KeyListener;
 
 
 /** 
@@ -69,7 +70,7 @@ public class DefaultModalGraphMouse extends AbstractModalGraphMouse
     protected void loadPlugins() {
         pickingPlugin = new PickingGraphMousePlugin();
         animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-        translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
+        translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
         scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
         rotatingPlugin = new RotatingGraphMousePlugin();
         shearingPlugin = new ShearingGraphMousePlugin();
@@ -78,7 +79,7 @@ public class DefaultModalGraphMouse extends AbstractModalGraphMouse
         setMode(Mode.TRANSFORMING);
     }
     
-    public static class ModeKeyAdapter extends KeyAdapter {
+    public static class ModeKeyAdapter implements KeyListener {
     	private char t = 't';
     	private char p = 'p';
     	protected ModalGraphMouse graphMouse;
@@ -96,12 +97,15 @@ public class DefaultModalGraphMouse extends AbstractModalGraphMouse
 		public void keyTyped(KeyEvent event) {
 			char keyChar = event.getKeyChar();
 			if(keyChar == t) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				graphMouse.setMode(Mode.TRANSFORMING);
 			} else if(keyChar == p) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.HAND_CURSOR));
 				graphMouse.setMode(Mode.PICKING);
 			}
 		}
+
+		public void keyPressed(KeyEvent keyEvent) {}
+		public void keyReleased(KeyEvent keyEvent) {}
     }
 }

@@ -12,6 +12,7 @@ package edu.uci.ics.jung.visualization;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -30,8 +31,8 @@ public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E>
     
     public Image getImage(Point2D center, Dimension d) {
         
-            int width = preferredSize.width;
-            int height = preferredSize.height;
+            final int width = preferredSize.width;
+            final int height = preferredSize.height;
             
             float scalex = (float)width/d.width;
             float scaley = (float)height/d.height;
@@ -41,7 +42,18 @@ public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E>
             BufferedImage bi = new BufferedImage(width, height,
                     BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = bi.createGraphics();
-            renderGraph(graphics);
+            Graphics2DScreenDevice sd = new Graphics2DScreenDevice(graphics) {
+				@Override
+				public Rectangle getBounds() {
+					return new Rectangle(0, 0, width, height);
+				}
+
+				@Override
+				public Dimension getSize() {
+					return new Dimension(width, height);
+				}
+            };
+            renderGraph(sd, graphics);
             graphics.dispose();
             return bi;
 

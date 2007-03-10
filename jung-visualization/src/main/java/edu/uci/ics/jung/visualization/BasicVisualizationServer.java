@@ -257,12 +257,13 @@ public class BasicVisualizationServer<V, E>
     
 
 	
-	public void renderGraph(Graphics2D g2d) {
+	public void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
 	    if(renderContext.getGraphicsContext() == null) {
 	        renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
         } else {
         	renderContext.getGraphicsContext().setDelegate(g2d);
         }
+	    renderContext.setScreenDevice(screenDevice);
 	    Layout<V,E> layout = model.getGraphLayout();
 
 		// the size of the VisualizationViewer

@@ -11,10 +11,6 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Cursor;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.Map;
 
@@ -27,6 +23,10 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
 
 /** 
  * 
@@ -50,7 +50,7 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * create an instance with default settings
 	 */
 	public LabelEditingGraphMousePlugin() {
-	    this(InputEvent.BUTTON1_MASK);
+	    this(Event.BUTTON1_MASK);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 */
     public LabelEditingGraphMousePlugin(int selectionModifiers) {
         super(selectionModifiers);
-        this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        this.cursor = new Cursor(Cursor.HAND_CURSOR);
     }
     
 	/**
@@ -156,6 +156,11 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	}
 
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseDoubleClicked(MouseEvent mouseEvent) {
 		// TODO Auto-generated method stub
 		
 	}

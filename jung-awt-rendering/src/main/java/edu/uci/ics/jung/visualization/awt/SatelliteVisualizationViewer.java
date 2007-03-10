@@ -127,15 +127,16 @@ public class SatelliteVisualizationViewer<V, E>
     }
     
     protected void paintComponent(Graphics g) {
-    	renderGraph((Graphics2D)g);
+    	renderGraph(screenDevice, (Graphics2D)g);
     }
     
-    protected void renderGraph(Graphics2D g2d) {
+    protected void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
         if(visualizationServer.getRenderContext().getGraphicsContext() == null) {
         	visualizationServer.getRenderContext().setGraphicsContext(new GraphicsDecorator(g2d));
         } else {
         	visualizationServer.getRenderContext().getGraphicsContext().setDelegate(g2d);
         }
+        visualizationServer.getRenderContext().setScreenDevice(screenDevice);
         Layout<V,E> layout = visualizationServer.getModel().getGraphLayout();
 
         g2d.setRenderingHints(renderingHints);

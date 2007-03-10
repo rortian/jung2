@@ -10,10 +10,9 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.event.MouseWheelEvent;
-
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.awt.SatelliteVisualizationViewer;
+import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
 
 /**
  * Overrides ScalingGraphMousePlugin so that mouse events in the

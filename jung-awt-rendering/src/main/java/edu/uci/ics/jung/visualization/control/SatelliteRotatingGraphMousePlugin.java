@@ -10,12 +10,12 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.awt.SatelliteVisualizationViewer;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**

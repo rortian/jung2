@@ -47,7 +47,7 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         "Ctrl+MouseWheel to change magnification</center></html>";
     
     public MagnifyImageLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new MagnifyShapeTransformer(vv.getRenderContext().getScreenDevice()),
+        this(vv, new MagnifyShapeTransformer(vv.getScreenDevice()),
                 new ModalLensGraphMouse());
     }
     /**

@@ -10,35 +10,22 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JPanel;
-import javax.swing.ToolTipManager;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
+import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /**
@@ -53,6 +40,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 public interface VisualizationViewer<V,E> {
 	void setCursor(Cursor cursor);
 	
+	ScreenDevice getScreenDevice();
 	VisualizationServer<V, E> getServer();
 	
 	void repaint();

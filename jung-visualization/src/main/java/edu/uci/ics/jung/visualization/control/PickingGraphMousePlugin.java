@@ -12,25 +12,23 @@
 package edu.uci.ics.jung.visualization.control;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-
-import javax.swing.JComponent;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
@@ -96,7 +94,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * create an instance with default settings
 	 */
 	public PickingGraphMousePlugin() {
-	    this(InputEvent.BUTTON1_MASK, InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
+	    this(Event.BUTTON1_MASK, Event.BUTTON1_MASK | Event.SHIFT_MASK);
 	}
 
 	/**
@@ -108,7 +106,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         super(selectionModifiers);
         this.addToSelectionModifiers = addToSelectionModifiers;
         this.lensPaintable = new LensPaintable();
-        this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        this.cursor = new Cursor(Cursor.HAND_CURSOR);
     }
     
     /**
@@ -348,13 +346,13 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     }
 
     public void mouseEntered(MouseEvent e) {
-        JComponent c = (JComponent)e.getSource();
+        VisualizationViewer c = (VisualizationViewer)e.getSource();
         c.setCursor(cursor);
     }
 
     public void mouseExited(MouseEvent e) {
-        JComponent c = (JComponent)e.getSource();
-        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    	VisualizationViewer c = (VisualizationViewer)e.getSource();
+        c.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     public void mouseMoved(MouseEvent e) {
@@ -373,4 +371,6 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+
+	public void mouseDoubleClicked(MouseEvent mouseEvent) {}
 }

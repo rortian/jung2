@@ -10,14 +10,13 @@ package edu.uci.ics.jung.visualization.transform;
 
 import java.awt.Dimension;
 import java.awt.Shape;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.jung.visualization.ScreenDevice;
+import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
 
 /**
  * LensTransformer wraps a MutableAffineTransformer and modifies
@@ -145,7 +144,7 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     /**
      * react to size changes on a component
      */
-    protected class ComponentListenerImpl implements ScreenDevice.ScreenDeviceListener {
+    protected class ComponentListenerImpl implements ScreenDeviceListener {
         public void screenResized(ScreenDevice e) {
             setComponent(e);
          }

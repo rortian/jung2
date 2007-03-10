@@ -5,6 +5,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
 
+import edu.uci.ics.jung.visualization.event.KeyListener;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
+import edu.uci.ics.jung.visualization.event.MouseWheelListener;
+import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
+
 public interface ScreenDevice {
 	Color getBackground();
 	void setBackground(Color c);
@@ -21,8 +27,20 @@ public interface ScreenDevice {
 	void repaint();
 	
 	void addScreenDeviceListener(ScreenDeviceListener l);
+	void addKeyListener(KeyListener l);
+	void addMouseListener(MouseListener l);
+	void addMouseMotionListener(MouseMotionListener l);
+	void addMouseWheelListener(MouseWheelListener l);
 	
-	interface ScreenDeviceListener {
-		void screenResized(ScreenDevice target);
-	}
+	void removeScreenDeviceListener(ScreenDeviceListener l);
+	void removeKeyListener(KeyListener l);
+	void removeMouseListener(MouseListener l);
+	void removeMouseMotionListener(MouseMotionListener l);
+	void removeMouseWheelListener(MouseWheelListener l);
+	
+	ScreenDeviceListener[] getScreenDeviceListeners();
+	KeyListener[] getKeyListeners();
+	MouseListener[] getMouseListeners();
+	MouseMotionListener[] getMouseMotionListeners();
+	MouseWheelListener[] getMouseWheelListeners();
 }

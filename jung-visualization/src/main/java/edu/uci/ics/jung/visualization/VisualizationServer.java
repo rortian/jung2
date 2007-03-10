@@ -10,7 +10,10 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -241,6 +244,8 @@ public interface VisualizationServer<V, E> {
     RenderContext<V, E> getRenderContext();
 
     void setRenderContext(RenderContext<V, E> renderContext);
+    
+    void renderGraph(ScreenDevice screenDevice, Graphics2D g2d);
     
 //    void repaint();
     

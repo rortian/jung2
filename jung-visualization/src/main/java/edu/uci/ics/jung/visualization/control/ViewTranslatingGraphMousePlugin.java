@@ -11,14 +11,16 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Cursor;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /** 
@@ -37,7 +39,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
 	/**
 	 */
 	public ViewTranslatingGraphMousePlugin() {
-	    this(MouseEvent.BUTTON1_MASK);
+	    this(Event.BUTTON1_MASK);
 	}
 
 	/**
@@ -46,7 +48,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
 	 */
 	public ViewTranslatingGraphMousePlugin(int modifiers) {
 	    super(modifiers);
-        this.cursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+        this.cursor = new Cursor(Cursor.MOVE_CURSOR);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
     public void mouseReleased(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
         down = null;
-        vv.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        vv.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
     
     /**
@@ -122,4 +124,9 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
         // TODO Auto-generated method stub
         
     }
+
+	public void mouseDoubleClicked(MouseEvent mouseEvent) {
+		// TODO Auto-generated method stub
+		
+	}
 }

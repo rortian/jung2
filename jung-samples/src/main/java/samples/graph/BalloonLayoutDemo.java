@@ -152,7 +152,7 @@ public class BalloonLayoutDemo extends JApplet {
         vv.addKeyListener(graphMouse.getModeKeyListener());
         
         hyperbolicViewSupport = 
-            new ViewLensSupport<String,Integer>(vv, new HyperbolicShapeTransformer(vv.getRenderContext().getScreenDevice(), 
+            new ViewLensSupport<String,Integer>(vv, new HyperbolicShapeTransformer(vv.getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)), 
                     new ModalLensGraphMouse());
 

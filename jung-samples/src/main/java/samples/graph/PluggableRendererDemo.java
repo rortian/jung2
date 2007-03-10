@@ -25,8 +25,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,6 +75,9 @@ import edu.uci.ics.jung.visualization.decorators.GradientEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.NumberEdgeValueStringer;
 import edu.uci.ics.jung.visualization.decorators.NumberVertexValueStringer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
@@ -1106,7 +1107,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     	implements MouseListener {
         
         public PopupGraphMousePlugin() {
-            this(MouseEvent.BUTTON3_MASK);
+            this(Event.BUTTON3_MASK);
         }
         public PopupGraphMousePlugin(int modifiers) {
             super(modifiers);

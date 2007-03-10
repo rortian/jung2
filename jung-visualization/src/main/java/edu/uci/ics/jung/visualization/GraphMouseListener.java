@@ -12,7 +12,8 @@
  */
 package edu.uci.ics.jung.visualization;
 
-import java.awt.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+
 
 /**
  * This interface allows users to register listeners to register to receive

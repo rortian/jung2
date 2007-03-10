@@ -101,8 +101,9 @@ public class UnicodeLabelDemo {
         content.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        final ModalGraphMouse gm = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         vv.setGraphMouse(gm);
+        vv.getScreenDevice().addKeyListener(gm.getModeKeyListener());
         
         final ScalingControl scaler = new CrossoverScalingControl();
 

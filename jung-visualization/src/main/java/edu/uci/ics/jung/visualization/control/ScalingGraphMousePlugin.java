@@ -11,12 +11,12 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
+import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 
 /** 
  * ScalingGraphMouse applies a scaling transformation to the graph layout.

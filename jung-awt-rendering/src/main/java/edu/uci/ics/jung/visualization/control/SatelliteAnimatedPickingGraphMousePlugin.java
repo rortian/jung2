@@ -11,16 +11,16 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.awt.SatelliteVisualizationViewer;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 
 /** 
  * A version of the AnimatedPickingGraphMousePlugin that is for
@@ -38,7 +38,7 @@ public class SatelliteAnimatedPickingGraphMousePlugin<V,E> extends AnimatedPicki
 	 * 
 	 */
 	public SatelliteAnimatedPickingGraphMousePlugin() {
-	    this(InputEvent.BUTTON1_MASK  | InputEvent.CTRL_MASK);
+	    this(Event.BUTTON1_MASK  | Event.CTRL_MASK);
 	}
 
     public SatelliteAnimatedPickingGraphMousePlugin(int selectionModifiers) {

@@ -18,7 +18,6 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JApplet;
@@ -54,6 +53,7 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.event.Event;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
@@ -222,7 +222,7 @@ public class MultiViewDemo extends JApplet {
             protected void loadPlugins() {
                 pickingPlugin = new PickingGraphMousePlugin();
                 animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-                translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
+                translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
                 scalingPlugin = new ScalingGraphMousePlugin(new LayoutScalingControl(), 0);
                 rotatingPlugin = new RotatingGraphMousePlugin();
                 shearingPlugin = new ShearingGraphMousePlugin();
@@ -236,7 +236,7 @@ public class MultiViewDemo extends JApplet {
             protected void loadPlugins() {
                 pickingPlugin = new PickingGraphMousePlugin();
                 animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-                translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
+                translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
                 scalingPlugin = new ScalingGraphMousePlugin(new ViewScalingControl(), 0);
                 rotatingPlugin = new RotatingGraphMousePlugin();
                 shearingPlugin = new ShearingGraphMousePlugin();

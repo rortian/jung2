@@ -10,7 +10,8 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.event.InputEvent;
+import edu.uci.ics.jung.visualization.event.Event;
+
 /**
  * 
  * @author Tom Nelson 
@@ -30,7 +31,7 @@ public class ModalSatelliteGraphMouse extends DefaultModalGraphMouse implements
     protected void loadPlugins() {
         pickingPlugin = new PickingGraphMousePlugin();
         animatedPickingPlugin = new SatelliteAnimatedPickingGraphMousePlugin();
-        translatingPlugin = new SatelliteTranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
+        translatingPlugin = new SatelliteTranslatingGraphMousePlugin(Event.BUTTON1_MASK);
         scalingPlugin = new SatelliteScalingGraphMousePlugin(new CrossoverScalingControl(), 0);
         rotatingPlugin = new SatelliteRotatingGraphMousePlugin();
         shearingPlugin = new SatelliteShearingGraphMousePlugin();

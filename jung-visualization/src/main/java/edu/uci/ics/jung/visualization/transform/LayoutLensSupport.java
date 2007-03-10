@@ -33,7 +33,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
 	protected GraphElementAccessor<V,E> pickSupport;
 	
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicTransformer(vv.getRenderContext().getScreenDevice(), vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
+        this(vv, new HyperbolicTransformer(vv.getScreenDevice(), vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                 new ModalLensGraphMouse());
     }
     /**

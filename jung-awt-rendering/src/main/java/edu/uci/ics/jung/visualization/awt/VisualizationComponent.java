@@ -15,12 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +37,12 @@ import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.KeyListener;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
+import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
@@ -66,7 +67,7 @@ public class VisualizationComponent<V,E> extends JPanel
 	 */
 	protected Map renderingHints = new HashMap();
 	
-	
+	protected ScreenDevice screenDevice = new ScreenDevice(this);
 	protected BasicVisualizationServer<V,E> visualizationServer;
 	protected Transformer<V,String> vertexToolTipTransformer;
 	protected Transformer<E,String> edgeToolTipTransformer;
@@ -78,7 +79,7 @@ public class VisualizationComponent<V,E> extends JPanel
      */
     protected GraphMouse graphMouse;
     
-    protected MouseListener requestFocusListener = new MouseAdapter() {
+    protected java.awt.event.MouseListener requestFocusListener = new MouseAdapter() {
 		public void mouseClicked(MouseEvent e) {
 			requestFocusInWindow();
 		}
@@ -134,8 +135,6 @@ public class VisualizationComponent<V,E> extends JPanel
         renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         visualizationServer.addChangeListener(this);
-        
-        visualizationServer.getRenderContext().setScreenDevice(new ScreenDevice(this));
 	}
 	
 	/**
@@ -162,6 +161,10 @@ public class VisualizationComponent<V,E> extends JPanel
     		viewSize = getSize();
     	}
 	    visualizationServer.setGraphLayout(layout, viewSize);
+    }
+    
+    public ScreenDevice getScreenDevice() {
+    	return screenDevice;
     }
     
     public RenderContext<V,E> getRenderContext() {
@@ -219,7 +222,8 @@ public class VisualizationComponent<V,E> extends JPanel
 //			renderGraph(offscreenG2d);
 //		    g2d.drawImage(offscreen, null, 0, 0);
 //		} else {
-		    visualizationServer.renderGraph(g2d);
+		visualizationServer.getRenderContext().setScreenDevice(screenDevice);
+		visualizationServer.renderGraph(screenDevice, g2d);
 //		}
 	}
     
@@ -240,27 +244,27 @@ public class VisualizationComponent<V,E> extends JPanel
 	 */
 	public void setGraphMouse(GraphMouse graphMouse) {
 	    this.graphMouse = graphMouse;
-	    MouseListener[] ml = getMouseListeners();
+	    MouseListener[] ml = screenDevice.getMouseListeners();
 	    for(int i=0; i<ml.length; i++) {
 	        if(ml[i] instanceof GraphMouse) {
-	            removeMouseListener(ml[i]);
+	        	screenDevice.removeMouseListener(ml[i]);
 	        }
 	    }
-	    MouseMotionListener[] mml = getMouseMotionListeners();
+	    MouseMotionListener[] mml = screenDevice.getMouseMotionListeners();
 	    for(int i=0; i<mml.length; i++) {
 	        if(mml[i] instanceof GraphMouse) {
-	            removeMouseMotionListener(mml[i]);
+	        	screenDevice.removeMouseMotionListener(mml[i]);
 	        }
 	    }
-	    MouseWheelListener[] mwl = getMouseWheelListeners();
+	    MouseWheelListener[] mwl = screenDevice.getMouseWheelListeners();
 	    for(int i=0; i<mwl.length; i++) {
 	        if(mwl[i] instanceof GraphMouse) {
-	            removeMouseWheelListener(mwl[i]);
+	        	screenDevice.removeMouseWheelListener(mwl[i]);
 	        }
 	    }
-	    addMouseListener(graphMouse);
-	    addMouseMotionListener(graphMouse);
-	    addMouseWheelListener(graphMouse);
+	    screenDevice.addMouseListener(graphMouse);
+	    screenDevice.addMouseMotionListener(graphMouse);
+	    screenDevice.addMouseWheelListener(graphMouse);
 	}
 	
 	/**
@@ -276,18 +280,18 @@ public class VisualizationComponent<V,E> extends JPanel
 	 * @param gel
 	 */
 	public void addGraphMouseListener( GraphMouseListener<V> gel ) {
-		addMouseListener( new MouseListenerTranslator<V,E>( gel, visualizationServer ));
+		screenDevice.addMouseListener( new MouseListenerTranslator<V,E>( gel, visualizationServer ));
 	}
 	
 	/** 
-	 * Override to request focus on mouse enter, if a key listener is added
-	 * @see java.awt.Component#addKeyListener(java.awt.event.KeyListener)
+	 * A convienence method to add the key listener to the screen
+	 * device.
 	 */
-	@Override
 	public synchronized void addKeyListener(KeyListener l) {
-		super.addKeyListener(l);
-//		setFocusable(true);
-//		addMouseListener(requestFocusListener);
+		screenDevice.addKeyListener(l);
+//		super.addKeyListener(l);
+////		setFocusable(true);
+////		addMouseListener(requestFocusListener);
 	}
 	
 	/**
@@ -325,7 +329,7 @@ public class VisualizationComponent<V,E> extends JPanel
 	/**
      * called by the superclass to display tooltips
      */
-    public String getToolTipText(MouseEvent event) {
+    public String getToolTipText(java.awt.event.MouseEvent event) {
         Layout<V,E> layout = visualizationServer.getGraphLayout();
         Point2D p = null;
         if(vertexToolTipTransformer != null) {
@@ -344,8 +348,9 @@ public class VisualizationComponent<V,E> extends JPanel
             }
         }
         if(mouseEventToolTipTransformer != null) {
-        	return mouseEventToolTipTransformer.transform(event);
+        	return mouseEventToolTipTransformer.transform(ScreenDevice.createEvent(event));
         }
+        
         return super.getToolTipText(event);
     }
     
@@ -416,5 +421,9 @@ public class VisualizationComponent<V,E> extends JPanel
     
 	public Renderer<V, E> getRenderer() {
 		return getServer().getRenderer();
+	}
+
+	public void setCursor(Cursor cursor) {
+		setCursor( CursorUtils.getCursor(cursor) );
 	}
 }

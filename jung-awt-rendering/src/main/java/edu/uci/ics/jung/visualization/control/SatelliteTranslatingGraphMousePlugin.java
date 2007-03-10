@@ -10,13 +10,13 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Cursor;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.awt.SatelliteVisualizationViewer;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
 /**
@@ -53,7 +53,7 @@ public class SatelliteTranslatingGraphMousePlugin extends
                 
                 MutableTransformer modelTransformerMaster = 
                 	vvMaster.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
-                vv.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+                vv.setCursor(new Cursor(Cursor.MOVE_CURSOR));
                 try {
                     Point2D q = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
                     Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint());

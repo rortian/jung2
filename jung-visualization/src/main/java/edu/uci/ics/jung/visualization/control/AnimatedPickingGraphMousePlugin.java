@@ -11,19 +11,17 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import java.awt.Cursor;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
-
-import javax.swing.JComponent;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
+import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
@@ -48,7 +46,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 	 * 
 	 */
 	public AnimatedPickingGraphMousePlugin() {
-	    this(InputEvent.BUTTON1_MASK  | InputEvent.CTRL_MASK);
+	    this(Event.BUTTON1_MASK  | Event.CTRL_MASK);
 	}
 
 	/**
@@ -57,7 +55,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 	 */
     public AnimatedPickingGraphMousePlugin(int selectionModifiers) {
         super(selectionModifiers);
-        this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        this.cursor = new Cursor(Cursor.HAND_CURSOR);
     }
 
 	/**
@@ -133,7 +131,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
      * show a special cursor while the mouse is inside the window
      */
     public void mouseEntered(MouseEvent e) {
-        JComponent c = (JComponent)e.getSource();
+        VisualizationViewer c = (VisualizationViewer)e.getSource();
         c.setCursor(cursor);
     }
 
@@ -141,8 +139,8 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
      * revert to the default cursor when the mouse leaves this window
      */
     public void mouseExited(MouseEvent e) {
-        JComponent c = (JComponent)e.getSource();
-        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    	VisualizationViewer c = (VisualizationViewer)e.getSource();
+        c.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
 
     public void mouseMoved(MouseEvent e) {
@@ -150,4 +148,6 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 
 	public void mouseDragged(MouseEvent arg0) {
 	}
+
+	public void mouseDoubleClicked(MouseEvent mouseEvent) {}
 }

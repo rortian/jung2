@@ -12,19 +12,19 @@
  */
 package edu.uci.ics.jung.visualization;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.event.MouseEvent;
+import edu.uci.ics.jung.visualization.event.MouseListener;
 
 /**
  * This class translates mouse clicks into vertex clicks
  * 
  * @author danyelf
  */
-public class MouseListenerTranslator<V, E> extends MouseAdapter {
+public class MouseListenerTranslator<V, E> implements MouseListener{
 
 	private VisualizationServer<V,E> vs;
 	private GraphMouseListener<V> gel;
@@ -57,9 +57,7 @@ public class MouseListenerTranslator<V, E> extends MouseAdapter {
 	    } 
 	    return v;
 	}
-	/**
-	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-	 */
+
 	public void mouseClicked(MouseEvent e) {
 	    V v = getVertex(e.getPoint());
 		if ( v != null ) {
@@ -67,9 +65,7 @@ public class MouseListenerTranslator<V, E> extends MouseAdapter {
 		}
 	}
 
-	/**
-	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-	 */
+
 	public void mousePressed(MouseEvent e) {
 		V v = getVertex(e.getPoint());
 		if ( v != null ) {
@@ -77,13 +73,26 @@ public class MouseListenerTranslator<V, E> extends MouseAdapter {
 		}
 	}
 
-	/**
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-	 */
+
 	public void mouseReleased(MouseEvent e) {
 		V v = getVertex(e.getPoint());
 		if ( v != null ) {
 			gel.graphReleased(v, e );
 		}
+	}
+
+	public void mouseDoubleClicked(MouseEvent mouseEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseEntered(MouseEvent mouseEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseExited(MouseEvent mouseEvent) {
+		// TODO Auto-generated method stub
+		
 	}
 }

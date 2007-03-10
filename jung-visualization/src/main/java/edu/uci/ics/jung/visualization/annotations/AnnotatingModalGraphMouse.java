@@ -9,15 +9,10 @@
  */
 package edu.uci.ics.jung.visualization.annotations;
 
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.ItemSelectable;
-import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -28,6 +23,7 @@ import javax.swing.plaf.basic.BasicIconFactory;
 
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.AnimatedPickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -37,6 +33,10 @@ import edu.uci.ics.jung.visualization.control.RotatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ShearingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.cursor.Cursor;
+import edu.uci.ics.jung.visualization.event.Event;
+import edu.uci.ics.jung.visualization.event.KeyEvent;
+import edu.uci.ics.jung.visualization.event.KeyListener;
 
 /**
  * a graph mouse that supplies an annotations mode
@@ -85,7 +85,7 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected void loadPlugins() {
 		this.pickingPlugin = new PickingGraphMousePlugin();
 		this.animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-		this.translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
+		this.translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
 		this.scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		this.rotatingPlugin = new RotatingGraphMousePlugin();
 		this.shearingPlugin = new ShearingGraphMousePlugin();
@@ -221,7 +221,7 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		return modeMenu;
 	}
 	
-    public static class ModeKeyAdapter extends KeyAdapter {
+    public static class ModeKeyAdapter implements KeyListener {
     	private char t = 't';
     	private char p = 'p';
     	private char a = 'a';
@@ -241,16 +241,19 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		public void keyTyped(KeyEvent event) {
 			char keyChar = event.getKeyChar();
 			if(keyChar == t) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				graphMouse.setMode(Mode.TRANSFORMING);
 			} else if(keyChar == p) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.HAND_CURSOR));
 				graphMouse.setMode(Mode.PICKING);
 			} else if(keyChar == a) {
-				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+				((VisualizationViewer)event.getSource()).setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 				graphMouse.setMode(Mode.ANNOTATING);
 			}
 		}
+
+		public void keyPressed(KeyEvent keyEvent) {}
+		public void keyReleased(KeyEvent keyEvent) {}
     }
 }
 

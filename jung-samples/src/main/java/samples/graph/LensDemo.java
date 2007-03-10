@@ -180,19 +180,19 @@ public class LensDemo extends JApplet {
         vv.addKeyListener(graphMouse.getModeKeyListener());
         
         hyperbolicViewSupport = 
-            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv.getRenderContext().getScreenDevice(), 
+            new ViewLensSupport<String,Number>(vv, new HyperbolicShapeTransformer(vv.getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)), 
                     new ModalLensGraphMouse());
         hyperbolicLayoutSupport = 
-            new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv.getRenderContext().getScreenDevice(), 
+            new LayoutLensSupport<String,Number>(vv, new HyperbolicTransformer(vv.getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse());
         magnifyViewSupport = 
-            new ViewLensSupport<String,Number>(vv, new MagnifyShapeTransformer(vv.getRenderContext().getScreenDevice(),
+            new ViewLensSupport<String,Number>(vv, new MagnifyShapeTransformer(vv.getScreenDevice(),
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         magnifyLayoutSupport = 
-            new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv.getRenderContext().getScreenDevice(), 
+            new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv.getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
         hyperbolicLayoutSupport.getLensTransformer().setEllipse(hyperbolicViewSupport.getLensTransformer().getEllipse());

@@ -189,7 +189,7 @@ public class RadialTreeLensDemo extends JApplet {
 		vv.getServer().addPreRenderPaintable(rings);
 
         hyperbolicViewSupport = 
-            new ViewLensSupport<String,Integer>(vv, new HyperbolicShapeTransformer(vv.getRenderContext().getScreenDevice(), 
+            new ViewLensSupport<String,Integer>(vv, new HyperbolicShapeTransformer(vv.getScreenDevice(), 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW)), 
                     new ModalLensGraphMouse());
         
