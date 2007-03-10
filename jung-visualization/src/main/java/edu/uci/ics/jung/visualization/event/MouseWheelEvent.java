@@ -5,7 +5,7 @@ package edu.uci.ics.jung.visualization.event;
  * @author Jason A Wrang
  *
  */
-public class MouseWheelEvent extends MouseEvent {
+public class MouseWheelEvent<E> extends MouseEvent<E> {
 	/**
 	 * Indicated what sort of scrolling should take place in response to this
 	 * event, based on platform settings.  Legal values are:
@@ -28,14 +28,14 @@ public class MouseWheelEvent extends MouseEvent {
 	 */
 	int wheelRotation;
 	
-	public MouseWheelEvent(MouseWheelEvent event) {
+	public MouseWheelEvent(MouseWheelEvent<E> event) {
 		super(event);
 		this.scrollType = event.scrollType;
 		this.scrollAmount = event.scrollAmount;
 		this.wheelRotation = event.wheelRotation;
 	}
 	
-	public MouseWheelEvent(Object uiEvent, Object source, 
+	public MouseWheelEvent(E uiEvent, Object source, 
 			long time, int modifiers, int extendedModifiers,
 			int button, int x, int y, boolean popupTrigger, int clickCount,
 			int scrollType, int scrollAmount, int wheelRotation) {

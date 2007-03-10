@@ -67,7 +67,8 @@ public class VisualizationComponent<V,E> extends JPanel
 	 */
 	protected Map renderingHints = new HashMap();
 	
-	protected ScreenDevice screenDevice = new ScreenDevice(this);
+	// i could use Component, JPanel, whatever as the generic tag here:
+	protected ScreenDevice<VisualizationComponent> screenDevice = new ScreenDevice<VisualizationComponent>(this);
 	protected BasicVisualizationServer<V,E> visualizationServer;
 	protected Transformer<V,String> vertexToolTipTransformer;
 	protected Transformer<E,String> edgeToolTipTransformer;

@@ -5,7 +5,7 @@ package edu.uci.ics.jung.visualization.event;
  * @author Jason A Wrang
  *
  */
-public class InputEvent extends EventObject {
+public class InputEvent<E> extends EventObject<E> {
 	/**
 	 * The input event's Time stamp in UTC format.  The time stamp
 	 * indicates when the input event was created.
@@ -20,14 +20,14 @@ public class InputEvent extends EventObject {
 	int modifiers;
 	int extendedModifiers;
 	
-	public InputEvent(InputEvent event) {
+	public InputEvent(InputEvent<E> event) {
 		super(event);
 		this.time = event.time;
 		this.modifiers = event.modifiers;
 		this.extendedModifiers = event.extendedModifiers;
 	}
 	
-	public InputEvent(Object uiEvent, Object source, 
+	public InputEvent(E uiEvent, Object source, 
 			long time, int modifers, int extendedModifiers) {
 		super(uiEvent, source);
 		this.time = time;

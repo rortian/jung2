@@ -26,9 +26,9 @@ import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
  * @author Jason A Wrang
  *
  */
-public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice {
-	Component comp;
-	LinkedHashSet<ScreenDeviceListener> screenDeviceListeners = new LinkedHashSet<ScreenDeviceListener>();
+public class ScreenDevice<C extends Component> implements edu.uci.ics.jung.visualization.ScreenDevice<C> {
+	C comp;
+	LinkedHashSet<ScreenDeviceListener<C>> screenDeviceListeners = new LinkedHashSet<ScreenDeviceListener<C>>();
 	LinkedHashSet<KeyListener> keyListeners = new LinkedHashSet<KeyListener>();
 	LinkedHashSet<MouseListener> mouseListeners = new LinkedHashSet<MouseListener>();
 	LinkedHashSet<MouseMotionListener> mouseMotionListeners = new LinkedHashSet<MouseMotionListener>();
@@ -44,7 +44,7 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		componentListener = new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				synchronized (screenDeviceListeners) {
-					for (ScreenDeviceListener l : screenDeviceListeners) {
+					for (ScreenDeviceListener<C> l : screenDeviceListeners) {
 						l.screenResized(ScreenDevice.this);
 					}
 				}
@@ -119,7 +119,7 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		return modifiers;
 	}
 	
-	public static MouseEvent createEvent(java.awt.event.MouseEvent event) {
+	public static <E extends java.awt.event.MouseEvent> MouseEvent<E> createEvent(E event) {
 		int modifiers = getModifiers(event);
 		int extendedModifiers = getExtendedModifiers(event);
 		
@@ -136,15 +136,16 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		
 //		debugModifiers("reg:",modifiers);
 //		debugModifiers("ext:",extendedModifiers);
-		MouseEvent e = new MouseEvent(event, event.getSource(), 
+		MouseEvent<E> e = new MouseEvent<E>(event, event.getSource(), 
 				event.getWhen(), modifiers, extendedModifiers,
 				button, event.getX(), event.getY(), event.isPopupTrigger(), event.getClickCount());
 
 		return e;
 	}
 	
-	public static MouseWheelEvent createEvent(java.awt.event.MouseWheelEvent event) {
-		MouseEvent evt = createEvent((java.awt.event.MouseEvent)event);
+	public static <E extends java.awt.event.MouseWheelEvent> MouseWheelEvent<E> createMouseWheelEvent(E event) {
+		MouseEvent<E> evt = ScreenDevice.<E>createEvent(event);
+
 		int scrollType = event.getScrollType();
 		if (scrollType == java.awt.event.MouseWheelEvent.WHEEL_UNIT_SCROLL)
 			scrollType = Event.WHEEL_UNIT_SCROLL;
@@ -155,7 +156,7 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		int scrollAmount = event.getScrollAmount();
 		int wheelRotation = event.getWheelRotation();
 		
-		MouseWheelEvent e = new MouseWheelEvent(evt.getUiEvent(), evt.getSource(), 
+		MouseWheelEvent<E> e = new MouseWheelEvent<E>(evt.getUiEvent(), evt.getSource(), 
 				evt.getTime(), evt.getModifiers(), evt.getExtendedModifiers(),
 				evt.getButton(), evt.getX(), evt.getY(), evt.isPopupTrigger(), evt.getClickCount(),
 				scrollType, scrollAmount, wheelRotation);
@@ -166,8 +167,8 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		mouseListener = new java.awt.event.MouseListener() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				synchronized (mouseListener) {
-					MouseEvent evt = createEvent(e);
-					for (MouseListener l : mouseListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = createEvent(e);
+					for (MouseListener<java.awt.event.MouseEvent> l : mouseListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseClicked(evt);
 					}
@@ -176,8 +177,8 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void mouseEntered(java.awt.event.MouseEvent e) {
 				synchronized (mouseListener) {
-					MouseEvent evt = createEvent(e);
-					for (MouseListener l : mouseListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = createEvent(e);
+					for (MouseListener<java.awt.event.MouseEvent> l : mouseListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseEntered(evt);
 					}
@@ -186,8 +187,8 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void mouseExited(java.awt.event.MouseEvent e) {
 				synchronized (mouseListener) {
-					MouseEvent evt = createEvent(e);
-					for (MouseListener l : mouseListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = createEvent(e);
+					for (MouseListener<java.awt.event.MouseEvent> l : mouseListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseExited(evt);
 					}
@@ -196,8 +197,8 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void mousePressed(java.awt.event.MouseEvent e) {
 				synchronized (mouseListener) {
-					MouseEvent evt = createEvent(e);
-					for (MouseListener l : mouseListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = createEvent(e);
+					for (MouseListener<java.awt.event.MouseEvent> l : mouseListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mousePressed(evt);
 					}
@@ -206,8 +207,8 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void mouseReleased(java.awt.event.MouseEvent e) {
 				synchronized (mouseListener) {
-					MouseEvent evt = createEvent(e);
-					for (MouseListener l : mouseListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = createEvent(e);
+					for (MouseListener<java.awt.event.MouseEvent> l : mouseListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseReleased(evt);
 					}
@@ -220,8 +221,9 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		mouseMotionListener = new java.awt.event.MouseMotionListener() {
 			public void mouseDragged(java.awt.event.MouseEvent e) {
 				synchronized (mouseMotionListeners) {
-					MouseEvent evt = createEvent(e);
-					for (MouseMotionListener l : mouseMotionListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = 
+						ScreenDevice.<java.awt.event.MouseEvent>createEvent(e);
+					for (MouseMotionListener<java.awt.event.MouseEvent> l : mouseMotionListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseDragged(evt);
 					}
@@ -230,8 +232,9 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void mouseMoved(java.awt.event.MouseEvent e) {
 				synchronized (mouseMotionListeners) {
-					MouseEvent evt = createEvent(e);
-					for (MouseMotionListener l : mouseMotionListeners) {
+					MouseEvent<java.awt.event.MouseEvent> evt = 
+						ScreenDevice.<java.awt.event.MouseEvent>createEvent(e);
+					for (MouseMotionListener<java.awt.event.MouseEvent> l : mouseMotionListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseMoved(evt);
 					}
@@ -244,8 +247,8 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		mouseWheelListener = new java.awt.event.MouseWheelListener() {
 			public void mouseWheelMoved(java.awt.event.MouseWheelEvent e) {
 				synchronized (mouseWheelListeners) {
-					MouseWheelEvent evt = createEvent(e);
-					for (MouseWheelListener l : mouseWheelListeners) {
+					MouseWheelEvent<java.awt.event.MouseWheelEvent> evt = createMouseWheelEvent(e);
+					for (MouseWheelListener<java.awt.event.MouseWheelEvent> l : mouseWheelListeners) {
 						if ( evt.isConsumed() ) break;
 						l.mouseWheelMoved(evt);
 					}
@@ -255,12 +258,12 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 	}
 	
 	
-	public static KeyEvent createEvent(java.awt.event.KeyEvent event) {
+	public static <E extends java.awt.event.KeyEvent> KeyEvent<E> createEvent(E event) {
 		int modifiers = getModifiers(event);
 		int extendedModifiers = 0;
 		
 		char keyChar = event.getKeyChar();  // returns the key char
-		KeyEvent e = new KeyEvent(event, event.getSource(), 
+		KeyEvent<E> e = new KeyEvent<E>(event, event.getSource(), 
 				event.getWhen(), modifiers, extendedModifiers,
 				keyChar);
 
@@ -272,8 +275,9 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		keyListener = new java.awt.event.KeyListener() {
 			public void keyPressed(java.awt.event.KeyEvent e) {
 				synchronized (keyListeners) {
-					KeyEvent evt = createEvent(e);
-					for (KeyListener l : keyListeners) {
+					KeyEvent<java.awt.event.KeyEvent> evt = 
+						ScreenDevice.<java.awt.event.KeyEvent>createEvent(e);
+					for (KeyListener<java.awt.event.KeyEvent> l : keyListeners) {
 						if ( evt.isConsumed() ) break;
 						l.keyPressed(evt);
 					}
@@ -282,8 +286,9 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void keyReleased(java.awt.event.KeyEvent e) {
 				synchronized (keyListeners) {
-					KeyEvent evt = createEvent(e);
-					for (KeyListener l : keyListeners) {
+					KeyEvent<java.awt.event.KeyEvent> evt = 
+						ScreenDevice.<java.awt.event.KeyEvent>createEvent(e);
+					for (KeyListener<java.awt.event.KeyEvent> l : keyListeners) {
 						if ( evt.isConsumed() ) break;
 						l.keyReleased(evt);
 					}
@@ -292,8 +297,9 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 
 			public void keyTyped(java.awt.event.KeyEvent e) {
 				synchronized (keyListeners) {
-					KeyEvent evt = createEvent(e);
-					for (KeyListener l : keyListeners) {
+					KeyEvent<java.awt.event.KeyEvent> evt = 
+						ScreenDevice.<java.awt.event.KeyEvent>createEvent(e);
+					for (KeyListener<java.awt.event.KeyEvent> l : keyListeners) {
 						if ( evt.isConsumed() ) break;
 						l.keyTyped(evt);
 					}
@@ -303,11 +309,11 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 	}
 	
 	
-	public ScreenDevice(Component comp) {
+	public ScreenDevice(C comp) {
 		this.comp = comp;
 	}
 	
-	public Object getUIComponent() {
+	public C getUIComponent() {
 		return comp;
 	}
 	
@@ -340,7 +346,7 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 	}
 
 
-	public void addScreenDeviceListener(ScreenDeviceListener l) {
+	public void addScreenDeviceListener(ScreenDeviceListener<C> l) {
 		synchronized (screenDeviceListeners) {
 			if ( screenDeviceListeners.isEmpty() ) {
 				createComponentListener();

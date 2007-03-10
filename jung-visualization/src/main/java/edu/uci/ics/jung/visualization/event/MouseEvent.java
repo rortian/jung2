@@ -2,14 +2,14 @@ package edu.uci.ics.jung.visualization.event;
 
 import java.awt.Point;
 
-public class MouseEvent extends InputEvent {
+public class MouseEvent<E> extends InputEvent<E> {
 	int button;
 	int x;
 	int y;
 	boolean popupTrigger;
 	int clickCount;
 	
-	public MouseEvent(MouseEvent event) {
+	public MouseEvent(MouseEvent<E> event) {
 		super(event);
 		this.button = event.button;
 		this.x = event.x;
@@ -18,7 +18,7 @@ public class MouseEvent extends InputEvent {
 		this.clickCount = event.clickCount;
 	}
 	
-	public MouseEvent(Object uiEvent, Object source, 
+	public MouseEvent(E uiEvent, Object source, 
 			long time, int modifiers, int extendedModifiers,
 			int button, int x, int y, boolean popupTrigger, int clickCount) {
 		super(uiEvent, source, 

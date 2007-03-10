@@ -11,8 +11,8 @@ import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
 
-public interface ScreenDevice {
-	Object getUIComponent();
+public interface ScreenDevice<C> {
+	C getUIComponent();
 	
 	Color getBackground();
 	void setBackground(Color c);
@@ -28,13 +28,13 @@ public interface ScreenDevice {
 	
 	void repaint();
 	
-	void addScreenDeviceListener(ScreenDeviceListener l);
+	void addScreenDeviceListener(ScreenDeviceListener<C> l);
 	void addKeyListener(KeyListener l);
 	void addMouseListener(MouseListener l);
 	void addMouseMotionListener(MouseMotionListener l);
 	void addMouseWheelListener(MouseWheelListener l);
 	
-	void removeScreenDeviceListener(ScreenDeviceListener l);
+	void removeScreenDeviceListener(ScreenDeviceListener<C> l);
 	void removeKeyListener(KeyListener l);
 	void removeMouseListener(MouseListener l);
 	void removeMouseMotionListener(MouseMotionListener l);

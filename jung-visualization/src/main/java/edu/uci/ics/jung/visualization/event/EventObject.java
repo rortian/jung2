@@ -5,7 +5,7 @@ package edu.uci.ics.jung.visualization.event;
  * @author Jason A Wrang
  *
  */
-public class EventObject {
+public class EventObject<E> {
 	/**
 	 * The object on which the event initially occurred.
 	 */
@@ -14,14 +14,14 @@ public class EventObject {
 	/**
 	 * The UI Toolkit specific event object
 	 */
-	Object uiEvent;
+	E uiEvent;
 	
-	public EventObject(EventObject event) {
+	public EventObject(EventObject<E> event) {
 		this.source = event.source;
 		this.uiEvent = event.uiEvent;
 	}
 
-	public EventObject(Object uiEvent, Object source) {
+	public EventObject(E uiEvent, Object source) {
 		this.source = source;
 		this.uiEvent = uiEvent;
 	}
@@ -36,7 +36,7 @@ public class EventObject {
 	/**
 	 * @return the uiEvent
 	 */
-	public Object getUiEvent() {
+	public E getUiEvent() {
 		return uiEvent;
 	}
 }
