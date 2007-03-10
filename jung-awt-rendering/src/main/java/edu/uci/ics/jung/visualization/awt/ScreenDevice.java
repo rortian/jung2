@@ -307,6 +307,10 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 		this.comp = comp;
 	}
 	
+	public Object getUIComponent() {
+		return comp;
+	}
+	
 	public Color getBackground() {
 		return comp.getBackground();
 	}
@@ -493,4 +497,6 @@ public class ScreenDevice implements edu.uci.ics.jung.visualization.ScreenDevice
 			return mouseWheelListeners.toArray(new MouseWheelListener[mouseWheelListeners.size()]);
 		}
 	}
+
+
 }

@@ -55,7 +55,7 @@ public class ShearingGraphMousePlugin extends AbstractGraphMousePlugin
 	 */
 	public ShearingGraphMousePlugin(int modifiers) {
 	    super(modifiers);
-	    cursor = new Cursor(Cursor.ROTATE_CURSOR);
+	    cursor = new Cursor(Cursor.SHEAR_CURSOR);
 	}
 
 	/**

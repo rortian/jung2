@@ -34,6 +34,7 @@ public class Graphics2DScreenDevice implements edu.uci.ics.jung.visualization.Sc
 		this.g2d = g2d;
 	}
 	
+	public Object getUIComponent() {return g2d;}
 	public Color getBackground() {return g2d.getBackground();}
 	public Rectangle getBounds() {return null; }
 	public Font getFont() {return g2d.getFont();}

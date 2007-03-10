@@ -12,6 +12,8 @@ import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.event.ScreenDeviceListener;
 
 public interface ScreenDevice {
+	Object getUIComponent();
+	
 	Color getBackground();
 	void setBackground(Color c);
 	

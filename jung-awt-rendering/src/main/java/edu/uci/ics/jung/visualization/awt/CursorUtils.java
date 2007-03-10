@@ -77,7 +77,44 @@ public class CursorUtils {
         return cursor;
 	}
 	
-	
+	private static synchronized Cursor getShearCursor() {
+		Cursor cursor = customCursorMap.get(edu.uci.ics.jung.visualization.cursor.Cursor.SHEAR_CURSOR);
+		if (cursor != null) return cursor;
+		Dimension cd = Toolkit.getDefaultToolkit().getBestCursorSize(16,16);
+		BufferedImage cursorImage = 
+			new BufferedImage(cd.width,cd.height,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = cursorImage.createGraphics();
+		g.addRenderingHints(Collections.singletonMap(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
+		g.setColor(new Color(0,0,0,0));
+		g.fillRect(0,0,16,16);
+
+		int left = 0;
+		int top = 0;
+		int right = 15;
+		int bottom = 15;
+
+		g.setColor(Color.white);
+		g.setStroke(new BasicStroke(3));
+		g.drawLine(left+2,top+5,right-2,top+5);
+		g.drawLine(left+2,bottom-5,right-2,bottom-5);
+		g.drawLine(left+2,top+5,left+4,top+3);
+		g.drawLine(left+2,top+5,left+4,top+7);
+		g.drawLine(right-2,bottom-5,right-4,bottom-3);
+		g.drawLine(right-2,bottom-5,right-4,bottom-7);
+
+		g.setColor(Color.black);
+		g.setStroke(new BasicStroke(1));
+		g.drawLine(left+2,top+5,right-2,top+5);
+		g.drawLine(left+2,bottom-5,right-2,bottom-5);
+		g.drawLine(left+2,top+5,left+4,top+3);
+		g.drawLine(left+2,top+5,left+4,top+7);
+		g.drawLine(right-2,bottom-5,right-4,bottom-3);
+		g.drawLine(right-2,bottom-5,right-4,bottom-7);
+		g.dispose();
+		cursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImage, new Point(), "RotateCursor");
+		customCursorMap.put(edu.uci.ics.jung.visualization.cursor.Cursor.SHEAR_CURSOR, cursor);
+		return cursor;
+	}
 	
 	public static Cursor getCursor(edu.uci.ics.jung.visualization.cursor.Cursor cursor) {
 		int type = cursor.getType();
@@ -123,6 +160,8 @@ public class CursorUtils {
 			cursors[type] = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
 		} else if (type == edu.uci.ics.jung.visualization.cursor.Cursor.ROTATE_CURSOR) {
 			cursors[type] = getRotateCursor();
+		} else if (type == edu.uci.ics.jung.visualization.cursor.Cursor.SHEAR_CURSOR) {
+			cursors[type] = getShearCursor();
 		} else {
 			// shouldn't be here
 			System.err.println("Could not find cursor type: " + type);

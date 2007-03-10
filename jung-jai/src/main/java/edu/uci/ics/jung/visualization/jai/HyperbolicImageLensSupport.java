@@ -53,7 +53,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         "Ctrl+MouseWheel to change magnification</center></html>";
     
     public HyperbolicImageLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicShapeTransformer(vv.getRenderContext().getScreenDevice()),
+        this(vv, new HyperbolicShapeTransformer(vv.getScreenDevice()),
                 new ModalLensGraphMouse());
     }
     /**

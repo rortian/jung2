@@ -61,8 +61,12 @@ public class Cursor {
 	 * The rotate cursor type
 	 */
 	public static final int ROTATE_CURSOR = 14;
+	/**
+	 * The rotate cursor type
+	 */
+	public static final int SHEAR_CURSOR = 15;
 
-	public static final int MAX_TYPE = 14;
+	public static final int MAX_TYPE = 15;
 	
 	private int type;
 

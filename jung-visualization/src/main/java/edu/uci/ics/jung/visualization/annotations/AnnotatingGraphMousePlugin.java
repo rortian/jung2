@@ -11,6 +11,7 @@
 package edu.uci.ics.jung.visualization.annotations;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -168,7 +169,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 
     	
     	if(e.isPopupTrigger()) {
-    		String annotationString = JOptionPane.showInputDialog(vv,"Annotation:");
+    		String annotationString = JOptionPane.showInputDialog((Component)vv.getScreenDevice().getUIComponent(),"Annotation:");
     		if(annotationString != null && annotationString.length() > 0) {
     			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
     			Annotation<String> annotation =
@@ -194,7 +195,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void mouseReleased(MouseEvent e) {
         VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
     	if(e.isPopupTrigger()) {
-    		String annotationString = JOptionPane.showInputDialog(vv,"Annotation:");
+    		String annotationString = JOptionPane.showInputDialog((Component)vv.getScreenDevice().getUIComponent(),"Annotation:");
     		if(annotationString != null && annotationString.length() > 0) {
     			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
     			Annotation<String> annotation =
