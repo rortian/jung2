@@ -25,6 +25,7 @@ import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 import edu.uci.ics.jung.visualization.cursor.Cursor;
 import edu.uci.ics.jung.visualization.event.Event;
@@ -158,7 +159,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 */
     @SuppressWarnings("unchecked")
     public void mousePressed(MouseEvent e) {
-    	VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
+    	VisualizationComponent<V,E> vv = (VisualizationComponent)e.getSource();
     	down = e.getPoint();
     	
 		if(added == false) {
@@ -169,7 +170,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 
     	
     	if(e.isPopupTrigger()) {
-    		String annotationString = JOptionPane.showInputDialog((Component)vv.getScreenDevice().getUIComponent(),"Annotation:");
+    		String annotationString = JOptionPane.showInputDialog(vv.getScreenDevice().getUIComponent(),"Annotation:");
     		if(annotationString != null && annotationString.length() > 0) {
     			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
     			Annotation<String> annotation =
@@ -193,9 +194,9 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 */
     @SuppressWarnings("unchecked")
     public void mouseReleased(MouseEvent e) {
-        VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
+        VisualizationComponent<V,E> vv = (VisualizationComponent)e.getSource();
     	if(e.isPopupTrigger()) {
-    		String annotationString = JOptionPane.showInputDialog((Component)vv.getScreenDevice().getUIComponent(),"Annotation:");
+    		String annotationString = JOptionPane.showInputDialog(vv.getScreenDevice().getUIComponent(),"Annotation:");
     		if(annotationString != null && annotationString.length() > 0) {
     			Point2D p = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
     			Annotation<String> annotation =
