@@ -176,19 +176,8 @@ public class DirectedSparseGraph<V,E>
 	}
 
 	public boolean addEdge(E edge, Pair<? extends V> endpoints) {
-        edges.put(edge, new Pair<V>(endpoints));
         V source = endpoints.getFirst();
         V dest = endpoints.getSecond();
-        
-        if (!vertices.containsKey(source))
-            this.addVertex(source);
-        
-        if (!vertices.containsKey(dest))
-            this.addVertex(dest);
-        
-        vertices.get(source).getSecond().add(edge);        
-        vertices.get(dest).getFirst().add(edge);        
-
         if (edges.containsKey(edge)) {
             Pair<V> existingEndpoints = edges.get(edge);
             Pair<V> new_endpoints = new Pair<V>(source, dest);
@@ -199,6 +188,17 @@ public class DirectedSparseGraph<V,E>
                 return false;
             }
         }
+        edges.put(edge, new Pair<V>(endpoints));
+        
+        if (!vertices.containsKey(source))
+            this.addVertex(source);
+        
+        if (!vertices.containsKey(dest))
+            this.addVertex(dest);
+        
+        vertices.get(source).getSecond().add(edge);        
+        vertices.get(dest).getFirst().add(edge);        
+
         
        
         return true;
