@@ -34,6 +34,9 @@ import edu.uci.ics.jung.graph.Graphs;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.event.GraphEvent;
+import edu.uci.ics.jung.visualization.event.GraphEventListener;
+import edu.uci.ics.jung.visualization.graph.ObservableGraph;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /*
@@ -70,8 +73,16 @@ public class AddNodeDemo extends javax.swing.JApplet {
     public void init() {
 
         //create a graph
-        g = Graphs.<Number,Number>synchronizedDirectedGraph(new DirectedSparseGraph<Number,Number>());
+    	Graph<Number,Number> ig = Graphs.<Number,Number>synchronizedDirectedGraph(new DirectedSparseGraph<Number,Number>());
 
+        ObservableGraph<Number,Number> og = new ObservableGraph<Number,Number>(ig);
+        og.addGraphEventListener(new GraphEventListener<Number,Number>() {
+
+			public void handleGraphEvent(GraphEvent<Number, Number> evt) {
+				System.err.println("got "+evt);
+				
+			}});
+        this.g = og;
         //create a graphdraw
         layout = new FRLayout2<Number,Number>(g);
 //        ((FRLayout)layout).setMaxIterations(200);
