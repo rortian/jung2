@@ -10,7 +10,6 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;

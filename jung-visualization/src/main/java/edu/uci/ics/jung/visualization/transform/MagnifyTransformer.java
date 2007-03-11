@@ -8,7 +8,6 @@
  */
 package edu.uci.ics.jung.visualization.transform;
 
-import java.awt.Component;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;

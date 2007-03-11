@@ -13,8 +13,6 @@ package edu.uci.ics.jung.visualization;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JComponent;
-
 /**
  * @author Tom Nelson 
  *

@@ -39,9 +39,8 @@ import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -134,7 +133,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv1.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
         vv2.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
 
-        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Orthogonal());
+        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
         vv0.addChangeListener(vv1);
         vv1.addChangeListener(vv2);

@@ -8,7 +8,6 @@
  */
 package edu.uci.ics.jung.visualization.transform.shape;
 
-import java.awt.Component;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
