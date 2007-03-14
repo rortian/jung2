@@ -161,8 +161,8 @@ public class GraphEditorDemo extends JApplet implements Printable {
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
-        Factory<Number> vertexFactory = new VertexFactory(graph);
-        Factory<Number> edgeFactory = new EdgeFactory(graph);
+        Factory<Number> vertexFactory = new VertexFactory();
+        Factory<Number> edgeFactory = new EdgeFactory();
         
         final EditingModalGraphMouse<Number,Number> graphMouse = 
         	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), vertexFactory, edgeFactory);
@@ -249,25 +249,19 @@ public class GraphEditorDemo extends JApplet implements Printable {
     
     class VertexFactory implements Factory<Number> {
 
-    	Graph<Number,Number> graph;
-    	
-    	public VertexFactory(Graph<Number,Number> graph) {
-    		this.graph = graph;
-    	}
+    	int i=0;
+
 		public Number create() {
-			return graph.getVertexCount();
+			return i++;
 		}
     }
     
     class EdgeFactory implements Factory<Number> {
 
-    	Graph<Number,Number> graph;
+    	int i=0;
     	
-    	public EdgeFactory(Graph<Number,Number> graph) {
-    		this.graph = graph;
-    	}
 		public Number create() {
-			return graph.getEdgeCount();
+			return i++;
 		}
     }
 
