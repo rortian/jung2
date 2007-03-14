@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ChainedTransformer;
+import org.apache.commons.collections15.functors.CloneTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -66,7 +68,9 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	
 	protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer) {
 		this.graph = graph;
-		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), initializer);
+		Transformer chain = 
+			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
+		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), chain);
 	}
 	
 	protected AbstractLayout(Graph<V,E> graph, Dimension size) {
@@ -76,7 +80,9 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	
 	protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer, Dimension size) {
 		this.graph = graph;
-		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), initializer);
+		Transformer chain = 
+			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
+		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), chain);
 		this.size = size;
 	}
     
