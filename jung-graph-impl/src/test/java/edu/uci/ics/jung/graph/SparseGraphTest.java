@@ -46,7 +46,7 @@ public class SparseGraphTest extends TestCase {
         Set<Number> seeds = new HashSet<Number>();
         seeds.add(1);
         seeds.add(5);
-        graph = new SparseGraph<Number,Number>();
+        graph = new SparseMultigraph<Number,Number>();
         graph.addEdge(1, 0, 1);
         graph.addEdge(2, 1, 2);
         graph.addEdge(3, 0, 2);
@@ -65,7 +65,7 @@ public class SparseGraphTest extends TestCase {
         graph.addEdge(16, 8, 3);
         graph.addEdge(17, 5, 7);
 
-        smallGraph = new SparseGraph<Integer,Number>();
+        smallGraph = new SparseMultigraph<Integer,Number>();
         smallGraph.addVertex(v0);
         smallGraph.addVertex(v1);
         smallGraph.addVertex(v2);

@@ -21,7 +21,7 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 /**
  * @author Scott White, adapted to jung2 by Tom Nelson
@@ -50,7 +50,7 @@ public class TestWeightedNIPaths extends TestCase {
 
     public void testRanker() {
 
-        DirectedGraph<String,Number> graph = new DirectedSparseGraph<String,Number>();
+        DirectedGraph<String,Number> graph = new DirectedSparseMultigraph<String,Number>();
         for(int i=0; i<5; i++) {
         	graph.addVertex(vertexFactory.create());
         }

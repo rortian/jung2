@@ -195,6 +195,17 @@ public class Graphs {
 			return delegate.findEdge(v1, v2);
 		}
 
+        /**
+         * @param v1
+         * @param v2
+         * @return
+         * @see edu.uci.ics.jung.graph.Hypergraph#findEdgeSet(java.lang.Object, java.lang.Object)
+         */
+        public synchronized Collection<E> findEdgeSet(V v1, V v2)
+        {
+            return delegate.findEdgeSet(v1, v2);
+        }
+        
 		/**
 		 * @return
 		 * @see edu.uci.ics.jung.graph.Hypergraph#getEdges()
@@ -613,6 +624,17 @@ public class Graphs {
 		public E findEdge(V v1, V v2) {
 			return delegate.findEdge(v1, v2);
 		}
+        
+        /**
+         * @param v1
+         * @param v2
+         * @return
+         * @see edu.uci.ics.jung.graph.Hypergraph#findEdgeSet(java.lang.Object, java.lang.Object)
+         */
+        public Collection<E> findEdgeSet(V v1, V v2)
+        {
+            return delegate.findEdgeSet(v1, v2);
+        }
 
 		/**
 		 * @return

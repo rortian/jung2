@@ -146,6 +146,17 @@ public class ObservableGraph<V,E> implements Graph<V,E> {
 		return delegate.findEdge(v1, v2);
 	}
 
+    /**
+     * @param v1
+     * @param v2
+     * @return
+     * @see edu.uci.ics.jung.graph.Hypergraph#findEdgeSet(java.lang.Object, java.lang.Object)
+     */
+    public Collection<E> findEdgeSet(V v1, V v2)
+    {
+        return delegate.findEdgeSet(v1, v2);
+    }
+    
 	/**
 	 * @param directed_edge
 	 * @return

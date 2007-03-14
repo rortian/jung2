@@ -14,8 +14,8 @@ package edu.uci.ics.jung.graph;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,14 +25,14 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 @SuppressWarnings("serial")
-public class SortedSparseGraph<V,E> 
+public class OrderedSparseMultigraph<V,E> 
     extends AbstractSparseGraph<V,E>
     implements Graph<V,E>, Serializable {
 	
 	public static final <V,E> Factory<Graph<V,E>> getFactory() { 
 		return new Factory<Graph<V,E>> () {
 			public Graph<V,E> create() {
-				return new SortedSparseGraph<V,E>();
+				return new OrderedSparseMultigraph<V,E>();
 			}
 		};
 	}
@@ -40,11 +40,11 @@ public class SortedSparseGraph<V,E>
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
     protected Set<E> directedEdges;
 
-    public SortedSparseGraph()
+    public OrderedSparseMultigraph()
     {
-        vertices = new TreeMap<V, Pair<Set<E>>>();
-        edges = new TreeMap<E, Pair<V>>();
-        directedEdges = new TreeSet<E>();
+        vertices = new LinkedHashMap<V, Pair<Set<E>>>();
+        edges = new LinkedHashMap<E, Pair<V>>();
+        directedEdges = new LinkedHashSet<E>();
     }
 
     public Collection<E> getEdges()
@@ -59,7 +59,7 @@ public class SortedSparseGraph<V,E>
 
     public boolean addVertex(V vertex) {
         if (!vertices.containsKey(vertex)) {
-            vertices.put(vertex, new Pair<Set<E>>(new TreeSet<E>(), new TreeSet<E>()));
+            vertices.put(vertex, new Pair<Set<E>>(new LinkedHashSet<E>(), new LinkedHashSet<E>()));
             return true;
         } else {
         	return false;
@@ -69,8 +69,8 @@ public class SortedSparseGraph<V,E>
     public boolean removeVertex(V vertex) {
         // copy to avoid concurrent modification in removeEdge
         Pair<Set<E>> i_adj_set = vertices.get(vertex);
-        Pair<Set<E>> adj_set = new Pair<Set<E>>(new TreeSet<E>(i_adj_set.getFirst()), 
-                new TreeSet<E>(i_adj_set.getSecond()));
+        Pair<Set<E>> adj_set = new Pair<Set<E>>(new LinkedHashSet<E>(i_adj_set.getFirst()), 
+                new LinkedHashSet<E>(i_adj_set.getSecond()));
         
 
 //        Pair<Set<E>> adj_set = vertices.get(vertex);
@@ -174,7 +174,7 @@ public class SortedSparseGraph<V,E>
     public Collection<V> getPredecessors(V vertex)
     {
         Set<E> incoming = vertices.get(vertex).getFirst();        
-        Set<V> preds = new TreeSet<V>();
+        Set<V> preds = new LinkedHashSet<V>();
         for (E edge : incoming) {
         	if(getEdgeType(edge) == EdgeType.DIRECTED) {
         		preds.add(this.getSource(edge));
@@ -188,7 +188,7 @@ public class SortedSparseGraph<V,E>
     public Collection<V> getSuccessors(V vertex)
     {
         Set<E> outgoing = vertices.get(vertex).getSecond();        
-        Set<V> succs = new TreeSet<V>();
+        Set<V> succs = new LinkedHashSet<V>();
         for (E edge : outgoing) {
         	if(getEdgeType(edge) == EdgeType.DIRECTED) {
         		succs.add(this.getDest(edge));
@@ -201,7 +201,7 @@ public class SortedSparseGraph<V,E>
 
     public Collection<V> getNeighbors(V vertex)
     {
-        Collection<V> out = new TreeSet<V>();
+        Collection<V> out = new LinkedHashSet<V>();
         out.addAll(this.getPredecessors(vertex));
         out.addAll(this.getSuccessors(vertex));
         return out;
@@ -209,7 +209,7 @@ public class SortedSparseGraph<V,E>
 
     public Collection<E> getIncidentEdges(V vertex)
     {
-        Collection<E> out = new TreeSet<E>();
+        Collection<E> out = new LinkedHashSet<E>();
         out.addAll(this.getInEdges(vertex));
         out.addAll(this.getOutEdges(vertex));
         return out;
@@ -268,7 +268,7 @@ public class SortedSparseGraph<V,E>
 		if(edgeType == EdgeType.DIRECTED) {
 			return Collections.unmodifiableSet(this.directedEdges);
 		} else if(edgeType == EdgeType.UNDIRECTED) {
-			Collection<E> edges = new TreeSet<E>(getEdges());
+			Collection<E> edges = new LinkedHashSet<E>(getEdges());
 			edges.removeAll(directedEdges);
 			return edges;
 		} else {

@@ -46,7 +46,7 @@ public class OrderedSparseGraphTest extends TestCase {
         Set<Number> seeds = new HashSet<Number>();
         seeds.add(1);
         seeds.add(5);
-        graph = new OrderedSparseGraph<Number,Number>();
+        graph = new OrderedSparseMultigraph<Number,Number>();
         graph.addEdge(4, 2, 1);
         graph.addEdge(5, 3, 1);
         graph.addEdge(6, 0, 4, EdgeType.DIRECTED);
@@ -65,7 +65,7 @@ public class OrderedSparseGraphTest extends TestCase {
         graph.addEdge(14, 6, 4);
         graph.addEdge(15, 7, 8);
 
-        smallGraph = new SparseGraph<Integer,Number>();
+        smallGraph = new SparseMultigraph<Integer,Number>();
         smallGraph.addVertex(v0);
         smallGraph.addVertex(v1);
         smallGraph.addVertex(v2);

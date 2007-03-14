@@ -27,14 +27,14 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 
 @SuppressWarnings("serial")
-public class DirectedOrderedSparseGraph<V,E> 
+public class DirectedOrderedSparseMultigraph<V,E> 
     extends AbstractSparseGraph<V,E>
     implements DirectedGraph<V,E>, Serializable {
 
 	public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
 		return new Factory<DirectedGraph<V,E>> () {
 			public DirectedGraph<V,E> create() {
-				return new DirectedOrderedSparseGraph<V,E>();
+				return new DirectedOrderedSparseMultigraph<V,E>();
 			}
 		};
 	}
@@ -42,7 +42,7 @@ public class DirectedOrderedSparseGraph<V,E>
 	protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
-    public DirectedOrderedSparseGraph() {
+    public DirectedOrderedSparseMultigraph() {
         vertices = new LinkedHashMap<V, Pair<Set<E>>>();
         edges = new LinkedHashMap<E, Pair<V>>();
     }

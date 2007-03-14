@@ -25,7 +25,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	public static final <V,E> Factory<Tree<V,E>> getFactory() {
 		return new Factory<Tree<V,E>> () {
 			public Tree<V,E> create() {
-				return new SparseTree<V,E>(new DirectedSparseGraph<V,E>());
+				return new SparseTree<V,E>(new DirectedSparseMultigraph<V,E>());
 			}
 		};
 	}
@@ -35,7 +35,7 @@ public class SparseTree<V,E> implements Tree<V,E> {
     protected Map<V, Integer> vertex_depths;
     
     public SparseTree() {
-    	this(DirectedSparseGraph.<V,E>getFactory());
+    	this(DirectedSparseMultigraph.<V,E>getFactory());
     }
 
 	/**
@@ -145,6 +145,16 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	public E findEdge(V v1, V v2) {
 		return delegate.findEdge(v1, v2);
 	}
+
+    /**
+     * @param v1
+     * @param v2
+     * @return
+     * @see edu.uci.ics.jung.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
+     */
+    public Collection<E> findEdgeSet(V v1, V v2) {
+        return delegate.findEdgeSet(v1, v2);
+    }
 
 	/**
 	 * @param directed_edge

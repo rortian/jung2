@@ -39,7 +39,7 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.jung.algorithms.layout.BalloonLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
@@ -80,7 +80,7 @@ public class BalloonLayoutDemo extends JApplet {
 		new Factory<DirectedGraph<String,Integer>>() {
 
 		public DirectedGraph<String, Integer> create() {
-			return new DirectedSparseGraph<String,Integer>();
+			return new DirectedSparseMultigraph<String,Integer>();
 		}
 	};
 

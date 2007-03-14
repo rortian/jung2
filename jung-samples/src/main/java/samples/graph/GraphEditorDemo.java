@@ -43,7 +43,7 @@ import org.apache.commons.collections15.map.LazyMap;
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.visualization.annotations.AnnotationControls;
 import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
@@ -140,7 +140,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
     public GraphEditorDemo() {
         
         // create a simple graph for the demo
-        graph = new SparseGraph<Number,Number>();
+        graph = new SparseMultigraph<Number,Number>();
 
         this.layout = new StaticLayout<Number,Number>(graph, 
         	TransformerUtils.mapTransformer(vertexLocations),

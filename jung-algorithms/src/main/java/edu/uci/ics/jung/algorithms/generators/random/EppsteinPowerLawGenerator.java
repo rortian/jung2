@@ -55,7 +55,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
     protected Graph<V,E> initializeGraph() {
         Graph<V,E> graph = null;
         graph = graphFactory.create();
-        	//new UndirectedSparseGraph<V,E>();
+        	//new UndirectedSparseMultigraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	graph.addVertex(vertexFactory.create());
         }

@@ -14,8 +14,8 @@ package edu.uci.ics.jung.graph;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,15 +25,14 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 @SuppressWarnings("serial")
-public class UndirectedSparseGraph<V,E> 
+public class UndirectedOrderedSparseMultigraph<V,E> 
     extends AbstractSparseGraph<V,E>
     implements UndirectedGraph<V,E>, Serializable {
 	
 	public static final <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
 		return new Factory<UndirectedGraph<V,E>> () {
-
 			public UndirectedGraph<V,E> create() {
-				return new UndirectedSparseGraph<V,E>();
+				return new UndirectedOrderedSparseMultigraph<V,E>();
 			}
 		};
 	}
@@ -41,9 +40,9 @@ public class UndirectedSparseGraph<V,E>
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
-    public UndirectedSparseGraph() {
-        vertices = new HashMap<V, Set<E>>();
-        edges = new HashMap<E, Pair<V>>();
+    public UndirectedOrderedSparseMultigraph() {
+        vertices = new LinkedHashMap<V, Set<E>>();
+        edges = new LinkedHashMap<E, Pair<V>>();
     }
 
     public Collection<E> getEdges() {
@@ -60,7 +59,7 @@ public class UndirectedSparseGraph<V,E>
     	}
         if (!vertices.containsKey(vertex))
         {
-            vertices.put(vertex, new HashSet<E>());
+            vertices.put(vertex, new LinkedHashSet<E>());
             return true;
         } else {
             return false;
@@ -70,7 +69,7 @@ public class UndirectedSparseGraph<V,E>
     public boolean removeVertex(V vertex) {
         
         // copy to avoid concurrent modification in removeEdge
-        Set<E> adj_set = new HashSet<E>(vertices.get(vertex));
+        Set<E> adj_set = new LinkedHashSet<E>(vertices.get(vertex));
         if (adj_set == null)
             return false;
         
@@ -150,7 +149,7 @@ public class UndirectedSparseGraph<V,E>
 
     public Collection<V> getNeighbors(V vertex) {
         Set<E> incident_edges = vertices.get(vertex);        
-        Set<V> neighbors = new HashSet<V>();
+        Set<V> neighbors = new LinkedHashSet<V>();
         for (E edge : incident_edges)
         {
             Pair<V> endpoints = this.getEndpoints(edge);

@@ -22,7 +22,7 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
@@ -40,7 +40,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 
     public void testSanityChecks() 
     {
-        DirectedGraph<Number,Number> g = new DirectedSparseGraph<Number,Number>();
+        DirectedGraph<Number,Number> g = new DirectedSparseMultigraph<Number,Number>();
         Number source = new Integer(1);
         Number sink = new Integer(2);
         g.addVertex(source);
@@ -48,7 +48,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
         
         Number v = new Integer(3);
         
-        DirectedGraph<Number,Number> h = new DirectedSparseGraph<Number,Number>();
+        DirectedGraph<Number,Number> h = new DirectedSparseMultigraph<Number,Number>();
         Number w = new Integer(4);
         g.addVertex(w);
         
@@ -77,7 +77,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
     }
     
 	public void testSimpleFlow() {
-		DirectedGraph<Number,Number> graph = new DirectedSparseGraph<Number,Number>();
+		DirectedGraph<Number,Number> graph = new DirectedSparseMultigraph<Number,Number>();
 		Factory<Number> edgeFactory = new Factory<Number>() {
 			int count = 0;
 			public Number create() {
@@ -155,7 +155,7 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 	}
 
 	public void testAnotherSimpleFlow() {
-		DirectedGraph<Number,Number> graph = new DirectedSparseGraph<Number,Number>();
+		DirectedGraph<Number,Number> graph = new DirectedSparseMultigraph<Number,Number>();
 		Factory<Number> edgeFactory = new Factory<Number>() {
 			int count=0;
 			public Number create() {

@@ -186,7 +186,7 @@ public class PajekNetReader<V,E> {
     }
     
     /**
-     * Returns <code>load(filename, new SparseGraph(), null)</code>.
+     * Returns <code>load(filename, new SparseMultigraph(), null)</code>.
      * @throws IOException
      */
     public Graph<V,E> load(String filename) throws IOException
@@ -197,7 +197,7 @@ public class PajekNetReader<V,E> {
     }
 
     /**
-     * Returns <code>load(filename, new SparseGraph(), nev)</code>.
+     * Returns <code>load(filename, new SparseMultigraph(), nev)</code>.
      * @throws IOException
      */
     public Graph<V,E> load(String filename, Map<E,Number> nev) throws IOException
@@ -240,7 +240,7 @@ public class PajekNetReader<V,E> {
     }
     
     /**
-     * Returns <code>load(reader, new SparseGraph(), nev)</code>.
+     * Returns <code>load(reader, new SparseMultigraph(), nev)</code>.
      * @throws IOException
      */
     public Graph<V,E> load(Reader reader, Map<E,Number> nev) throws IOException
@@ -251,7 +251,7 @@ public class PajekNetReader<V,E> {
     }
     
     /**
-     * Returns <code>load(reader, new SparseGraph(), null)</code>.
+     * Returns <code>load(reader, new SparseMultigraph(), null)</code>.
      * @throws IOException
      */
     public Graph<V,E> load(Reader reader) throws IOException

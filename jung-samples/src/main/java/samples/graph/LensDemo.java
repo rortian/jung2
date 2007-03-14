@@ -51,7 +51,7 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.Layer;
@@ -336,7 +336,7 @@ public class LensDemo extends JApplet {
     private Graph<String,Number> generateVertexGrid(Map<String,Point2D> vlf,
             Dimension d, int interval) {
         int count = d.width/interval * d.height/interval;
-        Graph<String,Number> graph = new SparseGraph<String,Number>();
+        Graph<String,Number> graph = new SparseMultigraph<String,Number>();
         for(int i=0; i<count; i++) {
             int x = interval*i;
             int y = x / d.width * interval;

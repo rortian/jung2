@@ -40,7 +40,7 @@ import javax.swing.JRadioButton;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
@@ -94,7 +94,7 @@ public class LensVertexImageShaperDemo extends JApplet {
 	/**
      * the graph
      */
-    DirectedSparseGraph<Number, Number> graph;
+    DirectedSparseMultigraph<Number, Number> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -130,7 +130,7 @@ public class LensVertexImageShaperDemo extends JApplet {
     public LensVertexImageShaperDemo() {
         
         // create a simple graph for the demo
-        graph = new DirectedSparseGraph<Number,Number>();
+        graph = new DirectedSparseMultigraph<Number,Number>();
         Number[] vertices = createVertices(11);
         
         // a Map for the labels

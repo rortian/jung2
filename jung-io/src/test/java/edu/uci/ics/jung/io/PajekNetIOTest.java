@@ -34,11 +34,11 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -64,17 +64,17 @@ public class PajekNetIOTest extends TestCase
     protected void setUp() {
     	directedGraphFactory = new Factory<DirectedGraph<Number,Number>>() {
     		public DirectedGraph<Number,Number> create() {
-    			return new DirectedSparseGraph<Number,Number>();
+    			return new DirectedSparseMultigraph<Number,Number>();
     		}
     	};
     	undirectedGraphFactory = new Factory<UndirectedGraph<Number,Number>>() {
     		public UndirectedGraph<Number,Number> create() {
-    			return new UndirectedSparseGraph<Number,Number>();
+    			return new UndirectedSparseMultigraph<Number,Number>();
     		}
     	};
     	graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {
-    			return new SparseGraph<Number,Number>();
+    			return new SparseMultigraph<Number,Number>();
     		}
     	};
     	vertexFactory = new Factory<Number>() {
@@ -285,7 +285,7 @@ public class PajekNetIOTest extends TestCase
 
     public void testMixedSaveLoadSave() throws IOException
     {
-        Graph<Number,Number> graph1 = new SparseGraph<Number,Number>();
+        Graph<Number,Number> graph1 = new SparseMultigraph<Number,Number>();
         for(int i=0; i<5; i++) {
         	graph1.addVertex(i);
         }

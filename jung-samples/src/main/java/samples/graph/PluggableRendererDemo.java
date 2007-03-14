@@ -59,7 +59,7 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -332,7 +332,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     	Factory<Graph<Integer,Number>> graphFactory =
     		new Factory<Graph<Integer,Number>>() {
     		public Graph<Integer,Number> create() {
-    			return new SparseGraph<Integer,Number>();
+    			return new SparseMultigraph<Integer,Number>();
     		}
     	};
     	Factory<Integer> vertexFactory = 

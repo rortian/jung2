@@ -31,6 +31,8 @@ public interface Hypergraph<V, E>
     
     E findEdge(V v1, V v2);
     
+    Collection<E> findEdgeSet(V v1, V v2);
+    
     boolean addVertex(V vertex);
     
     boolean removeVertex(V vertex);

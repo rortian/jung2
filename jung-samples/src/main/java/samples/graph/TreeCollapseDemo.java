@@ -45,7 +45,7 @@ import edu.uci.ics.jung.algorithms.layout.PolarPoint;
 import edu.uci.ics.jung.algorithms.layout.RadialTreeLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseForest;
@@ -81,7 +81,7 @@ public class TreeCollapseDemo extends JApplet {
     	new Factory<DirectedGraph<String,Integer>>() {
 
 			public DirectedGraph<String, Integer> create() {
-				return new DirectedSparseGraph<String,Integer>();
+				return new DirectedSparseMultigraph<String,Integer>();
 			}
 		};
 			

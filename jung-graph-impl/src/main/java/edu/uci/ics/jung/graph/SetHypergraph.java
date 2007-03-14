@@ -11,7 +11,9 @@
  */
 package edu.uci.ics.jung.graph;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -81,8 +83,23 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
     
     public H findEdge(V v1, V v2)
     {
-        // TODO Auto-generated method stub
+        for (H h : getIncidentEdges(v1))
+        {
+            if (areIncident(v2, h))
+                return h;
+        }
         return null;
+    }
+
+    public Collection<H> findEdgeSet(V v1, V v2)
+    {
+        Collection<H> edges = new ArrayList<H>();
+        for (H h : getIncidentEdges(v1))
+        {
+            if (areIncident(v2, h))
+                edges.add(h);
+        }
+        return Collections.unmodifiableCollection(edges);
     }
     
     public boolean addVertex(V vertex)

@@ -22,7 +22,7 @@ public class SparseForest<V,E> implements Forest<V,E> {
 	protected DirectedGraph<V,E> delegate;
 
 	public SparseForest() {
-		this(new DirectedSparseGraph<V,E>());
+		this(new DirectedSparseMultigraph<V,E>());
 	}
 	public SparseForest(DirectedGraph<V,E> delegate) {
 		this.delegate = delegate;
@@ -122,7 +122,19 @@ public class SparseForest<V,E> implements Forest<V,E> {
 	public E findEdge(V v1, V v2) {
 		return delegate.findEdge(v1, v2);
 	}
-	/**
+    
+    /**
+     * @param v1
+     * @param v2
+     * @return
+     * @see edu.uci.ics.jung.graph.Hypergraph#findEdgeSet(java.lang.Object, java.lang.Object)
+     */
+    public Collection<E> findEdgeSet(V v1, V v2)
+    {
+        return delegate.findEdgeSet(v1, v2);
+    }
+
+    /**
 	 * @param directed_edge
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getDest(java.lang.Object)

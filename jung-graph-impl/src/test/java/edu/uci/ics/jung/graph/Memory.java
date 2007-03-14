@@ -9,7 +9,7 @@ public class Memory {
 		long free = Runtime.getRuntime().freeMemory();
 		long usedMemory = total-free;
 		System.err.println("total="+total+", free="+free+", used="+usedMemory);
-		Graph<Number,Number> graph = new UndirectedSparseGraph<Number,Number>();
+		Graph<Number,Number> graph = new UndirectedSparseMultigraph<Number,Number>();
 		for(int i=0; i<100; i++) {
 			graph.addVertex(i);
 		}
@@ -21,7 +21,7 @@ public class Memory {
 		usedMemory = total-free;
 		System.err.println("total="+total+", free="+free+", used="+usedMemory);
 		
-		Graph<Number,Number> copyOne = new UndirectedSparseGraph<Number,Number>();
+		Graph<Number,Number> copyOne = new UndirectedSparseMultigraph<Number,Number>();
 		for(Number v : graph.getVertices()) {
 			copyOne.addVertex(v);
 		}
@@ -34,7 +34,7 @@ public class Memory {
 		usedMemory = total-free;
 		System.err.println("total="+total+", free="+free+", used="+usedMemory);
 		
-		Graph<Number,Number> copyTwo = new UndirectedSparseGraph<Number,Number>();
+		Graph<Number,Number> copyTwo = new UndirectedSparseMultigraph<Number,Number>();
 		for(Number v : graph.getVertices()) {
 			copyTwo.addVertex(v);
 		}
@@ -47,7 +47,7 @@ public class Memory {
 		usedMemory = total-free;
 		System.err.println("total="+total+", free="+free+", used="+usedMemory);
 
-		Graph<Number,Number> copyThree = new UndirectedSparseGraph<Number,Number>();
+		Graph<Number,Number> copyThree = new UndirectedSparseMultigraph<Number,Number>();
 		for(Number v : graph.getVertices()) {
 			copyThree.addVertex(v);
 		}

@@ -63,9 +63,9 @@ public class MixedRandomGraphGenerator {
         bag.evolveGraph(num_vertices - 4);
         Graph<V, E> ug = bag.generateGraph();
 
-        // create a SparseGraph version of g
+        // create a SparseMultigraph version of g
         Graph<V, E> g = graphFactory.create();
-        	//new SparseGraph<V, E>();
+        	//new SparseMultigraph<V, E>();
         for(V v : ug.getVertices()) {
         	g.addVertex(v);
         }

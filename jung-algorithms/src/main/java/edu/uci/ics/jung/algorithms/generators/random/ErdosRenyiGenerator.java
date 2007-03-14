@@ -60,7 +60,7 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
      */
 	public Graph<V,E> generateGraph() {
         UndirectedGraph<V,E> g = graphFactory.create();
-//        	new UndirectedSparseGraph<V,E>();
+//        	new UndirectedSparseMultigraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	g.addVertex(vertexFactory.create());
         }

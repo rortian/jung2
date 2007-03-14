@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.Set;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 /**
  * 
@@ -51,8 +51,8 @@ public class TestGraphs {
 	/**
 	 * Creates a small sample graph that can be used for testing purposes. The
 	 * graph is as described in the section on {@link #pairs pairs}. If <tt>isDirected</tt>,
-	 * the graph is a {@link DirectedSparseGraph DirectedSparseGraph},
-	 * otherwise, it is an {@link UndirectedSparseGraph UndirectedSparseGraph}.
+	 * the graph is a {@link DirectedSparseMultigraph DirectedSparseMultigraph},
+	 * otherwise, it is an {@link UndirectedSparseMultigraph UndirectedSparseMultigraph}.
 	 * 
 	 * @param graph a directed or undirected graph
 	 *            Is the graph directed?
@@ -61,9 +61,9 @@ public class TestGraphs {
 	public static Graph<String, Number> createTestGraph(boolean directed) {
 		Graph<String, Number> graph = null;
 		if(directed) {
-			graph = new DirectedSparseGraph<String,Number>();
+			graph = new DirectedSparseMultigraph<String,Number>();
 		} else {
-			graph = new UndirectedSparseGraph<String,Number>();
+			graph = new UndirectedSparseMultigraph<String,Number>();
 		}
 
 		for (int i = 0; i < pairs.length; i++) {
@@ -79,7 +79,7 @@ public class TestGraphs {
      */
     public static Graph<String,Number> createChainPlusIsolates(int chain_length, int isolate_count)
     {
-    	Graph<String,Number> g = new UndirectedSparseGraph<String,Number>();
+    	Graph<String,Number> g = new UndirectedSparseMultigraph<String,Number>();
         if (chain_length > 0)
         {
             String[] v = new String[chain_length];
@@ -112,7 +112,7 @@ public class TestGraphs {
 		int maxNodesPerLayer,
 		double linkprob) {
 
-		DirectedGraph<String,Number> dag = new DirectedSparseGraph<String,Number>();
+		DirectedGraph<String,Number> dag = new DirectedSparseMultigraph<String,Number>();
 //		StringLabeller sl = StringLabeller.getLabeller(dag);
 		Set<String> previousLayers = new HashSet<String>();
 		Set<String> inThisLayer = new HashSet<String>();
@@ -163,7 +163,7 @@ public class TestGraphs {
 	 */
 	public static Graph<String,Number> getOneComponentGraph() {
 
-		UndirectedGraph<String,Number> g = new UndirectedSparseGraph<String,Number>();
+		UndirectedGraph<String,Number> g = new UndirectedSparseMultigraph<String,Number>();
 		// let's throw in a clique, too
 		for (int i = 1; i <= 10; i++) {
 			for (int j = i + 1; j <= 10; j++) {
@@ -203,12 +203,12 @@ public class TestGraphs {
 	 * Returns a bigger test graph with a clique, several components, and other
 	 * parts.
 	 * 
-	 * @return a demonstration graph of type <tt>UndirectedSparseGraph</tt>
+	 * @return a demonstration graph of type <tt>UndirectedSparseMultigraph</tt>
 	 *         with 28 vertices.
 	 */
 	public static Graph<String, Number> getDemoGraph() {
 		UndirectedGraph<String, Number> g = 
-            new UndirectedSparseGraph<String, Number>();
+            new UndirectedSparseMultigraph<String, Number>();
 
 		for (int i = 0; i < pairs.length; i++) {
 			String[] pair = pairs[i];
@@ -239,7 +239,7 @@ public class TestGraphs {
 
     public static Graph<Integer, Number> getSmallGraph() {
         Graph<Integer, Number> graph = 
-            new SparseGraph<Integer, Number>();
+            new SparseMultigraph<Integer, Number>();
         Integer[] v = new Integer[3];
         for (int i = 0; i < 3; i++) {
             v[i] = new Integer(i);

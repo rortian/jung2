@@ -39,7 +39,7 @@ import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
@@ -133,7 +133,7 @@ public class ShowLayouts extends JApplet {
     	Factory<Graph<Integer,Number>> graphFactory =
     		new Factory<Graph<Integer,Number>>() {
     		public Graph<Integer,Number> create() {
-    			return new SparseGraph<Integer,Number>();
+    			return new SparseMultigraph<Integer,Number>();
     		}
     	};
 

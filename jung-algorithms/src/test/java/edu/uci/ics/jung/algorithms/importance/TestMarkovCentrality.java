@@ -16,7 +16,7 @@ import junit.framework.Assert;
 import edu.uci.ics.jung.algorithms.importance.MarkovCentrality;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -36,7 +36,7 @@ public class TestMarkovCentrality extends TestCase {
 
     public void testSimple() {
 
-        DirectedGraph<Number,Number> graph = new DirectedSparseGraph<Number,Number>();
+        DirectedGraph<Number,Number> graph = new DirectedSparseMultigraph<Number,Number>();
         for(int i=0; i<4; i++) {
         	graph.addVertex(i);
         }

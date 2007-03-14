@@ -2,12 +2,12 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 
 import junit.framework.TestCase;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 public class TestPrimMinimumSpanningTree extends TestCase {
 	
@@ -30,7 +30,7 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 	}
 	
 	public void testDAG() {
-		DirectedGraph<String,Integer> graph = new DirectedSparseGraph<String,Integer>();
+		DirectedGraph<String,Integer> graph = new DirectedSparseMultigraph<String,Integer>();
 		graph.addVertex("B0");
 		graph.addEdge(0, "A", "B0");
 		graph.addEdge(1, "A", "B1");
@@ -44,7 +44,7 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 	}
 
 	public void testUAG() {
-		UndirectedGraph<String,Integer> graph = new UndirectedSparseGraph<String,Integer>();
+		UndirectedGraph<String,Integer> graph = new UndirectedSparseMultigraph<String,Integer>();
 		graph.addVertex("B0");
 		graph.addEdge(0, "A", "B0");
 		graph.addEdge(1, "A", "B1");

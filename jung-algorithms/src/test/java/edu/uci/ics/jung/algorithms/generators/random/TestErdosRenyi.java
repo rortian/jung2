@@ -9,7 +9,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.algorithms.generators.random.ErdosRenyiGenerator;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 import junit.framework.*;
 
@@ -27,7 +27,7 @@ public class TestErdosRenyi extends TestCase {
 	protected void setUp() {
 		graphFactory = new Factory<UndirectedGraph<String,Number>>() {
 			public UndirectedGraph<String,Number> create() {
-				return new UndirectedSparseGraph<String,Number>();
+				return new UndirectedSparseMultigraph<String,Number>();
 			}
 		};
 		vertexFactory = new Factory<String>() {

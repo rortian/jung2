@@ -14,9 +14,9 @@ import junit.framework.TestSuite;
 import edu.uci.ics.jung.algorithms.Indexer;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 /**
  * @author Scott White
@@ -47,7 +47,7 @@ public class TestUnweightedShortestPath extends TestCase
 	
 	public void testUndirected() {
 		UndirectedGraph<String,Integer> ug = 
-			new UndirectedSparseGraph<String,Integer>();
+			new UndirectedSparseMultigraph<String,Integer>();
 		for(int i=0; i<5; i++) {
 			ug.addVertex(vertexFactory.create());
 		}
@@ -71,7 +71,7 @@ public class TestUnweightedShortestPath extends TestCase
 	
 	public void testDirected() {
 			DirectedGraph<String,Integer> dg = 
-				new DirectedSparseGraph<String,Integer>();
+				new DirectedSparseMultigraph<String,Integer>();
 			for(int i=0; i<5; i++) {
 				dg.addVertex(vertexFactory.create());
 			}

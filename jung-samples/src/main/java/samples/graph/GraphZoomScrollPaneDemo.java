@@ -27,7 +27,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.Layer;
@@ -62,7 +62,7 @@ public class GraphZoomScrollPaneDemo {
     /**
      * the graph
      */
-    DirectedSparseGraph<String, Number> graph;
+    DirectedSparseMultigraph<String, Number> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -77,7 +77,7 @@ public class GraphZoomScrollPaneDemo {
     public GraphZoomScrollPaneDemo() {
         
         // create a simple graph for the demo
-        graph = new DirectedSparseGraph<String, Number>();
+        graph = new DirectedSparseMultigraph<String, Number>();
         String[] v = createVertices(10);
         createEdges(v);
         

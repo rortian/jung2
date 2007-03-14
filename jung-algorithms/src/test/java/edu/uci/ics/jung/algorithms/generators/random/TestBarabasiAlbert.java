@@ -14,7 +14,7 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 
 
 public class TestBarabasiAlbert extends TestCase {
@@ -36,7 +36,7 @@ public class TestBarabasiAlbert extends TestCase {
         Factory<Graph<Integer,Number>> graphFactory =
         	new Factory<Graph<Integer,Number>>() {
         	public Graph<Integer,Number> create() {
-        		return new SparseGraph<Integer,Number>();
+        		return new SparseMultigraph<Integer,Number>();
         	}
         };
     	Factory<Integer> vertexFactory = 

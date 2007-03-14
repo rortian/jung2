@@ -33,7 +33,7 @@ import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
@@ -296,7 +296,7 @@ public class ShortestPathDemo extends JPanel {
 	
 	static class GraphFactory implements Factory<Graph<String,Number>> {
 		public Graph<String,Number> create() {
-			return new SparseGraph<String,Number>();
+			return new SparseMultigraph<String,Number>();
 		}
 	}
 	

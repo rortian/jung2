@@ -21,7 +21,7 @@ import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.io.GraphMLFile;
 
@@ -43,7 +43,7 @@ public class TestGraphMLFile extends TestCase {
     protected void setUp() {
     	graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {
-    			return new DirectedSparseGraph<Number,Number>();
+    			return new DirectedSparseMultigraph<Number,Number>();
     		}
     	};
     	vertexFactory = new Factory<Number>() {

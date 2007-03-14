@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
@@ -69,7 +69,7 @@ public class UnicodeLabelDemo {
     public UnicodeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new DirectedSparseGraph<Integer,Number>();
+        graph = new DirectedSparseMultigraph<Integer,Number>();
         Integer[] v = createVertices(10);
         createEdges(v);
         

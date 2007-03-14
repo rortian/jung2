@@ -57,6 +57,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     
     private Rectangle2D innerBounds = new Rectangle2D.Double();
     
+    private boolean checked = false;
+    
     public FRLayout2(Graph<V, E> g) {
         super(g);
     }
@@ -290,6 +292,12 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
      */
     public boolean done() {
         if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension) { 
+            if (!checked)
+            {
+                System.out.println("current iteration: " + currentIteration);
+                System.out.println("temperature: " + temperature);
+                checked = true;
+            }
             return true; 
         } 
         return false;

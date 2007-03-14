@@ -15,10 +15,10 @@ import junit.framework.TestSuite;
 import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 /**
  * @author Scott
@@ -36,12 +36,12 @@ public class TestMatrixFile extends TestCase {
     protected void setUp() {
     	undirectedGraphFactory = new Factory<UndirectedGraph<Number,Number>>() {
     		public UndirectedGraph<Number,Number> create() {
-    			return new UndirectedSparseGraph<Number,Number>();
+    			return new UndirectedSparseMultigraph<Number,Number>();
     		}
     	};
     	directedGraphFactory = new Factory<DirectedGraph<Number,Number>>() {
     		public DirectedGraph<Number,Number> create() {
-    			return new DirectedSparseGraph<Number,Number>();
+    			return new DirectedSparseMultigraph<Number,Number>();
     		}
     	};
     	vertexFactory = new Factory<Number>() {

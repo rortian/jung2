@@ -22,7 +22,7 @@ public class DirectedSparseGraphTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        graph = new DirectedSparseGraph<Integer,Number>();
+        graph = new DirectedSparseMultigraph<Integer,Number>();
         graph.addEdge(e01, v0, v1);
         graph.addEdge(e10, v1, v0);
         graph.addEdge(e12, v1, v2);

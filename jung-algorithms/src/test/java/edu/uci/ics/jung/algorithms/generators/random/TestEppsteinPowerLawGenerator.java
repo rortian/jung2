@@ -18,7 +18,7 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 
 /**
  * @author Scott White
@@ -36,7 +36,7 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
 	protected void setUp() {
 		graphFactory = new Factory<Graph<Integer,Number>>() {
 			public Graph<Integer,Number> create() {
-				return new SparseGraph<Integer,Number>();
+				return new SparseMultigraph<Integer,Number>();
 			}
 		};
 		vertexFactory = new Factory<Integer>() {

@@ -23,7 +23,7 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.io.GraphMLFile;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
@@ -67,7 +67,7 @@ public class GraphFromGraphMLDemo {
         
     	Factory<Graph<Number,Number>> graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {
-    			return new DirectedSparseGraph<Number,Number>();
+    			return new DirectedSparseMultigraph<Number,Number>();
     		}
     	};
     	Factory<Number> vertexFactory = new Factory<Number>() {

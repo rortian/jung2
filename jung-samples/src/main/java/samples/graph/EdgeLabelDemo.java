@@ -40,7 +40,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.VertexLabelRenderer;
@@ -97,7 +97,7 @@ public class EdgeLabelDemo extends JApplet {
     public EdgeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new SparseGraph<Integer,Number>();
+        graph = new SparseMultigraph<Integer,Number>();
         Integer[] v = createVertices(3);
         createEdges(v);
         

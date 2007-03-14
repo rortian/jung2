@@ -10,7 +10,7 @@ import junit.framework.TestSuite;
 import edu.uci.ics.jung.algorithms.filters.Filter;
 import edu.uci.ics.jung.algorithms.filters.impl.KNeighborhoodFilter.EdgeType;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 
 
@@ -23,7 +23,7 @@ public class TestKNeighborhoodFilter extends TestCase {
 	}
 
 	protected void setUp() {
-		graph = new DirectedSparseGraph<Number,Number>();
+		graph = new DirectedSparseMultigraph<Number,Number>();
 		for(int i=0; i<7; i++) {
 			graph.addVertex(i);
 		}

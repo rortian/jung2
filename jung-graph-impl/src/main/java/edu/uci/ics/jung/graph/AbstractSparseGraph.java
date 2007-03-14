@@ -108,6 +108,33 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E> {
             throw new IllegalArgumentException(vertex + " is not incident to " + edge);
     }
 
+    public E findEdge(V v1, V v2)
+    {
+        for (E e : getOutEdges(v1))
+        {
+            if (getOpposite(v1, e).equals(v2))
+                return e;
+        }
+        return null;
+    }
+    
+    public Collection<E> findEdgeSet(V v1, V v2)
+    {
+        if (!getVertices().contains(v1))
+            throw new IllegalArgumentException(v1 + " is not an element of this graph");
+        
+        if (!getVertices().contains(v2))
+            throw new IllegalArgumentException(v2 + " is not an element of this graph");
+        
+        Collection<E> edges = new ArrayList<E>();
+        for (E e : getOutEdges(v1))
+        {
+            if (getOpposite(v1, e).equals(v2))
+                edges.add(e);
+        }
+        return Collections.unmodifiableCollection(edges);
+    }
+    
     public Collection<V> getIncidentVertices(E edge)
     {
         Pair<V> endpoints = this.getEndpoints(edge);

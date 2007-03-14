@@ -19,10 +19,10 @@ import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.Indexer;
 import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 import junit.framework.TestCase;
 
@@ -143,7 +143,7 @@ public class TestShortestPath extends TestCase
     protected void setUp() {
     	edgeWeights = new HashMap<Integer,Number>();
         nev = MapTransformer.<Integer,Number>getInstance(edgeWeights);
-		dg = new DirectedSparseGraph<String,Integer>();
+		dg = new DirectedSparseMultigraph<String,Integer>();
 		for(int i=0; i<dg_distances.length; i++) {
 			dg.addVertex(vertexFactoryDG.create());
 		}
@@ -151,7 +151,7 @@ public class TestShortestPath extends TestCase
         Integer[] dg_array = new Integer[edges.length];
 		addEdges(dg, did, dg_array);
         
-        ug = new UndirectedSparseGraph<String,Integer>();
+        ug = new UndirectedSparseMultigraph<String,Integer>();
 		for(int i=0; i<ug_distances.length; i++) {
 			ug.addVertex(vertexFactoryUG.create());
 		}
