@@ -57,6 +57,8 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.layout.LayoutTransition;
+import edu.uci.ics.jung.visualization.util.Animator;
 
 /**
  * Shoes a TreeLayout and RadialTreeLayout view of a
@@ -108,7 +110,7 @@ public class TreeLayoutDemo extends JApplet {
     
     String root;
     
-    TreeLayout<String,Integer> layout;
+    TreeLayout<String,Integer> treeLayout;
     
     RadialTreeLayout<String,Integer> radialLayout;
 
@@ -119,12 +121,12 @@ public class TreeLayoutDemo extends JApplet {
 
         createTree();
         
-        layout = new TreeLayout<String,Integer>(graph);
+        treeLayout = new TreeLayout<String,Integer>(graph);
         radialLayout = new RadialTreeLayout<String,Integer>(graph);
         radialLayout.setSize(new Dimension(600,600));
-        vv =  new VisualizationComponent<String,Integer>(layout, new Dimension(600,600));
+        vv =  new VisualizationComponent<String,Integer>(treeLayout, new Dimension(600,600));
         vv.setBackground(Color.white);
-        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Orthogonal());
+        vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -163,16 +165,22 @@ public class TreeLayoutDemo extends JApplet {
 
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
-//					layout.setRadial(true);
-					vv.setGraphLayout(radialLayout);
+					
+					LayoutTransition<String,Integer> lt =
+						new LayoutTransition<String,Integer>(vv, treeLayout, radialLayout);
+					Animator animator = new Animator(lt);
+					animator.start();
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.getServer().addPreRenderPaintable(rings);
 				} else {
-//					layout.setRadial(false);
-					vv.setGraphLayout(layout);
+					LayoutTransition<String,Integer> lt =
+						new LayoutTransition<String,Integer>(vv, radialLayout, treeLayout);
+					Animator animator = new Animator(lt);
+					animator.start();
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					vv.getServer().removePreRenderPaintable(rings);
 				}
+
 				vv.repaint();
 			}});
 
