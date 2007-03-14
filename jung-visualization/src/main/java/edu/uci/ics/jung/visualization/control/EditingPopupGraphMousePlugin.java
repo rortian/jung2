@@ -35,9 +35,9 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
 
-    public EditingPopupGraphMousePlugin(//Map<V,Point2D> vertexLocations,
+    public EditingPopupGraphMousePlugin(Map<V,Point2D> vertexLocations,
     		Factory<V> vertexFactory, Factory<E> edgeFactory) {
-//        this.vertexLocations = vertexLocations;
+        this.vertexLocations = vertexLocations;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
     }

@@ -165,12 +165,12 @@ public class GraphEditorDemo extends JApplet implements Printable {
         Factory<Number> edgeFactory = new EdgeFactory();
         
         final EditingModalGraphMouse<Number,Number> graphMouse = 
-        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), vertexFactory, edgeFactory);
+        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), vertexLocations, vertexFactory, edgeFactory);
         
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
         // they are created
-        graphMouse.setVertexLocations(vertexLocations);
+//        graphMouse.setVertexLocations(vertexLocations);
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
 

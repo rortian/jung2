@@ -30,6 +30,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 
 	protected Factory<V> vertexFactory;
 	protected Factory<E> edgeFactory;
+	protected Map<V,Point2D> vertexLocations;
 	protected EditingGraphMousePlugin<V,E> editingPlugin;
 	protected LabelEditingGraphMousePlugin<V,E> labelEditingPlugin;
 	protected EditingPopupGraphMousePlugin<V,E> popupEditingPlugin;
@@ -41,9 +42,9 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * create an instance with default values
 	 *
 	 */
-	public EditingModalGraphMouse(RenderContext rc, 
+	public EditingModalGraphMouse(RenderContext rc, Map<V,Point2D> vertexLocations,
 			Factory<V> vertexFactory, Factory<E> edgeFactory) {
-		this(rc, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
+		this(rc, vertexLocations, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
 	}
 
 	/**
@@ -51,9 +52,10 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public EditingModalGraphMouse(RenderContext rc,
+	public EditingModalGraphMouse(RenderContext rc, Map<V,Point2D> vertexLocations,
 			Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
 		super(in,out);
+		this.vertexLocations = vertexLocations;
 		this.vertexFactory = vertexFactory;
 		this.edgeFactory = edgeFactory;
 		this.rc = rc;
@@ -73,10 +75,10 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		rotatingPlugin = new RotatingGraphMousePlugin();
 		shearingPlugin = new ShearingGraphMousePlugin();
-		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
+		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexLocations, vertexFactory, edgeFactory);
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
 		annotatingPlugin = new AnnotatingGraphMousePlugin(rc);
-		popupEditingPlugin = new EditingPopupGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
+		popupEditingPlugin = new EditingPopupGraphMousePlugin<V,E>(vertexLocations, vertexFactory, edgeFactory);
 		add(scalingPlugin);
 //		add(labelEditingPlugin);
 		setMode(Mode.EDITING);

@@ -50,16 +50,17 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
-    public EditingGraphMousePlugin(Factory<V> vertexFactory, Factory<E> edgeFactory) {
-        this(Event.BUTTON1_MASK, vertexFactory, edgeFactory);
+    public EditingGraphMousePlugin(Map<V,Point2D> vertexLocations, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(Event.BUTTON1_MASK, vertexLocations, vertexFactory, edgeFactory);
     }
 
     /**
      * create instance and prepare shapes for visual effects
      * @param modifiers
      */
-    public EditingGraphMousePlugin(int modifiers, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+    public EditingGraphMousePlugin(int modifiers, Map<V,Point2D> vertexLocations, Factory<V> vertexFactory, Factory<E> edgeFactory) {
         super(modifiers);
+        this.vertexLocations = vertexLocations;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         rawEdge.setCurve(0.0f, 0.0f, 0.33f, 100, .66f, -50,
@@ -125,7 +126,6 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 } else { // make a new vertex
 
                     V newVertex = vertexFactory.create();
-                    	new Integer(graph.getVertexCount());
                     vertexLocations.put(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getServer().getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
