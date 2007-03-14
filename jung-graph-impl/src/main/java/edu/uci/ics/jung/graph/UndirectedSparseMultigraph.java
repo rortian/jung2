@@ -108,6 +108,9 @@ public class UndirectedSparseMultigraph<V,E>
         
     public boolean addEdge(E edge, Pair<? extends V> endpoints) {
         
+        if (edges.containsKey(edge))
+            return false;
+
         edges.put(edge, new Pair<V>(endpoints));
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
@@ -121,8 +124,6 @@ public class UndirectedSparseMultigraph<V,E>
         vertices.get(v1).add(edge);
         vertices.get(v2).add(edge);        
 
-        if (edges.containsKey(edge))
-            return false;
         
         return true;
     }
