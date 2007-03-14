@@ -20,7 +20,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseTree<V,E> implements Tree<V,E> {
+public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E> {
 	
 	public static final <V,E> Factory<Tree<V,E>> getFactory() {
 		return new Factory<Tree<V,E>> () {
@@ -30,7 +30,6 @@ public class SparseTree<V,E> implements Tree<V,E> {
 		};
 	}
 
-	protected DirectedGraph<V,E> delegate;
 	protected V root;
     protected Map<V, Integer> vertex_depths;
     
@@ -44,14 +43,14 @@ public class SparseTree<V,E> implements Tree<V,E> {
 	 * @param edgeFactory must create unique edges to connect tree nodes
 	 */
 	public SparseTree(Factory<DirectedGraph<V,E>> graphFactory) {
-		this.delegate = graphFactory.create();
+		super(graphFactory.create());
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
 	public SparseTree(DirectedGraph<V,E> graph) {
-		assert graph.getVertexCount() == 0 :
-			"Passed DirectedGraph must be empty";
-		this.delegate = graph;
+		super(graph);
+		if(graph.getVertexCount() != 0) throw new IllegalArgumentException(
+			"Passed DirectedGraph must be empty");
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
@@ -105,303 +104,6 @@ public class SparseTree<V,E> implements Tree<V,E> {
 		} else {
 			throw new UnsupportedOperationException("Unless you are setting the root, use addChild(V parent, V child)");
 		}
-	}
-
-	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#areIncident(java.lang.Object, java.lang.Object)
-	 */
-	public boolean areIncident(V vertex, E edge) {
-		return delegate.areIncident(vertex, edge);
-	}
-
-	/**
-	 * @param v1
-	 * @param v2
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#areNeighbors(java.lang.Object, java.lang.Object)
-	 */
-	public boolean areNeighbors(V v1, V v2) {
-		return delegate.areNeighbors(v1, v2);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#degree(java.lang.Object)
-	 */
-	public int degree(V vertex) {
-		return delegate.degree(vertex);
-	}
-
-	/**
-	 * @param v1
-	 * @param v2
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
-	 */
-	public E findEdge(V v1, V v2) {
-		return delegate.findEdge(v1, v2);
-	}
-
-    /**
-     * @param v1
-     * @param v2
-     * @return
-     * @see edu.uci.ics.jung.graph.Graph#findEdge(java.lang.Object, java.lang.Object)
-     */
-    public Collection<E> findEdgeSet(V v1, V v2) {
-        return delegate.findEdgeSet(v1, v2);
-    }
-
-	/**
-	 * @param directed_edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getDest(java.lang.Object)
-	 */
-	public V getDest(E directed_edge) {
-		return delegate.getDest(directed_edge);
-	}
-
-	/**
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEdgeCount()
-	 */
-	public int getEdgeCount() {
-		return delegate.getEdgeCount();
-	}
-
-	/**
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEdges()
-	 */
-	public Collection<E> getEdges() {
-		return delegate.getEdges();
-	}
-
-	/**
-	 * @param edgeType
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.jung.graph.util.EdgeType)
-	 */
-	public Collection<E> getEdges(EdgeType edgeType) {
-		return delegate.getEdges(edgeType);
-	}
-
-	/**
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEdgeType(java.lang.Object)
-	 */
-	public EdgeType getEdgeType(E edge) {
-		return delegate.getEdgeType(edge);
-	}
-
-	/**
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getEndpoints(java.lang.Object)
-	 */
-	public Pair<V> getEndpoints(E edge) {
-		return delegate.getEndpoints(edge);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getIncidentEdges(java.lang.Object)
-	 */
-	public Collection<E> getIncidentEdges(V vertex) {
-		return delegate.getIncidentEdges(vertex);
-	}
-
-	/**
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getIncidentVertices(java.lang.Object)
-	 */
-	public Collection<V> getIncidentVertices(E edge) {
-		return delegate.getIncidentVertices(edge);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getInEdges(java.lang.Object)
-	 */
-	public Collection<E> getInEdges(V vertex) {
-		return delegate.getInEdges(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getNeighbors(java.lang.Object)
-	 */
-	public Collection<V> getNeighbors(V vertex) {
-		return delegate.getNeighbors(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
-	 */
-	public V getOpposite(V vertex, E edge) {
-		return delegate.getOpposite(vertex, edge);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getOutEdges(java.lang.Object)
-	 */
-	public Collection<E> getOutEdges(V vertex) {
-		return delegate.getOutEdges(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getPredecessors(java.lang.Object)
-	 */
-	public Collection<V> getPredecessors(V vertex) {
-		return delegate.getPredecessors(vertex);
-	}
-
-	/**
-	 * @param directed_edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getSource(java.lang.Object)
-	 */
-	public V getSource(E directed_edge) {
-		return delegate.getSource(directed_edge);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getSuccessors(java.lang.Object)
-	 */
-	public Collection<V> getSuccessors(V vertex) {
-		return delegate.getSuccessors(vertex);
-	}
-
-	/**
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getVertexCount()
-	 */
-	public int getVertexCount() {
-		return delegate.getVertexCount();
-	}
-
-	/**
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getVertices()
-	 */
-	public Collection<V> getVertices() {
-		return delegate.getVertices();
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#inDegree(java.lang.Object)
-	 */
-	public int inDegree(V vertex) {
-		return delegate.inDegree(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#isDest(java.lang.Object, java.lang.Object)
-	 */
-	public boolean isDest(V vertex, E edge) {
-		return delegate.isDest(vertex, edge);
-	}
-
-	/**
-	 * @param v1
-	 * @param v2
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
-	 */
-	public boolean isPredecessor(V v1, V v2) {
-		return delegate.isPredecessor(v1, v2);
-	}
-
-	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#isSource(java.lang.Object, java.lang.Object)
-	 */
-	public boolean isSource(V vertex, E edge) {
-		return delegate.isSource(vertex, edge);
-	}
-
-	/**
-	 * @param v1
-	 * @param v2
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
-	 */
-	public boolean isSuccessor(V v1, V v2) {
-		return delegate.isSuccessor(v1, v2);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getNeighborCount(java.lang.Object)
-	 */
-	public int getNeighborCount(V vertex) {
-		return delegate.getNeighborCount(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getPredecessorCount(java.lang.Object)
-	 */
-	public int getPredecessorCount(V vertex) {
-		return delegate.getPredecessorCount(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#getSuccessorCount(java.lang.Object)
-	 */
-	public int getSuccessorCount(V vertex) {
-		return delegate.getSuccessorCount(vertex);
-	}
-
-	/**
-	 * @param vertex
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#outDegree(java.lang.Object)
-	 */
-	public int outDegree(V vertex) {
-		return delegate.outDegree(vertex);
-	}
-
-	/**
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Graph#removeEdge(java.lang.Object)
-	 */
-	public boolean removeEdge(E edge) {
-		return delegate.removeEdge(edge);
-//		Pair<V> endpoints = delegate.getEndpoints(edge);
-//		return delegate.removeVertex(endpoints.getSecond());
-//		throw new UnsupportedOperationException("Instead, use removeChild(V orphan)");
-
 	}
 
 	/**
