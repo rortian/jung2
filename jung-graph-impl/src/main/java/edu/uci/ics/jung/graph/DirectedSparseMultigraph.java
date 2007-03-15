@@ -55,6 +55,14 @@ public class DirectedSparseMultigraph<V,E>
         return Collections.unmodifiableCollection(vertices.keySet());
     }
 
+    public boolean containsVertex(V vertex) {
+    	return vertices.keySet().contains(vertex);
+    }
+    
+    public boolean containsEdge(E edge) {
+    	return edges.keySet().contains(edge);
+    }
+
     public boolean addVertex(V vertex) {
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");

@@ -41,6 +41,14 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
         return true;
     }
     
+    public boolean containsVertex(V vertex) {
+    	return vertices.keySet().contains(vertex);
+    }
+    
+    public boolean containsEdge(H edge) {
+    	return edges.keySet().contains(edge);
+    }
+
     public Collection<H> getEdges()
     {
         return edges.keySet();

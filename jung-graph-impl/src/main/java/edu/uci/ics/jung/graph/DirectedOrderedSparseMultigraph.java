@@ -47,6 +47,14 @@ public class DirectedOrderedSparseMultigraph<V,E>
         edges = new LinkedHashMap<E, Pair<V>>();
     }
     
+    public boolean containsVertex(V vertex) {
+    	return vertices.keySet().contains(vertex);
+    }
+    
+    public boolean containsEdge(E edge) {
+    	return edges.keySet().contains(edge);
+    }
+
     public Collection<E> getEdges() {
         return Collections.unmodifiableCollection(edges.keySet());
     }

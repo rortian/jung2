@@ -56,6 +56,14 @@ public class SparseMultigraph<V,E>
     {
         return Collections.unmodifiableCollection(vertices.keySet());
     }
+    
+    public boolean containsVertex(V vertex) {
+    	return vertices.keySet().contains(vertex);
+    }
+    
+    public boolean containsEdge(E edge) {
+    	return edges.keySet().contains(edge);
+    }
 
     public boolean addVertex(V vertex) {
         if (!vertices.containsKey(vertex)) {
