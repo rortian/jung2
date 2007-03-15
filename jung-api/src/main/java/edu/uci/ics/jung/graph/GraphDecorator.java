@@ -365,6 +365,24 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	public boolean removeVertex(V vertex) {
 		return delegate.removeVertex(vertex);
 	}
+
+	/**
+	 * @param edge
+	 * @return
+	 * @see edu.uci.ics.jung.graph.Hypergraph#containsEdge(java.lang.Object)
+	 */
+	public boolean containsEdge(E edge) {
+		return delegate.containsEdge(edge);
+	}
+
+	/**
+	 * @param vertex
+	 * @return
+	 * @see edu.uci.ics.jung.graph.Hypergraph#containsVertex(java.lang.Object)
+	 */
+	public boolean containsVertex(V vertex) {
+		return delegate.containsVertex(vertex);
+	}
 	
 	
 

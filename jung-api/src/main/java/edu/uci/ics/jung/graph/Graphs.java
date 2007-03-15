@@ -473,6 +473,24 @@ public class Graphs {
 		public boolean addEdge(E hyperedge, Collection<? extends V> vertices) {
 			return delegate.addEdge(hyperedge, vertices);
 		}
+
+		/**
+		 * @param edge
+		 * @return
+		 * @see edu.uci.ics.jung.graph.Hypergraph#containsEdge(java.lang.Object)
+		 */
+		public boolean containsEdge(E edge) {
+			return delegate.containsEdge(edge);
+		}
+
+		/**
+		 * @param vertex
+		 * @return
+		 * @see edu.uci.ics.jung.graph.Hypergraph#containsVertex(java.lang.Object)
+		 */
+		public boolean containsVertex(V vertex) {
+			return delegate.containsVertex(vertex);
+		}
         
 	}
 	
@@ -902,6 +920,24 @@ public class Graphs {
 		 */
 		public boolean addEdge(E hyperedge, Collection<? extends V> vertices) {
 			return delegate.addEdge(hyperedge, vertices);
+		}
+
+		/**
+		 * @param edge
+		 * @return
+		 * @see edu.uci.ics.jung.graph.Hypergraph#containsEdge(java.lang.Object)
+		 */
+		public boolean containsEdge(E edge) {
+			return delegate.containsEdge(edge);
+		}
+
+		/**
+		 * @param vertex
+		 * @return
+		 * @see edu.uci.ics.jung.graph.Hypergraph#containsVertex(java.lang.Object)
+		 */
+		public boolean containsVertex(V vertex) {
+			return delegate.containsVertex(vertex);
 		}
 	}
 	

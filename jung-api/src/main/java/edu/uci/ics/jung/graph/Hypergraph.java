@@ -19,6 +19,10 @@ public interface Hypergraph<V, E>
     
     Collection<V> getVertices();
     
+    boolean containsVertex(V vertex);
+    
+    boolean containsEdge(E edge);
+    
     int getEdgeCount();
     
     int getVertexCount();
