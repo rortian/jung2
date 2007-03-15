@@ -30,7 +30,12 @@ public class Animator implements Runnable {
 
 	
 	public Animator(IterativeContext process) {
+		this(process, 10L);
+	}
+
+	public Animator(IterativeContext process, long sleepTime) {
 		this.process = process;
+		this.sleepTime = sleepTime;
 	}
 
 	/**
