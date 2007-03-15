@@ -47,6 +47,8 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
+import edu.uci.ics.jung.visualization.layout.LayoutTransition;
+import edu.uci.ics.jung.visualization.util.Animator;
 
 
 /**
@@ -114,8 +116,18 @@ public class ShowLayouts extends JApplet {
                 Layout l = (Layout) o;
                 l.setInitializer(vv.getGraphLayout());
 //                vv.getModel().stop();
-                vv.setGraphLayout(l);
+//                vv.setGraphLayout(l);
 //                vv.getModel().restart();
+                
+				LayoutTransition<String,Integer> lt =
+					new LayoutTransition<String,Integer>(vv, vv.getGraphLayout(), l);
+				Animator animator = new Animator(lt);
+				animator.start();
+				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
+
+                
+                
+                
             }
             catch (Exception e)
             {
