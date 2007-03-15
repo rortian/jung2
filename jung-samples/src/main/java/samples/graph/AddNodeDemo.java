@@ -31,12 +31,12 @@ import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Graphs;
+import edu.uci.ics.jung.graph.ObservableGraph;
+import edu.uci.ics.jung.graph.event.GraphEvent;
+import edu.uci.ics.jung.graph.event.GraphEventListener;
 import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.event.GraphEvent;
-import edu.uci.ics.jung.visualization.event.GraphEventListener;
-import edu.uci.ics.jung.visualization.graph.ObservableGraph;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /*
