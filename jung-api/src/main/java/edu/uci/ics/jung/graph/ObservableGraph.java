@@ -1,49 +1,39 @@
-package edu.uci.ics.jung.visualization.graph;
+package edu.uci.ics.jung.graph;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-import javax.swing.event.EventListenerList;
-
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.event.GraphEvent;
+import edu.uci.ics.jung.graph.event.GraphEventListener;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
-import edu.uci.ics.jung.visualization.event.GraphEvent;
-import edu.uci.ics.jung.visualization.event.GraphEventListener;
 
 public class ObservableGraph<V,E> implements Graph<V,E> {
-	
+
 	protected Graph<V,E> delegate;
-	
-	EventListenerList listenerList = new EventListenerList();
-	
+
+	List<GraphEventListener> listenerList = 
+		Collections.synchronizedList(new LinkedList<GraphEventListener>());
+
 	public ObservableGraph(Graph<V, E> delegate) {
 		super();
 		this.delegate = delegate;
 	}
+	public void addGraphEventListener(GraphEventListener<V,E> l) {
+		listenerList.add(l);
+	}
 
+	public void removeFooListener(GraphEventListener<V,E> l) {
+		listenerList.remove(l);
+	}
 
-
-	 public void addGraphEventListener(GraphEventListener<V,E> l) {
-	     listenerList.add(GraphEventListener.class, l);
+	protected void fireGraphEvent(GraphEvent<V,E> evt) {
+		for(GraphEventListener<V,E> listener : listenerList) {
+			listener.handleGraphEvent(evt);
+		 }
 	 }
-
-	 public void removeFooListener(GraphEventListener<V,E> l) {
-	     listenerList.remove(GraphEventListener.class, l);
-	 }
-
-	 protected void fireGraphEvent(GraphEvent<V,E> evt) {
-	     // Guaranteed to return a non-null array
-	     Object[] listeners = listenerList.getListenerList();
-	     // Process the listeners last to first, notifying
-	     // those that are interested in this event
-	     for (int i = listeners.length-2; i>=0; i-=2) {
-	         if (listeners[i]==GraphEventListener.class) {
-	             // Lazily create the event:
-	             ((GraphEventListener)listeners[i+1]).handleGraphEvent(evt);
-	         }
-	     }
-	 }
-
 
 	/**
 	 * @param edge

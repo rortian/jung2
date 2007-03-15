@@ -1,4 +1,4 @@
-package edu.uci.ics.jung.visualization.event;
+package edu.uci.ics.jung.graph.event;
 
 import java.util.EventListener;
 
