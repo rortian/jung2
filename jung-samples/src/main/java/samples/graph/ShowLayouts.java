@@ -28,7 +28,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ChainedTransformer;
+import org.apache.commons.collections15.functors.CloneTransformer;
 
+import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.generators.random.MixedRandomGraphGenerator;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
@@ -115,6 +119,10 @@ public class ShowLayouts extends JApplet {
                 Object o = constructor.newInstance(constructorArgs);
                 Layout l = (Layout) o;
                 l.setInitializer(vv.getGraphLayout());
+                l.setSize(vv.getSize());
+
+//                Relaxer relaxer = vv.getModel().getRelaxer();
+//                if(relaxer != null) relaxer.stop();
 //                vv.getModel().stop();
 //                vv.setGraphLayout(l);
 //                vv.getModel().restart();
@@ -124,9 +132,7 @@ public class ShowLayouts extends JApplet {
 				Animator animator = new Animator(lt);
 				animator.start();
 				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-
-                
-                
+				vv.repaint();
                 
             }
             catch (Exception e)
