@@ -5,6 +5,8 @@ import java.awt.geom.Point2D;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
+import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
+import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
@@ -26,6 +28,10 @@ public class LayoutTransition<V,E> implements IterativeContext {
 		this.vv = vv;
 		this.startLayout = startLayout;
 		this.endLayout = endLayout;
+		if(endLayout instanceof IterativeContext) {
+			Relaxer relaxer = new VisRunner((IterativeContext)endLayout);
+			relaxer.prerelax();
+		}
 		this.transitionLayout =
 			new StaticLayout<V,E>(startLayout.getGraph(), startLayout);
 		vv.setGraphLayout(transitionLayout);
