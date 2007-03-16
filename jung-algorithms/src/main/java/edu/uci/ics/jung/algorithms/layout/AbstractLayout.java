@@ -141,7 +141,9 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
     }
     
     public void setInitializer(Transformer<V,Point2D> initializer) {
-    	this.locations = LazyMap.decorate(new HashMap<V,Point2D>(locations), initializer);
+		Transformer chain = 
+			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
+    	this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), chain);
     }
     
 	/**
