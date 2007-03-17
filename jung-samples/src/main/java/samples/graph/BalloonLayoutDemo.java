@@ -55,11 +55,13 @@ import edu.uci.ics.jung.visualization.control.ModalLensGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformerDecorator;
 import edu.uci.ics.jung.visualization.transform.shape.HyperbolicShapeTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
+import edu.uci.ics.jung.visualization.util.Animator;
 
 /**
  * Demonstrates the visualization of a Tree using TreeLayout
@@ -185,15 +187,19 @@ public class BalloonLayoutDemo extends JApplet {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange() == ItemEvent.SELECTED) {
 
-					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.setGraphLayout(radialLayout);
-					vv.scaleToLayout(scaler);
+					LayoutTransition<String,Integer> lt =
+						new LayoutTransition<String,Integer>(vv, layout, radialLayout);
+					Animator animator = new Animator(lt);
+					animator.start();
+					vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).setToIdentity();
 					vv.getServer().addPreRenderPaintable(rings);
 				} else {
 
-					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.setGraphLayout(layout);
-					vv.scaleToLayout(scaler);
+					LayoutTransition<String,Integer> lt =
+						new LayoutTransition<String,Integer>(vv, radialLayout, layout);
+					Animator animator = new Animator(lt);
+					animator.start();
+					vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).setToIdentity();
 					vv.getServer().removePreRenderPaintable(rings);
 				}
 				vv.repaint();
