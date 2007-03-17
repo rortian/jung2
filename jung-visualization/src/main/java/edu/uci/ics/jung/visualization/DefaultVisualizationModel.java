@@ -19,7 +19,7 @@ import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
-import edu.uci.ics.jung.visualization.layout.LayoutEventBroadcaster;
+import edu.uci.ics.jung.visualization.layout.ObservableCachingLayout;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
@@ -88,7 +88,7 @@ public class DefaultVisualizationModel<V, E> implements VisualizationModel<V,E>,
 	    if(layout instanceof ChangeEventSupport) {
 	    	this.layout = layout;
 	    } else {
-	    	this.layout = new LayoutEventBroadcaster<V,E>(layout);
+	    	this.layout = new ObservableCachingLayout<V,E>(layout);
 	    }
 		
 		((ChangeEventSupport)this.layout).addChangeListener(changeListener);

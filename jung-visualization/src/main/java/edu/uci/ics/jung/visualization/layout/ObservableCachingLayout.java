@@ -29,7 +29,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
 /**
- * A LayoutDecorator the fires ChangeEvents when certain methods 
+ * A LayoutDecorator that fires ChangeEvents when certain methods 
  * are called. Used to wrap a Layout so that the visualization
  * components can be notified of changes.
  * 
@@ -37,14 +37,14 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * @author Tom Nelson 
  *
  */
-public class LayoutEventBroadcaster<V, E> extends LayoutDecorator<V,E> implements ChangeEventSupport, Caching {
+public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implements ChangeEventSupport, Caching {
     
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
     
     protected Map<V,Point2D> locationMap;
 
-    public LayoutEventBroadcaster(Layout<V, E> delegate) {
+    public ObservableCachingLayout(Layout<V, E> delegate) {
     	super(delegate);
     	this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), 
     			new ChainedTransformer(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
@@ -99,12 +99,9 @@ public class LayoutEventBroadcaster<V, E> extends LayoutDecorator<V,E> implement
 
 	public void clear() {
 		this.locationMap.clear();
-		
 	}
 
 	public void init() {
-//		this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), delegate);
-		
 	}
 
 	/* (non-Javadoc)
