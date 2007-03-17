@@ -10,7 +10,6 @@
 package edu.uci.ics.jung.visualization.subLayout;
 
 import java.awt.geom.Point2D;
-import java.util.logging.Logger;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Forest;
@@ -18,14 +17,7 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
 
 public class TreeCollapser  {
     
-    private static final Logger logger = Logger.getLogger(TreeCollapser.class.getClass().getName());
-    private Layout layout;
-    
-    public TreeCollapser(Layout layout) {
-        this.layout = layout;
-    }
-    
-    public void collapse(Forest tree, Object subRoot) throws InstantiationException, IllegalAccessException {
+    public void collapse(Layout layout, Forest tree, Object subRoot) throws InstantiationException, IllegalAccessException {
         
     	// get a sub tree from subRoot
     	Forest subTree = TreeUtils.getSubTree(tree, subRoot);

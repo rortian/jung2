@@ -130,12 +130,9 @@ public class TreeCollapseDemo extends JApplet {
 
         createTree();
 
-
-
         layout = new TreeLayout<String,Integer>(graph);
-        collapser = new TreeCollapser(layout);
+        collapser = new TreeCollapser();
 
-        //layout1 = new FRLayout(graph);
         radialLayout = new RadialTreeLayout<String,Integer>(graph);
         radialLayout.setSize(new Dimension(600,600));
         vv =  new VisualizationComponent<String,Integer>(layout, new Dimension(600,600));
@@ -203,7 +200,7 @@ public class TreeCollapseDemo extends JApplet {
                     Forest inGraph = (Forest)layout.getGraph();
 
                     try {
-						collapser.collapse(inGraph, root);
+						collapser.collapse(vv.getGraphLayout(), inGraph, root);
 					} catch (InstantiationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
