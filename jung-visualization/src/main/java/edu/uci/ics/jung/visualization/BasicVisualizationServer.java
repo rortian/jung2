@@ -256,8 +256,13 @@ public class BasicVisualizationServer<V, E>
 
     
 
-	
-	public void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
+	/**
+	 * @TODO - do we really want to make everyone bear the cost of
+	 * synchonrization out here??
+	 */
+	public 
+//	synchronized 
+	void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
 	    if(renderContext.getGraphicsContext() == null) {
 	        renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
         } else {
