@@ -13,6 +13,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.event.ChangeListener;
@@ -38,6 +40,9 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  */
 @SuppressWarnings("serial")
 public interface VisualizationViewer<V,E> {
+	Map<Object, VisualizationViewer> eventSourceToViewer
+		= Collections.synchronizedMap( new HashMap<Object, VisualizationViewer>() );
+	
 	void setCursor(Cursor cursor);
 	
 	ScreenDevice getScreenDevice();
