@@ -155,13 +155,8 @@ public class GraphStatistics
         double diameter = 0;
         Collection<V> vertices = g.getVertices();
         for(V v : vertices) {
-//        for (Iterator outer = vertices.iterator(); outer.hasNext(); )
-//        {
-//            ArchetypeVertex v = (ArchetypeVertex)outer.next();
             for(V w : vertices) {
-//            for (Iterator inner = vertices.iterator(); inner.hasNext(); )
-//            {
-//                ArchetypeVertex w = (ArchetypeVertex)inner.next();
+
                 if (v.equals(w) == false) // don't include self-distances
                 {
                     Number dist = d.getDistance(v, w);
