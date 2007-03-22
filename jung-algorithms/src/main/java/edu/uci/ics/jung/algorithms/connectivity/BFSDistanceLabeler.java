@@ -124,9 +124,11 @@ public class BFSDistanceLabeler<V, E> {
         while (true) {
             List<V> newList = new ArrayList<V>();
             for(V currentVertex : mCurrentList) {
-                for(V next : graph.getSuccessors(currentVertex)) {
-                    visitNewVertex(currentVertex,next, distance, newList);
-                }
+            	if(graph.containsVertex(currentVertex)) {
+            		for(V next : graph.getSuccessors(currentVertex)) {
+            			visitNewVertex(currentVertex,next, distance, newList);
+            		}
+            	}
             }
             if (newList.size() == 0) break;
             mCurrentList = newList;
