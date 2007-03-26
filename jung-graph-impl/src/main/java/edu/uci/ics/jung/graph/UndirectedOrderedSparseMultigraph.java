@@ -103,10 +103,27 @@ public class UndirectedOrderedSparseMultigraph<V,E>
     }
     	
     public boolean addEdge(E edge, Pair<? extends V> endpoints) {
-    	
-        edges.put(edge, new Pair<V>(endpoints));
+        if (edge == null)
+            throw new IllegalArgumentException("input edge may not be null");
+        
+        if (endpoints == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+        
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
+        Pair<V> new_endpoints = new Pair<V>(v1, v2);
+
+        if (edges.containsKey(edge)) {
+            Pair<V> existingEndpoints = edges.get(edge);
+            if (!existingEndpoints.equals(new_endpoints)) {
+                throw new IllegalArgumentException("EdgeType " + edge + 
+                        " exists in this graph with endpoints " + v1 + ", " + v2);
+            } else {
+                return false;
+            }
+        }
+        
+        edges.put(edge, new_endpoints);
         
         if (!vertices.containsKey(v1))
             this.addVertex(v1);
@@ -117,9 +134,6 @@ public class UndirectedOrderedSparseMultigraph<V,E>
         vertices.get(v1).add(edge);
         vertices.get(v2).add(edge);        
 
-        if (edges.containsKey(edge))
-            return false;
-        
         return true;
     }
 

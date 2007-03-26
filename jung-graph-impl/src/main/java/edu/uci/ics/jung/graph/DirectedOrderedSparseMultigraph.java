@@ -184,9 +184,27 @@ public class DirectedOrderedSparseMultigraph<V,E>
 	}
 
 	public boolean addEdge(E edge, Pair<? extends V> endpoints) {
-        edges.put(edge, new Pair<V>(endpoints));
+        
+        if (edge == null)
+            throw new IllegalArgumentException("input edge may not be null");
+        
+        if (endpoints == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+        
         V source = endpoints.getFirst();
         V dest = endpoints.getSecond();
+        Pair<V> new_endpoints = new Pair<V>(source, dest);
+        if (edges.containsKey(edge)) {
+            Pair<V> existingEndpoints = edges.get(edge);
+            if (!existingEndpoints.equals(new_endpoints)) {
+                throw new IllegalArgumentException("EdgeType " + edge + 
+                        " exists in this graph with endpoints " + source + ", " + dest);
+            } else {
+                return false;
+            }
+        }
+        
+        edges.put(edge, new_endpoints);
         
         if (!vertices.containsKey(source))
             this.addVertex(source);
@@ -197,17 +215,6 @@ public class DirectedOrderedSparseMultigraph<V,E>
         vertices.get(source).getSecond().add(edge);        
         vertices.get(dest).getFirst().add(edge);        
 
-        if (edges.containsKey(edge)) {
-            Pair<V> existingEndpoints = edges.get(edge);
-            Pair<V> new_endpoints = new Pair<V>(source, dest);
-            if (!existingEndpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("EdgeType " + edge + 
-                        " exists in this graph with endpoints " + source + ", " + dest);
-            } else {
-                return false;
-            }
-        }
-        
        
         return true;
 	}

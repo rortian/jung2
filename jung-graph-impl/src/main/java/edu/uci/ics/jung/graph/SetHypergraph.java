@@ -26,10 +26,26 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>
  
     public boolean addEdge(H hyperedge, Collection<? extends V> to_attach)
     {
-    	if(to_attach.contains(null)) throw new IllegalArgumentException("cannot add an edge with a null enpoint");
+        if (hyperedge == null)
+            throw new IllegalArgumentException("input hyperedge may not be null");
+        
+        if (to_attach == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+
+        if(to_attach.contains(null)) throw new IllegalArgumentException("cannot add an edge with a null endpoint");
+        Set new_endpoints = new HashSet<V>(to_attach);
         if (edges.containsKey(hyperedge))
-            return false;
-        edges.put(hyperedge, new HashSet<V>(to_attach));
+        {
+            Collection attached = edges.get(hyperedge);
+            if (!attached.equals(new_endpoints))
+            {
+                throw new IllegalArgumentException("Edge " + hyperedge + 
+                        " exists in this graph with endpoints " + attached);
+            }
+            else
+                return false;
+        }
+        edges.put(hyperedge, new_endpoints);
         for (V v : to_attach)
         {
             // add v if it's not already in the graph

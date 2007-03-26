@@ -108,7 +108,13 @@ public class SparseMultigraph<V,E>
     }
     
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
-    	
+        
+        if (edge == null)
+            throw new IllegalArgumentException("input edge may not be null");
+        
+        if (endpoints == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
         

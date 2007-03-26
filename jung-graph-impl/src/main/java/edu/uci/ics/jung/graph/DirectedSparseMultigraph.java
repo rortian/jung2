@@ -172,7 +172,8 @@ public class DirectedSparseMultigraph<V,E>
      * Adds <code>edge</code> to the graph.  Also adds 
      * <code>source</code> and <code>dest</code> to the graph if they
      * are not already present.  Returns <code>false</code> if 
-     * the specified edge is 
+     * the specified edge (with the specified source and destination) are already
+     * in the graph.
      */
     public boolean addEdge(E edge, V source, V dest, EdgeType edgeType) {
     	return addEdge(edge, new Pair<V>(source, dest), edgeType);
@@ -184,11 +185,17 @@ public class DirectedSparseMultigraph<V,E>
 	}
 
 	public boolean addEdge(E edge, Pair<? extends V> endpoints) {
+        if (edge == null)
+            throw new IllegalArgumentException("input edge may not be null");
+        
+        if (endpoints == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+        
         V source = endpoints.getFirst();
         V dest = endpoints.getSecond();
+        Pair<V> new_endpoints = new Pair<V>(source, dest);
         if (edges.containsKey(edge)) {
             Pair<V> existingEndpoints = edges.get(edge);
-            Pair<V> new_endpoints = new Pair<V>(source, dest);
             if (!existingEndpoints.equals(new_endpoints)) {
                 throw new IllegalArgumentException("EdgeType " + edge + 
                         " exists in this graph with endpoints " + source + ", " + dest);
@@ -196,7 +203,7 @@ public class DirectedSparseMultigraph<V,E>
                 return false;
             }
         }
-        edges.put(edge, new Pair<V>(endpoints));
+        edges.put(edge, new_endpoints);
         
         if (!vertices.containsKey(source))
             this.addVertex(source);

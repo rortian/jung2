@@ -108,10 +108,27 @@ public class SortedSparseMultigraph<V,E>
     }
     
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
-    	
-        edges.put(edge, new Pair<V>(endpoints));
+        if (edge == null)
+            throw new IllegalArgumentException("input edge may not be null");
+        
+        if (endpoints == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+        
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
+        Pair<V> new_endpoints = new Pair<V>(v1, v2);
+        
+        if (edges.containsKey(edge)) {
+            Pair<V> existingEndpoints = edges.get(edge);
+            if (!existingEndpoints.equals(new_endpoints)) {
+                throw new IllegalArgumentException("EdgeType " + edge + 
+                        " exists in this graph with endpoints " + v1 + ", " + v2);
+            } else {
+                return false;
+            }
+        }
+
+        edges.put(edge, new_endpoints);
         
         if (!vertices.containsKey(v1))
             this.addVertex(v1);
@@ -128,21 +145,8 @@ public class SortedSparseMultigraph<V,E>
           vertices.get(v1).getFirst().add(edge);        
           vertices.get(v2).getSecond().add(edge);        
         }
-
-        if (edges.containsKey(edge)) {
-            Pair<V> existingEndpoints = edges.get(edge);
-            Pair<V> new_endpoints = new Pair<V>(v1, v2);
-            if (!existingEndpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("EdgeType " + edge + 
-                        " exists in this graph with endpoints " + v1 + ", " + v2);
-            } else {
-                return false;
-            }
-        }
-        
         
         return true;
-
     }
     
     public boolean removeEdge(E edge)
