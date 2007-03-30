@@ -14,7 +14,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class SortedSparseGraphTest extends TestCase {
+public class SortedSparseMultigraphTest extends TestCase {
 
 	class Foo {}
 	class Bar {}

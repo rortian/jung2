@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class UndirectedSparseGraphTest extends TestCase {
+public class UndirectedSparseMultigraphTest extends TestCase {
 
     Integer v0 = new Integer(0);
     Integer v1 = new Integer(1);
