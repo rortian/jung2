@@ -31,7 +31,7 @@ public class DirectedSparseMultigraph<V,E>
     extends AbstractSparseGraph<V,E>
     implements DirectedGraph<V,E>, Serializable {
 
-	public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
+	public static <V,E> Factory<DirectedGraph<V,E>> getFactory() {
 		return new Factory<DirectedGraph<V,E>> () {
 			public DirectedGraph<V,E> create() {
 				return new DirectedSparseMultigraph<V,E>();
@@ -63,6 +63,16 @@ public class DirectedSparseMultigraph<V,E>
     	return edges.keySet().contains(edge);
     }
 
+    protected Collection<E> getIncoming_internal(V vertex)
+    {
+        return vertices.get(vertex).getFirst();
+    }
+    
+    protected Collection<E> getOutgoing_internal(V vertex)
+    {
+        return vertices.get(vertex).getSecond();
+    }
+    
     public boolean addVertex(V vertex) {
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");
@@ -77,18 +87,14 @@ public class DirectedSparseMultigraph<V,E>
 
     public boolean removeVertex(V vertex) {
         // copy to avoid concurrent modification in removeEdge
-        Pair<Set<E>> i_adj_set = vertices.get(vertex);
-        Pair<Set<E>> adj_set = new Pair<Set<E>>(new HashSet<E>(i_adj_set.getFirst()), 
-                new HashSet<E>(i_adj_set.getSecond()));
-        
-
-//        Pair<Set<E>> adj_set = vertices.get(vertex);
-        if (adj_set == null)
+        if (!vertices.containsKey(vertex))
             return false;
         
-        for (E edge : adj_set.getFirst())
-            removeEdge(edge);
-        for (E edge : adj_set.getSecond())
+        // copy to avoid concurrent modification in removeEdge
+        Set<E> incident = new HashSet<E>(getIncoming_internal(vertex));
+        incident.addAll(getOutgoing_internal(vertex));
+        
+        for (E edge : incident)
             removeEdge(edge);
         
         vertices.remove(vertex);
@@ -105,8 +111,8 @@ public class DirectedSparseMultigraph<V,E>
         V dest = endpoints.getSecond();
         
         // remove edge from incident vertices' adjacency sets
-        vertices.get(source).getSecond().remove(edge);
-        vertices.get(dest).getFirst().remove(edge);
+        getOutgoing_internal(source).remove(edge);
+        getIncoming_internal(dest).remove(edge);
         
         edges.remove(edge);
         return true;
@@ -114,50 +120,51 @@ public class DirectedSparseMultigraph<V,E>
 
     
     public Collection<E> getInEdges(V vertex) {
-        return Collections.unmodifiableCollection(vertices.get(vertex).getFirst());
+        return Collections.unmodifiableCollection(getIncoming_internal(vertex));
     }
 
     public Collection<E> getOutEdges(V vertex) {
-        return Collections.unmodifiableCollection(vertices.get(vertex).getSecond());
+        return Collections.unmodifiableCollection(getOutgoing_internal(vertex));
     }
 
     public Collection<V> getPredecessors(V vertex) {
-        Set<E> incoming = vertices.get(vertex).getFirst();        
         Set<V> preds = new HashSet<V>();
-        for (E edge : incoming)
+        for (E edge : getIncoming_internal(vertex))
             preds.add(this.getSource(edge));
         
         return Collections.unmodifiableCollection(preds);
     }
 
     public Collection<V> getSuccessors(V vertex) {
-        Set<E> outgoing = vertices.get(vertex).getSecond();        
         Set<V> succs = new HashSet<V>();
-        for (E edge : outgoing)
+        for (E edge : getOutgoing_internal(vertex))
             succs.add(this.getDest(edge));
         
         return Collections.unmodifiableCollection(succs);
     }
 
     public Collection<V> getNeighbors(V vertex) {
-        Collection<V> out = new HashSet<V>();
-        out.addAll(this.getPredecessors(vertex));
-        out.addAll(this.getSuccessors(vertex));
-        return out;
+        Collection<V> neighbors = new HashSet<V>();
+        for (E edge : getIncoming_internal(vertex))
+            neighbors.add(this.getSource(edge));
+        for (E edge : getOutgoing_internal(vertex))
+            neighbors.add(this.getDest(edge));
+        return Collections.unmodifiableCollection(neighbors);
+//        out.addAll(this.getPredecessors(vertex));
+//        out.addAll(this.getSuccessors(vertex));
+//        return out;
 //        return CollectionUtils.union(this.getPredecessors(vertex), this.getSuccessors(vertex));
     }
 
     public Collection<E> getIncidentEdges(V vertex) {
-        Collection<E> out = new HashSet<E>();
-        out.addAll(this.getInEdges(vertex));
-        out.addAll(this.getOutEdges(vertex));
-        return out;
-//        return CollectionUtils.union(this.getInEdges(vertex), this.getOutEdges(vertex));
+        Collection<E> incident = new HashSet<E>();
+        incident.addAll(getIncoming_internal(vertex));
+        incident.addAll(getOutgoing_internal(vertex));
+        return incident;
     }
 
     public E findEdge(V v1, V v2) {
-        Set<E> outgoing = vertices.get(v1).getSecond();
-        for (E edge : outgoing)
+        for (E edge : getOutgoing_internal(v1))
             if (this.getDest(edge).equals(v2))
                 return edge;
         
@@ -180,42 +187,30 @@ public class DirectedSparseMultigraph<V,E>
     }
 
 	public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
-    	if(edgeType != EdgeType.DIRECTED) throw new IllegalArgumentException();
+    	if(edgeType != EdgeType.DIRECTED) 
+            throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
     	return addEdge(edge, endpoints);
 	}
 
 	public boolean addEdge(E edge, Pair<? extends V> endpoints) {
-        if (edge == null)
-            throw new IllegalArgumentException("input edge may not be null");
+        Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
+        if (new_endpoints == null)
+            return false;
         
-        if (endpoints == null)
-            throw new IllegalArgumentException("endpoints may not be null");
-        
-        V source = endpoints.getFirst();
-        V dest = endpoints.getSecond();
-        Pair<V> new_endpoints = new Pair<V>(source, dest);
-        if (edges.containsKey(edge)) {
-            Pair<V> existingEndpoints = edges.get(edge);
-            if (!existingEndpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("EdgeType " + edge + 
-                        " exists in this graph with endpoints " + source + ", " + dest);
-            } else {
-                return false;
-            }
-        }
         edges.put(edge, new_endpoints);
         
+        V source = new_endpoints.getFirst();
+        V dest = new_endpoints.getSecond();
+
         if (!vertices.containsKey(source))
             this.addVertex(source);
         
         if (!vertices.containsKey(dest))
             this.addVertex(dest);
         
-        vertices.get(source).getSecond().add(edge);        
-        vertices.get(dest).getFirst().add(edge);        
+        getIncoming_internal(dest).add(edge);
+        getOutgoing_internal(source).add(edge);
 
-        
-       
         return true;
 	}
 
@@ -241,19 +236,25 @@ public class DirectedSparseMultigraph<V,E>
     }
 
     public EdgeType getEdgeType(E edge) {
-        return EdgeType.DIRECTED;
+        if (containsEdge(edge))
+            return EdgeType.DIRECTED;
+        else 
+            return null;
     }
 
 	public Collection<E> getEdges(EdgeType edgeType) {
-		return getEdges();
+        if (edgeType == EdgeType.DIRECTED)
+            return getEdges();
+        else
+            return null;
 	}
 
 	public int getEdgeCount() {
-		return edges.keySet().size();
+		return edges.size();
 	}
 
 	public int getVertexCount() {
-		return vertices.keySet().size();
+		return vertices.size();
 	}
 
 }
