@@ -35,7 +35,29 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E> {
 	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints);
 	
 	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType);
-	
+
+    protected Pair<V> getValidatedEndpoints(E edge, Pair<? extends V> endpoints)
+    {
+        if (edge == null)
+            throw new IllegalArgumentException("input edge may not be null");
+        
+        if (endpoints == null)
+            throw new IllegalArgumentException("endpoints may not be null");
+        
+        Pair<V> new_endpoints = new Pair<V>(endpoints.getFirst(), endpoints.getSecond());
+        if (containsEdge(edge))
+        {
+            Pair<V> existing_endpoints = getEndpoints(edge);
+            if (!existing_endpoints.equals(new_endpoints)) {
+                throw new IllegalArgumentException("EdgeType " + edge + 
+                        " exists in this graph with endpoints " + existing_endpoints);
+            } else {
+                return null;
+            }
+        }
+        return new_endpoints;
+    }
+    
     public int inDegree(V vertex)
     {
         return this.getInEdges(vertex).size();
