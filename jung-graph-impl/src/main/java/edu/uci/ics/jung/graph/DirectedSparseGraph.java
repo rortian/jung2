@@ -139,7 +139,10 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public Collection<E> getEdges(EdgeType edgeType)
     {
-        return getEdges();
+        if (edgeType == EdgeType.DIRECTED)
+            return getEdges();
+        else
+            return null;
     }
 
     public Pair<V> getEndpoints(E edge)
