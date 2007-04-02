@@ -229,7 +229,7 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
         if(vertex == null) {
             throw new IllegalArgumentException("vertex may not be null");
         }
-        if (!vertices.containsKey(vertex)) {
+        if (containsVertex(vertex)) {
             vertices.put(vertex, new Pair<Map<V,E>>(new HashMap<V,E>(), new HashMap<V,E>()));
             return true;
         } else {
@@ -238,7 +238,7 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
     }
 
     public boolean removeVertex(V vertex) {
-        if (!vertices.containsKey(vertex))
+        if (containsVertex(vertex))
             return false;
         
         // copy to avoid concurrent modification in removeEdge
@@ -254,16 +254,16 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
     }
     
     public boolean removeEdge(E edge) {
-        if (!edges.containsKey(edge))
+        if (containsEdge(edge))
             return false;
         
         Pair<V> endpoints = this.getEndpoints(edge);
         V source = endpoints.getFirst();
         V dest = endpoints.getSecond();
         
-        // remove edge from incident vertices' adjacency maps
-        vertices.get(source).getSecond().remove(edge);
-        vertices.get(dest).getFirst().remove(edge);
+        // remove vertices from each others' adjacency maps
+        vertices.get(source).getSecond().remove(dest);
+        vertices.get(dest).getFirst().remove(source);
         
         edges.remove(edge);
         return true;
