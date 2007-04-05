@@ -108,11 +108,11 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      */
 	public E getIncomingEdge(V source, V target)
 	{
-        if (g.getVertices().contains(source) == false)
+        if (!g.containsVertex(source))
             throw new IllegalArgumentException("Specified source vertex " + 
                     source + " is not part of graph " + g);
-//
-        if (g.getVertices().contains(target) == false)
+        
+        if (!g.containsVertex(target))
             throw new IllegalArgumentException("Specified target vertex " + 
                     target + " is not part of graph " + g);
 
@@ -155,13 +155,11 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      */
 	public List<E> getPath(V source, V target)
 	{
-		if(g.getVertices().contains(source) == false) 
-//        if (source.getGraph() != g)
+		if(!g.containsVertex(source)) 
             throw new IllegalArgumentException("Specified source vertex " + 
                     source + " is not part of graph " + g);
-//
-		if(g.getVertices().contains(target) == false) 
-//        if (target.getGraph() != g)
+        
+		if(!g.containsVertex(target)) 
             throw new IllegalArgumentException("Specified target vertex " + 
                     target + " is not part of graph " + g);
         
@@ -179,7 +177,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
         if (incomingEdges.isEmpty() || incomingEdges.get(target) == null)
             return path;
         V current = target;
-        while (current != source)
+        while (!current.equals(source))
         {
             E incoming = incomingEdges.get(current);
             path.addFirst(incoming);
