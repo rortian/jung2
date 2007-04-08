@@ -3,7 +3,6 @@ package edu.uci.ics.jung.visualization.control;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
@@ -31,23 +30,23 @@ import edu.uci.ics.jung.visualization.picking.PickedState;
  */
 public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePlugin {
     
-    protected Map<V,Point2D> vertexLocations;
+    protected Layout<V,E> layout;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
 
-    public EditingPopupGraphMousePlugin(Map<V,Point2D> vertexLocations,
+    public EditingPopupGraphMousePlugin(Layout<V,E> layout,
     		Factory<V> vertexFactory, Factory<E> edgeFactory) {
-        this.vertexLocations = vertexLocations;
+        this.layout = layout;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
     }
 
-    public Map<V, Point2D> getVertexLocations() {
-		return vertexLocations;
+    public Layout<V, E> getLayout() {
+		return layout;
 	}
 
-	public void setVertexLocations(Map<V, Point2D> vertexLocations) {
-		this.vertexLocations = vertexLocations;
+	public void setLayout(Layout<V, E> layout) {
+		this.layout = layout;
 	}
 
 	@SuppressWarnings({ "unchecked", "serial", "serial" })
@@ -118,7 +117,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                 popup.add(new AbstractAction("Create Vertex") {
                     public void actionPerformed(ActionEvent e) {
                         V newVertex = vertexFactory.create();
-                        vertexLocations.put(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p));
+                        layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p));
                         Layout layout = vv.getGraphLayout();
                         for(V vertex : graph.getVertices()) {
                             layout.lock(vertex, true);

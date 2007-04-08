@@ -7,7 +7,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
-import java.util.Map;
 
 import org.apache.commons.collections15.Factory;
 
@@ -36,7 +35,7 @@ import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin implements
     MouseListener, MouseMotionListener {
     
-    protected Map<V,Point2D> vertexLocations;
+    protected Layout<V,E> layout;
     protected V startVertex;
     protected Point2D down;
     
@@ -50,17 +49,17 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
-    public EditingGraphMousePlugin(Map<V,Point2D> vertexLocations, Factory<V> vertexFactory, Factory<E> edgeFactory) {
-        this(Event.BUTTON1_MASK, vertexLocations, vertexFactory, edgeFactory);
+    public EditingGraphMousePlugin(Layout<V,E> layout, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(Event.BUTTON1_MASK, layout, vertexFactory, edgeFactory);
     }
 
     /**
      * create instance and prepare shapes for visual effects
      * @param modifiers
      */
-    public EditingGraphMousePlugin(int modifiers, Map<V,Point2D> vertexLocations, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+    public EditingGraphMousePlugin(int modifiers, Layout<V,E> layout, Factory<V> vertexFactory, Factory<E> edgeFactory) {
         super(modifiers);
-        this.vertexLocations = vertexLocations;
+        this.layout = layout;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         rawEdge.setCurve(0.0f, 0.0f, 0.33f, 100, .66f, -50,
@@ -75,8 +74,8 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
      * sets the vertex locations. Needed to place new vertices
      * @param vertexLocations
      */
-    public void setVertexLocations(Map<V,Point2D> vertexLocations) {
-        this.vertexLocations = vertexLocations;
+    public void setLayout(Layout<V,E> layout) {
+        this.layout = layout;
     }
     
     /**
@@ -126,7 +125,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 } else { // make a new vertex
 
                     V newVertex = vertexFactory.create();
-                    vertexLocations.put(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
+                    layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getServer().getModel().getGraphLayout();
                     for(V lockVertex : graph.getVertices()) {
                         layout.lock(lockVertex,true);
