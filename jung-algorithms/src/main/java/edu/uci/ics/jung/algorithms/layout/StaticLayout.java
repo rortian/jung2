@@ -28,6 +28,14 @@ public class StaticLayout<V, E> extends AbstractLayout<V,E> {
         super(graph, initializer);
     }
     
+    public StaticLayout(Graph<V,E> graph) {
+    	super(graph);
+    }
+    
+    public StaticLayout(Graph<V,E> graph, Dimension size) {
+    	super(graph, size);
+    }
+    
     public void initialize() {}
 
 	public void reset() {}
