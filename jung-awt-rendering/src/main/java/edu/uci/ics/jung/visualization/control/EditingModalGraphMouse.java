@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.ItemSelectable;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.Point2D;
-import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
