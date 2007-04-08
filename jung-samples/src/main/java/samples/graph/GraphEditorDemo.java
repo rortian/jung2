@@ -15,13 +15,11 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -36,7 +34,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.TransformerUtils;
 import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
@@ -81,8 +78,6 @@ public class GraphEditorDemo extends JApplet implements Printable {
      * the visual component and renderer for the graph
      */
     VisualizationComponent<Number,Number> vv;
-    
-    Map<Number,Point2D> vertexLocations = new HashMap<Number,Point2D>();
     
     String instructions =
         "<html>"+
@@ -143,7 +138,6 @@ public class GraphEditorDemo extends JApplet implements Printable {
         graph = new SparseMultigraph<Number,Number>();
 
         this.layout = new StaticLayout<Number,Number>(graph, 
-        	TransformerUtils.mapTransformer(vertexLocations),
         	new Dimension(600,600));
         
         vv =  new VisualizationComponent<Number,Number>(layout);
@@ -165,7 +159,7 @@ public class GraphEditorDemo extends JApplet implements Printable {
         Factory<Number> edgeFactory = new EdgeFactory();
         
         final EditingModalGraphMouse<Number,Number> graphMouse = 
-        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), vertexLocations, vertexFactory, edgeFactory);
+        	new EditingModalGraphMouse<Number,Number>(vv.getRenderContext(), layout, vertexFactory, edgeFactory);
         
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
