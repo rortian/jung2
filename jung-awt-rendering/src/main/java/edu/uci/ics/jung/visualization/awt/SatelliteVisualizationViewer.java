@@ -17,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -266,7 +267,8 @@ public class SatelliteVisualizationViewer<V, E>
             ShapeTransformer masterLayoutTransformer = master.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
             ShapeTransformer vvLayoutTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
 
-            Shape lens = master.getBounds();
+            Dimension d = master.getSize();
+            Shape lens = new Rectangle2D.Double(0,0,d.width,d.height);
             lens = masterViewTransformer.inverseTransform(lens);
             lens = masterLayoutTransformer.inverseTransform(lens);
             lens = vvLayoutTransformer.transform(lens);
