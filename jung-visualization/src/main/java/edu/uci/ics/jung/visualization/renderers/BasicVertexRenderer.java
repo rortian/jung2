@@ -103,15 +103,15 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         }
         Paint drawPaint = rc.getVertexDrawPaintTransformer().transform(v);
         if(drawPaint != null) {
-            g.setPaint(drawPaint);
+        	g.setPaint(drawPaint);
+        	Stroke oldStroke = g.getStroke();
+        	Stroke stroke = rc.getVertexStrokeTransformer().transform(v);
+        	if(stroke != null) {
+        		g.setStroke(stroke);
+        	}
+        	g.draw(shape);
+        	g.setPaint(oldPaint);
+        	g.setStroke(oldStroke);
         }
-        Stroke oldStroke = g.getStroke();
-        Stroke stroke = rc.getVertexStrokeTransformer().transform(v);
-        if(stroke != null) {
-            g.setStroke(stroke);
-        }
-        g.draw(shape);
-        g.setPaint(oldPaint);
-        g.setStroke(oldStroke);
     }
 }
