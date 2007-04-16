@@ -133,6 +133,7 @@ public class SparseMultigraph<V,E>
 
         vertices.get(v1).getSecond().add(edge);        
         vertices.get(v2).getFirst().add(edge);        
+        edges.put(edge, new_endpoints);
         if(edgeType == EdgeType.DIRECTED) {
         	directedEdges.add(edge);
         } else {
