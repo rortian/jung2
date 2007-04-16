@@ -18,8 +18,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.comparators.ComparableComparator;
 
-import edu.uci.ics.jung.graph.util.ComparableComparator;
 import edu.uci.ics.jung.graph.util.Pair;
 
 @SuppressWarnings("serial")
@@ -58,7 +58,7 @@ public class SortedSparseMultigraph<V,E>
     
     public SortedSparseMultigraph()
     {
-        this(new ComparableComparator<V>(), new ComparableComparator<E>());
+        this(new ComparableComparator(), new ComparableComparator());
     }
 
     public boolean addVertex(V vertex) {
