@@ -29,13 +29,16 @@ public class SparseMultigraph<V,E>
     extends AbstractSparseGraph<V,E>
     implements Graph<V,E>, Serializable {
 	
-	public static final <V,E> Factory<Graph<V,E>> getFactory() { 
+	public static <V,E> Factory<Graph<V,E>> getFactory() { 
 		return new Factory<Graph<V,E>> () {
 			public Graph<V,E> create() {
 				return new SparseMultigraph<V,E>();
 			}
 		};
 	}
+    
+    // TODO: refactor internal representation: right now directed edges each have two references (in vertices and directedEdges)
+    // and undirected also have two (incoming and outgoing).  
     protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
     protected Set<E> directedEdges;
@@ -65,6 +68,16 @@ public class SparseMultigraph<V,E>
     	return edges.keySet().contains(edge);
     }
 
+    protected Collection<E> getIncoming_internal(V vertex)
+    {
+        return vertices.get(vertex).getFirst();
+    }
+    
+    protected Collection<E> getOutgoing_internal(V vertex)
+    {
+        return vertices.get(vertex).getSecond();
+    }
+    
     public boolean addVertex(V vertex) {
         if (!vertices.containsKey(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new HashSet<E>(), new HashSet<E>()));
@@ -75,19 +88,14 @@ public class SparseMultigraph<V,E>
     }
 
     public boolean removeVertex(V vertex) {
-        // copy to avoid concurrent modification in removeEdge
-        Pair<Set<E>> i_adj_set = vertices.get(vertex);
-        Pair<Set<E>> adj_set = new Pair<Set<E>>(new HashSet<E>(i_adj_set.getFirst()), 
-                new HashSet<E>(i_adj_set.getSecond()));
-        
-
-//        Pair<Set<E>> adj_set = vertices.get(vertex);
-        if (adj_set == null)
+        if (!vertices.containsKey(vertex))
             return false;
         
-        for (E edge : adj_set.getFirst())
-            removeEdge(edge);
-        for (E edge : adj_set.getSecond())
+        // copy to avoid concurrent modification in removeEdge
+        Set<E> incident = new HashSet<E>(getIncoming_internal(vertex));
+        incident.addAll(getOutgoing_internal(vertex));
+        
+        for (E edge : incident)
             removeEdge(edge);
         
         vertices.remove(vertex);
@@ -108,27 +116,13 @@ public class SparseMultigraph<V,E>
     }
     
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
-        
-        if (edge == null)
-            throw new IllegalArgumentException("input edge may not be null");
-        
-        if (endpoints == null)
-            throw new IllegalArgumentException("endpoints may not be null");
 
-        V v1 = endpoints.getFirst();
-        V v2 = endpoints.getSecond();
+        Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
+        if (new_endpoints == null)
+            return false;
         
-        if (edges.containsKey(edge)) {
-            Pair<V> existingEndpoints = edges.get(edge);
-            Pair<V> new_endpoints = new Pair<V>(v1, v2);
-            if (!existingEndpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("EdgeType " + edge + 
-                        " exists in this graph with endpoints " + v1 + ", " + v2);
-            } else {
-                return false;
-            }
-        }
-        edges.put(edge, new Pair<V>(endpoints));
+        V v1 = new_endpoints.getFirst();
+        V v2 = new_endpoints.getSecond();
         
         if (!vertices.containsKey(v1))
             this.addVertex(v1);
@@ -182,11 +176,11 @@ public class SparseMultigraph<V,E>
         return Collections.unmodifiableCollection(vertices.get(vertex).getSecond());
     }
 
+    // TODO: this will need to get changed if we modify the internal representation
     public Collection<V> getPredecessors(V vertex)
     {
-        Set<E> incoming = vertices.get(vertex).getFirst();        
         Set<V> preds = new HashSet<V>();
-        for (E edge : incoming) {
+        for (E edge : getIncoming_internal(vertex)) {
         	if(getEdgeType(edge) == EdgeType.DIRECTED) {
         		preds.add(this.getSource(edge));
         	} else {
@@ -196,11 +190,11 @@ public class SparseMultigraph<V,E>
         return Collections.unmodifiableCollection(preds);
     }
 
+    // TODO: this will need to get changed if we modify the internal representation
     public Collection<V> getSuccessors(V vertex)
     {
-        Set<E> outgoing = vertices.get(vertex).getSecond();        
         Set<V> succs = new HashSet<V>();
-        for (E edge : outgoing) {
+        for (E edge : getOutgoing_internal(vertex)) {
         	if(getEdgeType(edge) == EdgeType.DIRECTED) {
         		succs.add(this.getDest(edge));
         	} else {
@@ -228,8 +222,7 @@ public class SparseMultigraph<V,E>
 
     public E findEdge(V v1, V v2)
     {
-        Set<E> outgoing = vertices.get(v1).getSecond();
-        for (E edge : outgoing)
+        for (E edge : getOutgoing_internal(v1))
             if (this.getOpposite(v1, edge).equals(v2))
                 return edge;
         
@@ -256,17 +249,11 @@ public class SparseMultigraph<V,E>
     }
 
     public boolean isSource(V vertex, E edge) {
-    	if(directedEdges.contains(edge)) {
-    		return vertex.equals(this.getEndpoints(edge).getFirst());
-    	}
-    	return false;
+        return getSource(edge).equals(vertex);
     }
 
     public boolean isDest(V vertex, E edge) {
-    	if(directedEdges.contains(edge)) {
-    		return vertex.equals(this.getEndpoints(edge).getSecond());
-    	}
-    	return false;
+        return getDest(edge).equals(vertex);
     }
 
     public EdgeType getEdgeType(E edge) {
