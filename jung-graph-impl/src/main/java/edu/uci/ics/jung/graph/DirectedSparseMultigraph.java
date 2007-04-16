@@ -86,7 +86,6 @@ public class DirectedSparseMultigraph<V,E>
     }
 
     public boolean removeVertex(V vertex) {
-        // copy to avoid concurrent modification in removeEdge
         if (!vertices.containsKey(vertex))
             return false;
         
