@@ -39,6 +39,10 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
                                                 // of neighboring vertices to incident edges
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
+    public DirectedSparseGraph() {
+        vertices = new HashMap<V, Pair<Map<V,E>>>();
+        edges = new HashMap<E, Pair<V>>();
+    }
     public boolean addEdge(E edge, Pair<? extends V> endpoints)
     {
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
@@ -229,7 +233,7 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
         if(vertex == null) {
             throw new IllegalArgumentException("vertex may not be null");
         }
-        if (containsVertex(vertex)) {
+        if (!containsVertex(vertex)) {
             vertices.put(vertex, new Pair<Map<V,E>>(new HashMap<V,E>(), new HashMap<V,E>()));
             return true;
         } else {
