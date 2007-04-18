@@ -9,7 +9,7 @@
   <artifactId>jung-io</artifactId>
   <name>jung-io</name>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-io</url>
   <build>
    	<plugins>
  	  <plugin>

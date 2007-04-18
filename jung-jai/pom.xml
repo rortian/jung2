@@ -9,7 +9,7 @@
   <artifactId>jung-jai</artifactId>
   <name>jung-jai</name>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-jai</url>
   <build>
    	<plugins>
  	  <plugin>
@@ -36,6 +36,7 @@
       <artifactId>jung-visualization</artifactId>
       <version>2.0a</version>
     </dependency>
+    <!--
     <dependency>
       <groupId>jai</groupId>
       <artifactId>jai-core</artifactId>
@@ -46,6 +47,7 @@
       <artifactId>jai-codec</artifactId>
       <version>1.1.2.1</version>
     </dependency>
+    -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

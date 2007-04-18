@@ -9,7 +9,7 @@
   <artifactId>jung-awt-rendering</artifactId>
   <name>jung-awt-rendering</name>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-awt-rendering</url>
   <dependencies>
     <dependency>
       <groupId>jung</groupId>

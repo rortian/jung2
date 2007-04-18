@@ -9,7 +9,7 @@
   <artifactId>jung-swt-rendering</artifactId>
   <name>jung-swt-rendering</name>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-swt-rendering</url>
   <dependencies>
     <dependency>
       <groupId>jung</groupId>
@@ -48,7 +48,7 @@
         <activation>
             <os>
                 <name>mac os x</name>
-                <arch>i386</arch>
+                <!--arch>i386</arch-->
             </os>
         </activation>
         <dependencies>
@@ -60,7 +60,7 @@
             </dependency>
         </dependencies>
     </profile>
-    <profile>
+     <profile>
         <id>org.eclipse.swt.linux</id>
         <activation>
             <os>

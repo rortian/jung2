@@ -5,7 +5,7 @@
   <artifactId>jung-visualization</artifactId>
   <packaging>jar</packaging>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-visualization</url>
   <name>jung-visualization</name>
   
   <parent>

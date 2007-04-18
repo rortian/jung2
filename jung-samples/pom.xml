@@ -5,7 +5,7 @@
   <artifactId>jung-samples</artifactId>
   <packaging>jar</packaging>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-samples</url>
   <name>jung-samples</name>
   
   <parent>
