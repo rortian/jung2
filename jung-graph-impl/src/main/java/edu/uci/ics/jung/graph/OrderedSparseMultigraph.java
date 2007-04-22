@@ -44,6 +44,9 @@ public class OrderedSparseMultigraph<V,E>
     }
 
     public boolean addVertex(V vertex) {
+        if(vertex == null) {
+            throw new IllegalArgumentException("vertex may not be null");
+        }
         if (!vertices.containsKey(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new LinkedHashSet<E>(), new LinkedHashSet<E>()));
             return true;

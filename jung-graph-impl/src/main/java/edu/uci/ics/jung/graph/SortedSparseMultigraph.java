@@ -62,6 +62,9 @@ public class SortedSparseMultigraph<V,E>
     }
 
     public boolean addVertex(V vertex) {
+        if(vertex == null) {
+            throw new IllegalArgumentException("vertex may not be null");
+        }
         if (!vertices.containsKey(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new TreeSet<E>(edge_comparator), new TreeSet<E>(edge_comparator)));
             return true;
