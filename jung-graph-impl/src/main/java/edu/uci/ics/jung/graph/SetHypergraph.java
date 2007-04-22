@@ -11,19 +11,37 @@
  */
 package edu.uci.ics.jung.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections15.Factory;
 
-public class SetHypergraph<V,H> implements Hypergraph<V,H>
+
+public class SetHypergraph<V,H> implements Hypergraph<V,H>, Serializable
 {
-    protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedges
+    protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedge sets
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets
  
+    public static <V,H> Factory<Hypergraph<V,H>> getFactory() {
+        return new Factory<Hypergraph<V,H>> () {
+            public Hypergraph<V,H> create() {
+                return new SetHypergraph<V,H>();
+            }
+        };
+    }
+
+    public SetHypergraph()
+    {
+        vertices = new HashMap<V, Set<H>>();
+        edges = new HashMap<H, Set<V>>();
+    }
+    
     public boolean addEdge(H hyperedge, Collection<? extends V> to_attach)
     {
         if (hyperedge == null)
