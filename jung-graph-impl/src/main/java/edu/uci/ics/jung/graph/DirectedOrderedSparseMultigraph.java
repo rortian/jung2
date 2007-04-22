@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
@@ -37,9 +36,6 @@ public class DirectedOrderedSparseMultigraph<V,E>
 			}
 		};
 	}
-
-	protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
-    protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
     public DirectedOrderedSparseMultigraph() {
         vertices = new LinkedHashMap<V, Pair<Set<E>>>();
