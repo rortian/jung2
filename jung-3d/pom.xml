@@ -10,6 +10,9 @@
   <name>jung-3d</name>
   <version>2.0a</version>
   <url>http://jung.sourceforge.net/site/jung-3d</url>
+  <description>
+  Experimental java3d-based graph rendering project
+  </description>
   <build>
    	<plugins>
  	  <plugin>

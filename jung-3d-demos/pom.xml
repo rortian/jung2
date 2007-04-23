@@ -10,6 +10,9 @@
   <name>jung-3d-demos</name>
   <version>2.0a</version>
   <url>http://jung.sourceforge.net/site/jung-3d-demos</url>
+  <description>
+  Demo programs for java3d based graph rendering project
+  </description>
   <build>
    	<plugins>
  	  <plugin>

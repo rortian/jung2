@@ -10,6 +10,9 @@
   <name>jung-jai</name>
   <version>2.0a</version>
   <url>http://jung.sourceforge.net/site/jung-jai</url>
+  <description>
+  Jung2 rendering project that uses Java Advanced Imaging (JAI) for non-affine transforms
+  </description>
   <build>
    	<plugins>
  	  <plugin>

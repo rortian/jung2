@@ -7,7 +7,9 @@
   <version>2.0a</version>
   <url>http://jung.sourceforge.net/site/jung-graph-impl</url>
   <name>jung-graph-impl</name>
-  
+  <description>
+  Graph implementations for the jung2 project
+  </description>
   <parent>
     <groupId>jung.app</groupId>
     <artifactId>app</artifactId>

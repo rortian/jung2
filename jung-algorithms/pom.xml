@@ -10,6 +10,9 @@
   <name>jung-algorithms</name>
   <version>2.0a</version>
   <url>http://jung.sourceforge.net/site/jung-algorithms</url>
+  <description>
+  Algorithms for the jung2 project
+  </description>
   <build>
    	<plugins>
  	  <plugin>

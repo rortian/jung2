@@ -10,6 +10,9 @@
   <name>jung-awt-rendering</name>
   <version>2.0a</version>
   <url>http://jung.sourceforge.net/site/jung-awt-rendering</url>
+  <description>
+  Graph rendering using Java awt/swing components
+  </description>
   <dependencies>
     <dependency>
       <groupId>jung</groupId>
