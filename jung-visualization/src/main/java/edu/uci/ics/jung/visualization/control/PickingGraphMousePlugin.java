@@ -274,7 +274,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void mouseDragged(MouseEvent e) {
         if(locked == false) {
             VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-            if(vertex != null) {
+            if(vertex != null && down != null) {
                 Point p = e.getPoint();
                 Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p);
                 Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
@@ -293,7 +293,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             } else {
                 Point2D out = e.getPoint();
                 if(e.getModifiers() == this.addToSelectionModifiers ||
-                        e.getModifiers() == modifiers) {
+                        e.getModifiers() == modifiers && down != null) {
                     rect.setFrameFromDiagonal(down,out);
                 }
             }

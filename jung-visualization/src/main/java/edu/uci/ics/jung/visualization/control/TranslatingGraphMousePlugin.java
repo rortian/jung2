@@ -82,7 +82,7 @@ public class TranslatingGraphMousePlugin extends AbstractGraphMousePlugin
     public void mouseDragged(MouseEvent e) {
         VisualizationViewer vv = (VisualizationViewer)e.getSource();
         boolean accepted = checkModifiers(e);
-        if(accepted) {
+        if(accepted && down != null) {
             MutableTransformer modelTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
             vv.setCursor(cursor);
             try {
