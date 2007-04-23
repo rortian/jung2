@@ -9,7 +9,10 @@
   <artifactId>jung-swt-samples</artifactId>
   <name>jung-swt-samples</name>
   <version>2.0a</version>
-  <url>http://maven.apache.org</url>
+  <url>http://jung.sourceforge.net/site/jung-swt-samples</url>
+  <description>
+  Sample programs using SWT libaries
+  </description>
   <build>
    	  <plugins>
  	  <plugin>
@@ -116,6 +119,6 @@
 		<version>2.0a</version>
 		<scope>compile</scope>
 	</dependency>
-	
+
    </dependencies>
 </project>
