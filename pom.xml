@@ -166,16 +166,22 @@ JUNG also provides a visualization framework that makes it easy to construct too
     <module>jung-visualization</module>
     <module>jung-algorithms</module>
     <module>jung-io</module>
-<!-- uncomment if you have jai installed
+    <module>jung-awt-rendering</module>
+
+<!-- uncomment only if you have jai installed
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
 -->
-<!-- uncomment if you have java3d installed
+
+<!-- uncomment only if you have java3d installed
     <module>jung-3d</module>
     <module>jung-3d-demos</module>
 -->
-    <module>jung-awt-rendering</module>
+
+<!-- uncomment only if you have swt installed
+     (see README-SWT.txt for details)
     <module>jung-swt-rendering</module>
     <module>jung-swt-samples</module>
+-->
   </modules>
 </project>
