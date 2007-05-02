@@ -258,7 +258,7 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
     }
     
     public boolean removeEdge(E edge) {
-        if (containsEdge(edge))
+        if (!containsEdge(edge))
             return false;
         
         Pair<V> endpoints = this.getEndpoints(edge);
