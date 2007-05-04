@@ -20,8 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import edu.uci.ics.jung.visualization.ScreenDevice;
-
 /**
  * AnnotationRenderer is similar to the cell renderers
  * used by the JTable and JTree jfc classes.
@@ -88,15 +86,15 @@ public class AnnotationRenderer extends JLabel implements
     * @param edge  the <code>Edge</code>
     * @return the default label renderer
     */
-    public Component getAnnotationRendererComponent(ScreenDevice sd, Object value) {
+    public Component getAnnotationRendererComponent(JComponent vv, Object value) {
         
-        super.setForeground(sd.getForeground());
-        super.setBackground(sd.getBackground());
+        super.setForeground(vv.getForeground());
+        super.setBackground(vv.getBackground());
         
 //        if(font != null) {
 //            setFont(font);
 //        } else {
-            setFont(sd.getFont());
+            setFont(vv.getFont());
 //        }
         setIcon(null);
         setBorder(noFocusBorder);

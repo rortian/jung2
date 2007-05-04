@@ -11,12 +11,12 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.event.Event;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
-import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -39,7 +39,7 @@ public class LensMagnificationGraphMousePlugin extends AbstractGraphMousePlugin
 	 * create an instance with default zoom in/out values
 	 */
 	public LensMagnificationGraphMousePlugin() {
-	    this(Event.CTRL_MASK);
+	    this(MouseEvent.CTRL_MASK);
 	}
     
     /**
@@ -47,7 +47,7 @@ public class LensMagnificationGraphMousePlugin extends AbstractGraphMousePlugin
      * @param modifiers
      */
     public LensMagnificationGraphMousePlugin(float floor, float ceiling, float delta) {
-        this(Event.CTRL_MASK, floor, ceiling, delta);
+        this(MouseEvent.CTRL_MASK, floor, ceiling, delta);
     }
     
     public LensMagnificationGraphMousePlugin(int modifiers) {

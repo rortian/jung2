@@ -10,15 +10,15 @@
 
 package edu.uci.ics.jung.visualization.control;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseListener;
-import edu.uci.ics.jung.visualization.event.MouseMotionListener;
-import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
-import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 
 /**
  * a GraphMouse that accepts plugins for various mouse events.
@@ -158,9 +158,4 @@ public class PluggableGraphMouse implements VisualizationViewer.GraphMouse {
         }
 //        ((Component) e.getSource()).repaint();
     }
-
-	public void mouseDoubleClicked(MouseEvent mouseEvent) {
-		// TODO Auto-generated method stub
-		
-	}
 }

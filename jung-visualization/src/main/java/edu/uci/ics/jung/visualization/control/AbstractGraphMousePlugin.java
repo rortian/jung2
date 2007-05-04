@@ -10,10 +10,9 @@
 
 package edu.uci.ics.jung.visualization.control;
 
+import java.awt.Cursor;
 import java.awt.Point;
-
-import edu.uci.ics.jung.visualization.cursor.Cursor;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * a base class for GraphMousePlugin instances. Holds some members

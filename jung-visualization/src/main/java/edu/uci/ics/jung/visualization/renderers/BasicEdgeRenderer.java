@@ -21,6 +21,8 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.JComponent;
+
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
@@ -29,7 +31,6 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.ScreenDevice;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape.IndexedRendering;
 import edu.uci.ics.jung.visualization.transform.LensTransformer;
@@ -95,7 +96,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         boolean edgeHit = true;
         boolean arrowHit = true;
         Rectangle deviceRectangle = null;
-        ScreenDevice vv = rc.getScreenDevice();
+        JComponent vv = rc.getScreenDevice();
         if(vv != null) {
             Dimension d = vv.getSize();
             deviceRectangle = new Rectangle(0,0,d.width,d.height);

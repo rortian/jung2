@@ -43,12 +43,6 @@ public class GraphicsDecorator extends Graphics2DWrapper {
     	icon.paintIcon(c, delegate, x-w/2, y-h/2);
     }
     
-    public void draw(Icon icon, Shape clip, int x, int y) {
-    	int w = icon.getIconWidth();
-    	int h = icon.getIconHeight();
-    	icon.paintIcon(null, delegate, x-w/2, y-h/2);
-    }
-    
     public void draw(Component c, CellRendererPane rendererPane, 
     		int x, int y, int w, int h, boolean shouldValidate) {
     	rendererPane.paintComponent(delegate, c, c.getParent(), x, y, w, h, shouldValidate);

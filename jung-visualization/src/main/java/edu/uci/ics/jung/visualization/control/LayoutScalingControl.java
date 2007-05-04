@@ -30,10 +30,11 @@ public class LayoutScalingControl implements ScalingControl {
 	 * zoom the display in or out, depending on the direction of the
 	 * mouse wheel motion.
 	 */
-    public void scale(VisualizationServer vs, float amount, Point2D from) {
+    public void scale(VisualizationServer vv, float amount, Point2D from) {
         
-        Point2D ivtfrom = vs.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, from);
-        MutableTransformer modelTransformer = vs.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
+        Point2D ivtfrom = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, from);
+        MutableTransformer modelTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
         modelTransformer.scale(amount, amount, ivtfrom);
+        vv.repaint();
     }
 }

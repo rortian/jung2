@@ -10,8 +10,8 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Simple extension of MouseAdapter that supplies modifier
@@ -20,7 +20,7 @@ import edu.uci.ics.jung.visualization.event.MouseListener;
  * @author Tom Nelson 
  *
  */
-public class GraphMouseAdapter implements MouseListener {
+public class GraphMouseAdapter extends MouseAdapter {
 
     protected int modifiers;
     
@@ -39,18 +39,4 @@ public class GraphMouseAdapter implements MouseListener {
     protected boolean checkModifiers(MouseEvent e) {
         return e.getModifiers() == modifiers;
     }
-    
-    
-
-	public void mouseClicked(MouseEvent mouseEvent) {}
-
-	public void mouseDoubleClicked(MouseEvent mouseEvent) {}
-
-	public void mouseEntered(MouseEvent mouseEvent) {}
-
-	public void mouseExited(MouseEvent mouseEvent) {}
-
-	public void mousePressed(MouseEvent mouseEvent) {}
-
-	public void mouseReleased(MouseEvent mouseEvent) {}
 }

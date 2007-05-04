@@ -10,8 +10,7 @@
 
 package edu.uci.ics.jung.visualization.control;
 
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-
+import java.awt.event.MouseEvent;
 
 /**
  * the interface for all plugins to the PluggableGraphMouse

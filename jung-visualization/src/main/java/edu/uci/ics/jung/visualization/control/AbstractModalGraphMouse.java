@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.ItemSelectable;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -23,8 +24,6 @@ import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.basic.BasicIconFactory;
-
-import edu.uci.ics.jung.visualization.event.KeyListener;
 
 
 /** 

@@ -108,7 +108,7 @@ public class AnnotationPaintable implements Paintable {
                 base.concatenate(xform);
                 base.concatenate(unrotate);
                 g2d.setTransform(base);
-                rc.getRendererPane().paintComponent(g, component, null, 
+                rc.getRendererPane().paintComponent(g, component, rc.getScreenDevice(), 
                         (int)p.getX(), (int)p.getY(),
                         d.width, d.height, true);
                 g2d.setTransform(old);

@@ -17,6 +17,7 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -101,7 +102,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /**
      * the JComponent that this Renderer will display the graph on
      */
-    protected ScreenDevice screenDevice;
+    protected JComponent screenDevice;
     
     protected PickedState<V> pickedVertexState;
     protected PickedState<E> pickedEdgeState;
@@ -414,16 +415,16 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#getScreenDevice()
      */
-    public ScreenDevice getScreenDevice() {
+    public JComponent getScreenDevice() {
         return screenDevice;
     }
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.RenderContext#setScreenDevice(edu.uci.ics.jung.visualization.VisualizationViewer)
      */
-    public void setScreenDevice(ScreenDevice screenDevice) {
+    public void setScreenDevice(JComponent screenDevice) {
         this.screenDevice = screenDevice;
-//        screenDevice.add(rendererPane);
+        screenDevice.add(rendererPane);
     }
 
     /* (non-Javadoc)

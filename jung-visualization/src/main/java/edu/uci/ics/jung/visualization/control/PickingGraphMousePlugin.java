@@ -12,23 +12,25 @@
 package edu.uci.ics.jung.visualization.control;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
+
+import javax.swing.JComponent;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
-import edu.uci.ics.jung.visualization.cursor.Cursor;
-import edu.uci.ics.jung.visualization.event.Event;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseListener;
-import edu.uci.ics.jung.visualization.event.MouseMotionListener;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 
 /** 
@@ -94,7 +96,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	 * create an instance with default settings
 	 */
 	public PickingGraphMousePlugin() {
-	    this(Event.BUTTON1_MASK, Event.BUTTON1_MASK | Event.SHIFT_MASK);
+	    this(InputEvent.BUTTON1_MASK, InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         super(selectionModifiers);
         this.addToSelectionModifiers = addToSelectionModifiers;
         this.lensPaintable = new LensPaintable();
-        this.cursor = new Cursor(Cursor.HAND_CURSOR);
+        this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
     }
     
     /**
@@ -164,9 +166,9 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void mousePressed(MouseEvent e) {
         down = e.getPoint();
         VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-        GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
-        PickedState<V> pickedVertexState = vv.getServer().getPickedVertexState();
-        PickedState<E> pickedEdgeState = vv.getServer().getPickedEdgeState();
+        GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+        PickedState<V> pickedVertexState = vv.getPickedVertexState();
+        PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
         if(pickSupport != null && pickedVertexState != null) {
             Layout<V,E> layout = vv.getGraphLayout();
             if(e.getModifiers() == modifiers) {
@@ -194,13 +196,13 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
                     pickedEdgeState.clear();
                     pickedEdgeState.pick(edge, true);
                 } else {
-                    vv.getServer().addPostRenderPaintable(lensPaintable);
+                    vv.addPostRenderPaintable(lensPaintable);
                 	pickedEdgeState.clear();
                     pickedVertexState.clear();
                 }
                 
             } else if(e.getModifiers() == addToSelectionModifiers) {
-                vv.getServer().addPostRenderPaintable(lensPaintable);
+                vv.addPostRenderPaintable(lensPaintable);
                 rect.setFrameFromDiagonal(down,down);
                 Point2D p = e.getPoint();
                 // remove view transform
@@ -259,7 +261,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         vertex = null;
         edge = null;
         rect.setFrame(0,0,0,0);
-        vv.getServer().removePostRenderPaintable(lensPaintable);
+        vv.removePostRenderPaintable(lensPaintable);
         vv.repaint();
     }
     
@@ -274,14 +276,14 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void mouseDragged(MouseEvent e) {
         if(locked == false) {
             VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-            if(vertex != null && down != null) {
+            if(vertex != null) {
                 Point p = e.getPoint();
                 Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p);
                 Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(down);
                 Layout<V,E> layout = vv.getGraphLayout();
                 double dx = graphPoint.getX()-graphDown.getX();
                 double dy = graphPoint.getY()-graphDown.getY();
-                PickedState<V> ps = vv.getServer().getPickedVertexState();
+                PickedState<V> ps = vv.getPickedVertexState();
                 
                 for(V v : ps.getPicked()) {
                     Point2D vp = layout.transform(v);
@@ -293,7 +295,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             } else {
                 Point2D out = e.getPoint();
                 if(e.getModifiers() == this.addToSelectionModifiers ||
-                        e.getModifiers() == modifiers && down != null) {
+                        e.getModifiers() == modifiers) {
                     rect.setFrameFromDiagonal(down,out);
                 }
             }
@@ -324,7 +326,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     protected void pickContainedVertices(VisualizationViewer<V,E> vv, Point2D down, Point2D out, boolean clear) {
         
         Layout<V,E> layout = vv.getGraphLayout();
-        PickedState<V> pickedVertexState = vv.getServer().getPickedVertexState();
+        PickedState<V> pickedVertexState = vv.getPickedVertexState();
         
         Rectangle2D pickRectangle = new Rectangle2D.Double();
         pickRectangle.setFrameFromDiagonal(down,out);
@@ -333,7 +335,7 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
             if(clear) {
             	pickedVertexState.clear();
             }
-            GraphElementAccessor<V,E> pickSupport = vv.getServer().getPickSupport();
+            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
 
             Collection<V> picked = pickSupport.getVertices(layout, pickRectangle);
             for(V v : picked) {
@@ -346,13 +348,13 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     }
 
     public void mouseEntered(MouseEvent e) {
-        VisualizationViewer c = (VisualizationViewer)e.getSource();
+        JComponent c = (JComponent)e.getSource();
         c.setCursor(cursor);
     }
 
     public void mouseExited(MouseEvent e) {
-    	VisualizationViewer c = (VisualizationViewer)e.getSource();
-        c.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        JComponent c = (JComponent)e.getSource();
+        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
     public void mouseMoved(MouseEvent e) {
@@ -371,6 +373,4 @@ public class PickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
-
-	public void mouseDoubleClicked(MouseEvent mouseEvent) {}
 }

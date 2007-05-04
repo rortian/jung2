@@ -11,12 +11,12 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseWheelEvent;
-import edu.uci.ics.jung.visualization.event.MouseWheelListener;
 
 /** 
  * ScalingGraphMouse applies a scaling transformation to the graph layout.
@@ -81,15 +81,15 @@ public class ScalingGraphMousePlugin extends AbstractGraphMousePlugin
             int amount = e.getWheelRotation();
             if(zoomAtMouse) {
                 if(amount > 0) {
-                    scaler.scale(vv.getServer(), in, mouse);
+                    scaler.scale(vv, in, mouse);
                 } else if(amount < 0) {
-                    scaler.scale(vv.getServer(), out, mouse);
+                    scaler.scale(vv, out, mouse);
                 }
             } else {
                 if(amount > 0) {
-                    scaler.scale(vv.getServer(), in, center);
+                    scaler.scale(vv, in, center);
                 } else if(amount < 0) {
-                    scaler.scale(vv.getServer(), out, center);
+                    scaler.scale(vv, out, center);
                 }
             }
             e.consume();

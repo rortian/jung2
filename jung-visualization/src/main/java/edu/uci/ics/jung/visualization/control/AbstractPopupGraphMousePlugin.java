@@ -8,16 +8,14 @@
  */
 package edu.uci.ics.jung.visualization.control;
 
-import edu.uci.ics.jung.visualization.event.Event;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
-import edu.uci.ics.jung.visualization.event.MouseListener;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public abstract class AbstractPopupGraphMousePlugin extends AbstractGraphMousePlugin 
     implements MouseListener {
     
     public AbstractPopupGraphMousePlugin() {
-        this(Event.BUTTON3_MASK);
+        this(MouseEvent.BUTTON3_MASK);
     }
     public AbstractPopupGraphMousePlugin(int modifiers) {
         super(modifiers);
@@ -53,6 +51,4 @@ public abstract class AbstractPopupGraphMousePlugin extends AbstractGraphMousePl
     
     public void mouseExited(MouseEvent e) {
     }
-    
-	public void mouseDoubleClicked(MouseEvent mouseEvent) {}
 }

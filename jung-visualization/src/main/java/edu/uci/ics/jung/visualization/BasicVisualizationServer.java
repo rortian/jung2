@@ -11,18 +11,28 @@ package edu.uci.ics.jung.visualization;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
@@ -42,10 +52,9 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  * @author Joshua O'Madadhain
  * @author Tom Nelson
  * @author Danyel Fisher
- * @author Jason A Wrang
  */
 @SuppressWarnings("serial")
-public class BasicVisualizationServer<V, E> 
+public class BasicVisualizationServer<V, E> extends JPanel 
                 implements //Transformer, LayoutTransformer, ViewTransformer, 
                 ChangeListener, ChangeEventSupport, VisualizationServer<V, E>{
 
@@ -63,6 +72,12 @@ public class BasicVisualizationServer<V, E>
 	 * handles the actual drawing of graph elements
 	 */
 	protected Renderer<V,E> renderer = new BasicRenderer<V,E>();
+	
+	/**
+	 * rendering hints used in drawing. Anti-aliasing is on
+	 * by default
+	 */
+	protected Map renderingHints = new HashMap();
 		
 	/**
 	 * holds the state of which vertices of the graph are
@@ -82,24 +97,24 @@ public class BasicVisualizationServer<V, E>
      */
     protected ItemListener pickEventListener;
 	
-//	/**
-//	 * an offscreen image to render the graph
-//	 * Used if doubleBuffered is set to true
-//	 */
-//	protected BufferedImage offscreen;
+	/**
+	 * an offscreen image to render the graph
+	 * Used if doubleBuffered is set to true
+	 */
+	protected BufferedImage offscreen;
 	
-//	/**
-//	 * graphics context for the offscreen image
-//	 * Used if doubleBuffered is set to true
-//	 */
-//	protected Graphics2D offscreenG2d;
-//	
-//	/**
-//	 * user-settable choice to use the offscreen image
-//	 * or not. 'false' by default
-//	 */
-//	protected boolean doubleBuffered;
-//	
+	/**
+	 * graphics context for the offscreen image
+	 * Used if doubleBuffered is set to true
+	 */
+	protected Graphics2D offscreenG2d;
+	
+	/**
+	 * user-settable choice to use the offscreen image
+	 * or not. 'false' by default
+	 */
+	protected boolean doubleBuffered;
+	
 	/**
 	 * a collection of user-implementable functions to render under
 	 * the topology (before the graph is rendered)
@@ -132,13 +147,18 @@ public class BasicVisualizationServer<V, E>
      * @param preferredSize the preferred size of this View
      */
 	public BasicVisualizationServer(Layout<V,E> layout, Dimension preferredSize) {
-	    this(new DefaultVisualizationModel<V,E>(layout, preferredSize));
+	    this(new DefaultVisualizationModel<V,E>(layout, preferredSize), preferredSize);
 	}
 	
+	/**
+	 * Create an instance with passed parameters.
+	 * 
+	 * @param model
+	 * @param renderer
+	 */
 	public BasicVisualizationServer(VisualizationModel<V,E> model) {
-		this(model, null);
+	    this(model, new Dimension(600,600));
 	}
-	
 	/**
 	 * Create an instance with passed parameters.
 	 * 
@@ -147,13 +167,13 @@ public class BasicVisualizationServer<V, E>
 	 * @param preferredSize initial preferred size of the view
 	 */
 	@SuppressWarnings("unchecked")
-    public BasicVisualizationServer(VisualizationModel<V,E> model, Dimension preferredSize) {
+    public BasicVisualizationServer(VisualizationModel<V,E> model,
+	        Dimension preferredSize) {
 	    this.model = model;
-	    if (preferredSize != null) this.model.getGraphLayout().setSize(preferredSize);
 //        renderContext.setScreenDevice(this);
 	    model.addChangeListener(this);
-//	    setDoubleBuffered(false);
-		
+	    setDoubleBuffered(false);
+		this.addComponentListener(new VisualizationListener(this));
 
 		setPickSupport(new ShapePickSupport<V,E>(this));
 		setPickedVertexState(new MultiPickedState<V>());
@@ -163,38 +183,53 @@ public class BasicVisualizationServer<V, E>
         renderContext.setVertexFillPaintTransformer(new PickableVertexPaintTransformer<V>(getPickedVertexState(), 
                 Color.red, Color.yellow));
 		
+		setPreferredSize(preferredSize);
+		renderingHints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         renderContext.getMultiLayerTransformer().addChangeListener(this);
 	}
 	
-//	/* (non-Javadoc)
-//     * @see edu.uci.ics.jung.visualization.VisualizationServer#setDoubleBuffered(boolean)
-//     */
-//	public void setDoubleBuffered(boolean doubleBuffered) {
-//	    this.doubleBuffered = doubleBuffered;
-//	}
-//	
-//	/* (non-Javadoc)
-//     * @see edu.uci.ics.jung.visualization.VisualizationServer#isDoubleBuffered()
-//     */
-//	public boolean isDoubleBuffered() {
-//	    return doubleBuffered;
-//	}
+	/* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#setDoubleBuffered(boolean)
+     */
+	public void setDoubleBuffered(boolean doubleBuffered) {
+	    this.doubleBuffered = doubleBuffered;
+	}
 	
+	/* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#isDoubleBuffered()
+     */
+	public boolean isDoubleBuffered() {
+	    return doubleBuffered;
+	}
+	
+	/**
+	 * Always sanity-check getSize so that we don't use a
+	 * value that is improbable
+	 * @see java.awt.Component#getSize()
+	 */
+	@Override
+	public Dimension getSize() {
+		Dimension d = super.getSize();
+		if(d.width <= 0 || d.height <= 0) {
+			d = getPreferredSize();
+		}
+		return d;
+	}
 
-//	/**
-//	 * Ensure that, if doubleBuffering is enabled, the offscreen
-//	 * image buffer exists and is the correct size.
-//	 * @param d
-//	 */
-//	protected void checkOffscreenImage(Dimension d) {
-//	    if(doubleBuffered) {
-//	        if(offscreen == null || offscreen.getWidth() != d.width || offscreen.getHeight() != d.height) {
-//	            offscreen = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
-//	            offscreenG2d = offscreen.createGraphics();
-//	        }
-//	    }
-//	}
+	/**
+	 * Ensure that, if doubleBuffering is enabled, the offscreen
+	 * image buffer exists and is the correct size.
+	 * @param d
+	 */
+	protected void checkOffscreenImage(Dimension d) {
+	    if(doubleBuffered) {
+	        if(offscreen == null || offscreen.getWidth() != d.width || offscreen.getHeight() != d.height) {
+	            offscreen = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
+	            offscreenG2d = offscreen.createGraphics();
+	        }
+	    }
+	}
 	
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#getModel()
@@ -212,6 +247,7 @@ public class BasicVisualizationServer<V, E>
      * @see edu.uci.ics.jung.visualization.VisualizationServer#stateChanged(javax.swing.event.ChangeEvent)
      */
 	public void stateChanged(ChangeEvent e) {
+	    repaint();
 	    fireStateChanged();
 	}
 
@@ -220,6 +256,7 @@ public class BasicVisualizationServer<V, E>
      */
 	public void setRenderer(Renderer<V,E> r) {
 	    this.renderer = r;
+	    repaint();
 	}
 	
 	/* (non-Javadoc)
@@ -233,49 +270,87 @@ public class BasicVisualizationServer<V, E>
      * @see edu.uci.ics.jung.visualization.VisualizationServer#setGraphLayout(edu.uci.ics.jung.visualization.layout.Layout)
      */
     public void setGraphLayout(Layout<V,E> layout) {
-    	Layout<V, E> curLayout = model.getGraphLayout();
-    	Dimension viewSize = curLayout == null?null:curLayout.getSize();
-    	setGraphLayout(layout, viewSize);
+    	Dimension viewSize = getPreferredSize();
+    	if(this.isShowing()) {
+    		viewSize = getSize();
+    	}
+	    model.setGraphLayout(layout, viewSize);
     }
     
-    public void setGraphLayout(Layout<V,E> layout, Dimension viewSize) {
-	    if (viewSize == null)
-	    	model.setGraphLayout(layout);
-	    else
-	    	model.setGraphLayout(layout, viewSize);
+    public void scaleToLayout(ScalingControl scaler) {
+    	Dimension vd = getPreferredSize();
+    	if(this.isShowing()) {
+    		vd = getSize();
+    	}
+		Dimension ld = getGraphLayout().getSize();
+		if(vd.equals(ld) == false) {
+			scaler.scale(this, (float)(vd.getWidth()/ld.getWidth()), new Point2D.Double());
+		}
     }
-    
 	
 	/* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#getGraphLayout()
      */
 	public Layout<V,E> getGraphLayout() {
-		return model.getGraphLayout();
+	        return model.getGraphLayout();
 	}
 	
+	/* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#setVisible(boolean)
+     */
+	public void setVisible(boolean aFlag) {
+		super.setVisible(aFlag);
+		if(aFlag == true) {
+			Dimension d = this.getSize();
+			if(d.width <= 0 || d.height <= 0) {
+				d = this.getPreferredSize();
+			}
+			model.getGraphLayout().setSize(d);
+		}
+	}
 
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#getRenderingHints()
+     */
+    public Map getRenderingHints() {
+        return renderingHints;
+    }
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#setRenderingHints(java.util.Map)
+     */
+    public void setRenderingHints(Map renderingHints) {
+        this.renderingHints = renderingHints;
+    }
     
+	protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-	/**
-	 * @TODO - do we really want to make everyone bear the cost of
-	 * synchonrization out here??
-	 */
-	public 
-//	synchronized 
-	void renderGraph(ScreenDevice screenDevice, Graphics2D g2d) {
+		Graphics2D g2d = (Graphics2D)g;
+		if(doubleBuffered) {
+		    checkOffscreenImage(getSize());
+			renderGraph(offscreenG2d);
+		    g2d.drawImage(offscreen, null, 0, 0);
+		} else {
+		    renderGraph(g2d);
+		}
+	}
+	
+	protected void renderGraph(Graphics2D g2d) {
 	    if(renderContext.getGraphicsContext() == null) {
 	        renderContext.setGraphicsContext(new GraphicsDecorator(g2d));
         } else {
         	renderContext.getGraphicsContext().setDelegate(g2d);
         }
-	    renderContext.setScreenDevice(screenDevice);
+        renderContext.setScreenDevice(this);
 	    Layout<V,E> layout = model.getGraphLayout();
 
+		g2d.setRenderingHints(renderingHints);
+		
 		// the size of the VisualizationViewer
-		Dimension d = renderContext.getScreenDevice().getSize();
+		Dimension d = getSize();
 		
 		// clear the offscreen image
-		g2d.setColor(renderContext.getScreenDevice().getBackground());
+		g2d.setColor(getBackground());
 		g2d.fillRect(0,0,d.width,d.height);
 
 		AffineTransform oldXform = g2d.getTransform();
@@ -318,7 +393,32 @@ public class BasicVisualizationServer<V, E>
 		g2d.setTransform(oldXform);
 	}
 
+	/**
+	 * VisualizationListener reacts to changes in the size of the
+	 * VisualizationViewer. When the size changes, it ensures
+	 * that the offscreen image is sized properly. 
+	 * If the layout is locked to this view size, then the layout
+	 * is also resized to be the same as the view size.
+	 *
+	 *
+	 */
+	protected class VisualizationListener extends ComponentAdapter {
+		protected BasicVisualizationServer<V,E> vv;
+		public VisualizationListener(BasicVisualizationServer<V,E> vv) {
+			this.vv = vv;
+		}
 
+		/**
+		 * create a new offscreen image for the graph
+		 * whenever the window is resied
+		 */
+		public void componentResized(ComponentEvent e) {
+		    Dimension d = vv.getSize();
+		    if(d.width <= 0 || d.height <= 0) return;
+		    checkOffscreenImage(d);
+		    repaint();
+		}
+	}
 
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.visualization.VisualizationServer#addPreRenderPaintable(edu.uci.ics.jung.visualization.BasicPaintable)
@@ -431,7 +531,7 @@ public class BasicVisualizationServer<V, E>
             pickEventListener = new ItemListener() {
 
                 public void itemStateChanged(ItemEvent e) {
-                    fireStateChanged();
+                    repaint();
                 }
             };
         }
@@ -451,7 +551,7 @@ public class BasicVisualizationServer<V, E>
             pickEventListener = new ItemListener() {
 
                 public void itemStateChanged(ItemEvent e) {
-                    fireStateChanged();
+                    repaint();
                 }
             };
         }
@@ -471,12 +571,12 @@ public class BasicVisualizationServer<V, E>
         renderContext.setPickSupport(pickSupport);
     }
     
-    public List<Paintable> getPreRenderPaintables() {
-    	return preRenderers;
-    }
-    
-    public List<Paintable> getPostRenderPaintables() {
-    	return postRenderers;
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.VisualizationServer#getCenter()
+     */
+    public Point2D getCenter() {
+        Dimension d = getSize();
+        return new Point2D.Float(d.width/2, d.height/2);
     }
 
     /* (non-Javadoc)

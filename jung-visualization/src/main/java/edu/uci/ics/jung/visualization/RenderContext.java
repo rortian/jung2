@@ -8,6 +8,7 @@ import java.awt.Stroke;
 
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -126,9 +127,9 @@ public interface RenderContext<V, E> {
 
     void setRendererPane(CellRendererPane rendererPane);
 
-    ScreenDevice getScreenDevice();
+    JComponent getScreenDevice();
 
-    void setScreenDevice(ScreenDevice screenDevice);
+    void setScreenDevice(JComponent screenDevice);
 
     Transformer<V,Font> getVertexFontTransformer();
 

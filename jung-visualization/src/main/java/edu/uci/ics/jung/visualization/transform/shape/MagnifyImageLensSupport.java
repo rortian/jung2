@@ -47,7 +47,7 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         "Ctrl+MouseWheel to change magnification</center></html>";
     
     public MagnifyImageLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new MagnifyShapeTransformer(vv.getScreenDevice()),
+        this(vv, new MagnifyShapeTransformer(vv),
                 new ModalLensGraphMouse());
     }
     /**
@@ -60,20 +60,20 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         super(vv, lensGraphMouse);
         this.renderContext = vv.getRenderContext();
         this.pickSupport = renderContext.getPickSupport();
-        this.renderer = vv.getServer().getRenderer();
+        this.renderer = vv.getRenderer();
         this.transformingRenderer = new BasicRenderer<V,E>();
 //        this.transformingRenderer.setVertexRenderer(new BasicVertexRenderer<V,E>());
         		//new MagnifyImageVertexIconRenderer<V,E>());
         
         this.savedGraphicsDecorator = renderContext.getGraphicsContext();
         this.lensTransformer = lensTransformer;
-        this.savedEdgeRenderer = vv.getServer().getRenderer().getEdgeRenderer();
+        this.savedEdgeRenderer = vv.getRenderer().getEdgeRenderer();
         this.reshapingEdgeRenderer = new ReshapingEdgeRenderer<V,E>();
 
         Dimension d = vv.getSize();
-//        if(d.width == 0 || d.height == 0) {
-//            d = vv.getPreferredSize();
-//        }
+        if(d.width == 0 || d.height == 0) {
+            d = vv.getPreferredSize();
+        }
         lensTransformer.setViewRadius(d.width/5);
         this.lensGraphicsDecorator = new MagnifyIconGraphics(lensTransformer);
         	//new TransformingFlatnessGraphics(lensTransformer);
@@ -88,14 +88,14 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
-        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv.getServer()));
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
         lensTransformer.setDelegate(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
 //        vv.setRenderer(transformingRenderer);
-        vv.getServer().getRenderer().setEdgeRenderer(reshapingEdgeRenderer);
-        vv.getServer().addPreRenderPaintable(lens);
-        vv.getServer().addPostRenderPaintable(lensControls);
+        vv.getRenderer().setEdgeRenderer(reshapingEdgeRenderer);
+        vv.addPreRenderPaintable(lens);
+        vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
         vv.setToolTipText(instructions);
         vv.repaint();
@@ -104,11 +104,11 @@ public class MagnifyImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
     	vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer.getDelegate());
-        vv.getServer().removePreRenderPaintable(lens);
-        vv.getServer().removePostRenderPaintable(lensControls);
+        vv.removePreRenderPaintable(lens);
+        vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);
 //        vv.setRenderer(renderer);
-        vv.getServer().getRenderer().setEdgeRenderer(savedEdgeRenderer);
+        vv.getRenderer().setEdgeRenderer(savedEdgeRenderer);
         vv.setToolTipText(defaultToolTipText);
         vv.setGraphMouse(graphMouse);
         vv.repaint();

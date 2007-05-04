@@ -33,7 +33,7 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
 	protected GraphElementAccessor<V,E> pickSupport;
 	
     public LayoutLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicTransformer(vv.getScreenDevice(), vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
+        this(vv, new HyperbolicTransformer(vv, vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                 new ModalLensGraphMouse());
     }
     /**
@@ -45,12 +45,12 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
             ModalGraphMouse lensGraphMouse) {
         super(vv, lensGraphMouse);
         this.lensTransformer = lensTransformer;
-        this.pickSupport = vv.getServer().getPickSupport();
+        this.pickSupport = vv.getPickSupport();
 
         Dimension d = vv.getSize();
-//        if(d.width <= 0 || d.height <= 0) {
-//            d = vv.getPreferredSize();
-//        }
+        if(d.width <= 0 || d.height <= 0) {
+            d = vv.getPreferredSize();
+        }
         lensTransformer.setViewRadius(d.width/5);
    }
     
@@ -61,10 +61,10 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
-        vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv.getServer()));
+        vv.getRenderContext().setPickSupport(new LayoutLensShapePickSupport<V,E>(vv));
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, lensTransformer);
-        vv.getServer().prependPreRenderPaintable(lens);
-        vv.getServer().addPostRenderPaintable(lensControls);
+        vv.prependPreRenderPaintable(lens);
+        vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
         vv.setToolTipText(instructions);
         vv.repaint();
@@ -72,8 +72,8 @@ public class LayoutLensSupport<V,E> extends AbstractLensSupport<V,E>
     
     public void deactivate() {
         if(lensTransformer != null) {
-            vv.getServer().removePreRenderPaintable(lens);
-            vv.getServer().removePostRenderPaintable(lensControls);
+            vv.removePreRenderPaintable(lens);
+            vv.removePostRenderPaintable(lensControls);
             vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.LAYOUT, lensTransformer.getDelegate());
         }
         vv.getRenderContext().setPickSupport(pickSupport);

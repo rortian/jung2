@@ -10,8 +10,8 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.util.List;
+import java.awt.geom.Point2D;
+import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -30,17 +30,17 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  */
 public interface VisualizationServer<V, E> {
 
-//    /**
-//     * set whether this class uses its offscreen image or not. If
-//     * true, then doubleBuffering in the superclass is set to 'false'
-//     */
-//    void setDoubleBuffered(boolean doubleBuffered);
-//
-//    /**
-//     * whether this class uses double buffering. The superclass
-//     * will be the opposite state.
-//     */
-//    boolean isDoubleBuffered();
+    /**
+     * set whether this class uses its offscreen image or not. If
+     * true, then doubleBuffering in the superclass is set to 'false'
+     */
+    void setDoubleBuffered(boolean doubleBuffered);
+
+    /**
+     * whether this class uses double buffering. The superclass
+     * will be the opposite state.
+     */
+    boolean isDoubleBuffered();
 
     /**
      * @return Returns the model.
@@ -94,11 +94,11 @@ public interface VisualizationServer<V, E> {
      */
     Layout<V, E> getGraphLayout();
 
-//    /** 
-//     * 
-//     * @see javax.swing.JComponent#setVisible(boolean)
-//     */
-//    void setVisible(boolean aFlag);
+    /** 
+     * 
+     * @see javax.swing.JComponent#setVisible(boolean)
+     */
+    void setVisible(boolean aFlag);
 
     /**
      * Returns a flag that says whether the visRunner thread is running. If
@@ -143,15 +143,15 @@ public interface VisualizationServer<V, E> {
 //
 //    MutableTransformer getLayoutTransformer();
 
-//    /**
-//     * @return Returns the renderingHints.
-//     */
-//    Map getRenderingHints();
-//
-//    /**
-//     * @param renderingHints The renderingHints to set.
-//     */
-//    void setRenderingHints(Map renderingHints);
+    /**
+     * @return Returns the renderingHints.
+     */
+    Map getRenderingHints();
+
+    /**
+     * @param renderingHints The renderingHints to set.
+     */
+    void setRenderingHints(Map renderingHints);
 
     /**
      * @param paintable The paintable to add.
@@ -167,20 +167,12 @@ public interface VisualizationServer<V, E> {
      * @param paintable The paintable to add.
      */
     void addPostRenderPaintable(Paintable paintable);
-    
-    void prependPostRenderPaintable(Paintable paintable);
-    void prependPreRenderPaintable(Paintable paintable);
-    
+
     /**
      * @param paintable The paintable to remove.
      */
     void removePostRenderPaintable(Paintable paintable);
 
-    
-    List<Paintable> getPreRenderPaintables();
-    
-    List<Paintable> getPostRenderPaintables();
-    
     /**
      * Adds a <code>ChangeListener</code>.
      * @param l the listener to be added
@@ -237,15 +229,13 @@ public interface VisualizationServer<V, E> {
      */
     void setPickSupport(GraphElementAccessor<V, E> pickSupport);
 
-//    Point2D getCenter();
+    Point2D getCenter();
 
     RenderContext<V, E> getRenderContext();
 
     void setRenderContext(RenderContext<V, E> renderContext);
     
-    void renderGraph(ScreenDevice screenDevice, Graphics2D g2d);
-    
-//    void repaint();
+    void repaint();
     
     /**
      * an interface for the preRender and postRender

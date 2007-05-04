@@ -10,6 +10,7 @@
 
 package edu.uci.ics.jung.visualization.transform.shape;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -38,7 +39,7 @@ public class MagnifyIconGraphics extends TransformingFlatnessGraphics {
         super(transformer, delegate);
     }
     
-    public void draw(Icon icon, Shape clip, int x, int y) {
+    public void draw(Icon icon, Component c, Shape clip, int x, int y) {
     	
     	if(transformer instanceof MagnifyShapeTransformer) {
     		MagnifyShapeTransformer mst = (MagnifyShapeTransformer)transformer;
@@ -62,7 +63,7 @@ public class MagnifyIconGraphics extends TransformingFlatnessGraphics {
     				Shape oldClip = delegate.getClip();
     				delegate.clip(clip);
     				delegate.setTransform(xform);
-    				icon.paintIcon(null, delegate, (int)s.getMinX(), (int)s.getMinY());
+    				icon.paintIcon(c, delegate, (int)s.getMinX(), (int)s.getMinY());
     				delegate.setTransform(old);
     				delegate.setClip(oldClip);
     			} else {
@@ -72,12 +73,12 @@ public class MagnifyIconGraphics extends TransformingFlatnessGraphics {
     				Area viewBounds = new Area(oldClip);
     				viewBounds.subtract(new Area(lens));
     				delegate.setClip(viewBounds);
-    				icon.paintIcon(null, delegate, (int)r.getMinX(),(int)r.getMinY());
+    				icon.paintIcon(c, delegate, (int)r.getMinX(),(int)r.getMinY());
     				delegate.setClip(oldClip);
     			}
 
     		} else {
-    			icon.paintIcon(null, delegate, (int)r.getMinX(),(int)r.getMinY());
+    			icon.paintIcon(c, delegate, (int)r.getMinX(),(int)r.getMinY());
     		}
     	}
     }

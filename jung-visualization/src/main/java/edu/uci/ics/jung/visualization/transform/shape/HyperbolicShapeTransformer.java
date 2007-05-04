@@ -8,13 +8,13 @@
  */
 package edu.uci.ics.jung.visualization.transform.shape;
 
+import java.awt.Component;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
-import edu.uci.ics.jung.visualization.ScreenDevice;
 import edu.uci.ics.jung.visualization.transform.HyperbolicTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 
@@ -36,7 +36,7 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
      * Create an instance, setting values from the passed component
      * and registering to listen for size changes on the component.
      */
-    public HyperbolicShapeTransformer(ScreenDevice component) {
+    public HyperbolicShapeTransformer(Component component) {
         this(component, null);
     }
     
@@ -45,7 +45,7 @@ public class HyperbolicShapeTransformer extends HyperbolicTransformer
      * and registering to listen for size changes on the component,
      * with a possibly shared transform <code>delegate</code>.
      */
-    public HyperbolicShapeTransformer(ScreenDevice component, MutableTransformer delegate) {
+    public HyperbolicShapeTransformer(Component component, MutableTransformer delegate) {
         super(component, delegate);
    }
     
