@@ -9,14 +9,13 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
-import org.apache.commons.collections15.BidiMap;
-
-import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.commons.collections15.BidiMap;
+
 import edu.uci.ics.jung.algorithms.Indexer;
-import edu.uci.ics.jung.algorithms.importance.BetweennessCentrality;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
