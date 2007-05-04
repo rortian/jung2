@@ -8,7 +8,6 @@ import java.util.List;
 import edu.uci.ics.jung.graph.event.GraphEvent;
 import edu.uci.ics.jung.graph.event.GraphEventListener;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
 
 public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 
