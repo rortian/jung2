@@ -47,8 +47,8 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -92,7 +92,7 @@ public class PerspectiveTransformerDemo extends JApplet {
    /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<String,Number> vv;
+    VisualizationViewer<String,Number> vv;
 
     /**
      * provides a Perspective transform for the view
@@ -127,8 +127,8 @@ public class PerspectiveTransformerDemo extends JApplet {
         
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
-        vv =  new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
-        PickedState<Number> pes = vv.getServer().getPickedEdgeState();
+        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        PickedState<Number> pes = vv.getPickedEdgeState();
         vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
         vv.getRenderContext().setVertexShapeTransformer(new Transformer<String,Shape>() {
 
@@ -159,13 +159,13 @@ public class PerspectiveTransformerDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 0.9f, vv.getCenter());
+                scaler.scale(vv, 0.9f, vv.getCenter());
             }
         });
         final JSlider horizontalSlider = new JSlider(-120,120,0){

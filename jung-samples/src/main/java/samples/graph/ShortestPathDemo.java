@@ -33,11 +33,10 @@ import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
@@ -73,7 +72,7 @@ public class ShortestPathDemo extends JPanel {
 		setBackground(Color.WHITE);
 		// show graph
         final Layout<String,Number> layout = new FRLayout<String,Number>(mGraph);
-        final VisualizationComponent<String,Number> vv = new VisualizationComponent<String,Number>(layout);
+        final VisualizationViewer<String,Number> vv = new VisualizationViewer<String,Number>(layout);
         vv.setBackground(Color.WHITE);
 
         vv.getRenderContext().setVertexDrawPaintTransformer(new MyVertexDrawPaintFunction<String>());
@@ -82,7 +81,7 @@ public class ShortestPathDemo extends JPanel {
         vv.getRenderContext().setEdgeStrokeTransformer(new MyEdgeStrokeFunction());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
         vv.setGraphMouse(new DefaultModalGraphMouse());
-        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
+        vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             
             public boolean useTransform() {
                 return true;
@@ -296,7 +295,7 @@ public class ShortestPathDemo extends JPanel {
 	
 	static class GraphFactory implements Factory<Graph<String,Number>> {
 		public Graph<String,Number> create() {
-			return new SparseMultigraph<String,Number>();
+			return new SparseGraph<String,Number>();
 		}
 	}
 	

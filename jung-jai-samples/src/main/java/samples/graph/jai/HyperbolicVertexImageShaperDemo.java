@@ -47,8 +47,8 @@ import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -99,7 +99,7 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<Number,Number> vv;
+    VisualizationViewer<Number,Number> vv;
     
     /**
      * some icon names to use
@@ -154,12 +154,12 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);
         layout.setMaxIterations(100);
-        vv =  new VisualizationComponent<Number, Number>(layout, new Dimension(400,400));
+        vv =  new VisualizationViewer<Number, Number>(layout, new Dimension(400,400));
         
         Transformer<Number,Paint> vpf = 
-            new PickableVertexPaintTransformer<Number>(vv.getServer().getPickedVertexState(), Color.white, Color.yellow);
+            new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
         vv.getRenderContext().setVertexFillPaintTransformer(vpf);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
@@ -186,10 +186,10 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
-        PickedState<Number> ps = vv.getServer().getPickedVertexState();
+        PickedState<Number> ps = vv.getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
         
-        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
+        vv.addPostRenderPaintable(new VisualizationServer.Paintable(){
             int x;
             int y;
             Font font;
@@ -235,13 +235,13 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         

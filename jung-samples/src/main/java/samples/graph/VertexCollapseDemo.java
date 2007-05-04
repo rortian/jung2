@@ -39,9 +39,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -94,7 +94,7 @@ public class VertexCollapseDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent vv;
+    VisualizationViewer vv;
     
     Layout layout;
     
@@ -112,7 +112,7 @@ public class VertexCollapseDemo extends JApplet {
         Dimension preferredSize = new Dimension(400,400);
         final VisualizationModel visualizationModel = 
             new DefaultVisualizationModel(layout, preferredSize);
-        vv =  new VisualizationComponent(visualizationModel, preferredSize);
+        vv =  new VisualizationViewer(visualizationModel, preferredSize);
         
         vv.getRenderContext().setVertexShapeTransformer(new ClusterVertexShapeFunction());
         
@@ -164,13 +164,13 @@ public class VertexCollapseDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         
@@ -178,7 +178,7 @@ public class VertexCollapseDemo extends JApplet {
         collapse.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Collection picked = new HashSet(vv.getServer().getPickedVertexState().getPicked());
+                Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
                 if(picked.size() > 1) {
                     Graph inGraph = layout.getGraph();
                     Graph clusterGraph = collapser.getClusterGraph(inGraph, picked);
@@ -195,7 +195,7 @@ public class VertexCollapseDemo extends JApplet {
                     vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                     layout.setGraph(g);
                     layout.setLocation(clusterGraph, cp);
-                    vv.getServer().getPickedVertexState().clear();
+                    vv.getPickedVertexState().clear();
                     vv.repaint();
                 }
             }});
@@ -204,7 +204,7 @@ public class VertexCollapseDemo extends JApplet {
         compressEdges.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				Collection picked = vv.getServer().getPickedVertexState().getPicked();
+				Collection picked = vv.getPickedVertexState().getPicked();
 				if(picked.size() == 2) {
 					Pair pair = new Pair(picked);
 					Graph graph = layout.getGraph();
@@ -220,7 +220,7 @@ public class VertexCollapseDemo extends JApplet {
         expandEdges.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				Collection picked = vv.getServer().getPickedVertexState().getPicked();
+				Collection picked = vv.getPickedVertexState().getPicked();
 				if(picked.size() == 2) {
 					Pair pair = new Pair(picked);
 					Graph graph = layout.getGraph();
@@ -236,7 +236,7 @@ public class VertexCollapseDemo extends JApplet {
         expand.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                Collection picked = new HashSet(vv.getServer().getPickedVertexState().getPicked());
+                Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
                 for(Object v : picked) {
                     if(v instanceof Graph) {
                         
@@ -244,7 +244,7 @@ public class VertexCollapseDemo extends JApplet {
                         vv.getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
-                    vv.getServer().getPickedVertexState().clear();
+                    vv.getPickedVertexState().clear();
                    vv.repaint();
                 }
             }});

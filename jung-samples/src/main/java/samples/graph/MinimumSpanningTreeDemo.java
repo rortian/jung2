@@ -38,9 +38,9 @@ import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -75,9 +75,9 @@ public class MinimumSpanningTreeDemo extends JApplet {
     /**
      * the visual components and renderers for the graph
      */
-    VisualizationComponent<String,Number> vv0;
-    VisualizationComponent<String,Number> vv1;
-    VisualizationComponent<String,Number> vv2;
+    VisualizationViewer<String,Number> vv0;
+    VisualizationViewer<String,Number> vv1;
+    VisualizationViewer<String,Number> vv2;
 //    VisualizationViewer<String,Number> vv3;
     
     /**
@@ -124,16 +124,16 @@ public class MinimumSpanningTreeDemo extends JApplet {
         	
         // create the two views, one for each model
         // they share the same renderer
-        vv0 = new VisualizationComponent<String,Number>(vm0, preferredSize);
-        vv1 = new VisualizationComponent<String,Number>(vm1, preferredSizeRect);
-        vv2 = new VisualizationComponent<String,Number>(vm2, preferredSizeRect);
+        vv0 = new VisualizationViewer<String,Number>(vm0, preferredSize);
+        vv1 = new VisualizationViewer<String,Number>(vm1, preferredSizeRect);
+        vv2 = new VisualizationViewer<String,Number>(vm2, preferredSizeRect);
 
 //        vv1.setRenderContext(vv2.getRenderContext());
         
         vv1.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
         vv2.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
 
-        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
+        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Orthogonal());
         
         vv0.addChangeListener(vv1);
         vv1.addChangeListener(vv2);
@@ -155,22 +155,22 @@ public class MinimumSpanningTreeDemo extends JApplet {
         
         // share one PickedState between the two views
         PickedState<String> ps = new MultiPickedState<String>();
-        vv0.getServer().setPickedVertexState(ps);
-        vv1.getServer().setPickedVertexState(ps);
-        vv2.getServer().setPickedVertexState(ps);
+        vv0.setPickedVertexState(ps);
+        vv1.setPickedVertexState(ps);
+        vv2.setPickedVertexState(ps);
 
         PickedState<Number> pes = new MultiPickedState<Number>();
-        vv0.getServer().setPickedEdgeState(pes);
-        vv1.getServer().setPickedEdgeState(pes);
-        vv2.getServer().setPickedEdgeState(pes);
+        vv0.setPickedEdgeState(pes);
+        vv1.setPickedEdgeState(pes);
+        vv2.setPickedEdgeState(pes);
 
         
         // set an edge paint function that will show picking for edges
-        vv0.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv0.getServer().getPickedEdgeState(), Color.black, Color.red));
-        vv0.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv0.getServer().getPickedVertexState(),
+        vv0.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv0.getPickedEdgeState(), Color.black, Color.red));
+        vv0.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv0.getPickedVertexState(),
                 Color.red, Color.yellow));
-        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getServer().getPickedEdgeState(), Color.black, Color.red));
-        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getServer().getPickedVertexState(),
+        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
+        vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(),
                 Color.red, Color.yellow));
         
         // add default listeners for ToolTips
@@ -243,13 +243,13 @@ public class MinimumSpanningTreeDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv1.getServer(), 1.1f, vv1.getCenter());
+                scaler.scale(vv1, 1.1f, vv1.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv1.getServer(), 1/1.1f, vv1.getCenter());
+                scaler.scale(vv1, 1/1.1f, vv1.getCenter());
             }
         });
         

@@ -34,9 +34,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -64,7 +64,7 @@ public class VertexLabelAsShapeDemo extends JApplet {
 
     Graph<String,Number> graph;
 
-    VisualizationComponent<String,Number> vv;
+    VisualizationViewer<String,Number> vv;
     
     Layout<String,Number> layout;
     
@@ -81,7 +81,7 @@ public class VertexLabelAsShapeDemo extends JApplet {
         Dimension preferredSize = new Dimension(400,400);
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(layout, preferredSize);
-        vv =  new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
+        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
         // this class will provide both label drawing and vertex shapes
         VertexLabelAsShapeRenderer<String,Number> vlasr = new VertexLabelAsShapeRenderer<String,Number>();
@@ -128,13 +128,13 @@ public class VertexLabelAsShapeDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         

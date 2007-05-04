@@ -48,10 +48,10 @@ import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.SparseForest;
 import edu.uci.ics.jung.graph.SparseTree;
 import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -105,7 +105,7 @@ public class L2RTreeLayoutDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<String,Integer> vv;
+    VisualizationViewer<String,Integer> vv;
     
     VisualizationServer.Paintable rings;
     
@@ -125,7 +125,7 @@ public class L2RTreeLayoutDemo extends JApplet {
         treeLayout = new TreeLayout<String,Integer>(graph);
         radialLayout = new RadialTreeLayout<String,Integer>(graph);
         radialLayout.setSize(new Dimension(600,600));
-        vv =  new VisualizationComponent<String,Integer>(treeLayout, new Dimension(600,600));
+        vv =  new VisualizationViewer<String,Integer>(treeLayout, new Dimension(600,600));
         vv.setBackground(Color.white);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
@@ -153,13 +153,13 @@ public class L2RTreeLayoutDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         
@@ -174,7 +174,7 @@ public class L2RTreeLayoutDemo extends JApplet {
 					Animator animator = new Animator(lt);
 					animator.start();
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
-					vv.getServer().addPreRenderPaintable(rings);
+					vv.addPreRenderPaintable(rings);
 				} else {
 					LayoutTransition<String,Integer> lt =
 						new LayoutTransition<String,Integer>(vv, radialLayout, treeLayout);
@@ -182,7 +182,7 @@ public class L2RTreeLayoutDemo extends JApplet {
 					animator.start();
 					vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 					setLtoR(vv);
-					vv.getServer().removePreRenderPaintable(rings);
+					vv.removePreRenderPaintable(rings);
 				}
 
 				vv.repaint();
@@ -201,7 +201,7 @@ public class L2RTreeLayoutDemo extends JApplet {
         content.add(controls, BorderLayout.SOUTH);
     }
     
-    private void setLtoR(VisualizationComponent<String,Integer> vv) {
+    private void setLtoR(VisualizationViewer<String,Integer> vv) {
     	Layout<String,Integer> layout = vv.getModel().getGraphLayout();
     	Dimension d = layout.getSize();
     	Point2D center = new Point2D.Double(d.width/2, d.height/2);

@@ -31,9 +31,9 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -65,7 +65,7 @@ public class VertexLabelPositionDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<String,Number> vv;
+    VisualizationViewer<String,Number> vv;
     
     ScalingControl scaler;
     
@@ -86,10 +86,10 @@ public class VertexLabelPositionDemo extends JApplet {
         
         final VisualizationModel<String,Number> visualizationModel = 
             new DefaultVisualizationModel<String,Number>(graphLayout, preferredSize);
-        vv =  new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
+        vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
 
-        PickedState<String> ps = vv.getServer().getPickedVertexState();
-        PickedState<Number> pes = vv.getServer().getPickedEdgeState();
+        PickedState<String> ps = vv.getPickedVertexState();
+        PickedState<Number> pes = vv.getPickedEdgeState();
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
         vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
@@ -117,13 +117,13 @@ public class VertexLabelPositionDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         JPanel positionPanel = new JPanel();

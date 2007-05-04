@@ -53,7 +53,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         "Ctrl+MouseWheel to change magnification</center></html>";
     
     public HyperbolicImageLensSupport(VisualizationViewer<V,E> vv) {
-        this(vv, new HyperbolicShapeTransformer(vv.getScreenDevice()),
+        this(vv, new HyperbolicShapeTransformer(vv),
                 new ModalLensGraphMouse());
     }
     /**
@@ -92,14 +92,14 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         if(lensControls == null) {
             lensControls = new LensControls(lensTransformer);
         }
-        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv.getServer()));
+        renderContext.setPickSupport(new ViewLensShapePickSupport<V,E>(vv));
         lensTransformer.setDelegate(vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW));
         vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer);
         this.renderContext.setGraphicsContext(lensGraphicsDecorator);
-        vv.getServer().setRenderer(transformingRenderer);
-        vv.getServer().getRenderer().setEdgeRenderer(reshapingEdgeRenderer);
-        vv.getServer().addPreRenderPaintable(lens);
-        vv.getServer().addPostRenderPaintable(lensControls);
+        vv.setRenderer(transformingRenderer);
+        vv.getRenderer().setEdgeRenderer(reshapingEdgeRenderer);
+        vv.addPreRenderPaintable(lens);
+        vv.addPostRenderPaintable(lensControls);
         vv.setGraphMouse(lensGraphMouse);
         vv.setToolTipText(instructions);
         vv.repaint();
@@ -108,10 +108,10 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     public void deactivate() {
     	renderContext.setPickSupport(pickSupport);
     	vv.getRenderContext().getMultiLayerTransformer().setTransformer(Layer.VIEW, lensTransformer.getDelegate());
-        vv.getServer().removePreRenderPaintable(lens);
-        vv.getServer().removePostRenderPaintable(lensControls);
+        vv.removePreRenderPaintable(lens);
+        vv.removePostRenderPaintable(lensControls);
         this.renderContext.setGraphicsContext(savedGraphicsDecorator);
-        vv.getServer().setRenderer(renderer);
+        vv.setRenderer(renderer);
         vv.setToolTipText(defaultToolTipText);
         vv.setGraphMouse(graphMouse);
         vv.repaint();

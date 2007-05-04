@@ -40,15 +40,14 @@ import javax.swing.JRadioButton;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.LayeredIcon;
-import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -94,12 +93,12 @@ public class LensVertexImageShaperDemo extends JApplet {
 	/**
      * the graph
      */
-    DirectedSparseMultigraph<Number, Number> graph;
+    DirectedSparseGraph<Number, Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<Number,Number> vv;
+    VisualizationViewer<Number,Number> vv;
     
     /**
      * some icon names to use
@@ -130,7 +129,7 @@ public class LensVertexImageShaperDemo extends JApplet {
     public LensVertexImageShaperDemo() {
         
         // create a simple graph for the demo
-        graph = new DirectedSparseMultigraph<Number,Number>();
+        graph = new DirectedSparseGraph<Number,Number>();
         Number[] vertices = createVertices(11);
         
         // a Map for the labels
@@ -156,12 +155,12 @@ public class LensVertexImageShaperDemo extends JApplet {
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);
         layout.setMaxIterations(100);
-        vv =  new VisualizationComponent<Number, Number>(layout, new Dimension(600,600));
+        vv =  new VisualizationViewer<Number, Number>(layout, new Dimension(600,600));
         
         Transformer<Number,Paint> vpf = 
-            new PickableVertexPaintTransformer<Number>(vv.getServer().getPickedVertexState(), Color.white, Color.yellow);
+            new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
         vv.getRenderContext().setVertexFillPaintTransformer(vpf);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
@@ -188,10 +187,10 @@ public class LensVertexImageShaperDemo extends JApplet {
         
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
-        PickedState<Number> ps = vv.getServer().getPickedVertexState();
+        PickedState<Number> ps = vv.getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
         
-        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
+        vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             int x;
             int y;
             Font font;
@@ -237,13 +236,13 @@ public class LensVertexImageShaperDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
         

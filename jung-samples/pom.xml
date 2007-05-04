@@ -84,13 +84,6 @@
 	
   	<dependency>
 		<groupId>jung</groupId>
-		<artifactId>jung-awt-rendering</artifactId>
-		<version>2.0a</version>
-		<scope>compile</scope>
-	</dependency>
-	
-  	<dependency>
-		<groupId>jung</groupId>
 		<artifactId>jung-graph-impl</artifactId>
 		<version>2.0a</version>
 		<scope>compile</scope>

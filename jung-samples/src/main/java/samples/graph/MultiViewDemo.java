@@ -18,6 +18,7 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JApplet;
@@ -35,11 +36,9 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.control.AnimatedPickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.LayoutScalingControl;
@@ -53,7 +52,6 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.event.Event;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
@@ -75,9 +73,9 @@ public class MultiViewDemo extends JApplet {
     /**
      * the visual components and renderers for the graph
      */
-    VisualizationComponent<String,Number> vv1;
-    VisualizationComponent<String,Number> vv2;
-    VisualizationComponent<String,Number> vv3;
+    VisualizationViewer<String,Number> vv1;
+    VisualizationViewer<String,Number> vv2;
+    VisualizationViewer<String,Number> vv3;
     
     /**
      * the normal transformer
@@ -122,9 +120,9 @@ public class MultiViewDemo extends JApplet {
             new DefaultVisualizationModel<String,Number>(layout, preferredSize);
  
         // create 3 views that share the same model
-        vv1 = new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
-        vv2 = new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
-        vv3 = new VisualizationComponent<String,Number>(visualizationModel, preferredSize);
+        vv1 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        vv2 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
+        vv3 = new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
         vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<String,Number>());
         vv2.getRenderContext().setVertexShapeTransformer(
@@ -154,20 +152,20 @@ public class MultiViewDemo extends JApplet {
         vv3.setBackground(Color.white);
         
         // create one pick support for all 3 views to share
-        GraphElementAccessor<String,Number> pickSupport = new ShapePickSupport<String,Number>(vv1.getServer());
-        vv1.getServer().setPickSupport(pickSupport);
-        vv2.getServer().setPickSupport(pickSupport);
-        vv3.getServer().setPickSupport(pickSupport);
+        GraphElementAccessor<String,Number> pickSupport = new ShapePickSupport<String,Number>(vv1);
+        vv1.setPickSupport(pickSupport);
+        vv2.setPickSupport(pickSupport);
+        vv3.setPickSupport(pickSupport);
 
         // create one picked state for all 3 views to share
         PickedState<Number> pes = new MultiPickedState<Number>();
         PickedState<String> pvs = new MultiPickedState<String>();
-        vv1.getServer().setPickedVertexState(pvs);
-        vv2.getServer().setPickedVertexState(pvs);
-        vv3.getServer().setPickedVertexState(pvs);
-        vv1.getServer().setPickedEdgeState(pes);
-        vv2.getServer().setPickedEdgeState(pes);
-        vv3.getServer().setPickedEdgeState(pes);
+        vv1.setPickedVertexState(pvs);
+        vv2.setPickedVertexState(pvs);
+        vv3.setPickedVertexState(pvs);
+        vv1.setPickedEdgeState(pes);
+        vv2.setPickedEdgeState(pes);
+        vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
         vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
@@ -222,7 +220,7 @@ public class MultiViewDemo extends JApplet {
             protected void loadPlugins() {
                 pickingPlugin = new PickingGraphMousePlugin();
                 animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-                translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
+                translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
                 scalingPlugin = new ScalingGraphMousePlugin(new LayoutScalingControl(), 0);
                 rotatingPlugin = new RotatingGraphMousePlugin();
                 shearingPlugin = new ShearingGraphMousePlugin();
@@ -236,7 +234,7 @@ public class MultiViewDemo extends JApplet {
             protected void loadPlugins() {
                 pickingPlugin = new PickingGraphMousePlugin();
                 animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
-                translatingPlugin = new TranslatingGraphMousePlugin(Event.BUTTON1_MASK);
+                translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
                 scalingPlugin = new ScalingGraphMousePlugin(new ViewScalingControl(), 0);
                 rotatingPlugin = new RotatingGraphMousePlugin();
                 shearingPlugin = new ShearingGraphMousePlugin();
@@ -257,9 +255,9 @@ public class MultiViewDemo extends JApplet {
         vv2.setToolTipText("<html><center>MouseWheel Scales View</center></html>");
         vv3.setToolTipText("<html><center>MouseWheel Scales Layout and<p>crosses over to view<p>ctrl+MouseWheel scales view</center></html>");
  
-        vv1.getServer().addPostRenderPaintable(new BannerLabel(vv1, "View 1"));
-        vv2.getServer().addPostRenderPaintable(new BannerLabel(vv2, "View 2"));
-        vv3.getServer().addPostRenderPaintable(new BannerLabel(vv3, "View 3"));
+        vv1.addPostRenderPaintable(new BannerLabel(vv1, "View 1"));
+        vv2.addPostRenderPaintable(new BannerLabel(vv2, "View 2"));
+        vv3.addPostRenderPaintable(new BannerLabel(vv3, "View 3"));
         
         textArea = new JTextArea(6,30);
         scrollPane = new JScrollPane(textArea, 
@@ -289,7 +287,7 @@ public class MultiViewDemo extends JApplet {
 
     }
     
-    class BannerLabel implements VisualizationServer.Paintable {
+    class BannerLabel implements VisualizationViewer.Paintable {
         int x;
         int y;
         Font font;

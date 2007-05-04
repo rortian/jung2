@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import junit.framework.TestCase;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
@@ -19,7 +19,7 @@ public class TestCrossoverScalingControl extends TestCase {
 	
 	public void setUp() {
 		sc = new CrossoverScalingControl();
-		vv = new BasicVisualizationServer(new FRLayout(new SparseMultigraph()));
+		vv = new BasicVisualizationServer(new FRLayout(new SparseGraph()));
 	}
 	public void testCrossover() {
 		crossover = 2.0f;

@@ -49,8 +49,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
 import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
@@ -99,7 +99,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<Number,Number> vv;
+    VisualizationViewer<Number,Number> vv;
     
     /**
      * some icon names to use
@@ -161,7 +161,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         
         FRLayout<Number,Number> layout = new FRLayout<Number,Number>(graph);
         layout.setMaxIterations(100);
-        vv =  new VisualizationComponent<Number,Number>(layout, new Dimension(400,400));
+        vv =  new VisualizationViewer<Number,Number>(layout, new Dimension(400,400));
 
         vv.setBackground(Color.decode("0xffffdd"));
         final DefaultVertexIconTransformer<Number> vertexIconFunction =
@@ -171,11 +171,11 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         vv.getRenderContext().setVertexShapeTransformer(vertexImageShapeFunction);
         vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
         vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
-        PickedState ps = vv.getServer().getPickedVertexState();
+        PickedState ps = vv.getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
 
 
-        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
+        vv.addPostRenderPaintable(new VisualizationServer.Paintable(){
             int x;
             int y;
             Font font;
@@ -224,13 +224,13 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 0.9f, vv.getCenter());
+                scaler.scale(vv, 0.9f, vv.getCenter());
             }
         });
         final JSlider horizontalSlider = new JSlider(-120,120,0){

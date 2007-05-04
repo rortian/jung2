@@ -17,6 +17,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,19 +28,17 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.GraphMouseListener;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.VisualizationServer;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.event.MouseEvent;
 import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsidePositioner;
@@ -62,12 +61,12 @@ public class GraphZoomScrollPaneDemo {
     /**
      * the graph
      */
-    DirectedSparseMultigraph<String, Number> graph;
+    DirectedSparseGraph<String, Number> graph;
 
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<String, Number> vv;
+    VisualizationViewer<String, Number> vv;
     
     /**
      * create an instance of a simple graph with controls to
@@ -77,7 +76,7 @@ public class GraphZoomScrollPaneDemo {
     public GraphZoomScrollPaneDemo() {
         
         // create a simple graph for the demo
-        graph = new DirectedSparseMultigraph<String, Number>();
+        graph = new DirectedSparseGraph<String, Number>();
         String[] v = createVertices(10);
         createEdges(v);
         
@@ -90,10 +89,10 @@ public class GraphZoomScrollPaneDemo {
             System.err.println("Can't load \""+imageLocation+"\"");
         }
         final ImageIcon icon = sandstoneIcon;
-        vv =  new VisualizationComponent<String,Number>(new KKLayout<String,Number>(graph));
+        vv =  new VisualizationViewer<String,Number>(new KKLayout<String,Number>(graph));
         
         if(icon != null) {
-            vv.getServer().addPreRenderPaintable(new VisualizationServer.Paintable(){
+            vv.addPreRenderPaintable(new VisualizationViewer.Paintable(){
                 public void paint(Graphics g) {
                     Dimension d = vv.getSize();
                     g.drawImage(icon.getImage(),0,0,d.width,d.height,vv);
@@ -101,7 +100,7 @@ public class GraphZoomScrollPaneDemo {
                 public boolean useTransform() { return false; }
             });
         }
-        vv.getServer().addPostRenderPaintable(new VisualizationServer.Paintable(){
+        vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             int x;
             int y;
             Font font;
@@ -136,7 +135,7 @@ public class GraphZoomScrollPaneDemo {
         		new GradientVertexRenderer<String,Number>(
         				Color.white, Color.red, 
         				Color.white, Color.blue,
-        				vv.getServer().getPickedVertexState(),
+        				vv.getPickedVertexState(),
         				false));
         vv.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.lightGray));
         vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
@@ -152,7 +151,7 @@ public class GraphZoomScrollPaneDemo {
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
-        vv.setForeground(Color.lightGray);
+        vv.setForeground(Color.pink);
         
         // create a frome to hold the graph
         final JFrame frame = new JFrame();
@@ -171,13 +170,13 @@ public class GraphZoomScrollPaneDemo {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
 

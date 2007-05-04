@@ -28,15 +28,16 @@ import javax.swing.JPanel;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
-import edu.uci.ics.jung.visualization.awt.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.awt.VisualizationComponent;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
 import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
@@ -62,18 +63,18 @@ public class UnicodeLabelDemo {
     /**
      * the visual component and renderer for the graph
      */
-    VisualizationComponent<Integer,Number> vv;
+    VisualizationViewer<Integer,Number> vv;
     
     boolean showLabels;
     
     public UnicodeLabelDemo() {
         
         // create a simple graph for the demo
-        graph = new DirectedSparseMultigraph<Integer,Number>();
+        graph = new DirectedSparseGraph<Integer,Number>();
         Integer[] v = createVertices(10);
         createEdges(v);
         
-        vv =  new VisualizationComponent<Integer,Number>(new FRLayout<Integer,Number>(graph));
+        vv =  new VisualizationViewer<Integer,Number>(new FRLayout<Integer,Number>(graph));
         vv.getRenderContext().setVertexLabelTransformer(new UnicodeVertexStringer<Integer>(v));
         vv.getRenderContext().setVertexLabelRenderer(new DefaultVertexLabelRenderer(Color.cyan));
         vv.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(Color.cyan));
@@ -84,8 +85,8 @@ public class UnicodeLabelDemo {
         vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
         loadImages(v, vertexIconFunction.getIconMap());
         vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getServer().getPickedVertexState(), Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getServer().getPickedEdgeState(), Color.black, Color.lightGray));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 
@@ -99,22 +100,21 @@ public class UnicodeLabelDemo {
         content.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        final DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
+        final ModalGraphMouse gm = new DefaultModalGraphMouse();
         vv.setGraphMouse(gm);
-        vv.getScreenDevice().addKeyListener(gm.getModeKeyListener());
         
         final ScalingControl scaler = new CrossoverScalingControl();
 
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1.1f, vv.getCenter());
+                scaler.scale(vv, 1.1f, vv.getCenter());
             }
         });
         JButton minus = new JButton("-");
         minus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(vv.getServer(), 1/1.1f, vv.getCenter());
+                scaler.scale(vv, 1/1.1f, vv.getCenter());
             }
         });
 
