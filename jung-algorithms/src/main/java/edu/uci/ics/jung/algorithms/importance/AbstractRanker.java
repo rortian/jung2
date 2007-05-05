@@ -55,7 +55,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
 					public Map<V,Number> create() {
 						return new HashMap<V,Number>();
 					}});
-    private Map<Object,Map<E, Number>> edgeRankScores = 
+    protected Map<Object,Map<E, Number>> edgeRankScores = 
     	LazyMap.decorate(
     			new HashMap<Object,Map<E,Number>>(),
     			new Factory<Map<E,Number>>() {
