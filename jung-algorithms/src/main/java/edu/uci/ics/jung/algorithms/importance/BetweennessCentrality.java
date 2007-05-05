@@ -38,12 +38,12 @@ import edu.uci.ics.jung.graph.UndirectedGraph;
  * Running time is: O(n^2 + nm).
  * @see "Ulrik Brandes: A Faster Algorithm for Betweenness Centrality. Journal of Mathematical Sociology 25(2):163-177, 2001."
  * @author Scott White
+ * @author Tom Nelson converted to jung2
  */
 
 public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
 
     public static final String CENTRALITY = "centrality.BetweennessCentrality";
-	protected Map<Object,Number> centralityMap = new HashMap<Object,Number>();
 
     /**
      * Constructor which initializes the algorithm
@@ -62,38 +62,19 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
         initialize(g, rankNodes, rankEdges);
     }
     
-    /**
-	 * @return the centralityMap
-	 */
-	public Map<Object, Number> getCentralityMap() {
-		return centralityMap;
-	}
-
-	/**
-	 * @param centralityMap the centralityMap to set
-	 */
-	public void setCentralityMap(Map<Object, Number> centralityMap) {
-		this.centralityMap = centralityMap;
-	}
-
 	protected void computeBetweenness(Graph<V,E> graph) {
 
     	Map<V,BetweennessData> decorator = new HashMap<V,BetweennessData>();
-//        BetweennessDataDecorator decorator = new BetweennessDataDecorator();
-    	Map<Object,Number> bcDecorator = new HashMap<Object,Number>();
-//        NumericDecorator bcDecorator = new NumericDecorator(CENTRALITY, UserData.SHARED);
-
+    	Map<V,Number> bcVertexDecorator = 
+    		vertexRankScores.get(getRankScoreKey());
+    	bcVertexDecorator.clear();
+    	Map<E,Number> bcEdgeDecorator = 
+    		edgeRankScores.get(getRankScoreKey());
+    	bcEdgeDecorator.clear();
         
         Collection<V> vertices = graph.getVertices();
         
-        // clean up previous decorations, if any; otherwise the new calculations will 
-        // incorporate the old data
-//        UserDataUtils.cleanup(vertices, getRankScoreKey());
-//        UserDataUtils.cleanup(graph.getEdges(), getRankScoreKey());
-        centralityMap.clear();
-
         for (V s : vertices) {
-//            Vertex s = (Vertex) vIt.next();
 
             initializeData(graph,decorator);
 
@@ -109,8 +90,6 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
                 stack.push(v);
 
                 for(V w : getGraph().getSuccessors(v)) {
-//                for (Iterator nIt = v.getSuccessors().iterator(); nIt.hasNext();) {
-//                    Vertex w = (Vertex) nIt.next();
 
                     if (decorator.get(w).distance < 0) {
                         queue.add(w);
@@ -123,73 +102,64 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
                     }
                 }
             }
+            
+            System.err.println("graph is "+getGraph());
+            System.err.println("bcEdgeDecorator is "+edgeRankScores.get(getRankScoreKey()));
 
             while (!stack.isEmpty()) {
                 V w = stack.pop();
 
                 for (V v : decorator.get(w).predecessors) {
-//                    Vertex v = (Vertex) v2It.next();
+
                     double partialDependency = (decorator.get(v).numSPs / decorator.get(w).numSPs);
                     partialDependency *= (1.0 + decorator.get(w).dependency);
                     decorator.get(v).dependency +=  partialDependency;
                     E currentEdge = getGraph().findEdge(v, w);
-                    double edgeValue = bcDecorator.get(currentEdge).doubleValue();
+                    double edgeValue = bcEdgeDecorator.get(currentEdge).doubleValue();
                     edgeValue += partialDependency;
-                    bcDecorator.put(currentEdge, edgeValue);
+                    bcEdgeDecorator.put(currentEdge, edgeValue);
                 }
                 if (w != s) {
-                	double bcValue = bcDecorator.get(w).doubleValue();
+                	double bcValue = bcVertexDecorator.get(w).doubleValue();
                 	bcValue += decorator.get(w).dependency;
-                	bcDecorator.put(w, bcValue);
-//                    MutableDouble bcValue = (MutableDouble) bcDecorator.getValue(w);
-//                    bcValue.add(decorator.data(w).dependency);
+                	bcVertexDecorator.put(w, bcValue);
                 }
             }
         }
 
-//        if (PredicateUtils.enforcesEdgeConstraint(graph, Graph.UNDIRECTED_EDGE)) {
         if(graph instanceof UndirectedGraph) {
-            for (V v : vertices) { //Iterator v3It = vertices.iterator(); v3It.hasNext();) {
-            	double bcValue = bcDecorator.get(v).doubleValue();
+            for (V v : vertices) { 
+            	double bcValue = bcVertexDecorator.get(v).doubleValue();
             	bcValue /= 2.0;
-            	bcDecorator.put(v, bcValue);
-//                MutableDouble bcValue = (MutableDouble) bcDecorator.getValue((Vertex) v3It.next());
-//                bcValue.setDoubleValue(bcValue.doubleValue() / 2.0);
+            	bcVertexDecorator.put(v, bcValue);
             }
             for (E e : graph.getEdges()) {
-            	double bcValue = bcDecorator.get(e).doubleValue();
+            	double bcValue = bcEdgeDecorator.get(e).doubleValue();
             	bcValue /= 2.0;
-            	bcDecorator.put(e, bcValue);
+            	bcEdgeDecorator.put(e, bcValue);
             }
         }
 
         for (V vertex : vertices) {
-//            Vertex vertex = (Vertex) vIt.next();
             decorator.remove(vertex);
         }
-
     }
 
     private void initializeData(Graph<V,E> g, Map<V,BetweennessData> decorator) {
         for (V vertex : g.getVertices()) {
 
-//            if (vertex.getUserDatum(CENTRALITY) == null) {
-//                vertex.addUserDatum(CENTRALITY, new MutableDouble(), UserData.SHARED);
-//            }
-            if(centralityMap.containsKey(vertex) == false) {
-            	centralityMap.put(vertex, 0.0);
-            }
-
+        	Map<V,Number> bcVertexDecorator = vertexRankScores.get(getRankScoreKey());
+        	if(bcVertexDecorator.containsKey(vertex) == false) {
+        		bcVertexDecorator.put(vertex, 0.0);
+        	}
             decorator.put(vertex, new BetweennessData());
         }
         for (E e : g.getEdges()) {
 
-//            if (e.getUserDatum(CENTRALITY) == null) {
-//                e.addUserDatum(CENTRALITY, new MutableDouble(), UserData.SHARED);
-//            }
-            if(centralityMap.containsKey(e) == false) {
-            	centralityMap.put(e, 0.0);
-            }
+        	Map<E,Number> bcEdgeDecorator = edgeRankScores.get(getRankScoreKey());
+        	if(bcEdgeDecorator.containsKey(e) == false) {
+        		bcEdgeDecorator.put(e, 0.0);
+        	}
         }
     }
     
@@ -203,23 +173,7 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
 
     public void step() {
         computeBetweenness(getGraph());
-//        return 0;
     }
-
-//    class BetweennessDataDecorator extends Decorator {
-//        public BetweennessDataDecorator() {
-//            super("centrality.BetwennessData", UserData.REMOVE);
-//        }
-//
-//        public BetweennessData data(Element udc) {
-//            return (BetweennessData) udc.getUserDatum(getKey());
-//        }
-//
-//        public void setData(BetweennessData value, Element udc) {
-//            udc.setUserDatum(getKey(), value, getCopyAction());
-//        }
-//
-//    }
 
     class BetweennessData {
         double distance;
