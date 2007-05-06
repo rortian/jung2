@@ -151,7 +151,7 @@ public class GraphZoomScrollPaneDemo {
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
-        vv.setForeground(Color.pink);
+        vv.setForeground(Color.lightGray);
         
         // create a frome to hold the graph
         final JFrame frame = new JFrame();
