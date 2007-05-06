@@ -133,7 +133,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         vv1.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
         vv2.getRenderContext().setMultiLayerTransformer(vv0.getRenderContext().getMultiLayerTransformer());
 
-        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Orthogonal());
+        vv1.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
         vv0.addChangeListener(vv1);
         vv1.addChangeListener(vv2);
