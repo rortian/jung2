@@ -155,7 +155,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, Serializable
     
     public boolean removeVertex(V vertex)
     {
-        if (!vertices.containsKey(vertex))
+        if (!containsVertex(vertex))
             return false;
         for (H hyperedge : vertices.get(vertex))
         {
@@ -167,7 +167,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, Serializable
     
     public boolean removeEdge(H hyperedge)
     {
-        if (!edges.containsKey(hyperedge))
+        if (!containsEdge(hyperedge))
             return false;
         for (V vertex : edges.get(hyperedge))
         {
