@@ -103,9 +103,6 @@ public class BetweennessCentrality<V,E> extends AbstractRanker<V,E> {
                 }
             }
             
-            System.err.println("graph is "+getGraph());
-            System.err.println("bcEdgeDecorator is "+edgeRankScores.get(getRankScoreKey()));
-
             while (!stack.isEmpty()) {
                 V w = stack.pop();
 

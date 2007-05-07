@@ -44,23 +44,17 @@ public class TestKNeighborhoodFilter extends TestCase {
 		Graph<Number,Number> result = filter.filter(graph);
 		assertEquals(result.getVertexCount(), 4);
 		assertEquals(result.getEdgeCount(), 5);
-		System.err.println("IN result "+ result.getVertices()+", "+result.getEdges());
 	}
 	public void testOut() {
 		Filter<Number,Number> filter = new KNeighborhoodFilter<Number,Number>(0, 2, EdgeType.OUT);
 		Graph<Number,Number> result = filter.filter(graph);
 		assertEquals(result.getVertexCount(), 5);
 		assertEquals(result.getEdgeCount(), 5);
-		System.err.println("IN result "+ result.getVertices()+", "+result.getEdges());
 	}
 	public void testInOut() {
 		Filter<Number,Number> filter = new KNeighborhoodFilter<Number,Number>(0, 2, EdgeType.IN_OUT);
 		Graph<Number,Number> result = filter.filter(graph);
 		assertEquals(result.getVertexCount(), 7);
 		assertEquals(result.getEdgeCount(), 8);
-		System.err.println("IN result "+ result.getVertices()+", "+result.getEdges());
-
 	}
-	  
-  
 }

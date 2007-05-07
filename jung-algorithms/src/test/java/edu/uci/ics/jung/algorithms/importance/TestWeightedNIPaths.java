@@ -76,7 +76,7 @@ public class TestWeightedNIPaths extends TestCase {
         	new WeightedNIPaths<String,Number>(graph, vertexFactory, edgeFactory, 2.0,3,priors);
         ranker.evaluate();
 
-        ranker.printRankings(true,true);
+//        ranker.printRankings(true,true);
         
         Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(0).rankScore,0.277787,.0001));
         Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(1).rankScore,0.222222,.0001));

@@ -55,7 +55,7 @@ public class TestMarkovCentrality extends TestCase {
         ranker.setMaximumIterations(500);
 
         ranker.evaluate();
-        ranker.printRankings(true, true);
+//        ranker.printRankings(true, true);
 
         Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(0),0.1764,.001));
         Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(1),0.3529,.001));

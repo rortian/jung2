@@ -17,12 +17,12 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		tree.addEdge(0,"A","B0");
 		tree.addEdge(1,"A","B1");
 		
-		System.err.println("tree = "+tree);
+//		System.err.println("tree = "+tree);
 		PrimMinimumSpanningTree pmst = 
 			new PrimMinimumSpanningTree(SparseTree.<String,Integer>getFactory());
 		
 		Graph<String,Integer> mst = pmst.transform(tree);
-		System.err.println("mst = "+mst);
+//		System.err.println("mst = "+mst);
 		
 //		assertEquals(tree.getVertices(), mst.getVertices());
 //		assertEquals(tree.getEdges(), mst.getEdges());
@@ -34,12 +34,12 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		graph.addVertex("B0");
 		graph.addEdge(0, "A", "B0");
 		graph.addEdge(1, "A", "B1");
-		System.err.println("graph = "+graph);
+//		System.err.println("graph = "+graph);
 		PrimMinimumSpanningTree pmst = 
 			new PrimMinimumSpanningTree(SparseTree.<String,Integer>getFactory());
 		
 		Graph<String,Integer> mst = pmst.transform(graph);
-		System.err.println("mst = "+mst);
+//		System.err.println("mst = "+mst);
 		
 	}
 
@@ -48,12 +48,12 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		graph.addVertex("B0");
 		graph.addEdge(0, "A", "B0");
 		graph.addEdge(1, "A", "B1");
-		System.err.println("graph = "+graph);
+//		System.err.println("graph = "+graph);
 		PrimMinimumSpanningTree pmst = 
 			new PrimMinimumSpanningTree(SparseTree.<String,Integer>getFactory());
 		
 		Graph<String,Integer> mst = pmst.transform(graph);
-		System.err.println("mst = "+mst);
+//		System.err.println("mst = "+mst);
 		
 	}
 
