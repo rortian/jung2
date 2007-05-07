@@ -46,6 +46,8 @@ public final class Pair<T> implements Collection<T>
      */
     public Pair(Collection<? extends T> values) 
     {
+        if (values == null)
+            throw new IllegalArgumentException("Input collection cannot be null");
     	if (values.size() == 2)
         {
             if(values.contains(null)) 
