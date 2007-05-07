@@ -81,6 +81,8 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public E findEdge(V v1, V v2)
     {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return null;
         return vertices.get(v1).getSecond().get(v2);
     }
 
@@ -242,7 +244,7 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
     }
 
     public boolean removeVertex(V vertex) {
-        if (containsVertex(vertex))
+        if (!containsVertex(vertex))
             return false;
         
         // copy to avoid concurrent modification in removeEdge
