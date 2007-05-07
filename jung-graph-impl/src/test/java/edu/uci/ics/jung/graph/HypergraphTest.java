@@ -17,12 +17,15 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.jung.graph.util.Pair;
+
+
 public class HypergraphTest extends TestCase
 {
-    protected Factory<? extends Hypergraph<Integer,Double>> factory;
-    protected Hypergraph<Integer,Double> h;
+    protected Factory<? extends Hypergraph<Integer,Character>> factory;
+    protected Hypergraph<Integer,Character> h;
     
-    public HypergraphTest(Factory<? extends Hypergraph<Integer,Double>> factory)
+    public HypergraphTest(Factory<? extends Hypergraph<Integer,Character>> factory)
     {
         this.factory = factory;
     }
@@ -31,17 +34,17 @@ public class HypergraphTest extends TestCase
     {
         TestSuite ts = new TestSuite("HypergraphTest");
         
-        ts.addTest(new HypergraphTest(SetHypergraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(DirectedOrderedSparseMultigraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(DirectedSparseGraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(DirectedSparseMultigraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(OrderedSparseMultigraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(SortedSparseMultigraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(SparseGraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(SparseMultigraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(UndirectedOrderedSparseMultigraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(UndirectedSparseGraph.<Integer,Double>getFactory()));
-        ts.addTest(new HypergraphTest(UndirectedSparseMultigraph.<Integer,Double>getFactory()));
+        ts.addTest(new HypergraphTest(SetHypergraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(DirectedOrderedSparseMultigraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(DirectedSparseGraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(DirectedSparseMultigraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(OrderedSparseMultigraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(SortedSparseMultigraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(SparseGraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(SparseMultigraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(UndirectedOrderedSparseMultigraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(UndirectedSparseGraph.<Integer,Character>getFactory()));
+        ts.addTest(new HypergraphTest(UndirectedSparseMultigraph.<Integer,Character>getFactory()));
 //        ts.addTest(new HypergraphTest(.getFactory()));
         
         return ts;
@@ -50,17 +53,21 @@ public class HypergraphTest extends TestCase
     public void setUp()
     {
         h = factory.create();
+        System.out.println(h.getClass().getSimpleName());
     }
     
     public void runTest() throws Exception {
         setUp();
         testAddVertex();
+        testAddEdge();
+        testEdgeEndpoints();
         tearDown();
     }
 
     /**
      * test for the following:
      * <ul>
+     * <li/>add successful iff arg is not present
      * <li/>count increases by 1 iff add is successful
      * <li/>null vertex argument actively rejected
      * <li/>vertex reported as present iff add is successful
@@ -72,9 +79,10 @@ public class HypergraphTest extends TestCase
         assertTrue(h.addVertex(new Integer(1)));
         assertEquals(count+1, h.getVertexCount());
         assertTrue(h.containsVertex(1));
+        boolean success = false;
         try
         {
-            h.addVertex(null);
+            success = h.addVertex(null);
             fail("Implementation should disallow null vertices");
         }
         catch (IllegalArgumentException iae) {}
@@ -82,8 +90,89 @@ public class HypergraphTest extends TestCase
         {
             fail("Implementation should actively prevent null vertices");
         }
+        assertFalse(success);
         assertFalse(h.addVertex(1));
         assertEquals(count+1, h.getVertexCount());
         assertFalse(h.containsVertex(2));
+    }
+    
+    /**
+     * test for the following:
+     * <ul>
+     * <li/>add successful iff edge is not present 
+     * <li/>edge count increases by 1 iff add successful
+     * <li/>null edge arg actively rejected
+     * <li/>edge reported as present iff add is successful
+     * <li/>throw if edge is present with different endpoints
+     * </ul>
+     */
+    public void testAddEdge()
+    {
+        int edge_count = h.getEdgeCount();
+        int vertex_count = h.getVertexCount();
+        Pair<Integer> p = new Pair<Integer>(2, 3);
+        assertTrue(h.addEdge('a', p));
+        assertEquals(edge_count+1, h.getEdgeCount());
+        assertEquals(vertex_count+2, h.getVertexCount());
+        assertTrue(h.containsEdge('a'));
+        boolean success = false;
+        try
+        {
+            success = h.addEdge('b', null);
+            fail("Implementation should disallow null pairs/collections");
+            success = h.addEdge(null, p);
+            fail("Implementation should disallow null edges");
+        }
+        catch (IllegalArgumentException iae) {}
+        catch (NullPointerException npe)
+        {
+            fail("Implementation should actively prevent null edges, pairs, and collections");
+        }
+        assertFalse(success);
+        // adding the same edge with an equal Pair should return false
+        assertFalse(h.addEdge('a', new Pair<Integer>(2,3)));
+        // adding the same edge with the same Pair should return false
+        assertFalse(h.addEdge('a', p));
+        try
+        {
+            success = h.addEdge('a', new Pair<Integer>(3,4));
+            fail("Implementation should disallow existing edge objects from connecting new pairs/collections");
+        }
+        catch (IllegalArgumentException iae) {}
+        assertEquals(edge_count+1, h.getEdgeCount());
+        assertFalse(h.containsEdge('b'));
+    }
+    
+    /**
+     * test for the following:
+     * <ul>
+     * <li/>if Graph, reject # of endpoints != 2
+     * <li/>otherwise, accept any number of endpoints >= 0
+     * 
+     * </ul>
+     *
+     */
+    public void testEdgeEndpoints()
+    {
+        
+    }
+    
+    /**
+     * should return null if any of the following is true
+     * <ul>
+     * <li/>v1 is null 
+     * <li/>v2 is null
+     * <li/>there is no edge connecting v1 to v2 in this graph
+     * </ul>
+     * otherwise should return _an_ edge connecting v1 to v2.
+     * May be directed or undirected (depending on the graph);
+     * may be any of the edges in the graph that so connect v1 and v2.
+     * 
+     * Must _not_ return any directed edge for which v1 and v2 are distinct
+     * and v2 is the source.
+     */
+    public void testFindEdge()
+    {
+        
     }
 }
