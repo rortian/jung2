@@ -62,6 +62,8 @@ public class SparseGraph<V,E>
 
     public E findEdge(V v1, V v2)
     {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return null;
         E edge = vertex_maps.get(v1)[OUTGOING].get(v2);
         if (edge == null)
             edge = vertex_maps.get(v1)[INCIDENT].get(v2);
@@ -71,6 +73,8 @@ public class SparseGraph<V,E>
     public Collection<E> findEdgeSet(V v1, V v2)
     {
         Collection<E> edges = new ArrayList<E>(2);
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return edges;
         E e1 = vertex_maps.get(v1)[OUTGOING].get(v2);
         if (e1 != null)
             edges.add(e1);
@@ -99,10 +103,10 @@ public class SparseGraph<V,E>
                     " are already connected by " + connection); 
         
 
-        if (!vertex_maps.containsKey(v1))
+        if (!containsVertex(v1))
             this.addVertex(v1);
         
-        if (!vertex_maps.containsKey(v2))
+        if (!containsVertex(v2))
             this.addVertex(v2);
         
         // map v1 to <v2, edge> and vice versa
@@ -115,7 +119,7 @@ public class SparseGraph<V,E>
         else
         {
             vertex_maps.get(v1)[INCIDENT].put(v2, edge);
-            vertex_maps.get(v2)[INCIDENT].put(v2, edge);
+            vertex_maps.get(v2)[INCIDENT].put(v1, edge);
             undirected_edges.put(edge, new_endpoints);
         }
         
@@ -285,7 +289,7 @@ public class SparseGraph<V,E>
             throw new IllegalArgumentException("vertex may not be null");
         }
         if (!containsVertex(vertex)) {
-            vertex_maps.put(vertex, new HashMap[3]);
+            vertex_maps.put(vertex, new HashMap[]{new HashMap<V,E>(), new HashMap<V,E>(), new HashMap<V,E>()});
             return true;
         } else {
             return false;
