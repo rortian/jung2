@@ -88,9 +88,14 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public Collection<E> findEdgeSet(V v1, V v2)
     {
-        ArrayList<E> edge = new ArrayList<E>(1);
-        edge.add(findEdge(v1, v2));
-        return edge;
+        ArrayList<E> edge_collection = new ArrayList<E>(1);
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return edge_collection;
+        E e = findEdge(v1, v2);
+        if (e == null)
+            return edge_collection;
+        edge_collection.add(e);
+        return edge_collection;
     }
     
     protected Collection<E> getIncoming_internal(V vertex)
