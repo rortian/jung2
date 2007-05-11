@@ -35,10 +35,10 @@ import edu.uci.ics.jung.graph.Tree;
 
 public class TreeLayout<V,E> implements Layout<V,E> {
 
-	private Dimension size;
+	private Dimension size = new Dimension(600,600);
 	private Forest<V,E> graph;
 	protected Map<V,Integer> basePositions = new HashMap<V,Integer>();
-    
+
     protected Map<V, Point2D> locations = 
     	LazyMap.decorate(new HashMap<V, Point2D>(),
     			new Transformer<V,Point2D>() {
@@ -85,6 +85,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         this.roots = getRoots(g);
         this.distX = distx;
         this.distY = disty;
+        buildTree();
     }
     
     private Collection<V> getRoots(Forest<V,E> forest) {
@@ -92,7 +93,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     	for(Tree<V,E> tree : forest.getTrees()) {
     			roots.add(tree.getRoot());
     	}
-    	System.err.println("roots = "+roots);
     	return roots;
     }
 
@@ -200,12 +200,23 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         return true;
     }
     public void setSize(Dimension size) {
-    	this.size = size;
-        buildTree();
+//    	this.size = size;
+//        buildTree();
     }
 
     private void setCurrentPositionFor(V vertex) {
+    	int x = m_currentPoint.x;
+    	int y = m_currentPoint.y;
+    	if(x < 0) size.width -= x;
+    	
+    	if(x > size.width-distX) 
+    		size.width = x + distX;
+    	
+    	if(y < 0) size.height -= y;
+    	if(y > size.height-distY) 
+    		size.height = y + distY;
     	locations.get(vertex).setLocation(m_currentPoint);
+
     }
 
 	public Graph<V,E> getGraph() {
@@ -233,6 +244,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 	public void setGraph(Graph<V,E> graph) {
 		if(graph instanceof Forest) {
 			this.graph = (Forest<V,E>)graph;
+			buildTree();
 		} else {
 			throw new IllegalArgumentException("graph must be a Forest");
 		}
