@@ -44,7 +44,7 @@ JUNG also provides a visualization framework that makes it easy to construct too
             <id>offkey</id>
             <name>Danyel</name>
             <email>offkey@sf.net</email>
-            <url></url>
+            <url/>
             <organization>UCI</organization>
             <organizationUrl>http://www.ics.uci.edu</organizationUrl>
             <timezone>-7</timezone>
@@ -58,7 +58,7 @@ JUNG also provides a visualization framework that makes it easy to construct too
             <id>tomnelson</id>
             <name>Tom</name>
             <email>tomnelson@sf.net</email>
-            <url></url>
+            <url/>
             <organization>RABA</organization>
             <organizationUrl>http://www.raba.com</organizationUrl>
             <timezone>-4</timezone>
@@ -70,9 +70,9 @@ JUNG also provides a visualization framework that makes it easy to construct too
             <id>jason</id>
             <name>Jason</name>
             <email>jason@sf.net</email>
-            <url></url>
+            <url/>
             <organization>BAH</organization>
-            <organizationUrl></organizationUrl>
+            <organizationUrl/>
             <timezone>-4</timezone>
             <roles>
                 <role>Developer</role>
@@ -167,11 +167,11 @@ JUNG also provides a visualization framework that makes it easy to construct too
     <module>jung-algorithms</module>
     <module>jung-io</module>
 
-<!-- uncomment if you have jai installed
+<!-- uncomment for jai
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
 -->
-<!-- uncomment if you have java3d installed
+<!-- uncomment for java3d
     <module>jung-3d</module>
     <module>jung-3d-demos</module>
 -->
