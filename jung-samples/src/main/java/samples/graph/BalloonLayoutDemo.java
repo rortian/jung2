@@ -131,7 +131,6 @@ public class BalloonLayoutDemo extends JApplet {
         createTree();
         
         layout = new TreeLayout<String,Integer>(graph);
-        layout.setSize(new Dimension(900,900));
         radialLayout = new BalloonLayout<String,Integer>(graph);
         radialLayout.setSize(new Dimension(900,900));
         vv =  new VisualizationViewer<String,Integer>(layout, new Dimension(600,600));
