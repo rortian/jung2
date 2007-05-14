@@ -4,7 +4,7 @@
   <groupId>jung.app</groupId>
   <artifactId>app</artifactId>
   <packaging>pom</packaging>
-  <version>2.0b</version>
+  <version>2.0-alpha2</version>
   <name>jung2</name>
   <url>http://jung.sourceforge.net/site</url>
   <licenses>
@@ -176,10 +176,10 @@ JUNG also provides a visualization framework that makes it easy to construct too
     <module>jung-3d-demos</module>
 -->
 
-<!-- uncomment for awt-swt-refactor branch
-    <module>jung-awt-rendering</module>
+<!-- uncomment for swt
     <module>jung-swt-rendering</module>
     <module>jung-swt-samples</module>
+    <module>jung-swt-visualization</module>
 -->
   </modules>
 </project>
