@@ -39,6 +39,13 @@
 		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
+	<dependency>
+		<groupId>jung</groupId>
+		<artifactId>jung-api</artifactId>
+		<version>${project.version}</version>
+		<type>test-jar</type>
+		<scope>test</scope>
+	</dependency>
     <dependency>
       <groupId>net.sourceforge.collections</groupId>
       <artifactId>collections-generic</artifactId>
