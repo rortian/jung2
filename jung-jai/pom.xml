@@ -2,13 +2,13 @@
   <parent>
     <artifactId>app</artifactId>
     <groupId>jung.app</groupId>
-    <version>2.0-alpha2</version>
+    <version>2.0-alpha2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>jung</groupId>
   <artifactId>jung-jai</artifactId>
   <name>jung-jai</name>
-  <version>2.0-alpha2</version>
+  <version>2.0-alpha2-SNAPSHOT</version>
   <url>http://jung.sourceforge.net/site/jung-jai</url>
   <description>
   Jung2 rendering project that uses Java Advanced Imaging (JAI) for non-affine transforms
@@ -32,12 +32,12 @@
     <dependency>
       <groupId>jung</groupId>
       <artifactId>jung-api</artifactId>
-      <version>2.0-alpha2</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>jung</groupId>
       <artifactId>jung-visualization</artifactId>
-      <version>2.0-alpha2</version>
+      <version>${project.version}</version>
     </dependency>
     <!--
     <dependency>

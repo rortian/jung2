@@ -2,13 +2,13 @@
   <parent>
     <artifactId>app</artifactId>
     <groupId>jung.app</groupId>
-    <version>2.0-alpha2</version>
+    <version>2.0-alpha2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>jung</groupId>
   <artifactId>jung-swt-samples</artifactId>
   <name>jung-swt-samples</name>
-  <version>2.0-alpha2</version>
+  <version>2.0-alpha2-SNAPSHOT</version>
   <url>http://jung.sourceforge.net/site/jung-swt-samples</url>
   <build>
    	  <plugins>
@@ -64,42 +64,42 @@
   	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-api</artifactId>
-		<version>2.0-alpha2</version>
+		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
 	
   	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-swt-rendering</artifactId>
-		<version>2.0-alpha2</version>
+		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
 	
   	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-swt-visualization</artifactId>
-		<version>2.0-alpha2</version>
+		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
 	
   	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-graph-impl</artifactId>
-		<version>2.0-alpha2</version>
+		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
 
 	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-algorithms</artifactId>
-		<version>2.0-alpha2</version>
+		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
 	
 	<dependency>
 		<groupId>jung</groupId>
 		<artifactId>jung-io</artifactId>
-		<version>2.0-alpha2</version>
+		<version>${project.version}</version>
 		<scope>compile</scope>
 	</dependency>
 	
