@@ -157,6 +157,10 @@ sub-projects.
 Once you have built everything (preceding instructions), here is a straightforward
 way to run some demos from the command line:
 
+(NOTE: you may need to change the version part of the jar names
+below. It could be jung-samples-2.0-alpha2-SHAPSHOT.jar for 
+example. Look at the actual jar file names to see.)
+
 cd jung2/jung-samples/target
 tar xvf jung-samples-2.0-dependencies.tar
 
