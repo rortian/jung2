@@ -4,7 +4,7 @@
   <groupId>jung.app</groupId>
   <artifactId>app</artifactId>
   <packaging>pom</packaging>
-  <version>2.0-alpha2</version>
+  <version>2.0-alpha3-SNAPSHOT</version>
   <name>jung2</name>
   <url>http://jung.sourceforge.net/site</url>
   <licenses>
@@ -17,7 +17,7 @@
   <scm>
     <url>http://jung.cvs.sourceforge.net/jung/jung2</url>
     <developerConnection>scm:cvs:ext:${cvsUserName}@jung.cvs.sourceforge.net:/cvsroot/jung:jung2</developerConnection>
-    <tag>2_0-alpha2</tag>
+    <tag>jung2-2_0-alpha2</tag>
   </scm>
       <description>
       JUNG the Java Universal Network/Graph Framework--is a software library that provides a common and extendible language for the modeling, analysis, and visualization of data that can be represented as a graph or network. It is written in Java, which allows JUNG-based applications to make use of the extensive built-in capabilities of the Java API, as well as those of other existing third-party Java libraries.
@@ -169,12 +169,18 @@ JUNG also provides a visualization framework that makes it easy to construct too
     <module>jung-algorithms</module>
     <module>jung-io</module>
 
+<!-- uncomment for if you have jai installed
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
+-->
+<!-- uncomment if you have java3d installed
     <module>jung-3d</module>
     <module>jung-3d-demos</module>
+-->
+<!-- uncomment for swt
     <module>jung-swt-rendering</module>
     <module>jung-swt-samples</module>
     <module>jung-swt-visualization</module>
+-->
   </modules>
 </project>
