@@ -13,6 +13,7 @@ package edu.uci.ics.jung.visualization.transform;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.geom.Ellipse2D;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -80,6 +81,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
     public static class Lens implements Paintable {
         LensTransformer lensTransformer;
         Ellipse2D ellipse;
+        Paint paint = Color.decode("0xdddddd");
         
         public Lens(LensTransformer lensTransformer) {
             this.lensTransformer = lensTransformer;
@@ -87,13 +89,27 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
         }
         
         /**
+		 * @return the paint
+		 */
+		public Paint getPaint() {
+			return paint;
+		}
+
+		/**
+		 * @param paint the paint to set
+		 */
+		public void setPaint(Paint paint) {
+			this.paint = paint;
+		}
+
+		/**
          * @return Returns the hyperbolicTransformer.
          */
 
         public void paint(Graphics g) {
             
             Graphics2D g2d = (Graphics2D)g;
-            g.setColor(Color.decode("0xdddddd"));
+            g2d.setPaint(paint);
             g2d.fill(ellipse);
         }
 
@@ -111,6 +127,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
     public static class LensControls  implements Paintable {
         LensTransformer lensTransformer;
         Ellipse2D ellipse;
+        Paint paint = Color.gray;
         
         public LensControls(LensTransformer lensTransformer) {
             this.lensTransformer = lensTransformer;
@@ -118,33 +135,64 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
         }
         
         /**
+		 * @return the paint
+		 */
+		public Paint getPaint() {
+			return paint;
+		}
+
+		/**
+		 * @param paint the paint to set
+		 */
+		public void setPaint(Paint paint) {
+			this.paint = paint;
+		}
+
+		/**
          * @return Returns the hyperbolicTransformer.
          */
 
         public void paint(Graphics g) {
             
             Graphics2D g2d = (Graphics2D)g;
-            g.setColor(Color.gray);
+            g2d.setPaint(paint);
             g2d.draw(ellipse);
             int centerX = (int)Math.round(ellipse.getCenterX());
             int centerY = (int)Math.round(ellipse.getCenterY());
-//            g.setColor(Color.darkGray);
             g.drawOval(centerX-10, centerY-10, 20, 20);
-//            g.setColor(Color.gray);
-//            g.drawOval(centerX-9, centerY-9, 18, 18);
-//            g.setColor(Color.white);
-//            g.drawOval(centerX-8, centerY-8, 16, 16);
-//            g.setColor(Color.gray);
-//            g.drawOval(centerX-7, centerY-7, 14, 14);
-//            g.setColor(Color.darkGray);
-//            g.drawOval(centerX-6, centerY-6, 12, 12);
-//            g.setColor(Color.gray);
-//            g.fill3DRect(centerX-4, centerY-11, 8, 8, true);
         }
 
         public boolean useTransform() {
             return true;
         }
     }
+
+	/**
+	 * @return the lens
+	 */
+	public Lens getLens() {
+		return lens;
+	}
+
+	/**
+	 * @param lens the lens to set
+	 */
+	public void setLens(Lens lens) {
+		this.lens = lens;
+	}
+
+	/**
+	 * @return the lensControls
+	 */
+	public LensControls getLensControls() {
+		return lensControls;
+	}
+
+	/**
+	 * @param lensControls the lensControls to set
+	 */
+	public void setLensControls(LensControls lensControls) {
+		this.lensControls = lensControls;
+	}
 
 }
