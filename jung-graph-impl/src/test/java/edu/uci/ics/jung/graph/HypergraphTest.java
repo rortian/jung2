@@ -11,6 +11,9 @@
  */
 package edu.uci.ics.jung.graph;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -154,7 +157,25 @@ public class HypergraphTest extends TestCase
      */
     public void testEdgeEndpoints()
     {
-        
+        Collection<Integer> c = new ArrayList<Integer>();
+        for (int i = 0; i < 10; i++)
+        {
+            try
+            {
+                h.addEdge((char)i, c);
+                c.add(i);
+            }
+            catch (IllegalArgumentException iae)
+            {
+                if (h instanceof Graph)
+                {
+                    if (c.size() == 2)
+                        fail("improperly rejected incident vertex collection " + c);
+                }
+                else
+                    fail("hypergraph implementations should accept any positive number of incident vertices");
+            }
+        }
     }
     
     /**
