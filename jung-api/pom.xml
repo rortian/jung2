@@ -16,6 +16,35 @@
     <artifactId>app</artifactId>
     <version>2.0-alpha2-SNAPSHOT</version>
   </parent>
-  
+  <build>
+   	<plugins>
+ 	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+ 	  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+		<executions>
+		  <execution>
+		    <goals>
+		      <goal>test-jar</goal>
+		    </goals>
+		  </execution>
+		</executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+      <dependency>
+      <groupId>net.sourceforge.collections</groupId>
+      <artifactId>collections-generic</artifactId>
+      <version>4.01</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>
