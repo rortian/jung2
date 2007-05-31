@@ -16,7 +16,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
@@ -30,7 +29,6 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -77,7 +75,7 @@ public class WorldMapGraphDemo {
         ImageIcon mapIcon = null;
         String imageLocation = "/images/political_world_map.jpg";
         try {
-            	mapIcon = 
+            mapIcon = 
             	    new ImageIcon(getClass().getResource(imageLocation));
         } catch(Exception ex) {
             System.err.println("Can't load \""+imageLocation+"\"");
@@ -107,7 +105,7 @@ public class WorldMapGraphDemo {
                     g.drawImage(icon.getImage(),0,0,icon.getIconWidth(),icon.getIconHeight(),vv);
                     g2d.setTransform(oldXform);
                 }
-                public boolean useTransform() { return true; }
+                public boolean useTransform() { return false; }
             });
         }
 
@@ -117,9 +115,6 @@ public class WorldMapGraphDemo {
         				Color.white, Color.blue,
         				vv.getPickedVertexState(),
         				false));
-//        vv.getRenderContext().setEdgeDrawPaintTransformer(new ConstantTransformer(Color.lightGray));
-//        vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
-//        vv.getRenderContext().setArrowDrawPaintTransformer(new ConstantTransformer(Color.lightGray));
         
         // add my listeners for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());
@@ -217,23 +212,6 @@ public class WorldMapGraphDemo {
         graph.addEdge(new Double(Math.random()), v[6], v[5], EdgeType.DIRECTED);
         graph.addEdge(new Double(Math.random()), v[4], v[2], EdgeType.DIRECTED);
         graph.addEdge(new Double(Math.random()), v[5], v[4], EdgeType.DIRECTED);
-    }
-
-    /**
-     * A nested class to demo the GraphMouseListener finding the
-     * right vertices after zoom/pan
-     */
-    static class TestGraphMouseListener<V> implements GraphMouseListener<V> {
-        
-    		public void graphClicked(V v, MouseEvent me) {
-    		    System.err.println("Vertex "+v+" was clicked at ("+me.getX()+","+me.getY()+")");
-    		}
-    		public void graphPressed(V v, MouseEvent me) {
-    		    System.err.println("Vertex "+v+" was pressed at ("+me.getX()+","+me.getY()+")");
-    		}
-    		public void graphReleased(V v, MouseEvent me) {
-    		    System.err.println("Vertex "+v+" was released at ("+me.getX()+","+me.getY()+")");
-    		}
     }
 
     /**
