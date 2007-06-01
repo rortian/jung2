@@ -169,6 +169,8 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 
     public void process() {
 
+    	vv.getRenderContext().getPickedVertexState().clear();
+    	vv.getRenderContext().getPickedEdgeState().clear();
         try {
 
             if (g.getVertexCount() < 100) {
@@ -176,13 +178,18 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
                 Integer v1 = new Integer(g.getVertexCount());
 
                 g.addVertex(v1);
+                vv.getRenderContext().getPickedVertexState().pick(v1, true);
 
                 // wire it to some edges
                 if (v_prev != null) {
-                    g.addEdge(g.getEdgeCount(), v_prev, v1);
+                	Integer edge = g.getEdgeCount();
+                	vv.getRenderContext().getPickedEdgeState().pick(edge, true);
+                    g.addEdge(edge, v_prev, v1);
                     // let's connect to a random vertex, too!
                     int rand = (int) (Math.random() * g.getVertexCount());
-                    g.addEdge(g.getEdgeCount(), v1, rand);
+                    edge = g.getEdgeCount();
+                	vv.getRenderContext().getPickedEdgeState().pick(edge, true);
+                   g.addEdge(edge, v1, rand);
                 }
 
                 v_prev = v1;
