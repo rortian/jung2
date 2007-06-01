@@ -87,7 +87,9 @@ public class VertexLabelAsShapeRenderer<V,E>
 
 	public Shape transform(V v) {
 		Shape shape = shapes.get(v);
-		if(shape == null) return new Rectangle(-20,-20,40,40);
+		if(shape == null) {
+			return new Rectangle(-20,-20,40,40);
+		}
 		else return shape;
 	}
 
