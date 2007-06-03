@@ -87,7 +87,7 @@ public class WorldMapGraphDemo extends JApplet {
    		map.put("MOW", new String[] {"55 45 N", "37 42 E"});
    		map.put("JRS", new String[] {"31 47 N", "35 13 E"});
    		map.put("CAI", new String[] {"30 03 N", "31 15 E"});
-   		map.put("CPT", new String[] {"35 55 S", "18 22 E"});
+   		map.put("CPT", new String[] {"33 55 S", "18 22 E"});
    		map.put("PAR", new String[] {"48 52 N", "2 20 E"});
    		map.put("LHR", new String[] {"51 30 N", "0 10 W"});
    		map.put("HNL", new String[] {"21 18 N", "157 51 W"});
@@ -229,7 +229,7 @@ public class WorldMapGraphDemo extends JApplet {
      */
     void createEdges() {
      	
-    	for(int i=0; i<map.keySet().size(); i++) {
+    	for(int i=0; i<map.keySet().size()*1.3; i++) {
     		graph.addEdge(new Double(Math.random()), randomCity(), randomCity(), EdgeType.DIRECTED);
     	}
     }
