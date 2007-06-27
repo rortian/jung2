@@ -121,7 +121,7 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                         for(V vertex : graph.getVertices()) {
                             layout.lock(vertex, true);
                         }
-                        graph.addVertex(vertexFactory.create());
+                        graph.addVertex(newVertex);
 //                        vv.getModel().restart();
                         for(V vertex : graph.getVertices()) {
                             layout.lock(vertex, false);
