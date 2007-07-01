@@ -10,7 +10,9 @@
 package edu.uci.ics.jung.algorithms.cluster;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.Transformer;
@@ -40,6 +42,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * This algorithm is a slight modification of the algorithm discussed below in that the number of edges
  * to be removed is parameterized.
  * @author Scott White
+ * @author Tom Nelson (converted to jung2)
  * @see "Community structure in social and biological networks by Michelle Girvan and Mark Newman"
  */
 public class EdgeBetweennessClusterer<V,E> implements Transformer<Graph<V,E>,Set<Set<V>>> {
@@ -65,7 +68,11 @@ public class EdgeBetweennessClusterer<V,E> implements Transformer<Graph<V,E>,Set
         if (mNumEdgesToRemove < 0 || mNumEdgesToRemove > graph.getEdgeCount()) {
             throw new IllegalArgumentException("Invalid number of edges passed in.");
         }
-
+        
+        // save the removed edges and endpoints here, as we would
+        // otherwise be unable to get the endpoints from a removed
+        // edge...
+        Map<E,Pair<V>> removedEdges = new HashMap<E,Pair<V>>();
         mEdgesRemoved.clear();
 
         for (int k=0;k<mNumEdgesToRemove;k++) {
@@ -73,14 +80,18 @@ public class EdgeBetweennessClusterer<V,E> implements Transformer<Graph<V,E>,Set
             bc.setRemoveRankScoresOnFinalize(true);
             bc.evaluate();
             Ranking<E> highestBetweenness = (Ranking<E>)bc.getRankings().get(0);
+            E removedEdge = highestBetweenness.getRanked();
+            Pair<V> removedEdgeEndpoints = graph.getEndpoints(removedEdge);
+            removedEdges.put(removedEdge, removedEdgeEndpoints);
             mEdgesRemoved.add(highestBetweenness.getRanked());
             graph.removeEdge(highestBetweenness.getRanked());
         }
 
         WeakComponentVertexClusterer wcSearch = new WeakComponentVertexClusterer();
         Set<Set<V>> clusterSet = wcSearch.transform(graph);
+
         for (E edge : mEdgesRemoved ) {
-        	Pair<V> endpoints = graph.getEndpoints(edge);
+        	Pair<V> endpoints = removedEdges.get(edge);
             graph.addEdge(edge,endpoints.getFirst(), endpoints.getSecond());
         }
         return clusterSet;
