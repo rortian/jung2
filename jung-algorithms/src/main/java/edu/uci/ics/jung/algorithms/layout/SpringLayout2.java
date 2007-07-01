@@ -232,8 +232,8 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     			V v1 = getAVertex(e);
     			V v2 = getGraph().getOpposite(v1, e);
 
-    			Point2D p1 = getLocation(v1);
-    			Point2D p2 = getLocation(v2);
+    			Point2D p1 = transform(v1);
+    			Point2D p2 = transform(v2);
     			if(p1 == null || p2 == null) continue;
     			double vx = p1.getX() - p2.getX();
     			double vy = p1.getY() - p2.getY();
@@ -283,8 +283,8 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
 
             for (V v2 : getGraph().getVertices()) {
                 if (v == v2) continue;
-                Point2D p = getLocation(v);
-                Point2D p2 = getLocation(v2);
+                Point2D p = transform(v);
+                Point2D p2 = transform(v2);
                 if(p == null || p2 == null) continue;
                 double vx = p.getX() - p2.getX();
                 double vy = p.getY() - p2.getY();

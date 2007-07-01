@@ -197,8 +197,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         	// both locked, do nothing
         	return;
         }
-        Point2D p1 = getLocation(v1);
-        Point2D p2 = getLocation(v2);
+        Point2D p1 = transform(v1);
+        Point2D p2 = transform(v2);
         if(p1 == null || p2 == null) return;
         double xDelta = p1.getX() - p2.getX();
         double yDelta = p1.getY() - p2.getY();
@@ -241,8 +241,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
                 boolean v2_locked = isLocked(v2);
             	if (v1_locked && v2_locked) continue;
                 if (v1 != v2) {
-                    Point2D p1 = getLocation(v1);
-                    Point2D p2 = getLocation(v2);
+                    Point2D p1 = transform(v1);
+                    Point2D p2 = transform(v2);
                     if(p1 == null || p2 == null) continue;
                     double xDelta = p1.getX() - p2.getX();
                     double yDelta = p1.getY() - p2.getY();
