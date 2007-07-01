@@ -42,7 +42,12 @@ public class VertexLabelAsShapeRenderer<V,E>
 	implements Renderer.VertexLabel<V,E>, Transformer<V,Shape> {
 
 	protected Map<V,Shape> shapes = new HashMap<V,Shape>();
+	protected RenderContext<V,E> rc;
 	
+	public VertexLabelAsShapeRenderer(RenderContext<V, E> rc) {
+		this.rc = rc;
+	}
+
 	public Component prepareRenderer(RenderContext<V,E> rc, VertexLabelRenderer graphLabelRenderer, Object value, 
 			boolean isSelected, V vertex) {
 		return rc.getVertexLabelRenderer().<V>getVertexLabelRendererComponent(rc.getScreenDevice(), value, 
@@ -77,20 +82,23 @@ public class VertexLabelAsShapeRenderer<V,E>
         int y = (int)p.getY();
 
         g.draw(component, rc.getRendererPane(), x+h_offset, y+v_offset, d.width, d.height, true);
-//        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), x+h_offset, y+v_offset,
-//                d.width, d.height, true);
 
         Dimension size = component.getPreferredSize();
-        Rectangle bounds = new Rectangle(-size.width/2, -size.height/2, size.width, size.height);
+        Rectangle bounds = new Rectangle(-size.width/2 -2, -size.height/2 -2, size.width+4, size.height);
         shapes.put(v, bounds);
     }
 
 	public Shape transform(V v) {
-		Shape shape = shapes.get(v);
-		if(shape == null) {
-			return new Rectangle(-20,-20,40,40);
-		}
-		else return shape;
+		Component component = prepareRenderer(rc, rc.getVertexLabelRenderer(), rc.getVertexLabelTransformer().transform(v),
+				rc.getPickedVertexState().isPicked(v), v);
+        Dimension size = component.getPreferredSize();
+        Rectangle bounds = new Rectangle(-size.width/2 -2, -size.height/2 -2, size.width+4, size.height);
+        return bounds;
+//		Shape shape = shapes.get(v);
+//		if(shape == null) {
+//			return new Rectangle(-20,-20,40,40);
+//		}
+//		else return shape;
 	}
 
 	public Renderer.VertexLabel.Position getPosition() {
