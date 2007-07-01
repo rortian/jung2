@@ -204,9 +204,9 @@ public abstract class AbstractLayout<V, E> implements Layout<V,E> {
      * @param v a Vertex of interest
      * @return the location point of the supplied vertex
      */
-	public Point3f getLocation(V v) {
-	    return getCoordinates(v);
-	}
+//	public Point3f getLocation(V v) {
+//	    return getCoordinates(v);
+//	}
 
 	/**
 	 * @param v

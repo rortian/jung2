@@ -216,8 +216,8 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     			V v1 = getAVertex(e);
     			V v2 = getGraph().getOpposite(v1, e);
 
-    			Point3f p1 = getLocation(v1);
-    			Point3f p2 = getLocation(v2);
+    			Point3f p1 = transform(v1);
+    			Point3f p2 = transform(v2);
     			if(p1 == null || p2 == null) continue;
     			double vx = p1.getX() - p2.getX();
     			double vy = p1.getY() - p2.getY();
@@ -271,8 +271,8 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 
             for (V v2 : getGraph().getVertices()) {
                 if (v == v2) continue;
-                Point3f p = getLocation(v);
-                Point3f p2 = getLocation(v2);
+                Point3f p = transform(v);
+                Point3f p2 = transform(v2);
                 if(p == null || p2 == null) continue;
                 double vx = p.getX() - p2.getX();
                 double vy = p.getY() - p2.getY();
