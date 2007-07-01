@@ -163,7 +163,8 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	/**
 	 * Had to override this one as well, to ensure that setRoot() is called.
 	 */
-	protected void initialize_local() {
+	public void initialize() {
+		super.initialize();
 		for(E e : getGraph().getEdges()) {
 			SpringEdgeData<E> sed = getSpringData(e);
 			if (sed == null) {
@@ -290,8 +291,8 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			V v1 = getAVertex(e);
 			V v2 = getGraph().getOpposite(v1, e);//e.getOpposite(v1);
 
-			Point2D p1 = getLocation(v1);
-			Point2D p2 = getLocation(v2);
+			Point2D p1 = transform(v1);
+			Point2D p2 = transform(v2);
 			double vx = p1.getX() - p2.getX();
 			double vy = p1.getY() - p2.getY();
 			double len = Math.sqrt(vx * vx + vy * vy);
