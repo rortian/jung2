@@ -23,9 +23,9 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.algorithms.util.BasicMapEntry;
-import edu.uci.ics.jung.algorithms.util.ConstantMap;
 import edu.uci.ics.jung.algorithms.util.MapBinaryHeap;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * <p>Calculates distances in a specified graph, using  
@@ -64,11 +64,10 @@ import edu.uci.ics.jung.graph.Graph;
  */
 public class DijkstraDistance<V,E> implements Distance<V>
 {
-    protected Graph<V,E> g;
-    protected Transformer<E,Number> nev;
+    protected Hypergraph<V,E> g;
+    protected Transformer<E,? extends Number> nev;
     protected Map<V,SourceData> sourceMap;   // a map of source vertices to an instance of SourceData
     protected boolean cached;
-    protected final Map<E,Number> dev = new ConstantMap<E,Number>(new Integer(1));
     protected double max_distance;
     protected int max_targets;
     
@@ -82,7 +81,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param nev   the class responsible for returning weights for edges
      * @param cached    specifies whether the results are to be cached
      */
-    public DijkstraDistance(Graph<V,E> g, Transformer<E,Number> nev, boolean cached) {
+    public DijkstraDistance(Hypergraph<V,E> g, Transformer<E,? extends Number> nev, boolean cached) {
         this.g = g;
         this.nev = nev;
         this.sourceMap = new HashMap<V,SourceData>();
@@ -99,7 +98,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param g     the graph on which distances will be calculated
      * @param nev   the class responsible for returning weights for edges
      */
-    public DijkstraDistance(Graph<V,E> g, Transformer<E,Number> nev) {
+    public DijkstraDistance(Hypergraph<V,E> g, Transformer<E,? extends Number> nev) {
         this(g, nev, true);
     }
     
@@ -181,8 +180,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
                 break;
             }
             
-            // TODO should this call g.getOutEdges(v) instead?
-            for (E e : getIncidentEdges(v) )
+            for (E e : getEdgesToCheck(v) )
             {
                 for (V w : g.getIncidentVertices(e))
                 {
@@ -223,14 +221,16 @@ public class DijkstraDistance<V,E> implements Distance<V>
     
     /**
      * Returns the set of edges incident to <code>v</code> that should be tested.
-     * By default, this is the set of outgoing edges for instances of <code>V</code>,
-     * the set of incident edges for instances of <code>Hypervertex</code>,
+     * By default, this is the set of outgoing edges for instances of <code>Graph</code>,
+     * the set of incident edges for instances of <code>Hypergraph</code>,
      * and is otherwise undefined.
      */
-    protected Collection<E> getIncidentEdges(V v)
+    protected Collection<E> getEdgesToCheck(V v)
     {
-            return g.getOutEdges(v);
-//            g.getIncidentEdges(v);
+        if (g instanceof Graph)
+            return ((Graph)g).getOutEdges(v);
+        else
+            return g.getIncidentEdges(v);
 
     }
 
@@ -246,10 +246,10 @@ public class DijkstraDistance<V,E> implements Distance<V>
      */
     public Number getDistance(V source, V target)
     {
-        if (g.getVertices().contains(target) == false)
+        if (g.containsVertex(target) == false)
             throw new IllegalArgumentException("Specified target vertex " + 
                     target + " is not part of graph " + g);
-        if (g.getVertices().contains(source) == false)
+        if (g.containsVertex(source) == false)
             throw new IllegalArgumentException("Specified source vertex " + 
                     source + " is not part of graph " + g);
         
@@ -262,7 +262,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
 
     public Map<V,Number> getDistanceMap(V source, Collection<V> targets)
     {
-       if (g.getVertices().contains(source) == false)
+       if (g.containsVertex(source) == false)
             throw new IllegalArgumentException("Specified source vertex " + 
                     source + " is not part of graph " + g);
        if (targets.size() > max_targets)
