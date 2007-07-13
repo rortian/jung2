@@ -76,18 +76,6 @@ public class UnweightedShortestPath<V, E>
 		return sourceIEMap;
 	}
 
-	/**
-	* Computes the shortest path distance from the source to target. If the shortest path distance has not already
-	* been computed, then all pairs shortest paths will be computed.
-	* @param source the source node
-	* @param target the target node
-	* @return the shortest path value (if the target is unreachable, NPE is thrown)
-	* @deprecated use getDistance
-	*/
-	public int getShortestPath(V source, V target)
-	{
-		return getDistance(source, target).intValue();
-	}
 
 	/**
 	 * Computes the shortest path distances from a given node to all other nodes.
