@@ -51,10 +51,10 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, Serializable
             throw new IllegalArgumentException("endpoints may not be null");
 
         if(to_attach.contains(null)) throw new IllegalArgumentException("cannot add an edge with a null endpoint");
-        Set new_endpoints = new HashSet<V>(to_attach);
+        Set<V> new_endpoints = new HashSet<V>(to_attach);
         if (edges.containsKey(hyperedge))
         {
-            Collection attached = edges.get(hyperedge);
+            Collection<V> attached = edges.get(hyperedge);
             if (!attached.equals(new_endpoints))
             {
                 throw new IllegalArgumentException("Edge " + hyperedge + 

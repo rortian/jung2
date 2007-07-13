@@ -121,7 +121,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
      * @return the constructed graph
      * @deprecated generally, InputStreams are less robust than Readers
      */
-    public Graph load(InputStream stream) {
+    public Graph<V,E> load(InputStream stream) {
 
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -137,7 +137,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
         return mFileHandler.getGraph();
     }
     
-    public Graph load( Reader reader ) {
+    public Graph<V,E> load( Reader reader ) {
 
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -162,7 +162,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
      * @param filter the file filter
      * @return a list of graphs
      */
-    public List loadGraphCollection(String dirName, FilenameFilter filter) {
+    public List<Graph<V,E>> loadGraphCollection(String dirName, FilenameFilter filter) {
         File dir = new File(dirName);
         if (!dir.isDirectory()) {
             throw new RuntimeException("Parameter dirName must be a directory");
