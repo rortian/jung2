@@ -181,7 +181,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
         {
             E incoming = incomingEdges.get(current);
             path.addFirst(incoming);
-            current = g.getOpposite(current, incoming);
+            current = ((Graph<V,E>)g).getOpposite(current, incoming);
         }
 		return path;
 	}
