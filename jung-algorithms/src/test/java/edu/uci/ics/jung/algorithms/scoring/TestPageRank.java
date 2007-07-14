@@ -47,7 +47,7 @@ public class TestPageRank extends TestCase {
 			}};
     }
 
-    private void addEdge(Graph G, Integer v1, Integer v2, double weight) {
+    private void addEdge(Graph<Integer,Integer> G, Integer v1, Integer v2, double weight) {
     	Integer edge = edgeFactory.create();
     	graph.addEdge(edge, v1, v2);
     	edgeWeights.put(edge, weight);
@@ -70,9 +70,9 @@ public class TestPageRank extends TestCase {
         Transformer<Integer, Double> pr_scores = pr.getVertexScores();
         
         Assert.assertEquals(pr_scores.transform(0), 0, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(1), 0.2, pr.getTolerance());
+        Assert.assertEquals(pr_scores.transform(1), 0.4, pr.getTolerance());
         Assert.assertEquals(pr_scores.transform(2), 0.4, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(3), 0.4, pr.getTolerance());
+        Assert.assertEquals(pr_scores.transform(3), 0.2, pr.getTolerance());
 
 //        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(0)).rankScore,0.4,.001));
 //        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(1)).rankScore,0.4,.001));

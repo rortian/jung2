@@ -47,7 +47,7 @@ public class TestPageRankWithPriors extends TestCase {
 			}};
     }
 
-    private void addEdge(Graph G, Integer v1, Integer v2)
+    private void addEdge(Graph<Integer, Integer> G, Integer v1, Integer v2)
     {
     	Integer edge = edgeFactory.create();
     	graph.addEdge(edge, v1, v2);
