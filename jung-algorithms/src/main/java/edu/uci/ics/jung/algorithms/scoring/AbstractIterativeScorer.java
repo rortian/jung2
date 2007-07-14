@@ -86,7 +86,7 @@ public abstract class AbstractIterativeScorer<V,E,T extends Number> implements I
     protected void initialize()
     {
         this.total_iterations = 0;
-        this.max_delta = Double.MIN_VALUE;
+        this.max_delta = Double.MAX_VALUE;
         this.current_values = new HashMap<V, T>();
         this.output = new HashMap<V, T>();
     }
