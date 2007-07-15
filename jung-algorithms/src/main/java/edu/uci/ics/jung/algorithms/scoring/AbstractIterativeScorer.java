@@ -71,7 +71,6 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
         this.max_iterations = 100;
         this.tolerance = 0.001;
         this.edge_weights = edge_weights;
-        initialize();
     }
     
     public AbstractIterativeScorer(Graph<V,E> g)
