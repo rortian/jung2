@@ -61,23 +61,23 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
             }
             
             // modify total_input according to alpha
-            auth = auth * (1 - alpha) + vertex_priors.transform(v).getSecond() * alpha;
-            hub = hub * (1 - alpha) + vertex_priors.transform(v).getFirst() * alpha;
+            auth = auth * (1 - alpha) + getAuthPrior(v) * alpha;
+            hub = hub * (1 - alpha) + getHubPrior(v) * alpha;
             
             // update max_delta as appropriate
             this.max_delta = Math.max(this.max_delta, Math.abs(getHubScore(v) - hub));
             this.max_delta = Math.max(this.max_delta, Math.abs(getAuthScore(v) - auth));
 
-            setScore(v, hub, auth);
+            setVertexScore(v, new Pair<Double>(hub, auth));
         }
 
         if (disappearing_hub > 0 || disappearing_auth > 0)
         {
             for (V v : graph.getVertices())
             {
-                setScore(v, 
-                        getHubScore(v) + (1 - alpha) * (disappearing_hub * vertex_priors.transform(v).getFirst()),
-                        getAuthScore(v) + (1 - alpha) * (disappearing_hub * vertex_priors.transform(v).getSecond()));
+                double new_hub = getHubScore(v) + (1 - alpha) * (disappearing_hub * getHubPrior(v));
+                double new_auth = getAuthScore(v) + (1 - alpha) * (disappearing_hub * getAuthPrior(v));
+                setVertexScore(v, new Pair<Double>(new_hub, new_auth));
             }
         }
         
@@ -114,16 +114,21 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
     
     protected double getHubScore(V v)
     {
-        return output.get(v).getFirst();
+        return getVertexScore(v).getFirst();
     }
     
     protected double getAuthScore(V v)
     {
-        return output.get(v).getSecond();
+        return getVertexScore(v).getSecond();
     }
 
-    protected void setScore(V v, double hub, double authority)
+    protected double getHubPrior(V v)
     {
-        current_values.put(v, new Pair<Double>(hub, authority));
+        return getVertexPrior(v).getFirst();
+    }
+    
+    protected double getAuthPrior(V v)
+    {
+        return getVertexPrior(v).getSecond();
     }
 }

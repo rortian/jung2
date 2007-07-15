@@ -51,11 +51,11 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
             for (E e : graph.getInEdges(v))
             {
                 V w = graph.getOpposite(v, e);
-                total_input += (output.get(w).doubleValue() * getEdgeWeight(w,e).doubleValue());
+                total_input += (getVertexScore(w) * getEdgeWeight(w,e).doubleValue());
             }
             
             // modify total_input according to alpha
-            double new_value = total_input * (1 - alpha) + vertex_priors.transform(v).doubleValue() * alpha;
+            double new_value = total_input * (1 - alpha) + getVertexPrior(v) * alpha;
             current_values.put(v, new_value);
             
             // update max_delta as appropriate
@@ -69,7 +69,7 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
             {
                 setVertexScore(v, 
                         getVertexScore(v) + 
-                        (1 - alpha) * (disappearing_potential * vertex_priors.transform(v)));
+                        (1 - alpha) * (disappearing_potential * getVertexPrior(v)));
             }
         }
         
