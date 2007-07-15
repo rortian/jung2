@@ -15,12 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 
-public abstract class AbstractIterativeScorer<V,E,T extends Number> implements IterativeContext
+public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
 {
     /**
      * Maximum number of iterations to use before terminating.  Defaults to 100.
@@ -51,11 +52,6 @@ public abstract class AbstractIterativeScorer<V,E,T extends Number> implements I
     /**
      * 
      */
-//    protected Transformer<VEPair<V,E>, ? extends Number> vertex_edge_weights;
-    
-    /**
-     * 
-     */
     protected Map<V, T> output;
     
     /**
@@ -80,7 +76,10 @@ public abstract class AbstractIterativeScorer<V,E,T extends Number> implements I
     
     public AbstractIterativeScorer(Graph<V,E> g)
     {
-        this(g, (Transformer<E, ? extends Number>)(g instanceof DirectedGraph ? new UniformOut<V,E>(g) : new UniformIncident<V,E>(g)));
+        this(g, (Transformer<E, ? extends Number>)
+                (g instanceof DirectedGraph ? 
+                        new UniformOut<V,E>(g) : 
+                        new UniformIncident<V,E>(g)));
     }
     
     protected void initialize()
@@ -104,6 +103,12 @@ public abstract class AbstractIterativeScorer<V,E,T extends Number> implements I
 
     public abstract void step();
 
+    public Transformer<V, T> getVertexScores()
+    {
+        return MapTransformer.getInstance(output);
+    }
+
+    
     public int getMaxIterations()
     {
         return max_iterations;
@@ -132,34 +137,20 @@ public abstract class AbstractIterativeScorer<V,E,T extends Number> implements I
         return edge_weights;
     }
 
-//    /**
-//     * @param edge_weights the edge_weights to set
-//     */
-//    public void setEdgeWeights(Transformer<E, ? extends Number> edge_weights)
-//    {
-//        this.edge_weights = edge_weights;
-//        this.vertex_edge_weights = null;
-//        initialize();
-//    }
-//
-//    /**
-//     * @return the vertex_edge_weights
-//     */
-//    public Transformer<VEPair<V, E>, ? extends Number> getVertexEdgeWeights()
-//    {
-//        return vertex_edge_weights;
-//    }
-//
-//    /**
-//     * @param vertex_edge_weights the vertex_edge_weights to set
-//     */
-//    public void setVertexEdgeWeights(Transformer<VEPair<V, E>, ? extends Number> vertex_edge_weights)
-//    {
-//        this.vertex_edge_weights = vertex_edge_weights;
-//        this.edge_weights = null;
-//        initialize();
-//    }
-
-
-
+    /**
+     * @param edge_weights the edge_weights to set
+     */
+    public void setEdgeWeights(Transformer<E, ? extends Number> edge_weights)
+    {
+        this.edge_weights = edge_weights;
+        initialize();
+    }
+    
+    protected Number getEdgeWeight(V v, E e)
+    {
+        if (edge_weights instanceof VertexEdgeWeight)
+            return ((VertexEdgeWeight<V,E,? extends Number>)edge_weights).transform(new VEPair<V,E>(v,e));
+        else
+            return edge_weights.transform(e);
+    }
 }
