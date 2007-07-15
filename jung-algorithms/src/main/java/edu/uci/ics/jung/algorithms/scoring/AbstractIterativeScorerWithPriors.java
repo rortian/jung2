@@ -32,19 +32,22 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
     {
         super(g, edge_weights);
         this.vertex_priors = vertex_priors;
-        this.accept_disconnected_graph = true;
+        this.alpha = alpha;
+        initialize();
     }
 
     public AbstractIterativeScorerWithPriors(Graph<V, E> g, Transformer<V, T> vertex_priors, double alpha)
     {
         super(g);
         this.vertex_priors = vertex_priors;
-        this.accept_disconnected_graph = true;
+        this.alpha = alpha;
+        initialize();
     }
 
     public void initialize()
     {
         super.initialize();
+        this.accept_disconnected_graph = true;
         // initialize output to priors
         for (V v : graph.getVertices())
             output.put(v, vertex_priors.transform(v));
@@ -71,6 +74,11 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
     protected void setVertexScore(V v, T t)
     {
         output.put(v, t);
+    }
+    
+    protected T getVertexPrior(V v)
+    {
+        return vertex_priors.transform(v);
     }
 
     /**
