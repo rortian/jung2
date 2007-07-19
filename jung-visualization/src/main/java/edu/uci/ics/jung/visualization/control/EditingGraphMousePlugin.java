@@ -36,7 +36,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin implements
     MouseListener, MouseMotionListener {
     
-    protected Layout<V,E> layout;
     protected V startVertex;
     protected Point2D down;
     
@@ -50,17 +49,16 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     
-    public EditingGraphMousePlugin(Layout<V,E> layout, Factory<V> vertexFactory, Factory<E> edgeFactory) {
-        this(MouseEvent.BUTTON1_MASK, layout, vertexFactory, edgeFactory);
+    public EditingGraphMousePlugin(Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(MouseEvent.BUTTON1_MASK, vertexFactory, edgeFactory);
     }
 
     /**
      * create instance and prepare shapes for visual effects
      * @param modifiers
      */
-    public EditingGraphMousePlugin(int modifiers, Layout<V,E> layout, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+    public EditingGraphMousePlugin(int modifiers, Factory<V> vertexFactory, Factory<E> edgeFactory) {
         super(modifiers);
-        this.layout = layout;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         rawEdge.setCurve(0.0f, 0.0f, 0.33f, 100, .66f, -50,
@@ -69,14 +67,6 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
         edgePaintable = new EdgePaintable();
         arrowPaintable = new ArrowPaintable();
 		this.cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-    }
-    
-    /**
-     * sets the vertex locations. Needed to place new vertices
-     * @param vertexLocations
-     */
-    public void setLayout(Layout<V,E> layout) {
-        this.layout = layout;
     }
     
     /**
@@ -126,15 +116,9 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 } else { // make a new vertex
 
                     V newVertex = vertexFactory.create();
-                    layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
                     Layout<V,E> layout = vv.getModel().getGraphLayout();
-                    for(V lockVertex : graph.getVertices()) {
-                        layout.lock(lockVertex,true);
-                    }
                     graph.addVertex(newVertex);
-                    for(V lockVertex : graph.getVertices()) {
-                        layout.lock(lockVertex, false);
-                    }
+                    layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(e.getPoint()));
                 }
             }
             vv.repaint();

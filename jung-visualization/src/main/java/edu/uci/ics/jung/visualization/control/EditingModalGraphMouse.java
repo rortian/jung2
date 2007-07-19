@@ -19,7 +19,6 @@ import javax.swing.plaf.basic.BasicIconFactory;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.MultiLayerTransformer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.annotations.AnnotatingGraphMousePlugin;
@@ -29,7 +28,6 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 
 	protected Factory<V> vertexFactory;
 	protected Factory<E> edgeFactory;
-	protected Layout<V,E> layout;
 	protected EditingGraphMousePlugin<V,E> editingPlugin;
 	protected LabelEditingGraphMousePlugin<V,E> labelEditingPlugin;
 	protected EditingPopupGraphMousePlugin<V,E> popupEditingPlugin;
@@ -41,9 +39,9 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * create an instance with default values
 	 *
 	 */
-	public EditingModalGraphMouse(RenderContext rc, Layout<V,E> layout,
+	public EditingModalGraphMouse(RenderContext rc,
 			Factory<V> vertexFactory, Factory<E> edgeFactory) {
-		this(rc, layout, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
+		this(rc, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
 	}
 
 	/**
@@ -51,10 +49,9 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public EditingModalGraphMouse(RenderContext rc, Layout<V,E> layout,
+	public EditingModalGraphMouse(RenderContext rc,
 			Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
 		super(in,out);
-		this.layout = layout;
 		this.vertexFactory = vertexFactory;
 		this.edgeFactory = edgeFactory;
 		this.rc = rc;
@@ -74,17 +71,13 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		rotatingPlugin = new RotatingGraphMousePlugin();
 		shearingPlugin = new ShearingGraphMousePlugin();
-		editingPlugin = new EditingGraphMousePlugin<V,E>(layout, vertexFactory, edgeFactory);
+		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
 		annotatingPlugin = new AnnotatingGraphMousePlugin(rc);
-		popupEditingPlugin = new EditingPopupGraphMousePlugin<V,E>(layout, vertexFactory, edgeFactory);
+		popupEditingPlugin = new EditingPopupGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		add(scalingPlugin);
 //		add(labelEditingPlugin);
 		setMode(Mode.EDITING);
-	}
-	public void setLayout(Layout<V,E> layout) {
-		((EditingGraphMousePlugin<V,E>)editingPlugin).setLayout(layout);
-		((EditingPopupGraphMousePlugin<V,E>)popupEditingPlugin).setLayout(layout);
 	}
 
 	/**
