@@ -101,14 +101,8 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
                 popup.add(new AbstractAction("Create Vertex") {
                     public void actionPerformed(ActionEvent e) {
                         V newVertex = vertexFactory.create();
-                        layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p));
-                        for(V vertex : graph.getVertices()) {
-                            layout.lock(vertex, true);
-                        }
                         graph.addVertex(newVertex);
-                        for(V vertex : graph.getVertices()) {
-                            layout.lock(vertex, false);
-                        }
+                        layout.setLocation(newVertex, vv.getRenderContext().getMultiLayerTransformer().inverseTransform(p));
                         vv.repaint();
                     }
                 });
