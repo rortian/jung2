@@ -74,10 +74,7 @@ public class AnimatedPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 			if (pickSupport != null && pickedVertexState != null) {
 				// p is the screen point for the mouse event
 				Point2D p = e.getPoint();
-				// take away the view transform
-				Point2D ip = p;//vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
-
-				vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
+				vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
 				if (vertex != null) {
 					if (pickedVertexState.isPicked(vertex) == false) {
 						pickedVertexState.clear();

@@ -109,9 +109,6 @@ public class BasicVertexLabelRenderer<V,E> implements Renderer.VertexLabel<V,E> 
     		p = getAnchorPoint(bounds, d, position);
     	}
         g.draw(component, rc.getRendererPane(), p.x, p.y, d.width, d.height, true);
-//        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), p.x, p.y,
-//                d.width, d.height, true);
-        
     }
     
     protected Point getAnchorPoint(Rectangle2D vertexBounds, Dimension labelSize, Position position) {

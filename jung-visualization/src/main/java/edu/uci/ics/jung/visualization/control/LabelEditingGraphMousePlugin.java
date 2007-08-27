@@ -92,10 +92,8 @@ public class LabelEditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     				Layout<V,E> layout = vv.getGraphLayout();
     				// p is the screen point for the mouse event
     				Point2D p = e.getPoint();
-    				// take away the view transform
-    				Point2D ip = p;//vv.getRenderContext().getBasicTransformer().inverseViewTransform(p);
 
-    				V vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
+    				V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
     				if(vertex != null) {
     					String newLabel = vs.transform(vertex);
     					newLabel = JOptionPane.showInputDialog("New Vertex Label for "+vertex);
