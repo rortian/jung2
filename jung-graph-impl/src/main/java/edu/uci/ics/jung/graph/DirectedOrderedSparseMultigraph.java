@@ -27,7 +27,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class DirectedOrderedSparseMultigraph<V,E> 
     extends DirectedSparseMultigraph<V,E>
-    implements DirectedGraph<V,E>, Serializable {
+    implements DirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
 
 	public static <V,E> Factory<DirectedGraph<V,E>> getFactory() {
 		return new Factory<DirectedGraph<V,E>> () {
