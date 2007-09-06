@@ -30,6 +30,7 @@ import junit.framework.TestCase;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
+import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
@@ -92,10 +93,10 @@ public class PajekNetIOTest extends TestCase
     public void testFileNotFound()
     {
         PajekNetReader<Number,Number> pnf = new PajekNetReader<Number,Number>();
-        pnf.setGraphFactory(directedGraphFactory);
+//        pnf.setGraphFactory(directedGraphFactory);
         try
         {
-            pnf.load("/dev/null/foo");
+            pnf.load("/dev/null/foo", graphFactory, vertexFactory, edgeFactory);
             fail("File load did not fail on nonexistent file");
         }
         catch (FileNotFoundException fnfe)
@@ -113,10 +114,10 @@ public class PajekNetIOTest extends TestCase
         Reader r = new StringReader(test);
         
         PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>();
-        pnr.setGraphFactory(undirectedGraphFactory);
-        pnr.setVertexFactory(vertexFactory);
-        pnr.setEdgeFactory(edgeFactory);
-        Graph g = pnr.load(r);
+//        pnr.setGraphFactory(undirectedGraphFactory);
+//        pnr.setVertexFactory(vertexFactory);
+//        pnr.setEdgeFactory(edgeFactory);
+        Graph<Number, Number> g = pnr.load(r, undirectedGraphFactory, vertexFactory, edgeFactory);
         assertEquals(g.getVertexCount(), 3);
         assertEquals(g.getEdgeCount(), 2);
     }
@@ -156,12 +157,12 @@ public class PajekNetIOTest extends TestCase
 
         PajekNetWriter<Number,Number> pnw = new PajekNetWriter<Number,Number>();
         PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>();
-        pnr.setGraphFactory(directedGraphFactory);
-        pnr.setVertexFactory(vertexFactory);
-        pnr.setEdgeFactory(edgeFactory);
+//        pnr.setGraphFactory(directedGraphFactory);
+//        pnr.setVertexFactory(vertexFactory);
+//        pnr.setEdgeFactory(edgeFactory);
         pnw.save(graph1, testFilename, gl, null, null);
 
-        Graph<Number,Number> graph2 = pnr.load(testFilename);
+        Graph<Number,Number> graph2 = pnr.load(testFilename, directedGraphFactory, vertexFactory, edgeFactory);
 
         System.err.println("graph2 = "+graph2);
         for(Number edge : graph2.getEdges()) {
@@ -176,11 +177,12 @@ public class PajekNetIOTest extends TestCase
         assertEquals(graph1.getVertexCount(), graph2.getVertexCount());
         assertEquals(graph1.getEdgeCount(), graph2.getEdgeCount());
 
-        pnw.save(graph2, testFilename2, new PajekLabels<Number>(pnr.getVertexLabeller()), null, null);
+//        pnw.save(graph2, testFilename2, new PajekLabels<Number>(pnr.getVertexLabeller()), null, null);
+        pnw.save(graph2, testFilename2, pnr.getVertexLabeller(), null, null);
 
         compareIndexedGraphs(graph1, graph2);
 
-        Graph<Number,Number> graph3 = pnr.load(testFilename2);
+        Graph<Number,Number> graph3 = pnr.load(testFilename2, graphFactory, vertexFactory, edgeFactory);
 
         System.err.println("graph3 = "+graph3);
         for(Number edge : graph3.getEdges()) {
@@ -237,12 +239,12 @@ public class PajekNetIOTest extends TestCase
 
         PajekNetWriter<Number,Number> pnw = new PajekNetWriter<Number,Number>();
         PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>();
-        pnr.setGraphFactory(undirectedGraphFactory);
-        pnr.setVertexFactory(vertexFactory);
-        pnr.setEdgeFactory(edgeFactory);
+//        pnr.setGraphFactory(undirectedGraphFactory);
+//        pnr.setVertexFactory(vertexFactory);
+//        pnr.setEdgeFactory(edgeFactory);
         pnw.save(graph1, testFilename, gl, null, null);
 
-        Graph<Number,Number> graph2 = pnr.load(testFilename);
+        Graph<Number,Number> graph2 = pnr.load(testFilename, undirectedGraphFactory, vertexFactory, edgeFactory);
         
         
         System.err.println("graph2 = "+graph2);
@@ -259,10 +261,11 @@ public class PajekNetIOTest extends TestCase
         assertEquals(graph1.getVertexCount(), graph2.getVertexCount());
         assertEquals(graph1.getEdgeCount(), graph2.getEdgeCount());
 
-        pnw.save(graph2, testFilename2, new PajekLabels<Number>(pnr.getVertexLabeller()), null, null);
+//        pnw.save(graph2, testFilename2, new PajekLabels<Number>(pnr.getVertexLabeller()), null, null);
+        pnw.save(graph2, testFilename2, pnr.getVertexLabeller(), null, null);
         compareIndexedGraphs(graph1, graph2);
 
-        Graph<Number,Number> graph3 = pnr.load(testFilename2);
+        Graph<Number,Number> graph3 = pnr.load(testFilename2, graphFactory, vertexFactory, edgeFactory);
         System.err.println("graph3 = "+graph3);
         for(Number edge : graph3.getEdges()) {
         	System.err.println("edge "+edge+" is directed? "+graph3.getEdgeType(edge));
@@ -331,19 +334,20 @@ public class PajekNetIOTest extends TestCase
         					new RandomLocationTransformer<Number>(d)));
         
         PajekNetWriter<Number,Number> pnw = new PajekNetWriter<Number,Number>();
-        pnw.save(graph1, testFilename, gl, nr, vld);
+        pnw.save(graph1, testFilename, gl, MapTransformer.getInstance(nr), vld);
         
-        PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>(false, true);
-        pnr.setGraphFactory(graphFactory);
-        pnr.setVertexFactory(vertexFactory);
-        pnr.setEdgeFactory(edgeFactory);
-        Map<Number,Number> nr2 = new HashMap<Number,Number>();
-        Graph<Number,Number> graph2 = pnr.load(testFilename, nr2);
-        PajekLabels<Number> pl = new PajekLabels<Number>(pnr.getVertexLabeller());
+//        PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>(false, true);
+        PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>();
+//        pnr.setGraphFactory(graphFactory);
+//        pnr.setVertexFactory(vertexFactory);
+//        pnr.setEdgeFactory(edgeFactory);
+        Graph<Number,Number> graph2 = pnr.load(testFilename, graphFactory, vertexFactory, edgeFactory);
+//        PajekLabels<Number> pl = new PajekLabels<Number>(pnr.getVertexLabeller());
+        Transformer<Number, String> pl = pnr.getVertexLabeller();
         List<Number> id2 = new ArrayList<Number>(graph2.getVertices());
         	//Indexer.getIndexer(graph2);
-        Transformer<Number,Point2D> vld2 = 
-        	TransformerUtils.mapTransformer(pnr.getVertexLocationTransformer());
+        Transformer<Number,Point2D> vld2 = pnr.getVertexLocationTransformer();
+//        	TransformerUtils.mapTransformer(pnr.getVertexLocationTransformer());
         
         assertEquals(graph1.getVertexCount(), graph2.getVertexCount());
         assertEquals(graph1.getEdgeCount(), graph2.getEdgeCount());
@@ -358,6 +362,7 @@ public class PajekNetIOTest extends TestCase
         }
         
         // test edge weights
+        Transformer<Number,Number> nr2 = pnr.getEdgeWeightTransformer();
         for (Number e2 : graph2.getEdges()) 
         {
             Pair<Number> endpoints = graph2.getEndpoints(e2);
@@ -367,15 +372,17 @@ public class PajekNetIOTest extends TestCase
             Number v2_1 = id.get(id2.indexOf(v2_2));
             Number e1 = graph1.findEdge(v1_1, v2_1);
             assertNotNull(e1);
-            assertEquals(nr.get(e1).floatValue(), nr2.get(e2).floatValue(), 0.0001);
+//            assertEquals(nr.get(e1).floatValue(), nr2.get(e2).floatValue(), 0.0001);
+            assertEquals(nr.get(e1).floatValue(), nr2.transform(e2).floatValue(), 0.0001);
         }
 
         pnw.save(graph2, testFilename2, pl, nr2, vld2);
 
         compareIndexedGraphs(graph1, graph2);
 
-        pnr.setGetLocations(false);
-        Graph<Number,Number> graph3 = pnr.load(testFilename2);
+//        pnr.setGetLocations(false);
+        pnr.setVertexLabeller(null);
+        Graph<Number,Number> graph3 = pnr.load(testFilename2, graphFactory, vertexFactory, edgeFactory);
 
         compareIndexedGraphs(graph2, graph3);
 
@@ -449,19 +456,19 @@ public class PajekNetIOTest extends TestCase
         
     }
     
-    private class PajekLabels<V> implements Transformer<V,String>
-    {
-    	Map<V,String> labeller;
-    	
-        public PajekLabels(Map<V, String> labeller) {
-			this.labeller = labeller;
-		}
-
-		public String transform(V v)
-        {
-            return labeller.get(v);
-        }
-    }
+//    private class PajekLabels<V> implements Transformer<V,String>
+//    {
+//    	Map<V,String> labeller;
+//    	
+//        public PajekLabels(Map<V, String> labeller) {
+//			this.labeller = labeller;
+//		}
+//
+//		public String transform(V v)
+//        {
+//            return labeller.get(v);
+//        }
+//    }
     
 //    private class NumberReader implements Map<E,Number>
 //    {
