@@ -294,8 +294,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension) { 
             if (!checked)
             {
-                System.out.println("current iteration: " + currentIteration);
-                System.out.println("temperature: " + temperature);
+//                System.out.println("current iteration: " + currentIteration);
+//                System.out.println("temperature: " + temperature);
                 checked = true;
             }
             return true; 

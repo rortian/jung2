@@ -14,7 +14,7 @@ public class WeakComponentClustererTest extends TestCase {
 		WeakComponentGraphClusterer<String,Number> clusterer = 
 			new WeakComponentGraphClusterer<String,Number>();
 		Collection<Graph<String,Number>> clusterSet = clusterer.transform(graph);
-		System.err.println("set is "+clusterSet);
+//		System.err.println("set is "+clusterSet);
 	}
 
 }
