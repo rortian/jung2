@@ -11,8 +11,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 
 public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 
-	List<GraphEventListener> listenerList = 
-		Collections.synchronizedList(new LinkedList<GraphEventListener>());
+	List<GraphEventListener<V,E>> listenerList = 
+		Collections.synchronizedList(new LinkedList<GraphEventListener<V,E>>());
 
 	public ObservableGraph(Graph<V, E> delegate) {
 		super(delegate);

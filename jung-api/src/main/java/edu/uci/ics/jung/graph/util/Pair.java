@@ -136,7 +136,7 @@ public final class Pair<T> implements Collection<T>
     public boolean containsAll(Collection<?> c) {
         if (c.size() > 2)
             return false;
-        Iterator iter = c.iterator();
+        Iterator<?> iter = c.iterator();
         Object c_first = iter.next();
         Object c_second = iter.next();
         return this.contains(c_first) && this.contains(c_second);
@@ -188,7 +188,7 @@ public final class Pair<T> implements Collection<T>
         return to_return;
     }
     
-    private class PairIterator implements Iterator
+    private class PairIterator implements Iterator<T>
     {
         int position;
         
@@ -202,7 +202,7 @@ public final class Pair<T> implements Collection<T>
             return position < 2;
         }
 
-        public Object next()
+        public T next()
         {
             position++;
             if (position == 1)
