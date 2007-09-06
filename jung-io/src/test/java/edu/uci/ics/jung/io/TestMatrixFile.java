@@ -93,7 +93,7 @@ public class TestMatrixFile extends TestCase {
 		DirectedGraph<Number,Number> dg = createSimpleDirectedGraph();
 		String filename = "testMatrixLoadSaveUW.mat";
 		mf.save(dg, filename);
-		Graph g = mf.load(filename);
+		Graph<Number, Number> g = mf.load(filename);
 		Assert.assertEquals(dg.getVertexCount(), g.getVertexCount());
 		Assert.assertEquals(dg.getEdgeCount(), g.getEdgeCount());
 		File file = new File(filename);
@@ -105,7 +105,7 @@ public class TestMatrixFile extends TestCase {
 		DirectedGraph<Number,Number> dg = createSimpleDirectedGraph();
 		String filename = "testMatrixLoadSaveW.mat";
 		mf.save(dg, filename);
-		Graph g = mf.load(filename);
+		Graph<Number,Number> g = mf.load(filename);
 		Assert.assertEquals(dg.getVertexCount(), g.getVertexCount());
 		Assert.assertEquals(dg.getEdgeCount(), g.getEdgeCount());
 		File file = new File(filename);

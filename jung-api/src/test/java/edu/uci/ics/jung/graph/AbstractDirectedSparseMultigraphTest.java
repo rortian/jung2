@@ -87,7 +87,7 @@ public abstract class AbstractDirectedSparseMultigraphTest extends TestCase {
     }
 
     public void testGetNeighbors() {
-        Collection neighbors = graph.getNeighbors(v1);
+        Collection<Integer> neighbors = graph.getNeighbors(v1);
         assertTrue(neighbors.contains(v0));
         assertTrue(neighbors.contains(v2));
     }

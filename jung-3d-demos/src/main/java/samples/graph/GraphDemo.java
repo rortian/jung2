@@ -42,8 +42,8 @@ public class GraphDemo extends JPanel {
 
 	Graph<String,Number> demoGraph = TestGraphs.getDemoGraph();
 	Graph<String,Number> oneComponentGraph = TestGraphs.getOneComponentGraph();
-	Map<String,Graph> graphMap = new HashMap<String,Graph>();
-	Map<String,Class> layoutMap = new HashMap<String,Class>();
+	Map<String,Graph<String,Number>> graphMap = new HashMap<String,Graph<String,Number>>();
+//	Map<String,Class> layoutMap = new HashMap<String,Class>();
 	JComboBox layoutBox, graphBox;
 	
 	public GraphDemo() {

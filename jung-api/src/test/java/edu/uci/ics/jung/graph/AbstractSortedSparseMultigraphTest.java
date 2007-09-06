@@ -132,7 +132,7 @@ public abstract class AbstractSortedSparseMultigraphTest extends TestCase {
     }
 
     public void testGetNeighbors() {
-        Collection neighbors = smallGraph.getNeighbors(v1);
+        Collection<Integer> neighbors = smallGraph.getNeighbors(v1);
         assertTrue(neighbors.contains(v0));
         assertTrue(neighbors.contains(v2));
     }
