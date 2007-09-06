@@ -15,20 +15,20 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
-public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
-        AbstractIterativeScorer<V, E, T> implements VertexScorer<V, T>
+public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
+        AbstractIterativeScorer<V, E, S> implements VertexScorer<V, S>
 {
     /**
      * 
      */
-    protected Transformer<V, T> vertex_priors;
+    protected Transformer<V, S> vertex_priors;
 
     protected double alpha;
 
     protected boolean accept_disconnected_graph;
     
     public AbstractIterativeScorerWithPriors(Graph<V, E> g,
-            Transformer<E, ? extends Number> edge_weights, Transformer<V, T> vertex_priors, double alpha)
+            Transformer<E, ? extends Number> edge_weights, Transformer<V, S> vertex_priors, double alpha)
     {
         super(g, edge_weights);
         this.vertex_priors = vertex_priors;
@@ -36,7 +36,7 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
         initialize();
     }
 
-    public AbstractIterativeScorerWithPriors(Graph<V, E> g, Transformer<V, T> vertex_priors, double alpha)
+    public AbstractIterativeScorerWithPriors(Graph<V, E> g, Transformer<V, S> vertex_priors, double alpha)
     {
         super(g);
         this.vertex_priors = vertex_priors;
@@ -54,7 +54,7 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
 
     }
     
-    protected abstract T getDisappearingPotential(V v);
+    protected abstract S getDisappearingPotential(V v);
 
     public void acceptDisconnectedGraph(boolean accept)
     {
@@ -66,17 +66,17 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
         return this.accept_disconnected_graph;
     }
     
-    protected T getVertexScore(V v)
+    public S getVertexScore(V v)
     {
         return output.get(v);
     }
     
-    protected void setVertexScore(V v, T t)
+    public void setVertexScore(V v, S s)
     {
-        output.put(v, t);
+        output.put(v, s);
     }
     
-    protected T getVertexPrior(V v)
+    protected S getVertexPrior(V v)
     {
         return vertex_priors.transform(v);
     }
@@ -84,7 +84,7 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, T> extends
     /**
      * @return the vertex_priors
      */
-    public Transformer<V, T> getVertexPriors()
+    public Transformer<V, S> getVertexPriors()
     {
         return vertex_priors;
     }
