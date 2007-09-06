@@ -171,7 +171,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         vv.getRenderContext().setVertexShapeTransformer(vertexImageShapeFunction);
         vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
         vv.getRenderContext().setVertexLabelTransformer(vertexStringerImpl);
-        PickedState ps = vv.getPickedVertexState();
+        PickedState<Number> ps = vv.getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
 
 
@@ -206,7 +206,7 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         });
 
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Number>());
         
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
@@ -382,11 +382,11 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
      */
     class VertexStringerImpl<V> implements Transformer<V,String> {
 
-        Map map = new HashMap();
+        Map<V,String> map = new HashMap<V,String>();
         
         boolean enabled = true;
         
-        public VertexStringerImpl(Map map) {
+        public VertexStringerImpl(Map<V,String> map) {
             this.map = map;
         }
         

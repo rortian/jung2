@@ -74,7 +74,7 @@ public class SWTImageEdgeLabelDemo extends Composite {
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);
         layout.setMaxIterations(100);
-        final GraphZoomScrollPane panel = new GraphZoomScrollPane(this, SWT.NONE, layout, new Dimension(400,400));
+        final GraphZoomScrollPane<Number,Number> panel = new GraphZoomScrollPane<Number,Number>(this, SWT.NONE, layout, new Dimension(400,400));
 		GridData gridData = new GridData();
         gridData.grabExcessHorizontalSpace = true;
         gridData.grabExcessVerticalSpace = true;
@@ -104,8 +104,8 @@ public class SWTImageEdgeLabelDemo extends Composite {
 			}});
         
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
-        vv.setEdgeToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Number>());
+        vv.setEdgeToolTipTransformer(new ToStringLabeller<Number>());
 
         
         final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();

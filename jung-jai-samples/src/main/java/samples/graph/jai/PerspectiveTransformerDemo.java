@@ -116,7 +116,7 @@ public class PerspectiveTransformerDemo extends JApplet {
         graph = TestGraphs.getOneComponentGraph();
 
         graphLayout = new FRLayout<String,Number>(graph);
-        ((FRLayout)graphLayout).setMaxIterations(1000);
+        ((FRLayout<String,Number>)graphLayout).setMaxIterations(1000);
 
         Dimension preferredSize = new Dimension(600,600);
         Map<String,Point2D> map =
@@ -138,7 +138,7 @@ public class PerspectiveTransformerDemo extends JApplet {
         vv.setBackground(Color.white);
 
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<String>());
         
         Container content = getContentPane();
         GraphZoomScrollPane gzsp = new GraphZoomScrollPane(vv);

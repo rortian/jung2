@@ -11,8 +11,6 @@ package samples.graph;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -134,7 +132,7 @@ public class SWTBalloonLayoutDemo extends Composite {
 				radialLayout.setSize(new Dimension(900,900));
 				
 
-				final GraphZoomScrollPane panel = new GraphZoomScrollPane(this, SWT.NONE, layout, new Dimension(600,600));
+				final GraphZoomScrollPane<String,Integer> panel = new GraphZoomScrollPane<String,Integer>(this, SWT.NONE, layout, new Dimension(600,600));
 				GridData gridData = new GridData();
 		        gridData.grabExcessHorizontalSpace = true;
 		        gridData.grabExcessVerticalSpace = true;
@@ -144,10 +142,10 @@ public class SWTBalloonLayoutDemo extends Composite {
 				
 				vv =  panel.vv;
 				vv.setBackground(Color.white);
-				vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
-				vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+				vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<String,Integer>());
+				vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
 				// add a listener for ToolTips
-				vv.setVertexToolTipTransformer(new ToStringLabeller());
+				vv.setVertexToolTipTransformer(new ToStringLabeller<String>());
 				vv.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
 				rings = new Rings(radialLayout);
 				

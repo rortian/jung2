@@ -220,7 +220,7 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         });
 
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Number>());
         
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
@@ -319,11 +319,11 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
      */
     class VertexStringerImpl<V> implements Transformer<V,String> {
 
-        Map map = new HashMap();
+        Map<V, String> map = new HashMap<V, String>();
         
         boolean enabled = true;
         
-        public VertexStringerImpl(Map map) {
+        public VertexStringerImpl(Map<V,String> map) {
             this.map = map;
         }
         
@@ -332,7 +332,7 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
          */
         public String transform(V v) {
             if(isEnabled()) {
-                return (String)map.get(v);
+                return map.get(v);
             } else {
                 return "";
             }
