@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.algorithms.util.ConstantMap;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -59,13 +57,15 @@ public class PajekNetWriter<V,E>
      * @throws IOException
      */
     public void save(Graph<V,E> g, String filename, Transformer<V,String> vs, 
-            Map<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
+//            Map<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
+            Transformer<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
     {
         save(g, new FileWriter(filename), vs, nev, vld);
     }
     
     public void save(Graph<V,E> g, String filename, Transformer<V,String> vs, 
-            Map<E,Number> nev) throws IOException
+//            Map<E,Number> nev) throws IOException
+            Transformer<E,Number> nev) throws IOException
     {
         save(g, new FileWriter(filename), vs, nev, null);
     }
@@ -93,7 +93,8 @@ public class PajekNetWriter<V,E>
     }
 
     public void save(Graph<V,E> g, Writer w, Transformer<V,String> vs, 
-            Map<E,Number> nev) throws IOException
+//            Map<E,Number> nev) throws IOException
+            Transformer<E,Number> nev) throws IOException
     {
         save(g, w, vs, nev, null);
     }
@@ -108,7 +109,8 @@ public class PajekNetWriter<V,E>
      */
     @SuppressWarnings("unchecked")
 	public void save(Graph<V,E> graph, Writer w, Transformer<V,String> vs, 
-    		Map<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
+//    		Map<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
+	        Transformer<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
     {
         /*
          * TODO: Changes we might want to make:
@@ -117,7 +119,8 @@ public class PajekNetWriter<V,E>
         
         BufferedWriter writer = new BufferedWriter(w);
         if (nev == null)
-            nev = new ConstantMap(1);
+//            nev = new ConstantMap(1);
+            nev = new Transformer<E, Number>() { public Number transform(E e) { return 1; } };
         writer.write("*Vertices " + graph.getVertexCount());
         writer.newLine();
         
@@ -177,7 +180,8 @@ public class PajekNetWriter<V,E>
         {
             int source_id = id.indexOf(graph.getEndpoints(e).getFirst()) + 1;
             int target_id = id.indexOf(graph.getEndpoints(e).getSecond()) + 1;
-            float weight = nev.get(e).floatValue();
+//            float weight = nev.get(e).floatValue();
+            float weight = nev.transform(e).floatValue();
             writer.write(source_id + " " + target_id + " " + weight);
             writer.newLine();
         }
@@ -193,7 +197,8 @@ public class PajekNetWriter<V,E>
             Pair<V> endpoints = graph.getEndpoints(e);
             int v1_id = id.indexOf(endpoints.getFirst()) + 1;
             int v2_id = id.indexOf(endpoints.getSecond()) + 1;
-            float weight = nev.get(e).floatValue();
+//            float weight = nev.get(e).floatValue();
+            float weight = nev.transform(e).floatValue();
             writer.write(v1_id + " " + v2_id + " " + weight);
             writer.newLine();
         }
