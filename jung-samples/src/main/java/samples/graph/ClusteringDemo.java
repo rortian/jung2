@@ -139,17 +139,26 @@ public class ClusteringDemo extends JApplet {
     		}
     	};
 
-    	pnr.setGraphFactory(graphFactory);
-    	pnr.setVertexFactory(new Factory<Number>() {
-    		int n = 0;
-    		public Number create() { return n++; }
-    	});
-    	pnr.setEdgeFactory(new Factory<Number>() {
-    		int n = 0;
-    		public Number create() { return n++; }
-    	});
+//    	pnr.setGraphFactory(graphFactory);
+    	Factory<Number> vertexFactory = new Factory<Number>() {
+            int n = 0;
+            public Number create() { return n++; }
+        };
+        Factory<Number> edgeFactory = new Factory<Number>()  {
+            int n = 0;
+            public Number create() { return n++; }
+        };
+        
+//    	pnr.setVertexFactory(new Factory<Number>() {
+//    		int n = 0;
+//    		public Number create() { return n++; }
+//    	});
+//    	pnr.setEdgeFactory(new Factory<Number>() {
+//    		int n = 0;
+//    		public Number create() { return n++; }
+//    	});
 
-        final Graph<Number,Number> graph = pnr.load(br);
+        final Graph<Number,Number> graph = pnr.load(br, graphFactory, vertexFactory, edgeFactory);
 
 		//Create a simple layout frame
         //specify the Fruchterman-Rheingold layout algorithm
