@@ -17,7 +17,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -33,7 +32,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.MultiGraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
 
 
 /**
@@ -125,7 +123,8 @@ public class PajekNetReader<V,E> {
     private static final Predicate<String> t_pred = new StartsWithPredicate("*");
     private static final Predicate<String> c_pred = OrPredicate.getInstance(a_pred, e_pred);
     protected static final Predicate<String> l_pred = ListTagPred.getInstance();
-    protected Predicate<E> p_pred;// = ParallelEdgePredicate.getInstance();
+//    protected Predicate<E> p_pred;// = ParallelEdgePredicate.getInstance();
+//    protected Predicate<Pair<V>> p_pred;// = ParallelEdgePredicate.getInstance();
     
     /**
      * Creates a PajekNetReader whose labels are not required to be unique.
@@ -168,7 +167,7 @@ public class PajekNetReader<V,E> {
     public Graph<V,E> load(Reader reader, Graph<V,E> g, Factory<V> vertex_factory, Factory<E> edge_factory) throws IOException
     {
         BufferedReader br = new BufferedReader(reader);
-        this.p_pred = new ParallelEdgePredicate<V,E>(g);
+//        this.p_pred = new ParallelEdgePredicate<V,E>(g);
                 
         // ignore everything until we see '*Vertices'
         String curLine = skip(br, v_pred);
@@ -363,7 +362,7 @@ public class PajekNetReader<V,E> {
             {
                 E e = createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
                 // get the edge weight if we care
-                if (edge_weights != null)
+                if (edge_weights != null && st.hasMoreTokens())
                     edge_weights.set(e, new Float(st.nextToken()));
             }
         }
@@ -379,10 +378,10 @@ public class PajekNetReader<V,E> {
 
         // add this edge if parallel edges are OK,
         // or if this isn't one; otherwise ignore it
-        if (parallel_ok || !p_pred.evaluate(e)) {
-        	
+//        if (parallel_ok || !p_pred.evaluate(e)) 
+//        if (parallel_ok || !p_pred.evaluate(new Pair<Integer>(v1, v2)));
+        if (parallel_ok || !g.isPredecessor(v1, v2))
         	g.addEdge(e, v1, v2, directed);
-        }
         return e;
     }
     
@@ -442,27 +441,29 @@ public class PajekNetReader<V,E> {
         }
     }
     
-    public static class ParallelEdgePredicate<V,E> implements Predicate<E> {
-    	Graph<V,E> graph;
-
-		private ParallelEdgePredicate(Graph<V, E> graph) {
-			this.graph = graph;
-		}
-
-		public boolean evaluate(E e) {
-			Pair<V> endpoints = graph.getEndpoints(e);
-			V start = endpoints.getFirst();
-			V end = endpoints.getSecond();
-			Collection<E> outgoing = graph.getOutEdges(start);
-			for(E edge : outgoing) {
-				if(graph.getEndpoints(edge).getSecond().equals(end)) {
-					return true;
-				}
-			}
-			return false;
-		}
-    	
-    }
+//    public static class ParallelEdgePredicate<V,E> implements Predicate<Pair<V>> {
+//    	Graph<V,E> graph;
+//
+//		private ParallelEdgePredicate(Graph<V, E> graph) {
+//			this.graph = graph;
+//		}
+//
+//		public boolean evaluate(Pair<V> endpoints) {
+////			Pair<V> endpoints = graph.getEndpoints(e);
+////			if (endpoints == null)
+////			    System.out.println("wtf?");
+//			V start = endpoints.getFirst();
+//			V end = endpoints.getSecond();
+//			Collection<E> outgoing = graph.getOutEdges(start);
+//			for(E edge : outgoing) {
+//				if(graph.getEndpoints(edge).getSecond().equals(end)) {
+//					return true;
+//				}
+//			}
+//			return false;
+//		}
+//    	
+//    }
     
     /**
      * A Predicate which evaluates to <code>true</code> if the
