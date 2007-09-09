@@ -29,7 +29,6 @@ import edu.uci.ics.jung.algorithms.util.MapSettableTransformer;
 import edu.uci.ics.jung.algorithms.util.SettableTransformer;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.MultiGraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
@@ -335,7 +334,7 @@ public class PajekNetReader<V,E> {
         
         boolean is_list = l_pred.evaluate(nextLine);
 
-        boolean parallel_ok = (g instanceof MultiGraph == true);
+//        boolean parallel_ok = (g instanceof MultiGraph == true);
         	//!PredicateUtils.enforcesNotParallel(g);
 
         while (br.ready())
@@ -355,12 +354,14 @@ public class PajekNetReader<V,E> {
             {
                 do
                 {
-                    createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
+//                    createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
+                    createAddEdge(st, v1, directedness, g, id, edge_factory);
                 } while (st.hasMoreTokens());
             }
             else // one source, one destination, at most one weight
             {
-                E e = createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
+//                E e = createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
+                E e = createAddEdge(st, v1, directedness, g, id, edge_factory);
                 // get the edge weight if we care
                 if (edge_weights != null && st.hasMoreTokens())
                     edge_weights.set(e, new Float(st.nextToken()));
@@ -369,8 +370,10 @@ public class PajekNetReader<V,E> {
         return nextLine;
     }
 
+//    protected E createAddEdge(StringTokenizer st, V v1, 
+//            EdgeType directed, Graph<V,E> g, List<V> id, boolean parallel_ok, Factory<E> edge_factory)
     protected E createAddEdge(StringTokenizer st, V v1, 
-            EdgeType directed, Graph<V,E> g, List<V> id, boolean parallel_ok, Factory<E> edge_factory)
+            EdgeType directed, Graph<V,E> g, List<V> id, Factory<E> edge_factory)
     {
         int vid2 = Integer.parseInt(st.nextToken()) - 1;
         V v2 = id.get(vid2);
@@ -380,8 +383,10 @@ public class PajekNetReader<V,E> {
         // or if this isn't one; otherwise ignore it
 //        if (parallel_ok || !p_pred.evaluate(e)) 
 //        if (parallel_ok || !p_pred.evaluate(new Pair<Integer>(v1, v2)));
-        if (parallel_ok || !g.isPredecessor(v1, v2))
-        	g.addEdge(e, v1, v2, directed);
+//        if (parallel_ok || !g.isPredecessor(v1, v2))
+        // don't error-check this: let the graph implementation do whatever it's going to do 
+        // (add the edge, replace the existing edge, throw an exception--depends on the graph implementation)
+     	g.addEdge(e, v1, v2, directed);
         return e;
     }
     

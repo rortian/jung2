@@ -23,7 +23,7 @@ import java.util.Set;
 import org.apache.commons.collections15.Factory;
 
 
-public class SetHypergraph<V,H> implements Hypergraph<V,H>, Serializable
+public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Serializable
 {
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedge sets
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets

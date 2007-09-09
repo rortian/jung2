@@ -39,7 +39,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class UndirectedSparseMultigraph<V,E> 
     extends AbstractSparseGraph<V,E>
-    implements UndirectedGraph<V,E>, Serializable {
+    implements UndirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
     
     public static <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
         return new Factory<UndirectedGraph<V,E>> () {
