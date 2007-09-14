@@ -152,12 +152,8 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             	}
             	
             }
-//            	gp.lineTo(0, dy-index);
-//            	gp.lineTo(dx+index, 0);
-//            	gp.lineTo(dx+index, dy);
 
             edgeShape = gp;
-//            System.err.println("its a gp:["+0+","+0+"],["+dx+","+0+"],["+dx+","+dy+"]");
         	
         } else {
             // this is a normal edge. Rotate it to the angle between
@@ -204,6 +200,12 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             if(scalex < .3 || scaley < .3) return;
             
             if (rc.getEdgeArrowPredicate().evaluate(Context.<Graph<V,E>,E>getInstance(graph, e))) {
+            	
+                Stroke new_stroke = rc.getEdgeArrowStrokeTransformer().transform(e);
+                Stroke old_stroke = g.getStroke();
+                if (new_stroke != null)
+                    g.setStroke(new_stroke);
+
                 
                 Shape destVertexShape = 
                     rc.getVertexShapeTransformer().transform(graph.getEndpoints(e).getSecond());
@@ -243,15 +245,14 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                         g.draw(arrow);
                     }
                 }
+                // restore paint and stroke
+                if (new_stroke != null)
+                    g.setStroke(old_stroke);
+
             }
             // use existing paint for text if no draw paint specified
             if (draw_paint == null)
                 g.setPaint(oldPaint);
-//            String label = edgeStringer.getLabel(e);
-//            if (label != null) {
-//                labelEdge(g, graph, e, label, x1, x2, y1, y2);
-//            }
-            
             
             // restore old paint
             g.setPaint(oldPaint);
