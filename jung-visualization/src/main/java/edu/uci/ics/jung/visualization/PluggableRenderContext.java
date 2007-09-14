@@ -61,6 +61,7 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
     protected Transformer<E,String> edgeLabelTransformer = new ConstantTransformer(null);
     protected Transformer<E,Stroke> edgeStrokeTransformer = new ConstantTransformer(new BasicStroke(1.0f));
+    protected Transformer<E,Stroke> edgeArrowStrokeTransformer = new ConstantTransformer(new BasicStroke(1.0f));
     
     protected Transformer<Context<Graph<V,E>,E>,Shape> edgeArrowTransformer = 
         new DirectionalEdgeArrowTransformer<V,E>(10, 8, 4);
@@ -334,6 +335,20 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
      */
     public void setEdgeStrokeTransformer(Transformer<E,Stroke> edgeStrokeTransformer) {
         this.edgeStrokeTransformer = edgeStrokeTransformer;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeStrokeTransformer()
+     */
+    public Transformer<E,Stroke> getEdgeArrowStrokeTransformer() {
+        return edgeArrowStrokeTransformer;
+    }
+
+    /* (non-Javadoc)
+     * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeStrokeTransformer(edu.uci.ics.jung.visualization.decorators.EdgeStrokeTransformer)
+     */
+    public void setEdgeArrowStrokeTransformer(Transformer<E,Stroke> edgeArrowStrokeTransformer) {
+        this.edgeArrowStrokeTransformer = edgeArrowStrokeTransformer;
     }
 
     public GraphicsDecorator getGraphicsContext() {

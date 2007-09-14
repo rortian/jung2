@@ -106,6 +106,10 @@ public interface RenderContext<V, E> {
 
     void setEdgeStrokeTransformer(Transformer<E,Stroke> edgeStrokeTransformer);
     
+    Transformer<E,Stroke> getEdgeArrowStrokeTransformer();
+
+    void setEdgeArrowStrokeTransformer(Transformer<E,Stroke> edgeArrowStrokeTransformer);
+    
     GraphicsDecorator getGraphicsContext();
     
     void setGraphicsContext(GraphicsDecorator graphicsContext);
