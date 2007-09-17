@@ -117,7 +117,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
             int index = 0;
             if(rc.getEdgeShapeTransformer() instanceof IndexedRendering) {
             	EdgeIndexFunction<V,E> peif = 
-            		((IndexedRendering)rc.getEdgeShapeTransformer()).getEdgeIndexFunction();
+            		((IndexedRendering<V,E>)rc.getEdgeShapeTransformer()).getEdgeIndexFunction();
             	index = peif.getIndex(graph, e);
             	index *= 20;
             }
@@ -250,9 +250,9 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     g.setStroke(old_stroke);
 
             }
-            // use existing paint for text if no draw paint specified
-            if (draw_paint == null)
-                g.setPaint(oldPaint);
+//            // use existing paint for text if no draw paint specified
+//            if (draw_paint == null)
+//                g.setPaint(oldPaint);
             
             // restore old paint
             g.setPaint(oldPaint);
