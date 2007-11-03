@@ -53,4 +53,16 @@ public abstract class GraphEvent<V,E> {
 		}
 		
 	}
+	/**
+	 * @return the source
+	 */
+	public Graph<V, E> getSource() {
+		return source;
+	}
+	/**
+	 * @return the type
+	 */
+	public Type getType() {
+		return type;
+	}
 }
