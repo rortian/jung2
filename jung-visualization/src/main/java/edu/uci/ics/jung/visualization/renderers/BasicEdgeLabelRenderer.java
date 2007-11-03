@@ -108,9 +108,6 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
         g.setTransform(xform);
         g.draw(component, rc.getRendererPane(), 0, 0, d.width, d.height, true);
 
-//        rc.getRendererPane().paintComponent(g.getDelegate(), component, rc.getScreenDevice(), 
-//                0, 0,
-//                d.width, d.height, true);
         g.setTransform(old);
     }
 

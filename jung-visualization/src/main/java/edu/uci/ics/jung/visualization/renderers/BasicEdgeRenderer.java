@@ -250,9 +250,6 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
                     g.setStroke(old_stroke);
 
             }
-//            // use existing paint for text if no draw paint specified
-//            if (draw_paint == null)
-//                g.setPaint(oldPaint);
             
             // restore old paint
             g.setPaint(oldPaint);
