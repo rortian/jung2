@@ -11,6 +11,7 @@
  */
 package edu.uci.ics.jung.graph.util;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -26,7 +27,7 @@ import java.util.Iterator;
 * @author scott white and Danyel Fisher
 */
 
-public final class Pair<T> implements Collection<T> 
+public final class Pair<T> implements Collection<T>, Serializable
 {
     private T first;
     private T second;

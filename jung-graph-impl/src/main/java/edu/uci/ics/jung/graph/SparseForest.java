@@ -1,5 +1,6 @@
 package edu.uci.ics.jung.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,7 +18,7 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E> {
+public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E>, Serializable {
 	
 //	protected DirectedGraph<V,E> delegate;
 

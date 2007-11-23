@@ -1,5 +1,6 @@
 package edu.uci.ics.jung.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E> {
+public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, Serializable {
 	
 	public static final <V,E> Factory<Tree<V,E>> getFactory() {
 		return new Factory<Tree<V,E>> () {
