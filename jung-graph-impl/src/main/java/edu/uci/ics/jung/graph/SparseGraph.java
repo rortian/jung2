@@ -98,7 +98,7 @@ public class SparseGraph<V,E>
         // so as long as anything that's returned by findEdge is not of the same type as
         // edge, we're fine
         E connection = findEdge(v1, v2);
-        if (connection != null && getEdgeType(connection) == getEdgeType(edge))
+        if (connection != null && getEdgeType(connection) == edgeType)
             throw new IllegalArgumentException("This graph does not accept parallel edges; " + new_endpoints + 
                     " are already connected by " + connection); 
         
@@ -324,14 +324,14 @@ public class SparseGraph<V,E>
         // remove edge from incident vertices' adjacency maps
         if (getEdgeType(edge) == EdgeType.DIRECTED)
         {
-            vertex_maps.get(v1)[OUTGOING].remove(edge);
-            vertex_maps.get(v2)[INCOMING].remove(edge);
+            vertex_maps.get(v1)[OUTGOING].remove(v2);
+            vertex_maps.get(v2)[INCOMING].remove(v1);
             directed_edges.remove(edge);
         }
         else
         {
-            vertex_maps.get(v1)[INCIDENT].remove(edge);
-            vertex_maps.get(v2)[INCIDENT].remove(edge);
+            vertex_maps.get(v1)[INCIDENT].remove(v2);
+            vertex_maps.get(v2)[INCIDENT].remove(v1);
             undirected_edges.remove(edge);
         }
 
