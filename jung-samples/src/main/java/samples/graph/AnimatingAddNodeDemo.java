@@ -15,6 +15,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -108,6 +111,20 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Number>());
         vv.setForeground(Color.white);
+        
+        vv.addComponentListener(new ComponentAdapter() {
+
+			/* (non-Javadoc)
+			 * @see java.awt.event.ComponentAdapter#componentResized(java.awt.event.ComponentEvent)
+			 */
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				super.componentResized(arg0);
+				System.err.println("resized");
+				layout.setSize(arg0.getComponent().getSize());
+			}});
+        
         getContentPane().add(vv);
         switchLayout = new JButton("Switch to SpringLayout");
         switchLayout.addActionListener(new ActionListener() {
@@ -129,7 +146,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
     							staticLayout);
     				Animator animator = new Animator(lt);
     				animator.start();
-    				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
+    			//	vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
     				vv.repaint();
 
                 } else {
@@ -146,7 +163,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
     							staticLayout);
     				Animator animator = new Animator(lt);
     				animator.start();
-    				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
+    			//	vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
     				vv.repaint();
 
                 }
@@ -206,7 +223,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 							staticLayout);
 				Animator animator = new Animator(lt);
 				animator.start();
-				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
+//				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 				vv.repaint();
                 
             } else {
