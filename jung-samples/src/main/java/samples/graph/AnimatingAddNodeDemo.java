@@ -130,7 +130,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
         switchLayout.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
-            	Dimension d = new Dimension(600,600);
+            	Dimension d = vv.getSize();//new Dimension(600,600);
                 if (switchLayout.getText().indexOf("Spring") > 0) {
                     switchLayout.setText("Switch to FRLayout");
                     layout = 
