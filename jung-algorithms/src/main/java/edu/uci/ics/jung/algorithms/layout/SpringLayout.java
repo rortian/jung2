@@ -156,7 +156,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 
     		try {
     			for(E e : graph.getEdges()) {
-    				SpringEdgeData<E> sed = getSpringData(e);
+    				SpringEdgeData<E> sed = getSpringEdgeData(e);
     				calcEdgeLength(sed, lengthFunction);
     			}
     		} catch(ConcurrentModificationException cme) {
@@ -180,7 +180,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     public void step() {
     	try {
     		for(V v : getGraph().getVertices()) {
-    			SpringVertexData svd = getSpringData(v);
+    			SpringVertexData svd = getSpringVertexData(v);
     			if (svd == null) {
     				continue;
     			}
@@ -218,7 +218,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     			double vy = p1.getY() - p2.getY();
     			double len = Math.sqrt(vx * vx + vy * vy);
 
-    			SpringEdgeData<E> sed = getSpringData(e);
+    			SpringEdgeData<E> sed = getSpringEdgeData(e);
     			if (sed == null) {
     				continue;
     			}
@@ -236,8 +236,8 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     			double dx = f * vx;
     			double dy = f * vy;
     			SpringVertexData v1D, v2D;
-    			v1D = getSpringData(v1);
-    			v2D = getSpringData(v2);
+    			v1D = getSpringVertexData(v1);
+    			v2D = getSpringVertexData(v2);
 
     			sed.f = f;
 
@@ -256,7 +256,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
         for (V v : getGraph().getVertices()) {
             if (isLocked(v)) continue;
 
-            SpringVertexData svd = getSpringData(v);
+            SpringVertexData svd = getSpringVertexData(v);
             if(svd == null) continue;
             double dx = 0, dy = 0;
 
@@ -295,7 +295,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
             try {
                 for (V v : getGraph().getVertices()) {
                     if (isLocked(v)) continue;
-                    SpringVertexData vd = getSpringData(v);
+                    SpringVertexData vd = getSpringVertexData(v);
                     if(vd == null) continue;
                     Point2D xyd = transform(v);
                     
@@ -328,11 +328,11 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
         }
     }
 
-    public SpringVertexData getSpringData(V v) {
+    public SpringVertexData getSpringVertexData(V v) {
         return springVertexData.get(v);
     }
 
-    public SpringEdgeData<E> getSpringData(E e) {
+    public SpringEdgeData<E> getSpringEdgeData(E e) {
             return springEdgeData.get(e);
     }
 

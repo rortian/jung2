@@ -166,7 +166,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	public void initialize() {
 		super.initialize();
 		for(E e : getGraph().getEdges()) {
-			SpringEdgeData<E> sed = getSpringData(e);
+			SpringEdgeData<E> sed = getSpringEdgeData(e);
 			if (sed == null) {
 				sed = new SpringEdgeData<E>(e);
 				springEdgeData.put(e, sed);
@@ -191,7 +191,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			for(V v : getGraph().getVertices()) {
 				if (isLocked(v))
 					continue;
-				SpringLayout.SpringVertexData vd = getSpringData(v);
+				SpringLayout.SpringVertexData vd = getSpringVertexData(v);
 				Point2D xyd = transform(v);
 
 				int width = getSize().width;
@@ -331,10 +331,10 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			double dx = f * vx;
 			double dy = f * vy;
 			SpringVertexData v1D, v2D;
-			v1D = getSpringData(v1);
-			v2D = getSpringData(v2);
+			v1D = getSpringVertexData(v1);
+			v2D = getSpringVertexData(v2);
 
-			SpringEdgeData<E> sed = getSpringData(e);
+			SpringEdgeData<E> sed = getSpringEdgeData(e);
 			sed.f = f;
 
 			v1D.edgedx += dx;
