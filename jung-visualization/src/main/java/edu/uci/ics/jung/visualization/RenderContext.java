@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.Point2D;
+import java.util.Map;
 
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
@@ -201,11 +203,14 @@ public interface RenderContext<V, E> {
 	/**
 	 * @return the pickSupport
 	 */
-	public GraphElementAccessor<V, E> getPickSupport();
+	GraphElementAccessor<V, E> getPickSupport();
 
 	/**
 	 * @param pickSupport the pickSupport to set
 	 */
-	public void setPickSupport(GraphElementAccessor<V, E> pickSupport);
+	void setPickSupport(GraphElementAccessor<V, E> pickSupport);
+	
+	Map<V, Point2D> getLocationCache();
+
 
 }

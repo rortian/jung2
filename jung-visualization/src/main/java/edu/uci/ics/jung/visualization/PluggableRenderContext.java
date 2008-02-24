@@ -14,6 +14,9 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
@@ -90,6 +93,8 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         IncidentEdgeIndexFunction.<V,E>getInstance();
     
     protected MultiLayerTransformer multiLayerTransformer = new BasicTransformer();
+    
+    protected Map<V,Point2D> locationCache = new HashMap<V,Point2D>();
     
 	/**
 	 * pluggable support for picking graph elements by
@@ -584,6 +589,13 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 	public void setArrowFillPaintTransformer(Transformer<E, Paint> arrowFillPaintTransformer) {
 		this.arrowFillPaintTransformer = arrowFillPaintTransformer;
 		
+	}
+
+	/**
+	 * @return the locationCache
+	 */
+	public Map<V, Point2D> getLocationCache() {
+		return locationCache;
 	}
 	
 }
