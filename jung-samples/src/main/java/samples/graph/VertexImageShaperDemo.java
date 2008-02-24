@@ -43,6 +43,7 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.Checkmark;
@@ -146,6 +147,7 @@ public class VertexImageShaperDemo extends JApplet {
         
         FRLayout<Number, Number> layout = new FRLayout<Number, Number>(graph);
         layout.setMaxIterations(100);
+        layout.setInitializer(new RandomLocationTransformer<Number>(new Dimension(400,400), 0));
         vv =  new VisualizationViewer<Number, Number>(layout, new Dimension(400,400));
         
         // This demo uses a special renderer to turn outlines on and off.
