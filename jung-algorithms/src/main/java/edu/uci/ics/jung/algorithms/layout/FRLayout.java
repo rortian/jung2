@@ -69,7 +69,9 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 	 */
 	@Override
 	public void setSize(Dimension size) {
-		setInitializer(new RandomLocationTransformer<V>(size));
+		if(initialized == false) {
+			setInitializer(new RandomLocationTransformer<V>(size));
+		}
 		super.setSize(size);
         max_dimension = Math.max(size.height, size.width);
 	}

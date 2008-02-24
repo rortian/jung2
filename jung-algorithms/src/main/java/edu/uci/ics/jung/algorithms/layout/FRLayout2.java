@@ -74,7 +74,8 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
 	 */
 	@Override
 	public void setSize(Dimension size) {
-		setInitializer(new RandomLocationTransformer<V>(size));
+		if(initialized == false) 
+			setInitializer(new RandomLocationTransformer<V>(size));
 		super.setSize(size);
 		double t = size.width/50.0;
 		innerBounds.setFrameFromDiagonal(t,t,size.width-t,size.height-t);

@@ -93,7 +93,7 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
 	 */
 	@Override
 	public void setSize(Dimension size) {
-		setInitializer(new RandomLocationTransformer<V>(size));
+		if(initialized == false) setInitializer(new RandomLocationTransformer<V>(size));
 		super.setSize(size);
 	}
     

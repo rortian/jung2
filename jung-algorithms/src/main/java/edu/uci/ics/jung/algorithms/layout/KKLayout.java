@@ -268,7 +268,8 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
 	 */
 	@Override
 	public void setSize(Dimension size) {
-		setInitializer(new RandomLocationTransformer<V>(size));
+		if(initialized == false)
+			setInitializer(new RandomLocationTransformer<V>(size));
 		super.setSize(size);
 	}
 
