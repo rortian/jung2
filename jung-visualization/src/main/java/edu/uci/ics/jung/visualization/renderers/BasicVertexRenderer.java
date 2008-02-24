@@ -16,6 +16,7 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -47,8 +48,15 @@ public class BasicVertexRenderer<V,E> implements Renderer.Vertex<V,E> {
         // get the shape to be rendered
         Shape shape = rc.getVertexShapeTransformer().transform(v);
         
-        Point2D p = layout.transform(v);
-        p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
+        Map<V,Point2D> locationCache = rc.getLocationCache();
+	    Point2D p = (Point2D) locationCache.get(v);
+        if(p == null) {
+            p = layout.transform(v);
+            p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
+            locationCache.put(v, p);
+        }
+//        Point2D p = layout.transform(v);
+       // p = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p);
         float x = (float)p.getX();
         float y = (float)p.getY();
         // create a transform that translates to the location of

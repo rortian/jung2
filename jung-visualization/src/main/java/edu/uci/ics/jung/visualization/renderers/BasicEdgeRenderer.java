@@ -20,6 +20,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -80,10 +81,27 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
         Pair<V> endpoints = graph.getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
-        Point2D p1 = layout.transform(v1);
-        Point2D p2 = layout.transform(v2);
-        p1 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p1);
-        p2 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p2);
+        
+        Map<V,Point2D> locationCache = rc.getLocationCache();
+        
+        Point2D p1 = locationCache.get(v1);
+        if(p1 == null) {
+            
+            p1 = layout.transform(v1);
+            p1 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p1);
+            locationCache.put(v1, p1);
+        }
+	    Point2D p2 = locationCache.get(v2);
+        if(p2 == null) {
+            p2 = layout.transform(v2);
+            p2 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p2);
+            locationCache.put(v2, p2);
+        }
+        
+//        Point2D p1 = layout.transform(v1);
+//        Point2D p2 = layout.transform(v2);
+//        p1 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p1);
+//        p2 = rc.getMultiLayerTransformer().transform(Layer.LAYOUT, p2);
         float x1 = (float) p1.getX();
         float y1 = (float) p1.getY();
         float x2 = (float) p2.getX();
