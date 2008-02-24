@@ -46,6 +46,7 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 
 	private Dimension size;
 	private Graph<V, E> graph;
+	protected boolean initialized;
     
     protected Map<V, Point2D> locations = 
     	LazyMap.decorate(new HashMap<V, Point2D>(),
@@ -71,6 +72,7 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 		Transformer chain = 
 			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
 		this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), chain);
+		initialized = true;
 	}
 	
 	protected AbstractLayout(Graph<V,E> graph, Dimension size) {
@@ -144,6 +146,7 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 		Transformer chain = 
 			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
     	this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), chain);
+    	initialized = true;
     }
     
 	/**
