@@ -94,8 +94,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
     
     protected MultiLayerTransformer multiLayerTransformer = new BasicTransformer();
     
-    protected Map<V,Point2D> locationCache = new HashMap<V,Point2D>();
-    
 	/**
 	 * pluggable support for picking graph elements by
 	 * finding them based on their coordinates.
@@ -590,14 +588,6 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 		this.arrowFillPaintTransformer = arrowFillPaintTransformer;
 		
 	}
-
-	/**
-	 * @return the locationCache
-	 */
-	public Map<V, Point2D> getLocationCache() {
-		return locationCache;
-	}
-	
 }
 
 

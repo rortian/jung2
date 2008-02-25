@@ -210,7 +210,5 @@ public interface RenderContext<V, E> {
 	 */
 	void setPickSupport(GraphElementAccessor<V, E> pickSupport);
 	
-	Map<V, Point2D> getLocationCache();
-
 
 }

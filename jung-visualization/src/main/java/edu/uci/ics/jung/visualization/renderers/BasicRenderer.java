@@ -32,7 +32,6 @@ public class BasicRenderer<V,E> implements Renderer<V, E> {
     
 	public void render(RenderContext<V, E> renderContext, Layout<V, E> layout) {
 		
-		renderContext.getLocationCache().clear();
 		// paint all the edges
         try {
         	for(E e : layout.getGraph().getEdges()) {
