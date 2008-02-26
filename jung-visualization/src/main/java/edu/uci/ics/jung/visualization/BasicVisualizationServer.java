@@ -61,8 +61,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
     
-//    protected Map<V,Point2D> locationMap = new HashMap<V,Point2D>();
-
     /**
      * holds the state of this View
      */
