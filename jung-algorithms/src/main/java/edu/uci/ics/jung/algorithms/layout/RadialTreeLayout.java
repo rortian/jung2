@@ -25,6 +25,7 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Tree;
 
 /**
  * 
@@ -92,6 +93,15 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
         this.roots = getRoots(g);
         this.distX = distx;
         this.distY = disty;
+    }
+    
+    public RadialTreeLayout(Tree<V,E> g)
+    {
+        this.graph = g;
+        this.roots = new ArrayList<V>(1);
+        roots.add(g.getRoot());
+        this.distX = DEFAULT_DISTX;
+        this.distY = DEFAULT_DISTY;
     }
     
     private Collection<V> getRoots(Graph<V,E> graph) {

@@ -24,6 +24,7 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Tree;
 
 /**
  * implements the balloon layout for the supplied Tree
@@ -59,6 +60,13 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     	
     	this.graph = g;
         this.roots = getRoots(g);
+    }
+    
+    public BalloonLayout(Tree<V,E> g)
+    {
+        this.graph = g;
+        this.roots = new ArrayList<V>(1);
+        roots.add(g.getRoot());
     }
     
     private Collection<V> getRoots(Graph<V,E> graph) {
