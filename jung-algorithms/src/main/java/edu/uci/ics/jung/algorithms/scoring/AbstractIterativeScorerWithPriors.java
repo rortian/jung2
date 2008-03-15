@@ -25,7 +25,7 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
 
     protected double alpha;
 
-    protected boolean accept_disconnected_graph;
+    private boolean accept_disconnected_graph;
     
     public AbstractIterativeScorerWithPriors(Graph<V, E> g,
             Transformer<E, ? extends Number> edge_weights, Transformer<V, S> vertex_priors, double alpha)
@@ -48,13 +48,12 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
     {
         super.initialize();
         this.accept_disconnected_graph = true;
-        // initialize output to priors
+        // initialize current values to priors
         for (V v : graph.getVertices())
-            output.put(v, vertex_priors.transform(v));
-
+            setCurrentValue(v, getVertexPrior(v));
     }
     
-    protected abstract S getDisappearingPotential(V v);
+    protected abstract void collectDisappearingPotential(V v);
 
     public void acceptDisconnectedGraph(boolean accept)
     {
@@ -64,16 +63,6 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
     public boolean isDisconnectedGraphOK()
     {
         return this.accept_disconnected_graph;
-    }
-    
-    public S getVertexScore(V v)
-    {
-        return output.get(v);
-    }
-    
-    public void setVertexScore(V v, S s)
-    {
-        output.put(v, s);
     }
     
     protected S getVertexPrior(V v)

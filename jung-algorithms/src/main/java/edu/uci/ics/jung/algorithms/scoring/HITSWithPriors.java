@@ -11,8 +11,6 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import java.util.Map;
-
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -20,6 +18,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E, Pair<Double>>
 {
+    protected double disappearing_hub;
+    protected double disappearing_auth;
 
     public HITSWithPriors(Graph<V, E> g,
             Transformer<E, ? extends Number> edge_weights,
@@ -35,91 +35,73 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
     }
 
     
-    public void step()
+    public double update(V v)
     {
-        double disappearing_hub = 0;
-        double disappearing_auth = 0;
+        collectDisappearingPotential(v);
         
-        for (V v : graph.getVertices())
+        double auth = 0;
+        for (E e : graph.getInEdges(v))
         {
-            Pair<Double> disappearing_potential = getDisappearingPotential(v);
-            disappearing_hub += disappearing_potential.getFirst();
-            disappearing_auth += disappearing_potential.getSecond();
-            
-            double auth = 0;
-            for (E e : graph.getInEdges(v))
-            {
-                V w = graph.getOpposite(v, e);
-                auth += (getHubScore(w) * getEdgeWeight(w, e).doubleValue());
-            }
-            
-            double hub = 0;
-            for (E e : graph.getOutEdges(v))
-            {
-                V x = graph.getOpposite(v,e);
-                hub += (getAuthScore(x) * getEdgeWeight(x, e).doubleValue()); 
-            }
-            
-            // modify total_input according to alpha
-            auth = auth * (1 - alpha) + getAuthPrior(v) * alpha;
-            hub = hub * (1 - alpha) + getHubPrior(v) * alpha;
-            
-            // update max_delta as appropriate
-            this.max_delta = Math.max(this.max_delta, Math.abs(getHubScore(v) - hub));
-            this.max_delta = Math.max(this.max_delta, Math.abs(getAuthScore(v) - auth));
-
-            setVertexScore(v, new Pair<Double>(hub, auth));
+            V w = graph.getOpposite(v, e);
+            auth += (getHubScore(w) * getEdgeWeight(w, e).doubleValue());
         }
+        
+        double hub = 0;
+        for (E e : graph.getOutEdges(v))
+        {
+            V x = graph.getOpposite(v,e);
+            hub += (getAuthScore(x) * getEdgeWeight(x, e).doubleValue()); 
+        }
+        
+        // modify total_input according to alpha
+        auth = auth * (1 - alpha) + getAuthPrior(v) * alpha;
+        hub = hub * (1 - alpha) + getHubPrior(v) * alpha;
+        setOutputValue(v, new Pair<Double>(hub, auth));
 
+        return Math.max(Math.abs(getHubScore(v) - hub), Math.abs(getAuthScore(v) - auth));
+    }
+
+    protected void afterStep()
+    {
         if (disappearing_hub > 0 || disappearing_auth > 0)
         {
             for (V v : graph.getVertices())
             {
-                double new_hub = getHubScore(v) + (1 - alpha) * (disappearing_hub * getHubPrior(v));
-                double new_auth = getAuthScore(v) + (1 - alpha) * (disappearing_hub * getAuthPrior(v));
-                setVertexScore(v, new Pair<Double>(new_hub, new_auth));
+                double new_hub = getOutputValue(v).getFirst() + (1 - alpha) * (disappearing_hub * getHubPrior(v));
+                double new_auth = getOutputValue(v).getSecond() + (1 - alpha) * (disappearing_hub * getAuthPrior(v));
+                setOutputValue(v, new Pair<Double>(new_hub, new_auth));
             }
         }
-        
-        // swap output and current values
-        Map<V, Pair<Double>> tmp = output;
-        output = current_values;
-        current_values = tmp;
-        
-        total_iterations++;
+        super.afterStep();
     }
     
-    protected Pair<Double> getDisappearingPotential(V v)
+    protected void collectDisappearingPotential(V v)
     {
-        double hub = 0;
-        double auth = 0;
         if (graph.outDegree(v) == 0)
         {
-            if (accept_disconnected_graph)
-                hub = getAuthScore(v);
+            if (isDisconnectedGraphOK())
+                disappearing_hub += getAuthScore(v);
             else
                 throw new IllegalArgumentException("Outdegree of " + v + " must be > 0");
         }
         if (graph.inDegree(v) == 0)
         {
-            if (accept_disconnected_graph)
-                auth = getHubScore(v);
+            if (isDisconnectedGraphOK())
+                disappearing_auth += getHubScore(v);
             else
                 throw new IllegalArgumentException("Indegree of " + v + " must be > 0");
         }
-        
-        return new Pair<Double>(hub, auth);
     }
 
     
     protected double getHubScore(V v)
     {
-        return getVertexScore(v).getFirst();
+        return getCurrentValue(v).getFirst();
     }
     
     protected double getAuthScore(V v)
     {
-        return getVertexScore(v).getSecond();
+        return getCurrentValue(v).getSecond();
     }
 
     protected double getHubPrior(V v)

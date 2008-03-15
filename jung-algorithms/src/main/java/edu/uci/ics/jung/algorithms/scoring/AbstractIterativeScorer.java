@@ -21,7 +21,7 @@ import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 
-public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
+public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext, VertexScorer<V,T>
 {
     /**
      * Maximum number of iterations to use before terminating.  Defaults to 100.
@@ -47,18 +47,37 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     /**
      * 
      */
-    protected Transformer<E, ? extends Number> edge_weights;
+    private Transformer<E, ? extends Number> edge_weights;
     
     /**
      * 
      */
-    protected Map<V, T> output;
+    private Map<V, T> output;
     
     /**
      * 
      */
-    protected Map<V, T> current_values;
+    private Map<V, T> current_values;
     
+    protected void setOutputValue(V v, T value)
+    {
+        output.put(v, value);
+    }
+    
+    protected T getOutputValue(V v)
+    {
+        return output.get(v);
+    }
+    
+    protected T getCurrentValue(V v)
+    {
+        return current_values.get(v);
+    }
+    
+    protected void setCurrentValue(V v, T value)
+    {
+        current_values.put(v, value);
+    }
     
     /**
      * The largest change seen so far among all vertex scores.
@@ -77,22 +96,23 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     {
         this(g, (Transformer<E, ? extends Number>)
                 (g instanceof DirectedGraph ? 
-                        new UniformOut<V,E>(g) : 
+                        new UniformOut<V,E>((DirectedGraph<V,E>)g) : 
                         new UniformIncident<V,E>(g)));
     }
     
     protected void initialize()
     {
         this.total_iterations = 0;
-        this.max_delta = Double.MAX_VALUE;
+        this.max_delta = Double.MIN_VALUE;
         this.current_values = new HashMap<V, T>();
         this.output = new HashMap<V, T>();
     }
     
     public void evaluate()
     {
-        while (!done())
+        do
             step();
+        while (!done());
     }
     
     public boolean done()
@@ -100,8 +120,33 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
         return total_iterations > max_iterations || max_delta < tolerance;
     }
 
-    public abstract void step();
+    public void step()
+    {
+        for (V v : graph.getVertices())
+        {
+            double diff = update(v);
+            updateMaxDelta(v, diff);
+        }
+        afterStep();
+        total_iterations++;
+    }
 
+    protected abstract double update(V v);
+
+    protected void updateMaxDelta(V v, double diff)
+    {
+        max_delta = Math.max(max_delta, diff);
+    }
+    
+    protected void afterStep()
+    {
+        Map<V, T> tmp = output;
+        output = current_values;
+        current_values = tmp;
+        
+        total_iterations++;
+    }
+    
     public Transformer<V, T> getVertexScores()
     {
         return MapTransformer.getInstance(output);
