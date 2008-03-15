@@ -11,13 +11,13 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 public class UniformIncident<V, E> implements VertexEdgeWeight<V,E,Double>
 {
-    private Graph<V,E> graph;
+    private Hypergraph<V,E> graph;
     
-    public UniformIncident(Graph<V,E> graph)
+    public UniformIncident(Hypergraph<V,E> graph)
     {
         this.graph = graph;
     }
