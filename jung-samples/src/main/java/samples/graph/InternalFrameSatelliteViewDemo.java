@@ -101,7 +101,7 @@ public class InternalFrameSatelliteViewDemo {
         Layout<String,Number> layout = new ISOMLayout<String,Number>(graph);
 
         vv = new VisualizationViewer<String,Number>(layout, new Dimension(600,600));
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
 
         // add my listener for ToolTips
@@ -111,7 +111,7 @@ public class InternalFrameSatelliteViewDemo {
 
         satellite =
             new SatelliteVisualizationViewer<String,Number>(vv, new Dimension(200,200));
-        satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
+        satellite.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(satellite.getPickedEdgeState(), Color.black, Color.cyan));
         satellite.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(satellite.getPickedVertexState(), Color.red, Color.yellow));
 
         ScalingControl satelliteScaler = new CrossoverScalingControl();

@@ -158,7 +158,7 @@ public class VertexImageShaperDemo extends JApplet {
         Transformer<Number,Paint> vpf = 
             new PickableVertexPaintTransformer<Number>(vv.getPickedVertexState(), Color.white, Color.yellow);
         vv.getRenderContext().setVertexFillPaintTransformer(vpf);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         

@@ -168,9 +168,9 @@ public class MultiViewDemo extends JApplet {
         vv3.setPickedEdgeState(pes);
         
         // set an edge paint function that shows picked edges
-        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
-        vv2.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
-        vv3.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.red));
+        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(pes, Color.black, Color.red));
+        vv2.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(pes, Color.black, Color.red));
+        vv3.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(pes, Color.black, Color.red));
         vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));
         vv2.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(pvs, Color.blue, Color.cyan));
         vv3.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(pvs, Color.red, Color.yellow));

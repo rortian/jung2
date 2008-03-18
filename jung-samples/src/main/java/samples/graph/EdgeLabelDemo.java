@@ -114,7 +114,7 @@ public class EdgeLabelDemo extends JApplet {
             }
         };
         vv.getRenderContext().setEdgeLabelTransformer(stringer);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
         // add my listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller());

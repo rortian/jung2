@@ -276,11 +276,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         // uses a gradient edge if unpicked, otherwise uses picked selection
         edgeDrawPaint = 
             new GradientPickedEdgePaintFunction<Integer,Number>(
-                    new PickableEdgePaintTransformer<Integer,Number>(
+                    new PickableEdgePaintTransformer<Number>(
                             vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
         edgeFillPaint = 
             new GradientPickedEdgePaintFunction<Integer,Number>(
-                    new PickableEdgePaintTransformer<Integer,Number>(
+                    new PickableEdgePaintTransformer<Number>(
                             vv.getPickedEdgeState(),Color.black,Color.cyan), vv);
         
         vv.getRenderContext().setVertexFillPaintTransformer(seedFillColor);

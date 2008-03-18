@@ -26,7 +26,7 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  * @author Joshua O'Madadhain
  * 
  */
-public class PickableEdgePaintTransformer<V,E> implements Transformer<E,Paint> {
+public class PickableEdgePaintTransformer<E> implements Transformer<E,Paint> {
     protected PickedInfo<E> pi;
     protected Paint draw_paint;
     protected Paint picked_paint;

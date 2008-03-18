@@ -91,7 +91,7 @@ public class VertexLabelPositionDemo extends JApplet {
         PickedState<String> ps = vv.getPickedVertexState();
         PickedState<Number> pes = vv.getPickedEdgeState();
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(ps, Color.red, Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(pes, Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.W);
         

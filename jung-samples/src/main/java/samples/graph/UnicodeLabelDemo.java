@@ -86,7 +86,7 @@ public class UnicodeLabelDemo {
         loadImages(v, vertexIconFunction.getIconMap());
         vertexIconShapeFunction.setIconMap(vertexIconFunction.getIconMap());
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.white,  Color.yellow));
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer,Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.lightGray));
 
         vv.setBackground(Color.white);
 

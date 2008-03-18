@@ -130,7 +130,7 @@ public class SubLayoutDemo extends JApplet {
         vv =  new VisualizationViewer<String,Number>(visualizationModel, preferredSize);
         
         ps = vv.getPickedVertexState();
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.red));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.red));
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), 
                 Color.red, Color.yellow));
         vv.setBackground(Color.white);

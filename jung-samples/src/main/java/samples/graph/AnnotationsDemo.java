@@ -102,7 +102,7 @@ public class AnnotationsDemo<V, E> extends JApplet {
         final VisualizationViewer<String,Number> vv = 
             new VisualizationViewer<String,Number>(vm, preferredSize1);
         vv.setBackground(Color.white);
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv.getPickedVertexState(), Color.red, Color.yellow));
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);

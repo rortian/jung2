@@ -166,10 +166,10 @@ public class MinimumSpanningTreeDemo extends JApplet {
 
         
         // set an edge paint function that will show picking for edges
-        vv0.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv0.getPickedEdgeState(), Color.black, Color.red));
+        vv0.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv0.getPickedEdgeState(), Color.black, Color.red));
         vv0.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv0.getPickedVertexState(),
                 Color.red, Color.yellow));
-        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<String,Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
+        vv1.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv1.getPickedEdgeState(), Color.black, Color.red));
         vv1.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<String>(vv1.getPickedVertexState(),
                 Color.red, Color.yellow));
         

@@ -75,7 +75,7 @@ public class ImageEdgeLabelDemo extends JApplet {
         layout.setMaxIterations(100);
         vv =  new VisualizationViewer<Number, Number>(layout, new Dimension(400,400));
         
-        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number, Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
+        vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
 
         vv.setBackground(Color.white);
         
