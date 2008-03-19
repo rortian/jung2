@@ -81,12 +81,12 @@ public class BasicEdgeLabelRenderer<V,E> implements Renderer.EdgeLabel<V,E> {
 
         parallelOffset += rc.getParallelEdgeIndexFunction().getIndex(graph, e);
 
+        parallelOffset *= d.height;
         if(edgeShape instanceof Ellipse2D) {
             parallelOffset += edgeShape.getBounds().getHeight();
             parallelOffset = -parallelOffset;
         }
         
-        parallelOffset *= d.height;
         
         AffineTransform old = g.getTransform();
         AffineTransform xform = new AffineTransform(old);
