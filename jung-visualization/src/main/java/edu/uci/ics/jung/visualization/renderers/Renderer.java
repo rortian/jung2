@@ -30,10 +30,10 @@ public interface Renderer<V,E> {
     void setEdgeRenderer(Renderer.Edge<V,E> r);
     void setVertexLabelRenderer(Renderer.VertexLabel<V,E> r);
     void setEdgeLabelRenderer(Renderer.EdgeLabel<V,E> r);
-    Renderer.VertexLabel getVertexLabelRenderer();
-    Renderer.Vertex getVertexRenderer();
-    Renderer.Edge getEdgeRenderer();
-    Renderer.EdgeLabel getEdgeLabelRenderer();
+    Renderer.VertexLabel<V,E> getVertexLabelRenderer();
+    Renderer.Vertex<V,E> getVertexRenderer();
+    Renderer.Edge<V,E> getEdgeRenderer();
+    Renderer.EdgeLabel<V,E> getEdgeLabelRenderer();
 
 	interface Vertex<V,E> {
 		void paintVertex(RenderContext<V,E> rc, Layout<V,E> layout, V v);
