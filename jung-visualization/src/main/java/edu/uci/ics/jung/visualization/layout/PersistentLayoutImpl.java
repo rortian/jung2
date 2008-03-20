@@ -23,13 +23,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.util.Caching;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 
 
@@ -43,7 +41,7 @@ import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
  *  
  */
 public class PersistentLayoutImpl<V, E> extends ObservableCachingLayout<V,E>
-    implements PersistentLayout<V,E> {
+    implements PersistentLayout<V,E>,  ChangeEventSupport, Caching {
 
     /**
      * a container for Vertices
@@ -66,15 +64,10 @@ public class PersistentLayoutImpl<V, E> extends ObservableCachingLayout<V,E>
      * @param layout 
      */
     public PersistentLayoutImpl(Layout<V,E> layout) {
-        super(new ObservableCachingLayout<V,E>(layout));
+        super(layout);
         this.map = LazyMap.decorate(new HashMap<V,Point>(), new RandomPointFactory(getSize()));
 
         this.dontmove = new HashSet<V>();
-        ((ChangeEventSupport)getDelegate()).addChangeListener(new ChangeListener() {
-        	public void stateChanged(ChangeEvent e) {
-        		fireStateChanged();
-        	}
-        });
     }
 
     /**
@@ -176,6 +169,6 @@ public class PersistentLayoutImpl<V, E> extends ObservableCachingLayout<V,E>
 	            double y = Math.random() * d.height;
 				return new Point(x,y);
 		}
-    	
     }
+
 }
