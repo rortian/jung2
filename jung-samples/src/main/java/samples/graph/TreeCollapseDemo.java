@@ -48,8 +48,8 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseForest;
-import edu.uci.ics.jung.graph.SparseTree;
+import edu.uci.ics.jung.graph.DelegateForest;
+import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
@@ -89,7 +89,7 @@ public class TreeCollapseDemo extends JApplet {
 		new Factory<Tree<String,Integer>> () {
 
 		public Tree<String, Integer> create() {
-			return new SparseTree<String,Integer>(graphFactory);
+			return new DelegateTree<String,Integer>(graphFactory);
 		}
 	};
 	
@@ -126,7 +126,7 @@ public class TreeCollapseDemo extends JApplet {
     public TreeCollapseDemo() {
 
         // create a simple graph for the demo
-        graph = new SparseForest<String,Integer>();
+        graph = new DelegateForest<String,Integer>();
 
         createTree();
 

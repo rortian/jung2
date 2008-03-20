@@ -23,7 +23,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class UndirectedSparseGraph<V, E> extends AbstractSparseGraph<V, E>
+public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         implements UndirectedGraph<V, E>, Serializable
 {
 
@@ -109,9 +109,11 @@ public class UndirectedSparseGraph<V, E> extends AbstractSparseGraph<V, E>
     
     public Collection<E> findEdgeSet(V v1, V v2)
     {
-        ArrayList<E> edge_collection = new ArrayList<E>(1);
         if (!containsVertex(v1) || !containsVertex(v2))
-            return edge_collection;
+            return null;
+        ArrayList<E> edge_collection = new ArrayList<E>(1);
+//        if (!containsVertex(v1) || !containsVertex(v2))
+//            return edge_collection;
         E e = findEdge(v1, v2);
         if (e == null)
             return edge_collection;
@@ -202,11 +204,15 @@ public class UndirectedSparseGraph<V, E> extends AbstractSparseGraph<V, E>
 
     public Collection<V> getNeighbors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         return Collections.unmodifiableCollection(vertices.get(vertex).keySet());
     }
 
     public Collection<E> getIncidentEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         return Collections.unmodifiableCollection(vertices.get(vertex).values());
     }
 

@@ -25,7 +25,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 public class SparseGraph<V,E> 
-    extends AbstractSparseGraph<V,E> 
+    extends AbstractGraph<V,E> 
     implements Graph<V,E>, Serializable
 {
     public static <V,E> Factory<Graph<V,E>> getFactory() 
@@ -72,9 +72,9 @@ public class SparseGraph<V,E>
 
     public Collection<E> findEdgeSet(V v1, V v2)
     {
-        Collection<E> edges = new ArrayList<E>(2);
         if (!containsVertex(v1) || !containsVertex(v2))
-            return edges;
+            return null;
+        Collection<E> edges = new ArrayList<E>(2);
         E e1 = vertex_maps.get(v1)[OUTGOING].get(v2);
         if (e1 != null)
             edges.add(e1);
@@ -99,8 +99,9 @@ public class SparseGraph<V,E>
         // edge, we're fine
         E connection = findEdge(v1, v2);
         if (connection != null && getEdgeType(connection) == edgeType)
-            throw new IllegalArgumentException("This graph does not accept parallel edges; " + new_endpoints + 
-                    " are already connected by " + connection); 
+            return false;
+//            throw new IllegalArgumentException("This graph does not accept parallel edges; " + new_endpoints + 
+//                    " are already connected by " + connection); 
         
 
         if (!containsVertex(v1))
@@ -130,6 +131,9 @@ public class SparseGraph<V,E>
     
     public Collection<E> getInEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         // combine directed inedges and undirected
         Collection<E> in = new HashSet<E>(vertex_maps.get(vertex)[INCOMING].values());
         in.addAll(vertex_maps.get(vertex)[INCIDENT].values());
@@ -138,6 +142,9 @@ public class SparseGraph<V,E>
 
     public Collection<E> getOutEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         // combine directed outedges and undirected
         Collection<E> out = new HashSet<E>(vertex_maps.get(vertex)[OUTGOING].values());
         out.addAll(vertex_maps.get(vertex)[INCIDENT].values());
@@ -146,6 +153,9 @@ public class SparseGraph<V,E>
 
     public Collection<V> getPredecessors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         // consider directed inedges and undirected
         Collection<V> preds = new HashSet<V>(vertex_maps.get(vertex)[INCOMING].keySet());
         preds.addAll(vertex_maps.get(vertex)[INCIDENT].keySet());
@@ -154,6 +164,9 @@ public class SparseGraph<V,E>
 
     public Collection<V> getSuccessors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         // consider directed outedges and undirected
         Collection<V> succs = new HashSet<V>(vertex_maps.get(vertex)[OUTGOING].keySet());
         succs.addAll(vertex_maps.get(vertex)[INCIDENT].keySet());
@@ -177,7 +190,8 @@ public class SparseGraph<V,E>
         else if (edgeType == EdgeType.UNDIRECTED)
             return Collections.unmodifiableCollection(undirected_edges.keySet());
         else
-            return Collections.unmodifiableCollection(new ArrayList<E>(0));
+            return null;
+//            return Collections.unmodifiableCollection(new ArrayList<E>(0));
     }
 
     public Pair<V> getEndpoints(E edge)
@@ -218,6 +232,9 @@ public class SparseGraph<V,E>
 
     public boolean isSource(V vertex, E edge)
     {
+        if (!containsVertex(vertex) || !containsEdge(edge))
+            return false;
+        
         V source = getSource(edge);
         if (source != null)
             return source.equals(vertex);
@@ -227,6 +244,9 @@ public class SparseGraph<V,E>
 
     public boolean isDest(V vertex, E edge)
     {
+        if (!containsVertex(vertex) || !containsEdge(edge))
+            return false;
+        
         V dest = getDest(edge);
         if (dest != null)
             return dest.equals(vertex);
@@ -268,6 +288,8 @@ public class SparseGraph<V,E>
 
     public Collection<V> getNeighbors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         // consider directed edges and undirected edges
         Collection<V> neighbors = new HashSet<V>(vertex_maps.get(vertex)[INCOMING].keySet());
         neighbors.addAll(vertex_maps.get(vertex)[OUTGOING].keySet());
@@ -277,6 +299,8 @@ public class SparseGraph<V,E>
 
     public Collection<E> getIncidentEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         Collection<E> incident = new HashSet<E>(vertex_maps.get(vertex)[INCOMING].values());
         incident.addAll(vertex_maps.get(vertex)[OUTGOING].values());
         incident.addAll(vertex_maps.get(vertex)[INCIDENT].values());

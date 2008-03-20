@@ -17,6 +17,6 @@ public class SparseTreeTest extends AbstractSparseTreeTest {
 			public Integer create() {
 				return i++;
 			}};
-		tree = new SparseTree<String,Integer>(graphFactory);
+		tree = new DelegateTree<String,Integer>(graphFactory);
 	}
 }

@@ -34,8 +34,8 @@ import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.algorithms.shortestpath.MinimumSpanningForest2;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseForest;
-import edu.uci.ics.jung.graph.SparseTree;
+import edu.uci.ics.jung.graph.DelegateForest;
+import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.util.TestGraphs;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -103,7 +103,7 @@ public class MinimumSpanningTreeDemo extends JApplet {
         
         MinimumSpanningForest2<String,Number> prim = 
         	new MinimumSpanningForest2<String,Number>(graph,
-        		new SparseForest<String,Number>(), SparseTree.<String,Number>getFactory(),
+        		new DelegateForest<String,Number>(), DelegateTree.<String,Number>getFactory(),
         		(Transformer<Number,Double>)new ConstantTransformer(1.0));
         
         tree = prim.getForest();

@@ -24,7 +24,7 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implements
+public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         DirectedGraph<V, E>, Serializable
 {
     public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
@@ -52,10 +52,8 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
         V source = new_endpoints.getFirst();
         V dest = new_endpoints.getSecond();
         
-        E connection = findEdge(source, dest);
-        if (connection != null)
-            throw new IllegalArgumentException("This graph does not accept parallel edges; " + new_endpoints + 
-                    " are already connected by " + connection); 
+        if (findEdge(source, dest) != null)
+            return false;
         
         edges.put(edge, new_endpoints);
 
@@ -88,9 +86,9 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public Collection<E> findEdgeSet(V v1, V v2)
     {
-        ArrayList<E> edge_collection = new ArrayList<E>(1);
         if (!containsVertex(v1) || !containsVertex(v2))
-            return edge_collection;
+            return null;
+        ArrayList<E> edge_collection = new ArrayList<E>(1);
         E e = findEdge(v1, v2);
         if (e == null)
             return edge_collection;
@@ -120,21 +118,29 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
     
     public Collection<E> getInEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         return Collections.unmodifiableCollection(getIncoming_internal(vertex));
     }
 
     public Collection<E> getOutEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         return Collections.unmodifiableCollection(getOutgoing_internal(vertex));
     }
 
     public Collection<V> getPredecessors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         return Collections.unmodifiableCollection(getPreds_internal(vertex));
     }
 
     public Collection<V> getSuccessors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
         return Collections.unmodifiableCollection(getSuccs_internal(vertex));
     }
 
@@ -158,6 +164,8 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public Pair<V> getEndpoints(E edge)
     {
+        if (!containsEdge(edge))
+            return null;
         return edges.get(edge);
     }
 
@@ -171,21 +179,29 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public V getSource(E directed_edge)
     {
+        if (!containsEdge(directed_edge))
+            return null;
         return edges.get(directed_edge).getFirst();
     }
 
     public V getDest(E directed_edge)
     {
+        if (!containsEdge(directed_edge))
+            return null;
         return edges.get(directed_edge).getSecond();
     }
 
     public boolean isSource(V vertex, E edge)
     {
+        if (!containsEdge(edge) || !containsVertex(vertex))
+            return false;
         return vertex.equals(this.getEndpoints(edge).getFirst());
     }
 
     public boolean isDest(V vertex, E edge)
     {
+        if (!containsEdge(edge) || !containsVertex(vertex))
+            return false;
         return vertex.equals(this.getEndpoints(edge).getSecond());
     }
 
@@ -221,6 +237,9 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public Collection<V> getNeighbors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         Collection<V> neighbors = new HashSet<V>();
         neighbors.addAll(getPreds_internal(vertex));
         neighbors.addAll(getSuccs_internal(vertex));
@@ -229,6 +248,9 @@ public class DirectedSparseGraph<V,E> extends AbstractSparseGraph<V, E> implemen
 
     public Collection<E> getIncidentEdges(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         Collection<E> incident_edges = new HashSet<E>();
         incident_edges.addAll(getIncoming_internal(vertex));
         incident_edges.addAll(getOutgoing_internal(vertex));

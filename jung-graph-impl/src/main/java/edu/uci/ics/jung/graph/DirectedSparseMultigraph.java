@@ -28,7 +28,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 @SuppressWarnings("serial")
 public class DirectedSparseMultigraph<V,E> 
-    extends AbstractSparseGraph<V,E>
+    extends AbstractGraph<V,E>
     implements DirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
 
 	public static <V,E> Factory<DirectedGraph<V,E>> getFactory() {
@@ -77,7 +77,7 @@ public class DirectedSparseMultigraph<V,E>
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");
     	}
-        if (!vertices.containsKey(vertex)) {
+        if (!containsVertex(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new HashSet<E>(), new HashSet<E>()));
             return true;
         } else {
@@ -119,14 +119,23 @@ public class DirectedSparseMultigraph<V,E>
 
     
     public Collection<E> getInEdges(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+
         return Collections.unmodifiableCollection(getIncoming_internal(vertex));
     }
 
     public Collection<E> getOutEdges(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+        
         return Collections.unmodifiableCollection(getOutgoing_internal(vertex));
     }
 
     public Collection<V> getPredecessors(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+
         Set<V> preds = new HashSet<V>();
         for (E edge : getIncoming_internal(vertex))
             preds.add(this.getSource(edge));
@@ -135,6 +144,9 @@ public class DirectedSparseMultigraph<V,E>
     }
 
     public Collection<V> getSuccessors(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+        
         Set<V> succs = new HashSet<V>();
         for (E edge : getOutgoing_internal(vertex))
             succs.add(this.getDest(edge));
@@ -143,19 +155,21 @@ public class DirectedSparseMultigraph<V,E>
     }
 
     public Collection<V> getNeighbors(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+        
         Collection<V> neighbors = new HashSet<V>();
         for (E edge : getIncoming_internal(vertex))
             neighbors.add(this.getSource(edge));
         for (E edge : getOutgoing_internal(vertex))
             neighbors.add(this.getDest(edge));
         return Collections.unmodifiableCollection(neighbors);
-//        out.addAll(this.getPredecessors(vertex));
-//        out.addAll(this.getSuccessors(vertex));
-//        return out;
-//        return CollectionUtils.union(this.getPredecessors(vertex), this.getSuccessors(vertex));
     }
 
     public Collection<E> getIncidentEdges(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+        
         Collection<E> incident = new HashSet<E>();
         incident.addAll(getIncoming_internal(vertex));
         incident.addAll(getOutgoing_internal(vertex));
@@ -201,10 +215,10 @@ public class DirectedSparseMultigraph<V,E>
         V source = new_endpoints.getFirst();
         V dest = new_endpoints.getSecond();
 
-        if (!vertices.containsKey(source))
+        if (!containsVertex(source))
             this.addVertex(source);
         
-        if (!vertices.containsKey(dest))
+        if (!containsVertex(dest))
             this.addVertex(dest);
         
         getIncoming_internal(dest).add(edge);
@@ -215,18 +229,26 @@ public class DirectedSparseMultigraph<V,E>
 
     
     public V getSource(E edge) {
+        if (!containsEdge(edge))
+            return null;
         return this.getEndpoints(edge).getFirst();
     }
 
     public V getDest(E edge) {
+        if (!containsEdge(edge))
+            return null;
         return this.getEndpoints(edge).getSecond();
     }
 
     public boolean isSource(V vertex, E edge) {
+        if (!containsEdge(edge) || !containsVertex(vertex))
+            return false;
         return vertex.equals(this.getEndpoints(edge).getFirst());
     }
 
     public boolean isDest(V vertex, E edge) {
+        if (!containsEdge(edge) || !containsVertex(vertex))
+            return false;
         return vertex.equals(this.getEndpoints(edge).getSecond());
     }
 

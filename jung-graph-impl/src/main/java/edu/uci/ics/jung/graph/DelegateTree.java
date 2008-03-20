@@ -21,12 +21,12 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, Serializable {
+public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, Serializable {
 	
 	public static final <V,E> Factory<Tree<V,E>> getFactory() {
 		return new Factory<Tree<V,E>> () {
 			public Tree<V,E> create() {
-				return new SparseTree<V,E>(new DirectedSparseMultigraph<V,E>());
+				return new DelegateTree<V,E>(new DirectedSparseMultigraph<V,E>());
 			}
 		};
 	}
@@ -34,7 +34,7 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	protected V root;
     protected Map<V, Integer> vertex_depths;
     
-    public SparseTree() {
+    public DelegateTree() {
     	this(DirectedSparseMultigraph.<V,E>getFactory());
     }
 
@@ -43,15 +43,20 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * @param graphFactory must create a DirectedGraph to use as a delegate
 	 * @param edgeFactory must create unique edges to connect tree nodes
 	 */
-	public SparseTree(Factory<DirectedGraph<V,E>> graphFactory) {
+	public DelegateTree(Factory<DirectedGraph<V,E>> graphFactory) {
 		super(graphFactory.create());
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
-	public SparseTree(DirectedGraph<V,E> graph) {
+	/**
+	 * Creates a new <code>DelegateTree</code> which delegates to <code>graph</code>.
+	 * Assumes that <code>graph</code> is already a tree; if it's not, future behavior
+	 * of this instance is undefined.
+	 */
+	public DelegateTree(DirectedGraph<V,E> graph) {
 		super(graph);
-		if(graph.getVertexCount() != 0) throw new IllegalArgumentException(
-			"Passed DirectedGraph must be empty");
+//		if(graph.getVertexCount() != 0) throw new IllegalArgumentException(
+//			"Passed DirectedGraph must be empty");
         this.vertex_depths = new HashMap<V, Integer>();
 	}
 	
@@ -103,7 +108,7 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
             vertex_depths.put(vertex, 0);
 			return delegate.addVertex(vertex);
 		} else {
-			throw new UnsupportedOperationException("Unless you are setting the root, use addChild(V parent, V child)");
+			throw new UnsupportedOperationException("Unless you are setting the root, use addChild()");
 		}
 	}
 
@@ -115,6 +120,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * @see edu.uci.ics.jung.graph.Graph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
+	    if (!delegate.containsVertex(vertex))
+	        return false;
 		for(V v : getChildren(vertex)) {
 			removeVertex(v);
             vertex_depths.remove(v);
@@ -183,6 +190,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * get the number of children of the passed parent node
 	 */
 	public int getChildCount(V parent) {
+	    if (!delegate.containsVertex(parent))
+	        return 0;
 		return getChildren(parent).size();
 	}
 
@@ -190,6 +199,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * get the immediate children nodes of the passed parent
 	 */
 	public Collection<V> getChildren(V parent) {
+        if (!delegate.containsVertex(parent))
+            return null;
 		return delegate.getSuccessors(parent);
 	}
 
@@ -197,6 +208,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * get the single parent node of the passed child
 	 */
 	public V getParent(V child) {
+        if (!delegate.containsVertex(child))
+            return null;
 		Collection<V> predecessors = delegate.getPredecessors(child);
 		if(predecessors.size() == 0) {
 			return null;
@@ -208,13 +221,15 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * returns an ordered list of the nodes beginning at the root
 	 * and ending at the passed child node, including all intermediate
 	 * nodes.
-	 * @param child the last node in the path from the root
+	 * @param vertex the last node in the path from the root
 	 * @return an ordered list of the nodes from root to child
 	 */
-	public List<V> getPath(V child) {
+	public List<V> getPath(V vertex) {
+        if (!delegate.containsVertex(vertex))
+            return null;
 		List<V> list = new ArrayList<V>();
-		list.add(child);
-		V parent = getParent(child);
+		list.add(vertex);
+		V parent = getParent(vertex);
 		while(parent != null) {
 			list.add(list.size(), parent);
 			parent = getParent(parent);
@@ -282,6 +297,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * @return 
 	 */
 	public boolean isInternal(V v) {
+	    if (!delegate.containsVertex(v))
+	        return false;
 		return isLeaf(v) == false && isRoot(v) == false;
 	}
 
@@ -290,6 +307,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * a leaf (has no child nodes)
 	 */
 	public boolean isLeaf(V v) {
+        if (!delegate.containsVertex(v))
+            return false;
 		return getChildren(v).size() == 0;
 	}
 
@@ -298,6 +317,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 	 * (has no children)
 	 */
 	public boolean isRoot(V v) {
+        if (!delegate.containsVertex(v))
+            return false;
 		return getParent(v) == null;
 	}
 
@@ -307,6 +328,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 
     public int getIncidentCount(E edge)
     {
+        if (!delegate.containsEdge(edge))
+            return 0;
         // all edges in a tree connect exactly 2 vertices
         return 2;
     }
@@ -329,8 +352,8 @@ public class SparseTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, S
 		return Collections.<Tree<V,E>>singleton(this);
 	}
 
-	public void addTree(Tree<V, E> tree) {
-		// TODO Auto-generated method stub
-		
-	}
+//	public void addTree(Tree<V, E> tree) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }

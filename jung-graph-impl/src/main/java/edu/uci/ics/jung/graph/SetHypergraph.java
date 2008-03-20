@@ -105,6 +105,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     
     public Collection<V> getNeighbors(V vertex)
     {
+        if (!containsVertex(vertex))
+            return null;
+        
         Set<V> neighbors = new HashSet<V>();
         for (H hyperedge : vertices.get(vertex))
         {
@@ -125,6 +128,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     
     public H findEdge(V v1, V v2)
     {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return null;
+        
         for (H h : getIncidentEdges(v1))
         {
             if (areIncident(v2, h))
@@ -135,6 +141,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
 
     public Collection<H> findEdgeSet(V v1, V v2)
     {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return null;
+        
         Collection<H> edges = new ArrayList<H>();
         for (H h : getIncidentEdges(v1))
         {
@@ -146,8 +155,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     
     public boolean addVertex(V vertex)
     {
-    	if(vertex == null) throw new IllegalArgumentException("cannot add a null vertex");
-        if (vertices.containsKey(vertex))
+    	if(vertex == null) 
+    	    throw new IllegalArgumentException("cannot add a null vertex");
+        if (containsVertex(vertex))
             return false;
         vertices.put(vertex, new HashSet<H>());
         return true;
@@ -179,6 +189,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     
     public boolean areNeighbors(V v1, V v2)
     {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return false;
+        
         if (vertices.get(v2).isEmpty())
             return false;
         for (H hyperedge : vertices.get(v1))
@@ -191,21 +204,33 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     
     public boolean areIncident(V vertex, H edge)
     {
+        if (!containsVertex(vertex) || !containsEdge(edge))
+            return false;
+        
         return vertices.get(vertex).contains(edge);
     }
     
     public int degree(V vertex)
     {
+        if (!containsVertex(vertex))
+            return 0;
+        
         return vertices.get(vertex).size();
     }
     
     public int getNeighborCount(V vertex)
     {
+        if (!containsVertex(vertex))
+            return 0;
+        
         return getNeighbors(vertex).size();
     }
     
     public int getIncidentCount(H edge)
     {
+        if (!containsEdge(edge))
+            return 0;
+        
         return edges.get(edge).size();
     }
 

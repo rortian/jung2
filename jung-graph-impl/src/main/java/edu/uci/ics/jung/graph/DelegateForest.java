@@ -12,20 +12,19 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
 
 /**
  * An implementation of the Forest<V,E> interface that aggregates 
- * a collection of Tree<V,E>
+ * a collection of Tree<V,E>.  Delegates operations to a specified <code>Graph</code>
+ * implementation.
  * @author Tom Nelson
  *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E>, Serializable {
+public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E>, Serializable {
 	
-//	protected DirectedGraph<V,E> delegate;
-
-	public SparseForest() {
-		this(new DirectedSparseMultigraph<V,E>());
+	public DelegateForest() {
+		this(new DirectedSparseGraph<V,E>());
 	}
-	public SparseForest(DirectedGraph<V,E> delegate) {
+	public DelegateForest(DirectedGraph<V,E> delegate) {
 		super(delegate);
 	}
 	
@@ -92,6 +91,8 @@ public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
+	    if (!delegate.containsEdge(edge))
+	        return false;
 		Pair<V> endpoints = delegate.getEndpoints(edge);
 		return removeVertex(endpoints.getSecond());
 //		return delegate.removeEdge(edge);
@@ -102,6 +103,8 @@ public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
+	    if (!delegate.containsVertex(vertex))
+	        return false;
 		for(V v : delegate.getSuccessors(vertex)) {
 			removeVertex(v);
 		}
@@ -115,6 +118,8 @@ public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E
 	 * @return an ordered list of the nodes from root to child
 	 */
 	public List<V> getPath(V child) {
+        if (!delegate.containsVertex(child))
+            return null;
 		List<V> list = new ArrayList<V>();
 		list.add(child);
 		V parent = getParent(child);
@@ -126,6 +131,8 @@ public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E
 	}
 	
 	public V getParent(V child) {
+        if (!delegate.containsVertex(child))
+            return null;
 		Collection<V> parents = delegate.getPredecessors(child);
 		if(parents.size() > 0) {
 			return parents.iterator().next();
@@ -240,7 +247,7 @@ public class SparseForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E
 	public Collection<Tree<V, E>> getTrees() {
 		Collection<Tree<V,E>> trees = new HashSet<Tree<V,E>>();
 		for(V v : getRoots()) {
-			Tree<V,E> tree = new SparseTree<V,E>();
+			Tree<V,E> tree = new DelegateTree<V,E>();
 			tree.addVertex(v);
 			TreeUtils.growSubTree(this, tree, v);
 			trees.add(tree);

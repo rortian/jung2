@@ -46,7 +46,7 @@ public class DirectedOrderedSparseMultigraph<V,E>
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");
     	}
-        if (!vertices.containsKey(vertex)) {
+        if (!containsVertex(vertex)) {
             vertices.put(vertex, new Pair<Set<E>>(new LinkedHashSet<E>(), new LinkedHashSet<E>()));
             return true;
         } else {
@@ -55,6 +55,8 @@ public class DirectedOrderedSparseMultigraph<V,E>
     }
 
     public Collection<V> getPredecessors(V vertex) {
+        if (!containsVertex(vertex)) 
+            return null;
         Set<V> preds = new LinkedHashSet<V>();
         for (E edge : getIncoming_internal(vertex))
             preds.add(this.getSource(edge));
@@ -63,6 +65,8 @@ public class DirectedOrderedSparseMultigraph<V,E>
     }
 
     public Collection<V> getSuccessors(V vertex) {
+        if (!containsVertex(vertex)) 
+            return null;
         Set<V> succs = new LinkedHashSet<V>();
         for (E edge : getOutgoing_internal(vertex))
             succs.add(this.getDest(edge));
@@ -71,6 +75,8 @@ public class DirectedOrderedSparseMultigraph<V,E>
     }
 
     public Collection<V> getNeighbors(V vertex) {
+        if (!containsVertex(vertex)) 
+            return null;
         Collection<V> neighbors = new LinkedHashSet<V>();
         for (E edge : getIncoming_internal(vertex))
             neighbors.add(this.getSource(edge));
@@ -80,6 +86,8 @@ public class DirectedOrderedSparseMultigraph<V,E>
     }
 
     public Collection<E> getIncidentEdges(V vertex) {
+        if (!containsVertex(vertex)) 
+            return null;
         Collection<E> incident = new LinkedHashSet<E>();
         incident.addAll(getIncoming_internal(vertex));
         incident.addAll(getOutgoing_internal(vertex));

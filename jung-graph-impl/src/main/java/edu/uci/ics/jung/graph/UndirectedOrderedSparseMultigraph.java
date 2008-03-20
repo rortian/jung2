@@ -44,7 +44,7 @@ public class UndirectedOrderedSparseMultigraph<V,E>
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");
     	}
-        if (!vertices.containsKey(vertex))
+        if (!containsVertex(vertex))
         {
             vertices.put(vertex, new LinkedHashSet<E>());
             return true;
@@ -54,6 +54,9 @@ public class UndirectedOrderedSparseMultigraph<V,E>
     }
 
     public Collection<V> getNeighbors(V vertex) {
+        if (!containsVertex(vertex))
+            return null;
+        
         Set<V> neighbors = new LinkedHashSet<V>();
         for (E edge : getIncident_internal(vertex))
         {

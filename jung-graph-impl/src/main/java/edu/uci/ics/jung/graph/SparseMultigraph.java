@@ -26,7 +26,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 @SuppressWarnings("serial")
 public class SparseMultigraph<V,E> 
-    extends AbstractSparseGraph<V,E>
+    extends AbstractGraph<V,E>
     implements MultiGraph<V,E>, Serializable {
 	
 	public static <V,E> Factory<Graph<V,E>> getFactory() { 

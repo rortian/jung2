@@ -19,7 +19,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 
-public abstract class AbstractSparseGraph<V, E> implements Graph<V,E> {
+public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		return addEdge(edge, 
 				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices)
@@ -111,6 +111,8 @@ public abstract class AbstractSparseGraph<V, E> implements Graph<V,E> {
     public int getIncidentCount(E edge)
     {
         Pair<V> incident = this.getEndpoints(edge);
+        if (incident == null)
+            return 0;
         if (incident.getFirst() == incident.getSecond())
             return 1;
         else

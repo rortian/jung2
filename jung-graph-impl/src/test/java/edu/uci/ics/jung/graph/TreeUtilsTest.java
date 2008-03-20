@@ -1,6 +1,6 @@
 package edu.uci.ics.jung.graph;
 
-import edu.uci.ics.jung.graph.SparseTree;
+import edu.uci.ics.jung.graph.DelegateTree;
 
 public class TreeUtilsTest extends AbstractTreeUtilsTest {
 	
@@ -10,7 +10,7 @@ public class TreeUtilsTest extends AbstractTreeUtilsTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		tree = new SparseTree<String,Integer>();
+		tree = new DelegateTree<String,Integer>();
 		tree.addVertex("A");
 		tree.addEdge(1, "A", "B0");
 		tree.addEdge(2, "A", "B1");
