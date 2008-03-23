@@ -21,15 +21,30 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
-		return addEdge(edge, 
-				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices)
-				);
+	    if (vertices.size() == 2)
+	        return addEdge(edge, 
+	                vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices));
+	    else if (vertices.size() == 1)
+	    {
+	        V vertex = vertices.iterator().next();
+	        return addEdge(edge, new Pair<V>(vertex, vertex));
+	    }
+	    else
+	        throw new IllegalArgumentException("Graph objects connect 1 or 2 vertices; vertices arg has " + vertices.size());
 	}
 
 	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType edgeType) {
-		return addEdge(edge, 
-				vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices),
-				edgeType);
+	    if (vertices.size() == 2)
+	        return addEdge(edge, 
+	                vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices), 
+	                edgeType);
+        else if (vertices.size() == 1)
+        {
+            V vertex = vertices.iterator().next();
+            return addEdge(edge, new Pair<V>(vertex, vertex), edgeType);
+        }
+        else
+            throw new IllegalArgumentException("Graph objects connect 1 or 2 vertices; vertices arg has " + vertices.size());
 	}
 	
 	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints);
