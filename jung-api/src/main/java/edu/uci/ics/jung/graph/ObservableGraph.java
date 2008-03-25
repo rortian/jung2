@@ -21,7 +21,7 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 		listenerList.add(l);
 	}
 
-	public void removeFooListener(GraphEventListener<V,E> l) {
+	public void removeGraphEventListener(GraphEventListener<V,E> l) {
 		listenerList.remove(l);
 	}
 
