@@ -21,6 +21,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
+        if (vertices == null)
+            throw new IllegalArgumentException("'vertices' parameter must not be null");
 	    if (vertices.size() == 2)
 	        return addEdge(edge, 
 	                vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices));
@@ -34,6 +36,8 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	}
 
 	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType edgeType) {
+	    if (vertices == null)
+	        throw new IllegalArgumentException("'vertices' parameter must not be null");
 	    if (vertices.size() == 2)
 	        return addEdge(edge, 
 	                vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices), 
