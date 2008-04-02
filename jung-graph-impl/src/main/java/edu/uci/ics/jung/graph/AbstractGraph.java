@@ -68,8 +68,9 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
         {
             Pair<V> existing_endpoints = getEndpoints(edge);
             if (!existing_endpoints.equals(new_endpoints)) {
-                throw new IllegalArgumentException("EdgeType " + edge + 
-                        " exists in this graph with endpoints " + existing_endpoints);
+                throw new IllegalArgumentException("edge " + edge + 
+                        " already exists in this graph with endpoints " + existing_endpoints + " and cannot be " +
+                        		"added with endpoints " + endpoints);
             } else {
                 return null;
             }
