@@ -131,14 +131,13 @@ public class ClusteringDemo extends JApplet {
 	private void setUpView(BufferedReader br) throws IOException {
 		
 		
-        PajekNetReader<Number,Number> pnr = new PajekNetReader<Number,Number>();
         
-        graphFactory = new Factory<Graph<Number,Number>>() {
-    		public Graph<Number,Number> create() {
-    			return new SparseMultigraph<Number,Number>();
-    		}
-    	};
-
+//        graphFactory = new Factory<Graph<Number,Number>>() {
+//    		public Graph<Number,Number> create() {
+//    			return new SparseMultigraph<Number,Number>();
+//    		}
+//    	};
+    	
 //    	pnr.setGraphFactory(graphFactory);
     	Factory<Number> vertexFactory = new Factory<Number>() {
             int n = 0;
@@ -148,6 +147,9 @@ public class ClusteringDemo extends JApplet {
             int n = 0;
             public Number create() { return n++; }
         };
+
+        PajekNetReader<Graph<Number, Number>, Number,Number> pnr = 
+            new PajekNetReader<Graph<Number, Number>, Number,Number>(vertexFactory, edgeFactory);
         
 //    	pnr.setVertexFactory(new Factory<Number>() {
 //    		int n = 0;
@@ -158,7 +160,9 @@ public class ClusteringDemo extends JApplet {
 //    		public Number create() { return n++; }
 //    	});
 
-        final Graph<Number,Number> graph = pnr.load(br, graphFactory, vertexFactory, edgeFactory);
+        final Graph<Number,Number> graph = new SparseMultigraph<Number, Number>();
+        
+        pnr.load(br, graph);
 
 		//Create a simple layout frame
         //specify the Fruchterman-Rheingold layout algorithm

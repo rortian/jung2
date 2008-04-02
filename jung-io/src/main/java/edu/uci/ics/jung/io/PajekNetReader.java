@@ -89,24 +89,19 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * @see "'Pajek - Program for Analysis and Visualization of Large Networks', Vladimir Batagelj and Andrej Mrvar, http://vlado.fmf.uni-lj.si/pub/networks/pajek/doc/pajekman.pdf"
  * @author Tom Nelson - converted to jung2
  */
-public class PajekNetReader<V,E> {
-	
-//	protected Factory<? extends Graph<V,E>> graphFactory;
-//	protected Factory<V> vertexFactory;
-//	protected Factory<E> edgeFactory;
-//    protected boolean unique_labels;
+public class PajekNetReader<G extends Graph<V,E>,V,E>
+{
+	protected Factory<V> vertex_factory;
+	protected Factory<E> edge_factory;
 
     /**
      * The map for vertex labels (if any) created by this class.
      */
-//    protected Map<V,String> vertexLabeller = new HashMap<V,String>();
 	protected SettableTransformer<V, String> vertex_labels = new MapSettableTransformer<V,String>(new HashMap<V,String>());
     
     /**
      * The map for vertex locations (if any) defined by this class.
      */
-//    protected Map<V,Point2D> vertexLocationTransformer;
-//    protected boolean get_locations = false;
 	protected SettableTransformer<V, Point2D> vertex_locations = new MapSettableTransformer<V,Point2D>(new HashMap<V,Point2D>());
     
 	protected SettableTransformer<E, Number> edge_weights = 
@@ -122,32 +117,33 @@ public class PajekNetReader<V,E> {
     private static final Predicate<String> t_pred = new StartsWithPredicate("*");
     private static final Predicate<String> c_pred = OrPredicate.getInstance(a_pred, e_pred);
     protected static final Predicate<String> l_pred = ListTagPred.getInstance();
-//    protected Predicate<E> p_pred;// = ParallelEdgePredicate.getInstance();
-//    protected Predicate<Pair<V>> p_pred;// = ParallelEdgePredicate.getInstance();
     
     /**
      * Creates a PajekNetReader whose labels are not required to be unique.
      */
-    public PajekNetReader() { }
+    public PajekNetReader(Factory<V> vertex_factory, Factory<E> edge_factory) 
+    { 
+        this.vertex_factory = vertex_factory;
+        this.edge_factory = edge_factory;
+    }
     
     /**
      * @throws IOException
      */
-    public Graph<V,E> load(String filename, 
-            Factory<? extends Graph<V,E>> graph_factory, 
-            Factory<V> vertex_factory,
-            Factory<E> edge_factory) throws IOException
+    public G load(String filename, Factory<? extends G> graph_factory) throws IOException
     {
-        return load(new FileReader(filename), graph_factory, vertex_factory, edge_factory);
+        return load(new FileReader(filename), graph_factory.create());
     }
     
-    public Graph<V,E> load(Reader reader,
-            Factory<? extends Graph<V,E>> graph_factory, 
-            Factory<V> vertex_factory, Factory<E> edge_factory) throws IOException
+    public G load(Reader reader, Factory<? extends G> graph_factory) throws IOException
     {
-        return load(reader, graph_factory.create(), vertex_factory, edge_factory);
+        return load(reader, graph_factory.create());
     }
-    
+
+    public G load(String filename, G g) throws IOException
+    {
+        return load(new FileReader(filename), g);
+    }
     
     /**
      * Populates the graph <code>g</code> with the graph represented by the
@@ -163,7 +159,7 @@ public class PajekNetReader<V,E> {
      * or call <code>load(reader, g, nev)</code> for a default generator.
      * @throws IOException
      */
-    public Graph<V,E> load(Reader reader, Graph<V,E> g, Factory<V> vertex_factory, Factory<E> edge_factory) throws IOException
+    public G load(Reader reader, G g) throws IOException
     {
         BufferedReader br = new BufferedReader(reader);
 //        this.p_pred = new ParallelEdgePredicate<V,E>(g);
@@ -571,5 +567,5 @@ public class PajekNetReader<V,E> {
 	{
 	    this.edge_weights = edge_weights;
 	}
-	
+
 }
