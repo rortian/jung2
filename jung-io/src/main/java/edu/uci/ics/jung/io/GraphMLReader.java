@@ -61,8 +61,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     protected Factory<G> graph_factory;
     protected Factory<V> vertex_factory;
     protected Factory<E> edge_factory;
-    protected BidiMap<V, String> vertex_label;
-    protected BidiMap<E, String> edge_label;
+    protected BidiMap<V, String> vertex_labels;
+    protected BidiMap<E, String> edge_labels;
     protected Map<String, String> graph_data_descriptions;
     protected Map<String, String> edge_data_descriptions;
     protected Map<String, String> vertex_data_descriptions;
@@ -106,7 +106,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         throws IOException
     {
         this.graph_factory = graph_factory;
-        initialize();
+        initializeData();
+        clearData();
         parse(reader);
       
         return graphs;
@@ -124,7 +125,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     {
         this.current_graph = g;
         this.graph_factory = null;
-        initialize();
+        initializeData();
+        clearData();
         
         parse(reader);
     }
@@ -134,23 +136,43 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         load(new FileReader(filename), g);
     }
     
-    protected void initialize()
+    protected void clearData()
     {
-        this.vertex_label = new DualHashBidiMap<V, String>();
-        this.edge_label = new DualHashBidiMap<E, String>();
-        this.graph_data_descriptions = new HashMap<String, String>();
-        this.edge_data_descriptions = new HashMap<String, String>();
-        this.vertex_data_descriptions = new HashMap<String, String>();
-        this.graph_data = new HashMap<String, SettableTransformer<G, String>>();
-        this.edge_data = new HashMap<String, SettableTransformer<E, String>>();
-        this.vertex_data = new HashMap<String, SettableTransformer<V, String>>();
-        this.hyperedge_vertices = new ArrayList<V>();
-        this.vertex_desc = new HashMap<V, String>();
-        this.edge_desc = new HashMap<E, String>();
-        this.graph_desc = new HashMap<G, String>();
-        
+        this.vertex_labels.clear();
+        this.vertex_desc.clear();
+
+        this.edge_labels.clear();
+        this.edge_desc.clear();
+
+        this.graph_desc.clear();
+
+        this.hyperedge_vertices.clear();
     }
 
+    /**
+     * This is separate from initialize() because these data structures are shared among all 
+     * graphs loaded (i.e., they're defined inside <code>graphml</code> rather than <code>graph</code>.
+     */
+    protected void initializeData()
+    {
+        this.vertex_labels = new DualHashBidiMap<V, String>();
+        this.vertex_desc = new HashMap<V, String>();
+        this.vertex_data = new HashMap<String, SettableTransformer<V, String>>();
+        this.vertex_data_descriptions = new HashMap<String, String>();
+        
+        this.edge_labels = new DualHashBidiMap<E, String>();
+        this.edge_desc = new HashMap<E, String>();
+        this.edge_data = new HashMap<String, SettableTransformer<E, String>>();
+        this.edge_data_descriptions = new HashMap<String, String>();
+
+        this.graph_desc = new HashMap<G, String>();
+        this.graph_data = new HashMap<String, SettableTransformer<G, String>>();
+        this.graph_data_descriptions = new HashMap<String, String>();
+
+        this.defaults = new HashMap<String, String>();
+        this.hyperedge_vertices = new ArrayList<V>();
+    }
+    
     protected void parse(Reader reader) throws IOException
     {
         try
@@ -223,9 +245,10 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 if (this.current_edge == null)
                     throw new SAXNotSupportedException("No edge defined for endpoint");
                 if (this.current_states.getFirst() != State.HYPEREDGE)
-                    throw new SAXNotSupportedException("Endpoints must be defined inside hyperedge");
+                    throw new SAXNotSupportedException("Endpoints must be defined immediately inside hyperedge");
                 Map<String, String> endpoint_atts = getAttributeMap(atts);
                 V v = getVertex(endpoint_atts.remove("id"));
+                this.current_vertex = v;
                 hyperedge_vertices.add(v);
                 
             
@@ -236,13 +259,14 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 // graph factory is null if there's only one graph
                 if (graph_factory != null)
                     current_graph = graph_factory.create();
+
+                // reset all non-key data structures (to avoid accidental collisions between different graphs)
+                clearData();
                 
                 // make sure graph gets a copy of any defaults
                 for (String s: defaults.keySet())
                     if (graph_data.containsKey(s))
                         graph_data.get(s).set(this.current_graph, defaults.get(s));
-                
-                // get graph desc if present
 
                 break;
                 
@@ -277,6 +301,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                         graph_desc.put(current_graph, text);
                         break;
                     case VERTEX:
+                    case ENDPOINT:
                         vertex_desc.put(current_vertex, text);
                         break;
                     case EDGE:
@@ -299,6 +324,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                             throw new SAXNotSupportedException("key " + this.current_key + " not valid for graphs");
                         break;
                     case VERTEX:
+                    case ENDPOINT:
                         if (vertex_data.containsKey(this.current_key))
                             vertex_data.get(this.current_key).set(current_vertex, text);
                         else
@@ -351,6 +377,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 
             case HYPEREDGE:
                 current_graph.addEdge(current_edge, hyperedge_vertices);
+                hyperedge_vertices.clear();
                 current_edge = null;
             
             case DATA:
@@ -384,9 +411,9 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         switch (this.current_states.getFirst())
         {
             case GRAPH:
-                
                 break;
             case VERTEX:
+            case ENDPOINT:
                 break;
             case EDGE:
                 break;
@@ -397,6 +424,16 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                         "'edge', or 'hyperedge'");
         }
         this.current_key = getAttributeMap(atts).get("key");
+        if (this.current_key == null)
+            throw new SAXNotSupportedException("'data' tag requires a key specification");
+        if (this.current_key.equals(""))
+            throw new SAXNotSupportedException("'data' tag requires a non-empty key");
+        if (!getGraphData().containsKey(this.current_key) &&
+            !getVertexData().containsKey(this.current_key) &&
+            !getEdgeData().containsKey(this.current_key))
+        {
+            throw new SAXNotSupportedException("'data' tag's key specification must reference a defined key");
+        }
 
     }
     
@@ -437,11 +474,11 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     
     protected V getVertex(String id)
     {
-        V v = vertex_label.getKey(id);
+        V v = vertex_labels.getKey(id);
         if (v == null)
         {
             v = vertex_factory.create();
-            vertex_label.put(v, id);
+            vertex_labels.put(v, id);
             this.current_graph.addVertex(v);
         }
         return v;
@@ -467,7 +504,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         E e = edge_factory.create();
         String id = edge_atts.remove("id");
         if (id != null)
-            edge_label.put(e, id);
+            edge_labels.put(e, id);
        
         ((Graph<V,E>)this.current_graph).addEdge(e, source, target, directed);
         
@@ -481,8 +518,65 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         E e = edge_factory.create();
         String id = edge_atts.remove("id");
         if (id != null)
-            edge_label.put(e, id);
+            edge_labels.put(e, id);
         
         return e;
     }
+
+    public BidiMap<V, String> getVertexLabels()
+    {
+        return vertex_labels;
+    }
+    
+    public BidiMap<E, String> getEdgeLabels()
+    {
+        return edge_labels;
+    }
+    
+    public Map<String, String> getGraphDataDescriptions()
+    {
+        return graph_data_descriptions;
+    }
+    
+    public Map<String, String> getVertexDataDescriptions()
+    {
+        return vertex_data_descriptions;
+    }
+    
+    public Map<String, String> getEdgeDataDescriptions()
+    {
+        return edge_data_descriptions;
+    }
+    
+    public Map<String, SettableTransformer<G, String>> getGraphData()
+    {
+        return graph_data;
+    }
+    
+    public Map<String, SettableTransformer<V, String>> getVertexData()
+    {
+        return vertex_data;
+    }
+    
+    public Map<String, SettableTransformer<E, String>> getEdgeData()
+    {
+        return edge_data;
+    }
+
+    public Map<G, String> getGraphDesc()
+    {
+        return graph_desc;
+    }
+    
+    public Map<V, String> getVertexDesc()
+    {
+        return vertex_desc;
+    }
+    
+    public Map<E, String> getEdgeDesc()
+    {
+        return edge_desc;
+    }
+    
+
 }
