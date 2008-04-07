@@ -197,8 +197,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         if (state == null)
             state = State.OTHER;
 
-        System.out.println("opening: " + tag);
-        System.out.println("elements: " + current_states);
+//        System.out.println("opening: " + tag);
+//        System.out.println("elements: " + current_states);
         
         switch (state)
         {
@@ -331,7 +331,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     {
         String text = new String(ch, start, length);
 
-        System.out.println("inside: " + text);
+//        System.out.println("inside: " + text);
         
         switch (this.current_states.getFirst())
         {
@@ -405,8 +405,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
             return;
         }
 
-        System.out.println("closing: " + tag);
-        System.out.println("elements: " + current_states);
+//        System.out.println("closing: " + tag);
+//        System.out.println("elements: " + current_states);
         
         if (state != current_states.getFirst())
             throw new SAXNotSupportedException("Unbalanced tags: opened " + tag_state.getKey(current_states.getFirst()) + 
