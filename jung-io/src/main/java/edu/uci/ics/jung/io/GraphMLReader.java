@@ -39,6 +39,7 @@ import edu.uci.ics.jung.algorithms.util.SettableTransformer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * 
@@ -48,21 +49,21 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  */
 public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandler
 {
-    protected enum State {NO_TAG, VERTEX, EDGE, HYPEREDGE, ENDPOINT, GRAPH, DATA, KEY, DESC, DEFAULT_KEY, OTHER};
+    protected enum State {NO_TAG, VERTEX, EDGE, HYPEREDGE, ENDPOINT, GRAPH, DATA, KEY, DESC, DEFAULT_KEY, GRAPHML, OTHER};
     
     protected SAXParser saxp;
-    protected EdgeType default_directed;
+    protected EdgeType default_edgetype;
     protected G current_graph;
     protected V current_vertex;
     protected E current_edge;
     protected String current_key;
     protected LinkedList<State> current_states;
-    protected Map<String, State> tag_state;
+    protected BidiMap<String, State> tag_state;
     protected Factory<G> graph_factory;
     protected Factory<V> vertex_factory;
     protected Factory<E> edge_factory;
-    protected BidiMap<V, String> vertex_labels;
-    protected BidiMap<E, String> edge_labels;
+    protected BidiMap<V, String> vertex_ids;
+    protected BidiMap<E, String> edge_ids;
     protected Map<String, String> graph_data_descriptions;
     protected Map<String, String> edge_data_descriptions;
     protected Map<String, String> vertex_data_descriptions;
@@ -88,15 +89,18 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
 
         current_states = new LinkedList<State>();
         
-        current_states.add(State.NO_TAG);
-        tag_state = new HashMap<String, State>();
+//        current_states.add(State.NO_TAG);
+        tag_state = new DualHashBidiMap<String, State>();
         tag_state.put("node", State.VERTEX);
         tag_state.put("edge", State.EDGE);
         tag_state.put("hyperedge", State.HYPEREDGE);
+        tag_state.put("endpoint", State.ENDPOINT);
         tag_state.put("graph", State.GRAPH);
         tag_state.put("data", State.DATA);
         tag_state.put("key", State.KEY);
+        tag_state.put("desc", State.DESC);
         tag_state.put("default", State.DEFAULT_KEY);
+        tag_state.put("graphml", State.GRAPHML);
         
         this.vertex_factory = vertex_factory;
         this.edge_factory = edge_factory;
@@ -138,10 +142,10 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     
     protected void clearData()
     {
-        this.vertex_labels.clear();
+        this.vertex_ids.clear();
         this.vertex_desc.clear();
 
-        this.edge_labels.clear();
+        this.edge_ids.clear();
         this.edge_desc.clear();
 
         this.graph_desc.clear();
@@ -155,12 +159,12 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
      */
     protected void initializeData()
     {
-        this.vertex_labels = new DualHashBidiMap<V, String>();
+        this.vertex_ids = new DualHashBidiMap<V, String>();
         this.vertex_desc = new HashMap<V, String>();
         this.vertex_data = new HashMap<String, SettableTransformer<V, String>>();
         this.vertex_data_descriptions = new HashMap<String, String>();
         
-        this.edge_labels = new DualHashBidiMap<E, String>();
+        this.edge_ids = new DualHashBidiMap<E, String>();
         this.edge_desc = new HashMap<E, String>();
         this.edge_data = new HashMap<String, SettableTransformer<E, String>>();
         this.edge_data_descriptions = new HashMap<String, String>();
@@ -192,23 +196,47 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         State state = tag_state.get(tag);
         if (state == null)
             state = State.OTHER;
+
+        System.out.println("opening: " + tag);
+        System.out.println("elements: " + current_states);
         
         switch (state)
         {
+            case GRAPHML:
+                break;
+                
             case VERTEX:
                 if (this.current_graph == null)
                     throw new SAXNotSupportedException("Graph must be defined prior to elements");
                 if (this.current_edge != null || this.current_vertex != null)
                     throw new SAXNotSupportedException("Nesting elements not supported");
 
-                Map<String, String> vertex_atts = getAttributeMap(atts);
-                this.current_vertex = getVertex(vertex_atts.remove("id"));
+                this.current_vertex = createVertex(atts);
 
                 // make sure vertex gets a copy of any defaults
                 for (String s: defaults.keySet())
                     if (vertex_data.containsKey(s))
                         vertex_data.get(s).set(this.current_vertex, defaults.get(s));
+                break;
                 
+            case ENDPOINT:
+                if (this.current_graph == null)
+                    throw new SAXNotSupportedException("Graph must be defined prior to elements");
+                if (this.current_edge == null)
+                    throw new SAXNotSupportedException("No edge defined for endpoint");
+                if (this.current_states.getFirst() != State.HYPEREDGE)
+                    throw new SAXNotSupportedException("Endpoints must be defined inside hyperedge");
+                Map<String, String> endpoint_atts = getAttributeMap(atts);
+                String node = endpoint_atts.remove("node");
+                if (node == null)
+                    throw new SAXNotSupportedException("Endpoint must include an 'id' attribute");
+                V v = vertex_ids.getKey(node);
+                if (v == null)
+                    throw new SAXNotSupportedException("Endpoint refers to nonexistent node ID: " + node);
+//                V v = getVertex(id, "Endpoint refers to nonexistent node ID: " + id);
+               
+                this.current_vertex = v;
+                hyperedge_vertices.add(v);
                 break;
                 
             case EDGE:
@@ -217,7 +245,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 if (this.current_edge != null || this.current_vertex != null)
                     throw new SAXNotSupportedException("Nesting elements not supported");
 
-                this.current_edge = getEdge(atts);
+                this.current_edge = createEdge(atts, false);
                 
                 // make sure edge gets a copy of any defaults
                 for (String s: defaults.keySet())
@@ -231,26 +259,13 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 if (this.current_edge != null || this.current_vertex != null)
                     throw new SAXNotSupportedException("Nesting elements not supported");
                 
-                this.current_edge = getHyperedge(atts);
+                this.current_edge = createEdge(atts, true);
                 
                 // make sure edge gets a copy of any defaults
                 for (String s: defaults.keySet())
                     if (edge_data.containsKey(s))
                         edge_data.get(s).set(this.current_edge, defaults.get(s));
                 break;
-                
-            case ENDPOINT:
-                if (this.current_graph == null)
-                    throw new SAXNotSupportedException("Graph must be defined prior to elements");
-                if (this.current_edge == null)
-                    throw new SAXNotSupportedException("No edge defined for endpoint");
-                if (this.current_states.getFirst() != State.HYPEREDGE)
-                    throw new SAXNotSupportedException("Endpoints must be defined immediately inside hyperedge");
-                Map<String, String> endpoint_atts = getAttributeMap(atts);
-                V v = getVertex(endpoint_atts.remove("id"));
-                this.current_vertex = v;
-                hyperedge_vertices.add(v);
-                
             
             case GRAPH:
                 if (this.current_graph != null && graph_factory != null)
@@ -260,14 +275,38 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 if (graph_factory != null)
                     current_graph = graph_factory.create();
 
-                // reset all non-key data structures (to avoid accidental collisions between different graphs)
+                // reset all non-key data structures (to avoid collisions between different graphs)
                 clearData();
+
+                // set up default direction of edges
+                Map<String, String> graph_atts = getAttributeMap(atts);
+                String default_direction = graph_atts.remove("edgedefault");
+                if (default_direction == null)
+                    throw new SAXNotSupportedException("All graphs must specify a default edge direction");
+                if (default_direction.equals("directed"))
+                    this.default_edgetype = EdgeType.DIRECTED;
+                else if (default_direction.equals("undirected"))
+                    this.default_edgetype = EdgeType.UNDIRECTED;
+                else
+                    throw new SAXNotSupportedException("Invalid or unrecognized default edge direction: " + default_direction);
                 
                 // make sure graph gets a copy of any defaults
                 for (String s: defaults.keySet())
                     if (graph_data.containsKey(s))
                         graph_data.get(s).set(this.current_graph, defaults.get(s));
 
+                // put remaining attribute/value pairs in graph_data
+                for (Map.Entry<String, String> entry : graph_atts.entrySet())
+                {
+                    SettableTransformer<G, String> st = this.graph_data.get(entry.getKey());
+                    if (st == null)
+                    {
+                        st = new MapSettableTransformer<G, String>(new HashMap<G, String>());
+                        this.graph_data.put(entry.getKey(), st);
+                    }
+                    st.set(current_graph, entry.getValue());
+                }
+                
                 break;
                 
             case DATA:
@@ -291,6 +330,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     public void characters(char[] ch, int start, int length) throws SAXNotSupportedException
     {
         String text = new String(ch, start, length);
+
+        System.out.println("inside: " + text);
         
         switch (this.current_states.getFirst())
         {
@@ -340,9 +381,11 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                     default:
                         break;
                 }
+                break;
             case DEFAULT_KEY:
                 if (this.current_states.get(1) != State.KEY)
-                    throw new SAXNotSupportedException("'default' only defined in context of 'key' tag");
+                    throw new SAXNotSupportedException("'default' only defined in context of 'key' tag: " +
+                            "stack: " + current_states.toString());
                 defaults.put(this.current_key, text);
                 break;
             default:
@@ -356,18 +399,23 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         State state = tag_state.get(tag);
         if (state == null)
             state = State.OTHER;
-        if (state == State.OTHER || state == State.NO_TAG)
+        if (state == State.OTHER) // || state == State.NO_TAG)
         {
-            state = State.NO_TAG;
+//            state = State.NO_TAG;
             return;
         }
+
+        System.out.println("closing: " + tag);
+        System.out.println("elements: " + current_states);
         
         if (state != current_states.getFirst())
-            throw new SAXNotSupportedException("Unbalanced tags");
+            throw new SAXNotSupportedException("Unbalanced tags: opened " + tag_state.getKey(current_states.getFirst()) + 
+                    ", closed " + tag);
         
         switch(state)
         {
             case VERTEX:
+            case ENDPOINT:
                 current_vertex = null;
                 break;
                 
@@ -388,6 +436,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 break;
                 
             case KEY:
+                current_key = null;
                 break;
                 
             default:
@@ -459,6 +508,12 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                     graph_data.put(id, new MapSettableTransformer<G, String>(new HashMap<G, String>()));
                     break;
                 default:
+                    if (for_type.equals("all"))
+                    {
+                        vertex_data.put(id, new MapSettableTransformer<V, String>(new HashMap<V, String>()));
+                        edge_data.put(id, new MapSettableTransformer<E, String>(new HashMap<E, String>()));
+                        graph_data.put(id, new MapSettableTransformer<G, String>(new HashMap<G, String>()));
+                    }
                     break;
             }
         }
@@ -469,68 +524,132 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
             graph_data.put(id, new MapSettableTransformer<G, String>(new HashMap<G, String>()));
         }
         
+        this.current_key = id;
         
     }
-    
-    protected V getVertex(String id)
+
+    protected V createVertex(Attributes atts) throws SAXNotSupportedException
     {
-        V v = vertex_labels.getKey(id);
+        Map<String, String> vertex_atts = getAttributeMap(atts);
+        String id = vertex_atts.remove("id");
+        if (id == null)
+            throw new SAXNotSupportedException("node attribute list missing 'source': " + atts.toString());
+        V v = vertex_ids.getKey(id);
+        
+//        V v = getVertex(id, "vertex attribute list missing 'id': " + atts.toString());
         if (v == null)
         {
             v = vertex_factory.create();
-            vertex_labels.put(v, id);
+            vertex_ids.put(v, id);
             this.current_graph.addVertex(v);
+
+            // put remaining attribute/value pairs in vertex_data
+            for (Map.Entry<String, String> entry : vertex_atts.entrySet())
+            {
+                SettableTransformer<V, String> st = this.vertex_data.get(entry.getKey());
+                if (st == null)
+                {
+                    st = new MapSettableTransformer<V, String>(new HashMap<V, String>());
+                    this.vertex_data.put(entry.getKey(), st);
+                }
+                st.set(v, entry.getValue());
+            }
         }
-        return v;
-    }
-    
-    protected E getEdge(Attributes atts) throws SAXNotSupportedException
-    {
-        Map<String,String> edge_atts = getAttributeMap(atts);
-        V source = getVertex(edge_atts.remove("source"));
-        V target = getVertex(edge_atts.remove("target"));
-        String direction = edge_atts.remove("directed");
-        EdgeType directed;
-        if (direction == null)
-            directed = default_directed;
-        else if (direction.equals("directed"))
-            directed = EdgeType.DIRECTED;
-        else if (direction.equals("undirected"))
-            directed = EdgeType.UNDIRECTED;
         else
-            throw new SAXNotSupportedException("Unrecognized edge direction specifier: " + direction + 
-                    ": " + atts.toString());
+            throw new SAXNotSupportedException("Node id \"" + id + " is a duplicate of an existing node ID");
+        return v;
         
-        E e = edge_factory.create();
-        String id = edge_atts.remove("id");
-        if (id != null)
-            edge_labels.put(e, id);
-       
-        ((Graph<V,E>)this.current_graph).addEdge(e, source, target, directed);
-        
-        return e;
     }
     
-    protected E getHyperedge(Attributes atts)
+  
+    protected E createEdge(Attributes atts, boolean is_hyperedge) throws SAXNotSupportedException
     {
         Map<String,String> edge_atts = getAttributeMap(atts);
 
         E e = edge_factory.create();
         String id = edge_atts.remove("id");
         if (id != null)
-            edge_labels.put(e, id);
+        {
+            if (edge_ids.containsKey(e))
+                throw new SAXNotSupportedException("Edge id \"" + id + " is a duplicate of an existing edge ID");
+            edge_ids.put(e, id);
+        }
         
+        if (!is_hyperedge)
+        {
+            String source_id = edge_atts.remove("source");
+            if (source_id == null)
+                throw new SAXNotSupportedException("edge attribute list missing 'source': " + atts.toString());
+            V source = vertex_ids.getKey(source_id);
+            if (source == null)
+                throw new SAXNotSupportedException("specified 'source' attribute \"" + id + 
+                      "\" does not match any node ID");
+            
+            String target_id = edge_atts.remove("target");
+            if (target_id == null)
+                throw new SAXNotSupportedException("edge attribute list missing 'target': " + atts.toString());
+            V target = vertex_ids.getKey(target_id);
+            if (source == null)
+                throw new SAXNotSupportedException("specified 'target' attribute \"" + id + 
+                      "\" does not match any node ID");
+            
+            String direction = edge_atts.remove("directed");
+            EdgeType edge_type;
+            if (direction == null)
+                edge_type = default_edgetype;
+            else if (direction.equals("directed"))
+                edge_type = EdgeType.DIRECTED;
+            else if (direction.equals("undirected"))
+                edge_type = EdgeType.UNDIRECTED;
+            else
+                throw new SAXNotSupportedException("Unrecognized edge direction specifier: " + direction + 
+                        ": " + atts.toString());
+            
+            if (current_graph instanceof Graph)
+                ((Graph<V,E>)this.current_graph).addEdge(e, source, target, edge_type);
+            else
+                this.current_graph.addEdge(e, new Pair<V>(source, target));
+        }
+        
+        // put remaining attribute/value pairs in edge_data
+        for (Map.Entry<String, String> entry : edge_atts.entrySet())
+        {
+            SettableTransformer<E, String> st = this.edge_data.get(entry.getKey());
+            if (st == null)
+            {
+                st = new MapSettableTransformer<E, String>(new HashMap<E, String>());
+                this.edge_data.put(entry.getKey(), st);
+            }
+            st.set(e, entry.getValue());
+        }
+
         return e;
     }
+    
+//    protected E createHyperedge(Attributes atts) throws SAXNotSupportedException
+//    {
+//        Map<String,String> edge_atts = getAttributeMap(atts);
+//
+//        E e = edge_factory.create();
+//        String id = edge_atts.remove("id");
+//        if (id != null)
+//        {
+//            if (edge_ids.containsKey(e))
+//                throw new SAXNotSupportedException("Hyperedge id \"" + id + " is a duplicate of an existing edge ID");
+//            edge_ids.put(e, id);
+//        }
+//        
+//        return e;
+//    }
 
-    public BidiMap<V, String> getVertexLabels()
+    public BidiMap<V, String> getVertexIDs()
     {
-        return vertex_labels;
+        return vertex_ids;
     }
     
-    public BidiMap<E, String> getEdgeLabels()
+    public BidiMap<E, String> getEdgeIDs()
     {
-        return edge_labels;
+        return edge_ids;
     }
     
     public Map<String, String> getGraphDataDescriptions()
