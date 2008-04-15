@@ -31,15 +31,15 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	protected EditingGraphMousePlugin<V,E> editingPlugin;
 	protected LabelEditingGraphMousePlugin<V,E> labelEditingPlugin;
 	protected EditingPopupGraphMousePlugin<V,E> popupEditingPlugin;
-	protected AnnotatingGraphMousePlugin annotatingPlugin;
+	protected AnnotatingGraphMousePlugin<V,E> annotatingPlugin;
 	protected MultiLayerTransformer basicTransformer;
-	protected RenderContext rc;
+	protected RenderContext<V,E> rc;
 
 	/**
 	 * create an instance with default values
 	 *
 	 */
-	public EditingModalGraphMouse(RenderContext rc,
+	public EditingModalGraphMouse(RenderContext<V,E> rc,
 			Factory<V> vertexFactory, Factory<E> edgeFactory) {
 		this(rc, vertexFactory, edgeFactory, 1.1f, 1/1.1f);
 	}
@@ -49,7 +49,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public EditingModalGraphMouse(RenderContext rc,
+	public EditingModalGraphMouse(RenderContext<V,E> rc,
 			Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
 		super(in,out);
 		this.vertexFactory = vertexFactory;
@@ -65,18 +65,17 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 *
 	 */
 	protected void loadPlugins() {
-		pickingPlugin = new PickingGraphMousePlugin();
-		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
+		pickingPlugin = new PickingGraphMousePlugin<V,E>();
+		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin<V,E>();
 		translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
 		scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		rotatingPlugin = new RotatingGraphMousePlugin();
 		shearingPlugin = new ShearingGraphMousePlugin();
 		editingPlugin = new EditingGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		labelEditingPlugin = new LabelEditingGraphMousePlugin<V,E>();
-		annotatingPlugin = new AnnotatingGraphMousePlugin(rc);
+		annotatingPlugin = new AnnotatingGraphMousePlugin<V,E>(rc);
 		popupEditingPlugin = new EditingPopupGraphMousePlugin<V,E>(vertexFactory, edgeFactory);
 		add(scalingPlugin);
-//		add(labelEditingPlugin);
 		setMode(Mode.EDITING);
 	}
 
