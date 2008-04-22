@@ -217,7 +217,7 @@ public class Graphs {
 		/**
 		 * @param directedness
 		 * @return
-		 * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.graph.Edges)
+		 * @see edu.uci.ics.jung.graph.Graph#getEdges(EdgeType)
 		 */
 		public Collection<E> getEdges(EdgeType edgeType) {
 			return delegate.getEdges(edgeType);
