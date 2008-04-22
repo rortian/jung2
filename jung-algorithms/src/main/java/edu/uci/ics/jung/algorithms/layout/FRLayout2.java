@@ -37,7 +37,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
 
     private int currentIteration;
 
-    private int mMaxIterations = 700;
+    private int maxIterations = 700;
     
     private Map<V, Point2D> frVertexData = 
     	LazyMap.decorate(new HashMap<V,Point2D>(), new Factory<Point2D>() {
@@ -273,11 +273,11 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     }
 
     private void cool() {
-        temperature *= (1.0 - currentIteration / (double) mMaxIterations);
+        temperature *= (1.0 - currentIteration / (double) maxIterations);
     }
 
     public void setMaxIterations(int maxIterations) {
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -292,7 +292,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
      * <tt>MAX_ITERATIONS</tt>.
      */
     public boolean done() {
-        if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension) { 
+        if (currentIteration > maxIterations || temperature < 1.0/max_dimension) { 
             if (!checked)
             {
 //                System.out.println("current iteration: " + currentIteration);
