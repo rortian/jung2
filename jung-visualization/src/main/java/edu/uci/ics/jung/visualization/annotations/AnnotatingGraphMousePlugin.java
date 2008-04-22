@@ -82,7 +82,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     /**
      * holds rendering settings
      */
-    protected RenderContext rc;
+    protected RenderContext<V,E> rc;
     
     /**
      * set to true when the AnnotationPaintable has been
@@ -93,7 +93,7 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
     /**
 	 * create an instance with default settings
 	 */
-	public AnnotatingGraphMousePlugin(RenderContext rc) {
+	public AnnotatingGraphMousePlugin(RenderContext<V,E> rc) {
 	    this(rc, InputEvent.BUTTON1_MASK, 
 	    		InputEvent.BUTTON1_MASK | InputEvent.SHIFT_MASK);
 	}
@@ -101,9 +101,9 @@ public class AnnotatingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
 	/**
 	 * create an instance with overides
 	 * @param selectionModifiers for primary selection
-	 * @param addToSelectionModifiers for additional selection
+	 * @param additionalModifiers for additional selection
 	 */
-    public AnnotatingGraphMousePlugin(RenderContext rc,
+    public AnnotatingGraphMousePlugin(RenderContext<V,E> rc,
     		int selectionModifiers, int additionalModifiers) {
         super(selectionModifiers);
         this.rc = rc;

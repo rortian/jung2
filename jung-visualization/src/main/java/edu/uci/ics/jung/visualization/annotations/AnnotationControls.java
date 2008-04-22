@@ -35,11 +35,11 @@ import javax.swing.JToolBar;
  * @author Tom Nelson - tomnelson@dev.java.net
  *
  */
-public class AnnotationControls {
+public class AnnotationControls<V,E> {
 	
-	protected AnnotatingGraphMousePlugin annotatingPlugin;
+	protected AnnotatingGraphMousePlugin<V,E> annotatingPlugin;
 
-	public AnnotationControls(AnnotatingGraphMousePlugin annotatingPlugin) {
+	public AnnotationControls(AnnotatingGraphMousePlugin<V,E> annotatingPlugin) {
 		this.annotatingPlugin = annotatingPlugin;
 	}
 	
@@ -51,7 +51,8 @@ public class AnnotationControls {
     					new Ellipse2D.Double()
     			});
     	shapeBox.setRenderer(new DefaultListCellRenderer() {
-    		public Component getListCellRendererComponent(JList list, Object value,
+    		@Override
+            public Component getListCellRendererComponent(JList list, Object value,
     			int index, boolean isSelected, boolean hasFocus) {
     			String valueString = value.toString();
     			valueString = valueString.substring(0,valueString.indexOf("2D"));

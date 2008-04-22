@@ -49,16 +49,16 @@ import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse 
 	implements ModalGraphMouse, ItemSelectable {
 
-	protected AnnotatingGraphMousePlugin annotatingPlugin;
+	protected AnnotatingGraphMousePlugin<V,E> annotatingPlugin;
 	protected MultiLayerTransformer basicTransformer;
-	protected RenderContext rc;
+	protected RenderContext<V,E> rc;
 
 	/**
 	 * create an instance with default values
 	 *
 	 */
-	public AnnotatingModalGraphMouse(RenderContext rc, 
-			AnnotatingGraphMousePlugin annotatingPlugin) {
+	public AnnotatingModalGraphMouse(RenderContext<V,E> rc, 
+			AnnotatingGraphMousePlugin<V,E> annotatingPlugin) {
 		this(rc, annotatingPlugin, 1.1f, 1/1.1f);
 	}
 
@@ -67,8 +67,8 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * @param in override value for scale in
 	 * @param out override value for scale out
 	 */
-	public AnnotatingModalGraphMouse(RenderContext rc,
-			AnnotatingGraphMousePlugin annotatingPlugin,
+	public AnnotatingModalGraphMouse(RenderContext<V,E> rc,
+			AnnotatingGraphMousePlugin<V,E> annotatingPlugin,
 			float in, float out) {
 		super(in,out);
 		this.rc = rc;
@@ -82,9 +82,10 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * create the plugins, and load the plugins for TRANSFORMING mode
 	 *
 	 */
-	protected void loadPlugins() {
-		this.pickingPlugin = new PickingGraphMousePlugin();
-		this.animatedPickingPlugin = new AnimatedPickingGraphMousePlugin();
+	@Override
+    protected void loadPlugins() {
+		this.pickingPlugin = new PickingGraphMousePlugin<V,E>();
+		this.animatedPickingPlugin = new AnimatedPickingGraphMousePlugin<V,E>();
 		this.translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
 		this.scalingPlugin = new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, in, out);
 		this.rotatingPlugin = new RotatingGraphMousePlugin();
@@ -96,6 +97,7 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	/**
 	 * setter for the Mode.
 	 */
+	@Override
 	public void setMode(Mode mode) {
 		if(this.mode != mode) {
 			fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED,
@@ -114,9 +116,11 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, mode, ItemEvent.SELECTED));
 		}
 	}
+	
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#setPickingMode()
 	 */
+	@Override
 	protected void setPickingMode() {
 		remove(translatingPlugin);
 		remove(rotatingPlugin);
@@ -129,6 +133,7 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	/* (non-Javadoc)
 	 * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#setTransformingMode()
 	 */
+	@Override
 	protected void setTransformingMode() {
 		remove(pickingPlugin);
 		remove(animatedPickingPlugin);
@@ -160,6 +165,7 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	/**
 	 * @return Returns the modeBox.
 	 */
+	@Override
 	public JComboBox getModeComboBox() {
 		if(modeBox == null) {
 			modeBox = new JComboBox(new Mode[]{Mode.TRANSFORMING, Mode.PICKING, Mode.ANNOTATING});
@@ -174,7 +180,8 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * the mode
 	 * @return the menu
 	 */
-	public JMenu getModeMenu() {
+	@Override
+    public JMenu getModeMenu() {
 		if(modeMenu == null) {
 			modeMenu = new JMenu();// {
 			Icon icon = BasicIconFactory.getMenuArrowIcon();
@@ -238,7 +245,8 @@ public class AnnotatingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			this.graphMouse = graphMouse;
 		}
 		
-		public void keyTyped(KeyEvent event) {
+		@Override
+    public void keyTyped(KeyEvent event) {
 			char keyChar = event.getKeyChar();
 			if(keyChar == t) {
 				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
