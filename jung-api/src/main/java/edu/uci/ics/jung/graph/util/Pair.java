@@ -18,8 +18,8 @@ import java.util.Iterator;
 
 /**
 * Stores a pair of values together. Access either one by directly
-* getting the fields. Pairs are not mutable, respect <tt>equals</tt>
-* and may be used as indices.<p>
+* getting the fields. Pairs are not mutable, respect <code>equals</code>
+* and may be used as indices or map keys.<p>
 * Note that they do not protect from malevolent behavior: if one or another
 * object in the tuple is mutable, then that can be changed with the usual bad
 * effects.
@@ -78,9 +78,6 @@ public final class Pair<T> implements Collection<T>, Serializable
         return second;
     }
     
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     public boolean equals( Object o ) {
         if (o == this)
             return true;
@@ -110,9 +107,6 @@ public final class Pair<T> implements Collection<T>, Serializable
     	return hashCode;
     }
     
-    /**
-     * @see java.lang.Object#toString()
-     */
     public String toString()
     {
         return "<" + first.toString() + ", " + second.toString() + ">";

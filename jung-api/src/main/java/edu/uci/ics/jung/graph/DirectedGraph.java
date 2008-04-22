@@ -12,14 +12,13 @@
 package edu.uci.ics.jung.graph;
 
 /**
- * a marker interface.
- * The meaning is that the implementing graph shall accept only
- * directed edges
+ * A tagging interface for implementations of <code>Graph</code> 
+ * that accept only directed edges.
  * 
  * @author Tom Nelson - tomnelson@dev.java.net
  *
- * @param <V>
- * @param <E>
+ * @param <V>   type specification for vertices
+ * @param <E>   type specification for edges
  */
 public interface DirectedGraph<V,E> extends Graph<V,E> {
 }

@@ -22,12 +22,22 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 
-
+/**
+ * 
+ * 
+ * @author Joshua O'Madadhain
+ */
 public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Serializable
 {
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedge sets
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets
  
+    /**
+     * Returns a <code>Factory</code> which creates instances of this class.
+     * @param <V> vertex type of the hypergraph to be created
+     * @param <H> edge type of the hypergraph to be created
+     * @return a <code>Factory</code> which creates instances of this class
+     */
     public static <V,H> Factory<Hypergraph<V,H>> getFactory() {
         return new Factory<Hypergraph<V,H>> () {
             public Hypergraph<V,H> create() {
@@ -36,12 +46,22 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
         };
     }
 
+    /**
+     * Creates a <code>SetHypergraph</code> and initializes the internal data structures.
+     */
     public SetHypergraph()
     {
         vertices = new HashMap<V, Set<H>>();
         edges = new HashMap<H, Set<V>>();
     }
     
+    /**
+     * Adds <code>hyperedge</code> to this graph and connects them to the vertex collection <code>to_attach</code>.
+     * Any vertices in <code>to_attach</code> that appear more than once will only appear once in the
+     * incident vertex collection for <code>hyperedge</code>, that is, duplicates will be ignored.
+     * 
+     * @see Hypergraph#addEdge(H, Collection<V>)
+     */
     public boolean addEdge(H hyperedge, Collection<? extends V> to_attach)
     {
         if (hyperedge == null)
@@ -50,7 +70,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
         if (to_attach == null)
             throw new IllegalArgumentException("endpoints may not be null");
 
-        if(to_attach.contains(null)) throw new IllegalArgumentException("cannot add an edge with a null endpoint");
+        if(to_attach.contains(null)) 
+            throw new IllegalArgumentException("cannot add an edge with a null endpoint");
+        
         Set<V> new_endpoints = new HashSet<V>(to_attach);
         if (edges.containsKey(hyperedge))
         {

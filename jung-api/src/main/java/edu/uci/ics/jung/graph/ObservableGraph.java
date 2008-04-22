@@ -9,6 +9,11 @@ import edu.uci.ics.jung.graph.event.GraphEvent;
 import edu.uci.ics.jung.graph.event.GraphEventListener;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
+/**
+ * A decorator class for graphs which generates events 
+ * 
+ * @author Joshua O'Madadhain
+ */
 public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 
 	List<GraphEventListener<V,E>> listenerList = 
