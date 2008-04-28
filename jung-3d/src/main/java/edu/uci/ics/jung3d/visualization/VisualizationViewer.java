@@ -53,8 +53,8 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
-import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;

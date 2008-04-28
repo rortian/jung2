@@ -28,8 +28,8 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.functors.TruePredicate;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
-import edu.uci.ics.jung.algorithms.util.Context;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.DefaultParallelEdgeIndexFunction;
 import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
 import edu.uci.ics.jung.graph.util.IncidentEdgeIndexFunction;
