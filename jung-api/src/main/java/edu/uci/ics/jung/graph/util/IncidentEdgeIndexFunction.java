@@ -34,6 +34,7 @@ public class IncidentEdgeIndexFunction<V,E> implements EdgeIndexFunction<V,E>
     public static <V,E> IncidentEdgeIndexFunction<V,E> getInstance() {
         return new IncidentEdgeIndexFunction<V,E>();
     }
+    
     /**
      * Returns the index for the specified edge.
      * Calculates the indices for <code>e</code> and for all edges parallel
@@ -57,21 +58,6 @@ public class IncidentEdgeIndexFunction<V,E> implements EdgeIndexFunction<V,E>
 
     protected int getIndex(Graph<V,E> graph, E e, V u, V v) {
     	Collection<E> commonEdgeSet = new HashSet<E>(graph.getIncidentEdges(u));
-//    	commonEdgeSet.retainAll(graph.getIncidentEdges(v));
-//    	for(Iterator<E> iterator=commonEdgeSet.iterator(); iterator.hasNext(); ) {
-//    		E edge = iterator.next();
-//    		Pair<V> ep = graph.getEndpoints(edge);
-//    		V first = ep.getFirst();
-//    		V second = ep.getSecond();
-//    		// remove loops
-//    		if(first.equals(second) == true) {
-//    			iterator.remove();
-//    		}
-//    		// remove edges in opposite direction
-//    		if(first.equals(v) == false) {
-//    			iterator.remove();
-//    		}
-//    	}
     	int count=0;
     	for(E other : commonEdgeSet) {
     		if(e.equals(other) == false) {

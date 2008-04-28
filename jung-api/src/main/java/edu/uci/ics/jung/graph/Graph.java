@@ -36,12 +36,16 @@ import edu.uci.ics.jung.graph.util.Pair;
  * Extensions or implementations of this interface 
  * may enforce or disallow any or all of these variations.
  * 
- * <p>Definitions (with respect to a given vertex <code>v</code>:
+ * <p>Definitions (with respect to a given vertex <code>v</code>):
  * <ul>
- * <li/><b>incoming edge</b> of <code>v</code>: 
- * <li/><b>outgoing edge</b> of <code>v</code>:
- * <li/><b>predecessor</b> of <code>v</code>: 
- * <li/><b>successor</b> of <code>v</code>:
+ * <li/><b>incoming edge</b> of <code>v</code>: an edge that can be traversed 
+ * from a neighbor of <code>v</code> to reach <code>v</code>
+ * <li/><b>outgoing edge</b> of <code>v</code>: an edge that can be traversed
+ * from <code>v</code> to reach some neighbor of <code>v</code> 
+ * <li/><b>predecessor</b> of <code>v</code>: a vertex at the other end of an
+ * incoming edge of <code>v</code>
+ * <li/><b>successor</b> of <code>v</code>: a vertex at the other end of an 
+ * outgoing edge of <code>v</code>
  * <li/>
  * </ul> 
  * 
@@ -100,11 +104,12 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     Collection<E> getEdges(EdgeType edgeType);
 
     /**
-     * Returns the edge type of <code>Edge</code>.
+     * Returns the edge type of <code>edge</code>.
+     * Current <code>EdgeType</code>s include <code>DIRECTED</code> and <code>UNDIRECTED</code>.
      * @param edge
-     * @return
+     * @return the <code>EdgeType</code> of <code>edge</code>, or <code>null</code> if <code>edge</code> has no defined type
      */
-    EdgeType getEdgeType(E edge); // whether edge is directed or not
+    EdgeType getEdgeType(E edge); 
     
     
     /**
@@ -126,8 +131,8 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     /**
      * Returns <code>true</code> if <code>v1</code> is a predecessor of <code>v2</code> in this graph.
      * Equivalent to <code>v1.getPredecessors().contains(v2)</code>.
-     * @param v1    
-     * @param v2
+     * @param v1 the first vertex to be queried
+     * @param v2 the second vertex to be queried
      * @return <code>true</code> if <code>v1</code> is a predecessor of <code>v2</code>, and false otherwise.
      */
     boolean isPredecessor(V v1, V v2);
@@ -135,8 +140,8 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     /**
      * Returns <code>true</code> if <code>v1</code> is a successor of <code>v2</code> in this graph.
      * Equivalent to <code>v1.getSuccessors().contains(v2)</code>.
-     * @param v1    
-     * @param v2
+     * @param v1 the first vertex to be queried
+     * @param v2 the second vertex to be queried
      * @return <code>true</code> if <code>v1</code> is a successor of <code>v2</code>, and false otherwise.
      */
     boolean isSuccessor(V v1, V v2);
@@ -185,11 +190,11 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     /**
      * Returns <code>true</code> if <code>vertex</code> is the source of <code>edge</code>.
      * Equivalent to <code>getSource(edge).equals(vertex)</code>.
-     * @param vertex
+     * @param vertex the 
      * @param edge
      * @return
      */
-    boolean isSource(V vertex, E edge); // get{Source, Dest}(e) == v
+    boolean isSource(V vertex, E edge);
     
     /**
      * Returns <code>true</code> if <code>vertex</code> is the destination of <code>edge</code>.
@@ -198,15 +203,63 @@ public interface Graph<V,E> extends Hypergraph<V,E>
      * @param edge
      * @return
      */
-    boolean isDest(V vertex, E edge); // get{Source, Dest}(e) == v
+    boolean isDest(V vertex, E edge);
 
-    
+    /**
+     * Adds edge <code>e</code> to this graph such that it connects 
+     * vertex <code>v1</code> to <code>v2</code>.
+     * Equivalent to <code>addEdge(e, new Pair<V>(v1, v2))</code>.
+     * If this graph does not contain <code>v1</code>, <code>v2</code>, 
+     * or both, implementations may choose to either silently add 
+     * the vertices to the graph or throw an <code>IllegalArgumentException</code>.
+     * If this graph assigns edge types to its edges, the edge type of
+     * <code>e</code> will be the default for this graph.
+     * See <code>Hypergraph.addEdge()</code> for a listing of possible reasons
+     * for failure.
+     * @param e the edge to be added
+     * @param v1 the first vertex to be connected
+     * @param v2 the second vertex to be connected
+     * @return <code>true</code> if the add is successful, <code>false</code> otherwise
+     * @see Hypergraph#addEdge(Object, Collection)
+     * @see #addEdge(Object, Object, Object, EdgeType)
+     */
     boolean addEdge(E e, V v1, V v2);
     
+    /**
+     * Adds edge <code>e</code> to this graph such that it connects 
+     * vertex <code>v1</code> to <code>v2</code>.
+     * Equivalent to <code>addEdge(e, new Pair<V>(v1, v2))</code>.
+     * If this graph does not contain <code>v1</code>, <code>v2</code>, 
+     * or both, implementations may choose to either silently add 
+     * the vertices to the graph or throw an <code>IllegalArgumentException</code>.
+     * If <code>edgeType</code> is not legal for this graph, this method will
+     * throw <code>IllegalArgumentException</code>.
+     * See <code>Hypergraph.addEdge()</code> for a listing of possible reasons
+     * for failure.
+     * @param e the edge to be added
+     * @param v1 the first vertex to be connected
+     * @param v2 the second vertex to be connected
+     * @param edgeType the type to be assigned to the edge
+     * @return <code>true</code> if the add is successful, <code>false</code> otherwise
+     * @see Hypergraph#addEdge(Object, Collection)
+     * @see #addEdge(Object, Object, Object)
+     */
     boolean addEdge(E e, V v1, V v2, EdgeType edgeType);
 
-    Pair<V> getEndpoints(E edge); // build Pair from getIncidentVertices()
+    /**
+     * Returns the endpoints of <code>edge</code> as a <code>Pair<V></code>.
+     * @param edge the edge whose endpoints are to be returned
+     * @return the endpoints (incident vertices) of <code>edge</code>
+     */
+    Pair<V> getEndpoints(E edge);
     
+    /**
+     * Returns the vertex at the other end of <code>edge</code> from <code>vertex</code>.
+     * (That is, returns the vertex incident to <code>edge</code> which is not <code>vertex</code>.)
+     * @param vertex the vertex to be queried
+     * @param edge the edge to be queried
+     * @return the vertex at the other end of <code>edge</code> from <code>vertex</code>
+     */
     V getOpposite(V vertex, E edge); // get edge's incident vertices, find the Vertex that's not the one input
 
 }

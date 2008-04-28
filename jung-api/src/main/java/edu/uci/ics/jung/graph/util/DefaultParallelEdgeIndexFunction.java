@@ -21,11 +21,12 @@ import edu.uci.ics.jung.graph.Graph;
 
 /**
  * A class which creates and maintains indices for parallel edges.
- * Parallel edges are defined here to be those edges of type <code>Edge</code>
+ * Parallel edges are defined here to be the collection of edges 
  * that are returned by <code>v.findEdgeSet(w)</code> for some 
  * <code>v</code> and <code>w</code>.
  * 
- * <p>At this time, users are responsible for resetting the indices if changes to the
+ * <p>At this time, users are responsible for resetting the indices 
+ * (by calling <code>reset()</code>) if changes to the
  * graph make it appropriate.</p>
  * 
  * @author Joshua O'Madadhain
@@ -42,10 +43,11 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<
     public static <V,E> DefaultParallelEdgeIndexFunction<V,E> getInstance() {
         return new DefaultParallelEdgeIndexFunction<V,E>();
     }
+    
     /**
-     * Returns the index for the specified edge.
+     * Returns the index for <code>e</code> in <code>graph</code>.
      * Calculates the indices for <code>e</code> and for all edges parallel
-     * to <code>e</code>.
+     * to <code>e</code>, if they are not already assigned.
      */
     public int getIndex(Graph<V,E> graph, E e)
     {

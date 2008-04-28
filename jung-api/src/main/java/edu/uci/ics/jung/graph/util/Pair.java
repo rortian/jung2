@@ -21,10 +21,8 @@ import java.util.Iterator;
 * getting the fields. Pairs are not mutable, respect <code>equals</code>
 * and may be used as indices or map keys.<p>
 * Note that they do not protect from malevolent behavior: if one or another
-* object in the tuple is mutable, then that can be changed with the usual bad
+* object in the tuple is mutable, then it can be changed with the usual bad
 * effects.
-* 
-* @author scott white and Danyel Fisher
 */
 
 public final class Pair<T> implements Collection<T>, Serializable
