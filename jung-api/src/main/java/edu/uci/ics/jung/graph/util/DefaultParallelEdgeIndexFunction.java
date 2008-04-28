@@ -35,7 +35,8 @@ import edu.uci.ics.jung.graph.Graph;
  */
 public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<V,E>
 {
-    protected Map<E, Integer> edge_index = new HashMap<E, Integer>();
+    protected Map<Context<Graph<V,E>,E>, Integer> edge_index = 
+    	new HashMap<Context<Graph<V,E>,E>, Integer>();
     
     private DefaultParallelEdgeIndexFunction() {
     }
@@ -51,26 +52,27 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<
      */
     public int getIndex(Graph<V,E> graph, E e)
     {
-        Integer index = edge_index.get(e);
+    	Context<Graph<V,E>,E> context = Context.<Graph<V,E>,E>getInstance(graph,e);
+        Integer index = edge_index.get(context);
         if(index == null) {
         	Pair<V> endpoints = graph.getEndpoints(e);
         	V u = endpoints.getFirst();
         	V v = endpoints.getSecond();
         	if(u.equals(v)) {
-        		index = getIndex(graph, e, v);
+        		index = getIndex(context, v);
         	} else {
-        		index = getIndex(graph, e, u, v);
+        		index = getIndex(context, u, v);
         	}
         }
         return index.intValue();
     }
 
-    protected int getIndex(Graph<V,E> graph, E e, V v, V u) {
-    	Collection<E> commonEdgeSet = new HashSet<E>(graph.getIncidentEdges(u));
-    	commonEdgeSet.retainAll(graph.getIncidentEdges(v));
+    protected int getIndex(Context<Graph<V,E>,E> context, V v, V u) {
+    	Collection<E> commonEdgeSet = new HashSet<E>(context.graph.getIncidentEdges(u));
+    	commonEdgeSet.retainAll(context.graph.getIncidentEdges(v));
     	for(Iterator<E> iterator=commonEdgeSet.iterator(); iterator.hasNext(); ) {
     		E edge = iterator.next();
-    		Pair<V> ep = graph.getEndpoints(edge);
+    		Pair<V> ep = context.graph.getEndpoints(edge);
     		V first = ep.getFirst();
     		V second = ep.getSecond();
     		// remove loops
@@ -84,31 +86,31 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<
     	}
     	int count=0;
     	for(E other : commonEdgeSet) {
-    		if(e.equals(other) == false) {
-    			edge_index.put(other, count);
+    		if(context.element.equals(other) == false) {
+    			edge_index.put(Context.<Graph<V,E>,E>getInstance(context.graph,other), count);
     			count++;
     		}
     	}
-    	edge_index.put(e, count);
+    	edge_index.put(context, count);
     	return count;
      }
     
-    protected int getIndex(Graph<V,E> graph, E e, V v) {
+    protected int getIndex(Context<Graph<V,E>,E> context, V v) {
     	Collection<E> commonEdgeSet = new HashSet<E>();
-    	for(E another : graph.getIncidentEdges(v)) {
-    		V u = graph.getOpposite(v, another);
+    	for(E another : context.graph.getIncidentEdges(v)) {
+    		V u = context.graph.getOpposite(v, another);
     		if(u.equals(v)) {
     			commonEdgeSet.add(another);
     		}
     	}
     	int count=0;
     	for(E other : commonEdgeSet) {
-    		if(e.equals(other) == false) {
-    			edge_index.put(other, count);
+    		if(context.element.equals(other) == false) {
+    			edge_index.put(Context.<Graph<V,E>,E>getInstance(context.graph,other), count);
     			count++;
     		}
     	}
-    	edge_index.put(e, count);
+    	edge_index.put(context, count);
     	return count;
     }
 
@@ -121,8 +123,8 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<
      */
     public void reset(Graph<V,E> graph, E e) {
     	Pair<V> endpoints = graph.getEndpoints(e);
-        getIndex(graph, e, endpoints.getFirst());
-        getIndex(graph, e, endpoints.getFirst(), endpoints.getSecond());
+        getIndex(Context.<Graph<V,E>,E>getInstance(graph,e), endpoints.getFirst());
+        getIndex(Context.<Graph<V,E>,E>getInstance(graph,e), endpoints.getFirst(), endpoints.getSecond());
     }
     
     /**
