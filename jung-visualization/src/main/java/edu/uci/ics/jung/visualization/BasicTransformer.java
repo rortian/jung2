@@ -7,15 +7,20 @@ import java.awt.geom.Point2D;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.uci.ics.jung.visualization.transform.BidirectionalTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableAffineTransformer;
 import edu.uci.ics.jung.visualization.transform.MutableTransformer;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
 import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 
-public class BasicTransformer implements BidirectionalTransformer, 
-	ShapeTransformer, ChangeListener, ChangeEventSupport, MultiLayerTransformer {
+/**
+ * A basic implementation of the MultiLayerTransformer interface that 
+ * provides two Layers: VIEW and LAYOUT. It also provides ChangeEventSupport
+ * @author Tom Nelson - tomnelson@dev.java.net
+ *
+ */
+public class BasicTransformer implements MultiLayerTransformer, 
+	ShapeTransformer, ChangeListener, ChangeEventSupport  {
 
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
