@@ -1,8 +1,5 @@
 package edu.uci.ics.jung.graph.util;
 
-import java.util.Map;
-
-
 public class Context<G,E> {
 	
 	private static Context instance = new Context();
