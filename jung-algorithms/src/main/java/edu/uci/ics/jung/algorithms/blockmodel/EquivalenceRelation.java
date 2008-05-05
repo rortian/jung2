@@ -68,8 +68,8 @@ public class EquivalenceRelation<V,E> {
 	 * Iterates through all the equivalence sets. Does not return any singletons.
 	 * @return an Iterator of Sets of vertices. 
 	 */
-	public Iterator<Set<V>> getAllEquivalences() {
-		return equivalenceSets.iterator();
+	public Set<Set<V>> getAllEquivalences() {
+		return equivalenceSets;
 	}
 
 	/**
