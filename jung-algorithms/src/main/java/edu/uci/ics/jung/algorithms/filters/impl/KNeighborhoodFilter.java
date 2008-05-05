@@ -12,10 +12,6 @@
  *
  */
 package edu.uci.ics.jung.algorithms.filters.impl;
-import static edu.uci.ics.jung.algorithms.filters.impl.KNeighborhoodFilter.EdgeType.IN;
-import static edu.uci.ics.jung.algorithms.filters.impl.KNeighborhoodFilter.EdgeType.IN_OUT;
-import static edu.uci.ics.jung.algorithms.filters.impl.KNeighborhoodFilter.EdgeType.OUT;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
