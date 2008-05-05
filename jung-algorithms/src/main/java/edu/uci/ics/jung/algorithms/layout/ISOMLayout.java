@@ -67,6 +67,10 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		return status;
 	}
 
+	/**
+	 * Creates an <code>ISOMLayout</code> instance for the specified graph <code>g</code>.
+	 * @param g
+	 */
 	public ISOMLayout(Graph<V,E> g) {
 		super(g);
 	}
@@ -208,8 +212,11 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 	}
 
 	/**
-	 * For now, we pretend it never finishes.
-	 * @return <code>true</code> is the increments are done, <code>false</code> otherwise
+	 * Returns <code>true</code> if the vertex positions are no longer being
+	 * updated.  Currently <code>ISOMLayout</code> stops updating vertex
+	 * positions after a certain number of iterations have taken place.
+	 * @return <code>true</code> if the vertex position updates have stopped, 
+	 * <code>false</code> otherwise
 	 */
 	public boolean done() {
 		return epoch >= maxEpoch;
@@ -256,6 +263,10 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		}
 	}
 
+	/**
+	 * Resets the layout iteration count to 0, which allows the layout algorithm to
+	 * continue updating vertex positions.
+	 */
 	public void reset() {
 		epoch = 0;
 	}
