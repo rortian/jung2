@@ -25,8 +25,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  */
 public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer<Context<Graph<V,E>,E>,Number>
 {
-    protected Double undirected_closeness;
-    protected Double directed_closeness;
+    protected Double undirected_value;
+    protected Double directed_value;
 
     /**
      * 
@@ -35,8 +35,8 @@ public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer
      */
     public ConstantDirectionalEdgeValueTransformer(double undirected, double directed)
     {
-        this.undirected_closeness = new Double(undirected);
-        this.directed_closeness = new Double(directed);
+        this.undirected_value = new Double(undirected);
+        this.directed_value = new Double(directed);
     }
     
     /**
@@ -46,8 +46,8 @@ public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer
     	Graph<V,E> graph = context.graph;
     	E e = context.element;
         if (graph.getEdgeType(e) == EdgeType.DIRECTED)
-            return directed_closeness;
+            return directed_value;
         else 
-            return undirected_closeness;
+            return undirected_value;
     }
 }
