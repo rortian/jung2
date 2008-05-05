@@ -57,11 +57,11 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
     public void testSimpleDirectedCase() {
 
         for (int r=0; r<10; r++) {
-            EppsteinPowerLawGenerator generator = 
-            	new EppsteinPowerLawGenerator(graphFactory, vertexFactory, edgeFactory, 10,40,r);
+            EppsteinPowerLawGenerator<Integer, Number> generator = 
+            	new EppsteinPowerLawGenerator<Integer, Number>(graphFactory, vertexFactory, edgeFactory, 10,40,r);
             generator.setSeed(2);
 
-            Graph graph = (Graph) generator.generateGraph();
+            Graph<Integer, Number> graph = generator.generateGraph();
             Assert.assertEquals(graph.getVertexCount(),10);
             Assert.assertEquals(graph.getEdgeCount(),40);
         }

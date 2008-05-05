@@ -32,9 +32,9 @@ public class KNeighborhoodExtractor {
 	 * @param rootNodes the set of root nodes (starting vertices) in the graph
 	 * @param radiusK the radius of the subgraph to be extracted
 	 */
-	static public Graph extractNeighborhood(
-		Graph graph,
-		Set rootNodes,
+	static public <V,E> Graph<V,E> extractNeighborhood(
+		Graph<V,E> graph,
+		Set<V> rootNodes,
 		int radiusK) {
 		return extract(graph, rootNodes, radiusK, KNeighborhoodFilter.EdgeType.IN_OUT);
 	}
@@ -46,9 +46,9 @@ public class KNeighborhoodExtractor {
 	 * @param rootNodes the set of root nodes (starting vertices) in the graph
 	 * @param radiusK the radius of the subgraph to be extracted
 	 */
-	static public Graph extractOutDirectedNeighborhood(
-		DirectedGraph graph,
-		Set rootNodes,
+	static public <V,E> Graph<V,E> extractOutDirectedNeighborhood(
+		DirectedGraph<V,E> graph,
+		Set<V> rootNodes,
 		int radiusK) {
 		return extract(graph, rootNodes, radiusK, KNeighborhoodFilter.EdgeType.OUT);
 	}
@@ -60,19 +60,19 @@ public class KNeighborhoodExtractor {
 	 * @param rootNodes the set of root nodes (starting vertices) in the graph
 	 * @param radiusK the radius of the subgraph to be extracted
 	 */
-	static public Graph extractInDirectedNeighborhood(
-		DirectedGraph graph,
-		Set rootNodes,
+	static public <V,E> Graph<V,E> extractInDirectedNeighborhood(
+		DirectedGraph<V,E> graph,
+		Set<V> rootNodes,
 		int radiusK) {
 		return extract(graph, rootNodes, radiusK, KNeighborhoodFilter.EdgeType.IN);
 	}
 
-	static private Graph extract(
-		Graph graph,
-		Set rootNodes,
+	static private <V,E> Graph<V,E> extract(
+		Graph<V,E> graph,
+		Set<V> rootNodes,
 		int radiusK,
 		KNeighborhoodFilter.EdgeType edgeType) {
-		Filter nf = new KNeighborhoodFilter(rootNodes, radiusK, edgeType);
+		Filter<V,E> nf = new KNeighborhoodFilter<V,E>(rootNodes, radiusK, edgeType);
 		return nf.filter(graph);
 	}
 
