@@ -171,78 +171,84 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         return dotting;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getArrow_placement_tolerance()
      */
     public float getArrowPlacementTolerance() {
         return arrowPlacementTolerance;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setArrow_placement_tolerance(float)
      */
     public void setArrowPlacementTolerance(float arrow_placement_tolerance) {
         this.arrowPlacementTolerance = arrow_placement_tolerance;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeArrowTransformer()
      */
     public Transformer<Context<Graph<V,E>,E>,Shape> getEdgeArrowTransformer() {
         return edgeArrowTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeArrowTransformer(edu.uci.ics.jung.visualization.decorators.EdgeArrowTransformer)
      */
     public void setEdgeArrowTransformer(Transformer<Context<Graph<V,E>,E>,Shape> edgeArrowTransformer) {
         this.edgeArrowTransformer = edgeArrowTransformer;
     }
 
+    /**
+     * @see RenderContext#getEdgeArrowPredicate()
+     */
     public Predicate<Context<Graph<V,E>,E>> getEdgeArrowPredicate() {
         return edgeArrowPredicate;
     }
 
+    /**
+     * @see RenderContext#setEdgeArrowPredicate(Predicate)
+     */
     public void setEdgeArrowPredicate(Predicate<Context<Graph<V,E>,E>> edgeArrowPredicate) {
         this.edgeArrowPredicate = edgeArrowPredicate;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeFontTransformer()
      */
     public Transformer<E,Font> getEdgeFontTransformer() {
         return edgeFontTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeFontTransformer(edu.uci.ics.jung.visualization.decorators.EdgeFontTransformer)
      */
     public void setEdgeFontTransformer(Transformer<E,Font> edgeFontTransformer) {
         this.edgeFontTransformer = edgeFontTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeIncludePredicate()
      */
     public Predicate<Context<Graph<V,E>,E>> getEdgeIncludePredicate() {
         return edgeIncludePredicate;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeIncludePredicate(org.apache.commons.collections15.Predicate)
      */
     public void setEdgeIncludePredicate(Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate) {
         this.edgeIncludePredicate = edgeIncludePredicate;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeLabelClosenessTransformer()
      */
     public Transformer<Context<Graph<V,E>,E>,Number> getEdgeLabelClosenessTransformer() {
         return edgeLabelClosenessTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeLabelClosenessTransformer(edu.uci.ics.jung.visualization.decorators.NumberDirectionalEdgeValue)
      */
     public void setEdgeLabelClosenessTransformer(
@@ -250,56 +256,56 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.edgeLabelClosenessTransformer = edgeLabelClosenessTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeLabelRenderer()
      */
     public EdgeLabelRenderer getEdgeLabelRenderer() {
         return edgeLabelRenderer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeLabelRenderer(edu.uci.ics.jung.visualization.EdgeLabelRenderer)
      */
     public void setEdgeLabelRenderer(EdgeLabelRenderer edgeLabelRenderer) {
         this.edgeLabelRenderer = edgeLabelRenderer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgePaintTransformer()
      */
     public Transformer<E,Paint> getEdgeFillPaintTransformer() {
         return edgeFillPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgePaintTransformer(edu.uci.ics.jung.visualization.decorators.EdgePaintTransformer)
      */
     public void setEdgeDrawPaintTransformer(Transformer<E,Paint> edgeDrawPaintTransformer) {
         this.edgeDrawPaintTransformer = edgeDrawPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgePaintTransformer()
      */
     public Transformer<E,Paint> getEdgeDrawPaintTransformer() {
         return edgeDrawPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgePaintTransformer(edu.uci.ics.jung.visualization.decorators.EdgePaintTransformer)
      */
     public void setEdgeFillPaintTransformer(Transformer<E,Paint> edgeFillPaintTransformer) {
         this.edgeFillPaintTransformer = edgeFillPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeShapeTransformer()
      */
     public Transformer<Context<Graph<V,E>,E>,Shape> getEdgeShapeTransformer() {
         return edgeShapeTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeShapeTransformer(edu.uci.ics.jung.visualization.decorators.EdgeShapeTransformer)
      */
     public void setEdgeShapeTransformer(Transformer<Context<Graph<V,E>,E>,Shape> edgeShapeTransformer) {
@@ -312,72 +318,84 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         }
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeLabelTransformer()
      */
     public Transformer<E,String> getEdgeLabelTransformer() {
         return edgeLabelTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeLabelTransformer(edu.uci.ics.jung.visualization.decorators.EdgeLabelTransformer)
      */
     public void setEdgeLabelTransformer(Transformer<E,String> edgeLabelTransformer) {
         this.edgeLabelTransformer = edgeLabelTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeStrokeTransformer()
      */
     public Transformer<E,Stroke> getEdgeStrokeTransformer() {
         return edgeStrokeTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeStrokeTransformer(edu.uci.ics.jung.visualization.decorators.EdgeStrokeTransformer)
      */
     public void setEdgeStrokeTransformer(Transformer<E,Stroke> edgeStrokeTransformer) {
         this.edgeStrokeTransformer = edgeStrokeTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getEdgeStrokeTransformer()
      */
     public Transformer<E,Stroke> getEdgeArrowStrokeTransformer() {
         return edgeArrowStrokeTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setEdgeStrokeTransformer(edu.uci.ics.jung.visualization.decorators.EdgeStrokeTransformer)
      */
     public void setEdgeArrowStrokeTransformer(Transformer<E,Stroke> edgeArrowStrokeTransformer) {
         this.edgeArrowStrokeTransformer = edgeArrowStrokeTransformer;
     }
 
+    /**
+     * @see RenderContext#getGraphicsContext()
+     */
     public GraphicsDecorator getGraphicsContext() {
         return graphicsContext;
     }
 
+    /**
+     * @see RenderContext#setGraphicsContext(GraphicsDecorator)
+     */
     public void setGraphicsContext(GraphicsDecorator graphicsContext) {
         this.graphicsContext = graphicsContext;
     }
 
+    /**
+     * @see RenderContext#getLabelOffset()
+     */
     public int getLabelOffset() {
         return labelOffset;
     }
 
+    /**
+     * @see RenderContext#setLabelOffset(int)
+     */
     public void setLabelOffset(int labelOffset) {
         this.labelOffset = labelOffset;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getParallelEdgeIndexTransformer()
      */
     public EdgeIndexFunction<V, E> getParallelEdgeIndexFunction() {
         return parallelEdgeIndexFunction;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setParallelEdgeIndexFunction(edu.uci.ics.graph.util.ParallelEdgeIndexFunction)
      */
     public void setParallelEdgeIndexFunction(
@@ -388,56 +406,56 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         this.setEdgeShapeTransformer(getEdgeShapeTransformer());
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getPickedEdgeState()
      */
     public PickedState<E> getPickedEdgeState() {
         return pickedEdgeState;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setPickedEdgeState(edu.uci.ics.jung.visualization.picking.PickedState)
      */
     public void setPickedEdgeState(PickedState<E> pickedEdgeState) {
         this.pickedEdgeState = pickedEdgeState;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getPickedVertexState()
      */
     public PickedState<V> getPickedVertexState() {
         return pickedVertexState;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setPickedVertexState(edu.uci.ics.jung.visualization.picking.PickedState)
      */
     public void setPickedVertexState(PickedState<V> pickedVertexState) {
         this.pickedVertexState = pickedVertexState;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getRendererPane()
      */
     public CellRendererPane getRendererPane() {
         return rendererPane;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setRendererPane(javax.swing.CellRendererPane)
      */
     public void setRendererPane(CellRendererPane rendererPane) {
         this.rendererPane = rendererPane;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getScreenDevice()
      */
     public JComponent getScreenDevice() {
         return screenDevice;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setScreenDevice(edu.uci.ics.jung.visualization.VisualizationViewer)
      */
     public void setScreenDevice(JComponent screenDevice) {
@@ -445,98 +463,98 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
         screenDevice.add(rendererPane);
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexFontTransformer()
      */
     public Transformer<V,Font> getVertexFontTransformer() {
         return vertexFontTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexFontTransformer(edu.uci.ics.jung.visualization.decorators.VertexFontTransformer)
      */
     public void setVertexFontTransformer(Transformer<V,Font> vertexFontTransformer) {
         this.vertexFontTransformer = vertexFontTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexIconTransformer()
      */
     public Transformer<V,Icon> getVertexIconTransformer() {
         return vertexIconTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIconTransformer(edu.uci.ics.jung.visualization.decorators.VertexIconTransformer)
      */
     public void setVertexIconTransformer(Transformer<V,Icon> vertexIconTransformer) {
         this.vertexIconTransformer = vertexIconTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexIncludePredicate()
      */
     public Predicate<Context<Graph<V,E>,V>> getVertexIncludePredicate() {
         return vertexIncludePredicate;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexIncludePredicate(org.apache.commons.collections15.Predicate)
      */
     public void setVertexIncludePredicate(Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate) {
         this.vertexIncludePredicate = vertexIncludePredicate;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexLabelRenderer()
      */
     public VertexLabelRenderer getVertexLabelRenderer() {
         return vertexLabelRenderer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexLabelRenderer(edu.uci.ics.jung.visualization.VertexLabelRenderer)
      */
     public void setVertexLabelRenderer(VertexLabelRenderer vertexLabelRenderer) {
         this.vertexLabelRenderer = vertexLabelRenderer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexPaintTransformer()
      */
     public Transformer<V,Paint> getVertexFillPaintTransformer() {
         return vertexFillPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexPaintTransformer(edu.uci.ics.jung.visualization.decorators.VertexPaintTransformer)
      */
     public void setVertexFillPaintTransformer(Transformer<V,Paint> vertexFillPaintTransformer) {
         this.vertexFillPaintTransformer = vertexFillPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexPaintTransformer()
      */
     public Transformer<V,Paint> getVertexDrawPaintTransformer() {
         return vertexDrawPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexPaintTransformer(edu.uci.ics.jung.visualization.decorators.VertexPaintTransformer)
      */
     public void setVertexDrawPaintTransformer(Transformer<V,Paint> vertexDrawPaintTransformer) {
         this.vertexDrawPaintTransformer = vertexDrawPaintTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#getVertexLabelTransformer()
      */
     public Transformer<V,String> getVertexLabelTransformer() {
         return vertexLabelTransformer;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.visualization.RenderContext#setVertexLabelTransformer(edu.uci.ics.jung.visualization.decorators.VertexLabelTransformer)
      */
     public void setVertexLabelTransformer(Transformer<V,String> vertexLabelTransformer) {
@@ -571,19 +589,31 @@ public class PluggableRenderContext<V, E> implements RenderContext<V, E> {
 		this.multiLayerTransformer = basicTransformer;
 	}
 
+	/**
+	 * @see RenderContext#getArrowDrawPaintTransformer()
+	 */
 	public Transformer<E, Paint> getArrowDrawPaintTransformer() {
 		return arrowDrawPaintTransformer;
 	}
 
+	/**
+	 * @see RenderContext#getArrowFillPaintTransformer()
+	 */
 	public Transformer<E, Paint> getArrowFillPaintTransformer() {
 		return arrowFillPaintTransformer;
 	}
 
+	/**
+	 * @see RenderContext#setArrowDrawPaintTransformer(Transformer)
+	 */
 	public void setArrowDrawPaintTransformer(Transformer<E, Paint> arrowDrawPaintTransformer) {
 		this.arrowDrawPaintTransformer = arrowDrawPaintTransformer;
 		
 	}
 
+	/**
+	 * @see RenderContext#setArrowFillPaintTransformer(Transformer)
+	 */
 	public void setArrowFillPaintTransformer(Transformer<E, Paint> arrowFillPaintTransformer) {
 		this.arrowFillPaintTransformer = arrowFillPaintTransformer;
 		
