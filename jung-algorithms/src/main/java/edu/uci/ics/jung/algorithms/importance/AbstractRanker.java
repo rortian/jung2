@@ -347,7 +347,7 @@ public abstract class AbstractRanker<V,E> extends IterativeProcess {
             Format formatter = new DecimalFormat("#0.#######");
             int rank = 1;
 
-            for (Ranking currentRanking : getRankings()) {
+            for (Ranking<?> currentRanking : getRankings()) {
                 double rankScore = currentRanking.rankScore;
                 if (verbose) {
                     System.out.print("Rank " + rank + ": ");
