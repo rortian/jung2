@@ -35,27 +35,61 @@ import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 
 /**
- * ShapePickSupport provides access to Vertices and EdgeType based on
- * their actual shapes. 
+ * A <code>GraphElementAccessor</code> that returns elements whose <code>Shape</code>
+ * contains the specified pick point or region.
  * 
  * @author Tom Nelson
  *
  */
 public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 
+	/**
+	 * The available picking heuristics:
+     * <ul>
+     * <li/><code>Style.CENTERED</code>: returns the element whose 
+     * center is closest to the pick point.
+     * <li/><code>Style.LOWEST</code>: returns the first such element
+     * encountered.  (If the element collection has a consistent
+     * ordering, this will also be the element "on the bottom", 
+     * that is, the one which is rendered first.) 
+     * <li/><code>Style.HIGHEST</code>: returns the last such element
+     * encountered.  (If the element collection has a consistent
+     * ordering, this will also be the element "on the top", 
+     * that is, the one which is rendered last.)
+     * </ul>
+	 *
+	 */
 	public static enum Style { LOWEST, CENTERED, HIGHEST };
+
+	/**
+	 * 
+	 *
+	 */
     protected float pickSize;
+    
+    /**
+     * The <code>VisualizationServer</code> in which the 
+     * this instance is being used for picking.  Used to 
+     * retrieve properties such as the layout, renderer,
+     * vertex and edge shapes, and coordinate transformations.
+     */
     protected VisualizationServer<V,E> vv;
+    
+    /**
+     * The current picking heuristic for this instance.  Defaults
+     * to <code>CENTERED</code>.
+     */
     protected Style style = Style.CENTERED;
     
     /**
-     * Create an instance.
-     * The HasGraphLayout is used as the source of the current
-     * Graph Layout. The HasShapes
-     * is used to access the VertexShapes and the EdgeShapes
-     * @param hasGraphLayout source of the current layout.
-     * @param hasShapeFunctions source of Vertex and Edge shapes.
-     * @param pickSize how large to make the pick footprint for line edges
+     * Creates a <code>ShapePickSupport</code> for the <code>vv</code>
+     * VisualizationServer, with the specified pick footprint and
+     * the default pick style.
+     * The <code>VisualizationServer</code> is used to access 
+     * properties of the current visualization (layout, renderer,
+     * coordinate transformations, vertex/edge shapes, etc.).
+     * @param vv source of the current <code>Layout</code>.
+     * @param pickSize the size of the pick footprint for line edges
      */
     public ShapePickSupport(VisualizationServer<V,E> vv, float pickSize) {
     	this.vv = vv;
@@ -63,8 +97,9 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     }
     
     /**
-     * Create an instance.
-     * The pickSize footprint defaults to 2.
+     * Create a <code>ShapePickSupport</code> for the specified
+     * <code>VisualizationServer</code> with a default pick footprint.
+     * of size 2.
      */
     public ShapePickSupport(VisualizationServer<V,E> vv) {
         this.vv = vv;
@@ -72,13 +107,46 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     }
     
     /**
-	 * @return the style
+     * Returns the style of picking used by this instance.
+     * This specifies which of the elements, among those
+     * whose shapes contain the pick point, is returned.
+     * The available styles are:
+     * <ul>
+     * <li/><code>Style.CENTERED</code>: returns the element whose 
+     * center is closest to the pick point.
+     * <li/><code>Style.LOWEST</code>: returns the first such element
+     * encountered.  (If the element collection has a consistent
+     * ordering, this will also be the element "on the bottom", 
+     * that is, the one which is rendered first.) 
+     * <li/><code>Style.HIGHEST</code>: returns the last such element
+     * encountered.  (If the element collection has a consistent
+     * ordering, this will also be the element "on the top", 
+     * that is, the one which is rendered last.)
+     * </ul>
+     * 
+	 * @return the style of picking used by this instance
 	 */
 	public Style getStyle() {
 		return style;
 	}
 
 	/**
+	 * Specifies the style of picking to be used by this instance.
+     * This specifies which of the elements, among those
+     * whose shapes contain the pick point, will be returned.
+     * The available styles are:
+     * <ul>
+     * <li/><code>Style.CENTERED</code>: returns the element whose 
+     * center is closest to the pick point.
+     * <li/><code>Style.LOWEST</code>: returns the first such element
+     * encountered.  (If the element collection has a consistent
+     * ordering, this will also be the element "on the bottom", 
+     * that is, the one which is rendered first.) 
+     * <li/><code>Style.HIGHEST</code>: returns the last such element
+     * encountered.  (If the element collection has a consistent
+     * ordering, this will also be the element "on the top", 
+     * that is, the one which is rendered last.)
+     * </ul>
 	 * @param style the style to set
 	 */
 	public void setStyle(Style style) {
@@ -95,7 +163,8 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 
         V closest = null;
         double minDistance = Double.MAX_VALUE;
-        Point2D ip = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, new Point2D.Double(x,y));
+        Point2D ip = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, 
+        		new Point2D.Double(x,y));
         x = ip.getX();
         y = ip.getY();
 
@@ -143,16 +212,19 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     }
 
     /**
-     * returns the vertices that are contained in the passed shape.
+     * Returns the vertices whose layout coordinates are contained in 
+     * <code>Shape</code>.
      * The shape is in screen coordinates, and the graph vertices
      * are transformed to screen coordinates before they are tested
-     * for inclusion
+     * for inclusion.
+     * @return the <code>Collection</code> of vertices whose <code>layout</code>
+     * coordinates are contained in <code>shape</code>.
      */
-    public Collection<V> getVertices(Layout<V, E> layout, Shape rectangle) {
+    public Collection<V> getVertices(Layout<V, E> layout, Shape shape) {
     	Set<V> pickedVertices = new HashSet<V>();
     	
     	// remove the view transform from the rectangle
-    	rectangle = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, rectangle);
+    	shape = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(Layer.VIEW, shape);
 
         while(true) {
             try {
@@ -161,7 +233,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
                     if(p == null) continue;
 
                     p = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, p);
-                    if(rectangle.contains(p)) {
+                    if(shape.contains(p)) {
                     	pickedVertices.add(v);
                     }
                 }
@@ -172,7 +244,7 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     }
     
     /**
-     * return an edge whose shape intersects the 'pickArea' footprint of the passed
+     * Returns an edge whose shape intersects the 'pickArea' footprint of the passed
      * x,y, coordinates.
      */
     public E getEdge(Layout<V, E> layout, double x, double y) {
@@ -192,43 +264,9 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
             try {
                 for(E e : getFilteredEdges(layout)) {
 
-                    Pair<V> pair = layout.getGraph().getEndpoints(e);
-                    V v1 = pair.getFirst();
-                    V v2 = pair.getSecond();
-                    boolean isLoop = v1.equals(v2);
-                    Point2D p1 = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, layout.transform(v1));
-                    Point2D p2 = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, layout.transform(v2));
-                    if(p1 == null || p2 == null) continue;
-                    float x1 = (float) p1.getX();
-                    float y1 = (float) p1.getY();
-                    float x2 = (float) p2.getX();
-                    float y2 = (float) p2.getY();
-
-                    // translate the edge to the starting vertex
-                    AffineTransform xform = AffineTransform.getTranslateInstance(x1, y1);
-
-                    Shape edgeShape = 
-                    	vv.getRenderContext().getEdgeShapeTransformer().transform(Context.<Graph<V,E>,E>getInstance(vv.getGraphLayout().getGraph(),e));
-                    if(isLoop) {
-                        // make the loops proportional to the size of the vertex
-                        Shape s2 = vv.getRenderContext().getVertexShapeTransformer().transform(v2);
-                        Rectangle2D s2Bounds = s2.getBounds2D();
-                        xform.scale(s2Bounds.getWidth(),s2Bounds.getHeight());
-                        // move the loop so that the nadir is centered in the vertex
-                        xform.translate(0, -edgeShape.getBounds2D().getHeight()/2);
-                    } else {
-                        float dx = x2 - x1;
-                        float dy = y2 - y1;
-                        // rotate the edge to the angle between the vertices
-                        double theta = Math.atan2(dy,dx);
-                        xform.rotate(theta);
-                        // stretch the edge to span the distance between the vertices
-                        float dist = (float) Math.sqrt(dx*dx + dy*dy);
-                        xform.scale(dist, 1.0f);
-                    }
-
-                    // transform the edge to its location and dimensions
-                    edgeShape = xform.createTransformedShape(edgeShape);
+                    Shape edgeShape = getTransformedEdgeShape(layout, e);
+                    if (edgeShape == null)
+                    	continue;
 
                     // because of the transform, the edgeShape is now a GeneralPath
                     // see if this edge is the closest of any that intersect
@@ -263,7 +301,63 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 		return closest;
     }
 
-    public Collection<V> getFilteredVertices(Layout<V,E> layout) {
+    /**
+     * Retrieves the shape template for <code>e</code> and
+     * transforms it according to the positions of its endpoints
+     * in <code>layout</code>.
+     * @param layout the <code>Layout</code> which specifies
+     * <code>e</code>'s endpoints' positions
+     * @param e the edge whose shape is to be returned
+     * @return
+     */
+	private Shape getTransformedEdgeShape(Layout<V, E> layout, E e) {
+		Pair<V> pair = layout.getGraph().getEndpoints(e);
+		V v1 = pair.getFirst();
+		V v2 = pair.getSecond();
+		boolean isLoop = v1.equals(v2);
+		Point2D p1 = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, layout.transform(v1));
+		Point2D p2 = vv.getRenderContext().getMultiLayerTransformer().transform(Layer.LAYOUT, layout.transform(v2));
+        if(p1 == null || p2 == null) 
+        	return null;
+		float x1 = (float) p1.getX();
+		float y1 = (float) p1.getY();
+		float x2 = (float) p2.getX();
+		float y2 = (float) p2.getY();
+
+		// translate the edge to the starting vertex
+		AffineTransform xform = AffineTransform.getTranslateInstance(x1, y1);
+
+		Shape edgeShape = 
+			vv.getRenderContext().getEdgeShapeTransformer().transform(Context.<Graph<V,E>,E>getInstance(vv.getGraphLayout().getGraph(),e));
+		if(isLoop) {
+		    // make the loops proportional to the size of the vertex
+		    Shape s2 = vv.getRenderContext().getVertexShapeTransformer().transform(v2);
+		    Rectangle2D s2Bounds = s2.getBounds2D();
+		    xform.scale(s2Bounds.getWidth(),s2Bounds.getHeight());
+		    // move the loop so that the nadir is centered in the vertex
+		    xform.translate(0, -edgeShape.getBounds2D().getHeight()/2);
+		} else {
+		    float dx = x2 - x1;
+		    float dy = y2 - y1;
+		    // rotate the edge to the angle between the vertices
+		    double theta = Math.atan2(dy,dx);
+		    xform.rotate(theta);
+		    // stretch the edge to span the distance between the vertices
+		    float dist = (float) Math.sqrt(dx*dx + dy*dy);
+		    xform.scale(dist, 1.0f);
+		}
+
+		// transform the edge to its location and dimensions
+		edgeShape = xform.createTransformedShape(edgeShape);
+		return edgeShape;
+	}
+
+	/**
+	 * 
+	 * @param layout
+	 * @return
+	 */
+    protected Collection<V> getFilteredVertices(Layout<V,E> layout) {
     	if(verticesAreFiltered()) {
     		Collection<V> unfiltered = layout.getGraph().getVertices();
     		Collection<V> filtered = new LinkedHashSet<V>();
@@ -278,7 +372,12 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     	}
     }
 
-    public Collection<E> getFilteredEdges(Layout<V,E> layout) {
+    /**
+     * 
+     * @param layout
+     * @return
+     */
+    protected Collection<E> getFilteredEdges(Layout<V,E> layout) {
     	if(edgesAreFiltered()) {
     		Collection<E> unfiltered = layout.getGraph().getEdges();
     		Collection<E> filtered = new LinkedHashSet<E>();
@@ -294,9 +393,9 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     }
     
     /**
-     * quick test to allow optimization of getFilteredVertices
-     * method
-     * @return
+     * Quick test to allow optimization of <code>getFilteredVertices()</code>.
+     * @return <code>true</code> if there is an active vertex filtering
+     * mechanism for this visualization, <code>false</code> otherwise
      */
     protected boolean verticesAreFiltered() {
 		Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate =
@@ -306,8 +405,9 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
     }
     
     /**
-     * quick test to allow optimization of getFilteredEdges method
-     * @return
+     * Quick test to allow optimization of <code>getFilteredEdges()</code>.
+     * @return <code>true</code> if there is an active edge filtering
+     * mechanism for this visualization, <code>false</code> otherwise
      */
     protected boolean edgesAreFiltered() {
 		Predicate<Context<Graph<V,E>,E>> edgeIncludePredicate =
@@ -316,12 +416,29 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 			edgeIncludePredicate instanceof TruePredicate == false;
     }
     
+	/**
+	 * Returns <code>true</code> if this vertex in this graph is included 
+	 * in the collections of elements to be rendered, and <code>false</code> otherwise.
+	 * @param context the vertex and graph to be queried
+	 * @return <code>true</code> if this vertex is 
+	 * included in the collections of elements to be rendered, <code>false</code>
+	 * otherwise.
+	 */
 	protected boolean isVertexRendered(Context<Graph<V,E>,V> context) {
 		Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate =
 			vv.getRenderContext().getVertexIncludePredicate();
 		return vertexIncludePredicate == null || vertexIncludePredicate.evaluate(context);
 	}
 	
+	/**
+	 * Returns <code>true</code> if this edge and its endpoints
+	 * in this graph are all included in the collections of
+	 * elements to be rendered, and <code>false</code> otherwise.
+	 * @param context the edge and graph to be queried
+	 * @return <code>true</code> if this edge and its endpoints are all
+	 * included in the collections of elements to be rendered, <code>false</code>
+	 * otherwise.
+	 */
 	protected boolean isEdgeRendered(Context<Graph<V,E>,E> context) {
 		Predicate<Context<Graph<V,E>,V>> vertexIncludePredicate =
 			vv.getRenderContext().getVertexIncludePredicate();
@@ -340,14 +457,18 @@ public class ShapePickSupport<V, E> implements GraphElementAccessor<V,E> {
 	}
 
 	/**
-	 * @return the pickSize
+	 * Returns the size of the edge picking area.
+	 * The picking area is square; the size is specified as the length of one
+	 * side, in view coordinates. 
+	 * @return the size of the edge picking area
 	 */
 	public float getPickSize() {
 		return pickSize;
 	}
 
 	/**
-	 * @param pickSize the pickSize to set
+	 * Sets the size of the edge picking area.
+	 * @param the length of one side of the (square) picking area, in view coordinates
 	 */
 	public void setPickSize(float pickSize) {
 		this.pickSize = pickSize;
