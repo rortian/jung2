@@ -25,15 +25,14 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * An algorithm for computing clusters (community structure) in graphs based on edge betweenness.
- * [Note: The betweenness of an edge measure the extent to which that edge lies along shortest paths
- * between all pairs of nodes.]
- * Edges which are least central to communities are progressively removed until the communities
- * have been adequately seperated.
+ * The betweenness of an edge is defined as the extent to which that edge lies along 
+ * shortest paths between all pairs of nodes.
  *
  * This algorithm works by iteratively following the 2 step process:
  * <ul>
  * <li> Compute edge betweenness for all edges in current graph
  * <li> Remove edge with highest betweenness
+ * </ul>
  * <p>
  * Running time is: O(kmn) where k is the number of edges to remove, m is the total number of edges, and
  * n is the total number of vertices. For very sparse graphs the running time is closer to O(kn^2) and for
@@ -87,7 +86,7 @@ public class EdgeBetweennessClusterer<V,E> implements Transformer<Graph<V,E>,Set
             graph.removeEdge(highestBetweenness.getRanked());
         }
 
-        WeakComponentVertexClusterer wcSearch = new WeakComponentVertexClusterer();
+        WeakComponentVertexClusterer<V,E> wcSearch = new WeakComponentVertexClusterer<V,E>();
         Set<Set<V>> clusterSet = wcSearch.transform(graph);
 
         for (E edge : mEdgesRemoved ) {

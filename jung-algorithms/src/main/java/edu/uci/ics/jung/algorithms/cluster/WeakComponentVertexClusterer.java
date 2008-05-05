@@ -22,12 +22,15 @@ import edu.uci.ics.jung.graph.Graph;
 
 
 /**
- * Finds all weak components in a graph where a weak component is defined as
+ * Finds all weak components in a graph as sets of vertex sets.  A weak component is defined as
  * a maximal subgraph in which all pairs of vertices in the subgraph are reachable from one
  * another in the underlying undirected subgraph.
+ * <p>This implementation identifies components as sets of vertex sets.  For a weak component
+ * clusterer that identifies components as graphs, see {@link WeakComponentGraphClusterer}.
  * <p>
  * Running time: O(|V| + |E|) where |V| is the number of vertices and |E| is the number of edges.
  * @author Scott White
+ * @see WeakComponentGraphClusterer.
  */
 public class WeakComponentVertexClusterer<V,E> implements Transformer<Graph<V,E>, Set<Set<V>>> {
 
