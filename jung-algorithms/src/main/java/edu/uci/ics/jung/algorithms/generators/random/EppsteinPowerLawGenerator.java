@@ -98,6 +98,8 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
             List<E> edges = new ArrayList<E>(graph.getIncidentEdges(v));
             E randomExistingEdge = edges.get((int) (mRandom.nextDouble()*degree));
 
+            // FIXME: look at Google email thread on a more efficient RNG for arbitrary distributions
+            
             V x = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
             V y = null;
             do {
