@@ -12,7 +12,6 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 
@@ -58,7 +57,7 @@ public class TestBarabasiAlbert extends TestCase {
 	    for (int i = 1; i <= num_tests; i++) {
 	        
 	        generator.evolveGraph(num_timesteps);
-	        Graph graph = (Graph) generator.generateGraph();
+	        Graph<Integer, Number> graph = generator.generateGraph();
 	        assertEquals(graph.getVertexCount(), (i*num_timesteps) + init_vertices);
 	        assertEquals(graph.getEdgeCount(), edges_to_add_per_timestep * (i*num_timesteps));
 	    }
