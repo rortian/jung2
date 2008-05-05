@@ -48,7 +48,7 @@ public class RadiusPickSupport<V, E>
 	 * Gets the vertex nearest to the location of the (x,y) location selected,
 	 * within a distance of <tt>maxDistance</tt>. Iterates through all
 	 * visible vertices and checks their distance from the click. Override this
-	 * method to provde a more efficient implementation.
+	 * method to provide a more efficient implementation.
 	 */
 	public V getVertex(Layout<V,E> layout, double x, double y) {
 	    return getVertex(layout, x, y, this.maxDistance);
@@ -58,7 +58,7 @@ public class RadiusPickSupport<V, E>
 	 * Gets the vertex nearest to the location of the (x,y) location selected,
 	 * within a distance of <tt>maxDistance</tt>. Iterates through all
 	 * visible vertices and checks their distance from the click. Override this
-	 * method to provde a more efficient implementation.
+	 * method to provide a more efficient implementation.
 	 * @param x
 	 * @param y
 	 * @param maxDistance temporarily overrides member maxDistance
