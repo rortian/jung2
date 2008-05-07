@@ -41,7 +41,6 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	/**
 	 * create an instance with passed values.
 	 * @param graphFactory must create a DirectedGraph to use as a delegate
-	 * @param edgeFactory must create unique edges to connect tree nodes
 	 */
 	public DelegateTree(Factory<DirectedGraph<V,E>> graphFactory) {
 		super(graphFactory.create());
@@ -74,6 +73,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	 * @return true if this call mutates the underlying graph
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
+	@Override
 	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 		return addChild(e, v1, v2, edgeType);
 	}
@@ -89,6 +89,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	 * @return true if this call mutates the underlying graph
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public boolean addEdge(E e, V v1, V v2) {
 		return addChild(e, v1, v2);
 	}
@@ -100,8 +101,9 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	 * @param vertex the tree root to set
 	 * @return true if this call mutates the underlying graph
 	 * @see edu.uci.ics.jung.graph.Graph#addVertex(java.lang.Object)
-	 * @throws an UnsupportedOperationException if the root was previously set
+	 * @throws UnsupportedOperationException if the root was previously set
 	 */
+	@Override
 	public boolean addVertex(V vertex) {
 		if(root == null) {
 			this.root = vertex;
@@ -116,9 +118,10 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	 * remove the passed node, and all nodes that are descendants of the
 	 * passed node.
 	 * @param vertex
-	 * @return
+	 * @return <code>true</code> iff the tree was modified 
 	 * @see edu.uci.ics.jung.graph.Graph#removeVertex(java.lang.Object)
 	 */
+	@Override
 	public boolean removeVertex(V vertex) {
 	    if (!delegate.containsVertex(vertex))
 	        return false;
@@ -131,19 +134,6 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 		return delegate.removeVertex(vertex);
 	}
 	
-	/**
-	 * add the passed child node as a child of parent.
-	 * parent must exist in the tree, and child must not already exist.
-	 * the connecting edge will be dynamically created by the 
-	 * edgeFactory member
-	 * @param parent the existing parent to attach the child to
-	 * @param child the new child to add to the tree as a child of parent
-	 * @return whether this call mutates the underlying graph
-	 */
-//	public boolean addChild(V parent, V child) {
-//		return addChild(edgeFactory.create(), parent, child);
-//	}
-
 	/**
 	 * add the passed child node as a child of parent.
 	 * parent must exist in the tree, and child must not already exist.
@@ -279,7 +269,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	}
 
 	/**
-	 * computes and returns the height of the tree
+	 * Computes and returns the height of the tree.
 	 * 
 	 * @return the height
 	 */
@@ -292,9 +282,10 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	}
 
 	/**
-	 * computes and returns whether the passed node is
-	 * neither the root, nor a leaf node.
-	 * @return 
+	 * Returns <code>true</code> if <code>v</code> is neither 
+	 * a leaf nor the root of this tree.
+	 * @return <code>true</code> if <code>v</code> is neither 
+     * a leaf nor the root of this tree
 	 */
 	public boolean isInternal(V v) {
 	    if (!delegate.containsVertex(v))
@@ -303,8 +294,10 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	}
 
 	/**
-	 * computes and returns whether the passed node is
-	 * a leaf (has no child nodes)
+	 * Returns <code>true</code> if the passed node has no
+	 * children.
+	 * @return <code>true</code> if the passed node has no
+     * children
 	 */
 	public boolean isLeaf(V v) {
         if (!delegate.containsVertex(v))
@@ -326,6 +319,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 		return Collections.singleton(getRoot());
 	}
 
+	@Override
     public int getIncidentCount(E edge)
     {
         if (!delegate.containsEdge(edge))
@@ -334,6 +328,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
         return 2;
     }
     
+	@Override
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		Pair<V> pair = null;
 		if(vertices instanceof Pair) {
@@ -344,6 +339,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 		return addEdge(edge, pair.getFirst(), pair.getSecond());
 	}
 	
+	@Override
 	public String toString() {
 		return "Tree of "+delegate.toString();
 	}
@@ -352,8 +348,11 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 		return Collections.<Tree<V,E>>singleton(this);
 	}
 
-//	public void addTree(Tree<V, E> tree) {
-//		// TODO Auto-generated method stub
-//		
-//	}
+  public Collection<E> getChildEdges(V vertex) {
+      return getOutEdges(vertex);
+  }
+
+  public E getParentEdge(V vertex) {
+      return getInEdges(vertex).iterator().next();
+  }
 }
