@@ -43,6 +43,8 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         vertices = new HashMap<V, Pair<Map<V,E>>>();
         edges = new HashMap<E, Pair<V>>();
     }
+    
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints)
     {
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
@@ -70,6 +72,7 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         return true;
     }
 
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType)
     {
         if(edgeType != EdgeType.DIRECTED) 
@@ -77,6 +80,7 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         return addEdge(edge, endpoints);
     }
 
+    @Override
     public E findEdge(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))
@@ -84,6 +88,7 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         return vertices.get(v1).getSecond().get(v2);
     }
 
+    @Override
     public Collection<E> findEdgeSet(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))

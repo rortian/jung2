@@ -190,18 +190,18 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     /**
      * Returns <code>true</code> if <code>vertex</code> is the source of <code>edge</code>.
      * Equivalent to <code>getSource(edge).equals(vertex)</code>.
-     * @param vertex the 
-     * @param edge
-     * @return
+     * @param vertex the vertex to be queried
+     * @param edge the edge to be queried
+     * @return <code>true</code> iff <code>vertex</code> is the source of <code>edge</code>
      */
     boolean isSource(V vertex, E edge);
     
     /**
      * Returns <code>true</code> if <code>vertex</code> is the destination of <code>edge</code>.
      * Equivalent to <code>getDest(edge).equals(vertex)</code>.
-     * @param vertex
-     * @param edge
-     * @return
+     * @param vertex the vertex to be queried
+     * @param edge the edge to be queried
+     * @return <code>true</code> iff <code>vertex</code> is the destination of <code>edge</code>
      */
     boolean isDest(V vertex, E edge);
 
@@ -260,6 +260,5 @@ public interface Graph<V,E> extends Hypergraph<V,E>
      * @param edge the edge to be queried
      * @return the vertex at the other end of <code>edge</code> from <code>vertex</code>
      */
-    V getOpposite(V vertex, E edge); // get edge's incident vertices, find the Vertex that's not the one input
-
+    V getOpposite(V vertex, E edge); 
 }

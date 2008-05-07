@@ -60,7 +60,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
      * Any vertices in <code>to_attach</code> that appear more than once will only appear once in the
      * incident vertex collection for <code>hyperedge</code>, that is, duplicates will be ignored.
      * 
-     * @see Hypergraph#addEdge(H, Collection<V>)
+     * @see Hypergraph#addEdge(Object, Collection)
      */
     public boolean addEdge(H hyperedge, Collection<? extends V> to_attach)
     {

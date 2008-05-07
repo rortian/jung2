@@ -76,6 +76,7 @@ public final class Pair<T> implements Collection<T>, Serializable
         return second;
     }
     
+    @Override
     public boolean equals( Object o ) {
         if (o == this)
             return true;
@@ -97,6 +98,7 @@ public final class Pair<T> implements Collection<T>, Serializable
         }
     }
     
+    @Override
     public int hashCode() 
     {
     	int hashCode = 1;
@@ -105,6 +107,7 @@ public final class Pair<T> implements Collection<T>, Serializable
     	return hashCode;
     }
     
+    @Override
     public String toString()
     {
         return "<" + first.toString() + ", " + second.toString() + ">";

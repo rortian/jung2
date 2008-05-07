@@ -12,7 +12,7 @@ public interface Forest<V,E> extends DirectedGraph<V,E> {
 	
     /**
      * Returns a view of this graph as a collection of <code>Tree</code> instances.
-     * @return
+     * @return a view of this graph as a collection of <code>Tree</code>s
      */
 	Collection<Tree<V,E>> getTrees();
 

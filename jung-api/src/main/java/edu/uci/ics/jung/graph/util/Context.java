@@ -12,10 +12,12 @@ public class Context<G,E> {
 		return instance;
 	}
 	
+	@Override
 	public int hashCode() {
 		return graph.hashCode() ^ element.hashCode();
 	}
 	
+	@Override
     public boolean equals(Object o) {
         if (!(o instanceof Context))
             return false;

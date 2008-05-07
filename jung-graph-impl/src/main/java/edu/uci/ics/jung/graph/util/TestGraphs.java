@@ -54,8 +54,6 @@ public class TestGraphs {
 	 * the graph is a {@link DirectedSparseMultigraph DirectedSparseMultigraph},
 	 * otherwise, it is an {@link UndirectedSparseMultigraph UndirectedSparseMultigraph}.
 	 * 
-	 * @param graph a directed or undirected graph
-	 *            Is the graph directed?
 	 * @return a graph consisting of eight edges and ten nodes.
 	 */
 	public static Graph<String, Number> createTestGraph(boolean directed) {
