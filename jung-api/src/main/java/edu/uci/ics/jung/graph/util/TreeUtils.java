@@ -11,9 +11,10 @@
  */
 package edu.uci.ics.jung.graph.util;
 
-import java.util.Collection;
-
 import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Tree;
+
+import java.util.Collection;
 
 /**
  * Contains static methods for operating on instances of <code>Tree</code>.
@@ -49,7 +50,7 @@ public class TreeUtils
      * @param <V> the vertex type
      * @param <E> the edge type
      * @param tree the tree whose subtree is to be extracted
-     * @param subtree the tree instance which is to be populated with the subtree of <code>tree</code>
+     * @param subTree the tree instance which is to be populated with the subtree of <code>tree</code>
      * @param root the root of the subtree to be extracted
 	 */
 	public static <V,E> void growSubTree(Forest<V,E> tree, Forest<V,E> subTree, V root) {
@@ -71,7 +72,7 @@ public class TreeUtils
      * @param <V> the vertex type
      * @param <E> the edge type
      * @param tree the tree to which <code>subTree</code> is to be added
-     * @param subtree the tree which is to be grafted on to <code>tree</code>
+     * @param subTree the tree which is to be grafted on to <code>tree</code>
      * @param node the parent of <code>subTree</code> in its new position in <code>tree</code>
 	 * @param connectingEdge the edge used to connect <code>subtree</code>'s root as a child of <code>node</code>
 	 */
@@ -83,7 +84,38 @@ public class TreeUtils
 		addFromSubTree(tree, subTree, connectingEdge, node, root);
 	}
 	
-	private static <V,E> void addFromSubTree(Forest<V,E> tree, Forest<V,E> subTree, 
+	/**
+	 * Adds the trees in <code>source</code> to <code>destination</code>.
+	 * <code>source</code> is left unchanged.  The vertex and edge objects
+	 * in <code>source</code> will also be used in <code>destination</code>,
+	 * in the same (structural) roles.
+	 * @param <V> the vertex type
+	 * @param <E> the edge type
+	 * @param destination  the forest to which the trees in <code>source</code> 
+	 * will be added
+	 * @param source the forest whose trees will be added to 
+	 * <code>destination</code>
+	 * FIXME also note that this is redundant with DelegateForest.addTree()
+	 *
+	 */
+	public static <V,E> void mergeForests(Forest<V,E> destination, 
+	        Forest<V,E> source)
+	{
+	    for (Tree<V,E> tree : source.getTrees())
+	    {
+	        V root = tree.getRoot();
+	        // FIXME this is not done: addChildrenToForest is not yet complete
+	        // also still need to integrate into MST2, etc. (see email thread)
+//	        addChildrenToForest(destination, tree, root);
+	        for (E e: tree.getOutEdges(root))
+	        {
+	            V child = tree.getOpposite(root, e);
+	            addFromSubTree(destination, source, e, root, child);
+	        }
+	    }
+	}
+	
+	public static <V,E> void addFromSubTree(Forest<V,E> tree, Forest<V,E> subTree, 
 			E edge, V parent, V root) {
 
 		// add edge connecting parent and root to tree
@@ -92,10 +124,23 @@ public class TreeUtils
 		} else {
 			tree.addVertex(root);
 		}
+		
 		Collection<E> outEdges = subTree.getOutEdges(root);
 		for(E e : outEdges) {
 			V opposite = subTree.getOpposite(root, e);
 			addFromSubTree(tree, subTree, e, root, opposite);
 		}
+	}
+
+	// FIXME: not done or integrated yet
+	private static <V,E> void addChildrenToForest(Forest<V,E> forest, Tree<V,E> tree, 
+	        V subtree_root)
+	{
+	    V parent = tree.getPredecessors(subtree_root).iterator().next();
+	    for (E e : tree.getOutEdges(subtree_root))
+	    {
+	        V child = tree.getOpposite(subtree_root, e);
+	        addChildrenToForest(forest, tree, child);
+	    }
 	}
 }
