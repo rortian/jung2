@@ -549,6 +549,22 @@ public class Graphs {
 		public synchronized V getRoot() {
 			return ((Tree<V,E>)delegate).getRoot();
 		}
+
+        public Collection<E> getChildEdges(V vertex) {
+            return getOutEdges(vertex);
+        }
+    
+        public Collection<V> getChildren(V vertex) {
+            return getSuccessors(vertex);
+        }
+    
+        public V getParent(V vertex) {
+            return getPredecessors(vertex).iterator().next();
+        }
+    
+        public E getParentEdge(V vertex) {
+            return getInEdges(vertex).iterator().next();
+        }
 	}
 	
 	static class SynchronizedForest<V,E> extends SynchronizedDirectedGraph<V,E> implements Forest<V,E> {
@@ -1009,6 +1025,22 @@ public class Graphs {
 		public Collection<Tree<V, E>> getTrees() {
 			return ((Tree<V,E>)delegate).getTrees();
 		}
+		
+        public Collection<E> getChildEdges(V vertex) {
+          return getOutEdges(vertex);
+        }
+  
+        public Collection<V> getChildren(V vertex) {
+            return getSuccessors(vertex);
+        }
+    
+        public V getParent(V vertex) {
+            return getPredecessors(vertex).iterator().next();
+        }
+    
+        public E getParentEdge(V vertex) {
+            return getInEdges(vertex).iterator().next();
+        }
 	}
 
 }
