@@ -146,7 +146,7 @@ public interface Hypergraph<V, E>
      * 
      * @return  an edge that connects <code>v1</code> to <code>v2</code>, 
      * or <code>null</code> if no such edge exists (or either vertex is not present)
-     * @see Hypergraph#findEdgeSet(V, V) 
+     * @see Hypergraph#findEdgeSet(Object, Object) 
      */
     E findEdge(V v1, V v2);
     
@@ -168,7 +168,7 @@ public interface Hypergraph<V, E>
      * 
      * @return  a collection containing all edges that connect <code>v1</code> to <code>v2</code>, 
      * or <code>null</code> if either vertex is not present
-     * @see Hypergraph#findEdge(V, V) 
+     * @see Hypergraph#findEdge(Object, Object) 
      */
     Collection<E> findEdgeSet(V v1, V v2);
     
@@ -247,7 +247,8 @@ public interface Hypergraph<V, E>
      * <code>getIncidentVertices(edge).contains(vertex)</code>.
      * @param vertex
      * @param edge
-     * @return
+     * @return <code>true</code> if <code>vertex</code> and <code>edge</code> 
+     * are incident to each other
      */
     boolean areIncident(V vertex, E edge);
     
@@ -268,7 +269,7 @@ public interface Hypergraph<V, E>
      * </ul>
      * <p>Equivalent to <code>getIncidentEdges(vertex).size()</code>.
      * 
-     * @param the vertex whose degree is to be returned
+     * @param vertex the vertex whose degree is to be returned
      * @return the degree of this node
      * @see Hypergraph#getNeighborCount(Object)
      */
