@@ -42,6 +42,7 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 	 * @return true if this call mutates the underlying graph
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
+	@Override
 	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 		if(delegate.getVertices().contains(v1) == false) {
 			throw new IllegalArgumentException("Tree must already contain "+v1);
@@ -63,6 +64,7 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 	 * @return true if this call mutates the underlying graph
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
+	@Override
 	public boolean addEdge(E e, V v1, V v2) {
 		if(delegate.getVertices().contains(v1) == false) {
 			throw new IllegalArgumentException("Tree must already contain "+v1);
@@ -80,36 +82,84 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 	 * @return true if this call mutates the underlying graph
 	 * @see edu.uci.ics.jung.graph.Graph#addVertex(java.lang.Object)
 	 */
+	@Override
 	public boolean addVertex(V vertex) {
 		setRoot(vertex);
 		return true;
 	}
 
 	/**
-	 * @param edge
-	 * @return
+	 * Removes <code>edge</code> from this tree, and the subtree rooted
+	 * at the child vertex incident to <code>edge</code>.
+	 * (The subtree is removed to ensure that the tree in which the edge
+	 * was found is still a tree rather than a forest.  To change this
+	 * behavior so that the 
+	 * @param edge the edge to remove
+	 * @return <code>true</code> iff the tree was modified
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeEdge(java.lang.Object)
 	 */
+	@Override
 	public boolean removeEdge(E edge) {
-	    if (!delegate.containsEdge(edge))
-	        return false;
-		Pair<V> endpoints = delegate.getEndpoints(edge);
-		return removeVertex(endpoints.getSecond());
-//		return delegate.removeEdge(edge);
+	    return removeEdge(edge, true);
 	}
+	
 	/**
-	 * @param vertex
-	 * @return
+	 * Removes <code>edge</code> from this tree.  
+	 * If <code>remove_subtree</code> is <code>true</code>, removes 
+	 * the subtree rooted at the child vertex incident to <code>edge</code>.
+	 * Otherwise, leaves the subtree intact as a new component tree of this 
+	 * forest.
+	 * @param edge the edge to remove
+	 * @param remove_subtree if <code>true</code>, remove the subtree
+	 * @return <code>true</code> iff the tree was modified
+	 */
+	public boolean removeEdge(E edge, boolean remove_subtree)
+	{
+        if (!delegate.containsEdge(edge))
+            return false;
+        V child = getDest(edge);
+        if (remove_subtree)
+            return removeVertex(child);
+        else
+        {
+            delegate.removeEdge(edge);
+            return false;
+        }        
+	}
+	
+	/**
+	 * Removes <code>vertex</code> from this tree, and the subtree 
+	 * rooted at <code>vertex</code>.
+	 * @param vertex the vertex to remove
+	 * @return <code>true</code> iff the tree was modified
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
+	@Override
 	public boolean removeVertex(V vertex) {
-	    if (!delegate.containsVertex(vertex))
-	        return false;
-		for(V v : delegate.getSuccessors(vertex)) {
-			removeVertex(v);
-		}
-		return delegate.removeVertex(vertex);
+	    return removeVertex(vertex, true);
 	}
+
+	/**
+	 * Removes <code>vertex</code> from this tree.
+     * If <code>remove_subtrees</code> is <code>true</code>, removes 
+     * the subtrees rooted at the children of <code>vertex</code>.
+     * Otherwise, leaves these subtrees intact as new component trees of this 
+     * forest.
+     * @param vertex the vertex to remove
+	 * @param remove_subtrees if <code>true</code>, remove the subtrees
+	 * rooted at <code>vertex</code>'s children
+	 * @return <code>true</code> iff the tree was modified
+	 */
+	public boolean removeVertex(V vertex, boolean remove_subtrees)
+	{
+        if (!delegate.containsVertex(vertex))
+            return false;
+        if (remove_subtrees)
+            for(V v : delegate.getSuccessors(vertex)) 
+                removeVertex(v, true);
+        return delegate.removeVertex(vertex);
+	}
+	
 	/**
 	 * returns an ordered list of the nodes beginning at the root
 	 * and ending at the passed child node, including all intermediate
@@ -194,7 +244,8 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 	/**
 	 * computes and returns whether the passed node is
 	 * neither the root, nor a leaf node.
-	 * @return 
+	 * @return <code>true</code> if <code>v</code> is neither a leaf
+	 * nor a root 
 	 */
 	public boolean isInternal(V v) {
 		return isLeaf(v) == false && isRoot(v) == false;
@@ -219,11 +270,13 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 		return getParent(v) == null;
 	}
 
+	@Override
     public int getIncidentCount(E edge)
     {
         return 2;
     }
     
+	@Override
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		Pair<V> pair = null;
 		if(vertices instanceof Pair) {
