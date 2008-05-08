@@ -50,4 +50,22 @@ public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer
         else 
             return undirected_value;
     }
+    
+    /**
+     * Sets the value returned for undirected edges to <code>value</code>.
+     * @param value the new value to return for undirected edges
+     */
+    public void setUndirectedValue(double value)
+    {
+    	this.undirected_value = value;
+    }
+    
+    /**
+     * Sets the value returned for directed edges to <code>value</code>.
+     * @param value the new value to return for directed edges
+     */
+    public void setDirectedValue(double value)
+    {
+    	this.directed_value = value;
+    }
 }

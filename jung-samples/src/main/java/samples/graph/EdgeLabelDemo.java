@@ -283,13 +283,13 @@ public class EdgeLabelDemo extends JApplet {
             
             undirectedModel.addChangeListener(new ChangeListener(){
                 public void stateChanged(ChangeEvent e) {
-                    undirected_closeness = new Double(undirectedModel.getValue()/10f);
+                    setUndirectedValue(new Double(undirectedModel.getValue()/10f));
                     vv.repaint();
                 }
             });
             directedModel.addChangeListener(new ChangeListener(){
                 public void stateChanged(ChangeEvent e) {
-                    directed_closeness = new Double(directedModel.getValue()/10f);
+                    setDirectedValue(new Double(directedModel.getValue()/10f));
                     vv.repaint();
                 }
             });
