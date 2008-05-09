@@ -27,21 +27,21 @@ public class TreeUtils
      * The tree returned is an independent entity, although it uses the same vertex and edge objects.
      * @param <V> the vertex type
      * @param <E> the edge type
-     * @param tree the tree whose subtree is to be extracted
+     * @param forest the tree whose subtree is to be extracted
      * @param root the root of the subtree to be extracted
      * @return the subtree of <code>tree</code> which is rooted at <code>root</code>
      * @throws InstantiationException if a new tree of the same type cannot be created
      * @throws IllegalAccessException 
      */
-	public static <V,E> Forest<V,E> getSubTree(Forest<V,E> tree, V root) throws InstantiationException, IllegalAccessException 
+	public static <V,E> Tree<V,E> getSubTree(Forest<V,E> forest, V root) throws InstantiationException, IllegalAccessException 
 	{
-	    if (!tree.containsVertex(root))
+	    if (!forest.containsVertex(root))
 	        throw new IllegalArgumentException("Specified tree does not contain the specified root as a vertex");
-		Forest<V,E> subTree = tree.getClass().newInstance();
-		subTree.addVertex(root);
-		growSubTree(tree, subTree, root);
+		Forest<V,E> subforest = forest.getClass().newInstance();
+		subforest.addVertex(root);
+		growSubTree(forest, subforest, root);
 		
-		return subTree;
+		return subforest.getTrees().iterator().next();
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class TreeUtils
 	 */
 	public static <V,E> void addSubTree(Forest<V,E> tree, Forest<V,E> subTree, 
 			V node, E connectingEdge) {
-        if (!tree.containsVertex(node))
+        if (node != null && !tree.containsVertex(node))
             throw new IllegalArgumentException("Specified tree does not contain the specified node as a vertex");
 		V root = ((Forest<V,E>)subTree).getTrees().iterator().next().getRoot();
 		addFromSubTree(tree, subTree, connectingEdge, node, root);
