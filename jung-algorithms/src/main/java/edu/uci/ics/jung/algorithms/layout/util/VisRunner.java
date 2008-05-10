@@ -58,14 +58,11 @@ public class VisRunner implements Relaxer, Runnable {
 		while (System.currentTimeMillis() - timeNow < 500 && !process.done()) {
 			process.step();
 		}
-//		System.err.println("time was "+(System.currentTimeMillis()-timeNow));
 		manualSuspend = false;
 	}
-	
 
 	public void pause() {
 		manualSuspend = true;
-		
 	}
 
 	public void relax() {
@@ -91,24 +88,22 @@ public class VisRunner implements Relaxer, Runnable {
 		}
 	}
 
-
 	public synchronized void stop() {
 		if(thread != null) {
-		manualSuspend = false;
-		stop = true;
-		// interrupt the relaxer, in case it is paused or sleeping
-		// this should ensure that visRunnerIsRunning gets set to false
-		try { thread.interrupt(); }
-        catch(Exception ex) {
-            // the applet security manager may have prevented this.
-            // just sleep for a second to let the thread stop on its own
-//            System.err.println("got "+ex);
-            try { Thread.sleep(1000); }
-            catch(InterruptedException ie) {} // ignore
-        }
-		synchronized (pauseObject) {
-			pauseObject.notifyAll();
-		}
+			manualSuspend = false;
+			stop = true;
+			// interrupt the relaxer, in case it is paused or sleeping
+			// this should ensure that visRunnerIsRunning gets set to false
+			try { thread.interrupt(); }
+			catch(Exception ex) {
+				// the applet security manager may have prevented this.
+				// just sleep for a second to let the thread stop on its own
+				try { Thread.sleep(1000); }
+				catch(InterruptedException ie) {} // ignore
+			}
+			synchronized (pauseObject) {
+				pauseObject.notifyAll();
+			}
 		}
 	}
 
@@ -121,7 +116,7 @@ public class VisRunner implements Relaxer, Runnable {
 	                    try {
 	                        pauseObject.wait();
 	                    } catch (InterruptedException e) {
-//	                        System.err.println("vis runner wait interrupted");
+	                    	// ignore
 	                    }
 	                }
 	            }
@@ -133,7 +128,7 @@ public class VisRunner implements Relaxer, Runnable {
 	            try {
 	                Thread.sleep(sleepTime);
 	            } catch (InterruptedException ie) {
-//	                System.err.println("vis runner sleep interrupted");
+	            	// ignore
 	            }
 	        }
 
