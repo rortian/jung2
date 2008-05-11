@@ -61,9 +61,9 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * phase, and continue looking for another opportunity.
 	 */
 	final double MSV_THRESHOLD = 10.0;
-	static double meanSquareVel;
-	static boolean stoppingIncrements = false;
-	static int incrementsLeft;
+	double meanSquareVel;
+	boolean stoppingIncrements = false;
+	int incrementsLeft;
 	final int COOL_DOWN_INCREMENTS = 200;
 	/*
 	 * @param g
@@ -148,7 +148,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * @param coord
 	 * @param d
 	 */
-	protected void initializeLocation(
+	private void initializeLocation(
 		V v,
 		Point2D coord,
 		Dimension d) {
@@ -160,9 +160,20 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 		coord.setLocation(x,y);
 	}
 
+    /* (non-Javadoc)
+	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
+	 */
+	@Override
+	public void setSize(Dimension size) {
+		super.setSize(size);
+		for(V v : getGraph().getVertices()) {
+			initializeLocation(v,transform(v),getSize());
+		}
+	}
 	/**
 	 * Had to override this one as well, to ensure that setRoot() is called.
 	 */
+	@Override
 	public void initialize() {
 		super.initialize();
 		for(E e : getGraph().getEdges()) {
@@ -181,6 +192,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * need to make is to make sure that nodes don't float higher than the minY
 	 * coordinate, as calculated by their minimumLevel.
 	 */
+	@Override
 	protected void moveNodes() {
 		// Dimension d = currentSize;
 		double oldMSV = meanSquareVel;
@@ -262,6 +274,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	/**
 	 * Override incrementsAreDone so that we can eventually stop.
 	 */
+	@Override
 	public boolean done() {
 		if (stoppingIncrements && incrementsLeft == 0)
 			return true;
@@ -273,9 +286,21 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * Override forceMove so that if someone moves a node, we can re-layout
 	 * everything.
 	 */
-	public void forceMove(V picked, int x, int y) {
+	@Override
+	public void setLocation(V picked, double x, double y) {
 		Point2D coord = transform(picked);
 		coord.setLocation(x,y);
+		stoppingIncrements = false;
+	}
+
+	/**
+	 * Override forceMove so that if someone moves a node, we can re-layout
+	 * everything.
+	 */
+	@Override
+	public void setLocation(V picked, Point2D p) {
+		Point2D coord = transform(picked);
+		coord.setLocation(p);
 		stoppingIncrements = false;
 	}
 
@@ -284,7 +309,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * greatly different levels.
 	 *  
 	 */
-
+	@Override
 	protected void relaxEdges() {
 		for(E e : getGraph().getEdges()) {
 
