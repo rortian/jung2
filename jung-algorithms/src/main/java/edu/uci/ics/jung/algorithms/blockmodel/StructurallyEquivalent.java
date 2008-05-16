@@ -11,12 +11,16 @@
 package edu.uci.ics.jung.algorithms.blockmodel;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections15.CollectionUtils;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -77,6 +81,12 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 			intermediate.put(p.getSecond(), res);
 		}
 		rv.addAll(intermediate.values());
+		
+		// pick up the vertices which don't appear in intermediate; they are singletons
+		Collection<V> singletons = CollectionUtils.subtract(g.getVertices(), intermediate.keySet());
+		for (V v : singletons)
+		    rv.add(Collections.singleton(v));
+		
 		return new EquivalenceRelation<V,E>(rv, g);
 	}
 
@@ -118,7 +128,7 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 				}
 			}
 		}
-
+		
 		return rv;
 	}
 

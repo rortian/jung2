@@ -50,18 +50,16 @@ public class EquivalenceRelation<V,E> {
 	}
 
 	/**
-	 * Returns the set of vertices that do not belong to an particular equivalence class.
-	 * Takes O(n) time by walking through the whole graph and checking all vertices that
-	 * are not in any equivalence relation.
+	 * Returns the set of vertices whose equivalence class consists of a single vertex.
+	 * Takes O(n) time by walking through the whole graph and checking all vertices.
 	 */
 	public Set<V> getSingletonVertices() {
-		Set<V> allVerticesInEquivalence = new HashSet<V>();
+		Set<V> singletons = new HashSet<V>();
 		for(Set<V> s : equivalenceSets) {
-			allVerticesInEquivalence.addAll(s);
+		    if (s.size() == 1)
+		        singletons.add(s.iterator().next());
 		}
-		Set<V> allVertices = new HashSet<V>(graph.getVertices());
-		allVertices.removeAll(allVerticesInEquivalence);
-		return allVertices;
+		return singletons;
 	}
 
 	/**
