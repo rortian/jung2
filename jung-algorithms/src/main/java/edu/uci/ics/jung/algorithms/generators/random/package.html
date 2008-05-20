@@ -14,7 +14,15 @@ IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT
 </head>
 <body>
 
-Provides mechanisms for identifying clusters in graphs.
+Methods for generating random graphs with various properties.  These include:
+<ul>
+<li/><code>BarabasiAlbertGenerator</code>: scale-free graphs using the preferential attachment heuristic.
+<li/><code>EppsteinPowerLawGenerator</code>: graphs whose degree distribution approximates a power law
+<li/><code>ErdosRenyiGenerator</code>: graphs for which edges are created with a specified probability
+<li/><code>MixedRandomGraphGenerator</code>: takes the output of <code>BarabasiAlbertGenerator</code> and
+perturbs it to generate a mixed-mode analog with both directed and undirected edges. 
+<li/>
+
 
 </body>
 </html>
