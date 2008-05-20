@@ -11,7 +11,7 @@
  * Created on Dec 26, 2001
  *
  */
-package edu.uci.ics.jung.algorithms.filters.impl;
+package edu.uci.ics.jung.algorithms.filters;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -65,7 +65,7 @@ public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 	/**
 	 * Constructs an unassembled graph containing the k-neighbhood around the root node(s)
 	 */
-	public Graph<V,E> filter(Graph<V,E> graph) {
+	public Graph<V,E> transform(Graph<V,E> graph) {
 		// generate a Set of Vertices we want
 		// add all to the UG
 		int currentDepth = 0;

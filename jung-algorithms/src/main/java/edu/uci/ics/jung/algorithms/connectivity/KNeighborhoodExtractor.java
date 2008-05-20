@@ -11,10 +11,10 @@ package edu.uci.ics.jung.algorithms.connectivity;
 
 import java.util.Set;
 
+import edu.uci.ics.jung.algorithms.filters.Filter;
+import edu.uci.ics.jung.algorithms.filters.KNeighborhoodFilter;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.algorithms.filters.Filter;
-import edu.uci.ics.jung.algorithms.filters.impl.KNeighborhoodFilter;
 
 
 
@@ -73,7 +73,7 @@ public class KNeighborhoodExtractor {
 		int radiusK,
 		KNeighborhoodFilter.EdgeType edgeType) {
 		Filter<V,E> nf = new KNeighborhoodFilter<V,E>(rootNodes, radiusK, edgeType);
-		return nf.filter(graph);
+		return nf.transform(graph);
 	}
 
 }
