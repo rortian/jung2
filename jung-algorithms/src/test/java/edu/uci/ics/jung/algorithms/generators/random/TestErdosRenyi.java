@@ -55,7 +55,7 @@ public class TestErdosRenyi extends TestCase {
 					numVertices,0.1);
             generator.setSeed(0);
 
-			Graph<String,Number> graph = generator.generateGraph();
+			Graph<String,Number> graph = generator.create();
 			Assert.assertTrue(graph.getVertexCount() == numVertices);
             total += graph.getEdgeCount();
 		}

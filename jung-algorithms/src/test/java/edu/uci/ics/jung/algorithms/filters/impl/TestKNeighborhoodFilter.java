@@ -8,7 +8,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.jung.algorithms.filters.Filter;
-import edu.uci.ics.jung.algorithms.filters.impl.KNeighborhoodFilter.EdgeType;
+import edu.uci.ics.jung.algorithms.filters.KNeighborhoodFilter;
+import edu.uci.ics.jung.algorithms.filters.KNeighborhoodFilter.EdgeType;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
@@ -41,19 +42,19 @@ public class TestKNeighborhoodFilter extends TestCase {
 
 	public void testIn() {
 		Filter<Number,Number> filter = new KNeighborhoodFilter<Number,Number>(0, 2, EdgeType.IN);
-		Graph<Number,Number> result = filter.filter(graph);
+		Graph<Number,Number> result = filter.transform(graph);
 		assertEquals(result.getVertexCount(), 4);
 		assertEquals(result.getEdgeCount(), 5);
 	}
 	public void testOut() {
 		Filter<Number,Number> filter = new KNeighborhoodFilter<Number,Number>(0, 2, EdgeType.OUT);
-		Graph<Number,Number> result = filter.filter(graph);
+		Graph<Number,Number> result = filter.transform(graph);
 		assertEquals(result.getVertexCount(), 5);
 		assertEquals(result.getEdgeCount(), 5);
 	}
 	public void testInOut() {
 		Filter<Number,Number> filter = new KNeighborhoodFilter<Number,Number>(0, 2, EdgeType.IN_OUT);
-		Graph<Number,Number> result = filter.filter(graph);
+		Graph<Number,Number> result = filter.transform(graph);
 		assertEquals(result.getVertexCount(), 7);
 		assertEquals(result.getEdgeCount(), 8);
 	}

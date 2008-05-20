@@ -61,7 +61,7 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
             	new EppsteinPowerLawGenerator<Integer, Number>(graphFactory, vertexFactory, edgeFactory, 10,40,r);
             generator.setSeed(2);
 
-            Graph<Integer, Number> graph = generator.generateGraph();
+            Graph<Integer, Number> graph = generator.create();
             Assert.assertEquals(graph.getVertexCount(),10);
             Assert.assertEquals(graph.getEdgeCount(),40);
         }
