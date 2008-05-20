@@ -55,7 +55,7 @@ public class BFSDistanceLabeler<V, E> {
      * Returns the set of all vertices that were not visited
      * @return the list of unvisited vertices
      */
-    public Set<V> getUnivistedVertices() {
+    public Set<V> getUnvisitedVertices() {
         return mUnvisitedVertices;
     }
 

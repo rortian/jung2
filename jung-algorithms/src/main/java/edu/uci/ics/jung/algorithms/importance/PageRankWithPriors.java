@@ -79,7 +79,7 @@ public class PageRankWithPriors<V,E> extends PageRank<V,E> {
         labeler.labelDistances(g, priors);
         labeler.removeDecorations(g);
         Pair<Set<V>> p = new Pair<Set<V>>(new HashSet<V>(labeler.getVerticesInOrderVisited()),
-                          new HashSet<V>(labeler.getUnivistedVertices()));
+                          new HashSet<V>(labeler.getUnvisitedVertices()));
 
         return p;
     }
