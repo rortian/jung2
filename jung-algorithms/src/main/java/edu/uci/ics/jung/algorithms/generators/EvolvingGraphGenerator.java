@@ -9,40 +9,23 @@
  */
 package edu.uci.ics.jung.algorithms.generators;
 
-import java.util.Set;
-
-import edu.uci.ics.jung.graph.Graph;
 
 
 /**
- * An interface for algorithms that generate graphs that evolve over time
+ * An interface for algorithms that generate graphs that evolve iteratively.
  * @author Scott White
  */
 public interface EvolvingGraphGenerator<V, E> extends GraphGenerator<V,E> {
 
     /**
-     * Instructs the algorithm to evolve the graph N time steps and return
-     * the most current evolved state of the graph
-     * @param numTimeSteps number of time steps to simulate from its
-     * current state
+     * Instructs the algorithm to evolve the graph N steps.
+     * @param numTimeSteps number of steps to iterate from the current state
      */
-    void evolveGraph(int numTimeSteps);
+    void evolveGraph(int numSteps);
 
     /**
-     * Retrieves the total number of time steps elapsed
-     * @return number of elapsed time steps
+     * Retrieves the total number of steps elapsed.
+     * @return number of elapsed steps
      */
-    int getNumElapsedTimeSteps();
-
-    /**
-     * Returns a copy of the evolved graph in its current state
-     * @return new instance of the evolved graph
-     */
-    public Graph<V,E> generateGraph();
-
-    /**
-     * Resets the random graph to the state that it had after the
-     * constructor returned.
-     */
-    public void reset(Set<V> seedVertices);
+    int numIterations();
 }

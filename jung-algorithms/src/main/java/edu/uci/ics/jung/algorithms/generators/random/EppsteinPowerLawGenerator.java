@@ -19,7 +19,7 @@ import edu.uci.ics.jung.algorithms.generators.GraphGenerator;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
- * Graph generator that generates undirected sparse graphs with power-law distributions.
+ * Graph generator that generates undirected graphs with power-law degree distributions.
  * @author Scott White
  * @see "A Steady State Model for Graph Power Law by David Eppstein and Joseph Wang"
  */
@@ -34,11 +34,14 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
     private Factory<E> edgeFactory;
 
     /**
-     * Constructor which specifies the parameters of the generator
+     * Creates an instance with the specified factories and specifications.
+     * @param graphFactory the factory to use to generate the graph
+     * @param vertexFactory the factory to use to create vertices
+     * @param edgeFactory the factory to use to create edges
      * @param numVertices the number of vertices for the generated graph
      * @param numEdges the number of edges the generated graph will have, should be Theta(numVertices)
-     * @param r the model parameter. The larger the value for this parameter the better the graph's degree
-     * distribution will approximate a power-law.
+     * @param r the number of iterations to use; the larger the value the better the graph's degree
+     * distribution will approximate a power-law
      */
     public EppsteinPowerLawGenerator(Factory<Graph<V,E>> graphFactory,
     		Factory<V> vertexFactory, Factory<E> edgeFactory, 
@@ -55,7 +58,6 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
     protected Graph<V,E> initializeGraph() {
         Graph<V,E> graph = null;
         graph = graphFactory.create();
-        	//new UndirectedSparseMultigraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	graph.addVertex(vertexFactory.create());
         }
@@ -81,7 +83,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
      * Generates a graph whose degree distribution approximates a power-law.
      * @return the generated graph
      */
-    public Graph<V,E> generateGraph() {
+    public Graph<V,E> create() {
         Graph<V,E> graph = initializeGraph();
 
         List<V> vertices = new ArrayList<V>(graph.getVertices());
@@ -98,7 +100,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
             List<E> edges = new ArrayList<E>(graph.getIncidentEdges(v));
             E randomExistingEdge = edges.get((int) (mRandom.nextDouble()*degree));
 
-            // FIXME: look at Google email thread on a more efficient RNG for arbitrary distributions
+            // FIXME: look at email thread on a more efficient RNG for arbitrary distributions
             
             V x = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
             V y = null;
@@ -116,6 +118,10 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
         return graph;
     }
 
+    /**
+     * Sets the seed for the random number generator.
+     * @param seed input to the random number generator.
+     */
     public void setSeed(long seed) {
         mRandom.setSeed(seed);
     }

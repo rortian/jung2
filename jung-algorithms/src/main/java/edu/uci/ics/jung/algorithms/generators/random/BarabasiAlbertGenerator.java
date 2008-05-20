@@ -238,11 +238,11 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
         return ((Integer)index_vertex.get(v)).intValue();
     }
     
-    public int getNumElapsedTimeSteps() {
+    public int numIterations() {
         return mElapsedTimeSteps;
     }
 
-    public Graph<V, E> generateGraph() {
+    public Graph<V, E> create() {
         return mGraph;
     }
 

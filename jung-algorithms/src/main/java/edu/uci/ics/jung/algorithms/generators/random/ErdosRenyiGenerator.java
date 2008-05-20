@@ -20,7 +20,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 
 /**
- * Random Generator of Erdos-Renyi "binomial model"
+ * Generates a random graph using the Erdos-Renyi binomial model
+ * (each pair of vertices is connected with probability p).
+ * 
  *  @author William Giordano, Scott White, Joshua O'Madadhain
  */
 public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
@@ -58,9 +60,8 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
      * Returns a graph in which each pair of vertices is connected by 
      * an undirected edge with the probability specified by the constructor.
      */
-	public Graph<V,E> generateGraph() {
+	public Graph<V,E> create() {
         UndirectedGraph<V,E> g = graphFactory.create();
-//        	new UndirectedSparseMultigraph<V,E>();
         for(int i=0; i<mNumVertices; i++) {
         	g.addVertex(vertexFactory.create());
         }

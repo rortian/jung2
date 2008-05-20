@@ -21,9 +21,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
  * 
- * Generates a series of potentially useful test graphs.
- * 
- * @author danyelf
+ * Generates a mixed-mode random graph based on the output of <code>BarabasiAlbertGenerator</code>.
+ * Primarily intended for providing heterogenous sample graph for visualization testing, etc.
  *  
  */
 public class MixedRandomGraphGenerator {
@@ -61,7 +60,7 @@ public class MixedRandomGraphGenerator {
             new BarabasiAlbertGenerator<V,E>(graphFactory, vertexFactory, edgeFactory,
             		4, 3, false, parallel, seed, seedVertices);
         bag.evolveGraph(num_vertices - 4);
-        Graph<V, E> ug = bag.generateGraph();
+        Graph<V, E> ug = bag.create();
 
         // create a SparseMultigraph version of g
         Graph<V, E> g = graphFactory.create();
