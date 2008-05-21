@@ -21,7 +21,8 @@ public class TestBarabasiAlbert extends TestCase {
 		return new TestSuite(TestBarabasiAlbert.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 	}
 
 	public void test() 

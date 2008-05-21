@@ -38,6 +38,7 @@ public class TestUnweightedShortestPath extends TestCase
         	}};
     BidiMap<String,Integer> id;
 
+    @Override
     protected void setUp() {
     }
 	public static Test suite()
@@ -64,7 +65,7 @@ public class TestUnweightedShortestPath extends TestCase
 		UnweightedShortestPath<String,Integer> usp = 
 			new UnweightedShortestPath<String,Integer>(ug);
 		Assert.assertEquals(usp.getDistance(id.getKey(0),id.getKey(3)).intValue(),2);
-		Assert.assertEquals(((Number) usp.getDistanceMap(id.getKey(0)).get(id.getKey(3))).intValue(),2);
+		Assert.assertEquals((usp.getDistanceMap(id.getKey(0)).get(id.getKey(3))).intValue(),2);
 		Assert.assertNull(usp.getIncomingEdgeMap(id.getKey(0)).get(id.getKey(0)));
 		Assert.assertNotNull(usp.getIncomingEdgeMap(id.getKey(0)).get(id.getKey(3)));
 	}
@@ -86,7 +87,7 @@ public class TestUnweightedShortestPath extends TestCase
 			UnweightedShortestPath<String,Integer> usp = 
 				new UnweightedShortestPath<String,Integer>(dg);
 			Assert.assertEquals(usp.getDistance(id.getKey(0),id.getKey(3)).intValue(),2);
-			Assert.assertEquals(((Number) usp.getDistanceMap(id.getKey(0)).get(id.getKey(3))).intValue(),2);
+			Assert.assertEquals((usp.getDistanceMap(id.getKey(0)).get(id.getKey(3))).intValue(),2);
 			Assert.assertNull(usp.getIncomingEdgeMap(id.getKey(0)).get(id.getKey(0)));
 			Assert.assertNotNull(usp.getIncomingEdgeMap(id.getKey(0)).get(id.getKey(3)));
 

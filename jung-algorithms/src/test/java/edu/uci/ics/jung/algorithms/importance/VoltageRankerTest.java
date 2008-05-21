@@ -22,6 +22,7 @@ public class VoltageRankerTest extends TestCase
 {
     protected Graph<Number,Number> g;
     
+    @Override
     public void setUp() {
         g = new SparseMultigraph<Number,Number>();
         for (int i = 0; i < 7; i++) {

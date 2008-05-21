@@ -35,6 +35,7 @@ public class TestKStepMarkov extends TestCase {
         return new TestSuite(TestKStepMarkov.class);
     }
 
+    @Override
     protected void setUp()
     {
         mGraph = new DirectedSparseMultigraph<Number,Number>();

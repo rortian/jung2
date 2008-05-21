@@ -66,9 +66,6 @@ public class ShortestPathDemo extends JPanel {
 	private Graph<String,Number> mGraph;
 	private Set<String> mPred;
 	
-	/**
-	 * @param g
-	 */
 	public ShortestPathDemo() {
 	
 		this.mGraph = getGraph();
@@ -130,9 +127,6 @@ public class ShortestPathDemo extends JPanel {
 	 */
 	public class MyEdgePaintFunction implements Transformer<Number,Paint> {
 	    
-		/**
-		 * @see edu.uci.ics.jung.graph.decorators.EdgePaintFunction#getDrawPaint(edu.uci.ics.jung.graph.Edge)
-		 */
 		public Paint transform(Number e) {
 			if ( mPred == null || mPred.size() == 0) return Color.BLACK;
 			if( isBlessed( e )) {
@@ -213,11 +207,6 @@ public class ShortestPathDemo extends JPanel {
 		return jp;
 	}
 
-	/**
-	 * @param g
-	 * @param from
-	 * @return
-	 */
 	private Component getSelectionBox(final boolean from) {
 
 		Set<String> s = new TreeSet<String>();

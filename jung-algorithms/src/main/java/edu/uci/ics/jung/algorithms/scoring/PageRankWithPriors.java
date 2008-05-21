@@ -39,6 +39,7 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
     /**
      * 
      */
+    @Override
     public double update(V v)
     {
         collectDisappearingPotential(v);
@@ -57,6 +58,7 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
         return Math.abs(getCurrentValue(v) - new_value);
     }
 
+    @Override
     protected void afterStep()
     {
         // distribute disappearing potential according to priors
@@ -72,6 +74,7 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
         super.afterStep();
     }
     
+    @Override
     protected void collectDisappearingPotential(V v)
     {
         if (graph.outDegree(v) == 0)

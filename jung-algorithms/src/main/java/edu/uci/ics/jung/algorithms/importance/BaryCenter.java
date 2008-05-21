@@ -48,6 +48,7 @@ public class BaryCenter<V,E> extends AbstractRanker<V,E> {
         initialize(g, true, false);
     }
 
+    @Override
     public void step()
     {
         // Use this class to compute shortest path lengths.
@@ -62,13 +63,14 @@ public class BaryCenter<V,E> extends AbstractRanker<V,E> {
 
             while (j.hasNext())
             {
-                baryCenter += ((Number) j.next()).doubleValue();
+                baryCenter += (j.next()).doubleValue();
             }
             setVertexRankScore(u, baryCenter);
         }
 //        return 0;
     }
 
+    @Override
     public String getRankScoreKey()
     {
         return KEY;

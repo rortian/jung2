@@ -256,7 +256,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
         Set<V> targets = new HashSet<V>();
         targets.add(target);
         Map<V,Number> distanceMap = getDistanceMap(source, targets);
-        return (Double)distanceMap.get(target);
+        return distanceMap.get(target);
     }
     
 
@@ -271,7 +271,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
         
         Map<V,Number> distanceMap = 
         	singleSourceShortestPath(source, targets, 
-        			(int)Math.min(g.getVertexCount(), max_targets));
+        			Math.min(g.getVertexCount(), max_targets));
         if (!cached)
             reset(source);
         
@@ -294,7 +294,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      */
     public Map<V,Number> getDistanceMap(V source)
     {
-        return getDistanceMap(source, (int)Math.min(g.getVertexCount(), max_targets));
+        return getDistanceMap(source, Math.min(g.getVertexCount(), max_targets));
     }
     
 

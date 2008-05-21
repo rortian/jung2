@@ -34,7 +34,8 @@ public abstract class GraphEvent<V,E> {
 		public V getVertex() {
 			return vertex;
 		}
-		public String toString() {
+		@Override
+	    public String toString() {
 			return "GraphEvent type:"+type+" for "+vertex;
 		}
 		
@@ -48,7 +49,8 @@ public abstract class GraphEvent<V,E> {
 		public E getEdge() {
 			return edge;
 		}
-		public String toString() {
+		@Override
+    	public String toString() {
 			return "GraphEvent type:"+type+" for "+edge;
 		}
 		

@@ -29,7 +29,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 
-	public static enum EdgeType { IN_OUT, IN, OUT };
+	public static enum EdgeType { IN_OUT, IN, OUT }
 	private Set<V> rootNodes;
 	private int radiusK;
 	private EdgeType edgeType;
@@ -117,7 +117,7 @@ public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 		}
 		Graph<V,E> ug = null;
 		try {
-			ug = (Graph<V,E>)graph.getClass().newInstance();
+			ug = graph.getClass().newInstance();
 			for(E edge : graph.getEdges()) {
 				Pair<V> endpoints = graph.getEndpoints(edge);
 				if(acceptedVertices.containsAll(endpoints)) {

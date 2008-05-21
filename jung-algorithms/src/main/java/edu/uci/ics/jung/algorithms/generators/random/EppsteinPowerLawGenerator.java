@@ -107,7 +107,7 @@ public class EppsteinPowerLawGenerator<V,E> implements GraphGenerator<V,E> {
             do {
                 y = vertices.get((int) (mRandom.nextDouble() * mNumVertices));
 
-            } while (mRandom.nextDouble() > ((double) (graph.degree(y)+1)/mMaxDegree));
+            } while (mRandom.nextDouble() > ((graph.degree(y)+1)/mMaxDegree));
 
             if (!graph.isSuccessor(y,x) && x != y) {
                 graph.removeEdge(randomExistingEdge);

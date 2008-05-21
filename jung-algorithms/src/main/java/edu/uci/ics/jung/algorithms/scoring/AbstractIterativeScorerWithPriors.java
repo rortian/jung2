@@ -44,6 +44,7 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
         initialize();
     }
 
+    @Override
     public void initialize()
     {
         super.initialize();

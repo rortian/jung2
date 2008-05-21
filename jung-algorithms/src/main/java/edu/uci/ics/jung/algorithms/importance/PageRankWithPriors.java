@@ -84,6 +84,7 @@ public class PageRankWithPriors<V,E> extends PageRank<V,E> {
         return p;
     }
 
+    @Override
     public void reset() {
         super.reset();
         initializePriorWeights();

@@ -34,7 +34,8 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
 		return new TestSuite(TestEdmondsKarpMaxFlow.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 
 	}
 

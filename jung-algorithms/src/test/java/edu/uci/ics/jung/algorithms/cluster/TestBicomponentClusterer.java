@@ -30,7 +30,8 @@ public class TestBicomponentClusterer extends TestCase {
 		return new TestSuite(TestBicomponentClusterer.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 
 	}
 
@@ -239,7 +240,7 @@ public class TestBicomponentClusterer extends TestCase {
 //        System.out.println();
         
         // make sure that each set in c[] is found in bicomponents
-        List<Set<String>> clusterList = new ArrayList(bicomponents);
+        List<Set<String>> clusterList = new ArrayList<Set<String>>(bicomponents);
         boolean found = false;
         for (int i = 0; i < c.length; i++)
         {

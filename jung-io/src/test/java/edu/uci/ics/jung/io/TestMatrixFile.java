@@ -33,6 +33,7 @@ public class TestMatrixFile extends TestCase {
 	Factory<Number> edgeFactory;
 	Map<Number,Number> weights;
 	
+    @Override
     protected void setUp() {
     	undirectedGraphFactory = new Factory<UndirectedGraph<Number,Number>>() {
     		public UndirectedGraph<Number,Number> create() {

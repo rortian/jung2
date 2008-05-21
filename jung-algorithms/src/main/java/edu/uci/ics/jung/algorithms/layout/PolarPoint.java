@@ -67,7 +67,8 @@ public class PolarPoint {
 		return new PolarPoint(theta, radius);
 	}
 	
-	public String toString() {
+	@Override
+  public String toString() {
 		String superString = super.toString();
 		return superString.replace("Point2D", "PolarPoint2D");
 	}

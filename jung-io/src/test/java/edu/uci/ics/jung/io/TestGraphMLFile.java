@@ -40,6 +40,7 @@ public class TestGraphMLFile extends TestCase {
         return new TestSuite(TestGraphMLFile.class);
     }
 
+    @Override
     protected void setUp() {
     	graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {

@@ -36,6 +36,7 @@ public class TestEdgeBetweennessClusterer extends TestCase {
     Factory<Integer> vertexFactory;
     Factory<Number> edgeFactory;
 
+    @Override
     protected void setUp() {
         graphFactory = new Factory<Graph<Integer,Number>>() {
     		public Graph<Integer,Number> create() {

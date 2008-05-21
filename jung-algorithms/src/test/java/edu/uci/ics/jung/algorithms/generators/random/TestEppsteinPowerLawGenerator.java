@@ -33,7 +33,8 @@ public class TestEppsteinPowerLawGenerator extends TestCase {
 		return new TestSuite(TestEppsteinPowerLawGenerator.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 		graphFactory = new Factory<Graph<Integer,Number>>() {
 			public Graph<Integer,Number> create() {
 				return new SparseMultigraph<Integer,Number>();

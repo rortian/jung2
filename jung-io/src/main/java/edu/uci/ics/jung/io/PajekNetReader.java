@@ -216,9 +216,8 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
     /**
      * Parses <code>curLine</code> as a reference to a vertex, and optionally assigns 
      * label and location information.
-     * @throws IOException
      */
-    private void readVertex(String curLine, List<V> id, int num_vertices) throws IOException
+    private void readVertex(String curLine, List<V> id, int num_vertices)
     {
         V v;
         String[] parts = null;
@@ -231,7 +230,8 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
             String[] initial_split = curLine.trim().split("\"");
             // if there are any quote marks, there should be exactly 2
             if (initial_split.length < 2 || initial_split.length > 3)
-                throw new IllegalArgumentException("Unbalanced (or too many) quote marks in " + curLine);
+                throw new IllegalArgumentException("Unbalanced (or too many) " +
+                		"quote marks in " + curLine);
             index = initial_split[0].trim();
             label = initial_split[1].trim();
             if (initial_split.length == 3)
@@ -267,18 +267,10 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         	vertex_labels.set(v, label);
 
         // parse the rest of the line
-//        if (get_locations)
         if (coord_idx != -1 && parts != null && parts.length >= coord_idx+2 && vertex_locations != null)
         {
-//            if (coord_idx == -1 || parts == null || parts.length < coord_idx+2)
-//                throw new IllegalArgumentException("Coordinates requested, but" +
-//                        curLine + " does not include coordinates");
             double x = Double.parseDouble(parts[coord_idx]);
             double y = Double.parseDouble(parts[coord_idx+1]);
-//            if (x < 0 || x > 1 || y < 0 || y > 1)
-//                throw new IllegalArgumentException("Coordinates in line " + 
-//                        curLine + " are not all in the range [0,1]");
-                
             vertex_locations.set(v, new Point2D.Double(x,y));
         }
     }

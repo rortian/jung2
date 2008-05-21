@@ -24,7 +24,7 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Grap
 	
 	protected Factory<? extends Graph<V,E>> treeFactory;
 	protected Transformer<E,Double> weights = 
-		(Transformer<E,Double>)new ConstantTransformer(1.0);
+		new ConstantTransformer(1.0);
 	
 	public PrimMinimumSpanningTree(Factory<? extends Graph<V,E>> factory) {
 		this(factory, null);

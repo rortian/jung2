@@ -212,6 +212,7 @@ public class KMeansClusterer<T>
      */
     public static class NotEnoughClustersException extends RuntimeException
     {
+        @Override
         public String getMessage()
         {
             return "Not enough distinct points in the input data set to form " +

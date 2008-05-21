@@ -38,12 +38,13 @@ public class EdgePredicateFilter<V, E> implements Filter<V, E>
         this.edge_pred = edge_pred;
     }
     
+    @SuppressWarnings("unchecked")
     public Graph<V,E> transform(Graph<V,E> g)
     {
         Graph<V, E> filtered;
         try
         {
-            filtered = (Graph<V,E>)g.getClass().newInstance();
+            filtered = g.getClass().newInstance();
         }
         catch (InstantiationException e)
         {

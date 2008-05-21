@@ -38,6 +38,7 @@ public class TestPageRankWithPriors extends TestCase {
         return new TestSuite(TestPageRankWithPriors.class);
     }
 
+    @Override
     protected void setUp() {
 //    	edgeWeights = new HashMap<Integer,Number>();
     	edgeFactory = new Factory<Integer>() {

@@ -53,6 +53,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     /**
      * @see edu.uci.ics.jung.algorithms.importance.AbstractRanker#getRankScoreKey()
      */
+    @Override
     public String getRankScoreKey() {
         return MEAN_FIRST_PASSAGE_TIME;
     }
@@ -60,6 +61,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     /**
      * @see edu.uci.ics.jung.algorithms.importance.AbstractRanker#getRankScore(edu.uci.ics.jung.graph.Element)
      */
+    @Override
     public double getVertexRankScore(V vert) {
         return mRankings.get(mIndexer.get(vert));
     }
@@ -67,6 +69,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     /**
      * @see edu.uci.ics.jung.algorithms.IterativeProcess#evaluateIteration()
      */
+    @Override
     public void step() {
         DoubleMatrix2D mFPTMatrix = GraphMatrixOperations.computeMeanFirstPassageMatrix(getGraph(), getEdgeWeights(), getStationaryDistribution());
 

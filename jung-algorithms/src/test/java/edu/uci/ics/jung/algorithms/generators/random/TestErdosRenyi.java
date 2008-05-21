@@ -24,7 +24,8 @@ public class TestErdosRenyi extends TestCase {
 		return new TestSuite(TestErdosRenyi.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 		graphFactory = new Factory<UndirectedGraph<String,Number>>() {
 			public UndirectedGraph<String,Number> create() {
 				return new UndirectedSparseMultigraph<String,Number>();

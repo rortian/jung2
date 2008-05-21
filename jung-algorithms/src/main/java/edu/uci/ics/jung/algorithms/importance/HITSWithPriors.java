@@ -133,6 +133,7 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
 
     }
 
+    @Override
     protected void finalizeIterations() {
         super.finalizeIterations();
         for (V v : getVertices()) {
@@ -174,6 +175,7 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
      * the user datum key used to store the rank scores
      * @return the key
      */
+    @Override
     public String getRankScoreKey() {
         return mKeyToUseForRanking;
     }
@@ -186,6 +188,7 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
     	return mPreviousHubScores.get(v).doubleValue();
     }
 
+    @Override
     public void step() {
         updatePreviousScores();
 

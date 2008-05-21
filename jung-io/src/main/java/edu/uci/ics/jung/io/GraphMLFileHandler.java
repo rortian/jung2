@@ -9,17 +9,16 @@
 */
 package edu.uci.ics.jung.io;
 
-import java.util.HashMap;
-import java.util.Map;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.EdgeType;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The default GraphML file handler to use to parse the xml file
@@ -151,12 +150,13 @@ public class GraphMLFileHandler<V,E> extends DefaultHandler {
         return vertex;
     }
 
+    @Override
     public void startElement(
             String namespaceURI,
             String lName,
             // local name
             String qName, // qualified name
-            Attributes attrs) throws SAXException {
+            Attributes attrs) {
 
         Map<String,String> attributeMap = getAttributeMap(attrs);
 

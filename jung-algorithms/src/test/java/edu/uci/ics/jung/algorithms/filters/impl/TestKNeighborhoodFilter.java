@@ -23,7 +23,8 @@ public class TestKNeighborhoodFilter extends TestCase {
 		return new TestSuite(TestKNeighborhoodFilter.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 		graph = new DirectedSparseMultigraph<Number,Number>();
 		for(int i=0; i<7; i++) {
 			graph.addVertex(i);

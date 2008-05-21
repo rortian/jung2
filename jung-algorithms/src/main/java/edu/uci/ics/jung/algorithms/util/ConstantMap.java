@@ -37,10 +37,12 @@ public class ConstantMap<K,V> implements Map<K,V> {
 	public Set<Entry<K, V>> entrySet() {
 		return delegate.entrySet();
 	}
-	public boolean equals(Object o) {
+	@Override
+  public boolean equals(Object o) {
 		return delegate.equals(o);
 	}
-	public int hashCode() {
+	@Override
+  public int hashCode() {
 		return delegate.hashCode();
 	}
 	public boolean isEmpty() {

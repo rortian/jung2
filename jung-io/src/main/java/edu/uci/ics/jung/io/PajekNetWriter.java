@@ -34,9 +34,9 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * <p>Labels for vertices may optionally be specified by implementations of 
  * <code>VertexStringer</code>.  Edge weights are optionally specified by 
- * implementations of <code>NumberEdgeValue</code>.  Vertex locations
+ * implementations of <code>Transformer<E, Number></code>.  Vertex locations
  * are optionally specified by implementations of 
- * <code>VertexLocationFunction</code>.  Note that vertex location coordinates 
+ * <code>Transformer<V, Point2D></code>.  Note that vertex location coordinates 
  * must be normalized to the interval [0, 1] on each axis in order to conform to the 
  * Pajek specification.</p>
  * 
@@ -52,19 +52,25 @@ public class PajekNetWriter<V,E>
     /**
      * Saves <code>g</code> to <code>filename</code>.  Labels for vertices may
      * be supplied by <code>vs</code>.  Edge weights are specified by <code>nev</code>.
-     * 
-     * @see #save(Graph, Writer, VertexStringer, NumberEdgeValue, VertexLocationFunction)
      * @throws IOException
      */
     public void save(Graph<V,E> g, String filename, Transformer<V,String> vs, 
-//            Map<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
             Transformer<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
     {
         save(g, new FileWriter(filename), vs, nev, vld);
     }
     
+    /**
+     * Saves <code>g</code> to <code>filename</code>.  Labels are specified by
+     * <code>vs</code>, and edge weights by <code>nev</code>; vertex coordinates
+     * are not written out.
+     * @param g         the graph to write out
+     * @param filename  
+     * @param vs
+     * @param nev
+     * @throws IOException
+     */
     public void save(Graph<V,E> g, String filename, Transformer<V,String> vs, 
-//            Map<E,Number> nev) throws IOException
             Transformer<E,Number> nev) throws IOException
     {
         save(g, new FileWriter(filename), vs, nev, null);
@@ -92,8 +98,16 @@ public class PajekNetWriter<V,E>
         save(g, w, null, null, null);
     }
 
+    /**
+     * Saves <code>g</code> to <code>w</code>; vertex labels are given by 
+     * <code>vs</code> and edge weights by <code>nev</code>.
+     * @param g
+     * @param w
+     * @param vs
+     * @param nev
+     * @throws IOException
+     */
     public void save(Graph<V,E> g, Writer w, Transformer<V,String> vs, 
-//            Map<E,Number> nev) throws IOException
             Transformer<E,Number> nev) throws IOException
     {
         save(g, w, vs, nev, null);
@@ -109,7 +123,6 @@ public class PajekNetWriter<V,E>
      */
     @SuppressWarnings("unchecked")
 	public void save(Graph<V,E> graph, Writer w, Transformer<V,String> vs, 
-//    		Map<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
 	        Transformer<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
     {
         /*
@@ -119,7 +132,6 @@ public class PajekNetWriter<V,E>
         
         BufferedWriter writer = new BufferedWriter(w);
         if (nev == null)
-//            nev = new ConstantMap(1);
             nev = new Transformer<E, Number>() { public Number transform(E e) { return 1; } };
         writer.write("*Vertices " + graph.getVertexCount());
         writer.newLine();

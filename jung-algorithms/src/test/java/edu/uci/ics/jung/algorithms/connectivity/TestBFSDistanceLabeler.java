@@ -25,7 +25,8 @@ public class TestBFSDistanceLabeler extends TestCase {
 		return new TestSuite(TestBFSDistanceLabeler.class);
 	}
 
-	protected void setUp() {
+	@Override
+  protected void setUp() {
 
 	}
 

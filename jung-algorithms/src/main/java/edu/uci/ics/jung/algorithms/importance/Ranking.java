@@ -56,6 +56,7 @@ public class Ranking<V> implements Comparable {
      * Returns the rank score as a string.
      * @return the stringified rank score
      */
+    @Override
     public String toString() {
         return String.valueOf(rankScore);
     }

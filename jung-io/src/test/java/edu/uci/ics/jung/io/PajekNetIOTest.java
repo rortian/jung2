@@ -63,6 +63,7 @@ public class PajekNetIOTest extends TestCase
 	Factory<Number> edgeFactory;
     PajekNetReader<Graph<Number, Number>, Number,Number> pnr; 
 	
+    @Override
     protected void setUp() {
     	directedGraphFactory = new Factory<DirectedGraph<Number,Number>>() {
     		public DirectedGraph<Number,Number> create() {
@@ -401,7 +402,6 @@ public class PajekNetIOTest extends TestCase
      * 
      * @param g1
      * @param g2
-     * @return
      */
     private void compareIndexedGraphs(Graph<Number,Number> g1, Graph<Number,Number> g2)
     {
@@ -445,9 +445,6 @@ public class PajekNetIOTest extends TestCase
             this.id = id;
         }
         
-        /**
-         * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(ArchetypeVertex)
-         */
         public String transform(V v)
         {
             return vertex_labels[id.indexOf(v)];

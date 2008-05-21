@@ -140,6 +140,7 @@ public class TestShortestPath extends TestCase
     BidiMap<String,Integer> did;
     BidiMap<String,Integer> uid;
 
+    @Override
     protected void setUp() {
     	edgeWeights = new HashMap<Integer,Number>();
         nev = MapTransformer.<Integer,Number>getInstance(edgeWeights);
@@ -166,6 +167,7 @@ public class TestShortestPath extends TestCase
         edgeArrays.put(ug, ug_array);
     }
     
+    @Override
     protected void tearDown() throws Exception {
     }
 
@@ -312,7 +314,7 @@ public class TestShortestPath extends TestCase
         	new DijkstraShortestPath<String,Integer>(g, nev);
 //        Indexer id = Indexer.getIndexer(g);
         String start = indexer.getKey(index);
-        Integer[] edge_array = (Integer[])edgeArrays.get(g);
+        Integer[] edge_array = edgeArrays.get(g);
         Integer[] incomingEdges1 = null;
         if (g instanceof DirectedGraph)
             incomingEdges1 = dg_incomingEdges[index-1];
@@ -357,7 +359,7 @@ public class TestShortestPath extends TestCase
         assertEquals(incomingEdges1.length, g.getVertexCount());
         DijkstraShortestPath<String,Integer> dsp = 
         	new DijkstraShortestPath<String,Integer>(g, nev, cached);
-        Integer[] edge_array = (Integer[])edgeArrays.get(g);
+        Integer[] edge_array = edgeArrays.get(g);
         
         // test getDistance(start, v)
         for (int i = 1; i <= distances1.length; i++) {

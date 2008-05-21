@@ -76,6 +76,7 @@ public final class Pair<T> implements Collection<T>, Serializable
         return second;
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals( Object o ) {
         if (o == this)
@@ -169,6 +170,7 @@ public final class Pair<T> implements Collection<T>, Serializable
         return to_return;
     }
 
+    @SuppressWarnings("unchecked")
     public <S> S[] toArray(S[] a) {
         S[] to_return = a;
         Class<?> type = a.getClass().getComponentType();

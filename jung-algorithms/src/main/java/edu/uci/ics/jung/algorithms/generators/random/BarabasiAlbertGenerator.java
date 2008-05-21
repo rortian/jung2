@@ -235,7 +235,7 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
 
     public int getIndex(V v)
     {
-        return ((Integer)index_vertex.get(v)).intValue();
+        return (index_vertex.get(v)).intValue();
     }
     
     public int numIterations() {

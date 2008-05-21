@@ -30,6 +30,7 @@ public class TestMarkovCentrality extends TestCase {
         return new TestSuite(TestMarkovCentrality.class);
     }
 
+    @Override
     protected void setUp() {
 
     }

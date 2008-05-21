@@ -30,6 +30,7 @@ public class TestBetweennessCentrality extends TestCase {
         return new TestSuite(TestBetweennessCentrality.class);
     }
 
+    @Override
     protected void setUp() {}
 
     private static <V,E> E getEdge(Graph<V,E> g, int v1Index, int v2Index, BidiMap<V,Integer> id) {

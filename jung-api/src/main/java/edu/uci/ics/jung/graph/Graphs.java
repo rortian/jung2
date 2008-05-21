@@ -55,7 +55,7 @@ public class Graphs {
 	 * return a synchronized Forest backed by the passed Forest
 	 * @param <V>
 	 * @param <E>
-	 * @param graph
+	 * @param forest
 	 * @return
 	 */
 	public static <V,E> SynchronizedForest<V,E> synchronizedForest(Forest<V,E> forest) {
@@ -66,7 +66,7 @@ public class Graphs {
 	 * return a synchronized Tree backed by the passed Tree
 	 * @param <V>
 	 * @param <E>
-	 * @param graph
+	 * @param tree
 	 * @return
 	 */
 	public static <V,E> SynchronizedTree<V,E> synchronizedTree(Tree<V,E> tree) {
@@ -130,7 +130,6 @@ public class Graphs {
 		 * @param v1
 		 * @param v2
 		 * @return
-		 * @see edu.uci.ics.jung.graph.Hypergraph#addDirectedEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
 		public synchronized boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 			return delegate.addEdge(e, v1, v2, edgeType);
@@ -141,7 +140,6 @@ public class Graphs {
 		 * @param v1
 		 * @param v2
 		 * @return
-		 * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
 		public synchronized boolean addEdge(E e, V v1, V v2) {
 			return delegate.addEdge(e, v1, v2);
@@ -215,7 +213,7 @@ public class Graphs {
 		}
 
 		/**
-		 * @param directedness
+		 * @param edgeType
 		 * @return
 		 * @see edu.uci.ics.jung.graph.Graph#getEdges(EdgeType)
 		 */
@@ -515,19 +513,23 @@ public class Graphs {
 			super(delegate);
 		}
 
-		public synchronized V getDest(E directed_edge) {
+		@Override
+	    public synchronized V getDest(E directed_edge) {
 			return ((DirectedGraph<V,E>)delegate).getDest(directed_edge);
 		}
 
-		public synchronized V getSource(E directed_edge) {
+		@Override
+    	public synchronized V getSource(E directed_edge) {
 			return ((DirectedGraph<V,E>)delegate).getSource(directed_edge);
 		}
 
-		public synchronized boolean isDest(V vertex, E edge) {
+		@Override
+	    public synchronized boolean isDest(V vertex, E edge) {
 			return ((DirectedGraph<V,E>)delegate).isDest(vertex, edge);
 		}
 
-		public synchronized boolean isSource(V vertex, E edge) {
+		@Override
+    	public synchronized boolean isSource(V vertex, E edge) {
 			return ((DirectedGraph<V,E>)delegate).isSource(vertex, edge);
 		}
 	}
@@ -598,7 +600,6 @@ public class Graphs {
 		 * @param v1
 		 * @param v2
 		 * @return
-		 * @see edu.uci.ics.jung.graph.Hypergraph#addDirectedEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
 		public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 			throw new UnsupportedOperationException();
@@ -609,7 +610,6 @@ public class Graphs {
 		 * @param v1
 		 * @param v2
 		 * @return
-		 * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 		 */
 		public boolean addEdge(E e, V v1, V v2) {
 			throw new UnsupportedOperationException();
@@ -699,7 +699,7 @@ public class Graphs {
 		}
 
 		/**
-		 * @param directedness
+		 * @param edgeType
 		 * @return
 		 * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.jung.graph.util.EdgeType)
 		 */
@@ -973,19 +973,23 @@ public class Graphs {
 			super(delegate);
 		}
 
-		public V getDest(E directed_edge) {
+		@Override
+	    public V getDest(E directed_edge) {
 			return ((DirectedGraph<V,E>)delegate).getDest(directed_edge);
 		}
 
-		public V getSource(E directed_edge) {
+		@Override
+    	public V getSource(E directed_edge) {
 			return ((DirectedGraph<V,E>)delegate).getSource(directed_edge);
 		}
 
-		public boolean isDest(V vertex, E edge) {
+		@Override
+    	public boolean isDest(V vertex, E edge) {
 			return ((DirectedGraph<V,E>)delegate).isDest(vertex, edge);
 		}
 
-		public boolean isSource(V vertex, E edge) {
+		@Override
+    	public boolean isSource(V vertex, E edge) {
 			return ((DirectedGraph<V,E>)delegate).isSource(vertex, edge);
 		}
 	}
@@ -1026,7 +1030,8 @@ public class Graphs {
 			return ((Tree<V,E>)delegate).getRoot();
 		}
 
-		public Collection<Tree<V, E>> getTrees() {
+		@Override
+    	public Collection<Tree<V, E>> getTrees() {
 			return ((Tree<V,E>)delegate).getTrees();
 		}
 		

@@ -67,6 +67,7 @@ public class KStepMarkov<V,E> extends RelativeAuthorityRanker<V,E> {
      * The user datum key used to store the rank scores.
      * @return the key
      */
+    @Override
     public String getRankScoreKey() {
         return RANK_SCORE;
     }
@@ -102,6 +103,7 @@ public class KStepMarkov<V,E> extends RelativeAuthorityRanker<V,E> {
             }
         }
      }
+    @Override
     public void step() {
 
         for (int i=0;i<mNumSteps;i++) {

@@ -165,6 +165,7 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
         roots.put(dest, root);
     }
 
+    @Override
     public void step() {
         for (V v : mPriors) {
             computeWeightedPathsFromSource(v, mMaxDepth);
@@ -179,10 +180,12 @@ public class WeightedNIPaths<V,E> extends AbstractRanker<V,E> {
      * the decoration representing the rank score is of type <code>MutableDouble</code>.
      * @return  the rank score for this node
      */
+    @Override
     public String getRankScoreKey() {
         return WEIGHTED_NIPATHS_KEY;
     }
 
+    @Override
     protected void onFinalize(Object udc) {
     	pathIndices.remove(udc);
     	roots.remove(udc);

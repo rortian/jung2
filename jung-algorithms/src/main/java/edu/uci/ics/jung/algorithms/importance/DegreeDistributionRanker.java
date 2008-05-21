@@ -55,6 +55,7 @@ public class DegreeDistributionRanker<V,E> extends AbstractRanker<V,E> {
     }
 
 
+    @Override
     public void step() {
         for (V currentVertex : getVertices()) {
             if (directed)
@@ -72,6 +73,7 @@ public class DegreeDistributionRanker<V,E> extends AbstractRanker<V,E> {
 //        return 0;
     }
 
+    @Override
     public String getRankScoreKey() {
         return KEY;
     }

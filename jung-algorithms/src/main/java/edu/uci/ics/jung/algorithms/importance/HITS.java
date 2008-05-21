@@ -86,6 +86,7 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
         }
     }
 
+    @Override
     protected void finalizeIterations() {
         super.finalizeIterations();
         for (V v : getVertices()) {
@@ -101,6 +102,7 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
      * the user datum key used to store the rank scores
      * @return the key
      */
+    @Override
     public Object getRankScoreKey() {
         return mKeyToUseForRanking;
     }
@@ -110,6 +112,7 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
      * the decoration representing the rank score is of type <code>MutableDouble</code>.
      * @return the rank score for this node
      */
+    @Override
     public double getVertexRankScore(V v) {
         return getVertexRankScore(v, mKeyToUseForRanking);
     }
@@ -122,6 +125,7 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
         return mPreviousHubScores.get(v).doubleValue();
     }
 
+    @Override
     public void step() {
         updatePreviousScores();
 

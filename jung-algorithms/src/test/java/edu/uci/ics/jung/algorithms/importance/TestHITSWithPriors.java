@@ -34,6 +34,7 @@ public class TestHITSWithPriors extends TestCase {
         return new TestSuite(TestHITSWithPriors.class);
     }
 
+    @Override
     protected void setUp() {
     	graph = new DirectedSparseMultigraph<Number,Number>();
     	for(int i=0; i<4; i++) {

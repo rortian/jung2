@@ -30,6 +30,7 @@ public class TestHITS extends TestCase {
         return new TestSuite(TestHITS.class);
     }
 
+    @Override
     protected void setUp() {
         graph = new DirectedSparseMultigraph<Number,Number>();
         for(int i=0; i<5; i++) {

@@ -101,10 +101,12 @@ public class RandomWalkSTBetweenness<V,E> extends AbstractRanker<V,E> {
      * the user datum key used to store the rank scores
      * @return the key
      */
+    @Override
     public String getRankScoreKey() {
         return CENTRALITY;
     }
 
+    @Override
     public void step() {
         computeBetweenness();
     }

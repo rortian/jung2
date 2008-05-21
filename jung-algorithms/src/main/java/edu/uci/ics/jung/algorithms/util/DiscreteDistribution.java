@@ -178,7 +178,7 @@ public class DiscreteDistribution
         double[][] d_array = new double[distributions.size()][first.length];
         d_array[0] = first;
         for (int i = 1; i < d_array.length; i++)
-            d_array[i] = (double[])iter.next();
+            d_array[i] = iter.next();
         
         return mean(d_array);
     }

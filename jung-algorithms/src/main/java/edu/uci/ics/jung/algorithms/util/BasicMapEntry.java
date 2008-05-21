@@ -29,6 +29,7 @@ public class BasicMapEntry<K,V> implements Map.Entry<K,V> {
         return oldValue;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Map.Entry))
             return false;
@@ -44,11 +45,13 @@ public class BasicMapEntry<K,V> implements Map.Entry<K,V> {
         return false;
     }
 
+    @Override
     public int hashCode() {
         return (key==null ? 0 : key.hashCode()) ^
                (value==null   ? 0 : value.hashCode());
     }
 
+    @Override
     public String toString() {
         return getKey() + "=" + getValue();
     }

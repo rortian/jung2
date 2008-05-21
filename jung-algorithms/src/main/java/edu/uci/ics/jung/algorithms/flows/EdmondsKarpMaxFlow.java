@@ -172,7 +172,8 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         return hasAugmentingPath;
     }
 
-     public void step() {
+     @Override
+    public void step() {
         while (hasAugmentingPath()) {
         }
         computeMinCut();
@@ -240,6 +241,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         return mFlowGraph;
     }
 
+    @Override
     protected void initializeIterations() {
         parentCapacityMap.put(source, Integer.MAX_VALUE);
         parentMap.put(source, source);
@@ -266,6 +268,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
         }
     }
     
+    @Override
     protected void finalizeIterations() {
 
         for (E currentEdge : mFlowGraph.getEdges()) {

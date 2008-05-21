@@ -42,6 +42,7 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
 	 */
+	@Override
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		boolean state = super.addEdge(edge, vertices);
 		if(state) {
@@ -59,7 +60,8 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
-	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
+	@Override
+  public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
 		boolean state = super.addEdge(e, v1, v2, edgeType);
 		if(state) {
 			GraphEvent<V,E> evt = new GraphEvent.Edge<V,E>(delegate, GraphEvent.Type.EDGE_ADDED, e);
@@ -75,7 +77,8 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
-	public boolean addEdge(E e, V v1, V v2) {
+	@Override
+  public boolean addEdge(E e, V v1, V v2) {
 		boolean state = super.addEdge(e, v1, v2);
 		if(state) {
 			GraphEvent<V,E> evt = new GraphEvent.Edge<V,E>(delegate, GraphEvent.Type.EDGE_ADDED, e);
@@ -89,7 +92,8 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#addVertex(java.lang.Object)
 	 */
-	public boolean addVertex(V vertex) {
+	@Override
+  public boolean addVertex(V vertex) {
 		boolean state = super.addVertex(vertex);
 		if(state) {
 			GraphEvent<V,E> evt = new GraphEvent.Vertex<V,E>(delegate, GraphEvent.Type.VERTEX_ADDED, vertex);
@@ -103,7 +107,8 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeEdge(java.lang.Object)
 	 */
-	public boolean removeEdge(E edge) {
+	@Override
+  public boolean removeEdge(E edge) {
 		boolean state = delegate.removeEdge(edge);
 		if(state) {
 			GraphEvent<V,E> evt = new GraphEvent.Edge<V,E>(delegate, GraphEvent.Type.EDGE_REMOVED, edge);
@@ -117,7 +122,8 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
-	public boolean removeVertex(V vertex) {
+	@Override
+  public boolean removeVertex(V vertex) {
 		boolean state = delegate.removeVertex(vertex);
 		if(state) {
 			GraphEvent<V,E> evt = new GraphEvent.Vertex<V,E>(delegate, GraphEvent.Type.VERTEX_REMOVED, vertex);

@@ -51,6 +51,7 @@ public class GraphMatrixOperationsTest extends TestCase
          {10,8,2}};
     Map<String,Number> weights;
     
+    @Override
     protected void setUp()
     {
     	undirectedGraphFactory = new Factory<UndirectedGraph<String,String>>() {

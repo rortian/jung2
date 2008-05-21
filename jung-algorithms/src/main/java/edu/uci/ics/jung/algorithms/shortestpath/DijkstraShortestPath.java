@@ -90,9 +90,10 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
         super(g, cached);
     }
     
+    @Override
     protected SourceData getSourceData(V source)
     {
-        SourceData sd = (SourcePathData)sourceMap.get(source);
+        SourceData sd = sourceMap.get(source);
         if (sd == null)
             sd = new SourcePathData(source);
         return sd;
@@ -244,12 +245,14 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
             tentativeIncomingEdges = new HashMap<V,E>();
 		}
         
+        @Override
         public void update(V dest, E tentative_edge, double new_dist)
         {
             super.update(dest, tentative_edge, new_dist);
             tentativeIncomingEdges.put(dest, tentative_edge);
         }
         
+        @Override
         public Map.Entry<V,Number> getNextVertex()
         {
             Map.Entry<V,Number> p = super.getNextVertex();
@@ -259,6 +262,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
             return p;
         }
         
+        @Override
         public void createRecord(V w, E e, double new_dist)
         {
             super.createRecord(w, e, new_dist);

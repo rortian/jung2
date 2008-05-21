@@ -134,7 +134,7 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 		int size = rows.size();
 		DoubleMatrix2D matrix = new SparseDoubleMatrix2D(size, size);
 		for (int i = 0; i < size; i++) {
-			DoubleArrayList currentRow = (DoubleArrayList) rows.get(i);
+			DoubleArrayList currentRow = rows.get(i);
 			if (currentRow.size() != size) {
 				throw new ParseException(
 					"Matrix must have the same number of rows as columns",

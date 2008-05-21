@@ -35,6 +35,7 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
     }
 
     
+    @Override
     public double update(V v)
     {
         collectDisappearingPotential(v);
@@ -61,6 +62,7 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
         return Math.max(Math.abs(getHubScore(v) - hub), Math.abs(getAuthScore(v) - auth));
     }
 
+    @Override
     protected void afterStep()
     {
         if (disappearing_hub > 0 || disappearing_auth > 0)
@@ -75,6 +77,7 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
         super.afterStep();
     }
     
+    @Override
     protected void collectDisappearingPotential(V v)
     {
         if (graph.outDegree(v) == 0)

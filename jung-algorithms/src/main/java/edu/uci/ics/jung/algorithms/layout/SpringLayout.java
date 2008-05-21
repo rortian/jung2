@@ -412,6 +412,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 
     public class SpringDimensionChecker extends ComponentAdapter {
 
+        @Override
         public void componentResized(ComponentEvent e) {
             setSize(e.getComponent().getSize());
         }

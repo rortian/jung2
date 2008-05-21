@@ -45,11 +45,12 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * @author Joshua O'Madadhain
  * 
- * @link http://graphml.graphdrawing.org/specification.html
+ * @see "http://graphml.graphdrawing.org/specification.html"
  */
 public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandler
 {
-    protected enum State {NO_TAG, VERTEX, EDGE, HYPEREDGE, ENDPOINT, GRAPH, DATA, KEY, DESC, DEFAULT_KEY, GRAPHML, OTHER};
+    protected enum State {NO_TAG, VERTEX, EDGE, HYPEREDGE, ENDPOINT, GRAPH, 
+      DATA, KEY, DESC, DEFAULT_KEY, GRAPHML, OTHER}
     
     protected SAXParser saxp;
     protected EdgeType default_edgetype;
@@ -89,7 +90,6 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
 
         current_states = new LinkedList<State>();
         
-//        current_states.add(State.NO_TAG);
         tag_state = new DualHashBidiMap<String, State>();
         tag_state.put("node", State.VERTEX);
         tag_state.put("edge", State.EDGE);
@@ -123,7 +123,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     }
     
     /**
-     * @see edu.uci.ics.jung.io.GraphReader#load(java.io.Reader)
+     * @see edu.uci.ics.jung.io.GraphMLReader#load(Reader, Hypergraph)
      */
     public void load(Reader reader, G g) throws IOException
     {
@@ -190,6 +190,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         }
     }
     
+    @Override
     public void startElement(String uri, String name, String qName, Attributes atts) throws SAXNotSupportedException
     {
         String tag = qName.toLowerCase();
@@ -197,9 +198,6 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         if (state == null)
             state = State.OTHER;
 
-//        System.out.println("opening: " + tag);
-//        System.out.println("elements: " + current_states);
-        
         switch (state)
         {
             case GRAPHML:
@@ -233,7 +231,6 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 V v = vertex_ids.getKey(node);
                 if (v == null)
                     throw new SAXNotSupportedException("Endpoint refers to nonexistent node ID: " + node);
-//                V v = getVertex(id, "Endpoint refers to nonexistent node ID: " + id);
                
                 this.current_vertex = v;
                 hyperedge_vertices.add(v);
@@ -327,12 +324,11 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         current_states.addFirst(state);
     }
 
+    @Override
     public void characters(char[] ch, int start, int length) throws SAXNotSupportedException
     {
         String text = new String(ch, start, length);
 
-//        System.out.println("inside: " + text);
-        
         switch (this.current_states.getFirst())
         {
             case DESC:
@@ -393,17 +389,15 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         }
     }
     
+    @Override
     public void endElement(String uri, String name, String qName) throws SAXNotSupportedException
     {
         String tag = qName.toLowerCase();
         State state = tag_state.get(tag);
         if (state == null)
             state = State.OTHER;
-        if (state == State.OTHER) // || state == State.NO_TAG)
-        {
-//            state = State.NO_TAG;
+        if (state == State.OTHER)
             return;
-        }
 
 //        System.out.println("closing: " + tag);
 //        System.out.println("elements: " + current_states);
@@ -427,6 +421,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 current_graph.addEdge(current_edge, hyperedge_vertices);
                 hyperedge_vertices.clear();
                 current_edge = null;
+                break;
             
             case DATA:
                 break;

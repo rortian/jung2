@@ -25,6 +25,7 @@ public class TestRandomWalkBetweenness extends TestCase {
         return new TestSuite(TestRandomWalkBetweenness.class);
     }
 
+    @Override
     protected void setUp() {
 
     }

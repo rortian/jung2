@@ -51,6 +51,7 @@ public class TestGraphMLReader extends TestCase {
         return new TestSuite(TestGraphMLReader.class);
     }
 
+    @Override
     protected void setUp() throws ParserConfigurationException, SAXException {
     	graphFactory = new Factory<Graph<Number,Number>>() {
     		public Graph<Number,Number> create() {

@@ -40,6 +40,7 @@ public class RandomWalkBetweenness<V,E> extends RandomWalkSTBetweenness<V,E> {
        super(g,null,null);
     }
 
+    @Override
     protected void computeBetweenness() {
         setUp();
 
@@ -66,6 +67,7 @@ public class RandomWalkBetweenness<V,E> extends RandomWalkSTBetweenness<V,E> {
      * the user datum key used to store the rank scores
      * @return the key
      */
+    @Override
     public String getRankScoreKey() {
         return CENTRALITY;
     }

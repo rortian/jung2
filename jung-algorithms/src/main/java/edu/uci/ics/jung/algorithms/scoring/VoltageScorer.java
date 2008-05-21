@@ -63,6 +63,7 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         initialize();
     }
 
+    @Override
     public void initialize()
     {
         super.initialize();
@@ -97,6 +98,7 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
     /**
      * @see edu.uci.ics.jung.algorithms.scoring.AbstractIterativeScorer#update()
      */
+    @Override
     public double update(V v)
     {
         // if it's a voltage source or sink, we're done

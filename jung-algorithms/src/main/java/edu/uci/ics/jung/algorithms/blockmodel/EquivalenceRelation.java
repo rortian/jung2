@@ -89,7 +89,8 @@ public class EquivalenceRelation<V,E> {
 		return equivalenceSets.size();
 	}
 	
-	public String toString() {
+	@Override
+  	public String toString() {
 		return "Equivalence: " + equivalenceSets;
 	}
 

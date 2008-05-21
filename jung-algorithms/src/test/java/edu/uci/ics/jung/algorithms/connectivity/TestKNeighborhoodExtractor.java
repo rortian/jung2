@@ -26,6 +26,7 @@ public class TestKNeighborhoodExtractor extends TestCase {
         return new TestSuite(TestKNeighborhoodExtractor.class);
     }
 
+    @Override
     protected void setUp() {
 
     }

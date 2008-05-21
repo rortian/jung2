@@ -35,6 +35,7 @@ public class TestWeightedNIPaths extends TestCase {
         return new TestSuite(TestWeightedNIPaths.class);
     }
 
+    @Override
     protected void setUp() {
     	vertexFactory = new Factory<String>() {
     		char a = 'A';

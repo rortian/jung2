@@ -127,7 +127,8 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 			this.angle = angle;
 		}
 
-		public String toString() {
+		@Override
+    public String toString() {
 			return "CircleVertexData: angle=" + angle;
 		}
 	}

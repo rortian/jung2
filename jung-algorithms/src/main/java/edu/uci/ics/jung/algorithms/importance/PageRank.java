@@ -118,6 +118,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         }
     }
 
+    @Override
     public void reset() {
         initializeRankings(mReachableVertices, mUnreachableVertices);
     }
@@ -142,7 +143,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
             if (getPriorRankScore(currentVertex) > 0) {
                 for (V leafNode : mLeafNodes) {
                     double currentWeight = getPriorRankScore(currentVertex);
-                    currentPageRankSum += ((Number) mPreviousRankingsMap.get(leafNode)).doubleValue() * currentWeight;
+                    currentPageRankSum += (mPreviousRankingsMap.get(leafNode)).doubleValue() * currentWeight;
                 }
             }
 
@@ -157,6 +158,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
         }
     }
 
+    @Override
     public void step() {
         updateRankings();
 
@@ -178,6 +180,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
      * The user datum key used to store the rank scores.
      * @return the key
      */
+    @Override
     public String getRankScoreKey() {
         return KEY;
     }

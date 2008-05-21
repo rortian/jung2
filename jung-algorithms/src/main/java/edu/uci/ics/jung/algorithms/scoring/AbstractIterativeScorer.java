@@ -96,7 +96,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     {
         this(g, (Transformer<E, ? extends Number>)
                 (g instanceof DirectedGraph ? 
-                        new UniformOut<V,E>((DirectedGraph<V,E>)g) : 
+                        new UniformOut<V,E>(g) : 
                         new UniformIncident<V,E>(g)));
     }
     

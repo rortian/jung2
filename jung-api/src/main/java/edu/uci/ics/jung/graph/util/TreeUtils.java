@@ -33,6 +33,7 @@ public class TreeUtils
      * @throws InstantiationException if a new tree of the same type cannot be created
      * @throws IllegalAccessException 
      */
+	@SuppressWarnings("unchecked")
 	public static <V,E> Tree<V,E> getSubTree(Forest<V,E> forest, V root) throws InstantiationException, IllegalAccessException 
 	{
 	    if (!forest.containsVertex(root))
@@ -80,7 +81,7 @@ public class TreeUtils
 			V node, E connectingEdge) {
         if (node != null && !tree.containsVertex(node))
             throw new IllegalArgumentException("Specified tree does not contain the specified node as a vertex");
-		V root = ((Forest<V,E>)subTree).getTrees().iterator().next().getRoot();
+		V root = subTree.getTrees().iterator().next().getRoot();
 		addFromSubTree(tree, subTree, connectingEdge, node, root);
 	}
 	

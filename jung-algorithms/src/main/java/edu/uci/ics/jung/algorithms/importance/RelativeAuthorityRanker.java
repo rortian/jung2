@@ -35,6 +35,7 @@ public abstract class RelativeAuthorityRanker<V,E> extends AbstractRanker<V,E> {
     /**
      * Cleans up all of the prior rank scores on finalize.
      */
+    @Override
     protected void finalizeIterations() {
         super.finalizeIterations();
         priorRankScoreMap.clear();

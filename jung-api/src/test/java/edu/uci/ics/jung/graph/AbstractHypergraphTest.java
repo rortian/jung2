@@ -31,6 +31,7 @@ public abstract class AbstractHypergraphTest extends TestCase
         this.factory = factory;
     }
     
+    @Override
     public void runTest() throws Exception {
         setUp();
         testAddVertex();

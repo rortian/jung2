@@ -95,7 +95,8 @@ public class MapBinaryHeap<T>
 	/**
 	 * @see Collection#clear()
 	 */
-	public void clear()
+	@Override
+  public void clear()
 	{
         object_indices.clear();
         heap.clear();
@@ -104,7 +105,8 @@ public class MapBinaryHeap<T>
 	/**
 	 * Inserts <code>o</code> into this collection.
 	 */
-	public boolean add(T o)
+	@Override
+  public boolean add(T o)
 	{
         int i = heap.size();  // index 1 past the end of the heap
         heap.setSize(i+1);
@@ -116,7 +118,8 @@ public class MapBinaryHeap<T>
 	 * Returns <code>true</code> if this collection contains no elements, and
      * <code>false</code> otherwise.
 	 */
-	public boolean isEmpty()
+	@Override
+  public boolean isEmpty()
 	{
         return heap.isEmpty();
 	}
@@ -154,6 +157,7 @@ public class MapBinaryHeap<T>
     /**
      * Returns the size of this heap.
      */
+    @Override
     public int size() 
     {
         return heap.size();
@@ -179,6 +183,7 @@ public class MapBinaryHeap<T>
     /**
      * @see Collection#contains(java.lang.Object)
      */
+    @Override
     public boolean contains(Object o)
     {
         return object_indices.containsKey(o);
@@ -314,6 +319,7 @@ public class MapBinaryHeap<T>
      * Returns an <code>Iterator</code> that does not support modification
      * of the heap.
      */
+    @Override
     public Iterator<T> iterator()
     {
         return IteratorUtils.<T>unmodifiableIterator(heap.iterator());
@@ -322,6 +328,7 @@ public class MapBinaryHeap<T>
     /**
      * This data structure does not support the removal of arbitrary elements.
      */
+    @Override
     public boolean remove(Object o)
     {
         throw new UnsupportedOperationException();
@@ -330,6 +337,7 @@ public class MapBinaryHeap<T>
     /**
      * This data structure does not support the removal of arbitrary elements.
      */
+    @Override
     public boolean removeAll(Collection<?> c)
     {
         throw new UnsupportedOperationException();
@@ -338,6 +346,7 @@ public class MapBinaryHeap<T>
     /**
      * This data structure does not support the removal of arbitrary elements.
      */
+    @Override
     public boolean retainAll(Collection<?> c)
     {
         throw new UnsupportedOperationException();
