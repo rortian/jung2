@@ -42,6 +42,9 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /**
+ * Demonstrates use of the shortest path algorithm and visualization of the
+ * results.
+ * 
  * @author danyelf
  */
 public class ShortestPathDemo extends JPanel {
@@ -80,7 +83,7 @@ public class ShortestPathDemo extends JPanel {
         vv.getRenderContext().setEdgeDrawPaintTransformer(new MyEdgePaintFunction());
         vv.getRenderContext().setEdgeStrokeTransformer(new MyEdgeStrokeFunction());
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
-        vv.setGraphMouse(new DefaultModalGraphMouse());
+        vv.setGraphMouse(new DefaultModalGraphMouse<String, Number>());
         vv.addPostRenderPaintable(new VisualizationViewer.Paintable(){
             
             public boolean useTransform() {
@@ -274,13 +277,13 @@ public class ShortestPathDemo extends JPanel {
 	}
 
 	/**
-	 * @return
+	 * @return the graph for this demo
 	 */
 	Graph<String,Number> getGraph() {
 
 		Graph<String,Number> g =
 			new EppsteinPowerLawGenerator<String,Number>(
-					new GraphFactory(), new VertexFactory(), new EdgeFactory(), 26, 50, 50).generateGraph();
+					new GraphFactory(), new VertexFactory(), new EdgeFactory(), 26, 50, 50).create();
 		Set<String> removeMe = new HashSet<String>();
 		for (String v : g.getVertices()) {
             if ( g.degree(v) == 0 ) {
