@@ -95,7 +95,8 @@ public interface Tree<V,E> extends Forest<V,E>
     public Collection<V> getChildren(V vertex);
     
     /**
-     * Returns the children of <code>vertex</code> in this tree.
+     * Returns the edges connecting <code>vertex</code> to its children 
+     * in this tree.
      * The children of a vertex are defined as being the successors of
      * that vertex on the respective (unique) shortest paths from the root to
      * those vertices.
@@ -107,4 +108,19 @@ public interface Tree<V,E> extends Forest<V,E>
      * @see #getChildren(Object)
      */
     public Collection<E> getChildEdges(V vertex);
+    
+    /**
+     * Returns the number of children that <code>vertex</code> has in this tree.
+     * The children of a vertex are defined as being the successors of
+     * that vertex on the respective (unique) shortest paths from the root to
+     * those vertices.
+     * This is syntactic (maple) sugar for <code>getSuccessorCount(vertex)</code>. 
+     * @param vertex the vertex whose child edges are to be returned
+     * @return the <code>Collection</code> of edges connecting 
+     * <code>vertex</code> to its children in this tree
+     * @see #getChildEdges(Object)
+     * @see #getChildren(Object)
+     * @see Graph#getSuccessorCount(Object)
+     */
+    public int getChildCount(V vertex);
 }

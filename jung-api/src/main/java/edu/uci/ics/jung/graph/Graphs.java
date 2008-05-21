@@ -565,6 +565,10 @@ public class Graphs {
         public E getParentEdge(V vertex) {
             return getInEdges(vertex).iterator().next();
         }
+
+        public int getChildCount(V vertex) {
+            return getSuccessorCount(vertex);
+        }
 	}
 	
 	static class SynchronizedForest<V,E> extends SynchronizedDirectedGraph<V,E> implements Forest<V,E> {
@@ -1040,6 +1044,10 @@ public class Graphs {
     
         public E getParentEdge(V vertex) {
             return getInEdges(vertex).iterator().next();
+        }
+
+        public int getChildCount(V vertex) {
+            return getSuccessorCount(vertex);
         }
 	}
 
