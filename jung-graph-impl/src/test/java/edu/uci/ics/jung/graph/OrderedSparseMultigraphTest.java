@@ -10,6 +10,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 public class OrderedSparseMultigraphTest extends AbstractOrderedSparseMultigraphTest {
 
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         Set<Number> seeds = new HashSet<Number>();

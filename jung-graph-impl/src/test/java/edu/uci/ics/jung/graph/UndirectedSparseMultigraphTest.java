@@ -5,6 +5,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 public class UndirectedSparseMultigraphTest 
 	extends AbstractUndirectedSparseMultigraphTest {
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         graph = new UndirectedSparseMultigraph<Integer,Number>();

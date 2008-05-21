@@ -6,6 +6,7 @@ public class DirectedSparseMultigraphTest
 	extends AbstractDirectedSparseMultigraphTest {
 
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         graph = new DirectedSparseMultigraph<Integer,Number>();

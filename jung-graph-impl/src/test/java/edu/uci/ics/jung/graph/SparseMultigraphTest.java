@@ -10,6 +10,7 @@ public class SparseMultigraphTest
 	extends AbstractSparseMultigraphTest {
 
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         Set<Number> seeds = new HashSet<Number>();

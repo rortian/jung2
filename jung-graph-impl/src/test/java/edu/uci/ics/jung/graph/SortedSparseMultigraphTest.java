@@ -12,6 +12,7 @@ public class SortedSparseMultigraphTest
 	extends AbstractSortedSparseMultigraphTest {
 
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         Set<Number> seeds = new HashSet<Number>();

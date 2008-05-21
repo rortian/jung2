@@ -8,6 +8,7 @@ public class SparseGraphAddRemoveAddEdgeTest extends TestCase {
     SparseGraph<String,Integer> g;
 
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         g = new SparseGraph<String,Integer>();

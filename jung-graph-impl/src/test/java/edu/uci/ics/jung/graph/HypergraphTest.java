@@ -38,6 +38,7 @@ public class HypergraphTest extends AbstractHypergraphTest
         super(factory);
     }
     
+    @Override
     public void setUp()
     {
         h = factory.create();
