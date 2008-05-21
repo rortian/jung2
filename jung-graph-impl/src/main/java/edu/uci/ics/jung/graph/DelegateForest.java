@@ -276,6 +276,7 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
         return 2;
     }
     
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		Pair<V> pair = null;

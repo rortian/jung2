@@ -44,6 +44,7 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         edges = new HashMap<E, Pair<V>>();
     }
 
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints)
     {
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
@@ -73,6 +74,7 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         return true;
     }
 
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType)
     {
         if(edgeType != EdgeType.UNDIRECTED) 
@@ -100,6 +102,7 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         return this.getNeighbors(vertex);
     }
 
+    @Override
     public E findEdge(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))
@@ -107,6 +110,7 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         return vertices.get(v1).get(v2);
     }
     
+    @Override
     public Collection<E> findEdgeSet(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))

@@ -111,12 +111,14 @@ public class UndirectedSparseMultigraph<V,E>
         return addEdge(edge, new Pair<V>(v1, v2), edgeType);
     }
     
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
         if(edgeType != EdgeType.UNDIRECTED) 
             throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
         return addEdge(edge, endpoints);
     }
         
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints) {
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
         if (new_endpoints == null)
@@ -197,6 +199,7 @@ public class UndirectedSparseMultigraph<V,E>
         return Collections.unmodifiableCollection(getIncident_internal(vertex));
     }
 
+    @Override
     public E findEdge(V v1, V v2) {
         if (!containsVertex(v1) || !containsVertex(v2))
             return null;

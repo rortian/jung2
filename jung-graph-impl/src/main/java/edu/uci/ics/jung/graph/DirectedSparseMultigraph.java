@@ -176,6 +176,7 @@ public class DirectedSparseMultigraph<V,E>
         return incident;
     }
 
+    @Override
     public E findEdge(V v1, V v2) {
         for (E edge : getOutgoing_internal(v1))
             if (this.getDest(edge).equals(v2))
@@ -199,13 +200,15 @@ public class DirectedSparseMultigraph<V,E>
     	return addEdge(edge, new Pair<V>(source, dest), edgeType);
     }
 
-	public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
+	@Override
+  public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
     	if(edgeType != EdgeType.DIRECTED) 
             throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
     	return addEdge(edge, endpoints);
 	}
 
-	public boolean addEdge(E edge, Pair<? extends V> endpoints) {
+	@Override
+  public boolean addEdge(E edge, Pair<? extends V> endpoints) {
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
         if (new_endpoints == null)
             return false;

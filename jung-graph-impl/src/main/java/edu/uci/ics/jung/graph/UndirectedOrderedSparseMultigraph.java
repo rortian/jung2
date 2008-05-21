@@ -40,6 +40,7 @@ public class UndirectedOrderedSparseMultigraph<V,E>
         edges = new LinkedHashMap<E, Pair<V>>();
     }
 
+    @Override
     public boolean addVertex(V vertex) {
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");
@@ -53,6 +54,7 @@ public class UndirectedOrderedSparseMultigraph<V,E>
         }
     }
 
+    @Override
     public Collection<V> getNeighbors(V vertex) {
         if (!containsVertex(vertex))
             return null;

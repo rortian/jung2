@@ -56,11 +56,13 @@ public class SortedSparseMultigraph<V,E>
         directedEdges = new TreeSet<E>(edge_comparator);
     }
     
+    @SuppressWarnings("unchecked")
     public SortedSparseMultigraph()
     {
         this(new ComparableComparator(), new ComparableComparator());
     }
 
+    @Override
     public boolean addVertex(V vertex) {
         if(vertex == null) {
             throw new IllegalArgumentException("vertex may not be null");

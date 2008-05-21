@@ -60,6 +60,7 @@ public class SparseGraph<V,E>
         return addEdge(edge, endpoints, EdgeType.UNDIRECTED);
     }
 
+    @Override
     public E findEdge(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))
@@ -70,6 +71,7 @@ public class SparseGraph<V,E>
         return edge;
     }
 
+    @Override
     public Collection<E> findEdgeSet(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))
@@ -307,6 +309,7 @@ public class SparseGraph<V,E>
         return Collections.unmodifiableCollection(incident);
     }
 
+    @SuppressWarnings("unchecked")
     public boolean addVertex(V vertex)
     {
         if(vertex == null) {

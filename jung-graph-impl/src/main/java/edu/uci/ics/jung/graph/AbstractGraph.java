@@ -20,6 +20,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 
 public abstract class AbstractGraph<V, E> implements Graph<V,E> {
+	@SuppressWarnings("unchecked")
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
         if (vertices == null)
             throw new IllegalArgumentException("'vertices' parameter must not be null");
@@ -35,6 +36,7 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	        throw new IllegalArgumentException("Graph objects connect 1 or 2 vertices; vertices arg has " + vertices.size());
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType edgeType) {
 	    if (vertices == null)
 	        throw new IllegalArgumentException("'vertices' parameter must not be null");
@@ -189,6 +191,7 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
         return Collections.unmodifiableCollection(incident);
     }
     
+    @Override
     public String toString() {
     	StringBuffer sb = new StringBuffer("Vertices:");
     	for(V v : getVertices()) {

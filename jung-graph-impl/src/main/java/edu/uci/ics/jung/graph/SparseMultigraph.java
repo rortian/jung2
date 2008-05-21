@@ -114,10 +114,12 @@ public class SparseMultigraph<V,E>
     	return addEdge(edge, new Pair<V>(v1, v2), edgeType);
     }
 
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints) {
     	return addEdge(edge, endpoints, EdgeType.UNDIRECTED);
     }
     
+    @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
 
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
@@ -224,6 +226,7 @@ public class SparseMultigraph<V,E>
         return out;
     }
 
+    @Override
     public E findEdge(V v1, V v2)
     {
         for (E edge : getOutgoing_internal(v1))
@@ -266,6 +269,7 @@ public class SparseMultigraph<V,E>
     			EdgeType.UNDIRECTED;
     }
 
+	@SuppressWarnings("unchecked")
 	public Collection<E> getEdges(EdgeType edgeType) {
 		if(edgeType == EdgeType.DIRECTED) {
 			return Collections.unmodifiableSet(this.directedEdges);

@@ -42,6 +42,7 @@ public class DirectedOrderedSparseMultigraph<V,E>
         edges = new LinkedHashMap<E, Pair<V>>();
     }
     
+    @Override
     public boolean addVertex(V vertex) {
     	if(vertex == null) {
     		throw new IllegalArgumentException("vertex may not be null");
@@ -54,6 +55,7 @@ public class DirectedOrderedSparseMultigraph<V,E>
         }
     }
 
+    @Override
     public Collection<V> getPredecessors(V vertex) {
         if (!containsVertex(vertex)) 
             return null;
@@ -64,6 +66,7 @@ public class DirectedOrderedSparseMultigraph<V,E>
         return Collections.unmodifiableCollection(preds);
     }
 
+    @Override
     public Collection<V> getSuccessors(V vertex) {
         if (!containsVertex(vertex)) 
             return null;
@@ -74,6 +77,7 @@ public class DirectedOrderedSparseMultigraph<V,E>
         return Collections.unmodifiableCollection(succs);
     }
 
+    @Override
     public Collection<V> getNeighbors(V vertex) {
         if (!containsVertex(vertex)) 
             return null;
@@ -85,6 +89,7 @@ public class DirectedOrderedSparseMultigraph<V,E>
         return Collections.unmodifiableCollection(neighbors);
     }
 
+    @Override
     public Collection<E> getIncidentEdges(V vertex) {
         if (!containsVertex(vertex)) 
             return null;

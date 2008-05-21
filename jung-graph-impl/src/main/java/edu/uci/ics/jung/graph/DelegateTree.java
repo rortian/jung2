@@ -328,7 +328,8 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
         return 2;
     }
     
-	@Override
+	@SuppressWarnings("unchecked")
+  @Override
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		Pair<V> pair = null;
 		if(vertices instanceof Pair) {
