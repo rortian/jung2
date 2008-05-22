@@ -59,6 +59,26 @@ public final class Pair<T> implements Collection<T>, Serializable
             throw new IllegalArgumentException("Pair may only be created from a Collection of exactly 2 elements");
         
     }
+    
+    /**
+     * Creates a <code>Pair</code> from the passed array.
+     * The size of the array must be 2.
+     */
+    public Pair(T[] values)
+    {
+        if (values == null)
+            throw new IllegalArgumentException("Input array cannot be null");
+        if (values.length == 2)
+        {
+            if(values[0] == null || values[1] == null) 
+                throw new IllegalArgumentException("Pair cannot contain null values");
+            first = values[0];
+            second = values[1];
+        }
+        else
+            throw new IllegalArgumentException("Pair may only be created from an " +
+            		"array of 2 elements");
+    }
 
     /**
      * Returns the first constructor argument.
