@@ -33,6 +33,6 @@ public interface EquivalenceAlgorithm<V,E> {
 	 * @param g the graph to be checked for equivalence
 	 * @return an EquivalenceRelation
 	 */
-	public EquivalenceRelation<V,E> getEquivalences(Graph<V,E> g);
+	public VertexPartition<V,E> getEquivalences(Graph<V,E> g);
 
 }

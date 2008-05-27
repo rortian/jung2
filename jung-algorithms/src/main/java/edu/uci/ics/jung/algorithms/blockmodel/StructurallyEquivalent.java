@@ -55,7 +55,7 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 
 	}
 
-	public EquivalenceRelation<V,E> getEquivalences(Graph<V,E> g) {
+	public VertexPartition<V,E> getEquivalences(Graph<V,E> g) {
 		return createEquivalenceClasses(g, checkEquivalent(g));
 	}
 
@@ -63,7 +63,7 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 	 * Takes in a Set of Pairs (as in the results of checkEquivalent) and
 	 * massages into a Set of Sets, where each Set is an equivalence class.
 	 */
-	protected EquivalenceRelation<V,E> createEquivalenceClasses(Graph<V,E> g, Set<Pair<V>> s) {
+	protected VertexPartition<V,E> createEquivalenceClasses(Graph<V,E> g, Set<Pair<V>> s) {
 		Set<Set<V>> rv = new HashSet<Set<V>>();
 		Map<V,Set<V>> intermediate = new HashMap<V, Set<V>>();
 		for (Pair<V> p : s)
@@ -85,9 +85,13 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 		// pick up the vertices which don't appear in intermediate; they are singletons
 		Collection<V> singletons = CollectionUtils.subtract(g.getVertices(), intermediate.keySet());
 		for (V v : singletons)
-		    rv.add(Collections.singleton(v));
-		
-		return new EquivalenceRelation<V,E>(rv, g);
+		{
+		    Set<V> v_set = Collections.singleton(v);
+		    intermediate.put(v, v_set);
+		    rv.add(v_set);
+		}
+	
+		return new VertexPartition<V,E>(g, intermediate, rv);
 	}
 
 	/**
@@ -100,7 +104,7 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 	 * 
 	 * @param g
 	 */
-	public Set<Pair<V>> checkEquivalent(Graph<V,E> g) {
+	public Set<Pair<V>> checkEquivalent(Graph<V,?> g) {
 
 		Set<Pair<V>> rv = new HashSet<Pair<V>>();
 		Set<V> alreadyEquivalent = new HashSet<V>();
@@ -141,7 +145,7 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 	 * @param v1 the vertex to check for structural equivalence to v2
 	 * @param v2 the vertex to check for structural equivalence to v1
 	 */
-	protected boolean isStructurallyEquivalent(Graph<V,E> g, V v1, V v2) {
+	protected boolean isStructurallyEquivalent(Graph<V,?> g, V v1, V v2) {
 		
 		count ++;
 		
