@@ -27,7 +27,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
 
 /**
- * implements the balloon layout for the supplied Tree
+ * Implements the balloon layout for the supplied Tree
  * or Forest.
  * 
  * @author Tom Nelson 
