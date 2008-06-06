@@ -20,6 +20,7 @@ import junit.framework.TestSuite;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
