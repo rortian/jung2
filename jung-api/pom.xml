@@ -42,7 +42,7 @@
       <groupId>net.sourceforge.collections</groupId>
       <artifactId>collections-generic</artifactId>
       <version>4.01</version>
-      <scope>test</scope>
+		<scope>compile</scope>      
     </dependency>
   </dependencies>
 
