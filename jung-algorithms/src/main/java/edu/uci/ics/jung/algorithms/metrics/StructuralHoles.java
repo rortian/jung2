@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.metrics;
 
-import java.util.Map;
+import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
@@ -37,13 +37,13 @@ import edu.uci.ics.jung.graph.Graph;
  */
 public class StructuralHoles<V,E> {
 	
-    protected Map<E,Number> nev;
+    protected Transformer<E, ? extends Number> nev;
     
     /**
      * Creates a <code>StructuralHoles</code> instance based on the 
      * edge weights specified by <code>nev</code>.
      */
-    public StructuralHoles(Map<E,Number> nev) {
+    public StructuralHoles(Transformer<E, ? extends Number> nev) {
         this.nev = nev;
     }
 
@@ -264,8 +264,8 @@ public class StructuralHoles<V,E> {
     {
         E e12 = g.findEdge(v1,v2);
         E e21 = g.findEdge(v2,v1);
-        double w12 = (e12 != null ? nev.get(e12).doubleValue() : 0);
-        double w21 = (e21 != null ? nev.get(e21).doubleValue() : 0);
+        double w12 = (e12 != null ? nev.transform(e12).doubleValue() : 0);
+        double w21 = (e21 != null ? nev.transform(e21).doubleValue() : 0);
         
         return w12 + w21;
     }
