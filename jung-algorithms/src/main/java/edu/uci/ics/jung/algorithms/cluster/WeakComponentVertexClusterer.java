@@ -32,8 +32,8 @@ import edu.uci.ics.jung.graph.Graph;
  * @author Scott White
  * @see WeakComponentGraphClusterer.
  */
-public class WeakComponentVertexClusterer<V,E> implements Transformer<Graph<V,E>, Set<Set<V>>> {
-
+public class WeakComponentVertexClusterer<V,E> implements Transformer<Graph<V,E>, Set<Set<V>>> 
+{
 	/**
      * Extracts the weak components from a graph.
      * @param graph the graph whose weak components are to be extracted
@@ -70,5 +70,4 @@ public class WeakComponentVertexClusterer<V,E> implements Transformer<Graph<V,E>
         }
         return clusterSet;
     }
-
 }
