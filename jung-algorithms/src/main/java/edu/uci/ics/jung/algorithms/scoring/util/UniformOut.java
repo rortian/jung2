@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.algorithms.scoring;
+package edu.uci.ics.jung.algorithms.scoring.util;
 
 import org.apache.commons.collections15.Transformer;
 

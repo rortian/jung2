@@ -13,6 +13,7 @@ package edu.uci.ics.jung.algorithms.scoring;
 
 import org.apache.commons.collections15.Transformer;
 
+import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
