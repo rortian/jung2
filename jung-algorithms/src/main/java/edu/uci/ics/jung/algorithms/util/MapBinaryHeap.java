@@ -96,7 +96,7 @@ public class MapBinaryHeap<T>
 	 * @see Collection#clear()
 	 */
 	@Override
-  public void clear()
+	public void clear()
 	{
         object_indices.clear();
         heap.clear();
@@ -106,7 +106,7 @@ public class MapBinaryHeap<T>
 	 * Inserts <code>o</code> into this collection.
 	 */
 	@Override
-  public boolean add(T o)
+	public boolean add(T o)
 	{
         int i = heap.size();  // index 1 past the end of the heap
         heap.setSize(i+1);
@@ -119,7 +119,7 @@ public class MapBinaryHeap<T>
      * <code>false</code> otherwise.
 	 */
 	@Override
-  public boolean isEmpty()
+	public boolean isEmpty()
 	{
         return heap.isEmpty();
 	}
@@ -299,19 +299,17 @@ public class MapBinaryHeap<T>
      * Comparator used if none is specified in the constructor.
      * @author Joshua O'Madadhain
      */
-    private class ComparableComparator implements Comparator
+    private class ComparableComparator implements Comparator<T>
     {
         /**
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
-        public int compare(Object arg0, Object arg1)
+        public int compare(T arg0, T arg1)
         {
             if (!(arg0 instanceof Comparable) || !(arg1 instanceof Comparable))
                 throw new IllegalArgumentException("Arguments must be Comparable");
-            Comparable<Comparable> i1 = (Comparable<Comparable>)arg0;
-            Comparable i2 = (Comparable)arg1;
             
-            return i1.compareTo(i2);
+            return ((Comparable<T>)arg0).compareTo(arg1);
         }
     }
 
