@@ -19,13 +19,14 @@ import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Maintains information about a vertex partition of a graph.
+ * This can be built from a map from vertices to vertex sets or from a collection of (disjoint) vertex sets,
+ * such as those created by various clustering methods.
  */
-public class VertexPartition<V,E> {
-
+public class VertexPartition<V,E> 
+{
 	private Map<V,Set<V>> vertex_partitions;
-	private Set<Set<V>> partitions;
+	private Collection<Set<V>> partitions;
 	private Graph<V,E> graph;
-
 	
 	/**
 	 * Creates an instance based on the specified graph and mapping from vertices
@@ -42,28 +43,34 @@ public class VertexPartition<V,E> {
 	}
 
 	/**
-     * Creates an instance based on the specified graph, vertex-set mapping, and vertex partitions.
+     * Creates an instance based on the specified graph, vertex-set mapping, and set of disjoint vertex sets.
      * The vertex-set mapping and vertex partitions must be consistent, i.e., the mapping must
      * reflect the division of vertices into partitions, and each vertex must appear in exactly
      * one partition.
      * @param g the graph over which the vertex partition is defined
      * @param rv the mapping from vertices to vertex sets (partitions)
-	 * @param vertex_partitions 
+	 * @param vertex_partitions the set of disjoint vertex sets 
 	 */
-    public VertexPartition(Graph<V,E> g, Map<V, Set<V>> rv, Set<Set<V>> vertex_partitions) {
+    public VertexPartition(Graph<V,E> g, Map<V, Set<V>> rv, Collection<Set<V>> vertex_partitions) {
         this.vertex_partitions = Collections.unmodifiableMap( rv );
         this.partitions = vertex_partitions;
         this.graph = g;
     }
 
-    public VertexPartition(Graph<V,E> g, Set<Set<V>> equivalence_sets)
+    /**
+     * Creates an instance based on the specified graph and set of disjoint vertex sets, 
+     * and generates a vertex-to-partition map based on these sets.
+     * @param g the graph over which the vertex partition is defined
+     * @param vertex_partitions the set of disjoint vertex sets
+     */
+    public VertexPartition(Graph<V,E> g, Collection<Set<V>> vertex_partitions)
     {
-        this.partitions = equivalence_sets;
+        this.partitions = vertex_partitions;
         this.graph = g;
         this.vertex_partitions = new HashMap<V, Set<V>>();
-        for (Set<V> set : equivalence_sets)
+        for (Set<V> set : vertex_partitions)
             for (V v : set)
-                vertex_partitions.put(v, set);
+                this.vertex_partitions.put(v, set);
     }
 	
     /**
@@ -84,7 +91,7 @@ public class VertexPartition<V,E> {
 		return vertex_partitions;
 	}
 	
-	public Set<Set<V>> getVertexPartitions() 
+	public Collection<Set<V>> getVertexPartitions() 
 	{
 	    return partitions;
 	}
