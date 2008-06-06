@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.CollectionUtils;
+import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -40,58 +41,40 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * @author Danyel Fisher
  */
-public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
+public class StructurallyEquivalent<V,E> implements Transformer<Graph<V,E>, VertexPartition<V,E>> 
+{
+	public VertexPartition<V,E> transform(Graph<V,E> g) 
+	{
+	    Set<Pair<V>> vertex_pairs = getEquivalentPairs(g);
+	    
+	    Set<Set<V>> rv = new HashSet<Set<V>>();
+        Map<V, Set<V>> intermediate = new HashMap<V, Set<V>>();
+        for (Pair<V> p : vertex_pairs)
+        {
+            Set<V> res = intermediate.get(p.getFirst());
+            if (res == null)
+                res = intermediate.get(p.getSecond());
+            if (res == null)  // we haven't seen this one before
+                res = new HashSet<V>();
+            res.add(p.getFirst());
+            res.add(p.getSecond());
+            intermediate.put(p.getFirst(), res);
+            intermediate.put(p.getSecond(), res);
+        }
+        rv.addAll(intermediate.values());
 
-	private static StructurallyEquivalent instance = null;
-	
-	public static <V,E> StructurallyEquivalent<V,E> getInstance() {
-		if ( instance == null ) {
-			instance = new StructurallyEquivalent<V,E>();
-		}
-		return instance;
-	}
-	
-	public StructurallyEquivalent() {
+        // pick up the vertices which don't appear in intermediate; they are
+        // singletons (equivalence classes of size 1)
+        Collection<V> singletons = CollectionUtils.subtract(g.getVertices(),
+                intermediate.keySet());
+        for (V v : singletons)
+        {
+            Set<V> v_set = Collections.singleton(v);
+            intermediate.put(v, v_set);
+            rv.add(v_set);
+        }
 
-	}
-
-	public VertexPartition<V,E> getEquivalences(Graph<V,E> g) {
-		return createEquivalenceClasses(g, checkEquivalent(g));
-	}
-
-	/**
-	 * Takes in a Set of Pairs (as in the results of checkEquivalent) and
-	 * massages into a Set of Sets, where each Set is an equivalence class.
-	 */
-	protected VertexPartition<V,E> createEquivalenceClasses(Graph<V,E> g, Set<Pair<V>> s) {
-		Set<Set<V>> rv = new HashSet<Set<V>>();
-		Map<V,Set<V>> intermediate = new HashMap<V, Set<V>>();
-		for (Pair<V> p : s)
-		{
-			Set<V> res = intermediate.get(p.getFirst());
-			if (res == null)
-				res = intermediate.get(p.getSecond());
-			if (res == null) {
-				// we haven't seen this one before
-				res = new HashSet<V>();
-			}
-			res.add(p.getFirst());
-			res.add(p.getSecond());
-			intermediate.put(p.getFirst(), res);
-			intermediate.put(p.getSecond(), res);
-		}
-		rv.addAll(intermediate.values());
-		
-		// pick up the vertices which don't appear in intermediate; they are singletons
-		Collection<V> singletons = CollectionUtils.subtract(g.getVertices(), intermediate.keySet());
-		for (V v : singletons)
-		{
-		    Set<V> v_set = Collections.singleton(v);
-		    intermediate.put(v, v_set);
-		    rv.add(v_set);
-		}
-	
-		return new VertexPartition<V,E>(g, intermediate, rv);
+        return new VertexPartition<V, E>(g, intermediate, rv);
 	}
 
 	/**
@@ -104,7 +87,7 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 	 * 
 	 * @param g
 	 */
-	public Set<Pair<V>> checkEquivalent(Graph<V,?> g) {
+	protected Set<Pair<V>> getEquivalentPairs(Graph<V,?> g) {
 
 		Set<Pair<V>> rv = new HashSet<Pair<V>>();
 		Set<V> alreadyEquivalent = new HashSet<V>();
@@ -147,8 +130,6 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 	 */
 	protected boolean isStructurallyEquivalent(Graph<V,?> g, V v1, V v2) {
 		
-		count ++;
-		
 		if( g.degree(v1) != g.degree(v2)) {
 			return false;
 		}
@@ -182,8 +163,6 @@ public class StructurallyEquivalent<V,E> implements EquivalenceAlgorithm<V,E> {
 
 	}
 
-	public static int count = 0;
-	
 	/**
 	 * This is a space for optimizations. For example, for a bipartite graph,
 	 * vertices from different partitions cannot possibly be compared.
