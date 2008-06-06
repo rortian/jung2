@@ -87,6 +87,7 @@ public class TestBicomponentClusterer extends TestCase {
         
         List<Set<String>> c = new ArrayList<Set<String>>();
         c.add(0, new HashSet<String>());
+        c.add(1, new HashSet<String>());
 
         c.get(0).add(v[0]);
         c.get(0).add(v[1]);
