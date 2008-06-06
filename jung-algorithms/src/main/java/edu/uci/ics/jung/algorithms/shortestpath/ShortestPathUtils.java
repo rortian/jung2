@@ -25,7 +25,7 @@ public class ShortestPathUtils
      * <code>source</code> to <code>target</code>, in order of their
      * occurrence on this path.  
      */
-    public static <V, E> List getPath(Graph<V,E> graph, ShortestPath<V,E> sp, V source, V target)
+    public static <V, E> List<E> getPath(Graph<V,E> graph, ShortestPath<V,E> sp, V source, V target)
     {
         LinkedList<E> path = new LinkedList<E>();
         

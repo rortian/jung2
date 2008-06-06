@@ -48,7 +48,7 @@ public class TestPageRank extends TestCase {
 			}};
     }
 
-    private void addEdge(Graph G, Integer v1, Integer v2, double weight) {
+    private void addEdge(Graph<Integer, Integer> G, Integer v1, Integer v2, double weight) {
     	Integer edge = edgeFactory.create();
     	graph.addEdge(edge, v1, v2);
     	edgeWeights.put(edge, weight);
@@ -69,9 +69,9 @@ public class TestPageRank extends TestCase {
         ranker.setMaximumIterations(500);
         ranker.evaluate();
 
-        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(0)).rankScore,0.4,.001));
-        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(1)).rankScore,0.4,.001));
-        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(2)).rankScore,0.2,.001));
-        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(3)).rankScore,0,.001));
+        Assert.assertTrue(NumericalPrecision.equal(((Ranking<Integer>)ranker.getRankings().get(0)).rankScore,0.4,.001));
+        Assert.assertTrue(NumericalPrecision.equal(((Ranking<Integer>)ranker.getRankings().get(1)).rankScore,0.4,.001));
+        Assert.assertTrue(NumericalPrecision.equal(((Ranking<Integer>)ranker.getRankings().get(2)).rankScore,0.2,.001));
+        Assert.assertTrue(NumericalPrecision.equal(((Ranking<Integer>)ranker.getRankings().get(3)).rankScore,0,.001));
     }
 }

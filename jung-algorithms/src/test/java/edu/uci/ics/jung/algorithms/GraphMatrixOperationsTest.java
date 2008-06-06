@@ -81,7 +81,7 @@ public class GraphMatrixOperationsTest extends TestCase
 
     	g = new DirectedSparseMultigraph<String,String>();
     	weights = new HashMap<String,Number>();
-        meo = new RealMatrixElementOperations(weights);
+        meo = new RealMatrixElementOperations<String>(weights);
         // graph based on Weiss, _Data Structures and Algorithm Analysis_,
         // 1992, p. 292
         for(int i=1; i<NUM_VERTICES+1; i++) {
@@ -116,7 +116,7 @@ public class GraphMatrixOperationsTest extends TestCase
             m.setQuick(edges[i][1] - 1, edges[i][0] - 1, edges[i][2]);
         }
         
-        Graph g2 = GraphMatrixOperations.matrixToGraph(m, 
+        Graph<String, String> g2 = GraphMatrixOperations.<String,String>matrixToGraph(m, 
         		undirectedGraphFactory, directedGraphFactory,
         		vertexFactory, edgeFactory,
         		weights);

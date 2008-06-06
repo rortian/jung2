@@ -9,20 +9,18 @@
 */
 package edu.uci.ics.jung.algorithms.cluster;
 
+import java.util.Collection;
 import java.util.Set;
-
-import org.apache.commons.collections15.Factory;
 
 import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
-//import edu.uci.ics.jung.io.GraphMLFile;
 
 
 /**
@@ -77,8 +75,8 @@ public class TestEdgeBetweennessClusterer extends TestCase {
         Assert.assertEquals(graph.getVertexCount(),10);
         Assert.assertEquals(graph.getEdgeCount(),12);
 
-        EdgeBetweennessClusterer clusterer = new EdgeBetweennessClusterer(3);
-        Set clusters = clusterer.transform(graph);
+        EdgeBetweennessClusterer<Number, Number> clusterer = new EdgeBetweennessClusterer<Number, Number>(3);
+        Collection<Set<Number>> clusters = clusterer.transform(graph);
         
         Assert.assertEquals(clusters.size(),3);
     }

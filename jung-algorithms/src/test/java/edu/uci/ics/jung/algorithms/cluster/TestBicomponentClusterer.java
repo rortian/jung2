@@ -41,9 +41,13 @@ public class TestBicomponentClusterer extends TestCase {
         String[] v = {"0"};
         graph.addVertex(v[0]);
         
-        Set[] c = {new HashSet()};
+        List<Set<String>> c = new ArrayList<Set<String>>();
+        c.add(0, new HashSet<String>());
+        c.get(0).add(v[0]);
         
-        c[0].add(v[0]);
+//        Set[] c = {new HashSet<String>()};
+        
+//        c[0].add(v[0]);
      
         testComponents(graph, v, c);
     }
@@ -56,10 +60,15 @@ public class TestBicomponentClusterer extends TestCase {
         graph.addVertex(v[1]);
         graph.addEdge(0, v[0], v[1]);
         
-        Set[] c = {new HashSet()};
-        
-        c[0].add(v[0]);
-        c[0].add(v[1]);
+        List<Set<String>> c = new ArrayList<Set<String>>();
+        c.add(0, new HashSet<String>());
+        c.get(0).add(v[0]);
+        c.get(0).add(v[1]);
+
+//        Set[] c = {new HashSet()};
+//        
+//        c[0].add(v[0]);
+//        c[0].add(v[1]);
      
         testComponents(graph, v, c);
     }
@@ -76,13 +85,22 @@ public class TestBicomponentClusterer extends TestCase {
         graph.addEdge(0, v[0], v[1]);
         graph.addEdge(1, v[0], v[2]);
         
-        Set[] c = {new HashSet(), new HashSet()};
-              
-        c[0].add(v[0]);
-        c[0].add(v[1]);
+        List<Set<String>> c = new ArrayList<Set<String>>();
+        c.add(0, new HashSet<String>());
+
+        c.get(0).add(v[0]);
+        c.get(0).add(v[1]);
+
+        c.get(1).add(v[0]);
+        c.get(1).add(v[2]);
         
-        c[1].add(v[0]);
-        c[1].add(v[2]);
+//        Set[] c = {new HashSet(), new HashSet()};
+//              
+//        c[0].add(v[0]);
+//        c[0].add(v[1]);
+//        
+//        c[1].add(v[0]);
+//        c[1].add(v[2]);
            
         testComponents(graph, v, c);
     }
@@ -118,41 +136,35 @@ public class TestBicomponentClusterer extends TestCase {
         UndirectedGraph<String,Number> graph = new UndirectedSparseMultigraph<String,Number>();
         createEdges(v, edges1, graph);
         
-//		StringBuffer buffer= new StringBuffer();
-//        buffer.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?>\n");
-//        buffer.append("<graph edgedefault=\"undirected\">\n");
-//        buffer.append("<node id=\"0\"/>\n");
-//        buffer.append("<node id=\"1\"/>\n");
-//        buffer.append("<node id=\"2\"/>\n");
-//        buffer.append("<node id=\"3\"/>\n");
-//        buffer.append("<node id=\"4\"/>\n");
-//        buffer.append("<node id=\"5\"/>\n");
-//        buffer.append("<edge source=\"0\" target=\"1\"/>\n");
-//        buffer.append("<edge source=\"0\" target=\"5\"/>\n");
-//        buffer.append("<edge source=\"0\" target=\"3\"/>\n");
-//        buffer.append("<edge source=\"0\" target=\"4\"/>\n");
-//        buffer.append("<edge source=\"1\" target=\"5\"/>\n");
-//        buffer.append("<edge source=\"3\" target=\"4\"/>\n");
-//        buffer.append("<edge source=\"2\" target=\"3\"/>\n");
-//        buffer.append("</graph>\n");
-//
-//        GraphMLFile graphmlFile = new GraphMLFile();
-//        Graph graph = graphmlFile.load(new StringReader(buffer.toString()));
+        List<Set<String>> c = new ArrayList<Set<String>>();
+        for (int i = 0; i < 3; i++)
+            c.add(i, new HashSet<String>());
 
-        Set[] c = new Set[3];
-        for (int i = 0; i < c.length; i++)
-            c[i] = new HashSet();
-        
-        c[0].add(v[0]);
-        c[0].add(v[1]);
-        c[0].add(v[5]);
-        
-        c[1].add(v[0]);
-        c[1].add(v[3]);
-        c[1].add(v[4]);
-        
-        c[2].add(v[2]);
-        c[2].add(v[3]);
+        c.get(0).add(v[0]);
+        c.get(0).add(v[1]);
+        c.get(0).add(v[5]);
+
+        c.get(1).add(v[0]);
+        c.get(1).add(v[3]);
+        c.get(1).add(v[4]);
+
+        c.get(2).add(v[2]);
+        c.get(2).add(v[3]);
+
+//        Set[] c = new Set[3];
+//        for (int i = 0; i < c.length; i++)
+//            c[i] = new HashSet();
+//        
+//        c[0].add(v[0]);
+//        c[0].add(v[1]);
+//        c[0].add(v[5]);
+//        
+//        c[1].add(v[0]);
+//        c[1].add(v[3]);
+//        c[1].add(v[4]);
+//        
+//        c[2].add(v[2]);
+//        c[2].add(v[3]);
         
         testComponents(graph, v, c);
 	}
@@ -163,67 +175,54 @@ public class TestBicomponentClusterer extends TestCase {
         UndirectedGraph<String,Number> graph = new UndirectedSparseMultigraph<String,Number>();
         createEdges(v, edges1, graph);
         
-        
-        
-//		StringBuffer buffer= new StringBuffer();
-//        buffer.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\" ?>\n");
-//        buffer.append("<graph edgedefault=\"undirected\">\n");
-//        buffer.append("<node id=\"0\"/>\n");
-//        buffer.append("<node id=\"1\"/>\n");
-//        buffer.append("<node id=\"2\"/>\n");
-//        buffer.append("<node id=\"3\"/>\n");
-//        buffer.append("<node id=\"4\"/>\n");
-//        buffer.append("<node id=\"5\"/>\n");
-//        buffer.append("<node id=\"6\"/>\n");
-//        buffer.append("<node id=\"7\"/>\n");
-//        buffer.append("<node id=\"8\"/>\n");
-//        buffer.append("<edge source=\"0\" target=\"2\"/>\n");
-//        buffer.append("<edge source=\"0\" target=\"4\"/>\n");
-//        buffer.append("<edge source=\"1\" target=\"0\"/>\n");
-//        buffer.append("<edge source=\"2\" target=\"1\"/>\n");
-//        buffer.append("<edge source=\"3\" target=\"0\"/>\n");
-//        buffer.append("<edge source=\"4\" target=\"3\"/>\n");
-//        buffer.append("<edge source=\"5\" target=\"3\"/>\n");
-//        buffer.append("<edge source=\"6\" target=\"7\"/>\n");
-//        buffer.append("<edge source=\"6\" target=\"8\"/>\n");
-//        buffer.append("<edge source=\"8\" target=\"7\"/>\n");
-//        buffer.append("</graph>\n");
+        List<Set<String>> c = new ArrayList<Set<String>>();
+        for (int i = 0; i < 4; i++)
+            c.add(i, new HashSet<String>());
 
-//        GraphMLFile graphmlFile = new GraphMLFile();
-//        Graph graph = graphmlFile.load(new StringReader(buffer.toString()));
+        c.get(0).add(v[0]);
+        c.get(0).add(v[1]);
+        c.get(0).add(v[2]);
 
-//        StringLabeller sl = StringLabeller.getLabeller(graph);
-//        Vertex[] v = getVerticesByLabel(graph, sl);
-        
-        Set[] c = new Set[4];
-        for (int i = 0; i < c.length; i++)
-            c[i] = new HashSet();
-        
-        c[0].add(v[0]);
-        c[0].add(v[1]);
-        c[0].add(v[2]);
-        
-        c[1].add(v[0]);
-        c[1].add(v[3]);
-        c[1].add(v[4]);
-        
-        c[2].add(v[5]);
-        c[2].add(v[3]);
-        
-        c[3].add(v[6]);
-        c[3].add(v[7]);
-        c[3].add(v[8]);
+        c.get(1).add(v[0]);
+        c.get(1).add(v[3]);
+        c.get(1).add(v[4]);
+
+        c.get(2).add(v[5]);
+        c.get(2).add(v[3]);
+
+        c.get(3).add(v[6]);
+        c.get(3).add(v[7]);
+        c.get(3).add(v[8]);
+
+//        Set[] c = new Set[4];
+//        for (int i = 0; i < c.length; i++)
+//            c[i] = new HashSet();
+//        
+//        c[0].add(v[0]);
+//        c[0].add(v[1]);
+//        c[0].add(v[2]);
+//        
+//        c[1].add(v[0]);
+//        c[1].add(v[3]);
+//        c[1].add(v[4]);
+//        
+//        c[2].add(v[5]);
+//        c[2].add(v[3]);
+//        
+//        c[3].add(v[6]);
+//        c[3].add(v[7]);
+//        c[3].add(v[8]);
 
         testComponents(graph, v, c);
 	}
 
-    public void testComponents(UndirectedGraph<String,Number> graph, String[] vertices, Set[] c)
+    public void testComponents(UndirectedGraph<String,Number> graph, String[] vertices, List<Set<String>> c)
     {
         BicomponentClusterer<String,Number> finder = new BicomponentClusterer<String,Number>();
         Set<Set<String>> bicomponents = finder.transform(graph);
         
         // check number of components
-        assertEquals(bicomponents.size(), c.length);
+        assertEquals(bicomponents.size(), c.size());
 
         // diagnostic; should be commented out for typical unit tests
 //        for (int i = 0; i < bicomponents.size(); i++)
@@ -242,10 +241,10 @@ public class TestBicomponentClusterer extends TestCase {
         // make sure that each set in c[] is found in bicomponents
         List<Set<String>> clusterList = new ArrayList<Set<String>>(bicomponents);
         boolean found = false;
-        for (int i = 0; i < c.length; i++)
+        for (int i = 0; i < c.size(); i++)
         {
             for (int j = 0; j < bicomponents.size(); j++)
-                if (clusterList.get(j).equals(c[i]))
+                if (clusterList.get(j).equals(c.get(i)))
                 {
                     found = true;
                     break;
