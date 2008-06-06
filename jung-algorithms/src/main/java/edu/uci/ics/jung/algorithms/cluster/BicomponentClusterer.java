@@ -33,7 +33,8 @@ import edu.uci.ics.jung.graph.UndirectedGraph;
  * 
  * @author Joshua O'Madadhain
  */
-public class BicomponentClusterer<V,E> implements Transformer<UndirectedGraph<V,E>,Set<Set<V>>> {
+public class BicomponentClusterer<V,E> implements Transformer<UndirectedGraph<V,E>, Set<Set<V>>> 
+{
     protected Map<V,Number> dfs_num;
     protected Map<V,Number> high;
     protected Map<V,V> parents;
@@ -47,13 +48,12 @@ public class BicomponentClusterer<V,E> implements Transformer<UndirectedGraph<V,
     }
 
     /**
-    * Extracts the bicomponents from the graph
+    * Extracts the bicomponents from the graph.
     * @param theGraph the graph whose bicomponents are to be extracted
     * @return the <code>ClusterSet</code> of bicomponents
     */
     public Set<Set<V>> transform(UndirectedGraph<V,E> theGraph) 
     {
-
     	Set<Set<V>> bicomponents = new LinkedHashSet<Set<V>>();
 
         if (theGraph.getVertices().isEmpty())
