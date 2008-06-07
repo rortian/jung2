@@ -24,7 +24,7 @@ public class TestKNeighborhoodFilter extends TestCase {
 	}
 
 	@Override
-  protected void setUp() {
+	protected void setUp() {
 		graph = new DirectedSparseMultigraph<Number,Number>();
 		for(int i=0; i<7; i++) {
 			graph.addVertex(i);

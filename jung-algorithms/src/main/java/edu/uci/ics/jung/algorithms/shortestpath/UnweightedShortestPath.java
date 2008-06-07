@@ -12,7 +12,6 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 import edu.uci.ics.jung.graph.Graph;
 
 /**

@@ -7,7 +7,7 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.algorithms.connectivity;
+package edu.uci.ics.jung.algorithms.shortestpath;
 
 
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class BFSDistanceLabeler<V, E> {
 
     /**
      * Computes the distances of all the node from the specified root node. Also keeps track
-     * of the predecessors of each node traveresed as well as the order of nodes traversed.
+     * of the predecessors of each node traversed as well as the order of nodes traversed.
      *  @param graph the graph to label
      * @param root the single starting vertex to traverse from
      */

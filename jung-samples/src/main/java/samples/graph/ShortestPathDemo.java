@@ -28,10 +28,10 @@ import javax.swing.SwingConstants;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.algorithms.connectivity.BFSDistanceLabeler;
 import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.shortestpath.BFSDistanceLabeler;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.Pair;
