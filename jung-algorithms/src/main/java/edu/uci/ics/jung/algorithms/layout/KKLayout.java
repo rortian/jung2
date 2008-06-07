@@ -17,9 +17,9 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 
-import edu.uci.ics.jung.algorithms.GraphStatistics;
 import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
+import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.Graph;
@@ -153,7 +153,7 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
     			} catch(ConcurrentModificationException cme) {}
     		}
 
-    		diameter = GraphStatistics.<V,E>diameter(graph, distance, true);
+    		diameter = DistanceStatistics.<V,E>diameter(graph, distance, true);
 
     		double L0 = Math.min(height, width);
     		L = (L0 / diameter) * length_factor;  // length_factor used to be hardcoded to 0.9

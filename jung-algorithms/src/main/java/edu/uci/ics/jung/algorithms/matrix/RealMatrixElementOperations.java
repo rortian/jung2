@@ -7,11 +7,13 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.algorithms;
+package edu.uci.ics.jung.algorithms.matrix;
 
 
 import java.util.HashMap;
 import java.util.Map;
+
+import edu.uci.ics.jung.graph.event.GraphEvent.Edge;
 
 /**
  * Implements the basic matrix operations on double-precision values.  Assumes

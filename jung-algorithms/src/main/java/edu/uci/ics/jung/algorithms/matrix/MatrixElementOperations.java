@@ -7,7 +7,7 @@
 * "license.txt" or
 * http://jung.sourceforge.net/license.txt for a description.
 */
-package edu.uci.ics.jung.algorithms;
+package edu.uci.ics.jung.algorithms.matrix;
 
 import java.util.Map;
 

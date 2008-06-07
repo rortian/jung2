@@ -2,7 +2,7 @@
  * 
  * Created on Oct 30, 2003
  */
-package edu.uci.ics.jung.algorithms;
+package edu.uci.ics.jung.algorithms.matrix;
 
 import java.util.ArrayList;
 import java.util.HashMap;

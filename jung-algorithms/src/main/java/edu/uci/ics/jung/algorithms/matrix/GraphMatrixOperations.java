@@ -4,7 +4,7 @@
  * license; see either "license.txt" or http://jung.sourceforge.net/license.txt
  * for a description.
  */
-package edu.uci.ics.jung.algorithms;
+package edu.uci.ics.jung.algorithms.matrix;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,6 +19,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
+import edu.uci.ics.jung.algorithms.Indexer;
 import edu.uci.ics.jung.algorithms.util.ConstantMap;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
@@ -52,7 +53,8 @@ public class GraphMatrixOperations
      *            the graph to be squared
      * @return the result of squaring g
      */
-    public static <V,E> Graph<V,E> square(Graph<V,E> g, 
+    @SuppressWarnings("unchecked")
+	public static <V,E> Graph<V,E> square(Graph<V,E> g, 
     		Factory<E> edgeFactory, MatrixElementOperations<E> meo)
     {
         // create new graph of same type
