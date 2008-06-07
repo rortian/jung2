@@ -101,15 +101,12 @@ public class TriadicCensus {
         long[] count = new long[MAX_TRIADS];
 
         List<V> id = new ArrayList<V>(g.getVertices());
-        	//Indexer.getIndexer(g);
 
 		// apply algorithm to each edge, one at at time
 		for (int i_v = 0; i_v < g.getVertexCount(); i_v++) {
 			V v = id.get(i_v);
 			for(V u : g.getNeighbors(v)) {
-					//Iterator iter = v.getNeighbors().iterator(); iter.hasNext();) {
 				int triType = -1;
-//				Vertex u = (Vertex) iter.next();
 				if (id.indexOf(u) <= i_v)
 					continue;
 				Set<V> neighbors = new HashSet<V>(CollectionUtils.union(g.getNeighbors(u), g.getNeighbors(v)));
@@ -196,24 +193,4 @@ public class TriadicCensus {
 			return true;
 		return false;
 	}
-
-//	protected void initializeCounts() {
-//		for (int i = 0; i < count.length; i++) {
-//			count[i] = 0;
-//		}
-//	}
-
-//	/**
-//	 * Once you've created a triad, here's the census for that number. A triad
-//	 * census looks a little like an array: n elements inside it
-//	 * 
-//	 * @param i
-//	 * @return
-//	 */
-//	public long getCount(int i) throws IllegalArgumentException {
-//		if ( i < 1  || i > 16)
-//			throw new IllegalArgumentException("TriType must be 1-16");
-//		return count[i];
-//	}
-
 }
