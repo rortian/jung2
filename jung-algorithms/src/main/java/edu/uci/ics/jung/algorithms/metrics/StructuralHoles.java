@@ -16,14 +16,16 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
- * Calculates some of the measures from Burt's text "Structural Holes: The Social Structure of Competition".
+ * Calculates some of the measures from Burt's text "Structural Holes: 
+ * The Social Structure of Competition".
  * 
  * <p><b>Notes</b>: 
  * <ul>
- * <li/>Each of these measures assumes that each edge has an associated non-null weight
- * whose value is accessed through the specified <code>NumberEdgeValue</code> instance.
- * <li/>Nonexistent edges are treated as edges with weight 0 for purposes of edge weight
- * calculations.
+ * <li/>Each of these measures assumes that each edge has an associated 
+ * non-null weight whose value is accessed through the specified 
+ * <code>Transformer</code> instance.
+ * <li/>Nonexistent edges are treated as edges with weight 0 for purposes 
+ * of edge weight calculations.
  * </ul>
  *  
  * <p>Based on code donated by Jasper Voskuilen and 
