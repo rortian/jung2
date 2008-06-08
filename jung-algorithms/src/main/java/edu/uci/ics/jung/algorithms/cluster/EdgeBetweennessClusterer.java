@@ -86,7 +86,7 @@ public class EdgeBetweennessClusterer<V,E> implements Transformer<Graph<V,E>,Set
             graph.removeEdge(highestBetweenness.getRanked());
         }
 
-        WeakComponentVertexClusterer<V,E> wcSearch = new WeakComponentVertexClusterer<V,E>();
+        WeakComponentClusterer<V,E> wcSearch = new WeakComponentClusterer<V,E>();
         Set<Set<V>> clusterSet = wcSearch.transform(graph);
 
         for (E edge : mEdgesRemoved ) {

@@ -14,64 +14,42 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.collections15.Buffer;
-import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.buffer.UnboundedFifoBuffer;
 
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.Pair;
 
 
 
 /**
- * Finds all weak components in a graph.  A weak component is defined as
+ * Finds all weak components in a graph as sets of vertex sets.  A weak component is defined as
  * a maximal subgraph in which all pairs of vertices in the subgraph are reachable from one
  * another in the underlying undirected subgraph.
- * <p>This implementation identifies components as sets of graphs.  For a weak component
- * clusterer that identifies components as sets of vertex sets, see 
- * {@link WeakComponentVertexClusterer}.
+ * <p>This implementation identifies components as sets of vertex sets.  
+ * To create the induced graphs from any or all of these vertex sets, 
+ * see <code>algorithms.filters.FilterUtils</code>.
  * <p>
  * Running time: O(|V| + |E|) where |V| is the number of vertices and |E| is the number of edges.
  * @author Scott White
- * @see WeakComponentVertexClusterer
  */
-public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>, Collection<Graph<V,E>>> {
-
-	private Factory<Graph<V,E>> graphFactory;
-	
-    public WeakComponentGraphClusterer() {
-    	this(null);
-	}
-
-    public WeakComponentGraphClusterer(Factory<Graph<V, E>> graphFactory) {
-		this.graphFactory = graphFactory;
-	}
-
+public class WeakComponentClusterer<V,E> implements Transformer<Graph<V,E>, Set<Set<V>>> 
+{
 	/**
      * Extracts the weak components from a graph.
      * @param graph the graph whose weak components are to be extracted
      * @return the list of weak components
      */
-    public Collection<Graph<V,E>> transform(Graph<V,E> graph) {
+    public Set<Set<V>> transform(Graph<V,E> graph) {
 
-        Set<Graph<V,E>> clusterSet = new HashSet<Graph<V,E>>();
+        Set<Set<V>> clusterSet = new HashSet<Set<V>>();
 
         HashSet<V> unvisitedVertices = new HashSet<V>(graph.getVertices());
 
         while (!unvisitedVertices.isEmpty()) {
-        	Graph<V, E> cluster;
-        	if(graphFactory != null) {
-        		cluster = graphFactory.create();
-        	} else {
-        		try {
-        			cluster = (Graph<V,E>)graph.getClass().newInstance();
-        		} catch (Exception e1) {
-        			throw new RuntimeException(e1);
-        		}
-        	}
+        	Set<V> cluster = new HashSet<V>();
             V root = unvisitedVertices.iterator().next();
             unvisitedVertices.remove(root);
-            cluster.addVertex(root);
+            cluster.add(root);
 
             Buffer<V> queue = new UnboundedFifoBuffer<V>();
             queue.add(root);
@@ -84,15 +62,7 @@ public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>,
                     if (unvisitedVertices.contains(neighbor)) {
                         queue.add(neighbor);
                         unvisitedVertices.remove(neighbor);
-                        cluster.addVertex(neighbor);
-                        Collection<E> neighborIncidentEdges = graph.getIncidentEdges(neighbor);
-                        for(E e : neighborIncidentEdges) {
-                        	Pair<V> ep = graph.getEndpoints(e);
-                        	if(cluster.getEdges().contains(e) == false && 
-                        			cluster.getVertices().containsAll(ep)) {
-                        		cluster.addEdge(e, ep.getFirst(), ep.getSecond());
-                        	}
-                        }
+                        cluster.add(neighbor);
                     }
                 }
             }
@@ -100,5 +70,4 @@ public class WeakComponentGraphClusterer<V,E> implements Transformer<Graph<V,E>,
         }
         return clusterSet;
     }
-
 }

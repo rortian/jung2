@@ -39,7 +39,8 @@ public class VertexPredicateFilter<V,E> implements Filter<V,E>
         this.vertex_pred = vertex_pred;
     }
     
-    public Graph<V,E> transform(Graph<V,E> g)
+    @SuppressWarnings("unchecked")
+	public Graph<V,E> transform(Graph<V,E> g)
     {
         Graph<V, E> filtered;
         try
@@ -59,17 +60,12 @@ public class VertexPredicateFilter<V,E> implements Filter<V,E>
             if (vertex_pred.evaluate(v))
                 filtered.addVertex(v);
         
+        Collection<V> filtered_vertices = filtered.getVertices();
+        
         for (E e : g.getEdges())
         {
-            boolean add_edge = true;
             Collection<V> incident = g.getIncidentVertices(e);
-            for (V v : incident)
-                if (!vertex_pred.evaluate(v))
-                {
-                    add_edge = false;
-                    break;
-                }
-            if (add_edge)
+            if (filtered_vertices.containsAll(incident))
                 filtered.addEdge(e, incident);
         }
         

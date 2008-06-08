@@ -1,6 +1,6 @@
 package edu.uci.ics.jung.algorithms.cluster;
 
-import java.util.Collection;
+import java.util.Set;
 
 import junit.framework.TestCase;
 import edu.uci.ics.jung.graph.Graph;
@@ -11,9 +11,9 @@ public class WeakComponentClustererTest extends TestCase {
 	Graph<String,Number> graph =  TestGraphs.getDemoGraph();
 	
 	public void testWeakComponent() {
-		WeakComponentGraphClusterer<String,Number> clusterer = 
-			new WeakComponentGraphClusterer<String,Number>();
-		Collection<Graph<String,Number>> clusterSet = clusterer.transform(graph);
+		WeakComponentClusterer<String,Number> clusterer = 
+			new WeakComponentClusterer<String,Number>();
+		Set<Set<String>> clusterSet = clusterer.transform(graph);
 //		System.err.println("set is "+clusterSet);
 	}
 

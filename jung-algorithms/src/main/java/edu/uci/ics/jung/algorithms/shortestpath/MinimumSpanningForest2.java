@@ -1,12 +1,14 @@
 package edu.uci.ics.jung.algorithms.shortestpath;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
-import edu.uci.ics.jung.algorithms.cluster.WeakComponentGraphClusterer;
+import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
+import edu.uci.ics.jung.algorithms.filters.FilterUtils;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
@@ -21,6 +23,7 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
  * @param <V>
  * @param <E>
  */
+@SuppressWarnings("unchecked")
 public class MinimumSpanningForest2<V,E> {
 	
 	protected Graph<V,E> graph;
@@ -78,19 +81,20 @@ public class MinimumSpanningForest2<V,E> {
 			this.weights = weights;
 		}
 		
-		WeakComponentGraphClusterer<V,E> wcgc =
-			new WeakComponentGraphClusterer<V,E>();
-		Collection<Graph<V,E>> components = wcgc.transform(graph);
+		WeakComponentClusterer<V,E> wcc =
+			new WeakComponentClusterer<V,E>();
+		Set<Set<V>> component_vertices = wcc.transform(graph);
+		Collection<Graph<V,E>> components = 
+			FilterUtils.createAllInducedSubgraphs(component_vertices, graph);
+//		wcgc.transform(graph);
 		
 		for(Graph<V,E> component : components) {
 			PrimMinimumSpanningTree<V,E> mst = 
 				new PrimMinimumSpanningTree<V,E>(treeFactory, weights);
 			Graph<V,E> subTree = mst.transform(component);
 			if(subTree instanceof Tree) {
-		
 				TreeUtils.addSubTree(forest, (Tree<V,E>)subTree, null, null);
 			}
-//			forest.getTrees().add(mst.transform(component));
 		}
 	}
 	

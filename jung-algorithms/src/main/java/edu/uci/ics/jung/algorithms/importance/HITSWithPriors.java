@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.jung.algorithms.cluster.WeakComponentVertexClusterer;
+import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
 import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 import edu.uci.ics.jung.graph.Graph;
 
@@ -97,8 +97,8 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
             setPriorRankScore(v, 0);
         }
 
-        WeakComponentVertexClusterer<V,E> wcExtractor = 
-        	new WeakComponentVertexClusterer<V,E>();
+        WeakComponentClusterer<V,E> wcExtractor = 
+        	new WeakComponentClusterer<V,E>();
         Set<Set<V>> clusters = wcExtractor.transform(g);
         mReachableVertices = new HashSet<V>();
 
