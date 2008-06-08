@@ -13,6 +13,8 @@ package edu.uci.ics.jung.graph;
 
 import java.util.Collection;
 
+import edu.uci.ics.jung.graph.util.EdgeType;
+
 /**
  * A hypergraph, consisting of a set of vertices of type <code>V</code>
  * and a set of hyperedges of type <code>E</code> which connect the vertices.  
@@ -203,6 +205,28 @@ public interface Hypergraph<V, E>
     boolean addEdge(E edge, Collection<? extends V> vertices);
 
     /**
+     * Adds <code>edge</code> to this graph with type <code>edge_type</code>.
+     * Fails under the following circumstances:
+     * <ul>
+     * <li/><code>edge</code> is already an element of the graph 
+     * <li/>either <code>edge</code> or <code>vertices</code> is <code>null</code>
+     * <li/><code>vertices</code> has the wrong number of vertices for the graph type
+     * <li/><code>vertices</code> are already connected by another edge in this graph,
+     * and this graph does not accept parallel edges
+     * <li/><code>edge_type</code> is not legal for this graph
+     * </ul>
+     * 
+     * @param edge
+     * @param vertices
+     * @return <code>true</code> if the add is successful, and <code>false</code> otherwise
+     * @throws IllegalArgumentException if <code>edge</code> or <code>vertices</code> is null, 
+     * or if a different vertex set in this graph is already connected by <code>edge</code>, 
+     * or if <code>vertices</code> are not a legal vertex set for <code>edge</code> 
+     */
+    boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType 
+    		edge_type);
+    
+    /**
      * Removes <code>vertex</code> from this graph.
      * As a side effect, removes any edges <code>e</code> incident to <code>vertex</code> if the 
      * removal of <code>vertex</code> would cause <code>e</code> to be incident to an illegal
@@ -296,4 +320,12 @@ public interface Hypergraph<V, E>
      * @return the number of vertices that are incident to <code>edge</code>.
      */
     int getIncidentCount(E edge);
+    
+    /**
+     * Returns the edge type of <code>edge</code>.
+     * Current <code>EdgeType</code>s include <code>DIRECTED</code> and <code>UNDIRECTED</code>.
+     * @param edge
+     * @return the <code>EdgeType</code> of <code>edge</code>, or <code>null</code> if <code>edge</code> has no defined type
+     */
+    EdgeType getEdgeType(E edge); 
 }

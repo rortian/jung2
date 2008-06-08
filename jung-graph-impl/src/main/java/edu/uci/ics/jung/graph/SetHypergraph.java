@@ -22,6 +22,8 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.jung.graph.util.EdgeType;
+
 /**
  * 
  * 
@@ -95,6 +97,27 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
             vertices.get(v).add(hyperedge);
         }
         return true;
+    }
+    
+    /**
+     * @see Hypergraph#addEdge(Object, Collection, EdgeType)
+     */
+    public boolean addEdge(H hyperedge, Collection<? extends V> to_attach, 
+    	EdgeType edge_type)
+    {
+    	if (edge_type != EdgeType.UNDIRECTED)
+    		throw new IllegalArgumentException("Edge type for this " +
+    				"implementation must be EdgeType.UNDIRECTED, not " + 
+    				edge_type);
+    	return addEdge(hyperedge, to_attach);
+    }
+    
+    /**
+     * @see Hypergraph#getEdgeType(Object)
+     */
+    public EdgeType getEdgeType(H edge)
+    {
+    	return EdgeType.UNDIRECTED;
     }
     
     public boolean containsVertex(V vertex) {

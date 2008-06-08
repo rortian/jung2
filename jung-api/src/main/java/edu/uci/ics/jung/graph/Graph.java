@@ -104,15 +104,6 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     Collection<E> getEdges(EdgeType edgeType);
 
     /**
-     * Returns the edge type of <code>edge</code>.
-     * Current <code>EdgeType</code>s include <code>DIRECTED</code> and <code>UNDIRECTED</code>.
-     * @param edge
-     * @return the <code>EdgeType</code> of <code>edge</code>, or <code>null</code> if <code>edge</code> has no defined type
-     */
-    EdgeType getEdgeType(E edge); 
-    
-    
-    /**
      * Returns the number of incoming edges incident to <code>vertex</code>.
      * Equivalent to <code>getInEdges(vertex).size()</code>.
      * @param vertex    the vertex whose indegree is to be calculated

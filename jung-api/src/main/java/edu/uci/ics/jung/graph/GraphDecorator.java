@@ -22,7 +22,16 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
 		return delegate.addEdge(edge, vertices);
 	}
-
+	
+	/**
+	 * @see Hypergraph#addEdge(Object, Collection, EdgeType)
+	 */
+	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType
+		edge_type)
+	{
+		return delegate.addEdge(edge, vertices, edge_type);
+	}
+	
 	/**
 	 * @param e
 	 * @param v1

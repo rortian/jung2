@@ -135,6 +135,12 @@ public class Graphs {
 			return delegate.addEdge(e, v1, v2, edgeType);
 		}
 
+		public synchronized boolean addEdge(E e, Collection<? extends V> 
+			vertices, EdgeType edgeType) 
+		{
+			return delegate.addEdge(e, vertices, edgeType);
+		}
+		
 		/**
 		 * @param e
 		 * @param v1
@@ -605,6 +611,12 @@ public class Graphs {
 			throw new UnsupportedOperationException();
 		}
 
+		public boolean addEdge(E e, Collection<? extends V> vertices, 
+			EdgeType edgeType) 
+		{
+			throw new UnsupportedOperationException();
+		}
+		
 		/**
 		 * @param e
 		 * @param v1

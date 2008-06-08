@@ -484,4 +484,10 @@ public class BinaryTree<V, E> implements Tree<V, E>
       return false;
     }
 
+	public boolean addEdge(E edge, Collection<? extends V> vertices,
+			EdgeType edge_type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
