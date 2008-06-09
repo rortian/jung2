@@ -27,6 +27,9 @@ import java.util.Map;
  */
 public class BinaryTree<V, E> implements Tree<V, E> 
 {
+    protected static final int LEFT = 0;
+    protected static final int RIGHT = 1;
+    
     protected Map<V, E> parent_edges;
     // We don't use a Pair<E> for child edges because
     // (a) either or both edges might be null
@@ -152,12 +155,14 @@ public class BinaryTree<V, E> implements Tree<V, E>
       return false;
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Graph#getDest(java.lang.Object)
      */
-    public V getDest(E directed_edge) {
-      // TODO Auto-generated method stub
-      return null;
+    public V getDest(E directed_edge) 
+    {
+        if (!containsEdge(directed_edge))
+            return null;
+        return edge_vpairs.get(directed_edge).getSecond();
     }
   
     /**
@@ -251,12 +256,14 @@ public class BinaryTree<V, E> implements Tree<V, E>
         return Collections.singleton(getParent(vertex));
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Graph#getSource(java.lang.Object)
      */
-    public V getSource(E directed_edge) {
-      // TODO Auto-generated method stub
-      return null;
+    public V getSource(E directed_edge) 
+    {
+        if (!containsEdge(directed_edge))
+            return null;
+        return edge_vpairs.get(directed_edge).getSecond();
     }
   
     /**
@@ -275,7 +282,7 @@ public class BinaryTree<V, E> implements Tree<V, E>
         return getChildren(vertex);
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Graph#inDegree(java.lang.Object)
      */
     public int inDegree(V vertex) 
@@ -287,44 +294,83 @@ public class BinaryTree<V, E> implements Tree<V, E>
         return 1;
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Graph#isDest(java.lang.Object, java.lang.Object)
      */
-    public boolean isDest(V vertex, E edge) {
-      // TODO Auto-generated method stub
-      return false;
+    public boolean isDest(V vertex, E edge) 
+    {
+        if (!containsEdge(edge) || !containsVertex(vertex))
+            return false;
+        return edge_vpairs.get(edge).getSecond().equals(vertex);
     }
   
-    /* (non-Javadoc)
+    /**
+     * Returns <code>true</code> if <code>vertex</code> is a leaf of this tree,
+     * i.e., if it has no children.
+     * @param vertex the vertex to be queried
+     * @return <code>true</code> if <code>outDegree(vertex)==0</code>
+     */
+    public boolean isLeaf(V vertex)
+    {
+        if (!containsVertex(vertex))
+            return false;
+        return outDegree(vertex) == 0;
+    }
+    
+    /**
+     * Returns true iff <code>v1</code> is the parent of <code>v2</code>.
+     * Note that if <code>v2</code> is the root and <code>v1</code> is <code>null</code>,
+     * this method returns <code>true</code>.
+     * 
      * @see edu.uci.ics.jung.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
      */
-    public boolean isPredecessor(V v1, V v2) {
-      // TODO Auto-generated method stub
-      return false;
+    public boolean isPredecessor(V v1, V v2) 
+    {
+        if (!containsVertex(v2))
+            return false;
+        return getParent(v2).equals(v1);
     }
   
-    /* (non-Javadoc)
+    /**
+     * Returns <code>true</code> if <code>vertex</code> is a leaf of this tree,
+     * i.e., if it has no children.
+     * @param vertex the vertex to be queried
+     * @return <code>true</code> if <code>outDegree(vertex)==0</code>
+     */
+    public boolean isRoot(V vertex)
+    {
+        return root.equals(vertex);
+    }
+    
+    /**
      * @see edu.uci.ics.jung.graph.Graph#isSource(java.lang.Object, java.lang.Object)
      */
-    public boolean isSource(V vertex, E edge) {
-      // TODO Auto-generated method stub
-      return false;
+    public boolean isSource(V vertex, E edge) 
+    {
+        if (!containsEdge(edge) || !containsVertex(vertex))
+            return false;
+        return edge_vpairs.get(edge).getFirst().equals(vertex);
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
      */
-    public boolean isSuccessor(V v1, V v2) {
-      // TODO Auto-generated method stub
-      return false;
+    public boolean isSuccessor(V v1, V v2) 
+    {
+        if (!containsVertex(v2))
+            return false;
+        if (containsVertex(v1))
+            return getParent(v1).equals(v2);
+        return isLeaf(v2) && v1 == null;
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Graph#outDegree(java.lang.Object)
      */
-    public int outDegree(V vertex) {
-      // TODO Auto-generated method stub
-      return 0;
+    public int outDegree(V vertex) 
+    {
+        E[] out_edges = child_edges.get(vertex);
+        return (out_edges[LEFT] == null ? 0 : 1) + (out_edges[RIGHT] == null ? 0 : 1);
     }
   
     /* (non-Javadoc)
@@ -343,12 +389,15 @@ public class BinaryTree<V, E> implements Tree<V, E>
       return false;
     }
   
-    /* (non-Javadoc)
+    /**
      * @see edu.uci.ics.jung.graph.Hypergraph#areIncident(java.lang.Object, java.lang.Object)
      */
-    public boolean areIncident(V vertex, E edge) {
-      // TODO Auto-generated method stub
-      return false;
+    public boolean areIncident(V vertex, E edge) 
+    {
+        if (!containsVertex(vertex) || !containsEdge(edge))
+            return false;
+        Pair<V> endpoints = edge_vpairs.get(edge);
+        return endpoints.getFirst().equals(vertex) || endpoints.getSecond().equals(vertex);
     }
   
     /* (non-Javadoc)
@@ -440,6 +489,20 @@ public class BinaryTree<V, E> implements Tree<V, E>
     }
   
     /**
+     * Returns the left child of <code>vertex</code> in this tree, or <code>null</code>
+     * if it has no left child.
+     * @param vertex the vertex to query
+     * @return the left child of <code>vertex</code> in this tree, or <code>null</code>
+     * if it has no left child
+     */
+    public V getLeftChild(V vertex)
+    {
+        if (!containsVertex(vertex))
+            return null;
+        return edge_vpairs.get(child_edges.get(vertex)[0]).getSecond();
+    }
+    
+    /**
      * @see edu.uci.ics.jung.graph.Hypergraph#getNeighborCount(java.lang.Object)
      */
     public int getNeighborCount(V vertex) {
@@ -454,6 +517,20 @@ public class BinaryTree<V, E> implements Tree<V, E>
       return null;
     }
   
+    /**
+     * Returns the left child of <code>vertex</code> in this tree, or <code>null</code>
+     * if it has no left child.
+     * @param vertex the vertex to query
+     * @return the left child of <code>vertex</code> in this tree, or <code>null</code>
+     * if it has no left child
+     */
+    public V getRightChild(V vertex)
+    {
+        if (!containsVertex(vertex))
+            return null;
+        return edge_vpairs.get(child_edges.get(vertex)[0]).getSecond();
+    }
+    
     /* (non-Javadoc)
      * @see edu.uci.ics.jung.graph.Hypergraph#getVertexCount()
      */
