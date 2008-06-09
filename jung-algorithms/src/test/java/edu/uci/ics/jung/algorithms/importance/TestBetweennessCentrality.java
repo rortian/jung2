@@ -13,12 +13,8 @@ import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.apache.commons.collections15.BidiMap;
-
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
@@ -33,11 +29,11 @@ public class TestBetweennessCentrality extends TestCase {
     @Override
     protected void setUp() {}
 
-    private static <V,E> E getEdge(Graph<V,E> g, int v1Index, int v2Index, BidiMap<V,Integer> id) {
-        V v1 = id.getKey(v1Index);
-        V v2 = id.getKey(v2Index);
-        return g.findEdge(v1, v2);
-    }
+//    private static <V,E> E getEdge(Graph<V,E> g, int v1Index, int v2Index, BidiMap<V,Integer> id) {
+//        V v1 = id.getKey(v1Index);
+//        V v2 = id.getKey(v2Index);
+//        return g.findEdge(v1, v2);
+//    }
 
     public void testRanker() {
         UndirectedGraph<Integer,Integer> graph = 

@@ -37,7 +37,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
      * getter for the delegate
      * @return the delegate
      */
-    public Layout getDelegate() {
+    public Layout<V,E> getDelegate() {
         return delegate;
     }
 

@@ -265,13 +265,13 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 			return locations.get(v);
 	}
 	
-	private Point2D getMaxXY() {
-		double maxx = 0;
-		double maxy = 0;
-		for(Point2D p : locations.values()) {
-			maxx = Math.max(maxx, p.getX());
-			maxy = Math.max(maxy, p.getY());
-		}
-		return new Point2D.Double(maxx,maxy);
-	}
+//	private Point2D getMaxXY() {
+//		double maxx = 0;
+//		double maxy = 0;
+//		for(Point2D p : locations.values()) {
+//			maxx = Math.max(maxx, p.getX());
+//			maxy = Math.max(maxy, p.getY());
+//		}
+//		return new Point2D.Double(maxx,maxy);
+//	}
 }

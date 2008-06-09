@@ -18,8 +18,8 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		tree.addEdge(1,"A","B1");
 		
 //		System.err.println("tree = "+tree);
-		PrimMinimumSpanningTree pmst = 
-			new PrimMinimumSpanningTree(DelegateTree.<String,Integer>getFactory());
+		PrimMinimumSpanningTree<String,Integer> pmst = 
+			new PrimMinimumSpanningTree<String,Integer>(DelegateTree.<String,Integer>getFactory());
 		
 		Graph<String,Integer> mst = pmst.transform(tree);
 //		System.err.println("mst = "+mst);
@@ -35,8 +35,8 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		graph.addEdge(0, "A", "B0");
 		graph.addEdge(1, "A", "B1");
 //		System.err.println("graph = "+graph);
-		PrimMinimumSpanningTree pmst = 
-			new PrimMinimumSpanningTree(DelegateTree.<String,Integer>getFactory());
+		PrimMinimumSpanningTree<String,Integer> pmst = 
+			new PrimMinimumSpanningTree<String,Integer>(DelegateTree.<String,Integer>getFactory());
 		
 		Graph<String,Integer> mst = pmst.transform(graph);
 //		System.err.println("mst = "+mst);
@@ -49,8 +49,8 @@ public class TestPrimMinimumSpanningTree extends TestCase {
 		graph.addEdge(0, "A", "B0");
 		graph.addEdge(1, "A", "B1");
 //		System.err.println("graph = "+graph);
-		PrimMinimumSpanningTree pmst = 
-			new PrimMinimumSpanningTree(DelegateTree.<String,Integer>getFactory());
+		PrimMinimumSpanningTree<String,Integer> pmst = 
+			new PrimMinimumSpanningTree<String,Integer>(DelegateTree.<String,Integer>getFactory());
 		
 		Graph<String,Integer> mst = pmst.transform(graph);
 //		System.err.println("mst = "+mst);
