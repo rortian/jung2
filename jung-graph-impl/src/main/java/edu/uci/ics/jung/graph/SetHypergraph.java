@@ -117,7 +117,10 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
      */
     public EdgeType getEdgeType(H edge)
     {
-    	return EdgeType.UNDIRECTED;
+        if (containsEdge(edge))
+            return EdgeType.UNDIRECTED;
+        else
+            return null;
     }
     
     public boolean containsVertex(V vertex) {
