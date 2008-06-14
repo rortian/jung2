@@ -454,7 +454,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
     /**
      * For a given source vertex, holds the estimated and final distances, 
      * tentative and final assignments of incoming edges on the shortest path from
-     * the source vertex, and a priority queue (ordered by estimaed distance)
+     * the source vertex, and a priority queue (ordered by estimated distance)
      * of the vertices for which distances are unknown.
      * 
      * @author Joshua O'Madadhain
