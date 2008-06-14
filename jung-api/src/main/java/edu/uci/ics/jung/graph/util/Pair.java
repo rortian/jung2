@@ -194,8 +194,6 @@ public final class Pair<T> implements Collection<T>, Serializable
     public <S> S[] toArray(S[] a) {
         S[] to_return = a;
         Class<?> type = a.getClass().getComponentType();
-//        if (!(T instanceof S))
-//            throw new ArrayStoreException("input type is not a supertype of this Pair's type");
         if (a.length < 2)
             to_return = (S[])java.lang.reflect.Array.newInstance(type, 2);
         to_return[0] = (S)first;
