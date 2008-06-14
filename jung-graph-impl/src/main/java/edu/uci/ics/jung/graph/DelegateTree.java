@@ -131,6 +131,7 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 		}
         
         // recalculate height
+		vertex_depths.remove(vertex);
 		return delegate.removeVertex(vertex);
 	}
 	
@@ -263,9 +264,6 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	 */
 	public int getDepth(V v) {
         return this.vertex_depths.get(v);
-//        return getPath(v).size() - 1;
-        // the below definition was incorrect: it should have been getPath(v).size() - 1
-//		return getPath(v).size();
 	}
 
 	/**
