@@ -42,9 +42,6 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.Checkmark;
-import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
-import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.LayeredIcon;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -58,6 +55,9 @@ import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.renderers.Checkmark;
+import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.LayoutLensSupport;
 import edu.uci.ics.jung.visualization.transform.LensSupport;
 import edu.uci.ics.jung.visualization.transform.shape.MagnifyImageLensSupport;
@@ -221,7 +221,7 @@ public class LensVertexImageShaperDemo extends JApplet {
         });
 
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Number>());
         
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
@@ -324,20 +324,20 @@ public class LensVertexImageShaperDemo extends JApplet {
      */
     class VertexStringerImpl<V> implements Transformer<V,String> {
 
-        Map map = new HashMap();
+        Map<V,String> map = new HashMap<V,String>();
         
         boolean enabled = true;
         
-        public VertexStringerImpl(Map map) {
+        public VertexStringerImpl(Map<V,String> map) {
             this.map = map;
         }
         
-        /* (non-Javadoc)
+        /**
          * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
          */
         public String transform(V v) {
             if(isEnabled()) {
-                return (String)map.get(v);
+                return map.get(v);
             } else {
                 return "";
             }

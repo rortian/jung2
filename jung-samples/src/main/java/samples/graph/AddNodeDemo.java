@@ -30,10 +30,10 @@ import edu.uci.ics.jung.algorithms.layout.SpringLayout.LengthFunction;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.Graphs;
 import edu.uci.ics.jung.graph.ObservableGraph;
 import edu.uci.ics.jung.graph.event.GraphEvent;
 import edu.uci.ics.jung.graph.event.GraphEventListener;
+import edu.uci.ics.jung.graph.util.Graphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -97,7 +97,7 @@ public class AddNodeDemo extends javax.swing.JApplet {
         getContentPane().setFont(new Font("Serif", Font.PLAIN, 12));
 
         vv.getModel().getRelaxer().setSleepTime(500);
-        vv.setGraphMouse(new DefaultModalGraphMouse());
+        vv.setGraphMouse(new DefaultModalGraphMouse<Number,Number>());
         
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Number>());

@@ -91,9 +91,9 @@ public class ShowLayouts extends JApplet {
 	private static final class LayoutChooser implements ActionListener
     {
         private final JComboBox jcb;
-        private final VisualizationViewer vv;
+        private final VisualizationViewer<Integer,Number> vv;
 
-        private LayoutChooser(JComboBox jcb, VisualizationViewer vv)
+        private LayoutChooser(JComboBox jcb, VisualizationViewer<Integer,Number> vv)
         {
             super();
             this.jcb = jcb;
@@ -105,25 +105,20 @@ public class ShowLayouts extends JApplet {
             Object[] constructorArgs =
                 { g_array[graph_index]};
 
-            Class layoutC = (Class) jcb.getSelectedItem();
-            Class lay = layoutC;
+            Class<? extends Layout<Integer,Number>> layoutC = 
+                (Class<? extends Layout<Integer,Number>>) jcb.getSelectedItem();
+//            Class lay = layoutC;
             try
             {
-                Constructor constructor = lay
+                Constructor<? extends Layout<Integer, Number>> constructor = layoutC
                         .getConstructor(new Class[] {Graph.class});
                 Object o = constructor.newInstance(constructorArgs);
-                Layout l = (Layout) o;
+                Layout<Integer,Number> l = (Layout<Integer,Number>) o;
                 l.setInitializer(vv.getGraphLayout());
                 l.setSize(vv.getSize());
-
-//                Relaxer relaxer = vv.getModel().getRelaxer();
-//                if(relaxer != null) relaxer.stop();
-//                vv.getModel().stop();
-//                vv.setGraphLayout(l);
-//                vv.getModel().restart();
                 
-				LayoutTransition<String,Integer> lt =
-					new LayoutTransition<String,Integer>(vv, vv.getGraphLayout(), l);
+				LayoutTransition<Integer,Number> lt =
+					new LayoutTransition<Integer,Number>(vv, vv.getGraphLayout(), l);
 				Animator animator = new Animator(lt);
 				animator.start();
 				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
@@ -164,7 +159,7 @@ public class ShowLayouts extends JApplet {
             
         g_array[0] = TestGraphs.createTestGraph(false);
         g_array[1] = MixedRandomGraphGenerator.generateMixedRandomGraph(graphFactory, 
-        		vertexFactory, edgeFactory, new HashMap(), 20, true, new HashSet());
+        		vertexFactory, edgeFactory, new HashMap<Number,Number>(), 20, true, new HashSet<Integer>());
         g_array[2] = TestGraphs.getDemoGraph();
         g_array[3] = TestGraphs.createDirectedAcyclicGraph(4, 4, 0.3);
         g_array[4] = TestGraphs.getOneComponentGraph();
@@ -173,11 +168,12 @@ public class ShowLayouts extends JApplet {
 
         Graph<? extends Object, ? extends Object> g = g_array[4]; // initial graph
 
-        final VisualizationViewer vv = new VisualizationViewer(new FRLayout(g));
+        final VisualizationViewer<Integer,Number> vv = 
+            new VisualizationViewer<Integer,Number>(new FRLayout(g));
         
-        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer(vv.getPickedVertexState(), Color.red, Color.yellow));
+        vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
         
-        final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse<Integer,Number> graphMouse = new DefaultModalGraphMouse<Integer,Number>();
         vv.setGraphMouse(graphMouse);
         
         final ScalingControl scaler = new CrossoverScalingControl();
@@ -197,7 +193,7 @@ public class ShowLayouts extends JApplet {
         JButton reset = new JButton("reset");
         reset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Layout layout = vv.getGraphLayout();
+				Layout<Integer,Number> layout = vv.getGraphLayout();
 				layout.initialize();
 				Relaxer relaxer = vv.getModel().getRelaxer();
 				if(relaxer != null) {
@@ -209,7 +205,7 @@ public class ShowLayouts extends JApplet {
 			}});
         
         JComboBox modeBox = graphMouse.getModeComboBox();
-        modeBox.addItemListener(((DefaultModalGraphMouse)vv.getGraphMouse()).getModeListener());
+        modeBox.addItemListener(((DefaultModalGraphMouse<Integer,Number>)vv.getGraphMouse()).getModeListener());
 
         JPanel jp = new JPanel();
         jp.setBackground(Color.WHITE);
@@ -257,16 +253,17 @@ public class ShowLayouts extends JApplet {
     /**
      * @return
      */
-    private static Class[] getCombos()
+    @SuppressWarnings("unchecked")
+    private static Class<? extends Layout>[] getCombos()
     {
-        List layouts = new ArrayList();
+        List<Class<? extends Layout>> layouts = new ArrayList<Class<? extends Layout>>();
         layouts.add(KKLayout.class);
         layouts.add(FRLayout.class);
         layouts.add(CircleLayout.class);
         layouts.add(SpringLayout.class);
         layouts.add(SpringLayout2.class);
         layouts.add(ISOMLayout.class);
-        return (Class[]) layouts.toArray(new Class[0]);
+        return layouts.toArray(new Class[0]);
     }
 
     public static void main(String[] args)

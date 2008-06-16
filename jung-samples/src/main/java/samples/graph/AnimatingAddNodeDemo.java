@@ -35,10 +35,10 @@ import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.Graphs;
 import edu.uci.ics.jung.graph.ObservableGraph;
 import edu.uci.ics.jung.graph.event.GraphEvent;
 import edu.uci.ics.jung.graph.event.GraphEventListener;
+import edu.uci.ics.jung.graph.util.Graphs;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -105,7 +105,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
         getContentPane().setBackground(java.awt.Color.lightGray);
         getContentPane().setFont(new Font("Serif", Font.PLAIN, 12));
 
-        vv.setGraphMouse(new DefaultModalGraphMouse());
+        vv.setGraphMouse(new DefaultModalGraphMouse<Number,Number>());
         
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Number>());
@@ -113,12 +113,11 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
         
         vv.addComponentListener(new ComponentAdapter() {
 
-			/* (non-Javadoc)
+			/**
 			 * @see java.awt.event.ComponentAdapter#componentResized(java.awt.event.ComponentEvent)
 			 */
 			@Override
 			public void componentResized(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
 				super.componentResized(arg0);
 				System.err.println("resized");
 				layout.setSize(arg0.getComponent().getSize());

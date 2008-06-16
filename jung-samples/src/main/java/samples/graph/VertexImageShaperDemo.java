@@ -46,9 +46,6 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.Checkmark;
-import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
-import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.FourPassImageShaper;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
@@ -66,6 +63,9 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
+import edu.uci.ics.jung.visualization.renderers.Checkmark;
+import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 /**
@@ -228,13 +228,13 @@ public class VertexImageShaperDemo extends JApplet {
         });
 
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Number>());
         
         Container content = getContentPane();
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
         
-        final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse<Number,Number> graphMouse = new DefaultModalGraphMouse<Number,Number>();
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
         final ScalingControl scaler = new CrossoverScalingControl();
@@ -480,7 +480,7 @@ public class VertexImageShaperDemo extends JApplet {
 
 				Image image = ((ImageIcon) icon).getImage();
 
-				Shape shape = (Shape) shapeMap.get(image);
+				Shape shape = shapeMap.get(image);
 				if (shape == null) {
 					if (shapeImages) {
 						shape = FourPassImageShaper.getShape(image, 30);
@@ -527,7 +527,7 @@ public class VertexImageShaperDemo extends JApplet {
             Transformer<V,Icon> vertexIconFunction = rc.getVertexIconTransformer();
             
             if(vertexIconFunction instanceof DemoVertexIconTransformer) {
-                outlineImages = ((DemoVertexIconTransformer)vertexIconFunction).isOutlineImages();
+                outlineImages = ((DemoVertexIconTransformer<V>)vertexIconFunction).isOutlineImages();
             }
             Icon icon = vertexIconFunction.transform(v);
             if(icon == null || outlineImages) {

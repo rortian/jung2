@@ -42,9 +42,7 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -56,6 +54,8 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.renderers.EdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.VertexLabelRenderer;
 
 /**
  * Demonstrates jung support for drawing edge labels that
@@ -117,14 +117,14 @@ public class EdgeLabelDemo extends JApplet {
         vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Number>(vv.getPickedEdgeState(), Color.black, Color.cyan));
         vv.getRenderContext().setVertexFillPaintTransformer(new PickableVertexPaintTransformer<Integer>(vv.getPickedVertexState(), Color.red, Color.yellow));
         // add my listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Integer>());
         
         // create a frome to hold the graph
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         Container content = getContentPane();
         content.add(panel);
         
-        final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse<Integer,Number> graphMouse = new DefaultModalGraphMouse<Integer,Number>();
         vv.setGraphMouse(graphMouse);
         
         JButton plus = new JButton("+");
@@ -213,7 +213,8 @@ public class EdgeLabelDemo extends JApplet {
 
             public void stateChanged(ChangeEvent e) {
                 JSlider s = (JSlider)e.getSource();
-                AbstractEdgeShapeTransformer aesf = (AbstractEdgeShapeTransformer)vv.getRenderContext().getEdgeShapeTransformer();
+                AbstractEdgeShapeTransformer<Integer,Number> aesf = 
+                    (AbstractEdgeShapeTransformer<Integer,Number>)vv.getRenderContext().getEdgeShapeTransformer();
                 aesf.setControlOffsetIncrement(s.getValue());
                 vv.repaint();
             }

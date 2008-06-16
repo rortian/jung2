@@ -31,8 +31,6 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.DefaultEdgeLabelRenderer;
-import edu.uci.ics.jung.visualization.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -45,6 +43,8 @@ import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableVertexPaintTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.decorators.VertexIconShapeTransformer;
+import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.DefaultVertexLabelRenderer;
 
 /**
  * A demo that shows flag images as vertices, and uses unicode
@@ -91,7 +91,7 @@ public class UnicodeLabelDemo {
         vv.setBackground(Color.white);
 
         // add my listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<Integer>());
         
         // create a frome to hold the graph
         final JFrame frame = new JFrame();
@@ -100,7 +100,7 @@ public class UnicodeLabelDemo {
         content.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        final ModalGraphMouse gm = new DefaultModalGraphMouse();
+        final ModalGraphMouse gm = new DefaultModalGraphMouse<Integer,Number>();
         vv.setGraphMouse(gm);
         
         final ScalingControl scaler = new CrossoverScalingControl();
@@ -131,7 +131,7 @@ public class UnicodeLabelDemo {
         controls.add(plus);
         controls.add(minus);
         controls.add(lo);
-        controls.add(((DefaultModalGraphMouse) gm).getModeComboBox());
+        controls.add(((DefaultModalGraphMouse<Integer,Number>) gm).getModeComboBox());
         content.add(controls, BorderLayout.SOUTH);
 
         frame.pack();

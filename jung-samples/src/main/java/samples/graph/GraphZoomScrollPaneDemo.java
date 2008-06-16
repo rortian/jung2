@@ -30,13 +30,13 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.GraphMouseListener;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.GraphMouseListener;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.GradientVertexRenderer;
@@ -142,13 +142,13 @@ public class GraphZoomScrollPaneDemo {
         vv.getRenderContext().setArrowDrawPaintTransformer(new ConstantTransformer(Color.lightGray));
         
         // add my listeners for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<String>());
         vv.setEdgeToolTipTransformer(new Transformer<Number,String>() {
 			public String transform(Number edge) {
 				return "E"+graph.getEndpoints(edge).toString();
 			}});
         
-        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
         vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
         vv.setForeground(Color.lightGray);
@@ -159,7 +159,7 @@ public class GraphZoomScrollPaneDemo {
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse<String,Number>();
         vv.setGraphMouse(graphMouse);
         
         vv.addKeyListener(graphMouse.getModeKeyListener());
