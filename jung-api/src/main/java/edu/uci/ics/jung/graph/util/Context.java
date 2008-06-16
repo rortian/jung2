@@ -1,5 +1,9 @@
 package edu.uci.ics.jung.graph.util;
 
+/**
+ * A class that is used to link together a graph element and a specific graph.
+ * Provides appropriate implementations of <code>hashCode</code> and <code>equals</code>.
+ */
 public class Context<G,E> {
 	
 	@SuppressWarnings("unchecked")

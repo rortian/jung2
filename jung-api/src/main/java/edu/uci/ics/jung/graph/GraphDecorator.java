@@ -5,6 +5,12 @@ import java.util.Collection;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>Graph</code> that delegates its method calls to a
+ * constructor-specified <code>Graph</code> instance.  This is useful for adding
+ * additional behavior (such as synchronization or unmodifiability) to an existing
+ * instance.
+ */
 public class GraphDecorator<V,E> implements Graph<V,E> {
 	
 	protected Graph<V,E> delegate;

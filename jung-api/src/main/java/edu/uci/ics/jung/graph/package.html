@@ -32,7 +32,7 @@ SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 </head>
 <body>
 
-<p>Specifies the interfaces for and capabilities of the JUNG graph types.</p>
+<p>Interfaces for the JUNG graph types, and some representative implementations.</p>
 
 <P>A graph consists of a set of vertices set and a set of edges which connect the
 vertices.  The base interface is <code>Hypergraph</code>, which defines the most
@@ -50,6 +50,8 @@ define more restrictive graph types.
      graphs, or multimodal)
 <li> parallel edges (multiple edges which connect a single set of vertices)
 <li> internal representations as matrices or as adjacency lists or adjacency maps
+<li/>internal representations that order their elements according to insertion time,
+natural ordering, or a specified <code>Comparator</code>
 </ul> 
 Extensions or implementations of this interface 
 may enforce or disallow any or all of these variations.
@@ -65,8 +67,6 @@ in the constructor.
 if you want to create a graph implementation that uses another implementation to do the work,
 and adds some extra behavior.  (One example: <code>ObservableGraph</code>, which notifies 
 registered listeners when graph mutations occur.)
-<li/> <code>Graphs</code> is a utility class that facilitates the creation of special delegate
-types: synchronized and unmodifiable graphs.
 </ul>
 </body>
 </html>

@@ -17,19 +17,24 @@ import java.util.Iterator;
 
 
 /**
-* Stores a pair of values together. Access either one by directly
-* getting the fields. Pairs are not mutable, respect <code>equals</code>
-* and may be used as indices or map keys.<p>
-* Note that they do not protect from malevolent behavior: if one or another
-* object in the tuple is mutable, then it can be changed with the usual bad
-* effects.
-*/
-
+ * An implementation of <code>Collection</code> that stores exactly
+ * 2 non-null objects and is not mutable.  They respect <code>equals</code>
+ * and may be used as indices or map keys.<p>
+ * Note that they do not protect from malevolent behavior: if one or another
+ * object in the tuple is mutable, then it can be changed with the usual bad
+ * effects.
+ */
 public final class Pair<T> implements Collection<T>, Serializable
 {
     private T first;
     private T second;
 
+    /**
+     * Creates a <code>Pair</code> from the specified elements.
+     * @param value1 the first value in the new <code>Pair</code>
+     * @param value2 the second value in the new <code>Pair</code>
+     * @throws <code>IllegalArgumentException</code> if either argument is null
+     */
     public Pair(T value1, T value2) 
     {
     	if(value1 == null || value2 == null) 
@@ -41,7 +46,9 @@ public final class Pair<T> implements Collection<T>, Serializable
     /**
      * Creates a Pair from the passed Collection.
      * The size of the Collection must be 2.
-     * @param values
+     * @param values the elements of the new <code>Pair</code>
+     * @throws <code>IllegalArgumentException</code> if the input collection is null,
+     * contains null values, or has != 2 elements.
      */
     public Pair(Collection<? extends T> values) 
     {
@@ -63,6 +70,8 @@ public final class Pair<T> implements Collection<T>, Serializable
     /**
      * Creates a <code>Pair</code> from the passed array.
      * The size of the array must be 2.
+     * @throws <code>IllegalArgumentException</code> if the input array is null,
+     * contains null values, or has != 2 elements.
      */
     public Pair(T[] values)
     {
@@ -81,7 +90,7 @@ public final class Pair<T> implements Collection<T>, Serializable
     }
 
     /**
-     * Returns the first constructor argument.
+     * Returns the first element.
      */
     public T getFirst() 
     {
@@ -89,7 +98,7 @@ public final class Pair<T> implements Collection<T>, Serializable
     }
     
     /**
-     * Returns the second constructor argument.
+     * Returns the second element.
      */
     public T getSecond() 
     {
@@ -109,9 +118,7 @@ public final class Pair<T> implements Collection<T>, Serializable
             return 
             	(this.first  == otherFirst  || 
             			(this.first != null  && this.first.equals(otherFirst)))   
-            			
             			&&
-            			
                 (this.second == otherSecond || 
                 		(this.second != null && this.second.equals(otherSecond)));
         } else {

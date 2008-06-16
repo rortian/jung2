@@ -1,16 +1,18 @@
-package edu.uci.ics.jung.graph;
+package edu.uci.ics.jung.graph.util;
 
 import java.io.Serializable;
 import java.util.Collection;
 
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.graph.UndirectedGraph;
 /**
- * This class consists exclusively of static methods that operate on or return
- * graphs.  It contains "wrappers", which return a new graph backed by a
- * specified graph, and a few other odds and ends.
+ * Provides specialized implementations of <code>GraphDecorator</code>.  Currently these 
+ * wrapper types include "synchronized" and "unmodifiable".
  *
- * <p>The methods of this class all throw a <tt>NullPointerException</tt>
+ * <p>The methods of this class may each throw a <code>NullPointerException</code>
  * if the graphs or class objects provided to them are null.
  *
  * @author Tom Nelson
