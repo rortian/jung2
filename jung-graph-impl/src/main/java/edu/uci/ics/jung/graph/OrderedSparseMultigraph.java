@@ -23,6 +23,11 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>Graph</code> that orders its vertex and edge collections
+ * according to insertion time, is suitable for sparse graphs, and 
+ * permits directed, undirected, and parallel edges.
+ */
 @SuppressWarnings("serial")
 public class OrderedSparseMultigraph<V,E> 
     extends SparseMultigraph<V,E>

@@ -24,6 +24,9 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>DirectedGraph</code> suitable for sparse graphs.
+ */
 public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         DirectedGraph<V, E>, Serializable
 {

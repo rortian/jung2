@@ -25,7 +25,10 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 
-
+/**
+ * An implementation of <code>DirectedGraph</code>, suitable for sparse graphs,
+ * that permits parallel edges.
+ */
 @SuppressWarnings("serial")
 public class DirectedSparseMultigraph<V,E> 
     extends AbstractGraph<V,E>

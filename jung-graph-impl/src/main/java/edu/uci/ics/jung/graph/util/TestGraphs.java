@@ -24,11 +24,7 @@ import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 /**
- * 
- * Generates a series of potentially useful test graphs.
- * 
- * @author danyelf
- *  
+ * Provides generators for several different test graphs.
  */
 public class TestGraphs {
 

@@ -11,9 +11,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.graph.util.TreeUtils;
 
 /**
- * An implementation of the Forest<V,E> interface that aggregates 
- * a collection of Tree<V,E>.  Delegates operations to a specified <code>Graph</code>
- * implementation.
+ * An implementation of <code>Forest<V,E></code> that delegates to a specified <code>DirectedGraph</code>
+ * instance.
  * @author Tom Nelson
  *
  * @param <V> the vertex type

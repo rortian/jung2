@@ -25,9 +25,8 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
- * 
- * 
- * @author Joshua O'Madadhain
+ * An implementation of <code>Hypergraph</code> that is suitable for sparse graphs and 
+ * permits parallel edges.
  */
 public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Serializable
 {

@@ -18,7 +18,12 @@ import java.util.Collections;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
-
+/**
+ * Abstract implementation of the <code>Graph</code> interface.  Designed to simplify implementation of
+ * new graph classes.
+ * 
+ * @author Joshua O'Madadhain
+ */
 public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	@SuppressWarnings("unchecked")
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {

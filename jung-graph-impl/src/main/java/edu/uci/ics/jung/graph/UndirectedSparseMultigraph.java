@@ -36,6 +36,10 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>UndirectedGraph</code> that is suitable for 
+ * sparse graphs and permits parallel edges.
+ */
 @SuppressWarnings("serial")
 public class UndirectedSparseMultigraph<V,E> 
     extends AbstractGraph<V,E>

@@ -24,6 +24,10 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>Graph</code> that is suitable for sparse graphs and
+ * permits both directed and undirected edges.
+ */
 public class SparseGraph<V,E> 
     extends AbstractGraph<V,E> 
     implements Graph<V,E>, Serializable

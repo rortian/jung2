@@ -22,6 +22,11 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>UndirectedGraph</code> that is suitable for sparse graphs,
+ * orders its vertex and edge collections according to insertion time, and permits
+ * parallel edges.
+ */
 @SuppressWarnings("serial")
 public class UndirectedOrderedSparseMultigraph<V,E> 
     extends UndirectedSparseMultigraph<V,E>

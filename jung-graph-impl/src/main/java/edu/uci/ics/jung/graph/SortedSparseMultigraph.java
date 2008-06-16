@@ -22,6 +22,14 @@ import org.apache.commons.collections15.comparators.ComparableComparator;
 
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>Graph</code> that is suitable for sparse graphs,
+ * orders its vertex and edge collections according to either specified <code>Comparator</code>
+ * instances or the natural ordering of their elements, and permits directed, undirected,
+ * and parallel edges. 
+ * 
+ * @author Joshua O'Madadhain
+ */
 @SuppressWarnings("serial")
 public class SortedSparseMultigraph<V,E> 
     extends OrderedSparseMultigraph<V,E>

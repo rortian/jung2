@@ -23,7 +23,11 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.Pair;
 
 
-
+/**
+ * An implementation of <code>DirectedGraph</code>, suitable for sparse graphs, 
+ * that orders its vertex and edge collections
+ * according to insertion time.
+ */
 @SuppressWarnings("serial")
 public class DirectedOrderedSparseMultigraph<V,E> 
     extends DirectedSparseMultigraph<V,E>

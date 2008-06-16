@@ -23,6 +23,10 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * An implementation of <code>UndirectedGraph</code> that is suitable
+ * for sparse graphs.
+ */
 public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         implements UndirectedGraph<V, E>, Serializable
 {
