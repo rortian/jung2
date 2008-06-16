@@ -23,9 +23,10 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * An implementation of <code>Tree</code> in which each vertex has
- * <= k children.
+ * <= k children.  The value of 'k' is specified by the constructor
+ * parameter. 
  */
-public class KAryTree<V, E> implements Tree<V, E> 
+public class OrderedKAryTree<V, E> implements Tree<V, E> 
 {
     protected Map<E, Pair<V>> edge_vpairs;
     protected Map<V, VertexData> vertex_data;
@@ -33,7 +34,7 @@ public class KAryTree<V, E> implements Tree<V, E>
     protected V root;
     protected int order;
     
-    public KAryTree(int order)
+    public OrderedKAryTree(int order)
     {
     	this.order = order;
     }
