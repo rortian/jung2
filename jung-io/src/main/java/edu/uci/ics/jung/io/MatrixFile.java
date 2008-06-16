@@ -149,8 +149,9 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 		}
 		return matrix;
 	}
-	/* 
-	 * Loads a graph from a file
+	
+	/** 
+	 * Loads a graph from a file.
 	 * @see edu.uci.ics.jung.io.GraphFile#load(java.lang.String)
 	 */
 	public Graph<V,E> load(String filename) {
@@ -165,7 +166,8 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 			throw new RuntimeException("Error in loading file " + filename, ioe);
 		}
 	}
-	/* 
+	
+	/** 
 	 * Saves a graph to a file
 	 * @see edu.uci.ics.jung.io.GraphFile#save(edu.uci.ics.jung.graph.Graph, java.lang.String)
 	 */
@@ -173,7 +175,6 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 		try {
 			BufferedWriter writer =
 				new BufferedWriter(new FileWriter(filename));
-//			Vertex currentVertex = null;
 			DoubleMatrix2D matrix = GraphMatrixOperations.<V,E>graphToSparseMatrix(graph,
 					mWeightKey);
 			Format labelFormat = new Format("%4.2f");
