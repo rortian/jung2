@@ -10,7 +10,7 @@
 /*
  * Created on Feb 17, 2004
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.control;
 
 import java.awt.event.MouseEvent;
 

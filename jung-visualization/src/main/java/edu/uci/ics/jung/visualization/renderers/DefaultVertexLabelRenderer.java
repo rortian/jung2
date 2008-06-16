@@ -8,7 +8,7 @@
  * Created on Apr 14, 2005
  */
 
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.renderers;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,49 +22,30 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 /**
- * DefaultEdgeLabelRenderer is similar to the cell renderers
+ * DefaultVertexLabelRenderer is similar to the cell renderers
  * used by the JTable and JTree jfc classes.
  * 
- * @author Tom Nelson 
+ * @author Tom Nelson
  *
  * 
  */
 @SuppressWarnings("serial")
-public class DefaultEdgeLabelRenderer extends JLabel implements
-        EdgeLabelRenderer, Serializable {
+public class DefaultVertexLabelRenderer extends JLabel implements
+        VertexLabelRenderer, Serializable {
 
      protected static Border noFocusBorder = new EmptyBorder(0,0,0,0); 
     
-     protected Color pickedEdgeLabelColor = Color.black;
-     protected boolean rotateEdgeLabels;
-     
-     public DefaultEdgeLabelRenderer(Color pickedEdgeLabelColor) {
-         this(pickedEdgeLabelColor, true);
-     }
+     protected Color pickedVertexLabelColor = Color.black;
      
     /**
      * Creates a default table cell renderer.
      */
-    public DefaultEdgeLabelRenderer(Color pickedEdgeLabelColor, boolean rotateEdgeLabels) {
-        super();
-        this.pickedEdgeLabelColor = pickedEdgeLabelColor;
-        this.rotateEdgeLabels = rotateEdgeLabels;
+    public DefaultVertexLabelRenderer(Color pickedVertexLabelColor) {
+        this.pickedVertexLabelColor = pickedVertexLabelColor;
         setOpaque(true);
         setBorder(noFocusBorder);
     }
 
-    /**
-     * @return Returns the rotateEdgeLabels.
-     */
-    public boolean isRotateEdgeLabels() {
-        return rotateEdgeLabels;
-    }
-    /**
-     * @param rotateEdgeLabels The rotateEdgeLabels to set.
-     */
-    public void setRotateEdgeLabels(boolean rotateEdgeLabels) {
-        this.rotateEdgeLabels = rotateEdgeLabels;
-    }
     /**
      * Overrides <code>JComponent.setForeground</code> to assign
      * the unselected-foreground color to the specified color.
@@ -100,22 +81,21 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
     }
     
     /**
-    *
-    * Returns the default label renderer for an Edge
-    *
-    * @param vv  the <code>VisualizationViewer</code> to render on
-    * @param value  the value to assign to the label for
-    *			<code>Edge</code>
-    * @param edge  the <code>Edge</code>
-    * @return the default label renderer
-    */
-    public <E> Component getEdgeLabelRendererComponent(JComponent vv, Object value,
-            Font font, boolean isSelected, E edge) {
+     *
+     * Returns the default label renderer for a Vertex
+     *
+     * @param vv  the <code>VisualizationViewer</code> to render on
+     * @param value  the value to assign to the label for
+     *			<code>Vertex</code>
+     * @param vertex  the <code>Vertex</code>
+     * @return the default label renderer
+     */
+    public <V> Component getVertexLabelRendererComponent(JComponent vv, Object value,
+            Font font, boolean isSelected, V vertex) {
         
         super.setForeground(vv.getForeground());
-        if(isSelected) setForeground(pickedEdgeLabelColor);
+        if(isSelected) setForeground(pickedVertexLabelColor);
         super.setBackground(vv.getBackground());
-        
         if(font != null) {
             setFont(font);
         } else {

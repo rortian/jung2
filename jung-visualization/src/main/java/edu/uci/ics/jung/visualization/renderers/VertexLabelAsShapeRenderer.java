@@ -24,7 +24,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
-import edu.uci.ics.jung.visualization.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 /**

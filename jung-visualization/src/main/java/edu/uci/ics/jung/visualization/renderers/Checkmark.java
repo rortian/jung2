@@ -1,4 +1,4 @@
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.renderers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

@@ -19,6 +19,8 @@ import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.renderers.EdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public interface RenderContext<V, E> {

@@ -10,7 +10,7 @@
 /*
  * Created on Feb 17, 2004
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.control;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,6 +18,7 @@ import java.awt.geom.Point2D;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 /**
  * This class translates mouse clicks into vertex clicks

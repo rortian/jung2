@@ -7,7 +7,7 @@
  * 
  * Created on Jul 20, 2004
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.util;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;

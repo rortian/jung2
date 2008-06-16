@@ -14,9 +14,6 @@ import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.CellRendererPane;
 import javax.swing.Icon;
@@ -37,6 +34,10 @@ import edu.uci.ics.jung.visualization.decorators.ConstantDirectionalEdgeValueTra
 import edu.uci.ics.jung.visualization.decorators.DirectionalEdgeArrowTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.DefaultVertexLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.EdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.VertexLabelRenderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 

@@ -18,7 +18,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.ArrowFactory;
+import edu.uci.ics.jung.visualization.util.ArrowFactory;
 
 /**
  * Returns wedge arrows for undirected edges and notched arrows

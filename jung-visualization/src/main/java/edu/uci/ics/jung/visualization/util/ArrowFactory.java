@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.util;
 
 import java.awt.geom.GeneralPath;
 

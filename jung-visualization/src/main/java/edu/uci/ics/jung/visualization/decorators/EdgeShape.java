@@ -20,10 +20,10 @@ import java.awt.geom.Rectangle2D;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
+import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
-import edu.uci.ics.jung.graph.util.EdgeIndexFunction;
-import edu.uci.ics.jung.visualization.ArrowFactory;
+import edu.uci.ics.jung.visualization.util.ArrowFactory;
 
 
 /**

@@ -14,7 +14,7 @@ package edu.uci.ics.jung.visualization.decorators;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
-import edu.uci.ics.jung.visualization.VertexShapeFactory;
+import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 
 
 

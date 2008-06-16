@@ -8,7 +8,7 @@
  * Created on Apr 14, 2005
  */
 
-package edu.uci.ics.jung.visualization;
+package edu.uci.ics.jung.visualization.renderers;
 
 import java.awt.Component;
 import java.awt.Font;

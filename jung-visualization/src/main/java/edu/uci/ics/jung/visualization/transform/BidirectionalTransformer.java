@@ -37,8 +37,18 @@ public interface BidirectionalTransformer {
      */
     Point2D inverseTransform(Point2D p);
     
+    /**
+     * 
+     * @param shape
+     * @return
+     */
     Shape transform(Shape shape);
     
+    /**
+     * 
+     * @param shape
+     * @return
+     */
     Shape inverseTransform(Shape shape);
     
 }

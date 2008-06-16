@@ -22,9 +22,9 @@ import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.ArrowFactory;
 import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.util.ArrowFactory;
 
 /**
  * A plugin that can create vertices, undirected edges, and directed edges
