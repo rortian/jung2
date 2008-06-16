@@ -217,8 +217,6 @@ public class TestGraphMLReader extends TestCase {
 
         }
 
-//        GraphMLFile graphmlFile = new GraphMLFile<Numb>();
-        
         Graph<Number,Number> graph = graphFactory.create();
         gmlreader.load(testFilename, graph);
         return graph;
