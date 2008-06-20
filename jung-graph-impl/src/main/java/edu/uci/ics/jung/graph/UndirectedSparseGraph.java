@@ -27,6 +27,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * An implementation of <code>UndirectedGraph</code> that is suitable
  * for sparse graphs.
  */
+@SuppressWarnings("serial")
 public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         implements UndirectedGraph<V, E>, Serializable
 {

@@ -18,6 +18,7 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
+@SuppressWarnings("serial")
 public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E>, Serializable {
 	
 	public DelegateForest() {

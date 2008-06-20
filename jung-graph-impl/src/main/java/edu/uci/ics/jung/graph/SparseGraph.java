@@ -28,6 +28,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * An implementation of <code>Graph</code> that is suitable for sparse graphs and
  * permits both directed and undirected edges.
  */
+@SuppressWarnings("serial")
 public class SparseGraph<V,E> 
     extends AbstractGraph<V,E> 
     implements Graph<V,E>, Serializable

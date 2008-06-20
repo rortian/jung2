@@ -28,6 +28,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * An implementation of <code>Hypergraph</code> that is suitable for sparse graphs and 
  * permits parallel edges.
  */
+@SuppressWarnings("serial")
 public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Serializable
 {
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedge sets
@@ -104,9 +105,9 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     public boolean addEdge(H hyperedge, Collection<? extends V> to_attach, 
     	EdgeType edge_type)
     {
-    	if (edge_type != EdgeType.UNDIRECTED)
+    	if (edge_type != EdgeType.HYPER)
     		throw new IllegalArgumentException("Edge type for this " +
-    				"implementation must be EdgeType.UNDIRECTED, not " + 
+    				"implementation must be EdgeType.HYPER, not " + 
     				edge_type);
     	return addEdge(hyperedge, to_attach);
     }
@@ -117,7 +118,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     public EdgeType getEdgeType(H edge)
     {
         if (containsEdge(edge))
-            return EdgeType.UNDIRECTED;
+            return EdgeType.HYPER;
         else
             return null;
     }

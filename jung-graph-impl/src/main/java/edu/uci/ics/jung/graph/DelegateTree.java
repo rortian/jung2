@@ -21,6 +21,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
+@SuppressWarnings("serial")
 public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, Serializable {
 	
 	public static final <V,E> Factory<Tree<V,E>> getFactory() {
