@@ -15,7 +15,9 @@ package edu.uci.ics.jung.graph.util;
 /**
  * Defines the possible edge types for graphs which assign types to edges.
  */
-public enum EdgeType {
+public enum EdgeType 
+{
       DIRECTED,
-      UNDIRECTED
+      UNDIRECTED,
+      HYPER
 }
