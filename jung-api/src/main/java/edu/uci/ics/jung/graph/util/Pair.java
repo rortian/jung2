@@ -33,7 +33,7 @@ public final class Pair<T> implements Collection<T>, Serializable
      * Creates a <code>Pair</code> from the specified elements.
      * @param value1 the first value in the new <code>Pair</code>
      * @param value2 the second value in the new <code>Pair</code>
-     * @throws <code>IllegalArgumentException</code> if either argument is null
+     * @throws IllegalArgumentException if either argument is null
      */
     public Pair(T value1, T value2) 
     {
@@ -47,7 +47,7 @@ public final class Pair<T> implements Collection<T>, Serializable
      * Creates a Pair from the passed Collection.
      * The size of the Collection must be 2.
      * @param values the elements of the new <code>Pair</code>
-     * @throws <code>IllegalArgumentException</code> if the input collection is null,
+     * @throws IllegalArgumentException if the input collection is null,
      * contains null values, or has != 2 elements.
      */
     public Pair(Collection<? extends T> values) 
@@ -70,7 +70,7 @@ public final class Pair<T> implements Collection<T>, Serializable
     /**
      * Creates a <code>Pair</code> from the passed array.
      * The size of the array must be 2.
-     * @throws <code>IllegalArgumentException</code> if the input array is null,
+     * @throws IllegalArgumentException if the input array is null,
      * contains null values, or has != 2 elements.
      */
     public Pair(T[] values)
