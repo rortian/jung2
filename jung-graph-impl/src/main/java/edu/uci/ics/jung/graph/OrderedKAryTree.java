@@ -24,7 +24,10 @@ import edu.uci.ics.jung.graph.util.Pair;
 /**
  * An implementation of <code>Tree</code> in which each vertex has
  * <= k children.  The value of 'k' is specified by the constructor
- * parameter. 
+ * parameter.  A specific child (edge) can be retrieved directly by specifying the
+ * index at which the child is located.  By default, new (child) vertices
+ * are added at the lowest index available, if no index is specified.
+ * 
  */
 public class OrderedKAryTree<V, E> implements Tree<V, E> 
 {
@@ -55,10 +58,10 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
     }
   
     /**
-     * Returns the child edge of 
+     * Returns the child edge of the vertex at index <code>index</code>.
      * @param vertex
      * @param index
-     * @return
+     * @return the child edge of the vertex at index <code>index</code>
      */
     public E getChildEdge(V vertex, int index) 
     {
@@ -577,7 +580,7 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
      * @param vertex the vertex to query
      * @return the child of <code>vertex</code> at position <code>index</code> 
      * in this tree, or <code>null</code> if it has no child at that position
-     * @throws ArrayOutOfBoundsException if <code>index</code> >= the max 
+     * @throws ArrayIndexOutOfBoundsException if <code>index</code> >= the max 
      * number of children for this tree
      */
     public V getChild(V vertex, int index)
