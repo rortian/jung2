@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
@@ -29,27 +30,25 @@ import edu.uci.ics.jung.graph.util.Pair;
 /**
  * Writes graphs out in GraphML format.
  *
- * Known issues: does not indent lines for readability.
+ * Known issues: does not indent lines for text-format readability.
+ * 
  */
 public class GraphMLWriter<V,E> 
 {
     protected Transformer<V, String> vertex_ids;
     protected Transformer<E, String> edge_ids;
-    protected Map<String, String> graph_data_descriptions;
-    protected Map<String, String> edge_data_descriptions;
-    protected Map<String, String> vertex_data_descriptions;
-    protected Map<String, Transformer<Hypergraph<V,E>, String>> graph_data;
-    protected Map<String, Transformer<E, String>> edge_data;
-    protected Map<String, Transformer<V, String>> vertex_data;
+    protected Map<String, DataStructure<Hypergraph<V,E>>> graph_data;
+    protected Map<String, DataStructure<V>> vertex_data;
+    protected Map<String, DataStructure<E>> edge_data;
     protected Transformer<V, String> vertex_desc;
     protected Transformer<E, String> edge_desc;
     protected Transformer<Hypergraph<V,E>, String> graph_desc;
-	protected Map<String, String> defaults;
 	protected boolean directed;
     
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public GraphMLWriter() 
 	{
 	    vertex_ids = new Transformer<V,String>()
@@ -60,16 +59,12 @@ public class GraphMLWriter<V,E>
 	        }
 	    };
 	    edge_ids = TransformerUtils.nullTransformer();
-	    graph_data_descriptions = Collections.emptyMap();
-        vertex_data_descriptions = Collections.emptyMap();
-        edge_data_descriptions = Collections.emptyMap();
 	    graph_data = Collections.emptyMap();
         vertex_data = Collections.emptyMap();
         edge_data = Collections.emptyMap();
         vertex_desc = TransformerUtils.nullTransformer();
         edge_desc = TransformerUtils.nullTransformer();
         graph_desc = TransformerUtils.nullTransformer();
-	    defaults = Collections.emptyMap();
 	}
 	
 	
@@ -86,17 +81,17 @@ public class GraphMLWriter<V,E>
 
 		// write out boilerplate header
 		bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		bw.write("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns/graphml\"  " +
+		bw.write("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns/graphml\"\n" +
 				"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  \n");
 		bw.write("xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns/graphml\">\n");
 		
 		// write out data specifiers, including defaults
 		for (String key : graph_data.keySet())
-			writeKeySpecification(key, "graph", graph_data_descriptions, bw);
+			writeKeySpecification(key, "graph", graph_data.get(key), bw);
 		for (String key : vertex_data.keySet())
-			writeKeySpecification(key, "node", vertex_data_descriptions, bw);
+			writeKeySpecification(key, "node", vertex_data.get(key), bw);
 		for (String key : edge_data.keySet())
-			writeKeySpecification(key, "edge", edge_data_descriptions, bw);
+			writeKeySpecification(key, "edge", edge_data.get(key), bw);
 
 		// write out graph-level information
 		// set edge default direction
@@ -115,8 +110,8 @@ public class GraphMLWriter<V,E>
 		// write graph data out if any
 		for (String key : graph_data.keySet())
 		{
-			Transformer<Hypergraph<V,E>, String> t = graph_data.get(key);
-			String value = t.transform(graph);
+			Transformer<Hypergraph<V,E>, ?> t = graph_data.get(key).transformer;
+			String value = t.transform(graph).toString();
 			if (value != null)
 				w.write(format("data", "key", key, value) + "\n");
 		}
@@ -159,10 +154,10 @@ public class GraphMLWriter<V,E>
 			// write data out if any
 			for (String key : vertex_data.keySet())
 			{
-				Transformer<V, String> t = vertex_data.get(key);
+				Transformer<V, ?> t = vertex_data.get(key).transformer;
 				if (t != null)
 				{
-    				String value = t.transform(v);
+    				String value = t.transform(v).toString();
     				if (value != null)
     				{
     					if (!closed)
@@ -226,8 +221,8 @@ public class GraphMLWriter<V,E>
 			// write data out if any
 			for (String key : edge_data.keySet())
 			{
-				Transformer<E, String> t = edge_data.get(key);
-				String value = t.transform(e);
+				Transformer<E, ?> t = edge_data.get(key).transformer;
+				String value = t.transform(e).toString();
 				if (value != null)
 				{
 					if (!closed)
@@ -263,12 +258,12 @@ public class GraphMLWriter<V,E>
 	}
 
 	protected void writeKeySpecification(String key, String type, 
-			Map<String,String> descriptions, BufferedWriter bw) throws IOException
+			DataStructure<?> ds, BufferedWriter bw) throws IOException
 	{
 		bw.write("<key id=\"" + key + "\" for=\"" + type + "\"");
 		boolean closed = false;
 		// write out description if any
-		String desc = descriptions.get(key);
+		String desc = ds.description;
 		if (desc != null)
 		{
 			if (!closed)
@@ -279,7 +274,7 @@ public class GraphMLWriter<V,E>
 			bw.write("<desc>" + desc + "</desc>\n");
 		}
 		// write out default if any
-		String def = defaults.get(key);
+		Object def = ds.default_value;
 		if (def != null)
 		{
 			if (!closed)
@@ -287,12 +282,12 @@ public class GraphMLWriter<V,E>
 				bw.write(">\n");
 				closed = true;
 			}
-			bw.write("<default>" + def + "</default>\n");
+			bw.write("<default>" + def.toString() + "</default>\n");
 		}
 		if (!closed)
 		    bw.write("/>\n");
 		else
-		    bw.write("</key>");
+		    bw.write("</key>\n");
 	}
 	
 	protected String format(String type, String attr, String value, String contents)
@@ -328,48 +323,31 @@ public class GraphMLWriter<V,E>
 		this.edge_ids = edge_ids;
 	}
 
-
-
-	public void setGraphDataDescriptions(
-			Map<String, String> graph_data_descriptions) 
+	public void addGraphData(String id, String description, Object default_value,
+			Transformer<Hypergraph<V,E>, ?> graph_transformer)
 	{
-		this.graph_data_descriptions = graph_data_descriptions;
+		if (graph_data.equals(Collections.EMPTY_MAP))
+			graph_data = new HashMap<String, DataStructure<Hypergraph<V,E>>>();
+		graph_data.put(id, new DataStructure<Hypergraph<V,E>>(description, 
+				default_value, graph_transformer));
+	}
+	
+	public void addVertexData(String id, String description, Object default_value,
+			Transformer<V, ?> vertex_transformer)
+	{
+		if (vertex_data.equals(Collections.EMPTY_MAP))
+			vertex_data = new HashMap<String, DataStructure<V>>();
+		vertex_data.put(id, new DataStructure<V>(description, default_value, 
+				vertex_transformer));
 	}
 
-
-
-	public void setEdgeDataDescriptions(Map<String, String> edge_data_descriptions) 
+	public void addEdgeData(String id, String description, Object default_value,
+			Transformer<E, ?> edge_transformer)
 	{
-		this.edge_data_descriptions = edge_data_descriptions;
-	}
-
-
-
-	public void setVertexDataDescriptions(
-			Map<String, String> vertex_data_descriptions) 
-	{
-		this.vertex_data_descriptions = vertex_data_descriptions;
-	}
-
-
-
-	public void setGraphData(Map<String, Transformer<Hypergraph<V,E>, String>> graph_data) 
-	{
-		this.graph_data = graph_data;
-	}
-
-
-
-	public void setEdgeData(Map<String, Transformer<E, String>> edge_data) 
-	{
-		this.edge_data = edge_data;
-	}
-
-
-
-	public void setVertexData(Map<String, Transformer<V, String>> vertex_data) 
-	{
-		this.vertex_data = vertex_data;
+		if (edge_data.equals(Collections.EMPTY_MAP))
+			edge_data = new HashMap<String, DataStructure<E>>();
+		edge_data.put(id, new DataStructure<E>(description, default_value, 
+				edge_transformer));
 	}
 
 	public void setVertexDescriptions(Transformer<V, String> vertex_desc) 
@@ -387,8 +365,18 @@ public class GraphMLWriter<V,E>
 		this.graph_desc = graph_desc;
 	}
 	
-	public void setDefaults(Map<String, String> defaults)
+	protected class DataStructure<T>
 	{
-		this.defaults = defaults;
+		public String description;
+		public Object default_value;
+		public Transformer<T, ?> transformer;
+		
+		public DataStructure(String description, Object default_value,
+				Transformer<T, ?> transformer)
+		{
+			this.description = description;
+			this.transformer = transformer;
+			this.default_value = default_value;
+		}
 	}
 }
