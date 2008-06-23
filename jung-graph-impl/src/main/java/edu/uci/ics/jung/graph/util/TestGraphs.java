@@ -46,7 +46,7 @@ public class TestGraphs {
 
 	/**
 	 * Creates a small sample graph that can be used for testing purposes. The
-	 * graph is as described in the section on {@link #pairs pairs}. If <tt>isDirected</tt>,
+	 * graph is as described in the section on {@link #pairs pairs}. If <code>isDirected</code>,
 	 * the graph is a {@link DirectedSparseMultigraph DirectedSparseMultigraph},
 	 * otherwise, it is an {@link UndirectedSparseMultigraph UndirectedSparseMultigraph}.
 	 * 
@@ -62,7 +62,7 @@ public class TestGraphs {
 
 		for (int i = 0; i < pairs.length; i++) {
 			String[] pair = pairs[i];
-			createEdge(graph, pair[0], pair[1], Integer.parseInt(pair[2]));
+			graph.addEdge(Integer.parseInt(pair[2]), pair[0], pair[1]);
 		}
 		return graph;
 	}
@@ -107,7 +107,6 @@ public class TestGraphs {
 		double linkprob) {
 
 		DirectedGraph<String,Number> dag = new DirectedSparseMultigraph<String,Number>();
-//		StringLabeller sl = StringLabeller.getLabeller(dag);
 		Set<String> previousLayers = new HashSet<String>();
 		Set<String> inThisLayer = new HashSet<String>();
 		for (int i = 0; i < layers; i++) {
@@ -117,16 +116,8 @@ public class TestGraphs {
                 String v = i+":"+j;
 				dag.addVertex(v);
 				inThisLayer.add(v);
-//				try {
-//					sl.setLabel(v, i + ":" + j);
-//				} catch (Exception e) {
-//				}
 				// for each previous node...
                 for(String v2 : previousLayers) {
-//				for (Iterator iter = previousLayers.iterator();
-//					iter.hasNext();
-//					) {
-//					Vertex v2 = (Vertex) iter.next();
 					if (Math.random() < linkprob) {
                         Double de = new Double(Math.random());
 						dag.addEdge(de, v, v2);
@@ -139,6 +130,7 @@ public class TestGraphs {
 		}
 		return dag;
 	}
+	
 	private static void createEdge(
 			Graph<String, Number> g,
 			String v1Label,
@@ -163,7 +155,7 @@ public class TestGraphs {
 			for (int j = i + 1; j <= 10; j++) {
 				String i1 = "" + i;
 				String i2 = "" + j;
-				createEdge(g, i1, i2, i + j);
+				g.addEdge(Math.pow(i+2,j), i1, i2);
 			}
 		}
 
@@ -174,21 +166,15 @@ public class TestGraphs {
 					continue;
 				String i1 = "" + i;
 				String i2 = "" + j;
-				createEdge(g, i1, i2, i + j);
+				g.addEdge(Math.pow(i+2,j), i1, i2);
 			}
 		}
 
 		List<String> index = new ArrayList<String>();
 		index.addAll(g.getVertices());
 		// and one edge to connect them all
-//		Indexer ind = Indexer.getIndexer(g);
-		for (int i = 0; i < index.size() - 1; i++) {
-			try {
-				g.addEdge(new Integer(i), index.get(i), index.get(i+1));
-//				GraphUtils.addEdge(g, (Vertex)ind.getVertex(i), (Vertex) ind.getVertex(i + 1));
-			} catch (IllegalArgumentException fe) {
-			}
-		}
+		for (int i = 0; i < index.size() - 1; i++) 
+		    g.addEdge(new Integer(i), index.get(i), index.get(i+1));
 
 		return g;
 	}
@@ -214,7 +200,7 @@ public class TestGraphs {
 			for (int j = i + 1; j <= 10; j++) {
 				String i1 = "c" + i;
 				String i2 = "c" + j;
-				createEdge(g, i1, i2, i + j);
+                g.addEdge(Math.pow(i+2,j), i1, i2);
 			}
 		}
 
@@ -225,7 +211,7 @@ public class TestGraphs {
 					continue;
 				String i1 = "p" + i;
 				String i2 = "p" + j;
-				createEdge(g, i1, i2, i + j);
+                g.addEdge(Math.pow(i+2,j), i1, i2);
 			}
 		}
 		return g;
@@ -248,8 +234,5 @@ public class TestGraphs {
         graph.addEdge(new Double(.6), v[1], v[2]);
 
         return graph;
-
     }
-
-    
 }
