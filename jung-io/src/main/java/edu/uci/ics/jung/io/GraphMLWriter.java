@@ -15,10 +15,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
-import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.TransformerUtils;
 
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -30,19 +31,19 @@ import edu.uci.ics.jung.graph.util.Pair;
  *
  * Known issues: does not indent lines for readability.
  */
-public class GraphMLWriter<G extends Hypergraph<V,E>, V,E> 
+public class GraphMLWriter<V,E> 
 {
-    protected BidiMap<V, String> vertex_ids;
-    protected BidiMap<E, String> edge_ids;
+    protected Transformer<V, String> vertex_ids;
+    protected Transformer<E, String> edge_ids;
     protected Map<String, String> graph_data_descriptions;
     protected Map<String, String> edge_data_descriptions;
     protected Map<String, String> vertex_data_descriptions;
-    protected Map<String, Transformer<G, String>> graph_data;
+    protected Map<String, Transformer<Hypergraph<V,E>, String>> graph_data;
     protected Map<String, Transformer<E, String>> edge_data;
     protected Map<String, Transformer<V, String>> vertex_data;
     protected Transformer<V, String> vertex_desc;
     protected Transformer<E, String> edge_desc;
-    protected Transformer<G, String> graph_desc;
+    protected Transformer<Hypergraph<V,E>, String> graph_desc;
 	protected Map<String, String> defaults;
 	protected boolean directed;
     
@@ -51,7 +52,24 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 	 */
 	public GraphMLWriter() 
 	{
-		
+	    vertex_ids = new Transformer<V,String>()
+	    { 
+	        public String transform(V v) 
+	        { 
+	            return v.toString(); 
+	        }
+	    };
+	    edge_ids = TransformerUtils.nullTransformer();
+	    graph_data_descriptions = Collections.emptyMap();
+        vertex_data_descriptions = Collections.emptyMap();
+        edge_data_descriptions = Collections.emptyMap();
+	    graph_data = Collections.emptyMap();
+        vertex_data = Collections.emptyMap();
+        edge_data = Collections.emptyMap();
+        vertex_desc = TransformerUtils.nullTransformer();
+        edge_desc = TransformerUtils.nullTransformer();
+        graph_desc = TransformerUtils.nullTransformer();
+	    defaults = Collections.emptyMap();
 	}
 	
 	
@@ -62,7 +80,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 	 * @return
 	 * @throws IOException 
 	 */
-	public boolean save(G graph, Writer w) throws IOException
+	public boolean save(Hypergraph<V,E> graph, Writer w) throws IOException
 	{
 		BufferedWriter bw = new BufferedWriter(w);
 
@@ -73,22 +91,12 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 		bw.write("xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns/graphml\">\n");
 		
 		// write out data specifiers, including defaults
-		if (graph_data != null)
-		{
-			for (String key : graph_data.keySet())
-				writeKeySpecification(key, "graph", graph_data_descriptions, bw);
-		}
-		if (vertex_data != null)
-		{
-			for (String key : vertex_data.keySet())
-				writeKeySpecification(key, "node", vertex_data_descriptions, bw);
-			
-		}
-		if (edge_data != null)
-		{
-			for (String key : edge_data.keySet())
-				writeKeySpecification(key, "edge", edge_data_descriptions, bw);
-		}
+		for (String key : graph_data.keySet())
+			writeKeySpecification(key, "graph", graph_data_descriptions, bw);
+		for (String key : vertex_data.keySet())
+			writeKeySpecification(key, "node", vertex_data_descriptions, bw);
+		for (String key : edge_data.keySet())
+			writeKeySpecification(key, "edge", edge_data_descriptions, bw);
 
 		// write out graph-level information
 		// set edge default direction
@@ -107,7 +115,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 		// write graph data out if any
 		for (String key : graph_data.keySet())
 		{
-			Transformer<G, String> t = graph_data.get(key);
+			Transformer<Hypergraph<V,E>, String> t = graph_data.get(key);
 			String value = t.transform(graph);
 			if (value != null)
 				w.write(format("data", "key", key, value) + "\n");
@@ -120,25 +128,25 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
         writeEdgeData(graph, bw);
 
         // close graph
-        w.write("</graph>\n");
-        w.write("</graphml>\n");
+        bw.write("</graph>\n");
+        bw.write("</graphml>\n");
+        bw.flush();
         
-        w.close();
+        bw.close();
 
 		return true;
 	}
 
-//	public boolean save(Collection<G> graphs, Writer w)
+//	public boolean save(Collection<Hypergraph<V,E>> graphs, Writer w)
 //	{
 //		return true;
 //	}
 
-	protected void writeVertexData(G graph, BufferedWriter w) throws IOException
+	protected void writeVertexData(Hypergraph<V,E> graph, BufferedWriter w) throws IOException
 	{
 		for (V v: graph.getVertices())
 		{
-			String id = (vertex_ids != null) ? vertex_ids.get(v) : v.toString();
-			String v_string = String.format("<node id=\"%s\"", id);
+			String v_string = String.format("<node id=\"%s\"", vertex_ids.transform(v));
 			boolean closed = false;
 			// write description out if any
 			String desc = vertex_desc.transform(v);
@@ -152,28 +160,33 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 			for (String key : vertex_data.keySet())
 			{
 				Transformer<V, String> t = vertex_data.get(key);
-				String value = t.transform(v);
-				if (value != null)
+				if (t != null)
 				{
-					if (!closed)
-					{
-						w.write(v_string + ">\n");
-						closed = true;
-					}
-					w.write(format("data", "key", key, value) + "\n");
+    				String value = t.transform(v);
+    				if (value != null)
+    				{
+    					if (!closed)
+    					{
+    						w.write(v_string + ">\n");
+    						closed = true;
+    					}
+    					w.write(format("data", "key", key, value) + "\n");
+    				}
 				}
 			}
 			if (!closed)
 				w.write(v_string + "/>\n"); // no contents; close the node with "/>"
+			else
+			    w.write("</node>\n");
 		}
 	}
 
-	protected void writeEdgeData(G g, Writer w) throws IOException
+	protected void writeEdgeData(Hypergraph<V,E> g, Writer w) throws IOException
 	{
 		for (E e: g.getEdges())
 		{
 			Collection<V> vertices = g.getIncidentVertices(e);
-			String id = (edge_ids != null) ? edge_ids.get(e) : null;
+			String id = edge_ids.transform(e);
 			EdgeType edge_type = g.getEdgeType(e);
 			String e_string;
 			if (edge_type == EdgeType.HYPER)
@@ -185,7 +198,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 			}
 			else
 			{
-				Pair<V> endpoints = (Pair<V>)vertices;
+				Pair<V> endpoints = new Pair<V>(vertices);
 				V v1 = endpoints.getFirst();
 				V v2 = endpoints.getSecond();
 				e_string = "<edge ";
@@ -197,8 +210,8 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 					e_string += "directed=\"false\" ";
 				if (!directed && edge_type == EdgeType.DIRECTED)
 					e_string += "directed=\"true\" ";
-				e_string += "source=\"" + vertex_ids.get(v1) + 
-					" target = \"" + vertex_ids.get(v2);
+				e_string += "source=\"" + vertex_ids.transform(v1) + 
+					"\" target=\"" + vertex_ids.transform(v2) + "\"";
 			}
 			
 			boolean closed = false;
@@ -235,12 +248,17 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 						w.write(e_string + ">\n");
 						closed = true;
 					}
-					w.write("<endpoint node=\"" + vertex_ids.get(v) + "\"/>\n");
+					w.write("<endpoint node=\"" + vertex_ids.transform(v) + "\"/>\n");
 				}
 			}
 			
 			if (!closed)
 				w.write(e_string + "/>\n"); // no contents; close the edge with "/>"
+			else
+			    if (edge_type == EdgeType.HYPER)
+			        w.write("</hyperedge>\n");
+			    else
+			        w.write("</edge>\n");
 		}
 	}
 
@@ -271,6 +289,10 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 			}
 			bw.write("<default>" + def + "</default>\n");
 		}
+		if (!closed)
+		    bw.write("/>\n");
+		else
+		    bw.write("</key>");
 	}
 	
 	protected String format(String type, String attr, String value, String contents)
@@ -287,7 +309,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 	 * 
 	 * @param vertex_ids
 	 */
-	public void setVertexIDs(BidiMap<V, String> vertex_ids) 
+	public void setVertexIDs(Transformer<V, String> vertex_ids) 
 	{
 		this.vertex_ids = vertex_ids;
 	}
@@ -301,7 +323,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 	 * 
 	 * @param edge_ids
 	 */
-	public void setEdgeIDs(BidiMap<E, String> edge_ids) 
+	public void setEdgeIDs(Transformer<E, String> edge_ids) 
 	{
 		this.edge_ids = edge_ids;
 	}
@@ -331,7 +353,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 
 
 
-	public void setGraphData(Map<String, Transformer<G, String>> graph_data) 
+	public void setGraphData(Map<String, Transformer<Hypergraph<V,E>, String>> graph_data) 
 	{
 		this.graph_data = graph_data;
 	}
@@ -360,7 +382,7 @@ public class GraphMLWriter<G extends Hypergraph<V,E>, V,E>
 		this.edge_desc = edge_desc;
 	}
 
-	public void setGraphDescriptions(Transformer<G, String> graph_desc) 
+	public void setGraphDescriptions(Transformer<Hypergraph<V,E>, String> graph_desc) 
 	{
 		this.graph_desc = graph_desc;
 	}
