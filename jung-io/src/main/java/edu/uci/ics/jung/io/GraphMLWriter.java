@@ -72,10 +72,9 @@ public class GraphMLWriter<V,E>
 	 * 
 	 * @param graph
 	 * @param w
-	 * @return
 	 * @throws IOException 
 	 */
-	public boolean save(Hypergraph<V,E> graph, Writer w) throws IOException
+	public void save(Hypergraph<V,E> graph, Writer w) throws IOException
 	{
 		BufferedWriter bw = new BufferedWriter(w);
 
@@ -128,8 +127,6 @@ public class GraphMLWriter<V,E>
         bw.flush();
         
         bw.close();
-
-		return true;
 	}
 
 //	public boolean save(Collection<Hypergraph<V,E>> graphs, Writer w)
