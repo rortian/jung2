@@ -129,15 +129,6 @@ public class ClusteringDemo extends JApplet {
 
 	private void setUpView(BufferedReader br) throws IOException {
 		
-		
-        
-//        graphFactory = new Factory<Graph<Number,Number>>() {
-//    		public Graph<Number,Number> create() {
-//    			return new SparseMultigraph<Number,Number>();
-//    		}
-//    	};
-    	
-//    	pnr.setGraphFactory(graphFactory);
     	Factory<Number> vertexFactory = new Factory<Number>() {
             int n = 0;
             public Number create() { return n++; }
@@ -150,15 +141,6 @@ public class ClusteringDemo extends JApplet {
         PajekNetReader<Graph<Number, Number>, Number,Number> pnr = 
             new PajekNetReader<Graph<Number, Number>, Number,Number>(vertexFactory, edgeFactory);
         
-//    	pnr.setVertexFactory(new Factory<Number>() {
-//    		int n = 0;
-//    		public Number create() { return n++; }
-//    	});
-//    	pnr.setEdgeFactory(new Factory<Number>() {
-//    		int n = 0;
-//    		public Number create() { return n++; }
-//    	});
-
         final Graph<Number,Number> graph = new SparseMultigraph<Number, Number>();
         
         pnr.load(br, graph);
@@ -167,12 +149,10 @@ public class ClusteringDemo extends JApplet {
         //specify the Fruchterman-Rheingold layout algorithm
         final AggregateLayout<Number,Number> layout = 
         	new AggregateLayout<Number,Number>(new FRLayout<Number,Number>(graph));
-//        final PickedState ps = new MultiPickedState();
 
 		vv = new VisualizationViewer<Number,Number>(layout);
 		vv.setBackground( Color.white );
 		//Tell the renderer to use our own customized color rendering
-//        MapTransformer mt;
 		vv.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<Number,Paint>getInstance(vertexPaints));
 		vv.getRenderContext().setVertexDrawPaintTransformer(new Transformer<Number,Paint>() {
 			public Paint transform(Number v) {
