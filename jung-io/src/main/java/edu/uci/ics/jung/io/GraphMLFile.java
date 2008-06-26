@@ -75,9 +75,6 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
     private GraphMLFileHandler<V,E> mFileHandler;
     protected boolean directed;
     protected boolean undirected;
-//    private Factory<V> vertexFactory;
-//    private Factory<E> edgeFactory;
-//    private Factory<Graph<V,E>> graphFactory;
 
     /**
      * Default constructor which uses default GraphMLFileHandler to parse the graph
@@ -201,9 +198,7 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
 		out.println("xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns/graphml\">");
         out.print("<graph edgedefault=\"");
         boolean directed = g instanceof DirectedGraph;
-//        	PredicateUtils.enforcesEdgeConstraint(g, Graph.DIRECTED_EDGE);
         boolean undirected = g instanceof UndirectedGraph;
-        	//PredicateUtils.enforcesEdgeConstraint(g, Graph.UNDIRECTED_EDGE);
         if (directed)
             out.print("directed\" ");
         else if (undirected)
@@ -213,8 +208,6 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
             directed = true;
             out.print("directed\" ");
         }
-//            throw new IllegalArgumentException("Mixed (directed/undirected) " + 
-//                "graphs not currently supported");
 
         saveUserData(this.mFileHandler.getGraphAttributes(), out);
 		out.println(" >");
@@ -266,17 +259,10 @@ public class GraphMLFile<V,E> implements GraphFile<V,E> {
 
     private void saveUserData(Map<String,String> udc, PrintStream out) {
     	for(String key : udc.keySet()) {
-//        Iterator udki = udc.getUserDatumKeyIterator();
-//        while (udki.hasNext()) {
-//            Object key_obj = udki.next();
-//            if (udc.getUserDatumCopyAction(key_obj) == UserData.REMOVE)
-//                continue;
-//            String key = key_obj.toString();
             if (invalidXMLData(key)) continue;
             String datum = udc.get(key);
             if (datum == null)
                 continue;
-//            String datum = o.toString();
 			if (invalidXMLData(datum)) continue;
             out.print(key + "=\"" + datum + "\" ");
         }
