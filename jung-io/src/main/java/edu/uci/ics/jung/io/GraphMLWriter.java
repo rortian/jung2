@@ -30,7 +30,11 @@ import edu.uci.ics.jung.graph.util.Pair;
 /**
  * Writes graphs out in GraphML format.
  *
- * Known issues: does not indent lines for text-format readability.
+ * Current known issues: 
+ * <ul>
+ * <li/>Only supports one graph per output file.
+ * <li/>Does not indent lines for text-format readability.
+ * </ul>
  * 
  */
 public class GraphMLWriter<V,E> 
