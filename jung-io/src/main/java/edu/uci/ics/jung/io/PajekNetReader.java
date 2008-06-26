@@ -119,12 +119,26 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
     protected static final Predicate<String> l_pred = ListTagPred.getInstance();
     
     /**
-     * Creates a PajekNetReader whose labels are not required to be unique.
+     * Creates a PajekNetReader instance with the specified vertex and edge factories.
+     * @param vertex_factory the factory to use to create vertex objects
+     * @param edge_factory the factory to use to create edge objects
      */
     public PajekNetReader(Factory<V> vertex_factory, Factory<E> edge_factory) 
     { 
         this.vertex_factory = vertex_factory;
         this.edge_factory = edge_factory;
+    }
+
+    /**
+     * Creates a PajekNetReader instance with the specified edge factory,
+     * and whose vertex objects correspond to the integer IDs assigned in the file.
+     * Note that this requires <code>V</code> to be assignment-compatible with
+     * an <code>Integer</code> value.
+     * @param edge_factory the factory to use to create edge objects
+     */
+    public PajekNetReader(Factory<E> edge_factory)
+    {
+        this(null, edge_factory);
     }
     
     /**
@@ -162,7 +176,6 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
     public G load(Reader reader, G g) throws IOException
     {
         BufferedReader br = new BufferedReader(reader);
-//        this.p_pred = new ParallelEdgePredicate<V,E>(g);
                 
         // ignore everything until we see '*Vertices'
         String curLine = skip(br, v_pred);
@@ -174,9 +187,13 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         StringTokenizer st = new StringTokenizer(curLine);
         st.nextToken(); // skip past "*vertices";
         int num_vertices = Integer.parseInt(st.nextToken());
-        for (int i = 1; i <= num_vertices; i++)
-            g.addVertex(vertex_factory.create());
-        List<V> id = new ArrayList<V>(g.getVertices());//Indexer.getIndexer(g);
+        List<V> id = null;
+        if (vertex_factory != null)
+        {
+            for (int i = 1; i <= num_vertices; i++)
+                g.addVertex(vertex_factory.create());
+            id = new ArrayList<V>(g.getVertices());
+        }
 
         // read vertices until we see any Pajek format tag ('*...')
         curLine = null;
@@ -202,10 +219,10 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
 
         // skip over the intermediate stuff (if any) 
         // and read the next arcs/edges section that we find
-        curLine = readArcsOrEdges(curLine, br, g, edge_factory);
+        curLine = readArcsOrEdges(curLine, br, g, id, edge_factory);
 
         // ditto
-        readArcsOrEdges(curLine, br, g, edge_factory);
+        readArcsOrEdges(curLine, br, g, id, edge_factory);
         
         br.close();
         reader.close();
@@ -217,6 +234,7 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
      * Parses <code>curLine</code> as a reference to a vertex, and optionally assigns 
      * label and location information.
      */
+    @SuppressWarnings("unchecked")
     private void readVertex(String curLine, List<V> id, int num_vertices)
     {
         V v;
@@ -261,7 +279,10 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         if (v_id >= num_vertices || v_id < 0)
             throw new IllegalArgumentException("Vertex number " + v_id +
                     "is not in the range [1," + num_vertices + "]");
-        v = id.get(v_id);
+        if (id != null)
+          v = id.get(v_id);
+        else
+          v = (V)(new Integer(v_id));
         // only attach the label if there's one to attach
         if (label != null && label.length() > 0 && vertex_labels != null)
         	vertex_labels.set(v, label);
@@ -277,24 +298,15 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
 
     
     
-    private String readArcsOrEdges(String curLine, BufferedReader br, Graph<V,E> g, Factory<E> edge_factory)
+    @SuppressWarnings("unchecked")
+    private String readArcsOrEdges(String curLine, BufferedReader br, Graph<V,E> g, List<V> id, Factory<E> edge_factory)
         throws IOException
     {
         String nextLine = curLine;
         
-        List<V> id = new ArrayList<V>(g.getVertices());//Indexer.getIndexer(g);
-        
         // in case we're not there yet (i.e., format tag isn't arcs or edges)
         if (! c_pred.evaluate(curLine))
-//            nextLine = skip(br, e_pred);
             nextLine = skip(br, c_pred);
-
-        // in "*Arcs" and this graph is not strictly undirected
-//        boolean reading_arcs = a_pred.evaluate(nextLine) && 
-//            !PredicateUtils.enforcesUndirected(g);
-//        // in "*Edges" and this graph is not strictly directed
-//        boolean reading_edges = e_pred.evaluate(nextLine) && 
-//            !PredicateUtils.enforcesDirected(g);
 
         boolean reading_arcs = false;
         boolean reading_edges = false;
@@ -322,9 +334,6 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         
         boolean is_list = l_pred.evaluate(nextLine);
 
-//        boolean parallel_ok = (g instanceof MultiGraph == true);
-        	//!PredicateUtils.enforcesNotParallel(g);
-
         while (br.ready())
         {
             nextLine = br.readLine();
@@ -336,19 +345,22 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
             StringTokenizer st = new StringTokenizer(nextLine.trim());
             
             int vid1 = Integer.parseInt(st.nextToken()) - 1;
-            V v1 = id.get(vid1);
+            V v1;
+            if (id != null)
+              v1 = id.get(vid1);
+            else
+              v1 = (V)new Integer(vid1);
+
             
             if (is_list) // one source, multiple destinations
             {
                 do
                 {
-//                    createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
                     createAddEdge(st, v1, directedness, g, id, edge_factory);
                 } while (st.hasMoreTokens());
             }
             else // one source, one destination, at most one weight
             {
-//                E e = createAddEdge(st, v1, directedness, g, id, parallel_ok, edge_factory);
                 E e = createAddEdge(st, v1, directedness, g, id, edge_factory);
                 // get the edge weight if we care
                 if (edge_weights != null && st.hasMoreTokens())
@@ -358,20 +370,18 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         return nextLine;
     }
 
-//    protected E createAddEdge(StringTokenizer st, V v1, 
-//            EdgeType directed, Graph<V,E> g, List<V> id, boolean parallel_ok, Factory<E> edge_factory)
+    @SuppressWarnings("unchecked")
     protected E createAddEdge(StringTokenizer st, V v1, 
             EdgeType directed, Graph<V,E> g, List<V> id, Factory<E> edge_factory)
     {
         int vid2 = Integer.parseInt(st.nextToken()) - 1;
-        V v2 = id.get(vid2);
+        V v2;
+        if (id != null)
+          v2 = id.get(vid2);
+        else
+          v2 = (V)new Integer(vid2);
         E e = edge_factory.create();
 
-        // add this edge if parallel edges are OK,
-        // or if this isn't one; otherwise ignore it
-//        if (parallel_ok || !p_pred.evaluate(e)) 
-//        if (parallel_ok || !p_pred.evaluate(new Pair<Integer>(v1, v2)));
-//        if (parallel_ok || !g.isPredecessor(v1, v2))
         // don't error-check this: let the graph implementation do whatever it's going to do 
         // (add the edge, replace the existing edge, throw an exception--depends on the graph implementation)
      	g.addEdge(e, v1, v2, directed);
@@ -398,24 +408,6 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         return null;
     }
     
-//    /**
-//     * Sets or clears the <code>unique_labels</code> boolean.
-//     * @see #PajekNetReader(boolean, boolean)
-//     */
-//    public void setUniqueLabels(boolean unique_labels)
-//    {
-//        this.unique_labels = unique_labels;
-//    }
-//
-//    /**
-//     * Sets or clears the <code>get_locations</code> boolean.
-//     * @see #PajekNetReader(boolean, boolean)
-//     */
-//    public void setGetLocations(boolean get_locations)
-//    {
-//        this.get_locations = get_locations;
-//    }
-    
     /**
      * A Predicate which evaluates to <code>true</code> if the
      * argument starts with the constructor-specified String.
@@ -434,29 +426,6 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         }
     }
     
-//    public static class ParallelEdgePredicate<V,E> implements Predicate<Pair<V>> {
-//    	Graph<V,E> graph;
-//
-//		private ParallelEdgePredicate(Graph<V, E> graph) {
-//			this.graph = graph;
-//		}
-//
-//		public boolean evaluate(Pair<V> endpoints) {
-////			Pair<V> endpoints = graph.getEndpoints(e);
-////			if (endpoints == null)
-////			    System.out.println("wtf?");
-//			V start = endpoints.getFirst();
-//			V end = endpoints.getSecond();
-//			Collection<E> outgoing = graph.getOutEdges(start);
-//			for(E edge : outgoing) {
-//				if(graph.getEndpoints(edge).getSecond().equals(end)) {
-//					return true;
-//				}
-//			}
-//			return false;
-//		}
-//    	
-//    }
     
     /**
      * A Predicate which evaluates to <code>true</code> if the
@@ -479,52 +448,9 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         
         public boolean evaluate(String s)
         {
-//            String s = (String)arg0;
             return (s != null && s.toLowerCase().endsWith("list"));
         }
     }
-
-//	/**
-//	 * @return the edgeFactory
-//	 */
-//	public Factory<E> getEdgeFactory() {
-//		return edgeFactory;
-//	}
-
-//	/**
-//	 * @param edgeFactory the edgeFactory to set
-//	 */
-//	public void setEdgeFactory(Factory<E> edgeFactory) {
-//		this.edgeFactory = edgeFactory;
-//	}
-
-//	/**
-//	 * @return the graphFactory
-//	 */
-//	public Factory<? extends Graph<V, E>> getGraphFactory() {
-//		return graphFactory;
-//	}
-
-//	/**
-//	 * @param graphFactory the graphFactory to set
-//	 */
-//	public void setGraphFactory(Factory<? extends Graph<V, E>> graphFactory) {
-//		this.graphFactory = graphFactory;
-//	}
-
-//	/**
-//	 * @return the vertexFactory
-//	 */
-//	public Factory<V> getVertexFactory() {
-//		return vertexFactory;
-//	}
-
-//	/**
-//	 * @param vertexFactory the vertexFactory to set
-//	 */
-//	public void setVertexFactory(Factory<V> vertexFactory) {
-//		this.vertexFactory = vertexFactory;
-//	}
 
 	/**
 	 * @return the vertexLocationTransformer
