@@ -23,9 +23,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.FactoryUtils;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.TransformerUtils;
 import org.xml.sax.SAXException;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
@@ -46,22 +45,26 @@ public class TestGraphMLWriter extends TestCase
 			} 
 		};
 
+		Transformer<String, String> vertex_name = TransformerUtils.nopTransformer();
+		
         gmlw.addEdgeData("weight", "integer value for the edge", 
         		Integer.toString(-1), edge_weight);
+        gmlw.addVertexData("name", "identifier for the vertex", null, vertex_name);
         gmlw.setEdgeIDs(edge_weight);
+        gmlw.setVertexIDs(vertex_name);
         gmlw.save(g, new FileWriter("src/test/resources/testbasicwrite.graphml"));
         
         // TODO: now read it back in and compare the graph connectivity 
         // and other metadata with what's in TestGraphs.pairs[], etc.
-        Factory<String> vertex_factory = null;
-        Factory<Object> edge_factory = FactoryUtils.instantiateFactory(Object.class);
+//        Factory<String> vertex_factory = null;
+//        Factory<Object> edge_factory = FactoryUtils.instantiateFactory(Object.class);
+//        GraphMLReader<Graph<String, Object>, String, Object> gmlr = 
+//        	new GraphMLReader<Graph<String, Object>, String, Object>(
+//        			vertex_factory, edge_factory);
         GraphMLReader<Graph<String, Object>, String, Object> gmlr = 
-        	new GraphMLReader<Graph<String, Object>, String, Object>(
-        			vertex_factory, edge_factory);
+            new GraphMLReader<Graph<String, Object>, String, Object>();
         Graph<String, Object> g2 = new DirectedSparseGraph<String, Object>();
         gmlr.load("src/test/resources/testbasicwrite.graphml", g2);
-//        Map<String, SettableTransformer<Object, String>> edge_data = 
-//        	gmlr.getEdgeData();
         Map<String, GraphMLMetadata<Object>> edge_metadata = 
         	gmlr.getEdgeMetadata();
         Transformer<Object, String> edge_weight2 = 

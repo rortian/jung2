@@ -140,6 +140,13 @@ public class GraphMLWriter<V,E>
 //		return true;
 //	}
 
+	protected void writeIndentedText(BufferedWriter w, String to_write) throws IOException
+	{
+	    for (int i = 0; i < nest_level; i++)
+	        w.write("  ");
+	    w.write(to_write);
+	}
+	
 	protected void writeVertexData(Hypergraph<V,E> graph, BufferedWriter w) throws IOException
 	{
 		for (V v: graph.getVertices())
