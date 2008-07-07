@@ -41,13 +41,14 @@ public class GraphMLWriter<V,E>
 {
     protected Transformer<V, String> vertex_ids;
     protected Transformer<E, String> edge_ids;
-    protected Map<String, DataStructure<Hypergraph<V,E>>> graph_data;
-    protected Map<String, DataStructure<V>> vertex_data;
-    protected Map<String, DataStructure<E>> edge_data;
+    protected Map<String, GraphMLMetadata<Hypergraph<V,E>>> graph_data;
+    protected Map<String, GraphMLMetadata<V>> vertex_data;
+    protected Map<String, GraphMLMetadata<E>> edge_data;
     protected Transformer<V, String> vertex_desc;
     protected Transformer<E, String> edge_desc;
     protected Transformer<Hypergraph<V,E>, String> graph_desc;
 	protected boolean directed;
+	protected int nest_level;
     
 	/**
 	 * 
@@ -69,6 +70,7 @@ public class GraphMLWriter<V,E>
         vertex_desc = TransformerUtils.nullTransformer();
         edge_desc = TransformerUtils.nullTransformer();
         graph_desc = TransformerUtils.nullTransformer();
+        nest_level = 0;
 	}
 	
 	
@@ -259,7 +261,7 @@ public class GraphMLWriter<V,E>
 	}
 
 	protected void writeKeySpecification(String key, String type, 
-			DataStructure<?> ds, BufferedWriter bw) throws IOException
+			GraphMLMetadata<?> ds, BufferedWriter bw) throws IOException
 	{
 		bw.write("<key id=\"" + key + "\" for=\"" + type + "\"");
 		boolean closed = false;
@@ -324,30 +326,45 @@ public class GraphMLWriter<V,E>
 		this.edge_ids = edge_ids;
 	}
 
-	public void addGraphData(String id, String description, Object default_value,
-			Transformer<Hypergraph<V,E>, ?> graph_transformer)
+	public void setGraphData(Map<String, GraphMLMetadata<Hypergraph<V,E>>> graph_map)
+	{
+		graph_data = graph_map;
+	}
+	
+	public void setVertexData(Map<String, GraphMLMetadata<V>> vertex_map)
+	{
+		vertex_data = vertex_map;
+	}
+	
+	public void setEdgeData(Map<String, GraphMLMetadata<E>> edge_map)
+	{
+		edge_data = edge_map;
+	}
+	
+	public void addGraphData(String id, String description, String default_value,
+			Transformer<Hypergraph<V,E>, String> graph_transformer)
 	{
 		if (graph_data.equals(Collections.EMPTY_MAP))
-			graph_data = new HashMap<String, DataStructure<Hypergraph<V,E>>>();
-		graph_data.put(id, new DataStructure<Hypergraph<V,E>>(description, 
+			graph_data = new HashMap<String, GraphMLMetadata<Hypergraph<V,E>>>();
+		graph_data.put(id, new GraphMLMetadata<Hypergraph<V,E>>(description, 
 				default_value, graph_transformer));
 	}
 	
-	public void addVertexData(String id, String description, Object default_value,
-			Transformer<V, ?> vertex_transformer)
+	public void addVertexData(String id, String description, String default_value,
+			Transformer<V, String> vertex_transformer)
 	{
 		if (vertex_data.equals(Collections.EMPTY_MAP))
-			vertex_data = new HashMap<String, DataStructure<V>>();
-		vertex_data.put(id, new DataStructure<V>(description, default_value, 
+			vertex_data = new HashMap<String, GraphMLMetadata<V>>();
+		vertex_data.put(id, new GraphMLMetadata<V>(description, default_value, 
 				vertex_transformer));
 	}
 
-	public void addEdgeData(String id, String description, Object default_value,
-			Transformer<E, ?> edge_transformer)
+	public void addEdgeData(String id, String description, String default_value,
+			Transformer<E, String> edge_transformer)
 	{
 		if (edge_data.equals(Collections.EMPTY_MAP))
-			edge_data = new HashMap<String, DataStructure<E>>();
-		edge_data.put(id, new DataStructure<E>(description, default_value, 
+			edge_data = new HashMap<String, GraphMLMetadata<E>>();
+		edge_data.put(id, new GraphMLMetadata<E>(description, default_value, 
 				edge_transformer));
 	}
 
@@ -366,18 +383,4 @@ public class GraphMLWriter<V,E>
 		this.graph_desc = graph_desc;
 	}
 	
-	protected class DataStructure<T>
-	{
-		public String description;
-		public Object default_value;
-		public Transformer<T, ?> transformer;
-		
-		public DataStructure(String description, Object default_value,
-				Transformer<T, ?> transformer)
-		{
-			this.description = description;
-			this.transformer = transformer;
-			this.default_value = default_value;
-		}
-	}
 }

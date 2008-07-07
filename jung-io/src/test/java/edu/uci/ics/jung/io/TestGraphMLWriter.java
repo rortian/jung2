@@ -28,7 +28,6 @@ import org.apache.commons.collections15.FactoryUtils;
 import org.apache.commons.collections15.Transformer;
 import org.xml.sax.SAXException;
 
-import edu.uci.ics.jung.algorithms.util.SettableTransformer;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.TestGraphs;
@@ -47,7 +46,8 @@ public class TestGraphMLWriter extends TestCase
 			} 
 		};
 
-        gmlw.addEdgeData("weight", "integer value for the edge", -1, edge_weight);
+        gmlw.addEdgeData("weight", "integer value for the edge", 
+        		Integer.toString(-1), edge_weight);
         gmlw.setEdgeIDs(edge_weight);
         gmlw.save(g, new FileWriter("src/test/resources/testbasicwrite.graphml"));
         
@@ -60,9 +60,12 @@ public class TestGraphMLWriter extends TestCase
         			vertex_factory, edge_factory);
         Graph<String, Object> g2 = new DirectedSparseGraph<String, Object>();
         gmlr.load("src/test/resources/testbasicwrite.graphml", g2);
-        Map<String, SettableTransformer<Object, String>> edge_data = 
-        	gmlr.getEdgeData();
-        Transformer<Object, String> edge_weight2 = edge_data.get("weight");
+//        Map<String, SettableTransformer<Object, String>> edge_data = 
+//        	gmlr.getEdgeData();
+        Map<String, GraphMLMetadata<Object>> edge_metadata = 
+        	gmlr.getEdgeMetadata();
+        Transformer<Object, String> edge_weight2 = 
+        	(Transformer<Object, String>)edge_metadata.get("weight").transformer;
         Assert.assertEquals(g2.getEdgeCount(), g.getEdgeCount());
         List<String> g_vertices = new ArrayList<String>(g.getVertices());
         List<String> g2_vertices = new ArrayList<String>(g2.getVertices());

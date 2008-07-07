@@ -29,7 +29,6 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.xml.sax.SAXException;
 
-import edu.uci.ics.jung.algorithms.util.SettableTransformer;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
@@ -100,12 +99,17 @@ public class TestGraphMLReader extends TestCase
         Number bob = vertex_ids.getKey("2");
         Number sue = vertex_ids.getKey("3");
 
-        Assert.assertEquals(gmlreader.getVertexData().get("name")
-                .transform(joe), "Joe");
-        Assert.assertEquals(gmlreader.getVertexData().get("name")
-                .transform(bob), "Bob");
-        Assert.assertEquals(gmlreader.getVertexData().get("name")
-                .transform(sue), "Sue");
+        Assert.assertNotNull(joe);
+        Assert.assertNotNull(bob);
+        Assert.assertNotNull(sue);
+        
+        Map<String, GraphMLMetadata<Number>> vertex_metadata = 
+        	gmlreader.getVertexMetadata();
+        Transformer<Number, String> name = 
+        	(Transformer<Number, String>)vertex_metadata.get("name").transformer;
+        Assert.assertEquals(name.transform(joe), "Joe");
+        Assert.assertEquals(name.transform(bob), "Bob");
+        Assert.assertEquals(name.transform(sue), "Sue");
 
         Assert.assertTrue(graph.isPredecessor(joe, bob));
         Assert.assertTrue(graph.isPredecessor(bob, joe));
@@ -147,13 +151,20 @@ public class TestGraphMLReader extends TestCase
         }
 
         // test data
-        Map<String, SettableTransformer<Number, String>> vertex_data = gmlreader
-                .getVertexData();
-        Map<String, SettableTransformer<Number, String>> edge_data = gmlreader
-                .getEdgeData();
+//        Map<String, SettableTransformer<Number, String>> vertex_data = gmlreader
+//                .getVertexData();
+//        Map<String, SettableTransformer<Number, String>> edge_data = gmlreader
+//                .getEdgeData();
+        Map<String, GraphMLMetadata<Number>> vertex_metadata = 
+        	gmlreader.getVertexMetadata();
+        Map<String, GraphMLMetadata<Number>> edge_metadata = 
+        	gmlreader.getEdgeMetadata();
+        
 
         // test vertex colors
-        Transformer<Number, String> vertex_color = vertex_data.get("d0");
+//        Transformer<Number, String> vertex_color = vertex_data.get("d0");
+        Transformer<Number, String> vertex_color = 
+        	(Transformer<Number, String>)vertex_metadata.get("d0").transformer;
         Assert.assertEquals(vertex_color.transform(0), "green");
         Assert.assertEquals(vertex_color.transform(1), "yellow");
         Assert.assertEquals(vertex_color.transform(2), "blue");
@@ -162,7 +173,9 @@ public class TestGraphMLReader extends TestCase
         Assert.assertEquals(vertex_color.transform(5), "turquoise");
 
         // test edge weights
-        Transformer<Number, String> edge_weight = edge_data.get("d1");
+//        Transformer<Number, String> edge_weight = edge_data.get("d1");
+        Transformer<Number, String> edge_weight = 
+        	(Transformer<Number, String>)edge_metadata.get("d1").transformer;
         Assert.assertEquals(edge_weight.transform(0), "1.0");
         Assert.assertEquals(edge_weight.transform(1), "1.0");
         Assert.assertEquals(edge_weight.transform(2), "2.0");
