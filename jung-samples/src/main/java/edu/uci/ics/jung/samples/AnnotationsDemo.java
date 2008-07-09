@@ -45,6 +45,7 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 /**
+ * Demonstrates annotation of graph elements.
  * 
  * @author Tom Nelson
  * 

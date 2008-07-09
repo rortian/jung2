@@ -4,15 +4,15 @@
  */
 package edu.uci.ics.jung.algorithms.shortestpath;
 
-import org.apache.commons.collections15.BidiMap;
-import org.apache.commons.collections15.Factory;
-
 import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import edu.uci.ics.jung.algorithms.Indexer;
-import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
+
+import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.Factory;
+
+import edu.uci.ics.jung.algorithms.util.Indexer;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;

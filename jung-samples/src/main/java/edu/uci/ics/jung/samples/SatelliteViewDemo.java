@@ -55,7 +55,8 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
 
 /**
- * A graph displayed in a main and a satellite view. The satellite
+ * Demonstrates the construction of a graph visualization with a main and 
+ * a satellite view. The satellite
  * view is smaller, always contains the entire graph, and contains
  * a lens shape that shows the boundaries of the visible part of the
  * graph in the main view. Using the mouse, you can pick, translate,

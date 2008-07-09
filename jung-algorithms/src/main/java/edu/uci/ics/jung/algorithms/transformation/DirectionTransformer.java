@@ -14,13 +14,14 @@ package edu.uci.ics.jung.algorithms.transformation;
 
 import org.apache.commons.collections15.Factory;
 
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
- * <p>Transforms graphs into ones of the appropriate edge type.</p>
+ * <p>Functions for transforming graphs into directed or undirected graphs.</p>
  * 
  * 
  * @author Danyel Fisher
@@ -47,13 +48,14 @@ public class DirectionTransformer
      * @param edge_factory used to create new edges
      * @return          the transformed <code>Graph</code>
      */
-    public static <V,E> Graph<V,E> toUndirected(Graph<V,E> graph, Factory<Graph<V,E>> graph_factory,
+    public static <V,E> UndirectedGraph<V,E> toUndirected(Graph<V,E> graph, 
+    		Factory<UndirectedGraph<V,E>> graph_factory,
             Factory<E> edge_factory, boolean create_new)
     {
-        Graph<V,E> out = graph_factory.create();
-        if (out instanceof UndirectedGraph)
-            throw new IllegalArgumentException("Graph factory must create a graph that can accept " +
-                    "directed edges");
+        UndirectedGraph<V,E> out = graph_factory.create();
+//        if (out instanceof DirectedGraph)
+//            throw new IllegalArgumentException("Graph factory must create a graph that can accept " +
+//                    "directed edges");
         
         for (V v : graph.getVertices())
             out.addVertex(v);
@@ -90,13 +92,13 @@ public class DirectionTransformer
      * @param edge_factory used to create new edges
      * @return          the transformed <code>Graph</code>
      */
-    public static <V,E> Graph<V,E> toDirected(Graph<V,E> graph, Factory<Graph<V,E>> graph_factory,
+    public static <V,E> Graph<V,E> toDirected(Graph<V,E> graph, Factory<DirectedGraph<V,E>> graph_factory,
             Factory<E> edge_factory, boolean create_new)
     {
-        Graph<V,E> out = graph_factory.create();
-        if (out instanceof UndirectedGraph)
-            throw new IllegalArgumentException("Graph factory must create a graph that can accept " +
-            		"directed edges");
+        DirectedGraph<V,E> out = graph_factory.create();
+//        if (out instanceof UndirectedGraph)
+//            throw new IllegalArgumentException("Graph factory must create a graph that can accept " +
+//            		"directed edges");
         
         for (V v : graph.getVertices())
             out.addVertex(v);

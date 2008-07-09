@@ -20,7 +20,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 /**
- * A class that shows the minimal work necessary to visualize a graph.
+ * A class that shows the minimal work necessary to load and visualize a graph.
  */
 public class SimpleGraphDraw 
 {

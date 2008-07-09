@@ -26,20 +26,20 @@ public class TestCrossoverScalingControl extends TestCase {
 		scale = .5f;
 		sc.setCrossover(crossover);
 		sc.scale(vv, scale, new Point2D.Double());
-		System.err.println("crossover="+crossover);
-		System.err.println("scale="+scale);
-		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
-		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
+//		System.err.println("crossover="+crossover);
+//		System.err.println("scale="+scale);
+//		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
+//		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
 	}
 	public void testCrossover2() {
 		crossover = 2.0f;
 		scale = 1.5f;
 		sc.setCrossover(crossover);
 		sc.scale(vv, scale, new Point2D.Double());
-		System.err.println("crossover="+crossover);
-		System.err.println("scale="+scale);
-		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
-		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
+//		System.err.println("crossover="+crossover);
+//		System.err.println("scale="+scale);
+//		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
+//		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
 		
 	}
 	public void testCrossover3() {
@@ -47,29 +47,29 @@ public class TestCrossoverScalingControl extends TestCase {
 		scale = 2.5f;
 		sc.setCrossover(crossover);
 		sc.scale(vv, scale, new Point2D.Double());
-		System.err.println("crossover="+crossover);
-		System.err.println("scale="+scale);
-		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
-		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
+//		System.err.println("crossover="+crossover);
+//		System.err.println("scale="+scale);
+//		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
+//		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
 	}
 	public void testCrossover4() {
 		crossover = 0.5f;
 		scale = 2.5f;
 		sc.setCrossover(crossover);
 		sc.scale(vv, scale, new Point2D.Double());
-		System.err.println("crossover="+crossover);
-		System.err.println("scale="+scale);
-		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
-		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
+//		System.err.println("crossover="+crossover);
+//		System.err.println("scale="+scale);
+//		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
+//		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
 	}
 	public void testCrossover5() {
 		crossover = 0.5f;
 		scale = .3f;
 		sc.setCrossover(crossover);
 		sc.scale(vv, scale, new Point2D.Double());
-		System.err.println("crossover="+crossover);
-		System.err.println("scale="+scale);
-		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
-		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
+//		System.err.println("crossover="+crossover);
+//		System.err.println("scale="+scale);
+//		System.err.println("layout scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).getScale());
+//		System.err.println("view scale = "+vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getScale());
 	}
 }

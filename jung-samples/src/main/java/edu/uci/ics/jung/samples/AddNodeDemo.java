@@ -4,7 +4,8 @@
  * 
  * This software is open-source under the BSD license; see either "license.txt"
  * or http://jung.sourceforge.net/license.txt for a description.
- * 
+ *
+ * Created on May 10, 2004
  */
 
 
@@ -39,12 +40,8 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
-/*
- * Created on May 10, 2004
- */
-
 /**
- * Thanks to Brad Allen for an original inspiration for this.
+ * Demonstrates visualization of a graph being actively updated.
  * 
  * @author danyelf
  */

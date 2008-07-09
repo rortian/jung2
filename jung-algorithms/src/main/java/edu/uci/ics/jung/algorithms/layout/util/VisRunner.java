@@ -9,7 +9,7 @@
  */
 package edu.uci.ics.jung.algorithms.layout.util;
 
-import edu.uci.ics.jung.algorithms.IterativeContext;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
 
 /**
  * 

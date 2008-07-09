@@ -23,7 +23,7 @@ import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.KPartiteGraph;
 
 /**
- * A class for creating a "folded" graph based on a k-partite graph or a
+ * Methods for creating a "folded" graph based on a k-partite graph or a
  * hypergraph.  
  * 
  * <p>A "folded" graph is derived from a k-partite graph by identifying

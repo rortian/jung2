@@ -61,8 +61,7 @@ import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.util.Animator;
 
 /**
- * Shoes a TreeLayout and RadialTreeLayout view of a
- * Forest.
+ * Demonsrates TreeLayout and RadialTreeLayout.
  * @author Tom Nelson
  * 
  */

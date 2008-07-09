@@ -19,41 +19,43 @@ import edu.uci.ics.jung.graph.Graph;
 
 /**
  * Maintains information about a vertex partition of a graph.
- * This can be built from a map from vertices to vertex sets or from a collection of (disjoint) vertex sets,
+ * This can be built from a map from vertices to vertex sets 
+ * or from a collection of (disjoint) vertex sets,
  * such as those created by various clustering methods.
  */
 public class VertexPartition<V,E> 
 {
-	private Map<V,Set<V>> vertex_partitions;
-	private Collection<Set<V>> partitions;
+	private Map<V,Set<V>> vertex_partition_map;
+	private Collection<Set<V>> vertex_sets;
 	private Graph<V,E> graph;
 	
 	/**
 	 * Creates an instance based on the specified graph and mapping from vertices
 	 * to vertex sets, and generates a set of partitions based on this mapping.
 	 * @param g the graph over which the vertex partition is defined
-	 * @param rv the mapping from vertices to vertex sets (partitions)
+	 * @param partition_map the mapping from vertices to vertex sets (partitions)
 	 */
-	public VertexPartition(Graph<V,E> g, Map<V, Set<V>> rv) 
+	public VertexPartition(Graph<V,E> g, Map<V, Set<V>> partition_map) 
 	{
-		this.vertex_partitions = Collections.unmodifiableMap( rv );
-		this.partitions = new HashSet<Set<V>>();
-		this.partitions.addAll(vertex_partitions.values());
+		this.vertex_partition_map = Collections.unmodifiableMap(partition_map);
 		this.graph = g;
 	}
 
 	/**
-     * Creates an instance based on the specified graph, vertex-set mapping, and set of disjoint vertex sets.
-     * The vertex-set mapping and vertex partitions must be consistent, i.e., the mapping must
-     * reflect the division of vertices into partitions, and each vertex must appear in exactly
-     * one partition.
+     * Creates an instance based on the specified graph, vertex-set mapping, 
+     * and set of disjoint vertex sets.  The vertex-set mapping and vertex 
+     * partitions must be consistent; that is, the mapping must reflect the 
+     * division of vertices into partitions, and each vertex must appear in 
+     * exactly one partition.
      * @param g the graph over which the vertex partition is defined
-     * @param rv the mapping from vertices to vertex sets (partitions)
-	 * @param vertex_partitions the set of disjoint vertex sets 
+     * @param partition_map the mapping from vertices to vertex sets (partitions)
+	 * @param vertex_sets the set of disjoint vertex sets 
 	 */
-    public VertexPartition(Graph<V,E> g, Map<V, Set<V>> rv, Collection<Set<V>> vertex_partitions) {
-        this.vertex_partitions = Collections.unmodifiableMap( rv );
-        this.partitions = vertex_partitions;
+    public VertexPartition(Graph<V,E> g, Map<V, Set<V>> partition_map, 
+    		Collection<Set<V>> vertex_sets) 
+    {
+        this.vertex_partition_map = Collections.unmodifiableMap(partition_map);
+        this.vertex_sets = vertex_sets;
         this.graph = g;
     }
 
@@ -63,14 +65,10 @@ public class VertexPartition<V,E>
      * @param g the graph over which the vertex partition is defined
      * @param vertex_partitions the set of disjoint vertex sets
      */
-    public VertexPartition(Graph<V,E> g, Collection<Set<V>> vertex_partitions)
+    public VertexPartition(Graph<V,E> g, Collection<Set<V>> vertex_sets)
     {
-        this.partitions = vertex_partitions;
+        this.vertex_sets = vertex_sets;
         this.graph = g;
-        this.vertex_partitions = new HashMap<V, Set<V>>();
-        for (Set<V> set : vertex_partitions)
-            for (V v : set)
-                this.vertex_partitions.put(v, set);
     }
 	
     /**
@@ -84,16 +82,35 @@ public class VertexPartition<V,E>
 
 	/**
 	 * Returns a map from each vertex in the input graph to its partition.
-	 * @return
+	 * This map is generated if it does not already exist.
+	 * @return a map from each vertex in the input graph to a vertex set
 	 */
 	public Map<V,Set<V>> getVertexToPartitionMap() 
 	{
-		return vertex_partitions;
+		if (vertex_partition_map == null)
+		{
+	        this.vertex_partition_map = new HashMap<V, Set<V>>();
+	        for (Set<V> set : this.vertex_sets)
+	            for (V v : set)
+	                this.vertex_partition_map.put(v, set);
+		}
+		return vertex_partition_map;
 	}
 	
+	/**
+	 * Returns a collection of vertex sets, where each vertex in the 
+	 * input graph is in exactly one set.
+	 * This collection is generated if it does not already exist.
+	 * @return
+	 */
 	public Collection<Set<V>> getVertexPartitions() 
 	{
-	    return partitions;
+		if (vertex_sets == null)
+		{
+			this.vertex_sets = new HashSet<Set<V>>();
+			this.vertex_sets.addAll(vertex_partition_map.values());
+		}
+	    return vertex_sets;
 	}
 
 	/**
@@ -101,13 +118,12 @@ public class VertexPartition<V,E>
 	 */
 	public int numPartitions() 
 	{
-		return partitions.size();
+		return vertex_sets.size();
 	}
 	
 	@Override
   	public String toString() 
 	{
-		return "Partitions: " + vertex_partitions;
+		return "Partitions: " + vertex_partition_map;
 	}
-
 }

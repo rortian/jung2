@@ -65,8 +65,7 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.subLayout.TreeCollapser;
 
 /**
- * Shoes a TreeLayout and RadialTreeLayout view of a
- * Forest.
+ * Demonstrates "collapsing"/"expanding" of a tree's subtrees.
  * @author Tom Nelson
  * 
  */

@@ -41,12 +41,12 @@ public abstract class AbstractOrderedSparseMultigraphTest extends TestCase {
 
     public void testGetEdges() {
         assertEquals(smallGraph.getEdgeCount(), 4);
-        System.err.println("getEdges()="+graph.getEdges());
+//        System.err.println("getEdges()="+graph.getEdges());
     }
 
     public void testGetVertices() {
         assertEquals(smallGraph.getVertexCount(), 3);
-        System.err.println("getVertices()="+graph.getVertices());
+//        System.err.println("getVertices()="+graph.getVertices());
     }
 
     public void testAddVertex() {

@@ -44,17 +44,12 @@ import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsideP
 
 
 /**
- * Visualizes a graph from a GraphML file
+ * Demonstrates loading (and visualizing) a graph from a GraphML file.
  * 
  * @author Tom Nelson
  * 
  */
 public class GraphFromGraphMLDemo {
-
-    /**
-     * the graph
-     */
-//    Graph<Number, Number> graph;
 
     /**
      * the visual component and renderer for the graph
@@ -79,7 +74,6 @@ public class GraphFromGraphMLDemo {
     		int n = 0;
     		public Number create() { return n++; }
     	};
-//    	GraphMLFile<Number,Number> file = new GraphMLFile<Number,Number>(graphFactory,vertexFactory,edgeFactory);
     	
     	GraphMLReader<DirectedGraph<Number,Number>, Number, Number> gmlr = 
     	    new GraphMLReader<DirectedGraph<Number,Number>, Number, Number>(vertexFactory, edgeFactory);
@@ -87,7 +81,6 @@ public class GraphFromGraphMLDemo {
     	gmlr.load(filename, graph);
     	
         // create a simple graph for the demo
-//        graph = file.load(filename);
         vv =  new VisualizationViewer<Number,Number>(new FRLayout<Number,Number>(graph));
 
         vv.addGraphMouseListener(new TestGraphMouseListener<Number>());

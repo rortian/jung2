@@ -27,7 +27,8 @@ import edu.uci.ics.jung.graph.Graph;
  * vertices correspond to the input graph's partitions.  Two vertices in the output graph
  * are connected if and only if there exists at least one edge between vertices in the 
  * corresponding partitions of the input graph.  If the output graph permits parallel edges,
- * there will be one connecting two partitions for each such edge in the input graph.
+ * there will be an edge connecting two vertices in the new graph for each such 
+ * edge connecting constituent vertices in the input graph.
  * 
  * <p>Concept based on Danyel Fisher's <code>GraphCollapser</code> in JUNG 1.x.
  * 

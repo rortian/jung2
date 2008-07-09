@@ -12,19 +12,19 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 
-import edu.uci.ics.jung.algorithms.Indexer;
+import edu.uci.ics.jung.algorithms.util.Indexer;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
-
-import junit.framework.TestCase;
 
 
 /**

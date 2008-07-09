@@ -51,7 +51,7 @@ import edu.uci.ics.jung.visualization.util.Animator;
 
 
 /**
- * A demonstrator for some of the graph layout algorithms.
+ * Demonstrates several of the graph layout algorithms.
  * Allows the user to interactively select one of several graphs, and one of
  * several layouts, and visualizes the combination.
  * 

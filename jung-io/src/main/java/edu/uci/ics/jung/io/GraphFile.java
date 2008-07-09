@@ -17,7 +17,7 @@ import edu.uci.ics.jung.graph.Graph;
 
 
 /**
- * General interface for loading and saving a graph from/to disk
+ * General interface for loading and saving a graph from/to disk.
  * @author Scott
  * @author Tom Nelson - converted to jung2
  *

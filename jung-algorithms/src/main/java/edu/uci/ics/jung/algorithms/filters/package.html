@@ -14,12 +14,15 @@ IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT
 </head>
 <body>
 
-Provides for a filtering mechanism that produces subgraphs of an original graph. This package includes:
+Filtering mechanisms that produce subgraphs of an original graph. 
+Currently includes:
 <ul>
 <li/><code>Filter</code>: an interface for graph filters
-<li/><code>{Edge,Vertex}PredicateFilter</code>: graph filters that return the induced subgraph according to the
+<li/><code>{Edge,Vertex}PredicateFilter</code>: graph filters that return the 
+induced subgraph according to the
 specified edge or vertex <code>Predicate</code>, respectively.
-<li/><code>KNeighborhoodFiltere</code>: a filter that returns the subgraph within distance k of a specified vertex.
+<li/><code>KNeighborhoodFilter</code>: a filter that returns the subgraph 
+induced by vertices within (unweighted) distance k of a specified vertex.
 </ul>
 
 

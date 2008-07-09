@@ -15,8 +15,7 @@ import java.util.Map;
 
 
 /**
- * 
- * @author Joshua O'Madadhain
+ * An interface for algorithms that calculate shortest paths.
  */
 public interface ShortestPath<V, E>
 {

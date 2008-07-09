@@ -15,6 +15,15 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
+/**
+ * An edge weight function that assigns weights as uniform
+ * transition probabilities to all outgoing edges of a vertex.
+ * NOTE: will throw a <code>NullPointerException</code> if the input 
+ * edge does not have a <code>source</code> vertex.
+ *
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ */
 public class UniformOut<V,E> implements Transformer<E, Double>
 {
     private Graph<V, E> graph;

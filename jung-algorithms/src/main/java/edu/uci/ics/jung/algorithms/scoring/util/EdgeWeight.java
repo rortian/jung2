@@ -13,6 +13,12 @@ package edu.uci.ics.jung.algorithms.scoring.util;
 
 import org.apache.commons.collections15.Transformer;
 
+/**
+ * An interface for classes that assign numeric values to edges.
+ *
+ * @param <E> the edge type
+ * @param <W> the weight type
+ */
 public interface EdgeWeight<E, W extends Number> extends Transformer<E, W>
 {
 

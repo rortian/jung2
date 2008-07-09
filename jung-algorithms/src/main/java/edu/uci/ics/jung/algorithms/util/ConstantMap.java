@@ -15,6 +15,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * An implementation of <code>Map</code> that returns the constructor-supplied
+ * value for any input.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public class ConstantMap<K,V> implements Map<K,V> {
 
 	private Map<K,V> delegate;

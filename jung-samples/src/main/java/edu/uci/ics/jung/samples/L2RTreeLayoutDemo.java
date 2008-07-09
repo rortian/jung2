@@ -62,8 +62,8 @@ import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.util.Animator;
 
 /**
- * Shoes a TreeLayout and RadialTreeLayout view of a
- * Forest.
+ * A variant of TreeLayoutDemo that rotates the view by 90 degrees from the 
+ * default orientation.
  * @author Tom Nelson
  * 
  */

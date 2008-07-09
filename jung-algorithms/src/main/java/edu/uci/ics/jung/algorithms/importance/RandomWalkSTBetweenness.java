@@ -12,8 +12,8 @@ package edu.uci.ics.jung.algorithms.importance;
 import org.apache.commons.collections15.BidiMap;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import edu.uci.ics.jung.algorithms.Indexer;
 import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
+import edu.uci.ics.jung.algorithms.util.Indexer;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 
 

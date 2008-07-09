@@ -4,7 +4,7 @@ import edu.uci.ics.jung.graph.DelegateTree;
 
 public class TreeUtilsTest extends AbstractTreeUtilsTest {
 	
-	/* (non-Javadoc)
+	/**
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	@Override

@@ -29,7 +29,7 @@ import edu.uci.ics.jung.algorithms.util.DiscreteDistribution;
 
 
 /**
- * Groups Objects into a specified number of clusters, based on their 
+ * Groups items into a specified number of clusters, based on their 
  * proximity in d-dimensional space, using the k-means algorithm. 
  *  
  * @author Joshua O'Madadhain

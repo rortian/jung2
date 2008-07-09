@@ -35,8 +35,9 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * <p>You can extend this class to have a different definition of equivalence (by
  * overriding <code>isStructurallyEquivalent</code>), and may give it hints for
- * accelerating the process by overriding <code>canPossiblyCompare</code>. (For example, in
- * a bipartite graph, <code>canPossiblyCompare</code> may return <code>false</code> for vertices in
+ * accelerating the process by overriding <code>canPossiblyCompare</code>. 
+ * (For example, in a bipartite graph, <code>canPossiblyCompare</code> may 
+ * return <code>false</code> for vertices in
  * different partitions. This function should be fast.)
  * 
  * @author Danyel Fisher

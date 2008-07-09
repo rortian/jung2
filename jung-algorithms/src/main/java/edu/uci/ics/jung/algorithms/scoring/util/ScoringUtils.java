@@ -17,6 +17,10 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * Methods for assigning transition probabilities to vertices in the context
+ * of random-walk-based scoring algorithms.
+ */
 public class ScoringUtils
 {
     public static <V> Transformer<V, Double> getUniformRootPrior(Collection<V> roots)

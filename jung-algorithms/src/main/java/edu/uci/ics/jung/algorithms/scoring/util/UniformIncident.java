@@ -13,6 +13,17 @@ package edu.uci.ics.jung.algorithms.scoring.util;
 
 import edu.uci.ics.jung.graph.Hypergraph;
 
+/**
+ * An edge weight function that assigns weights as uniform transition 
+ * probabilities to all incident edges of a vertex.
+ * This is useful for random-walk-based scoring algorithms on undirected 
+ * graphs, since each edge may need to take
+ * on different weights depending on the direction in which it's being
+ * traversed.
+ *
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ */
 public class UniformIncident<V, E> implements VertexEdgeWeight<V,E,Double>
 {
     private Hypergraph<V,E> graph;

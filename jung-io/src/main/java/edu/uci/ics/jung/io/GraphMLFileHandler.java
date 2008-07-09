@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The default GraphML file handler to use to parse the xml file
+ * The default GraphML file handler to use to parse the xml file.
  * @author Scott White
  * @author Tom Nelson - converted to jung2
  */

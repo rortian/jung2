@@ -17,9 +17,9 @@ public abstract class AbstractSparseTreeTest extends TestCase {
 		tree.addEdge(edgeFactory.create(), "A", "C");
 		tree.addEdge(edgeFactory.create(), "B", "E");
 		tree.addEdge(edgeFactory.create(), "B", "F");
-		System.err.println("tree is "+tree);
+//		System.err.println("tree is "+tree);
 		tree.removeVertex("B");
-		System.err.println("tree now "+tree);
+//		System.err.println("tree now "+tree);
 	}
 	
 	public void testSimpleTree() {

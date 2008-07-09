@@ -14,13 +14,15 @@ IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT
 </head>
 <body>
 
-A collection of mechanisms for graph transformations.  These currently include:
+Mechanisms for graph transformation.  These currently include:
 <ul>
-<li/><code>DirectionTransformer</code>: generates graphs where input undirected edges have 
-been converted to directed edges, or vice versa
-<li/><code>FoldingTransformer</code>: transforms k-partite graphs or hypergraphs into unipartite graphs
-<li/><code>GraphCollapser</code>: transforms general graphs, given an equivalence relation over its vertices, into 
-a graph in which sets of equivalent vertices have been 'collapsed' into a single new vertex
+<li/><code>DirectionTransformer</code>: generates graphs where input undirected 
+edges have been converted to directed edges, or vice versa
+<li/><code>FoldingTransformer</code>: transforms k-partite graphs or hypergraphs 
+into unipartite graphs
+<li/><code>VertexPartitionCollapser</code>: transforms a graph, given a 
+partition of its vertices into disjoint sets, into a graph in which each 
+of these disjoint sets has been 'collapsed' into a single new vertex.
 </ul>
 
 </body>

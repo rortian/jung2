@@ -51,8 +51,8 @@ import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsideP
 
 
 /**
- * Shows a graph on a world map image
- * scaling of the graph also scales the image background
+ * Shows a graph overlaid on a world map image.
+ * Scaling of the graph also scales the image background.
  * @author Tom Nelson
  * 
  */

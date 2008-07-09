@@ -3,6 +3,12 @@ package edu.uci.ics.jung.algorithms.util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * An simple minimal implementation of <code>Map.Entry</code>.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public class BasicMapEntry<K,V> implements Map.Entry<K,V> {
     final K key;
     V value;

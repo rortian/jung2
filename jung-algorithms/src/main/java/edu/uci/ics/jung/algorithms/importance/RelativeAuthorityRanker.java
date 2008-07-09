@@ -29,7 +29,6 @@ public abstract class RelativeAuthorityRanker<V,E> extends AbstractRanker<V,E> {
     /**
      * The default key used for the user datum key corresponding to prior rank scores.
      */
-//    public static final String PRIOR_KEY = "jung.algorithms.importance.RelativeAuthorityRanker.PriorRankScore";
 
     protected Map<V,Number> priorRankScoreMap = new HashMap<V,Number>();
     /**
@@ -40,14 +39,6 @@ public abstract class RelativeAuthorityRanker<V,E> extends AbstractRanker<V,E> {
         super.finalizeIterations();
         priorRankScoreMap.clear();
     }
-
-    /**
-     * Returns the user datum key for the prior rank score.
-     * @return the user datum key for the prior rank score
-     */
-//    protected String getPriorRankScoreKey() {
-//        return PRIOR_KEY;
-//    }
 
     /**
      * Retrieves the value of the prior rank score.

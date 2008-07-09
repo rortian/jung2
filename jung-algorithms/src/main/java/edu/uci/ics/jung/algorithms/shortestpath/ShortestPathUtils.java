@@ -18,6 +18,9 @@ import java.util.Map;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
+/**
+ * Utilities relating to the shortest paths in a graph.
+ */
 public class ShortestPathUtils
 {
     /**

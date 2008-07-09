@@ -14,24 +14,18 @@ IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT
 </head>
 <body>
 
-Implementations of a notion of graph equivalence for blockmodeling.
+Support for establishing and maintaining graph element equivalence (e.g. for blockmodeling).
 <P/>
-This equivalence refers to the network measure forms of equivalence used for blockmodeling. 
-In blockmodeling, groups of vertices are clustered together by similarity (as if "blocked" together on the
-diagonal of a matrix). 
+In blockmodeling, groups of vertices are clustered together by similarity 
+(as if members of a "block" appearing on the diagonal of the graph's adjacency 
+matrix).
 <p/>
-This implementation currently provides:
+This support currently includes:
 <ul>
-<li/><code>EquivalenceAlgorithm</code>: An interface for an algorithm that returns an <code>EquivalenceRelation</code>.
-<li/><code>EquivalenceRelation</code>: A class that represents several mutually-exclusive partitions of a set. 
-The object is constructed with a Set of Sets; the 
-members of each set are all vertices from the graph.  Vertices that are not equivalent to any 
-other vertex are returned in singleton Sets.
+<li/><code>VertexPartition</code>: A class that maintains information on a 
+division of the vertices of a graph into disjoint sets.
 <li/><code>StructurallyEquivalent</code>: An algorithm that finds sets of vertices that are 
-structurally equivalent. Two vertices <i>i</i> and <i>j</i> are structurally equivalent if the set of <i>i</i>'s
-neighbors must be identical to the set of <i>j</i>'s neighbors, with the exception of <i>i</i> and
-<i>j</i> themselves. (In those cases, a directed edge may join <i>i</i> to <i>j</i> only if another
-directed edge runs the other way.)
+structurally equivalent.
 </ul> 
 
 <p/>

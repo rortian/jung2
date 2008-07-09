@@ -83,7 +83,7 @@ public class VoltageRanker<V, E>
      */
     public VoltageRanker(Map<V,Number> voltages, int num_iterations, 
         double threshold) {
-        this(new ConstantMap(new Integer(1)), voltages, num_iterations, threshold);
+        this(new ConstantMap<E, Number>(new Integer(1)), voltages, num_iterations, threshold);
     }
     
     /**

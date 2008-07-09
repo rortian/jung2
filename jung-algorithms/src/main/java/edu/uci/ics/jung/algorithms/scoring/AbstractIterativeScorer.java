@@ -17,11 +17,11 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 
-import edu.uci.ics.jung.algorithms.IterativeContext;
 import edu.uci.ics.jung.algorithms.scoring.util.UniformIncident;
 import edu.uci.ics.jung.algorithms.scoring.util.UniformOut;
 import edu.uci.ics.jung.algorithms.scoring.util.VEPair;
 import edu.uci.ics.jung.algorithms.scoring.util.VertexEdgeWeight;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 
