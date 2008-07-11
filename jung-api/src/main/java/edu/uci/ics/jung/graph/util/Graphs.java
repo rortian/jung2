@@ -21,66 +21,66 @@ import edu.uci.ics.jung.graph.UndirectedGraph;
 public class Graphs {
 	
 	/**
-	 * return a synchronized graph backed by the passed argument graph
-	 * @param <V>
-	 * @param <E>
-	 * @param graph
-	 * @return
+	 * Returns a synchronized graph backed by the passed argument graph.
+	 * @param <V> the vertex type
+	 * @param <E> the edge type
+	 * @param graph the graph for which a synchronized wrapper is to be created
+	 * @return a synchronized graph backed by the passed argument graph
 	 */
 	public static <V,E> Graph<V,E> synchronizedGraph(Graph<V,E> graph) {
 		return new SynchronizedGraph<V,E>(graph);
 	}
 	
 	/**
-	 * return a synchronized DirectedGraph backed by the passed DirectedGraph
-	 * @param <V>
-	 * @param <E>
-	 * @param graph
-	 * @return
+	 * Returns a synchronized DirectedGraph backed by the passed DirectedGraph.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param graph the graph for which a synchronized wrapper is to be created
+	 * @return a synchronized DirectedGraph backed by the passed DirectedGraph
 	 */
 	public static <V,E> DirectedGraph<V,E> synchronizedDirectedGraph(DirectedGraph<V,E> graph) {
 		return new SynchronizedDirectedGraph<V,E>(graph);
 	}
 	
 	/**
-	 * return a synchronized UndirectedGraph backed by the passed UndirectedGraph
-	 * @param <V>
-	 * @param <E>
-	 * @param graph
-	 * @return
+	 * Returns a synchronized UndirectedGraph backed by the passed UndirectedGraph.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param graph the graph for which a synchronized wrapper is to be created
+	 * @return a synchronized UndirectedGraph backed by the passed UndirectedGraph
 	 */
 	public static <V,E> UndirectedGraph<V,E> synchronizedUndirectedGraph(UndirectedGraph<V,E> graph) {
 		return new SynchronizedUndirectedGraph<V,E>(graph);
 	}
 	
 	/**
-	 * return a synchronized Forest backed by the passed Forest
-	 * @param <V>
-	 * @param <E>
-	 * @param forest
-	 * @return
+	 * Returns a synchronized Forest backed by the passed Forest.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param forest the forest for which a synchronized wrapper is to be created
+	 * @return a synchronized Forest backed by the passed Forest
 	 */
 	public static <V,E> SynchronizedForest<V,E> synchronizedForest(Forest<V,E> forest) {
 		return new SynchronizedForest<V,E>(forest);
 	}
 	
 	/**
-	 * return a synchronized Tree backed by the passed Tree
-	 * @param <V>
-	 * @param <E>
-	 * @param tree
-	 * @return
+	 * Returns a synchronized Tree backed by the passed Tree.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param tree the tree for which a synchronized wrapper is to be created
+	 * @return a synchronized Tree backed by the passed Tree
 	 */
 	public static <V,E> SynchronizedTree<V,E> synchronizedTree(Tree<V,E> tree) {
 		return new SynchronizedTree<V,E>(tree);
 	}
 	
 	/**
-	 * return an unmodifiable Graph backed by the passed Graph
-	 * @param <V>
-	 * @param <E>
-	 * @param graph
-	 * @return
+	 * Returns an unmodifiable Graph backed by the passed Graph.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param graph the graph for which the unmodifiable wrapper is to be returned
+	 * @return an unmodifiable Graph backed by the passed Graph
 	 */
 	public static <V,E> Graph<V,E> unmodifiableGraph(Graph<V,E> graph) {
 		return new UnmodifiableGraph<V,E>(graph);
@@ -108,10 +108,24 @@ public class Graphs {
 		return new UnmodifiableUndirectedGraph<V,E>(graph);
 	}
 	
+	/**
+     * Returns an unmodifiable <code>Tree</code> backed by the passed tree.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param tree the tree for which the unmodifiable wrapper is to be returned
+     * @return an unmodifiable <code>Tree</code> backed by the passed tree
+	 */
 	public static <V,E> UnmodifiableTree<V,E> unmodifiableTree(Tree<V,E> tree) {
 		return new UnmodifiableTree<V,E>(tree);
 	}
 	
+    /**
+     * Returns an unmodifiable <code>Forest</code> backed by the passed forest.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param forest the forest for which the unmodifiable wrapper is to be returned
+     * @return an unmodifiable <code>Forest</code> backed by the passed forest
+     */
 	public static <V,E> UnmodifiableForest<V,E> unmodifiableForest(Forest<V,E> forest) {
 		return new UnmodifiableForest<V,E>(forest);
 	}
@@ -144,7 +158,7 @@ public class Graphs {
 		}
 		
 		/**
-		 * @return
+		 * @see edu.uci.ics.jung.graph.Graph#addEdge(Object, Object, Object)
 		 */
 		public synchronized boolean addEdge(E e, V v1, V v2) {
 			return delegate.addEdge(e, v1, v2);
@@ -208,8 +222,6 @@ public class Graphs {
 		}
 
 		/**
-		 * @param edge
-		 * @return
 		 * @see edu.uci.ics.jung.graph.Graph#getEndpoints(java.lang.Object)
 		 */
 		public synchronized Pair<V> getEndpoints(E edge) {

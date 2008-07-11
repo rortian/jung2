@@ -37,9 +37,6 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 }
 
 	/**
-	 * @param edge
-	 * @param vertices
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
 	 */
 	@Override
@@ -53,11 +50,6 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	}
 
 	/**
-	 * @param e
-	 * @param v1
-	 * @param v2
-	 * @param edgeType
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	@Override
@@ -71,10 +63,6 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	}
 
 	/**
-	 * @param e
-	 * @param v1
-	 * @param v2
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
 	@Override
@@ -88,8 +76,6 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#addVertex(java.lang.Object)
 	 */
 	@Override
@@ -103,8 +89,6 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeEdge(java.lang.Object)
 	 */
 	@Override
@@ -118,8 +102,6 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
 	@Override
