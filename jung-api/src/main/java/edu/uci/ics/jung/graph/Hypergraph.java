@@ -262,7 +262,7 @@ public interface Hypergraph<V, E>
      * @param v2 the second vertex to test
      * @return <code>true</code> if <code>v1</code> and <code>v2</code> share an incident edge
      */
-    boolean areNeighbors(V v1, V v2);
+    boolean isNeighbor(V v1, V v2);
 
     /**
      * Returns <code>true</code> if <code>vertex</code> and <code>edge</code> 
@@ -274,7 +274,7 @@ public interface Hypergraph<V, E>
      * @return <code>true</code> if <code>vertex</code> and <code>edge</code> 
      * are incident to each other
      */
-    boolean areIncident(V vertex, E edge);
+    boolean isIncident(V vertex, E edge);
     
     /**
      * Returns the number of edges incident to <code>vertex</code>.  
@@ -322,10 +322,25 @@ public interface Hypergraph<V, E>
     int getIncidentCount(E edge);
     
     /**
-     * Returns the edge type of <code>edge</code>.
-     * Current <code>EdgeType</code>s include <code>DIRECTED</code> and <code>UNDIRECTED</code>.
+     * Returns the edge type of <code>edge</code> in this graph.
      * @param edge
      * @return the <code>EdgeType</code> of <code>edge</code>, or <code>null</code> if <code>edge</code> has no defined type
      */
     EdgeType getEdgeType(E edge); 
+    
+    /**
+     * Returns the collection of edges in this graph which are of type <code>edge_type</code>.
+     * @param edge_type the type of edges to be returned
+     * @return the collection of edges which are of type <code>edge_type</code>, or
+     * <code>null</code> if the graph does not accept edges of this type
+     * @see EdgeType
+     */
+    Collection<E> getEdges(EdgeType edge_type);
+    
+    /**
+     * Returns the number of edges of type <code>edge_type</code> in this graph.
+     * @param edge_type the type of edge for which the count is to be returned
+     * @return the number of edges of type <code>edge_type</code> in this graph
+     */
+    int getEdgeCount(EdgeType edge_type);
 }

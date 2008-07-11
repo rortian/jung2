@@ -73,6 +73,8 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
                 double new_auth = getOutputValue(v).getSecond() + (1 - alpha) * (disappearing_hub * getAuthPrior(v));
                 setOutputValue(v, new Pair<Double>(new_hub, new_auth));
             }
+            disappearing_hub = 0;
+            disappearing_auth = 0;
         }
         super.afterStep();
     }
@@ -97,12 +99,12 @@ public class HITSWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E
     }
 
     
-    protected double getHubScore(V v)
+    public double getHubScore(V v)
     {
         return getCurrentValue(v).getFirst();
     }
     
-    protected double getAuthScore(V v)
+    public double getAuthScore(V v)
     {
         return getCurrentValue(v).getSecond();
     }

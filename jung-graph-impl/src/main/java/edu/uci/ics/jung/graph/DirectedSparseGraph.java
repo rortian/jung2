@@ -310,4 +310,11 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         edges.remove(edge);
         return true;
     }
+
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.DIRECTED)
+            return edges.size();
+        return 0;
+    }
 }

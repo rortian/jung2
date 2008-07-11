@@ -295,4 +295,9 @@ public class SparseMultigraph<V,E>
 		return vertices.keySet().size();
 	}
 
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        return getEdges(edge_type).size();
+    }
+
 }

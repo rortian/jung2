@@ -20,9 +20,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @param vertices
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
 	 */
 	public boolean addEdge(E edge, Collection<? extends V> vertices) {
@@ -39,11 +36,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 	
 	/**
-	 * @param e
-	 * @param v1
-	 * @param v2
-	 * @param edgeType
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	public boolean addEdge(E e, V v1, V v2, EdgeType edgeType) {
@@ -51,10 +43,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param e
-	 * @param v1
-	 * @param v2
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
 	 */
 	public boolean addEdge(E e, V v1, V v2) {
@@ -62,8 +50,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#addVertex(java.lang.Object)
 	 */
 	public boolean addVertex(V vertex) {
@@ -71,28 +57,20 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Hypergraph#areIncident(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#isIncident(java.lang.Object, java.lang.Object)
 	 */
-	public boolean areIncident(V vertex, E edge) {
-		return delegate.areIncident(vertex, edge);
+	public boolean isIncident(V vertex, E edge) {
+		return delegate.isIncident(vertex, edge);
 	}
 
 	/**
-	 * @param v1
-	 * @param v2
-	 * @return
-	 * @see edu.uci.ics.jung.graph.Hypergraph#areNeighbors(java.lang.Object, java.lang.Object)
+	 * @see edu.uci.ics.jung.graph.Hypergraph#isNeighbor(java.lang.Object, java.lang.Object)
 	 */
-	public boolean areNeighbors(V v1, V v2) {
-		return delegate.areNeighbors(v1, v2);
+	public boolean isNeighbor(V v1, V v2) {
+		return delegate.isNeighbor(v1, v2);
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#degree(java.lang.Object)
 	 */
 	public int degree(V vertex) {
@@ -100,9 +78,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param v1
-	 * @param v2
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#findEdge(java.lang.Object, java.lang.Object)
 	 */
 	public E findEdge(V v1, V v2) {
@@ -110,9 +85,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param v1
-	 * @param v2
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#findEdgeSet(java.lang.Object, java.lang.Object)
 	 */
 	public Collection<E> findEdgeSet(V v1, V v2) {
@@ -120,8 +92,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param directed_edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getDest(java.lang.Object)
 	 */
 	public V getDest(E directed_edge) {
@@ -129,7 +99,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getEdgeCount()
 	 */
 	public int getEdgeCount() {
@@ -137,7 +106,14 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @return
+	 * @see edu.uci.ics.jung.graph.Hypergraph#getEdgeCount(EdgeType)
+	 */
+	public int getEdgeCount(EdgeType edge_type) 
+	{
+	    return delegate.getEdgeCount(edge_type);
+	}
+	
+	/**
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getEdges()
 	 */
 	public Collection<E> getEdges() {
@@ -145,8 +121,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edgeType
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.jung.graph.util.EdgeType)
 	 */
 	public Collection<E> getEdges(EdgeType edgeType) {
@@ -154,8 +128,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getEdgeType(java.lang.Object)
 	 */
 	public EdgeType getEdgeType(E edge) {
@@ -163,8 +135,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getEndpoints(java.lang.Object)
 	 */
 	public Pair<V> getEndpoints(E edge) {
@@ -172,8 +142,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentCount(java.lang.Object)
 	 */
 	public int getIncidentCount(E edge) {
@@ -181,8 +149,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentEdges(java.lang.Object)
 	 */
 	public Collection<E> getIncidentEdges(V vertex) {
@@ -190,8 +156,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentVertices(java.lang.Object)
 	 */
 	public Collection<V> getIncidentVertices(E edge) {
@@ -199,8 +163,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getInEdges(java.lang.Object)
 	 */
 	public Collection<E> getInEdges(V vertex) {
@@ -208,8 +170,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getNeighborCount(java.lang.Object)
 	 */
 	public int getNeighborCount(V vertex) {
@@ -217,8 +177,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getNeighbors(java.lang.Object)
 	 */
 	public Collection<V> getNeighbors(V vertex) {
@@ -226,9 +184,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
 	 */
 	public V getOpposite(V vertex, E edge) {
@@ -236,8 +191,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getOutEdges(java.lang.Object)
 	 */
 	public Collection<E> getOutEdges(V vertex) {
@@ -245,8 +198,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getPredecessorCount(java.lang.Object)
 	 */
 	public int getPredecessorCount(V vertex) {
@@ -254,8 +205,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getPredecessors(java.lang.Object)
 	 */
 	public Collection<V> getPredecessors(V vertex) {
@@ -263,8 +212,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param directed_edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getSource(java.lang.Object)
 	 */
 	public V getSource(E directed_edge) {
@@ -272,8 +219,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getSuccessorCount(java.lang.Object)
 	 */
 	public int getSuccessorCount(V vertex) {
@@ -281,8 +226,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#getSuccessors(java.lang.Object)
 	 */
 	public Collection<V> getSuccessors(V vertex) {
@@ -290,7 +233,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getVertexCount()
 	 */
 	public int getVertexCount() {
@@ -298,7 +240,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#getVertices()
 	 */
 	public Collection<V> getVertices() {
@@ -306,8 +247,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#inDegree(java.lang.Object)
 	 */
 	public int inDegree(V vertex) {
@@ -315,9 +254,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#isDest(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isDest(V vertex, E edge) {
@@ -325,9 +261,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param v1
-	 * @param v2
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isPredecessor(V v1, V v2) {
@@ -335,9 +268,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#isSource(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isSource(V vertex, E edge) {
@@ -345,9 +275,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param v1
-	 * @param v2
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
 	 */
 	public boolean isSuccessor(V v1, V v2) {
@@ -355,8 +282,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Graph#outDegree(java.lang.Object)
 	 */
 	public int outDegree(V vertex) {
@@ -364,8 +289,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeEdge(java.lang.Object)
 	 */
 	public boolean removeEdge(E edge) {
@@ -373,8 +296,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
 	public boolean removeVertex(V vertex) {
@@ -382,8 +303,6 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param edge
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#containsEdge(java.lang.Object)
 	 */
 	public boolean containsEdge(E edge) {
@@ -391,14 +310,9 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
-	 * @param vertex
-	 * @return
 	 * @see edu.uci.ics.jung.graph.Hypergraph#containsVertex(java.lang.Object)
 	 */
 	public boolean containsVertex(V vertex) {
 		return delegate.containsVertex(vertex);
 	}
-	
-	
-
 }

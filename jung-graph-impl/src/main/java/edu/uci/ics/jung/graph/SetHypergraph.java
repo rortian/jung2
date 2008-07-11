@@ -105,7 +105,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     public boolean addEdge(H hyperedge, Collection<? extends V> to_attach, 
     	EdgeType edge_type)
     {
-    	if (edge_type != EdgeType.HYPER)
+    	if (edge_type != EdgeType.UNDIRECTED)
     		throw new IllegalArgumentException("Edge type for this " +
     				"implementation must be EdgeType.HYPER, not " + 
     				edge_type);
@@ -118,7 +118,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
     public EdgeType getEdgeType(H edge)
     {
         if (containsEdge(edge))
-            return EdgeType.HYPER;
+            return EdgeType.UNDIRECTED;
         else
             return null;
     }
@@ -181,7 +181,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
         
         for (H h : getIncidentEdges(v1))
         {
-            if (areIncident(v2, h))
+            if (isIncident(v2, h))
                 return h;
         }
         return null;
@@ -195,7 +195,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
         Collection<H> edges = new ArrayList<H>();
         for (H h : getIncidentEdges(v1))
         {
-            if (areIncident(v2, h))
+            if (isIncident(v2, h))
                 edges.add(h);
         }
         return Collections.unmodifiableCollection(edges);
@@ -235,7 +235,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
         return true;
     }
     
-    public boolean areNeighbors(V v1, V v2)
+    public boolean isNeighbor(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))
             return false;
@@ -250,7 +250,7 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
         return false;
     }
     
-    public boolean areIncident(V vertex, H edge)
+    public boolean isIncident(V vertex, H edge)
     {
         if (!containsVertex(vertex) || !containsEdge(edge))
             return false;
@@ -280,6 +280,20 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
             return 0;
         
         return edges.get(edge).size();
+    }
+
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.UNDIRECTED)
+            return edges.size();
+        return 0;
+    }
+
+    public Collection<H> getEdges(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.UNDIRECTED)
+            return edges.keySet();
+        return null;
     }
 
 }

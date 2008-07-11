@@ -502,9 +502,9 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
     }
   
     /**
-     * @see edu.uci.ics.jung.graph.Hypergraph#areIncident(java.lang.Object, java.lang.Object)
+     * @see edu.uci.ics.jung.graph.Hypergraph#isIncident(java.lang.Object, java.lang.Object)
      */
-    public boolean areIncident(V vertex, E edge) 
+    public boolean isIncident(V vertex, E edge) 
     {
         if (!containsVertex(vertex) || !containsEdge(edge))
             return false;
@@ -512,9 +512,9 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
     }
   
     /**
-     * @see edu.uci.ics.jung.graph.Hypergraph#areNeighbors(java.lang.Object, java.lang.Object)
+     * @see edu.uci.ics.jung.graph.Hypergraph#isNeighbor(java.lang.Object, java.lang.Object)
      */
-    public boolean areNeighbors(V v1, V v2) 
+    public boolean isNeighbor(V v1, V v2) 
     {
     	if (!containsVertex(v1) || !containsVertex(v2))
     		return false;
@@ -757,4 +757,11 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
 			this.depth = depth;
 		}
 	}
+
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.DIRECTED)
+            return edge_vpairs.size();
+        return 0;
+    }
 }

@@ -370,5 +370,13 @@ public class SparseGraph<V,E>
         return true;
     }
     
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.DIRECTED)
+            return directed_edges.size();
+        if (edge_type == EdgeType.UNDIRECTED)
+            return undirected_edges.size();
+        return 0;
+    }
 
 }

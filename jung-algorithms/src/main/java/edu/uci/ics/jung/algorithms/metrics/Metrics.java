@@ -58,7 +58,7 @@ public class Metrics
                     for (int j = i+1; j < n; j++ )
                     {
                         V x = neighbors.get(j);
-                        edge_count += graph.areNeighbors(w, x) ? 1 : 0;
+                        edge_count += graph.isNeighbor(w, x) ? 1 : 0;
                     }
                 }
                 double possible_edges = (n * (n - 1))/2.0;

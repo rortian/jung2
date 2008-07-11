@@ -259,4 +259,11 @@ public class UndirectedSparseMultigraph<V,E>
     public int getVertexCount() {
         return vertices.size();
     }
+
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.UNDIRECTED)
+            return edges.size();
+        return 0;
+    }
 }

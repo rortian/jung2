@@ -79,8 +79,8 @@ public class TestGraphMLWriter extends TestCase
         {
         	for (String w : g2.getVertices())
         	{
-        		Assert.assertEquals(g.areNeighbors(v, w), 
-        				g2.areNeighbors(v, w));
+        		Assert.assertEquals(g.isNeighbor(v, w), 
+        				g2.isNeighbor(v, w));
         		Number n = g.findEdge(v, w);
         		Object o = g2.findEdge(v, w);
         		if (n != null)

@@ -268,4 +268,10 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         return true;
     }
 
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.UNDIRECTED)
+            return edges.size();
+        return 0;
+    }
 }

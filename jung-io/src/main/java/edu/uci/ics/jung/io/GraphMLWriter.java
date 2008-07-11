@@ -22,6 +22,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
 
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -192,16 +193,16 @@ public class GraphMLWriter<V,E>
 		{
 			Collection<V> vertices = g.getIncidentVertices(e);
 			String id = edge_ids.transform(e);
-			EdgeType edge_type = g.getEdgeType(e);
 			String e_string;
-			if (edge_type == EdgeType.HYPER)
-			{
-				e_string = "<hyperedge ";
-				// add ID if present
-				if (id != null)
-					e_string += "id=\"" + id + "\" ";
-			}
-			else
+			boolean is_hyperedge = !(g instanceof Graph);
+            if (is_hyperedge)
+            {
+                e_string = "<hyperedge ";
+                // add ID if present
+                if (id != null)
+                    e_string += "id=\"" + id + "\" ";
+            }
+            else
 			{
 				Pair<V> endpoints = new Pair<V>(vertices);
 				V v1 = endpoints.getFirst();
@@ -211,6 +212,7 @@ public class GraphMLWriter<V,E>
 				if (id != null)
 					e_string += "id=\"" + id + "\" ";
 				// add edge type if doesn't match default
+				EdgeType edge_type = g.getEdgeType(e);
 				if (directed && edge_type == EdgeType.UNDIRECTED)
 					e_string += "directed=\"false\" ";
 				if (!directed && edge_type == EdgeType.DIRECTED)
@@ -244,7 +246,7 @@ public class GraphMLWriter<V,E>
 				}
 			}
 			// if this is a hyperedge, write endpoints out if any
-			if (edge_type == EdgeType.HYPER)
+			if (is_hyperedge)
 			{
 				for (V v : vertices)
 				{
@@ -260,7 +262,7 @@ public class GraphMLWriter<V,E>
 			if (!closed)
 				w.write(e_string + "/>\n"); // no contents; close the edge with "/>"
 			else
-			    if (edge_type == EdgeType.HYPER)
+			    if (is_hyperedge)
 			        w.write("</hyperedge>\n");
 			    else
 			        w.write("</edge>\n");

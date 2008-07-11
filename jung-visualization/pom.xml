@@ -3,7 +3,7 @@
   <groupId>jung</groupId>
   <artifactId>jung-visualization</artifactId>
   <packaging>jar</packaging>
-  <version>2.0-alpha3-SNAPSHOT</version>
+  <version>2.0-beta</version>
   <url>http://jung.sourceforge.net/site/jung-visualization</url>
   <name>jung-visualization</name>
   <description>
@@ -12,7 +12,7 @@
   <parent>
   	<groupId>jung.app</groupId>
     <artifactId>app</artifactId>
-    <version>2.0-alpha3-SNAPSHOT</version>
+    <version>2.0-beta</version>
   </parent>
 
   <build>

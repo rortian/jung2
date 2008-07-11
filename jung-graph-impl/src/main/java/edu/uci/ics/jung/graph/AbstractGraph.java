@@ -115,12 +115,12 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
         return this.getSuccessors(vertex).size();
     }
 
-    public boolean areNeighbors(V v1, V v2)
+    public boolean isNeighbor(V v1, V v2)
     {
         return this.getNeighbors(v1).contains(v2);
     }
 
-    public boolean areIncident(V vertex, E edge)
+    public boolean isIncident(V vertex, E edge)
     {
         return this.getIncidentEdges(vertex).contains(edge);
     }

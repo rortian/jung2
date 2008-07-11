@@ -69,6 +69,7 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
                 setOutputValue(v, getOutputValue(v) + 
                         (1 - alpha) * (disappearing_potential_total * getVertexPrior(v)));
             }
+            disappearing_potential_total = 0;
         }
         
         super.afterStep();

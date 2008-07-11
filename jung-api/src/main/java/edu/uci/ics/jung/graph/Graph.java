@@ -96,14 +96,6 @@ public interface Graph<V,E> extends Hypergraph<V,E>
     Collection<V> getSuccessors(V vertex);
     
     /**
-     * Returns all edges in this graph of the specified <code>EdgeType</code>.
-     * Current <code>EdgeType</code>s include <code>DIRECTED</code> and <code>UNDIRECTED</code>.
-     * @param edgeType the type of the edge to return
-     * @return  all edges in this graph of type <code>EdgeType</code>
-     */
-    Collection<E> getEdges(EdgeType edgeType);
-
-    /**
      * Returns the number of incoming edges incident to <code>vertex</code>.
      * Equivalent to <code>getInEdges(vertex).size()</code>.
      * @param vertex    the vertex whose indegree is to be calculated

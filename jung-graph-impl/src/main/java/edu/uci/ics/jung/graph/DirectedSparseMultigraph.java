@@ -284,4 +284,10 @@ public class DirectedSparseMultigraph<V,E>
 		return vertices.size();
 	}
 
+    public int getEdgeCount(EdgeType edge_type)
+    {
+        if (edge_type == EdgeType.DIRECTED)
+            return edges.size();
+        return 0;
+    }
 }
