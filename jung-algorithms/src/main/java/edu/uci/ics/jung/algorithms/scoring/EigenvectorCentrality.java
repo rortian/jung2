@@ -27,7 +27,7 @@ public class EigenvectorCentrality<V,E> extends PageRank<V,E>
      * @param output_map
      * @param alpha
      */
-    public EigenvectorCentrality(Graph<V,E> graph, Transformer<E, ? extends Number> edge_weights)
+    public EigenvectorCentrality(Graph<V,E> graph, Transformer<E, Number> edge_weights)
     {
         super(graph, edge_weights, 0);
         acceptDisconnectedGraph(false);
@@ -37,10 +37,10 @@ public class EigenvectorCentrality<V,E> extends PageRank<V,E>
      * @param graph
      * @param alpha
      */
-    public EigenvectorCentrality(Graph<V,E> graph)
-    {
-        super(graph, 0);
-        acceptDisconnectedGraph(false);
-    }
+//    public EigenvectorCentrality(Graph<V,E> graph)
+//    {
+//        super(graph, 0);
+//        acceptDisconnectedGraph(false);
+//    }
 
 }

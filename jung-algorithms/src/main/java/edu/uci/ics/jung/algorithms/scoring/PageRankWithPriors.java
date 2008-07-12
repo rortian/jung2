@@ -15,12 +15,12 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
-public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E, Double>
+public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<V, E, Number, Number>
 {
     protected double disappearing_potential_total;
     
-    public PageRankWithPriors(Graph<V,E> graph, Transformer<E, ? extends Number> edge_weights, 
-            Transformer<V, Double> vertex_priors, double alpha)
+    public PageRankWithPriors(Graph<V,E> graph, Transformer<E, Number> edge_weights, 
+            Transformer<V, Number> vertex_priors, double alpha)
     {
         super(graph, edge_weights, vertex_priors, alpha);
     }
@@ -31,10 +31,10 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
      * @param output_map
      * @param alpha
      */
-    public PageRankWithPriors(Graph<V,E> graph, Transformer<V, Double> vertex_priors, double alpha)
-    {
-        super(graph, vertex_priors, alpha);
-    }
+//    public PageRankWithPriors(Graph<V,E> graph, Transformer<V, Number> vertex_priors, double alpha)
+//    {
+//        super(graph, vertex_priors, alpha);
+//    }
     
     /**
      * 
@@ -48,14 +48,14 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
         for (E e : graph.getInEdges(v))
         {
             V w = graph.getOpposite(v, e);
-            total_input += (getCurrentValue(w) * getEdgeWeight(w,e).doubleValue());
+            total_input += (getCurrentValue(w).doubleValue() * getEdgeWeight(w,e).doubleValue());
         }
         
         // modify total_input according to alpha
-        double new_value = total_input * (1 - alpha) + getVertexPrior(v) * alpha;
+        double new_value = total_input * (1 - alpha) + getVertexPrior(v).doubleValue() * alpha;
         setOutputValue(v, new_value);
         
-        return Math.abs(getCurrentValue(v) - new_value);
+        return Math.abs(getCurrentValue(v).doubleValue() - new_value);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
         {
             for (V v : graph.getVertices())
             {
-                setOutputValue(v, getOutputValue(v) + 
-                        (1 - alpha) * (disappearing_potential_total * getVertexPrior(v)));
+                setOutputValue(v, getOutputValue(v).doubleValue() + 
+                        (1 - alpha) * (disappearing_potential_total * getVertexPrior(v).doubleValue()));
             }
             disappearing_potential_total = 0;
         }
@@ -81,7 +81,7 @@ public class PageRankWithPriors<V, E> extends AbstractIterativeScorerWithPriors<
         if (graph.outDegree(v) == 0)
         {
             if (isDisconnectedGraphOK())
-                disappearing_potential_total += getCurrentValue(v);
+                disappearing_potential_total += getCurrentValue(v).doubleValue();
             else
                 throw new IllegalArgumentException("Outdegree of " + v + " must be > 0");
         }

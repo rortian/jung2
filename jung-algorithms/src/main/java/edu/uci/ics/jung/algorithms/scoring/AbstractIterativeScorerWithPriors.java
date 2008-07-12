@@ -15,8 +15,8 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
-public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
-        AbstractIterativeScorer<V, E, S> implements VertexScorer<V, S>
+public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
+        AbstractIterativeScorer<V,E,S,W> implements VertexScorer<V, S>
 {
     /**
      * 
@@ -28,7 +28,7 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
     private boolean accept_disconnected_graph;
     
     public AbstractIterativeScorerWithPriors(Graph<V, E> g,
-            Transformer<E, ? extends Number> edge_weights, Transformer<V, S> vertex_priors, double alpha)
+            Transformer<E, W> edge_weights, Transformer<V, S> vertex_priors, double alpha)
     {
         super(g, edge_weights);
         this.vertex_priors = vertex_priors;
@@ -36,13 +36,13 @@ public abstract class AbstractIterativeScorerWithPriors<V, E, S> extends
         initialize();
     }
 
-    public AbstractIterativeScorerWithPriors(Graph<V, E> g, Transformer<V, S> vertex_priors, double alpha)
-    {
-        super(g);
-        this.vertex_priors = vertex_priors;
-        this.alpha = alpha;
-        initialize();
-    }
+//    public AbstractIterativeScorerWithPriors(Graph<V, E> g, Transformer<V, S> vertex_priors, double alpha)
+//    {
+//        super(g);
+//        this.vertex_priors = vertex_priors;
+//        this.alpha = alpha;
+//        initialize();
+//    }
 
     @Override
     public void initialize()

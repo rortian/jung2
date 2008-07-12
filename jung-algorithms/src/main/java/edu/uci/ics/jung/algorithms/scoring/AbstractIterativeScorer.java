@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 
+import edu.uci.ics.jung.algorithms.scoring.util.DelegateToEdgeTransformer;
 import edu.uci.ics.jung.algorithms.scoring.util.UniformIncident;
 import edu.uci.ics.jung.algorithms.scoring.util.UniformOut;
 import edu.uci.ics.jung.algorithms.scoring.util.VEPair;
@@ -25,7 +26,7 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 
-public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext, VertexScorer<V,T>
+public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeContext, VertexScorer<V,T>
 {
     /**
      * Maximum number of iterations to use before terminating.  Defaults to 100.
@@ -51,7 +52,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     /**
      * 
      */
-    private Transformer<E, ? extends Number> edge_weights;
+    private Transformer<VEPair<V,E>, W> edge_weights;
     
     /**
      * 
@@ -88,21 +89,21 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
      */
     protected double max_delta;
     
-    public AbstractIterativeScorer(Graph<V,E> g, Transformer<E, ? extends Number> edge_weights)
+    public AbstractIterativeScorer(Graph<V,E> g, Transformer<E, W> edge_weights)
     {
         this.graph = g;
         this.max_iterations = 100;
         this.tolerance = 0.001;
-        this.edge_weights = edge_weights;
+        setEdgeWeights(edge_weights);
     }
     
-    public AbstractIterativeScorer(Graph<V,E> g)
-    {
-        this(g, (Transformer<E, ? extends Number>)
-                (g instanceof DirectedGraph ? 
-                        new UniformOut<V,E>(g) : 
-                        new UniformIncident<V,E>(g)));
-    }
+//    public AbstractIterativeScorer(Graph<V,E> g)
+//    {
+//        this(g, (Transformer<E, ? extends Number>)
+//                (g instanceof DirectedGraph ? 
+//                        new UniformOut<V,E>(g) : 
+//                        new UniformIncident<V,E>(g)));
+//    }
     
     protected void initialize()
     {
@@ -180,7 +181,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     /**
      * @return the edge_weights
      */
-    public Transformer<E, ? extends Number> getEdgeWeights()
+    public Transformer<VEPair<V,E>, W> getEdgeWeights()
     {
         return edge_weights;
     }
@@ -188,17 +189,18 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     /**
      * @param edge_weights the edge_weights to set
      */
-    public void setEdgeWeights(Transformer<E, ? extends Number> edge_weights)
+    public void setEdgeWeights(Transformer<E, W> edge_weights)
     {
-        this.edge_weights = edge_weights;
+        this.edge_weights = new DelegateToEdgeTransformer<V,E,W>(edge_weights);
         initialize();
     }
     
-    protected Number getEdgeWeight(V v, E e)
+    protected W getEdgeWeight(V v, E e)
     {
-        if (edge_weights instanceof VertexEdgeWeight)
-            return ((VertexEdgeWeight<V,E,? extends Number>)edge_weights).transform(new VEPair<V,E>(v,e));
-        else
-            return edge_weights.transform(e);
+        return edge_weights.transform(new VEPair<V,E>(v,e));
+//        if (edge_weights instanceof VertexEdgeWeight)
+//            return ((VertexEdgeWeight<V,E,? extends Number>)edge_weights).transform(new VEPair<V,E>(v,e));
+//        else
+//            return edge_weights.transform(e);
     }
 }

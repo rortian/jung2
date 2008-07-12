@@ -24,7 +24,7 @@ import edu.uci.ics.jung.graph.Graph;
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-public class UniformOut<V,E> implements Transformer<E, Double>
+public class UniformOut<V,E> implements Transformer<E, Number>
 {
     private Graph<V, E> graph;
     
@@ -33,7 +33,7 @@ public class UniformOut<V,E> implements Transformer<E, Double>
         this.graph = graph;
     }
     
-    public Double transform(E edge)
+    public Number transform(E edge)
     {
         return 1.0 / graph.outDegree(graph.getSource(edge));
     }

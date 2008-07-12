@@ -18,14 +18,15 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.SingletonMap;
 
+import edu.uci.ics.jung.algorithms.scoring.util.UniformOut;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
-        implements VertexScorer<V, Double>
+public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Number, Number>
+        implements VertexScorer<V, Number>
 {
     protected Map<V, ? extends Number> source_voltages;
     protected Collection<V> sinks;
@@ -34,8 +35,8 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
      * @param g
      * @param edge_weights
      */
-    public VoltageScorer(Graph<V, E> g, Transformer<E, ? extends Number> edge_weights, 
-            Map<V, ? extends Number> source_voltages, Collection<V> sinks)
+    public VoltageScorer(Graph<V, E> g, Transformer<E, Number> edge_weights, 
+            Map<V, Number> source_voltages, Collection<V> sinks)
     {
         super(g, edge_weights);
         this.source_voltages = source_voltages;
@@ -46,17 +47,17 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
     /**
      * @param g
      */
-    public VoltageScorer(Graph<V, E> g, Map<V, ? extends Number> source_voltages, Collection<V> sinks)
-    {
-        super(g);
-        this.source_voltages = source_voltages;
-        this.sinks = sinks;
-        initialize();
-    }
+//    public VoltageScorer(Graph<V, E> g, Map<V, Number> source_voltages, Collection<V> sinks)
+//    {
+//        super(g);
+//        this.source_voltages = source_voltages;
+//        this.sinks = sinks;
+//        initialize();
+//    }
     
     public VoltageScorer(Graph<V,E> g, V source, V sink)
     {
-        super(g);
+        super(g, new UniformOut<V,E>(g));
         this.source_voltages = new SingletonMap<V, Double>(source, 1.0);
         this.sinks = new ArrayList<V>(1);
         sinks.add(sink);
@@ -121,7 +122,7 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         {
             V w = graph.getOpposite(v, e);
             double weight = getEdgeWeight(w,e).doubleValue();
-            voltage_sum += getCurrentValue(w) * weight;
+            voltage_sum += getCurrentValue(w).doubleValue() * weight;
             weight_sum += weight;
         }
 
@@ -129,11 +130,11 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         if (voltage_sum == 0 || weight_sum == 0)
         {
             setOutputValue(v, 0.0);
-            return getCurrentValue(v);
+            return getCurrentValue(v).doubleValue();
         }
         
         setOutputValue(v, voltage_sum / weight_sum);
-        return Math.abs(getCurrentValue(v) - voltage_sum / weight_sum);
+        return Math.abs(getCurrentValue(v).doubleValue() - voltage_sum / weight_sum);
     }
 
 }

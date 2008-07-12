@@ -23,15 +23,15 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 public class ScoringUtils
 {
-    public static <V> Transformer<V, Double> getUniformRootPrior(Collection<V> roots)
+    public static <V> Transformer<V, Number> getUniformRootPrior(Collection<V> roots)
     {
         final Collection<V> inner_roots = roots;
-        Transformer<V, Double> distribution = new Transformer<V, Double>()
+        Transformer<V, Number> distribution = new Transformer<V, Number>()
         {
-            public Double transform(V input)
+            public Number transform(V input)
             {
                 if (inner_roots.contains(input))
-                    return 1.0 / inner_roots.size();
+                    return new Double(1.0 / inner_roots.size());
                 else
                     return 0.0;
             }
@@ -40,17 +40,17 @@ public class ScoringUtils
         return distribution;
     }
     
-    public static <V> Transformer<V, Pair<Double>> getTwoValueUniformRootPrior(Collection<V> roots)
+    public static <V> Transformer<V, Pair<Number>> getTwoValueUniformRootPrior(Collection<V> roots)
     {
         final Collection<V> inner_roots = roots;
-        Transformer<V, Pair<Double>> distribution = new Transformer<V, Pair<Double>>()
+        Transformer<V, Pair<Number>> distribution = new Transformer<V, Pair<Number>>()
         {
-            public Pair<Double> transform(V input)
+            public Pair<Number> transform(V input)
             {
                 if (inner_roots.contains(input))
-                    return new Pair<Double>(1.0 / inner_roots.size(), 1.0 / inner_roots.size());
+                    return new Pair<Number>(1.0 / inner_roots.size(), 1.0 / inner_roots.size());
                 else
-                    return new Pair<Double>(0.0, 0.0);
+                    return new Pair<Number>(0.0, 0.0);
             }
         };
         

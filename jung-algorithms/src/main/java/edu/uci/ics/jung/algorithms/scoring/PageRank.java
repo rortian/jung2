@@ -29,7 +29,7 @@ public class PageRank<V,E> extends PageRankWithPriors<V,E>
      * @param output_map
      * @param alpha
      */
-    public PageRank(Graph<V,E> graph, Transformer<E, ? extends Number> edge_weight, double alpha)
+    public PageRank(Graph<V,E> graph, Transformer<E, Number> edge_weight, double alpha)
     {
         super(graph, edge_weight, ScoringUtils.getUniformRootPrior(graph.getVertices()), alpha);
     }
@@ -39,9 +39,9 @@ public class PageRank<V,E> extends PageRankWithPriors<V,E>
      * @param vertex_priors
      * @param alpha
      */
-    public PageRank(Graph<V,E> graph, double alpha)
-    {
-        super(graph, ScoringUtils.getUniformRootPrior(graph.getVertices()), alpha);
-    }
+//    public PageRank(Graph<V,E> graph, double alpha)
+//    {
+//        super(graph, ScoringUtils.getUniformRootPrior(graph.getVertices()), alpha);
+//    }
 
 }

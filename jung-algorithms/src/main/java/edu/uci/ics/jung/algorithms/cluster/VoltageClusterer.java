@@ -161,10 +161,10 @@ public class VoltageClusterer<V,E>
             VoltageScorer<V,E> vs = new VoltageScorer<V,E>(g, source, target);
             vs.evaluate();
             
-            Transformer<V, Double> voltages = vs.getVertexScores();
+            Transformer<V, Number> voltages = vs.getVertexScores();
             Map<V, double[]> voltage_ranks = new HashMap<V, double[]>();
             for (V v : g.getVertices())
-                voltage_ranks.put(v, new double[] {voltages.transform(v)});
+                voltage_ranks.put(v, new double[] {voltages.transform(v).doubleValue()});
             
 //            addOneCandidateCluster(candidates, voltage_ranks);
             addTwoCandidateClusters(candidates, voltage_ranks);
