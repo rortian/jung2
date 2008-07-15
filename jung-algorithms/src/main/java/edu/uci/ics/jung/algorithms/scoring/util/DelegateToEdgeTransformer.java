@@ -19,9 +19,9 @@ import org.apache.commons.collections15.Transformer;
 public class DelegateToEdgeTransformer<V,E,W> implements
         Transformer<VEPair<V,E>,W>
 {
-    protected Transformer<E,W> delegate;
+    protected Transformer<E,? extends W> delegate;
     
-    public DelegateToEdgeTransformer(Transformer<E,W> delegate)
+    public DelegateToEdgeTransformer(Transformer<E,? extends W> delegate)
     {
         this.delegate = delegate;
     }
