@@ -13,8 +13,12 @@ import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.commons.collections15.Transformer;
+
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 
 /**
@@ -46,23 +50,66 @@ public class TestHITS extends TestCase {
 
     public void testRanker() {
 
-//        HITS<Number,Number> ranker = new HITS<Number,Number>(graph);
-//        for (int i = 0; i < 10; i++)
-//        {
-//            ranker.step();
-//            double auth_sum = 0;
-//            double hub_sum = 0;
-//            for (int j = 0; j < 5; j++)
-//            {
+        HITS<Number,Number> ranker = new HITS<Number,Number>(graph);
+        for (int i = 0; i < 10; i++)
+        {
+            ranker.step();
+            Transformer<Number, HITS.Scores> t = ranker.getVertexScores();
+//            // check hub scores in terms of previous authority scores
+//            Assert.assertEquals(t.transform(0).hub, 
+//            		0.5*ranker.getAuthScore(1) + 0.2*ranker.getAuthScore(4));
+//            Assert.assertEquals(t.transform(1).hub, 
+//            		ranker.getAuthScore(2) + 0.2*ranker.getAuthScore(4));
+//            Assert.assertEquals(t.transform(2).hub, 
+//            		0.5*ranker.getAuthScore(1) + ranker.getAuthScore(3) + 0.2*ranker.getAuthScore(4));
+//            Assert.assertEquals(t.transform(3).hub, 
+//            		ranker.getAuthScore(0) + 0.2*ranker.getAuthScore(4));
+//            Assert.assertEquals(t.transform(4).hub, 
+//            		0.2*ranker.getAuthScore(4));
+//            
+//            // check authority scores in terms of previous hub scores
+//            Assert.assertEquals(t.transform(0).authority, 
+//            		ranker.getHubScore(3) + 0.2*ranker.getHubScore(4));
+//            Assert.assertEquals(t.transform(1).authority, 
+//            		ranker.getHubScore(0) + 0.5 * ranker.getHubScore(2) + 0.2*ranker.getHubScore(4));
+//            Assert.assertEquals(t.transform(2).authority, 
+//            		ranker.getHubScore(1) + 0.2*ranker.getHubScore(4));
+//            Assert.assertEquals(t.transform(3).authority, 
+//            		0.5*ranker.getHubScore(2) + 0.2*ranker.getHubScore(4));
+//            Assert.assertEquals(t.transform(4).authority, 
+//            		0.2*ranker.getHubScore(4));
+//            
+            // verify that sums of each scores are 1.0
+            double auth_sum = 0;
+            double hub_sum = 0;
+            for (int j = 0; j < 5; j++)
+            {
 //                auth_sum += ranker.getAuthScore(j);
 //                hub_sum += ranker.getHubScore(j);
-//            }
-//            Assert.assertEquals(auth_sum, 1.0, .0001);
-//            Assert.assertEquals(hub_sum, 1.0, 0.0001);
-//        }
-//        
-//        ranker.evaluate();
-//
+//            	auth_sum += (ranker.getAuthScore(j) * ranker.getAuthScore(j));
+//            	hub_sum += (ranker.getHubScore(j) * ranker.getHubScore(j));
+            	HITS.Scores score = t.transform(j);
+            	auth_sum += score.authority * score.authority;
+            	hub_sum += score.hub * score.hub;
+            }
+            Assert.assertEquals(auth_sum, 1.0, .0001);
+            Assert.assertEquals(hub_sum, 1.0, 0.0001);
+        }
+        
+        ranker.evaluate();
+
+        Assert.assertEquals(ranker.getAuthScore(0), 0, .0001);  
+        Assert.assertEquals(ranker.getAuthScore(1), 0.8507, .001);
+        Assert.assertEquals(ranker.getAuthScore(2), 0.0, .0001);
+        Assert.assertEquals(ranker.getAuthScore(3), 0.5257, .001);
+
+        Assert.assertEquals(ranker.getHubScore(0), 0.5257, .001);
+        Assert.assertEquals(ranker.getHubScore(1), 0.0, .0001);
+        Assert.assertEquals(ranker.getHubScore(2), 0.8507, .0001);
+        Assert.assertEquals(ranker.getHubScore(3), 0.0, .0001);
+
+        // the values below assume scores sum to 1 
+        // (rather than that sum of squares of scores sum to 1)
 //        Assert.assertEquals(ranker.getAuthScore(0), 0, .0001);  
 //        Assert.assertEquals(ranker.getAuthScore(1), 0.618, .001);
 //        Assert.assertEquals(ranker.getAuthScore(2), 0.0, .0001);
