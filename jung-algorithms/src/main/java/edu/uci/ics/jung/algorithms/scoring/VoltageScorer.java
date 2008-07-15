@@ -11,12 +11,11 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.map.SingletonMap;
 
 import edu.uci.ics.jung.algorithms.scoring.util.UniformDegreeWeight;
 import edu.uci.ics.jung.graph.Graph;
@@ -47,7 +46,7 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double, N
     /**
      * @param g
      */
-    public VoltageScorer(Graph<V, E> g, Map<V, Number> source_voltages, Collection<V> sinks)
+    public VoltageScorer(Graph<V, E> g, Map<V, ? extends Number> source_voltages, Collection<V> sinks)
     {
         super(g);
         this.source_voltages = source_voltages;
@@ -56,16 +55,20 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double, N
         initialize();
     }
     
-    public VoltageScorer(Graph<V,E> g, V source, V sink)
+    public VoltageScorer(Graph<V,E> g, Transformer<E, ? extends Number> edge_weights, V source, V sink)
     {
-        super(g);
-        this.source_voltages = new SingletonMap<V, Double>(source, 1.0);
-        this.sinks = new ArrayList<V>(1);
-        sinks.add(sink);
-        this.edge_weights = new UniformDegreeWeight<V,E>(g);
+        this(g, edge_weights, Collections.singletonMap(source, 1.0), Collections.singletonList(sink));
         initialize();
     }
 
+    public VoltageScorer(Graph<V,E> g, V source, V sink)
+    {
+        this(g, Collections.singletonMap(source, 1.0), Collections.singletonList(sink));
+        initialize();
+    }
+
+    
+    
     @Override
     public void initialize()
     {
