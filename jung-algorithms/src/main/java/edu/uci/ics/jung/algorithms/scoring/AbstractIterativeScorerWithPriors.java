@@ -16,19 +16,20 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.graph.Graph;
 
 public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
-        AbstractIterativeScorer<V,E,S,W> implements VertexScorer<V, S>
+        AbstractIterativeScorer<V,E,S,W> implements VertexScorer<V,S>
 {
     /**
      * 
      */
-    protected Transformer<V, S> vertex_priors;
+    protected Transformer<V,S> vertex_priors;
 
     protected double alpha;
 
     private boolean accept_disconnected_graph;
     
-    public AbstractIterativeScorerWithPriors(Graph<V, E> g,
-            Transformer<E, W> edge_weights, Transformer<V, S> vertex_priors, double alpha)
+    public AbstractIterativeScorerWithPriors(Graph<V,E> g,
+            Transformer<E,? extends W> edge_weights, 
+            Transformer<V,S> vertex_priors, double alpha)
     {
         super(g, edge_weights);
         this.vertex_priors = vertex_priors;
@@ -36,22 +37,25 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
         initialize();
     }
 
-//    public AbstractIterativeScorerWithPriors(Graph<V, E> g, Transformer<V, S> vertex_priors, double alpha)
-//    {
-//        super(g);
-//        this.vertex_priors = vertex_priors;
-//        this.alpha = alpha;
-//        initialize();
-//    }
+    public AbstractIterativeScorerWithPriors(Graph<V,E> g, 
+    		Transformer<V,S> vertex_priors, double alpha)
+    {
+        super(g);
+        this.vertex_priors = vertex_priors;
+        this.alpha = alpha;
+        initialize();
+    }
 
     @Override
     public void initialize()
     {
         super.initialize();
         this.accept_disconnected_graph = true;
-        // initialize current values to priors
+        // initialize output values to priors
+        // (output and current are swapped before each step(), so current will
+        // have priors when update()s start happening)
         for (V v : graph.getVertices())
-            setCurrentValue(v, getVertexPrior(v));
+            setOutputValue(v, getVertexPrior(v));
     }
     
     protected abstract void collectDisappearingPotential(V v);
