@@ -191,11 +191,12 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
         for (V v : getVertices()) {
             double currentHubSum = computeSum(getGraph().getPredecessors(v), HUB_KEY);
             double newAuthorityScore = currentHubSum;
-            total += newAuthorityScore;
+//            total += newAuthorityScore;
+            total += newAuthorityScore * newAuthorityScore;
             setVertexRankScore(v, newAuthorityScore, AUTHORITY_KEY);
         }
 
-        normalizeRankings(total, AUTHORITY_KEY);
+        normalizeRankings(Math.sqrt(total), AUTHORITY_KEY);
     }
 
     protected void updateHubRankings() {
@@ -205,10 +206,11 @@ public class HITS<V,E> extends AbstractRanker<V,E> {
         for (V v : getVertices()) {
             double currentAuthoritySum = computeSum(getGraph().getSuccessors(v), AUTHORITY_KEY);
             double newHubScore = currentAuthoritySum;
-            total += newHubScore;
+//            total += newHubScore;
+            total += newHubScore * newHubScore;
             setVertexRankScore(v, newHubScore, HUB_KEY);
         }
-        normalizeRankings(total, HUB_KEY);
+        normalizeRankings(Math.sqrt(total), HUB_KEY);
     }
 
     protected void updatePreviousScores() {

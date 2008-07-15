@@ -52,10 +52,17 @@ public class TestHITS extends TestCase {
         ranker.setMaximumIterations(500);
         ranker.evaluate();
 
+        // assuming scores are normalized so that sum of squares = 1
         Assert.assertEquals(ranker.getVertexRankScore(0), 0, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(1), 0.618, .001);
+        Assert.assertEquals(ranker.getVertexRankScore(1), 0.8507, .001);
         Assert.assertEquals(ranker.getVertexRankScore(2), 0.0, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(3), 0.3819, .001);
+        Assert.assertEquals(ranker.getVertexRankScore(3), 0.5257, .001);
+
+        // the scores below assume scores are normalized to sum to 1
+//        Assert.assertEquals(ranker.getVertexRankScore(0), 0, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(1), 0.618, .001);
+//        Assert.assertEquals(ranker.getVertexRankScore(2), 0.0, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(3), 0.3819, .001);
 
     }
 
@@ -66,9 +73,16 @@ public class TestHITS extends TestCase {
         ranker.setRemoveRankScoresOnFinalize(false);
         ranker.evaluate();
 
-        Assert.assertEquals(ranker.getVertexRankScore(0), 0.38196, .001);
+        // assuming scores are normalized so that sum of squares = 1
+        Assert.assertEquals(ranker.getVertexRankScore(0), 0.5257, .001);
         Assert.assertEquals(ranker.getVertexRankScore(1), 0.0, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(2), 0.618, .0001);
+        Assert.assertEquals(ranker.getVertexRankScore(2), 0.8507, .0001);
         Assert.assertEquals(ranker.getVertexRankScore(3), 0.0, .0001);
+
+        // the scores below assume scores are normalized to sum to 1
+//        Assert.assertEquals(ranker.getVertexRankScore(0), 0.38196, .001);
+//        Assert.assertEquals(ranker.getVertexRankScore(1), 0.0, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(2), 0.618, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(3), 0.0, .0001);
     }
 }
