@@ -14,14 +14,13 @@ package edu.uci.ics.jung.algorithms.scoring.util;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * 
  * 
  * @author Joshua O'Madadhain
  */
-public class UniformInOut<V,E> implements Transformer<E, Pair<Number>>
+public class UniformInOut<V,E> implements Transformer<VEPair<V,E>, Double>
 {
     protected Graph<V,E> graph;
     
@@ -30,10 +29,15 @@ public class UniformInOut<V,E> implements Transformer<E, Pair<Number>>
         this.graph = graph;
     }
     
-    public Pair<Number> transform(E edge)
+    public Double transform(VEPair<V,E> ve_pair)
     {
-        return new Pair<Number>(1.0 / graph.outDegree(graph.getSource(edge)),
-                                1.0 / graph.inDegree(graph.getDest(edge)));
+    	V v = ve_pair.getV();
+    	E e = ve_pair.getE();
+    	return 1.0 / (graph.isSource(v, e) ? 
+    			graph.outDegree(v) : 
+    			graph.inDegree(v));
+//        return new Pair<Number>(1.0 / graph.outDegree(graph.getSource(edge)),
+//                                1.0 / graph.inDegree(graph.getDest(edge)));
     }
 
 }
