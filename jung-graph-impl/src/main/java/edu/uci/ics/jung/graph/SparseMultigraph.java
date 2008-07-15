@@ -178,17 +178,24 @@ public class SparseMultigraph<V,E>
     
     public Collection<E> getInEdges(V vertex)
     {
+    	if (!containsVertex(vertex))
+    		return null;
         return Collections.unmodifiableCollection(vertices.get(vertex).getFirst());
     }
 
     public Collection<E> getOutEdges(V vertex)
     {
+    	if (!containsVertex(vertex))
+    		return null;
         return Collections.unmodifiableCollection(vertices.get(vertex).getSecond());
     }
 
     // TODO: this will need to get changed if we modify the internal representation
     public Collection<V> getPredecessors(V vertex)
     {
+    	if (!containsVertex(vertex))
+    		return null;
+
         Set<V> preds = new HashSet<V>();
         for (E edge : getIncoming_internal(vertex)) {
         	if(getEdgeType(edge) == EdgeType.DIRECTED) {
@@ -203,6 +210,8 @@ public class SparseMultigraph<V,E>
     // TODO: this will need to get changed if we modify the internal representation
     public Collection<V> getSuccessors(V vertex)
     {
+    	if (!containsVertex(vertex))
+    		return null;
         Set<V> succs = new HashSet<V>();
         for (E edge : getOutgoing_internal(vertex)) {
         	if(getEdgeType(edge) == EdgeType.DIRECTED) {
@@ -216,6 +225,8 @@ public class SparseMultigraph<V,E>
 
     public Collection<V> getNeighbors(V vertex)
     {
+    	if (!containsVertex(vertex))
+    		return null;
         Collection<V> out = new HashSet<V>();
         out.addAll(this.getPredecessors(vertex));
         out.addAll(this.getSuccessors(vertex));
@@ -224,6 +235,8 @@ public class SparseMultigraph<V,E>
 
     public Collection<E> getIncidentEdges(V vertex)
     {
+    	if (!containsVertex(vertex))
+    		return null;
         Collection<E> out = new HashSet<E>();
         out.addAll(this.getInEdges(vertex));
         out.addAll(this.getOutEdges(vertex));
@@ -233,6 +246,8 @@ public class SparseMultigraph<V,E>
     @Override
     public E findEdge(V v1, V v2)
     {
+    	if (!containsVertex(v1) || !containsVertex(v2))
+    		return null;
         for (E edge : getOutgoing_internal(v1))
             if (this.getOpposite(v1, edge).equals(v2))
                 return edge;
@@ -260,10 +275,14 @@ public class SparseMultigraph<V,E>
     }
 
     public boolean isSource(V vertex, E edge) {
+    	if (!containsEdge(edge) || !containsVertex(vertex))
+    		return false;
         return getSource(edge).equals(vertex);
     }
 
     public boolean isDest(V vertex, E edge) {
+    	if (!containsEdge(edge) || !containsVertex(vertex))
+    		return false;
         return getDest(edge).equals(vertex);
     }
 
@@ -299,5 +318,4 @@ public class SparseMultigraph<V,E>
     {
         return getEdges(edge_type).size();
     }
-
 }
