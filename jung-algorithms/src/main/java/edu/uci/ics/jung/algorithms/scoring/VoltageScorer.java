@@ -18,15 +18,15 @@ import java.util.Map;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.SingletonMap;
 
-import edu.uci.ics.jung.algorithms.scoring.util.UniformOut;
+import edu.uci.ics.jung.algorithms.scoring.util.UniformDegreeWeight;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
  * 
  * @author Joshua O'Madadhain
  */
-public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Number, Number>
-        implements VertexScorer<V, Number>
+public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double, Number>
+        implements VertexScorer<V, Double>
 {
     protected Map<V, ? extends Number> source_voltages;
     protected Collection<V> sinks;
@@ -35,8 +35,8 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Number, N
      * @param g
      * @param edge_weights
      */
-    public VoltageScorer(Graph<V, E> g, Transformer<E, Number> edge_weights, 
-            Map<V, Number> source_voltages, Collection<V> sinks)
+    public VoltageScorer(Graph<V, E> g, Transformer<E, ? extends Number> edge_weights, 
+            Map<V, ? extends Number> source_voltages, Collection<V> sinks)
     {
         super(g, edge_weights);
         this.source_voltages = source_voltages;
@@ -47,20 +47,22 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Number, N
     /**
      * @param g
      */
-//    public VoltageScorer(Graph<V, E> g, Map<V, Number> source_voltages, Collection<V> sinks)
-//    {
-//        super(g);
-//        this.source_voltages = source_voltages;
-//        this.sinks = sinks;
-//        initialize();
-//    }
+    public VoltageScorer(Graph<V, E> g, Map<V, Number> source_voltages, Collection<V> sinks)
+    {
+        super(g);
+        this.source_voltages = source_voltages;
+        this.sinks = sinks;
+        this.edge_weights = new UniformDegreeWeight<V,E>(g);
+        initialize();
+    }
     
     public VoltageScorer(Graph<V,E> g, V source, V sink)
     {
-        super(g, new UniformOut<V,E>(g));
+        super(g);
         this.source_voltages = new SingletonMap<V, Double>(source, 1.0);
         this.sinks = new ArrayList<V>(1);
         sinks.add(sink);
+        this.edge_weights = new UniformDegreeWeight<V,E>(g);
         initialize();
     }
 
@@ -90,9 +92,9 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Number, N
         for (V v : graph.getVertices())
         {
             if (source_voltages.containsKey(v))
-                setCurrentValue(v, source_voltages.get(v).doubleValue());
+                setOutputValue(v, source_voltages.get(v).doubleValue());
             else
-                setCurrentValue(v, 0.0);
+                setOutputValue(v, 0.0);
         }
     }
     
@@ -126,7 +128,7 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Number, N
             weight_sum += weight;
         }
 
-        // if either is 0, new value is 
+        // if either is 0, new value is 0
         if (voltage_sum == 0 || weight_sum == 0)
         {
             setOutputValue(v, 0.0);
