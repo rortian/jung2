@@ -15,7 +15,7 @@ import java.util.Collection;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.graph.util.Pair;
+import edu.uci.ics.jung.algorithms.scoring.HITS;
 
 /**
  * Methods for assigning transition probabilities to vertices in the context
@@ -40,17 +40,18 @@ public class ScoringUtils
         return distribution;
     }
     
-    public static <V> Transformer<V, Pair<Number>> getTwoValueUniformRootPrior(Collection<V> roots)
+    public static <V> Transformer<V, HITS.Scores> getHITSUniformRootPrior(Collection<V> roots)
     {
         final Collection<V> inner_roots = roots;
-        Transformer<V, Pair<Number>> distribution = new Transformer<V, Pair<Number>>()
+        Transformer<V, HITS.Scores> distribution = 
+        	new Transformer<V, HITS.Scores>()
         {
-            public Pair<Number> transform(V input)
+            public HITS.Scores transform(V input)
             {
                 if (inner_roots.contains(input))
-                    return new Pair<Number>(1.0 / inner_roots.size(), 1.0 / inner_roots.size());
+                    return new HITS.Scores(1.0 / inner_roots.size(), 1.0 / inner_roots.size());
                 else
-                    return new Pair<Number>(0.0, 0.0);
+                    return new HITS.Scores(0.0, 0.0);
             }
         };
         
