@@ -18,12 +18,8 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.scoring.util.DelegateToEdgeTransformer;
-import edu.uci.ics.jung.algorithms.scoring.util.UniformIncident;
-import edu.uci.ics.jung.algorithms.scoring.util.UniformOut;
 import edu.uci.ics.jung.algorithms.scoring.util.VEPair;
-import edu.uci.ics.jung.algorithms.scoring.util.VertexEdgeWeight;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 
 public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeContext, VertexScorer<V,T>
@@ -52,7 +48,7 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
     /**
      * 
      */
-    private Transformer<VEPair<V,E>, W> edge_weights;
+    protected Transformer<VEPair<V,E>, ? extends W> edge_weights;
     
     /**
      * 
@@ -89,7 +85,12 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
      */
     protected double max_delta;
     
-    public AbstractIterativeScorer(Graph<V,E> g, Transformer<E, W> edge_weights)
+    /**
+     * Creates an instance for the specified graph and edge weights.
+     * @param g the graph for which the instance is to be created
+     * @param edge_weights the edge weights for this instance
+     */
+    public AbstractIterativeScorer(Graph<V,E> g, Transformer<E, ? extends W> edge_weights)
     {
         this.graph = g;
         this.max_iterations = 100;
@@ -97,13 +98,20 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
         setEdgeWeights(edge_weights);
     }
     
-//    public AbstractIterativeScorer(Graph<V,E> g)
-//    {
-//        this(g, (Transformer<E, ? extends Number>)
-//                (g instanceof DirectedGraph ? 
-//                        new UniformOut<V,E>(g) : 
-//                        new UniformIncident<V,E>(g)));
-//    }
+    /**
+     * Creates an instance for the specified graph <code>g</code>.
+     * NOTE: This constructor does not set the internal 
+     * <code>edge_weights</code> variable.  If this variable is used by 
+     * the subclass which invoked this constructor, it must be initialized
+     * by that subclass.
+     * @param g the graph for which the instance is to be created
+     */
+    public AbstractIterativeScorer(Graph<V,E> g)
+    {
+    	this.graph = g;
+        this.max_iterations = 100;
+        this.tolerance = 0.001;
+    }
     
     protected void initialize()
     {
@@ -127,13 +135,17 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
 
     public void step()
     {
+        Map<V, T> tmp = output;
+        output = current_values;
+        current_values = tmp;
+        
         for (V v : graph.getVertices())
         {
             double diff = update(v);
             updateMaxDelta(v, diff);
         }
-        afterStep();
         total_iterations++;
+        afterStep();
     }
 
     protected abstract double update(V v);
@@ -143,14 +155,7 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
         max_delta = Math.max(max_delta, diff);
     }
     
-    protected void afterStep()
-    {
-        Map<V, T> tmp = output;
-        output = current_values;
-        current_values = tmp;
-        
-        total_iterations++;
-    }
+    protected void afterStep() {}
     
     public Transformer<V, T> getVertexScores()
     {
@@ -181,7 +186,7 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
     /**
      * @return the edge_weights
      */
-    public Transformer<VEPair<V,E>, W> getEdgeWeights()
+    public Transformer<VEPair<V,E>, ? extends W> getEdgeWeights()
     {
         return edge_weights;
     }
@@ -189,18 +194,14 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
     /**
      * @param edge_weights the edge_weights to set
      */
-    public void setEdgeWeights(Transformer<E, W> edge_weights)
+    public void setEdgeWeights(Transformer<E, ? extends W> edge_weights)
     {
         this.edge_weights = new DelegateToEdgeTransformer<V,E,W>(edge_weights);
-        initialize();
+//        initialize();
     }
     
     protected W getEdgeWeight(V v, E e)
     {
         return edge_weights.transform(new VEPair<V,E>(v,e));
-//        if (edge_weights instanceof VertexEdgeWeight)
-//            return ((VertexEdgeWeight<V,E,? extends Number>)edge_weights).transform(new VEPair<V,E>(v,e));
-//        else
-//            return edge_weights.transform(e);
     }
 }
