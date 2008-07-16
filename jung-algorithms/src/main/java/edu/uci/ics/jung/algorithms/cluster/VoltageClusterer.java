@@ -71,7 +71,7 @@ import edu.uci.ics.jung.graph.Graph;
  * the number requested, however.</p>
  * 
  * @author Joshua O'Madadhain
- * @see <a href="http://www.hpl.hp.com/research/idl/papers/linear/">'Finding communities in linear time: a physics approach', Fang Wu and Bernardo Huberman</a>
+ * @see "'Finding communities in linear time: a physics approach', Fang Wu and Bernardo Huberman, http://www.hpl.hp.com/research/idl/papers/linear/"
  * @see VoltageRanker
  * @see KMeansClusterer
  */
@@ -88,9 +88,6 @@ public class VoltageClusterer<V,E>
      * and KMeansClusterer.
      * 
      * @param num_candidates    the number of candidate clusters to create
-     * @param rank_iterations   the number of iterations to run VoltageRanker
-     * @param cluster_iterations    the number of iterations to run KMeansClusterer
-     * @param cluster_convergence   the convergence value for KMeansClusterer
      */
     public VoltageClusterer(Graph<V,E> g, int num_candidates)
     {
@@ -120,7 +117,6 @@ public class VoltageClusterer<V,E>
     /**
      * Clusters the vertices of <code>g</code> into 
      * <code>num_clusters</code> clusters, based on their connectivity.
-     * @param g             the graph whose vertices are to be clustered
      * @param num_clusters  the number of clusters to identify
      */
     public Collection<Set<V>> cluster(int num_clusters)
@@ -130,9 +126,8 @@ public class VoltageClusterer<V,E>
     
     /**
      * Does the work of <code>getCommunity</code> and <code>cluster</code>.
-     * @param g             the graph whose vertices we're clustering
-     * @param origin        the center (if one exists) of the graph to cluster
-     * @param num_clusters  
+     * @param origin the vertex around which clustering is to be done
+     * @param num_clusters the (maximum) number of clusters to find
      */
     protected Collection<Set<V>> cluster_internal(V origin, int num_clusters)
     {
