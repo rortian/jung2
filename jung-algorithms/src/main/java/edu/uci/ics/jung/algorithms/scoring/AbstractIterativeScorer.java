@@ -22,6 +22,13 @@ import edu.uci.ics.jung.algorithms.scoring.util.VEPair;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
 
+/**
+ * An abstract class for algorithms that assign scores to vertices based on iterative methods.
+ * Generally, any (concrete) subclass will function by creating an instance, and then either calling
+ * <code>evaluate</code> (if the user wants to iterate until the algorithms is 'done') or 
+ * repeatedly call <code>step</code> (if the user wants to observe the values at each step).
+ * 
+ */
 public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeContext, VertexScorer<V,T>
 {
     /**
@@ -46,17 +53,17 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
     protected int total_iterations;
     
     /**
-     * 
+     * The edge weights used by this algorithm.
      */
     protected Transformer<VEPair<V,E>, ? extends W> edge_weights;
     
     /**
-     * 
+     * The map in which the output values are stored.
      */
     private Map<V, T> output;
     
     /**
-     * 
+     * The map in which the current values are stored.
      */
     private Map<V, T> current_values;
     
@@ -121,6 +128,9 @@ public abstract class AbstractIterativeScorer<V,E,T,W> implements IterativeConte
         this.output = new HashMap<V, T>();
     }
     
+    /**
+     * Steps through this scoring algorithm until a termination condition is reached.
+     */
     public void evaluate()
     {
         do
