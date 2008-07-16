@@ -73,16 +73,12 @@ public interface Layout<V, E> extends Transformer<V,Point2D> {
 	 * Sets a flag which fixes this vertex in place.
      * 
 	 * @param v	vertex
-     * @see #unlockVertex(V)
-     * @see #isLocked(V)
 	 */
 	void lock(V v, boolean state);
 
     /**
      * Returns <code>true</code> if the position of vertex <code>v</code>
      * is locked.
-     * @see #lockVertex(V)
-     * @see #unlockVertex(V)
      */
     boolean isLocked(V v);
 
