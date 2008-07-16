@@ -75,8 +75,7 @@ public abstract class IterativeProcess implements IterativeContext {
     }
 
     /**
-     * Evaluate the result of the current interation.
-     * @return the estimated precision of the result.
+     * Evaluate the result of the current iteration.
      */
     abstract public void step();
 

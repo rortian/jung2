@@ -138,8 +138,8 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * The map's iterator will return the elements in order of 
      * increasing distance from <code>source</code>.</p>
      * 
-     * @see DijkstraDistance#getDistanceMap(Vertex,int)
-     * @see DijkstraDistance#getDistance(Vertex,Vertex)
+     * @see DijkstraDistance#getDistanceMap(Object,int)
+     * @see DijkstraDistance#getDistance(Object,Object)
      * @param source    the vertex from which distances are measured
      */
     public Map<V,E> getIncomingEdgeMap(V source)
@@ -198,8 +198,8 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * either less than 1 or greater than the number of vertices in the 
      * graph.
      * 
-     * @see #getIncomingEdgeMap(Vertex)
-     * @see #getPath(Vertex,Vertex)
+     * @see #getIncomingEdgeMap(Object)
+     * @see #getPath(Object,Object)
      * @param source    the vertex from which distances are measured
      * @param numDests  the number of vertics for which to measure distances
      */

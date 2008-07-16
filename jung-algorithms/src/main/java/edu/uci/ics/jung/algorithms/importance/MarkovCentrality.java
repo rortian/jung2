@@ -59,7 +59,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.importance.AbstractRanker#getRankScore(edu.uci.ics.jung.graph.Element)
+     * @see edu.uci.ics.jung.algorithms.importance.AbstractRanker#getVertexRankScore(Object)
      */
     @Override
     public double getVertexRankScore(V vert) {
@@ -67,7 +67,7 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.IterativeProcess#evaluateIteration()
+     * @see edu.uci.ics.jung.algorithms.util.IterativeProcess#step()
      */
     @Override
     public void step() {

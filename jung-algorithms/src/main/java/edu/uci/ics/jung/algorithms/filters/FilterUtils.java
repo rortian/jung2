@@ -34,7 +34,7 @@ public class FilterUtils
 	 * which the subgraph is to be constructed
 	 * @param graph the graph whose subgraph is to be constructed
 	 * @return the subgraph induced by <code>vertices</code>
-	 * @throws <code>IllegalArgumentException</code> if any vertex in 
+	 * @throws IllegalArgumentException if any vertex in 
 	 * <code>vertices</code> is not in <code>graph</code>
 	 */
 	@SuppressWarnings("unchecked")

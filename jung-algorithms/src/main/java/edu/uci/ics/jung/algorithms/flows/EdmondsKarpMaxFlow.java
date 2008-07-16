@@ -75,6 +75,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
      * @param edgeFlowMap the map where the solver will place the value of the flow for each edge
      * @param edgeFactory used to create new edge instances for backEdges
      */
+    @SuppressWarnings("unchecked")
     public EdmondsKarpMaxFlow(DirectedGraph<V,E> directedGraph, V source, V sink, 
     		Transformer<E,Number> edgeCapacityTransformer, Map<E,Number> edgeFlowMap,
     		Factory<E> edgeFactory) {

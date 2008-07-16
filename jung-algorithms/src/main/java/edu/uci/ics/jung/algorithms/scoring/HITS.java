@@ -57,7 +57,8 @@ public class HITS<V,E> extends HITSWithPriors<V,E>
     		this.authority = authority;
     	}
     	
-    	public String toString()
+    	@Override
+        public String toString()
     	{
     		return String.format("[h:%.4f,a:%.4f]", this.hub, this.authority);
     	}

@@ -45,7 +45,7 @@ public class VertexPredicateFilter<V,E> implements Filter<V,E>
         Graph<V, E> filtered;
         try
         {
-            filtered = (Graph<V,E>)g.getClass().newInstance();
+            filtered = g.getClass().newInstance();
         }
         catch (InstantiationException e)
         {

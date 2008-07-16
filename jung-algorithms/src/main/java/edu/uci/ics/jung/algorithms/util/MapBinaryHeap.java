@@ -248,7 +248,8 @@ public class MapBinaryHeap<T>
      * Returns the index of the left child of the element at 
      * index <code>i</code> of the heap.
      * @param i
-     * @return
+     * @return the index of the left child of the element at 
+     * index <code>i</code> of the heap
      */
     private int lChild(int i)
     {
@@ -259,7 +260,8 @@ public class MapBinaryHeap<T>
      * Returns the index of the right child of the element at 
      * index <code>i</code> of the heap.
      * @param i
-     * @return
+     * @return the index of the right child of the element at 
+     * index <code>i</code> of the heap
      */
     private int rChild(int i)
     {
@@ -270,7 +272,7 @@ public class MapBinaryHeap<T>
      * Returns the index of the parent of the element at 
      * index <code>i</code> of the heap.
      * @param i
-     * @return
+     * @return the index of the parent of the element at index i of the heap
      */
     private int parent(int i)
     {
@@ -304,6 +306,7 @@ public class MapBinaryHeap<T>
         /**
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
+        @SuppressWarnings("unchecked")
         public int compare(T arg0, T arg1)
         {
             if (!(arg0 instanceof Comparable) || !(arg1 instanceof Comparable))

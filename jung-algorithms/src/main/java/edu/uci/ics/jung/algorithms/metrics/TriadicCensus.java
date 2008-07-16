@@ -158,7 +158,7 @@ public class TriadicCensus {
 	/**
 	 * Simply returns the triCode. 
 	 * @param triCode
-	 * @return
+	 * @return the string code associated with the numeric type
 	 */
 	public static int triType( int triCode ) {
 		return codeToType[ triCode ];
@@ -181,7 +181,7 @@ public class TriadicCensus {
 	 * @param u
 	 * @param v
 	 * @param w
-	 * @return
+	 * @return true if u < w, or if v < w < u and v doesn't link to w; false otherwise
 	 */
 	protected static <V,E> boolean shouldCount(Graph<V,E> g, List<V> id, V u, V v, V w) {
 		int i_u = id.indexOf(u);

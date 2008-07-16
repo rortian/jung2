@@ -19,7 +19,7 @@ public interface EvolvingGraphGenerator<V, E> extends GraphGenerator<V,E> {
 
     /**
      * Instructs the algorithm to evolve the graph N steps.
-     * @param numTimeSteps number of steps to iterate from the current state
+     * @param numSteps number of steps to iterate from the current state
      */
     void evolveGraph(int numSteps);
 

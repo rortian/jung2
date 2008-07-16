@@ -42,7 +42,6 @@ public class MinimumSpanningForest2<V,E> {
 	 * tree is created
 	 * @param graph
 	 * @param factory
-	 * @param root
 	 * @param weights
 	 */
 	public MinimumSpanningForest2(Graph<V, E> graph, 
@@ -64,7 +63,6 @@ public class MinimumSpanningForest2<V,E> {
 	 * tree is created
 	 * @param graph the Graph to find MST in
 	 * @param forest the Forest to populate. Must be empty
-	 * @param root first Tree root, may be null
 	 * @param weights edge weights, may be null
 	 */
 	public MinimumSpanningForest2(Graph<V, E> graph, 

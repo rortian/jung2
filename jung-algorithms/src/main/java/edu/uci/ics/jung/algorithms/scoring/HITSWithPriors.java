@@ -29,6 +29,7 @@ public class HITSWithPriors<V, E>
         super(g, edge_weights, vertex_priors, alpha);
     }
 
+    @SuppressWarnings("unchecked")
     public HITSWithPriors(Graph<V,E> g, 
           Transformer<V, HITS.Scores> vertex_priors, double alpha)
     {

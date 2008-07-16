@@ -114,8 +114,8 @@ public class FoldingTransformer<V,E>
      * @param g input k-partite graph
      * @param p predicate specifying vertex partition
      * @param graph_factory factory used to create the output graph 
-     * @param edge_factory factory used to create the edges in the new graph
-     * @return
+     * @return the result of folding g into unipartite graph whose vertices
+     * are those of the <code>p</code> partition of g
      */
     public static <V,E> Graph<V, Collection<V>> foldKPartiteGraph(KPartiteGraph<V,E> g, Predicate<V> p, 
             Factory<Graph<V, Collection<V>>> graph_factory)
@@ -276,8 +276,6 @@ public class FoldingTransformer<V,E>
      * <p>The edges of the new graph consist of collections of each vertex incident to 
      * the corresponding hyperedge pair in the original graph.</p>
      * 
-     * @param <V> vertex type
-     * @param <E> input edge type
      * @param h hypergraph to be folded
      * @param graph_factory factory used to generate the output graph
      * @return a transformation of the input graph whose vertices correspond to the input's hyperedges 

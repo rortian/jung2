@@ -31,9 +31,7 @@ public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Grap
 	}
 
 	/**
-	 * @param graph
 	 * @param factory
-	 * @param root
 	 * @param weights
 	 */
 	public PrimMinimumSpanningTree(Factory<? extends Graph<V,E>> factory, 

@@ -65,9 +65,9 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	}
 	
 	/**
-	 * returns the center of the passed layout
+	 * Returns the center of the passed layout.
 	 * @param layout
-	 * @return
+	 * @return the center of the passed layout
 	 */
 	public Point2D get(Layout<V,E> layout) {
 		return layouts.get(layout);
@@ -80,8 +80,10 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	public void removeAll() {
 		layouts.clear();
 	}
+	
 	/**
-	 * @return
+	 * Returns the graph for which this layout is defined.
+	 * @return the graph for which this layout is defined
 	 * @see edu.uci.ics.jung.algorithms.layout.Layout#getGraph()
 	 */
 	public Graph<V, E> getGraph() {
@@ -89,7 +91,8 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	}
 
 	/**
-	 * @return
+	 * Returns the size of the underlying layout.
+	 * @return the size of the underlying layout
 	 * @see edu.uci.ics.jung.algorithms.layout.Layout#getSize()
 	 */
 	public Dimension getSize() {
@@ -111,7 +114,7 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	 * Override to test if the passed vertex is locked in
 	 * any of the layouts.
 	 * @param v
-	 * @return
+	 * @return true if v is locked in any of the layouts, and false otherwise
 	 * @see edu.uci.ics.jung.algorithms.layout.Layout#isLocked(java.lang.Object)
 	 */
 	public boolean isLocked(V v) {
@@ -205,10 +208,10 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	}
 
 	/**
-	 * allow any sublayout first opportunity to specify the location
-	 * of a vertex, then default to the delegate graph.
-	 * @param input
-	 * @return
+	 * Returns the location of the vertex.  The location is specified first
+	 * by the sublayouts, and then by the base layout if no sublayouts operate
+	 * on this vertex.
+	 * @return the location of the vertex
 	 * @see org.apache.commons.collections15.Transformer#transform(java.lang.Object)
 	 */
 	public Point2D transform(V v) {

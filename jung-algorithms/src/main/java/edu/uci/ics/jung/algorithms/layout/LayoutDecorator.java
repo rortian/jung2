@@ -50,7 +50,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#step()
+     * @see edu.uci.ics.jung.algorithms.util.IterativeContext#done()
      */
     public void step() {
     	if(delegate instanceof IterativeContext) {
@@ -84,7 +84,7 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
 	}
 
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#getCurrentSize()
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#getSize()
      */
     public Dimension getSize() {
         return delegate.getSize();
@@ -98,14 +98,14 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#getLocation(edu.uci.ics.jung.graph.ArchetypeVertex)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#transform(Object)
      */
     public Point2D transform(V v) {
         return delegate.transform(v);
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#done()
+     * @see edu.uci.ics.jung.algorithms.util.IterativeContext#done()
      */
     public boolean done() {
     	if(delegate instanceof IterativeContext) {
@@ -115,21 +115,21 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#lockVertex(edu.uci.ics.jung.graph.Vertex)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#lock(Object, boolean)
      */
     public void lock(V v, boolean state) {
         delegate.lock(v, state);
     }
 
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#isLocked(V)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#isLocked(Object)
      */
     public boolean isLocked(V v) {
         return delegate.isLocked(v);
     }
     
     /**
-     * @see edu.uci.ics.jung.algorithms.layout.Layout#resize(java.awt.Dimension)
+     * @see edu.uci.ics.jung.algorithms.layout.Layout#setSize(Dimension)
      */
     public void setSize(Dimension d) {
         delegate.setSize(d);

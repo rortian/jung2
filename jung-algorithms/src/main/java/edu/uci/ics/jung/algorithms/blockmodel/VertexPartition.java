@@ -63,7 +63,7 @@ public class VertexPartition<V,E>
      * Creates an instance based on the specified graph and set of disjoint vertex sets, 
      * and generates a vertex-to-partition map based on these sets.
      * @param g the graph over which the vertex partition is defined
-     * @param vertex_partitions the set of disjoint vertex sets
+     * @param vertex_sets the set of disjoint vertex sets
      */
     public VertexPartition(Graph<V,E> g, Collection<Set<V>> vertex_sets)
     {
@@ -100,8 +100,10 @@ public class VertexPartition<V,E>
 	/**
 	 * Returns a collection of vertex sets, where each vertex in the 
 	 * input graph is in exactly one set.
-	 * This collection is generated if it does not already exist.
-	 * @return
+	 * This collection is generated based on the vertex-to-partition map 
+	 * if it does not already exist.
+	 * @return a collection of vertex sets such that each vertex in the 
+	 * instance's graph is in exactly one set
 	 */
 	public Collection<Set<V>> getVertexPartitions() 
 	{

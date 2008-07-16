@@ -48,7 +48,7 @@ public class KStepMarkov<V,E> extends RelativeAuthorityRanker<V,E> {
      * @param k positive integer parameter which controls the relative tradeoff between a distribution "biased" towards
      * R and the steady-state distribution which is independent of where the Markov-process started. Generally values
      * between 4-8 are reasonable
-     * @param edgeWeightKeyName
+     * @param edgeWeights the weight for each edge 
      */
     public KStepMarkov(DirectedGraph<V,E> graph, Set<V> priors, int k, Map<E,Number> edgeWeights) {
         super.initialize(graph,true,false);

@@ -46,7 +46,7 @@ public class VisRunner implements Relaxer, Runnable {
 	}
 
 	/**
-	 * @param relaxerThreadSleepTime the relaxerThreadSleepTime to set
+	 * @param sleepTime the sleep time to set for this thread
 	 */
 	public void setSleepTime(long sleepTime) {
 		this.sleepTime = sleepTime;

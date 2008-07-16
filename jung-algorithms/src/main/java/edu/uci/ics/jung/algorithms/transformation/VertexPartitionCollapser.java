@@ -58,7 +58,7 @@ public class VertexPartitionCollapser<V,E,CV,CE>
     /**
      * Creates a new graph whose vertices correspond to the partitions of the supplied graph.
      * @param partitioning
-     * @return
+     * @return a new graph whose vertices correspond to the partitions of the supplied graph
      */
     public Graph<CV,CE> collapseVertexPartitions(VertexPartition<V,E> partitioning)
     {

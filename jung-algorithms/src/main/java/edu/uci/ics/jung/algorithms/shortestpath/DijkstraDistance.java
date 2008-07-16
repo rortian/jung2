@@ -109,6 +109,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * 
      * @param g     the graph on which distances will be calculated
      */ 
+    @SuppressWarnings("unchecked")
     public DijkstraDistance(Graph<V,E> g) {
         this(g, new ConstantTransformer(1), true);
     }
@@ -121,6 +122,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param g     the graph on which distances will be calculated
      * @param cached    specifies whether the results are to be cached
      */ 
+    @SuppressWarnings("unchecked")
     public DijkstraDistance(Graph<V,E> g, boolean cached) {
         this(g, new ConstantTransformer(1), cached);
     }
@@ -241,8 +243,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * If either vertex is not in the graph for which this instance
      * was created, throws <code>IllegalArgumentException</code>.
      * 
-     * @see #getDistanceMap(V)
-     * @see #getDistanceMap(V,int)
+     * @see #getDistanceMap(Object)
+     * @see #getDistanceMap(Object,int)
      */
     public Number getDistance(V source, V target)
     {
@@ -288,8 +290,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * <p>The size of the map returned will be the number of 
      * vertices reachable from <code>source</code>.</p>
      * 
-     * @see #getDistanceMap(V,int)
-     * @see #getDistance(V,V)
+     * @see #getDistanceMap(Object,int)
+     * @see #getDistance(Object,Object)
      * @param source    the vertex from which distances are measured
      */
     public Map<V,Number> getDistanceMap(V source)
@@ -313,8 +315,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * <code>numDests</code> and the number of vertices reachable from
      * <code>source</code>. 
      * 
-     * @see #getDistanceMap(V)
-     * @see #getDistance(V,V)
+     * @see #getDistanceMap(Object)
+     * @see #getDistance(Object,Object)
      * @param source    the vertex from which distances are measured
      * @param numDests  the number of vertices for which to measure distances
      */
@@ -356,7 +358,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * <p>Note: if this instance has already calculated distances greater than <code>max_dist</code>,
      * and the results are cached, those results will still be valid and available; this limit
      * applies only to subsequent distance calculations.</p>
-     * @see #setMaxTargets(double)
+     * @see #setMaxTargets(int)
      */
     public void setMaxDistance(double max_dist)
     {
@@ -401,7 +403,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * some currently calculated distances are unaffected by a
      * change, <code>reset(V)</code> may be appropriate instead.
      * 
-     * @see #reset(V)
+     * @see #reset(Object)
      */
     public void reset()
     {

@@ -31,7 +31,6 @@ public class PageRankWithPriors<V, E>
     /**
      * 
      * @param graph
-     * @param output_map
      * @param alpha
      */
     public PageRankWithPriors(Graph<V,E> graph, 

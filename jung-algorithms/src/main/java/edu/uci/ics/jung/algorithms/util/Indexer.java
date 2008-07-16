@@ -30,15 +30,10 @@ public class Indexer {
 	 * O(n) <code>indexOf(element)</code> method of a <code>List</code>
 	 * @param <T>
 	 * @param collection
-	 * @return
+	 * @return a bidirectional map from collection elements to 0-based indices
 	 */
 	public static <T> BidiMap<T,Integer> create(Collection<T> collection) {
-		BidiMap<T,Integer> map = new DualHashBidiMap<T,Integer>();
-		int i=0;
-		for(T t : collection) {
-			map.put(t,i++);
-		}
-		return map;
+	    return create(collection, 0);
 	}
 	/**
 	 * Returns a <code>BidiMap</code> mapping each element of the collection to its
@@ -48,7 +43,7 @@ public class Indexer {
 	 * @param <T>
 	 * @param collection
 	 * @param start start index
-	 * @return
+	 * @return a bidirectional map from collection elements to start-based indices
 	 */
 	public static <T> BidiMap<T,Integer> create(Collection<T> collection, int start) {
 		BidiMap<T,Integer> map = new DualHashBidiMap<T,Integer>();

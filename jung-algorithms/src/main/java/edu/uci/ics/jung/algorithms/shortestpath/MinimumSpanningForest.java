@@ -28,18 +28,17 @@ public class MinimumSpanningForest<V,E> {
 	
 	protected Graph<V,E> graph;
 	protected Forest<V,E> forest;
-	protected Map<E,Double> weights = LazyMap.decorate(new HashMap<E,Double>(),
-			new ConstantTransformer(1));
+	protected Map<E,Double> weights;
 	
 	/**
-	 * create a Forest from the supplied Graph and supplied Factory, which
+	 * Creates a Forest from the supplied Graph and supplied Factory, which
 	 * is used to create a new, empty Forest. If non-null, the supplied root
 	 * will be used as the root of the tree/forest. If the supplied root is
 	 * null, or not present in the Graph, then an arbitary Graph vertex
 	 * will be selected as the root.
 	 * If the Minimum Spanning Tree does not include all vertices of the
 	 * Graph, then a leftover vertex is selected as a root, and another
-	 * tree is created
+	 * tree is created.
 	 * @param graph
 	 * @param factory
 	 * @param root
@@ -51,10 +50,10 @@ public class MinimumSpanningForest<V,E> {
 	}
 	
 	/**
-	 * create a forest from the supplied graph, populating the
+	 * Creates a minimum spanning forest from the supplied graph, populating the
 	 * supplied Forest, which must be empty. 
 	 * If the supplied root is null, or not present in the Graph,
-	 * then an arbitary Graph vertex will be selected as the root.
+	 * then an arbitrary Graph vertex will be selected as the root.
 	 * If the Minimum Spanning Tree does not include all vertices of the
 	 * Graph, then a leftover vertex is selected as a root, and another
 	 * tree is created
@@ -80,6 +79,37 @@ public class MinimumSpanningForest<V,E> {
 		}
 		updateForest(forest.getVertices(), unfinishedEdges);
 	}
+	
+    /**
+     * Creates a minimum spanning forest from the supplied graph, populating the
+     * supplied Forest, which must be empty. 
+     * If the supplied root is null, or not present in the Graph,
+     * then an arbitrary Graph vertex will be selected as the root.
+     * If the Minimum Spanning Tree does not include all vertices of the
+     * Graph, then a leftover vertex is selected as a root, and another
+     * tree is created
+     * @param graph the Graph to find MST in
+     * @param forest the Forest to populate. Must be empty
+     * @param root first Tree root, may be null
+     */
+    @SuppressWarnings("unchecked")
+    public MinimumSpanningForest(Graph<V, E> graph, Forest<V,E> forest, 
+            V root) {
+        
+        if(forest.getVertexCount() != 0) {
+            throw new IllegalArgumentException("Supplied Forest must be empty");
+        }
+        this.graph = graph;
+        this.forest = forest;
+        this.weights = LazyMap.decorate(new HashMap<E,Double>(),
+                new ConstantTransformer(1));
+        Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
+        if(graph.getVertices().contains(root)) {
+            this.forest.addVertex(root);
+        }
+        updateForest(forest.getVertices(), unfinishedEdges);
+    }
+	
 	
 	public Forest<V,E> getForest() {
 		return forest;

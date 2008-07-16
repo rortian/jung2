@@ -102,7 +102,7 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double, N
     }
     
     /**
-     * @see edu.uci.ics.jung.algorithms.scoring.AbstractIterativeScorer#update()
+     * @see edu.uci.ics.jung.algorithms.scoring.AbstractIterativeScorer#update(Object)
      */
     @Override
     public double update(V v)

@@ -60,7 +60,7 @@ public class EdgeBetweennessClusterer<V,E> implements Transformer<Graph<V,E>,Set
     /**
     * Finds the set of clusters which have the strongest "community structure".
     * The more edges removed the smaller and more cohesive the clusters.
-    * @param g the graph
+    * @param graph the graph
     */
     public Set<Set<V>> transform(Graph<V,E> graph) {
                 

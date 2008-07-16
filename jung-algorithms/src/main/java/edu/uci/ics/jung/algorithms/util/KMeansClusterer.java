@@ -36,22 +36,34 @@ import edu.uci.ics.jung.algorithms.util.DiscreteDistribution;
  */
 public class KMeansClusterer<T> 
 {
-    protected int max_iterations = 100;
-    protected double convergence_threshold = 0.001;
+    protected int max_iterations;
+    protected double convergence_threshold;
     protected RandomEngine rand = new DRand();
     
     /**
-     * Creates an instance for which calls to <code>cluster</code> will terminate
+     * Creates an instance whose termination conditions are set according
+     * to the parameters.  Calls to <code>cluster</code> will terminate
      * when either of the two following conditions is true:
      * <ul>
      * <li/>the number of iterations is &gt; <code>max_iterations</code>
      * <li/>none of the centroids has moved as much as <code>convergence_threshold</code>
      * since the previous iteration
      * </ul>
-     * @param max_iterations
-     * @param convergence_threshold
      */
-    public KMeansClusterer() {}
+    public KMeansClusterer(int max_iterations, double convergence_threshold) 
+    {
+        this.max_iterations = max_iterations;
+        this.convergence_threshold = convergence_threshold;
+    }
+    
+    /**
+     * Creates an instance with max iterations of 100 and convergence threshold
+     * of 0.001.
+     */
+    public KMeansClusterer()
+    {
+        this(100, 0.001);
+    }
     
     public int getMaxIterations()
     {
@@ -89,6 +101,7 @@ public class KMeansClusterer<T>
      * @param num_clusters  the number of clusters to create
      * @throws NotEnoughClustersException
      */
+    @SuppressWarnings("unchecked")
     public Collection<Map<T, double[]>> cluster(Map<T, double[]> object_locations, int num_clusters)
     {
         if (num_clusters < 2 || num_clusters > object_locations.size())

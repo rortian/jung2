@@ -13,8 +13,6 @@ package edu.uci.ics.jung.algorithms.matrix;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.jung.graph.event.GraphEvent.Edge;
-
 /**
  * Implements the basic matrix operations on double-precision values.  Assumes
  * that the edges have a MutableDouble value.
@@ -31,7 +29,7 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
     }
 
 	/**
-	 * @see MatrixElementOperations#mergePaths(Edge, Object)
+	 * @see MatrixElementOperations#mergePaths(Object, Object)
 	 */
 	public void mergePaths(E e, Object pathData) 
     {
@@ -49,7 +47,7 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
 	}
 
 	/**
-	 * @see MatrixElementOperations#computePathData(Edge, Edge)
+	 * @see MatrixElementOperations#computePathData(Object, Object)
 	 */
 	public Number computePathData(E e1, E e2) 
     {
