@@ -65,7 +65,8 @@ public class DistanceStatistics
      * For each vertex <code>v</code> in <code>g</code>, 
      * calculates the average shortest path length from <code>v</code> 
      * to all other vertices in <code>g</code>, ignoring edge weights.
-     * @see #diameter(ArchetypeGraph, Distance)
+     * @see #diameter(Graph)
+     * @see edu.uci.ics.jung.algorithms.scoring.ClosenessCentrality
      */
     public static <V,E> Transformer<V, Double> averageDistances(Graph<V,E> g)
     {

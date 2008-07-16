@@ -211,7 +211,6 @@ public class GraphMatrixOperations
      *  
      * @return a representation of <code>matrix</code> as a JUNG <code>Graph</code>
      * 
-     * @see #matrixToGraph(DoubleMatrix2D, NumberEdgeValue)
      */
     public static <V,E> Graph<V,E> matrixToGraph(DoubleMatrix2D matrix,
     		Factory<UndirectedGraph<V,E>> undirectedGraphFactory,
@@ -316,8 +315,7 @@ public class GraphMatrixOperations
      *            an undirected graph representing an electrical circuit
      * @return the voltage potential matrix
      * @see "P. Doyle and J. Snell, 'Random walks and electric networks,', 1989"
-     * @see "M. Newman, 'A measure of betweenness centrality based on random
-     *      walks', pp. 5-7, 2003"
+     * @see "M. Newman, 'A measure of betweenness centrality based on random walks', pp. 5-7, 2003"
      */
     public static <V,E> DoubleMatrix2D computeVoltagePotentialMatrix(
             UndirectedGraph<V,E> graph)
@@ -391,8 +389,8 @@ public class GraphMatrixOperations
      * 
      * @param G
      *            the graph on which the MFPT will be calculated
-     * @param edgeWeightKey
-     *            the user data key for the edge weights
+     * @param edgeWeights
+     *            the edge weights
      * @param stationaryDistribution
      *            the asymptotic state probabilities
      * @return the mean first passage time matrix

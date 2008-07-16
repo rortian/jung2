@@ -39,7 +39,7 @@ public class UnweightedShortestPath<V, E>
 	}
 
     /**
-     * @see edu.uci.ics.jung.algorithms.shortestpath.Distance#getDistance(edu.uci.ics.jung.graph.ArchetypeVertex, edu.uci.ics.jung.graph.ArchetypeVertex)
+     * @see edu.uci.ics.jung.algorithms.shortestpath.Distance#getDistance(Object, Object)
      */
 	public Number getDistance(V source, V target)
 	{
@@ -48,7 +48,7 @@ public class UnweightedShortestPath<V, E>
 	}
 
     /**
-     * @see edu.uci.ics.jung.algorithms.shortestpath.Distance#getDistanceMap(edu.uci.ics.jung.graph.ArchetypeVertex)
+     * @see edu.uci.ics.jung.algorithms.shortestpath.Distance#getDistanceMap(Object)
      */
 	public Map<V,Number> getDistanceMap(V source)
 	{
@@ -62,7 +62,7 @@ public class UnweightedShortestPath<V, E>
 	}
 
 	/**
-	 * @see edu.uci.ics.jung.algorithms.shortestpath.ShortestPath#getIncomingEdgeMap(edu.uci.ics.jung.graph.Vertex)
+	 * @see edu.uci.ics.jung.algorithms.shortestpath.ShortestPath#getIncomingEdgeMap(Object)
 	 */
 	public Map<V,E> getIncomingEdgeMap(V source)
 	{
@@ -78,9 +78,7 @@ public class UnweightedShortestPath<V, E>
 
 	/**
 	 * Computes the shortest path distances from a given node to all other nodes.
-	 * @param graph the graph
 	 * @param source the source node
-	 * @return A <code>Map</code> whose keys are target vertices and whose values are <code>Integers</code> representing the shortest path distance
 	 */
 	private void computeShortestPathsFromSource(V source)
 	{
@@ -125,7 +123,7 @@ public class UnweightedShortestPath<V, E>
      * some currently calculated distances are unaffected by a
      * change, <code>reset(V)</code> may be appropriate instead.
      * 
-     * @see #reset(V)
+     * @see #reset(Object)
      */
     public void reset()
     {

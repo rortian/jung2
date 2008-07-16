@@ -35,8 +35,7 @@ public class Metrics
      * <p><b>Note</b>: This algorithm treats its argument as an undirected graph;
      * edge direction is ignored. 
      * @param graph the graph whose clustering coefficients are to be calculated
-     * @see "The structure and function of complex networks, M.E.J. Newman, 
-     * aps.arxiv.org/abs/cond-mat/0303516"
+     * @see "The structure and function of complex networks, M.E.J. Newman, aps.arxiv.org/abs/cond-mat/0303516"
      */
     public static <V,E> Map<V, Double> clusteringCoefficients(Graph<V,E> graph)
     {
