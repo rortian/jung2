@@ -129,14 +129,12 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     	}
     }
 
-    /**
-     * ?
-     * 
-     * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
-     */
-    public boolean incrementsAreDone() {
-        return true;
-    }
+//    /**
+//     * @see edu.uci.ics.jung.algorithms.layout.Layout#()
+//     */
+//    public boolean incrementsAreDone() {
+//        return true;
+//    }
     public void setSize(Dimension size) {
     	this.size = size;
     	setRootPolars(new ArrayList<V>(roots));

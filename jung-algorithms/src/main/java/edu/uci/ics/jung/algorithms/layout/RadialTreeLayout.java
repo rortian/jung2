@@ -208,14 +208,14 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
         return depth + 1;
     }
 
-    /**
-     * ?
-     * 
-     * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
-     */
-    public boolean incrementsAreDone() {
-        return true;
-    }
+//    /**
+//     * ?
+//     * 
+//     * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
+//     */
+//    public boolean incrementsAreDone() {
+//        return true;
+//    }
     public void setSize(Dimension size) {
     	this.size = size;
         buildTree();
