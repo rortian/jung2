@@ -39,10 +39,10 @@ public class EigenvectorCentrality<V,E> extends PageRank<V,E>
      * (Default edge weights 
      * @param graph
      */
-//    public EigenvectorCentrality(Graph<V,E> graph)
-//    {
-//        super(graph, 0);
-//        acceptDisconnectedGraph(false);
-//    }
+    public EigenvectorCentrality(Graph<V,E> graph)
+    {
+        super(graph, 0);
+        acceptDisconnectedGraph(false);
+    }
 
 }
