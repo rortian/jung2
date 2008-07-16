@@ -19,6 +19,7 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
@@ -50,14 +51,14 @@ public class TestVoltageScore extends TestCase
     }
     
     public final void testCalculateVoltagesSourceTarget() {
-        VoltageScorer<Number,Number> vr = new VoltageScorer<Number,Number>(g, 0, 6);
+        VoltageScorer<Number,Number> vr = new VoltageScorer<Number,Number>(g, new ConstantTransformer(1), 0, 6);
         double[] voltages = {1.0, 0.75, 0.75, 0.5, 0.25, 0.25, 0};
         
         vr.evaluate();
         Transformer<Number, Double> scores = vr.getVertexScores();
-//        for (int i = 0; i < 7; i++) {
-//            assertEquals(scores.transform(i), voltages[i], 0.01);
-//        }
+        for (int i = 0; i < 7; i++) {
+            assertEquals(scores.transform(i), voltages[i], 0.01);
+        }
     }
     
     public final void testCalculateVoltagesSourcesTargets()
@@ -69,13 +70,13 @@ public class TestVoltageScore extends TestCase
         sinks.add(6);
         sinks.add(5);
         VoltageScorer<Number,Number> vr = 
-        	new VoltageScorer<Number,Number>(g, sources, sinks);
+        	new VoltageScorer<Number,Number>(g, new ConstantTransformer(1), sources, sinks);
         double[] voltages = {1.0, 0.5, 0.66, 0.33, 0.16, 0, 0};
         
         vr.evaluate();
         Transformer<Number, Double> scores = vr.getVertexScores();
-//        for (int i = 0; i < 7; i++) {
-//            assertEquals(scores.transform(i), voltages[i], 0.01);
-//        }
+        for (int i = 0; i < 7; i++) {
+            assertEquals(scores.transform(i), voltages[i], 0.01);
+        }
     }
 }
