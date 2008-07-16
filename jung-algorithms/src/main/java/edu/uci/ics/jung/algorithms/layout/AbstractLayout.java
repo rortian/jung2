@@ -57,16 +57,15 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 
 
 	/**
-	 * Constructor. Initializes the current size to be 100x100, both the graph
-	 * and the showing graph to the argument, and creates the <tt>dontmove</tt>
-	 * set.
+	 * Creates an instance which does not initialize the vertex locations.
 	 * 
-	 * @param g
+	 * @param graph the graph for which the layout algorithm is to be created.
 	 */
 	protected AbstractLayout(Graph<V, E> graph) {
 		this.graph = graph;
 	}
 	
+    @SuppressWarnings("unchecked")
     protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer) {
 		this.graph = graph;
 		Transformer<V, ? extends Object> chain = 
@@ -80,7 +79,8 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 		this.size = size;
 	}
 	
-	protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer, Dimension size) {
+	@SuppressWarnings("unchecked")
+    protected AbstractLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer, Dimension size) {
 		this.graph = graph;
 		Transformer<V, ? extends Object> chain = 
 			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
@@ -99,9 +99,6 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	 * When a visualization is resized, it presumably wants to fix the
 	 * locations of the vertices and possibly to reinitialize its data. The
 	 * current method calls <tt>initializeLocations</tt> followed by <tt>initialize_local</tt>.
-	 * TODO: A better implementation wouldn't destroy the current information,
-	 * but would either scale the current visualization, or move the nodes
-	 * toward the new center.
 	 */
 	public void setSize(Dimension size) {
 		
@@ -142,6 +139,7 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
     	return getGraph().getVertices();
     }
     
+    @SuppressWarnings("unchecked")
     public void setInitializer(Transformer<V,Point2D> initializer) {
 		Transformer<V, ? extends Object> chain = 
 			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
@@ -176,8 +174,7 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	
 	/**
 	 * Returns the x coordinate of the vertex from the Coordinates object.
-	 * in most cases you will be better off calling getLocation(Vertex v);
-	 * @see edu.uci.ics.jung.algorithms.layout.Layout#getX(edu.uci.ics.jung.graph.Vertex)
+	 * in most cases you will be better off calling transform(v).
 	 */
 	public double getX(V v) {
         assert getCoordinates(v) != null : "Cannot getX for an unmapped vertex "+v;
@@ -186,22 +183,13 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 
 	/**
 	 * Returns the y coordinate of the vertex from the Coordinates object.
-	 * In most cases you will be better off calling getLocation(Vertex v)
-	 * @see edu.uci.ics.jung.algorithms.layout.Layout#getX(edu.uci.ics.jung.graph.Vertex)
+	 * In most cases you will be better off calling transform(v).
 	 */
 	public double getY(V v) {
         assert getCoordinates(v) != null : "Cannot getY for an unmapped vertex "+v;
         return getCoordinates(v).getY();
 	}
 	
-    /**
-     * @param v a Vertex of interest
-     * @return the location point of the supplied vertex
-     */
-//	public Point2D getLocation(V v) {
-//	    return getCoordinates(v);
-//	}
-
 	/**
 	 * @param v
 	 * @param xOffset
