@@ -23,11 +23,14 @@ import org.apache.commons.collections15.Transformer;
 public class DelegateToEdgeTransformer<V,E> implements
         Transformer<VEPair<V,E>,Number>
 {
+	/**
+	 * The transformer to which this instance delegates its function.
+	 */
     protected Transformer<E,? extends Number> delegate;
     
     /**
      * Creates an instance with the specified delegate transformer.
-     * @param delegate the Transforme to which this instance will delegate
+     * @param delegate the Transformer to which this instance will delegate
      */
     public DelegateToEdgeTransformer(Transformer<E,? extends Number> delegate)
     {

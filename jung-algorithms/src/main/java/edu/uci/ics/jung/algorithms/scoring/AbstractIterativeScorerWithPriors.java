@@ -15,16 +15,38 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
+/**
+ * An abstract class for iterative random-walk-based vertex scoring algorithms 
+ * that have a 
+ * fixed probability, for each vertex, of 'jumping' to that vertex at each
+ * step in the algorithm (rather than following a link out of that vertex).
+ *
+ * @param <V> the vertex type
+ * @param <E> the edge type
+ * @param <S> the score type
+ */
 public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
         AbstractIterativeScorer<V,E,S> implements VertexScorer<V,S>
 {
     /**
-     * 
+     * The prior probability of each vertex being visited on a given 
+     * 'jump' (non-link-following) step.
      */
     protected Transformer<V,? extends S> vertex_priors;
 
+    /**
+     * The probability of making a 'jump' at each step.
+     */
     protected double alpha;
-    
+
+    /**
+     * Creates an instance for the specified graph, edge weights, vertex
+     * priors, and jump probability.
+     * @param g the graph whose vertices are to be assigned scores
+     * @param edge_weights the edge weights to use in the score assignment
+     * @param vertex_priors the prior probabilities of each vertex being 'jumped' to
+     * @param alpha the probability of making a 'jump' at each step
+     */
     public AbstractIterativeScorerWithPriors(Graph<V,E> g,
             Transformer<E,? extends Number> edge_weights, 
             Transformer<V,? extends S> vertex_priors, double alpha)
@@ -35,6 +57,13 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
         initialize();
     }
 
+    /**
+     * Creates an instance for the specified graph, vertex priors, and jump
+     * probability, with edge weights specified by the subclass.
+     * @param g the graph whose vertices are to be assigned scores
+     * @param vertex_priors the prior probabilities of each vertex being 'jumped' to
+     * @param alpha the probability of making a 'jump' at each step
+     */
     public AbstractIterativeScorerWithPriors(Graph<V,E> g, 
     		Transformer<V,? extends S> vertex_priors, double alpha)
     {
@@ -44,6 +73,9 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
         initialize();
     }
 
+    /**
+     * Initializes the state of this instance.
+     */
     @Override
     public void initialize()
     {
@@ -55,13 +87,19 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
             setOutputValue(v, getVertexPrior(v));
     }
     
+    /**
+     * Returns the prior probability for <code>v</code>.
+     * @param v the vertex whose prior probability is being queried
+     * @return the prior probability for <code>v</code>
+     */
     protected S getVertexPrior(V v)
     {
         return vertex_priors.transform(v);
     }
 
     /**
-     * @return the vertex_priors
+     * Returns a Transformer which maps each vertex to its prior probability.
+     * @return a Transformer which maps each vertex to its prior probability
      */
     public Transformer<V, ? extends S> getVertexPriors()
     {
@@ -69,7 +107,8 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
     }
 
     /**
-     * @return the alpha
+     * Returns the probability of making a 'jump' (non-link-following step).
+     * @return the probability of making a 'jump' (non-link-following step)
      */
     public double getAlpha()
     {

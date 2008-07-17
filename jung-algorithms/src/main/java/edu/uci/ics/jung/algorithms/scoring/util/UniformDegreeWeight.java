@@ -23,7 +23,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * vertex in the VEPair.
  * For directed edges, returns 1/outdegree(source(e)) (where 'e'
  * is the edge in the VEPair).
- * NOTE: will throw an <code>IllegalArgumentException</code> if the input 
+ * Throws an <code>IllegalArgumentException</code> if the input 
  * edge is neither EdgeType.UNDIRECTED nor EdgeType.DIRECTED.
  *
  */

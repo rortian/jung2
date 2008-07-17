@@ -26,9 +26,9 @@ public class ClosenessCentrality<V,E> extends DistanceCentralityScorer<V,E>
 {
 
     /**
-     * Creates an instance using the specified distance metric.
-     * @param graph
-     * @param distance
+     * Creates an instance using the specified vertex/vertex distance metric.
+     * @param graph the input
+     * @param distance the vertex/vertex distance metric.
      */
     public ClosenessCentrality(Hypergraph<V,E> graph, Distance<V> distance)
     {
@@ -37,8 +37,8 @@ public class ClosenessCentrality<V,E> extends DistanceCentralityScorer<V,E>
 
     /**
      * Creates an instance which measures distance using the specified edge weights.
-     * @param graph
-     * @param edge_weights
+     * @param graph the input graph
+     * @param edge_weights the edge weights to be used to determine vertex/vertex distances
      */
     public ClosenessCentrality(Hypergraph<V,E> graph, Transformer<E, ? extends Number> edge_weights)
     {
