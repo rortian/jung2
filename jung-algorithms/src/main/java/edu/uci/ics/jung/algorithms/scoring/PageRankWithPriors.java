@@ -17,13 +17,13 @@ import edu.uci.ics.jung.algorithms.scoring.util.UniformDegreeWeight;
 import edu.uci.ics.jung.graph.Graph;
 
 public class PageRankWithPriors<V, E> 
-	extends AbstractIterativeScorerWithPriors<V,E,Number,Number>
+	extends AbstractIterativeScorerWithPriors<V,E,Number>
 {
     protected double disappearing_potential_total;
     
     public PageRankWithPriors(Graph<V,E> graph, 
     		Transformer<E, ? extends Number> edge_weights, 
-            Transformer<V, Number> vertex_priors, double alpha)
+            Transformer<V, ? extends Number> vertex_priors, double alpha)
     {
         super(graph, edge_weights, vertex_priors, alpha);
     }
@@ -34,7 +34,7 @@ public class PageRankWithPriors<V, E>
      * @param alpha
      */
     public PageRankWithPriors(Graph<V,E> graph, 
-    		Transformer<V, Number> vertex_priors, double alpha)
+    		Transformer<V, ? extends Number> vertex_priors, double alpha)
     {
         super(graph, vertex_priors, alpha);
         this.edge_weights = new UniformDegreeWeight<V,E>(graph);

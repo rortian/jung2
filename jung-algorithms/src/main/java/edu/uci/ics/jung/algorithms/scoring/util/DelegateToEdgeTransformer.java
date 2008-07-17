@@ -14,20 +14,30 @@ package edu.uci.ics.jung.algorithms.scoring.util;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * 
+ * A <code>Transformer<VEPair,Number></code> that delegates its operation to a
+ * <code>Transformer<E,Number></code>.  Mainly useful for technical reasons inside 
+ * AbstractIterativeScorer; in essence it allows the edge weight instance 
+ * variable to be of type <code>VEPair,W</code> even if the edge weight 
+ * <code>Transformer</code> only operates on edges.
  */
-public class DelegateToEdgeTransformer<V,E,W> implements
-        Transformer<VEPair<V,E>,W>
+public class DelegateToEdgeTransformer<V,E> implements
+        Transformer<VEPair<V,E>,Number>
 {
-    protected Transformer<E,? extends W> delegate;
+    protected Transformer<E,? extends Number> delegate;
     
-    public DelegateToEdgeTransformer(Transformer<E,? extends W> delegate)
+    /**
+     * Creates an instance with the specified delegate transformer.
+     * @param delegate the Transforme to which this instance will delegate
+     */
+    public DelegateToEdgeTransformer(Transformer<E,? extends Number> delegate)
     {
         this.delegate = delegate;
     }
     
-    
-    public W transform(VEPair<V,E> arg0)
+    /**
+     * @see Transformer#transform(Object)
+     */
+    public Number transform(VEPair<V,E> arg0)
     {
         return delegate.transform(arg0.getE());
     }

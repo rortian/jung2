@@ -24,7 +24,7 @@ import edu.uci.ics.jung.graph.Graph;
  * 
  * @author Joshua O'Madadhain
  */
-public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double, Number>
+public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         implements VertexScorer<V, Double>
 {
     protected Map<V, ? extends Number> source_voltages;

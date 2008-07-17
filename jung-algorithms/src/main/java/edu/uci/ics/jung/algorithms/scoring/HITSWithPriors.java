@@ -17,13 +17,13 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 import edu.uci.ics.jung.graph.Graph;
 
 public class HITSWithPriors<V, E> 
-	extends AbstractIterativeScorerWithPriors<V,E,HITS.Scores,Double>
+	extends AbstractIterativeScorerWithPriors<V,E,HITS.Scores>
 {
     protected double disappearing_hub;
     protected double disappearing_auth;
 
     public HITSWithPriors(Graph<V,E> g,
-            Transformer<E, Double> edge_weights,
+            Transformer<E, ? extends Number> edge_weights,
             Transformer<V, HITS.Scores> vertex_priors, double alpha)
     {
         super(g, edge_weights, vertex_priors, alpha);
@@ -60,14 +60,14 @@ public class HITSWithPriors<V, E>
         for (E e : graph.getInEdges(v))
         {
             V w = graph.getOpposite(v, e);
-            auth += (getHubScore(w) * getEdgeWeight(w, e)); //.getSecond().doubleValue());
+            auth += (getHubScore(w) * getEdgeWeight(w, e).doubleValue()); //.getSecond().doubleValue());
         }
         
         double hub = 0;
         for (E e : graph.getOutEdges(v))
         {
             V x = graph.getOpposite(v,e);
-            hub += (getAuthScore(x) * getEdgeWeight(x, e)); // .getFirst().doubleValue()); 
+            hub += (getAuthScore(x) * getEdgeWeight(x, e).doubleValue()); // .getFirst().doubleValue()); 
         }
         
         // modify total_input according to alpha

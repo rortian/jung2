@@ -15,21 +15,19 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
-public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
-        AbstractIterativeScorer<V,E,S,W> implements VertexScorer<V,S>
+public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
+        AbstractIterativeScorer<V,E,S> implements VertexScorer<V,S>
 {
     /**
      * 
      */
-    protected Transformer<V,S> vertex_priors;
+    protected Transformer<V,? extends S> vertex_priors;
 
     protected double alpha;
-
-    private boolean accept_disconnected_graph;
     
     public AbstractIterativeScorerWithPriors(Graph<V,E> g,
-            Transformer<E,? extends W> edge_weights, 
-            Transformer<V,S> vertex_priors, double alpha)
+            Transformer<E,? extends Number> edge_weights, 
+            Transformer<V,? extends S> vertex_priors, double alpha)
     {
         super(g, edge_weights);
         this.vertex_priors = vertex_priors;
@@ -38,7 +36,7 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
     }
 
     public AbstractIterativeScorerWithPriors(Graph<V,E> g, 
-    		Transformer<V,S> vertex_priors, double alpha)
+    		Transformer<V,? extends S> vertex_priors, double alpha)
     {
         super(g);
         this.vertex_priors = vertex_priors;
@@ -50,24 +48,11 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
     public void initialize()
     {
         super.initialize();
-        this.accept_disconnected_graph = true;
         // initialize output values to priors
         // (output and current are swapped before each step(), so current will
         // have priors when update()s start happening)
         for (V v : graph.getVertices())
             setOutputValue(v, getVertexPrior(v));
-    }
-    
-    protected abstract void collectDisappearingPotential(V v);
-
-    public void acceptDisconnectedGraph(boolean accept)
-    {
-        this.accept_disconnected_graph = accept;
-    }
-    
-    public boolean isDisconnectedGraphOK()
-    {
-        return this.accept_disconnected_graph;
     }
     
     protected S getVertexPrior(V v)
@@ -78,7 +63,7 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S,W> extends
     /**
      * @return the vertex_priors
      */
-    public Transformer<V, S> getVertexPriors()
+    public Transformer<V, ? extends S> getVertexPriors()
     {
         return vertex_priors;
     }

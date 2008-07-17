@@ -18,17 +18,23 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.scoring.HITS;
 
 /**
- * Methods for assigning transition probabilities to vertices in the context
+ * Methods for assigning values (to be interpreted as prior probabilities) to vertices in the context
  * of random-walk-based scoring algorithms.
  */
 public class ScoringUtils
 {
-    public static <V> Transformer<V, Number> getUniformRootPrior(Collection<V> roots)
+    /**
+     * Assigns a probability of 1/<code>roots.size()</code> to each of the elements of <code>roots</code>.
+     * @param <V> the vertex type
+     * @param roots the vertices to be assigned nonzero prior probabilities
+     * @return
+     */
+    public static <V> Transformer<V, Double> getUniformRootPrior(Collection<V> roots)
     {
         final Collection<V> inner_roots = roots;
-        Transformer<V, Number> distribution = new Transformer<V, Number>()
+        Transformer<V, Double> distribution = new Transformer<V, Double>()
         {
-            public Number transform(V input)
+            public Double transform(V input)
             {
                 if (inner_roots.contains(input))
                     return new Double(1.0 / inner_roots.size());
@@ -40,6 +46,13 @@ public class ScoringUtils
         return distribution;
     }
     
+    /**
+     * Returns a Transformer that hub and authority values of 1/<code>roots.size()</code> to each 
+     * element of <code>roots</code>.
+     * @param <V> the vertex type
+     * @param roots the vertices to be assigned nonzero scores
+     * @return a Transformer that assigns uniform prior hub/authority probabilities to each root
+     */
     public static <V> Transformer<V, HITS.Scores> getHITSUniformRootPrior(Collection<V> roots)
     {
         final Collection<V> inner_roots = roots;
@@ -54,8 +67,6 @@ public class ScoringUtils
                     return new HITS.Scores(0.0, 0.0);
             }
         };
-        
         return distribution;
     }
-
 }
