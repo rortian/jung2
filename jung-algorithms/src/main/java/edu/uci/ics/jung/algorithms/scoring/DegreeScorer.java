@@ -15,32 +15,54 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
-public class DegreeScorer<V> implements VertexScorer<V,Double>
+/**
+ * Assigns a score to each vertex equal to its degree.
+ *
+ * @param <V> the vertex type
+ */
+public class DegreeScorer<V> implements VertexScorer<V,Integer>
 {
+	/**
+	 * The graph for which scores are to be generated.
+	 */
     protected Graph<V,?> graph;
     
-    protected Transformer<V, Double> scores;
+    /**
+     * The transformer which assigns scores to vertices.
+     */
+    protected Transformer<V, Integer> scores;
     
+    /**
+     * Creates an instance for the specified graph.
+     * @param graph the input graph
+     */
     public DegreeScorer(Graph<V,?> graph)
     {
         this.graph = graph;
     }
     
+    /**
+     * Assigns a score to each vertex, if one has not already been assigned.
+     */
     public void evaluate() 
     {
         if (scores == null)
         {
-            scores = new Transformer<V,Double>()
+            scores = new Transformer<V,Integer>()
             {
-                public Double transform(V vertex)
+                public Integer transform(V vertex)
                 {
-                    return new Double(graph.degree(vertex));
+                    return graph.degree(vertex);
                 }
             };
         }
     }
 
-    public Transformer<V, Double> getVertexScores() 
+    /**
+     * Returns the transformer which assigns scores to each vertex.
+     * @return the transformer assigning scores to each vertex
+     */
+    public Transformer<V, Integer> getVertexScores() 
     {
         return scores; 
     }
