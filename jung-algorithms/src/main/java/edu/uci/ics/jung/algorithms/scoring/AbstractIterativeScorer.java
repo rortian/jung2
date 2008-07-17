@@ -164,7 +164,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     {
         this.total_iterations = 0;
         this.max_delta = Double.MIN_VALUE;
-        this.output_reversed = false;
+        this.output_reversed = true;
         this.current_values = new HashMap<V, T>();
         this.output = new HashMap<V, T>();
     }
