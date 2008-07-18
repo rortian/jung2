@@ -27,13 +27,15 @@ import edu.uci.ics.jung.graph.Hypergraph;
  * in the graph.
  * 
  * NOTE: This class optionally normalizes its results based on the value of its
- * 'averaging' constructor parameter.  If it is <code>true</code>, then the value returned for vertex v is the
- * _average_ distance from v to all other vertices; this is usually called <i>closeness centrality</i>.
+ * 'averaging' constructor parameter.  If it is <code>true</code>, 
+ * then the value returned for vertex v is the
+ * _average_ distance from v to all other vertices; 
+ * this is sometimes called <i>closeness centrality</i>.
  * If it is <code>false</code>, then the value returned is the _total_ distance from
  * v to all other vertices; this is sometimes referred to as <i>barycenter centrality</i>.
  * 
- * 
- * @author Joshua O'Madadhain
+ * @see BarycenterScorer
+ * @see ClosenessCentrality
  */
 public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 {
@@ -186,31 +188,60 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
     }
 
     /**
-     * 
+     * Calculates the score for all vertices.
      */
     public void evaluate()
     {
         for (V v : graph.getVertices())
-        {
-            Double sum = 0.0;
-            for (Map.Entry<V,Number> entry : distance.getDistanceMap(v).entrySet())
-            {
-            	Number w_distance = entry.getValue();
-				if (w_distance == null)
-					if (ignore_missing)
-						continue;
-					else
-						sum = null;
-				else
-					sum += w_distance.doubleValue();
-            }
-            if (averaging)
-                output.put(v, sum / graph.getVertexCount());
-            else
-                output.put(v, sum);
-        }
+        	calculate(v);
     }
+
+	/**
+	 * Calculates the score for the specified vertex.
+	 */
+	public void calculate(V v) 
+	{
+		// if we don't ignore missing distances and there aren't enough
+		// distances, output null
+		if (!ignore_missing)
+		{
+			int n = graph.getVertexCount();
+			n -= ignore_self_distances ? 1 : 0;
+			if (distance.getDistanceMap(v).size() < n) 
+			{
+				output.put(v, null);
+				return;
+			}
+		}		
+
+		
+		Double sum = 0.0;
+		for (V w : graph.getVertices())
+		{
+			if (w.equals(v) && ignore_self_distances)
+				continue;
+			Number w_distance = distance.getDistance(v, w);
+			if (w_distance == null)
+				if (ignore_missing)
+					continue;
+				else
+				{
+					output.put(v, null);
+					return;
+				}
+			else
+				sum += w_distance.doubleValue();
+		}
+		if (averaging)
+		    output.put(v, sum / graph.getVertexCount());
+		else
+		    output.put(v, sum);
+	}
     
+	/**
+	 * Returns the transformer that assigns a score to each vertex.
+	 * @return the transformer that assigns a score to each vertex
+	 */
     public Transformer<V, Double> getVertexScores()
     {
         return MapTransformer.getInstance(output);
