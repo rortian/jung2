@@ -45,8 +45,8 @@ public class PageRankWithPriors<V,E> extends PageRank<V,E> {
      * @param graph the graph whose nodes are being ranked
      * @param beta the prior weight to put on the root nodes
      * @param priors the set of root nodes
-     * @param edgeWeightKeyName the user datum key associated with any user-defined weights. If there are none,
-     * null should be passed in.
+     * @param edgeWeights the user datum key associated with any user-defined weights. If there are none,
+     * null should be passed in (and default weights of 1/outdegree will be used).
      */
     public PageRankWithPriors(DirectedGraph<V,E> graph, double beta, Set<V> priors, Map<E,Number> edgeWeights) {
         super(graph, beta, edgeWeights,computeReachableVertices(graph,priors));

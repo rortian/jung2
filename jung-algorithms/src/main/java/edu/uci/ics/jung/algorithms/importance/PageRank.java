@@ -65,7 +65,7 @@ public class PageRank<V,E> extends RelativeAuthorityRanker<V,E> {
      * @param graph the graph whose nodes are to be ranked
      * @param bias the value (between 0 and 1) that indicates how much to dampen the underlying markov chain
      * with underlying uniform transitions over all nodes. Generally, values between 0.0-0.3 are used.
-     * @param edgeWeightKeyName if non-null, uses the user-defined weights to compute the transition probabilities;
+     * @param edgeWeights if non-null, uses the user-defined weights to compute the transition probabilities;
      * if null then default transition probabilities (1/outdegree(u)) are used
      */
     public PageRank(DirectedGraph<V,E> graph, double bias, Map<E,Number> edgeWeights) {
