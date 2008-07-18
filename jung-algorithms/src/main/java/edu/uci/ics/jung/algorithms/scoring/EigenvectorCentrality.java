@@ -21,7 +21,6 @@ import edu.uci.ics.jung.graph.Graph;
  * time that a random walk(er) will spend at that vertex over an infinite
  * time horizon.
  * Assumes that the graph is strongly connected.
- * 
  */
 public class EigenvectorCentrality<V,E> extends PageRank<V,E>
 {
@@ -50,5 +49,4 @@ public class EigenvectorCentrality<V,E> extends PageRank<V,E>
         super(graph, 0);
         acceptDisconnectedGraph(false);
     }
-
 }

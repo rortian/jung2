@@ -13,9 +13,22 @@ package edu.uci.ics.jung.algorithms.scoring;
 
 import org.apache.commons.collections15.Transformer;
 
+/**
+ * An interface for algorithms that assign scores to vertices.
+ *
+ * @param <V> the vertex type
+ * @param <S> the score type
+ */
 public interface VertexScorer<V, S>
 {
+    /**
+     * Returns a transformer that can retrieve the algorithm's score for each vertex.
+     * @return a transformer that can retrieve the algorithm's score for each vertex
+     */
     public Transformer<V,S> getVertexScores();
     
+    /**
+     * Invokes the algorithm that assigns scores to edges.
+     */
     public void evaluate();
 }
