@@ -18,7 +18,9 @@ import org.apache.commons.collections15.Transformer;
 
 /**
  * Assigns hub and authority scores to each vertex depending on the topology of
- * the network.  
+ * the network.  The essential idea is that a vertex is a hub to the extent 
+ * that it links to authoritative vertices, and is an authority to the extent
+ * that it links to 'hub' vertices.
  * 
  * <p>The classic HITS algorithm essentially proceeds as follows:
  * <pre>
@@ -31,13 +33,32 @@ import org.apache.commons.collections15.Transformer;
  * until scores converge
  * </pre>
  * 
- * This is somewhat different from eigenvector-based algorithms such as PageRank in that 
+ * HITS is somewhat different from random walk/eigenvector-based algorithms 
+ * such as PageRank in that: 
  * <ul>
+ * <li/>there are two mutually recursive scores being calculated, rather than 
+ * a single value
  * <li/>the edge weights are effectively all 1, i.e., they can't be interpreted
- * as transition probabilities
+ * as transition probabilities.  This means that the more inlinks and outlinks
+ * that a vertex has, the better, since adding an inlink (or outlink) does
+ * not dilute the influence of the other inlinks (or outlinks) as in 
+ * random walk-based algorithms.
  * <li/>the scores cannot be interpreted as posterior probabilities (due to the different
  * normalization)
- * <li/>
+ * </ul>
+ * 
+ * This implementation has the classic behavior by default.  However, it has
+ * been generalized somewhat so that it can act in a more "PageRank-like" fashion:
+ * <ul>
+ * <li/>the edge weights can be set to anything the user likes, and in 
+ * particular they can be set up (e.g. using <code>UniformDegreeWeight</code>)
+ * so that the weights of the relevant edges incident to a vertex sum to 1.
+ * <li/>The vertex score normalization has been factored into its own method
+ * so that it can be overridden by a subclass.  Thus, for example: 
+ * since the vertices' values are set to sum to 1 initially, if the weights of the
+ * relevant edges incident to a vertex sum to 1, then the vertices' values
+ * will continue to sum to 1 if the "sum-of-squares" normalization code
+ * is overridden to a no-op.  (Other normalization methods are also available.)
  * </ul>
  * 
  * @param <V> the vertex type
