@@ -18,7 +18,6 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -56,9 +55,8 @@ public class TestVoltageScore extends TestCase
         double[] voltages = {1.0, 0.75, 0.75, 0.5, 0.25, 0.25, 0};
         
         vr.evaluate();
-        Transformer<Number, Double> scores = vr.getVertexScores();
         for (int i = 0; i < 7; i++) {
-            assertEquals(scores.transform(i), voltages[i], 0.01);
+            assertEquals(vr.getVertexScore(i), voltages[i], 0.01);
         }
     }
     
@@ -76,9 +74,8 @@ public class TestVoltageScore extends TestCase
         double[] voltages = {1.0, 0.5, 0.66, 0.33, 0.16, 0, 0};
         
         vr.evaluate();
-        Transformer<Number, Double> scores = vr.getVertexScores();
         for (int i = 0; i < 7; i++) {
-            assertEquals(scores.transform(i), voltages[i], 0.01);
+            assertEquals(vr.getVertexScore(i), voltages[i], 0.01);
         }
     }
 }

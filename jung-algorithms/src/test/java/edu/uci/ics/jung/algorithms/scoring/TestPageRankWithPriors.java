@@ -18,7 +18,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -75,12 +74,10 @@ public class TestPageRankWithPriors extends TestCase {
             new PageRankWithPriors<Integer, Integer>(graph, ScoringUtils.getUniformRootPrior(priors), 0.3);
         pr.evaluate();
         
-        Transformer<Integer, Number> pr_scores = pr.getVertexScores();
-        
-        Assert.assertEquals(pr_scores.transform(0).doubleValue(), 0.1157, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(1).doubleValue(), 0.2463, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(2).doubleValue(), 0.4724, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(3).doubleValue(), 0.1653, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(0), 0.1157, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(1), 0.2463, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(2), 0.4724, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(3), 0.1653, pr.getTolerance());
        
 //        PageRankWithPriors<Integer,Integer> ranker = 
 //        	new PageRankWithPriors<Integer,Integer>(graph,0.3,priors,null);

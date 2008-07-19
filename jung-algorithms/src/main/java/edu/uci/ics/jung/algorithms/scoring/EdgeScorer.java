@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import org.apache.commons.collections15.Transformer;
 
 /**
  * An interface for algorithms that assign scores to edges.
@@ -22,10 +21,10 @@ import org.apache.commons.collections15.Transformer;
 public interface EdgeScorer<E, S>
 {
     /**
-     * Returns a transformer that can retrieve the algorithm's score for each edge.
-     * @return a transformer that can retrieve the algorithm's score for each edge
+     * Returns the algorithm's score for this edge.
+     * @return the algorithm's score for this edge
      */
-    public Transformer<E,S> getEdgeScores();
+    public S getEdgeScore(E e);
     
     /**
      * Invokes the algorithm that assigns scores to edges.

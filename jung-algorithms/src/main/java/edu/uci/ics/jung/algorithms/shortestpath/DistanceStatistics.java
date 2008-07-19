@@ -13,6 +13,7 @@ import java.util.Collection;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.scoring.ClosenessCentrality;
+import edu.uci.ics.jung.algorithms.scoring.util.VertexScoreTransformer;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
@@ -56,9 +57,8 @@ public class DistanceStatistics
      */
     public static <V,E> Transformer<V,Double> averageDistances(Graph<V,E> graph, Distance<V> d)
     {
-    	ClosenessCentrality<V,E> cc = new ClosenessCentrality<V,E>(graph, d);
-    	cc.evaluate();
-    	return cc.getVertexScores();
+    	final ClosenessCentrality<V,E> cc = new ClosenessCentrality<V,E>(graph, d);
+    	return new VertexScoreTransformer<V, Double>(cc);
     }
     
     /**
@@ -70,10 +70,9 @@ public class DistanceStatistics
      */
     public static <V,E> Transformer<V, Double> averageDistances(Graph<V,E> g)
     {
-    	ClosenessCentrality<V,E> cc = new ClosenessCentrality<V,E>(g, 
+    	final ClosenessCentrality<V,E> cc = new ClosenessCentrality<V,E>(g, 
     			new UnweightedShortestPath<V,E>(g));
-    	cc.evaluate();
-    	return cc.getVertexScores();
+        return new VertexScoreTransformer<V, Double>(cc);
     }
     
     /**

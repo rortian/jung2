@@ -11,8 +11,6 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import org.apache.commons.collections15.Transformer;
-
 import edu.uci.ics.jung.graph.Graph;
 
 /**
@@ -28,11 +26,6 @@ public class DegreeScorer<V> implements VertexScorer<V,Integer>
     protected Graph<V,?> graph;
     
     /**
-     * The transformer which assigns scores to vertices.
-     */
-    protected Transformer<V, Integer> scores;
-    
-    /**
      * Creates an instance for the specified graph.
      * @param graph the input graph
      */
@@ -42,29 +35,11 @@ public class DegreeScorer<V> implements VertexScorer<V,Integer>
     }
     
     /**
-     * Assigns a score to each vertex, if one has not already been assigned.
+     * Returns the degree of the vertex.
+     * @return the degree of the vertex
      */
-    public void evaluate() 
+    public Integer getVertexScore(V v) 
     {
-        if (scores == null)
-        {
-            scores = new Transformer<V,Integer>()
-            {
-                public Integer transform(V vertex)
-                {
-                    return graph.degree(vertex);
-                }
-            };
-        }
+        return graph.degree(v); 
     }
-
-    /**
-     * Returns the transformer which assigns scores to each vertex.
-     * @return the transformer assigning scores to each vertex
-     */
-    public Transformer<V, Integer> getVertexScores() 
-    {
-        return scores; 
-    }
-
 }

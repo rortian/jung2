@@ -9,15 +9,12 @@
 */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-
 import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.apache.commons.collections15.Transformer;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 
 /**
@@ -53,7 +50,6 @@ public class TestHITS extends TestCase {
         for (int i = 0; i < 10; i++)
         {
             ranker.step();
-            Transformer<Number, HITS.Scores> t = ranker.getVertexScores();
 //            // check hub scores in terms of previous authority scores
 //            Assert.assertEquals(t.transform(0).hub, 
 //            		0.5*ranker.getAuthScore(1) + 0.2*ranker.getAuthScore(4));
@@ -68,15 +64,15 @@ public class TestHITS extends TestCase {
 //            
 //            // check authority scores in terms of previous hub scores
 //            Assert.assertEquals(t.transform(0).authority, 
-//            		ranker.getHubScore(3) + 0.2*ranker.getHubScore(4));
+//            		ranker.getVertexScore(3) + 0.2*ranker.getVertexScore(4));
 //            Assert.assertEquals(t.transform(1).authority, 
-//            		ranker.getHubScore(0) + 0.5 * ranker.getHubScore(2) + 0.2*ranker.getHubScore(4));
+//            		ranker.getVertexScore(0) + 0.5 * ranker.getVertexScore(2) + 0.2*ranker.getVertexScore(4));
 //            Assert.assertEquals(t.transform(2).authority, 
-//            		ranker.getHubScore(1) + 0.2*ranker.getHubScore(4));
+//            		ranker.getVertexScore(1) + 0.2*ranker.getVertexScore(4));
 //            Assert.assertEquals(t.transform(3).authority, 
-//            		0.5*ranker.getHubScore(2) + 0.2*ranker.getHubScore(4));
+//            		0.5*ranker.getVertexScore(2) + 0.2*ranker.getVertexScore(4));
 //            Assert.assertEquals(t.transform(4).authority, 
-//            		0.2*ranker.getHubScore(4));
+//            		0.2*ranker.getVertexScore(4));
 //            
             // verify that sums of each scores are 1.0
             double auth_sum = 0;
@@ -84,10 +80,10 @@ public class TestHITS extends TestCase {
             for (int j = 0; j < 5; j++)
             {
 //                auth_sum += ranker.getAuthScore(j);
-//                hub_sum += ranker.getHubScore(j);
+//                hub_sum += ranker.getVertexScore(j);
 //            	auth_sum += (ranker.getAuthScore(j) * ranker.getAuthScore(j));
-//            	hub_sum += (ranker.getHubScore(j) * ranker.getHubScore(j));
-            	HITS.Scores score = t.transform(j);
+//            	hub_sum += (ranker.getVertexScore(j) * ranker.getVertexScore(j));
+            	HITS.Scores score = ranker.getVertexScore(j);
             	auth_sum += score.authority * score.authority;
             	hub_sum += score.hub * score.hub;
             }
@@ -97,27 +93,27 @@ public class TestHITS extends TestCase {
         
         ranker.evaluate();
 
-        Assert.assertEquals(ranker.getAuthScore(0), 0, .0001);  
-        Assert.assertEquals(ranker.getAuthScore(1), 0.8507, .001);
-        Assert.assertEquals(ranker.getAuthScore(2), 0.0, .0001);
-        Assert.assertEquals(ranker.getAuthScore(3), 0.5257, .001);
+        Assert.assertEquals(ranker.getVertexScore(0).authority, 0, .0001);  
+        Assert.assertEquals(ranker.getVertexScore(1).authority, 0.8507, .001);
+        Assert.assertEquals(ranker.getVertexScore(2).authority, 0.0, .0001);
+        Assert.assertEquals(ranker.getVertexScore(3).authority, 0.5257, .001);
 
-        Assert.assertEquals(ranker.getHubScore(0), 0.5257, .001);
-        Assert.assertEquals(ranker.getHubScore(1), 0.0, .0001);
-        Assert.assertEquals(ranker.getHubScore(2), 0.8507, .0001);
-        Assert.assertEquals(ranker.getHubScore(3), 0.0, .0001);
+        Assert.assertEquals(ranker.getVertexScore(0).hub, 0.5257, .001);
+        Assert.assertEquals(ranker.getVertexScore(1).hub, 0.0, .0001);
+        Assert.assertEquals(ranker.getVertexScore(2).hub, 0.8507, .0001);
+        Assert.assertEquals(ranker.getVertexScore(3).hub, 0.0, .0001);
 
         // the values below assume scores sum to 1 
         // (rather than that sum of squares of scores sum to 1)
-//        Assert.assertEquals(ranker.getAuthScore(0), 0, .0001);  
-//        Assert.assertEquals(ranker.getAuthScore(1), 0.618, .001);
-//        Assert.assertEquals(ranker.getAuthScore(2), 0.0, .0001);
-//        Assert.assertEquals(ranker.getAuthScore(3), 0.3819, .001);
+//        Assert.assertEquals(ranker.getVertexScore(0).authority, 0, .0001);  
+//        Assert.assertEquals(ranker.getVertexScore(1).authority, 0.618, .001);
+//        Assert.assertEquals(ranker.getVertexScore(2).authority, 0.0, .0001);
+//        Assert.assertEquals(ranker.getVertexScore(3).authority, 0.3819, .001);
 //
-//        Assert.assertEquals(ranker.getHubScore(0), 0.38196, .001);
-//        Assert.assertEquals(ranker.getHubScore(1), 0.0, .0001);
-//        Assert.assertEquals(ranker.getHubScore(2), 0.618, .0001);
-//        Assert.assertEquals(ranker.getHubScore(3), 0.0, .0001);
+//        Assert.assertEquals(ranker.getVertexScore(0).hub, 0.38196, .001);
+//        Assert.assertEquals(ranker.getVertexScore(1).hub, 0.0, .0001);
+//        Assert.assertEquals(ranker.getVertexScore(2).hub, 0.618, .0001);
+//        Assert.assertEquals(ranker.getVertexScore(3).hub, 0.0, .0001);
     }
 
 }

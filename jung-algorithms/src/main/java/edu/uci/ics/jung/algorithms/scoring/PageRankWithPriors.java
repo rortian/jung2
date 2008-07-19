@@ -17,13 +17,13 @@ import edu.uci.ics.jung.algorithms.scoring.util.UniformDegreeWeight;
 import edu.uci.ics.jung.graph.Graph;
 
 public class PageRankWithPriors<V, E> 
-	extends AbstractIterativeScorerWithPriors<V,E,Number>
+	extends AbstractIterativeScorerWithPriors<V,E,Double>
 {
     protected double disappearing_potential_total;
     
     public PageRankWithPriors(Graph<V,E> graph, 
     		Transformer<E, ? extends Number> edge_weights, 
-            Transformer<V, ? extends Number> vertex_priors, double alpha)
+            Transformer<V, Double> vertex_priors, double alpha)
     {
         super(graph, edge_weights, vertex_priors, alpha);
     }
@@ -34,7 +34,7 @@ public class PageRankWithPriors<V, E>
      * @param alpha
      */
     public PageRankWithPriors(Graph<V,E> graph, 
-    		Transformer<V, ? extends Number> vertex_priors, double alpha)
+    		Transformer<V, Double> vertex_priors, double alpha)
     {
         super(graph, vertex_priors, alpha);
         this.edge_weights = new UniformDegreeWeight<V,E>(graph);
@@ -52,14 +52,14 @@ public class PageRankWithPriors<V, E>
         for (E e : graph.getInEdges(v))
         {
             V w = graph.getOpposite(v, e);
-            total_input += (getCurrentValue(w).doubleValue() * getEdgeWeight(w,e).doubleValue());
+            total_input += (getCurrentValue(w) * getEdgeWeight(w,e).doubleValue());
         }
         
         // modify total_input according to alpha
-        double new_value = total_input * (1 - alpha) + getVertexPrior(v).doubleValue() * alpha;
+        double new_value = total_input * (1 - alpha) + getVertexPrior(v) * alpha;
         setOutputValue(v, new_value);
         
-        return Math.abs(getCurrentValue(v).doubleValue() - new_value);
+        return Math.abs(getCurrentValue(v) - new_value);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class PageRankWithPriors<V, E>
         {
             for (V v : graph.getVertices())
             {
-                setOutputValue(v, getOutputValue(v).doubleValue() + 
-                        (1 - alpha) * (disappearing_potential_total * getVertexPrior(v).doubleValue()));
+                setOutputValue(v, getOutputValue(v) + 
+                        (1 - alpha) * (disappearing_potential_total * getVertexPrior(v)));
             }
             disappearing_potential_total = 0;
         }
@@ -85,7 +85,7 @@ public class PageRankWithPriors<V, E>
         if (graph.outDegree(v) == 0)
         {
             if (isDisconnectedGraphOK())
-                disappearing_potential_total += getCurrentValue(v).doubleValue();
+                disappearing_potential_total += getCurrentValue(v);
             else
                 throw new IllegalArgumentException("Outdegree of " + v + " must be > 0");
         }

@@ -25,7 +25,7 @@ import org.apache.commons.collections15.Transformer;
  * <p>The classic HITS algorithm essentially proceeds as follows:
  * <pre>
  * assign equal initial hub and authority values to each vertex
- * repeat the following 
+ * repeat
  *   for each vertex w:
  *     w.hub = sum over successors x of x.authority
  *     w.authority = sum over predecessors v of v.hub
@@ -50,15 +50,20 @@ import org.apache.commons.collections15.Transformer;
  * This implementation has the classic behavior by default.  However, it has
  * been generalized somewhat so that it can act in a more "PageRank-like" fashion:
  * <ul>
+ * <li/>this implementation has an optional 'random jump probability' parameter analogous
+ * to the 'alpha' parameter used by PageRank.  Varying this value between 0 and 1
+ * allows the user to vary between the classic HITS behavior and one in which the
+ * scores are smoothed to a uniform distribution.
+ * The default value for this parameter is 0 (no random jumps possible).
  * <li/>the edge weights can be set to anything the user likes, and in 
  * particular they can be set up (e.g. using <code>UniformDegreeWeight</code>)
  * so that the weights of the relevant edges incident to a vertex sum to 1.
  * <li/>The vertex score normalization has been factored into its own method
- * so that it can be overridden by a subclass.  Thus, for example: 
+ * so that it can be overridden by a subclass.  Thus, for example, 
  * since the vertices' values are set to sum to 1 initially, if the weights of the
  * relevant edges incident to a vertex sum to 1, then the vertices' values
  * will continue to sum to 1 if the "sum-of-squares" normalization code
- * is overridden to a no-op.  (Other normalization methods are also available.)
+ * is overridden to a no-op.  (Other normalization methods may also be employed.)
  * </ul>
  * 
  * @param <V> the vertex type
@@ -70,27 +75,46 @@ public class HITS<V,E> extends HITSWithPriors<V,E>
 {
 
     /**
-     * Creates an instance for the specified graph, edge weights, and 
-     * @param g
-     * @param edge_weights
-     * @param alpha
+     * Creates an instance for the specified graph, edge weights, and alpha
+     * (random jump probability) parameter.
+     * @param g the input graph
+     * @param edge_weights the weights to use for each edge
+     * @param alpha the probability of a hub giving some authority to all vertices,
+     * and of an authority increasing the score of all hubs (not just those connected
+     * via links)
      */
     public HITS(Graph<V,E> g, Transformer<E, Double> edge_weights, double alpha)
     {
         super(g, edge_weights, ScoringUtils.getHITSUniformRootPrior(g.getVertices()), alpha);
     }
 
+    /**
+     * Creates an instance for the specified graph and alpha (random jump probability)
+     * parameter.  The edge weights are all set to 1.
+     * @param g the input graph
+     * @param alpha the probability of a hub giving some authority to all vertices,
+     * and of an authority increasing the score of all hubs (not just those connected
+     * via links)
+     */
     public HITS(Graph<V,E> g, double alpha)
     {
         super(g, ScoringUtils.getHITSUniformRootPrior(g.getVertices()), alpha);
     }
 
+    /**
+     * Creates an instance for the specified graph.  The edge weights are all set to 1
+     * and alpha is set to 0.
+     * @param g the input graph
+     */
     public HITS(Graph<V,E> g)
     {
         this(g, 0.0);
     }
     
 
+    /**
+     * Maintains hub and authority score information for a vertex.
+     */
     public static class Scores
     {
     	public double hub;

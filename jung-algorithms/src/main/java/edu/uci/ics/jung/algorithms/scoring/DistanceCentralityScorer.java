@@ -14,7 +14,6 @@ package edu.uci.ics.jung.algorithms.scoring;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
@@ -187,20 +186,19 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
         	true);
     }
 
-    /**
-     * Calculates the score for all vertices.
-     */
-    public void evaluate()
-    {
-        for (V v : graph.getVertices())
-        	calculate(v);
-    }
-
 	/**
 	 * Calculates the score for the specified vertex.
 	 */
-	public void calculate(V v) 
+	public Double getVertexScore(V v) 
 	{
+	    Double value = output.get(v);
+	    if (value != null)
+	    {
+	        if (value < 0)
+	            return null;
+	        return value;
+	    }
+	    
 		// if we don't ignore missing distances and there aren't enough
 		// distances, output null
 		if (!ignore_missing)
@@ -209,11 +207,10 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 			n -= ignore_self_distances ? 1 : 0;
 			if (distance.getDistanceMap(v).size() < n) 
 			{
-				output.put(v, null);
-				return;
+				output.put(v, -1.0);
+				return null;
 			}
 		}		
-
 		
 		Double sum = 0.0;
 		for (V w : graph.getVertices())
@@ -226,24 +223,19 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 					continue;
 				else
 				{
-					output.put(v, null);
-					return;
+					output.put(v, -1.0);
+					return null;
 				}
 			else
 				sum += w_distance.doubleValue();
 		}
+		value = sum;
 		if (averaging)
-		    output.put(v, sum / graph.getVertexCount());
-		else
-		    output.put(v, sum);
+		    value /= distance.getDistanceMap(v).size();
+		
+	    output.put(v, value);
+		   
+		return value;
 	}
     
-	/**
-	 * Returns the transformer that assigns a score to each vertex.
-	 * @return the transformer that assigns a score to each vertex
-	 */
-    public Transformer<V, Double> getVertexScores()
-    {
-        return MapTransformer.getInstance(output);
-    }
 }

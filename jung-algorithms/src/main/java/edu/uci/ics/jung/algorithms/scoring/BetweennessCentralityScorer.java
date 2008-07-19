@@ -40,12 +40,12 @@ public class BetweennessCentralityScorer<V,E> implements VertexScorer<V,Double>,
     }
     
     
-    public Transformer<V, Double> getVertexScores()
+    public Double getVertexScore(V v)
     {
         // TODO Auto-generated method stub
         return null;
     }
-    public Transformer<E, Double> getEdgeScores()
+    public Double getEdgeScore(E e)
     {
         // TODO Auto-generated method stub
         return null;

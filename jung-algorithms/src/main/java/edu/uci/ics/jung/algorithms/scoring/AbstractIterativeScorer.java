@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.scoring.util.DelegateToEdgeTransformer;
 import edu.uci.ics.jung.algorithms.scoring.util.VEPair;
@@ -27,7 +26,6 @@ import edu.uci.ics.jung.graph.Graph;
  * Generally, any (concrete) subclass will function by creating an instance, and then either calling
  * <code>evaluate</code> (if the user wants to iterate until the algorithms is 'done') or 
  * repeatedly call <code>step</code> (if the user wants to observe the values at each step).
- * 
  */
 public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext, VertexScorer<V,T>
 {
@@ -230,14 +228,15 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     
     protected void afterStep() {}
     
-    public Transformer<V, T> getVertexScores()
+    public T getVertexScore(V v)
     {
-        Transformer<V,T> scores;
+        if (!graph.containsVertex(v))
+            throw new IllegalArgumentException("Vertex " + v + " not an element of this graph");
+        
         if (output_reversed)
-            scores = MapTransformer.getInstance(current_values);
+            return current_values.get(v);
         else
-            scores = MapTransformer.getInstance(output);
-        return scores;
+            return output.get(v);
     }
 
     /**

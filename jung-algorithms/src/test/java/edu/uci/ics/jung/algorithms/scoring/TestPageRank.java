@@ -18,7 +18,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.graph.DirectedGraph;
@@ -68,12 +67,10 @@ public class TestPageRank extends TestCase {
         PageRankWithPriors<Integer, Integer> pr = new PageRank<Integer, Integer>(graph, MapTransformer.getInstance(edgeWeights), 0);
         pr.evaluate();
         
-        Transformer<Integer, Number> pr_scores = pr.getVertexScores();
-        
-        Assert.assertEquals(pr_scores.transform(0).doubleValue(), 0, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(1).doubleValue(), 0.4, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(2).doubleValue(), 0.4, pr.getTolerance());
-        Assert.assertEquals(pr_scores.transform(3).doubleValue(), 0.2, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(0), 0.0, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(1), 0.4, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(2), 0.4, pr.getTolerance());
+        Assert.assertEquals(pr.getVertexScore(3), 0.2, pr.getTolerance());
 
 //        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(0)).rankScore,0.4,.001));
 //        Assert.assertTrue(NumericalPrecision.equal(((Ranking)ranker.getRankings().get(1)).rankScore,0.4,.001));

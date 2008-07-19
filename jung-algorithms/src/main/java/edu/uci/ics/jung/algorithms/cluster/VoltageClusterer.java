@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections15.Transformer;
-
 import cern.jet.random.engine.DRand;
 import cern.jet.random.engine.RandomEngine;
 import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
@@ -156,10 +154,9 @@ public class VoltageClusterer<V,E>
             VoltageScorer<V,E> vs = new VoltageScorer<V,E>(g, source, target);
             vs.evaluate();
             
-            Transformer<V, Double> voltages = vs.getVertexScores();
             Map<V, double[]> voltage_ranks = new HashMap<V, double[]>();
             for (V v : g.getVertices())
-                voltage_ranks.put(v, new double[] {voltages.transform(v).doubleValue()});
+                voltage_ranks.put(v, new double[] {vs.getVertexScore(v)});
             
 //            addOneCandidateCluster(candidates, voltage_ranks);
             addTwoCandidateClusters(candidates, voltage_ranks);

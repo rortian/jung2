@@ -16,12 +16,28 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.graph.Graph;
 
+/**
+ * A generalization of HITS that permits non-uniformly-distributed random jumps.
+ * The 'vertex_priors' (that is, prior probabilities for each vertex) may be
+ * thought of as the fraction of the total 'potential' (hub or authority score)
+ * that is assigned to that vertex out of the portion that is assigned according
+ * to random jumps.
+ * 
+ */
 public class HITSWithPriors<V, E> 
 	extends AbstractIterativeScorerWithPriors<V,E,HITS.Scores>
 {
     protected double disappearing_hub;
     protected double disappearing_auth;
 
+    /**
+     * Creates an instance for the specified graph, edge weighs, vertex prior probabilities,
+     * and random jump probability (alpha).
+     * @param g the input graph
+     * @param edge_weights the edge weights 
+     * @param vertex_priors the prior probability for each vertex
+     * @param alpha the probability of a random jump at each step
+     */
     public HITSWithPriors(Graph<V,E> g,
             Transformer<E, ? extends Number> edge_weights,
             Transformer<V, HITS.Scores> vertex_priors, double alpha)
@@ -29,6 +45,13 @@ public class HITSWithPriors<V, E>
         super(g, edge_weights, vertex_priors, alpha);
     }
 
+    /**
+     * Creates an instance for the specified graph, vertex priors, and random
+     * jump probability (alpha).
+     * @param g the input graph
+     * @param vertex_priors the prior probability for each vertex
+     * @param alpha the probability of a random jump at each step
+     */
     @SuppressWarnings("unchecked")
     public HITSWithPriors(Graph<V,E> g, 
           Transformer<V, HITS.Scores> vertex_priors, double alpha)
@@ -36,23 +59,10 @@ public class HITSWithPriors<V, E>
     	super(g, new ConstantTransformer(1.0), vertex_priors, alpha);
     }
 
-    
-//    public HITSWithPriors(DirectedGraph<V,E> g,
-//            Transformer<V, Pair<Double>> vertex_priors, double alpha)
-//    {
-//    	super(g, vertex_priors, alpha);
-//    	this.edge_weights = new UniformInOut<V,E>(g);
-//    }
-//
-//    public HITSWithPriors(UndirectedGraph<V,E> g, 
-//            Transformer<V, Pair<Double>> vertex_priors, double alpha)
-//    {
-//        super(g, vertex_priors, alpha);
-//        this.edge_weights = new UniformIncidentPair<V,E>(g);
-//    }
-    
-    @Override
-    public double update(V v)
+    /**
+     * Updates the value for this vertex.
+     */
+    protected double update(V v)
     {
         collectDisappearingPotential(v);
         
@@ -60,14 +70,14 @@ public class HITSWithPriors<V, E>
         for (E e : graph.getInEdges(v))
         {
             V w = graph.getOpposite(v, e);
-            auth += (getHubScore(w) * getEdgeWeight(w, e).doubleValue()); //.getSecond().doubleValue());
+            auth += (getCurrentValue(w).hub * getEdgeWeight(w, e).doubleValue());
         }
         
         double hub = 0;
         for (E e : graph.getOutEdges(v))
         {
             V x = graph.getOpposite(v,e);
-            hub += (getAuthScore(x) * getEdgeWeight(x, e).doubleValue()); // .getFirst().doubleValue()); 
+            hub += (getCurrentValue(x).authority * getEdgeWeight(x, e).doubleValue()); 
         }
         
         // modify total_input according to alpha
@@ -75,36 +85,38 @@ public class HITSWithPriors<V, E>
         hub = hub * (1 - alpha) + getHubPrior(v) * alpha;
         setOutputValue(v, new HITS.Scores(hub, auth));
 
-        return Math.max(Math.abs(getHubScore(v) - hub), Math.abs(getAuthScore(v) - auth));
+        return Math.max(Math.abs(getCurrentValue(v).hub - hub), 
+                        Math.abs(getCurrentValue(v).authority - auth));
     }
 
     @Override
     protected void afterStep()
     {
-//        if (disappearing_hub > 0 || disappearing_auth > 0)
-//        {
-//            for (V v : graph.getVertices())
-//            {
-//                double new_hub = getOutputValue(v).getFirst().doubleValue() + 
-//                    (1 - alpha) * (disappearing_hub * getHubPrior(v));
-//                double new_auth = getOutputValue(v).getSecond().doubleValue() + 
-//                    (1 - alpha) * (disappearing_hub * getAuthPrior(v));
-//                setOutputValue(v, new Pair<Double>(new_hub, new_auth));
-//            }
-//            disappearing_hub = 0;
-//            disappearing_auth = 0;
-//        }
+        if (disappearing_hub > 0 || disappearing_auth > 0)
+        {
+            for (V v : graph.getVertices())
+            {
+                double new_hub = getOutputValue(v).hub + 
+                    (1 - alpha) * (disappearing_hub * getVertexPrior(v).hub);
+                double new_auth = getOutputValue(v).authority + 
+                    (1 - alpha) * (disappearing_hub * getVertexPrior(v).authority);
+                setOutputValue(v, new HITS.Scores(new_hub, new_auth));
+            }
+            disappearing_hub = 0;
+            disappearing_auth = 0;
+        }
     	disappearing_hub = 0;
     	disappearing_auth = 0; 
         
     	normalizeScores();
-
     	
         super.afterStep();
     }
 
 	/**
 	 * Normalizes scores so that sum of their squares = 1.
+	 * This method may be overridden so as to yield different 
+	 * normalizations.
 	 */
 	protected void normalizeScores() {
     	double hub_ssum = 0;
@@ -129,34 +141,32 @@ public class HITSWithPriors<V, E>
     	}
 	}
     
+	/**
+	 * Collects the "disappearing potential" associated with vertices that have either 
+	 * no incoming edges, no outgoing edges, or both.  Vertices that have no incoming edges
+	 * do not directly contribute to the hub scores of other vertices; similarly, vertices
+	 * that have no outgoing edges do not directly contribute to the authority scores of
+	 * other vertices.  These values are collected and then distributed across all vertices
+	 * as a part of the normalization process.  (This process is not required for, and does
+	 * not affect, the sum-of-squares-style normalization.) 
+	 */
     @Override
     protected void collectDisappearingPotential(V v)
     {
         if (graph.outDegree(v) == 0)
         {
             if (isDisconnectedGraphOK())
-                disappearing_hub += getAuthScore(v);
+                disappearing_hub += getCurrentValue(v).authority;
             else
                 throw new IllegalArgumentException("Outdegree of " + v + " must be > 0");
         }
         if (graph.inDegree(v) == 0)
         {
             if (isDisconnectedGraphOK())
-                disappearing_auth += getHubScore(v);
+                disappearing_auth += getCurrentValue(v).hub;
             else
                 throw new IllegalArgumentException("Indegree of " + v + " must be > 0");
         }
-    }
-
-    
-    public double getHubScore(V v)
-    {
-        return getCurrentValue(v).hub;
-    }
-    
-    public double getAuthScore(V v)
-    {
-        return getCurrentValue(v).authority;
     }
 
     protected double getHubPrior(V v)
