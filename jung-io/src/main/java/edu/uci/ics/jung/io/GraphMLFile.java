@@ -67,6 +67,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * }
  * </pre><br>
  *
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.io.GraphMLReader} and {@link edu.uci.ics.jung.io.GraphMLWriter}.
  * @see "http://graphml.graphdrawing.org/"
  * @author Scott White, John Yesberg
  * @author Tom Nelson - converted to jung2

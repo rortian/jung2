@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * The default GraphML file handler to use to parse the xml file.
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.io.GraphMLReader} and {@link edu.uci.ics.jung.io.GraphMLWriter}.
  * @author Scott White
  * @author Tom Nelson - converted to jung2
  */
