@@ -671,18 +671,22 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         if (edge_factory != null)
         	e = edge_factory.create();
         else
-        	e = (E)id;            
+            if (id != null)
+                e = (E)id;            
+            else
+                throw new IllegalArgumentException("If no edge factory is supplied, " +
+                		"edge id may not be null: " + edge_atts);
 
         if (id != null)
         {
             if (edge_ids.containsKey(e))
                 throw new SAXNotSupportedException("Edge id \"" + id + 
-                		" is a duplicate of an existing edge ID");
+                		"\" is a duplicate of an existing edge ID");
             edge_ids.put(e, id);
         }
         
         if (state == TagState.EDGE)
-        	assignEdgeSourceTarget(e, atts, edge_atts, id);
+        	assignEdgeSourceTarget(e, atts, edge_atts); //, id);
 
         // put remaining attribute/value pairs in edge_data
         addExtraData(edge_atts, edge_metadata, e);
@@ -691,7 +695,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     }
 
     protected void assignEdgeSourceTarget(E e, Attributes atts, 
-    		Map<String, String> edge_atts, String id) 
+    		Map<String, String> edge_atts)//, String id) 
     	throws SAXNotSupportedException
     {
         String source_id = edge_atts.remove("source");
@@ -701,7 +705,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         V source = vertex_ids.getKey(source_id);
         if (source == null)
             throw new SAXNotSupportedException("specified 'source' attribute " +
-            		"\"" + id + "\" does not match any node ID");
+            		"\"" + source_id + "\" does not match any node ID");
         
         String target_id = edge_atts.remove("target");
         if (target_id == null)
@@ -710,19 +714,19 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         V target = vertex_ids.getKey(target_id);
         if (source == null)
             throw new SAXNotSupportedException("specified 'target' attribute " +
-            		"\"" + id + "\" does not match any node ID");
+            		"\"" + target_id + "\" does not match any node ID");
         
-        String direction = edge_atts.remove("directed");
+        String directed = edge_atts.remove("directed");
         EdgeType edge_type;
-        if (direction == null)
+        if (directed == null)
             edge_type = default_edgetype;
-        else if (direction.equals("directed"))
+        else if (directed.equals("true"))
             edge_type = EdgeType.DIRECTED;
-        else if (direction.equals("undirected"))
+        else if (directed.equals("false"))
             edge_type = EdgeType.UNDIRECTED;
         else
-            throw new SAXNotSupportedException("Unrecognized edge direction: " +
-            		direction + ": " + atts.toString());
+            throw new SAXNotSupportedException("Unrecognized edge direction specifier 'direction=\"" +
+            		directed + "\"': " + "source: " + source_id + ", target: " + target_id);
         
         if (current_graph instanceof Graph)
             ((Graph<V,E>)this.current_graph).addEdge(e, source, target, 
