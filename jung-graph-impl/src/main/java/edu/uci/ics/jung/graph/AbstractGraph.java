@@ -117,21 +117,29 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 
     public boolean isNeighbor(V v1, V v2)
     {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            throw new IllegalArgumentException("At least one of these not in this graph: " + v1 + ", " + v2);
         return this.getNeighbors(v1).contains(v2);
     }
 
     public boolean isIncident(V vertex, E edge)
     {
+        if (!containsVertex(vertex) || !containsEdge(edge))
+            throw new IllegalArgumentException("At least one of these not in this graph: " + vertex + ", " + edge);
         return this.getIncidentEdges(vertex).contains(edge);
     }
 
     public int getNeighborCount(V vertex)
     {
+        if (!containsVertex(vertex))
+            throw new IllegalArgumentException(vertex + " is not a vertex in this graph");
         return this.getNeighbors(vertex).size();
     }
 
     public int degree(V vertex)
     {
+        if (!containsVertex(vertex))
+            throw new IllegalArgumentException(vertex + " is not a vertex in this graph");
         return this.getIncidentEdges(vertex).size();
     }
 
@@ -156,7 +164,7 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
         else if (vertex.equals(second))
             return first;
         else 
-            throw new IllegalArgumentException(vertex + " is not incident to " + edge);
+            throw new IllegalArgumentException(vertex + " is not incident to " + edge + " in this graph");
     }
 
     public E findEdge(V v1, V v2)
@@ -206,7 +214,7 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
     	sb.append("\nEdges:");
     	for(E e : getEdges()) {
     		Pair<V> ep = getEndpoints(e);
-    		sb.append(e+"["+ep.getFirst()+","+ep.getSecond()+"]");
+    		sb.append(e+"["+ep.getFirst()+","+ep.getSecond()+"] ");
     	}
         return sb.toString();
     }
