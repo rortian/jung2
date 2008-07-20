@@ -57,11 +57,18 @@ public class TestHITSWithPriors extends TestCase {
         ranker.setMaximumIterations(500);
         ranker.setRemoveRankScoresOnFinalize(false);
         ranker.evaluate();
-        
-        Assert.assertEquals(ranker.getVertexRankScore(0), 0, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(1), 0.246074, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(2), 0.588245, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(3), 0.165690, .0001);
+
+        Assert.assertEquals(ranker.getVertexRankScore(0), 0, .001);
+        Assert.assertEquals(ranker.getVertexRankScore(1), 0.765, .001);
+        Assert.assertEquals(ranker.getVertexRankScore(2), 0.365, .001);
+        Assert.assertEquals(ranker.getVertexRankScore(3), 0.530, .001);
+
+        // these scores are incorrect: the normalization is wrong (not sum of squares)
+        // and the edge weights are wrong (1/degree rather than all 1.0)
+//        Assert.assertEquals(ranker.getVertexRankScore(0), 0, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(1), 0.246074, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(2), 0.588245, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(3), 0.165690, .0001);
     }
 
     public void testHubsRankings() {
@@ -71,9 +78,16 @@ public class TestHITSWithPriors extends TestCase {
         ranker.setRemoveRankScoresOnFinalize(false);
         ranker.evaluate();
 
-        Assert.assertEquals(ranker.getVertexRankScore(0), 0.114834, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(1), 0.411764, .0001);
-        Assert.assertEquals(ranker.getVertexRankScore(2), 0.473400, .0001);
+        Assert.assertEquals(ranker.getVertexRankScore(0), 0.3983, .0001);
+        Assert.assertEquals(ranker.getVertexRankScore(1), 0.1903, .0001);
+        Assert.assertEquals(ranker.getVertexRankScore(2), 0.8973, .0001);
         Assert.assertEquals(ranker.getVertexRankScore(3), 0.0, .0001);
+        
+        // these scores are incorrect: the normalization is wrong (not sum of squares)
+        // and the edge weights are wrong (1/degree rather than all 1.0)
+//        Assert.assertEquals(ranker.getVertexRankScore(0), 0.114834, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(1), 0.411764, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(2), 0.473400, .0001);
+//        Assert.assertEquals(ranker.getVertexRankScore(3), 0.0, .0001);
     }
 }

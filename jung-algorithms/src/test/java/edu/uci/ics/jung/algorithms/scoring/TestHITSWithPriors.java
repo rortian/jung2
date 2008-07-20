@@ -16,15 +16,13 @@ import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import edu.uci.ics.jung.algorithms.importance.HITSWithPriors;
 import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
 
 /**
- * @author Scott White
- * @author Tom Nelson - adapted to jung2
+ * Tests HITSWithPriors.
  */
 public class TestHITSWithPriors extends TestCase {
 
@@ -54,30 +52,26 @@ public class TestHITSWithPriors extends TestCase {
 
     public void testRankings() {
 
-//        HITSWithPriors<Number,Number> ranker = 
-//            new HITSWithPriors<Number,Number>(graph, ScoringUtils.getHITSUniformRootPrior(roots));
+        HITSWithPriors<Number,Number> ranker = 
+            new HITSWithPriors<Number,Number>(graph, ScoringUtils.getHITSUniformRootPrior(roots), 0.3);
+        ranker.evaluate();
+        
+        double[] expected_auth = {0.0, 0.765, 0.365, 0.530};
+        double[] expected_hub = {0.398, 0.190, 0.897, 0.0};
 
-//        HITSWithPriors<Number,Number> ranker = new HITSWithPriors<Number,Number>(graph, true, 0.3, priors, null);
-//        ranker.setMaximumIterations(500);
-//        ranker.setRemoveRankScoresOnFinalize(false);
-//        ranker.evaluate();
-//        
-//        Assert.assertEquals(ranker.getVertexRankScore(0), 0, .0001);
-//        Assert.assertEquals(ranker.getVertexRankScore(1), 0.246074, .0001);
-//        Assert.assertEquals(ranker.getVertexRankScore(2), 0.588245, .0001);
-//        Assert.assertEquals(ranker.getVertexRankScore(3), 0.165690, .0001);
-    }
-
-    public void testHubsRankings() {
-
-//        HITSWithPriors<Number,Number> ranker = new HITSWithPriors<Number,Number>(graph, false, 0.3, priors, null);
-//        ranker.setMaximumIterations(500);
-//        ranker.setRemoveRankScoresOnFinalize(false);
-//        ranker.evaluate();
-//
-//        Assert.assertEquals(ranker.getVertexRankScore(0), 0.114834, .0001);
-//        Assert.assertEquals(ranker.getVertexRankScore(1), 0.411764, .0001);
-//        Assert.assertEquals(ranker.getVertexRankScore(2), 0.473400, .0001);
-//        Assert.assertEquals(ranker.getVertexRankScore(3), 0.0, .0001);
+        double hub_sum = 0;
+        double auth_sum = 0;
+        for (Number n : graph.getVertices())
+        {
+            int i = n.intValue();
+            double auth = ranker.getVertexScore(i).authority;
+            double hub = ranker.getVertexScore(i).hub;
+            Assert.assertEquals(auth, expected_auth[i], 0.001);
+            Assert.assertEquals(hub, expected_hub[i], 0.001);
+            hub_sum += hub * hub;
+            auth_sum += auth * auth;
+        }
+        Assert.assertEquals(1.0, hub_sum, 0.001);
+        Assert.assertEquals(1.0, auth_sum, 0.001);
     }
 }
