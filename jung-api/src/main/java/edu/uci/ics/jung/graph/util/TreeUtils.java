@@ -99,22 +99,22 @@ public class TreeUtils
 	 * FIXME also note that this is redundant with DelegateForest.addTree()
 	 *
 	 */
-	public static <V,E> void mergeForests(Forest<V,E> destination, 
-	        Forest<V,E> source)
-	{
-	    for (Tree<V,E> tree : source.getTrees())
-	    {
-	        V root = tree.getRoot();
-	        // FIXME this is not done: addChildrenToForest is not yet complete
-	        // also still need to integrate into MST2, etc. (see email thread)
-//	        addChildrenToForest(destination, tree, root);
-	        for (E e: tree.getOutEdges(root))
-	        {
-	            V child = tree.getOpposite(root, e);
-	            addFromSubTree(destination, source, e, root, child);
-	        }
-	    }
-	}
+//	public static <V,E> void mergeForests(Forest<V,E> destination, 
+//	        Forest<V,E> source)
+//	{
+//	    for (Tree<V,E> tree : source.getTrees())
+//	    {
+//	        V root = tree.getRoot();
+//	        // FIXME this is not done: addChildrenToForest is not yet complete
+//	        // also still need to integrate into MST2, etc. (see email thread)
+////	        addChildrenToForest(destination, tree, root);
+//	        for (E e: tree.getOutEdges(root))
+//	        {
+//	            V child = tree.getOpposite(root, e);
+//	            addFromSubTree(destination, source, e, root, child);
+//	        }
+//	    }
+//	}
 	
 	public static <V,E> void addFromSubTree(Forest<V,E> tree, Forest<V,E> subTree, 
 			E edge, V parent, V root) {
@@ -134,14 +134,14 @@ public class TreeUtils
 	}
 
 	// FIXME: not done or integrated yet
-	private static <V,E> void addChildrenToForest(Forest<V,E> forest, Tree<V,E> tree, 
-	        V subtree_root)
-	{
-	    V parent = tree.getPredecessors(subtree_root).iterator().next();
-	    for (E e : tree.getOutEdges(subtree_root))
-	    {
-	        V child = tree.getOpposite(subtree_root, e);
-	        addChildrenToForest(forest, tree, child);
-	    }
-	}
+//	private static <V,E> void addChildrenToForest(Forest<V,E> forest, Tree<V,E> tree, 
+//	        V subtree_root)
+//	{
+//	    V parent = tree.getPredecessors(subtree_root).iterator().next();
+//	    for (E e : tree.getOutEdges(subtree_root))
+//	    {
+//	        V child = tree.getOpposite(subtree_root, e);
+//	        addChildrenToForest(forest, tree, child);
+//	    }
+//	}
 }
