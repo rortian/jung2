@@ -32,6 +32,8 @@ import edu.uci.ics.jung.graph.Graph;
  * ranker.printRankings();
  * </pre>
  * 
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.algorithms.scoring.BarycenterScorer}.
+ * 
  * @author Dan Bolser, Scott White
  */
 public class BaryCenter<V,E> extends AbstractRanker<V,E> {

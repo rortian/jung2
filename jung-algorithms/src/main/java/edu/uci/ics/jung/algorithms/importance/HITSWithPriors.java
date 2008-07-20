@@ -34,6 +34,8 @@ import edu.uci.ics.jung.graph.Graph;
  * <p>
  * Running time: O(|V|*I) where |V| is the number of vertices and I is the number of iterations until convergence
  *
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.algorithms.scoring.HITSWithPriors}.
+ *
  * @author Scott White
  * @author Tom Nelson - adapted to jung2
  * @see "Algorithms for Estimating Relative Importance in Graphs by Scott White and Padhraic Smyth, 2003"
@@ -133,6 +135,13 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
 
     }
 
+    private void normalizeRankings(double normConstant, Object key) {
+        for (V v : getVertices()) {
+            double rankScore = getVertexRankScore(v,key);
+            setVertexRankScore(v,rankScore/normConstant,key);
+        }
+    }
+    
     @Override
     protected void finalizeIterations() {
         super.finalizeIterations();
@@ -247,12 +256,13 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
         double sum = 0;
         for (E e : edges) {
 
-            double currentWeight = 0;
-            if (key.equals(AUTHORITY_KEY)) {
-                currentWeight = getEdgeWeight(e);
-            } else {
-                currentWeight = getInEdgeWeight(e);
-            }
+//            double currentWeight = 0;
+//            if (key.equals(AUTHORITY_KEY)) {
+//                currentWeight = getEdgeWeight(e);
+//            } else {
+//                currentWeight = getInEdgeWeight(e);
+//            }
+            double currentWeight = 1.0;
             sum += getVertexRankScore(getGraph().getOpposite(v,e), oppositeKey) * currentWeight;
         }
 
@@ -270,34 +280,43 @@ public class HITSWithPriors<V,E> extends RelativeAuthorityRanker<V,E> {
 
     protected void updateAuthorityRankings() {
         double authoritySum = 0;
-
+        
+        double total = 0;
         //compute authority scores
         for (V v : mReachableVertices) {
             double newAuthorityScore = computeSum(v, AUTHORITY_KEY) * (1.0 - mBeta) + mBeta * getPriorRankScore(v);
             authoritySum += newAuthorityScore;
+            total += newAuthorityScore * newAuthorityScore;
             setVertexRankScore(v, newAuthorityScore, AUTHORITY_KEY);
         }
+        
+        normalizeRankings(Math.sqrt(total), AUTHORITY_KEY);
 
-        if (!NumericalPrecision.equal(authoritySum, 1.0, .1)) {
-            System.err.println("HITS With Priors scores can not be generrated because the specified graph is not connected.");
-            System.err.println("Authority Sum: " + authoritySum);
-        }
+//        if (!NumericalPrecision.equal(authoritySum, 1.0, .1)) {
+//            System.err.println("HITS With Priors scores can not be generrated because the specified graph is not connected.");
+//            System.err.println("Authority Sum: " + authoritySum);
+//        }
 
     }
 
     protected void updateHubRankings() {
         double hubSum = 0;
+        
+        double total = 0;
         //compute hub scores
         for (V v : mReachableVertices) {
             double newHubScore = computeSum(v, HUB_KEY) * (1.0 - mBeta) + mBeta * getPriorRankScore(v);
             hubSum += newHubScore;
+            total += newHubScore * newHubScore;
             setVertexRankScore(v, newHubScore, HUB_KEY);
         }
 
-        if (!NumericalPrecision.equal(hubSum, 1.0, .1)) {
-            System.err.println("HITS With Priors scores can not be generrated because the specified graph is not connected.");
-            System.err.println("Hub Sum: " + hubSum);
-        }
+        normalizeRankings(Math.sqrt(total), HUB_KEY);
+
+//        if (!NumericalPrecision.equal(hubSum, 1.0, .1)) {
+//            System.err.println("HITS With Priors scores can not be generrated because the specified graph is not connected.");
+//            System.err.println("Hub Sum: " + hubSum);
+//        }
     }
 
 

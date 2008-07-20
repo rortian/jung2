@@ -50,6 +50,7 @@ import edu.uci.ics.jung.graph.Graph;
  * </ul>
  * </p> 
  * 
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.algorithms.scoring.VoltageScorer}.
  * @author Joshua O'Madadhain, Tom Nelson
  */
 public class VoltageRanker<V, E>

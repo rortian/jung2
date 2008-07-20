@@ -35,6 +35,8 @@ import edu.uci.ics.jung.graph.Graph;
  * <p>
  * Running time: O(|V|*I) where |V| is the number of vertices and I is the number of iterations until convergence
  *
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.algorithms.scoring.HITS}.
+ * 
  * @author Scott White
  * @author Tom Nelson - adapted to jung2
  * @see "Authoritative sources in a hyperlinked environment by Jon Kleinberg, 1997"

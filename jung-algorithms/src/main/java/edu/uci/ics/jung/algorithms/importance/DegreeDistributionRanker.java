@@ -25,6 +25,8 @@ import edu.uci.ics.jung.graph.Graph;
  * ranker.evaluate();
  * ranker.printRankings();
  * </pre>
+ *
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.algorithms.scoring.DegreeScorer}.
  * 
  * @author Scott White
  */

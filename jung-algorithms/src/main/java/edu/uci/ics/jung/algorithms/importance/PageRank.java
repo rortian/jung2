@@ -37,6 +37,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * <p>
  * Running time: O(|E|*I) where |E| is the number of edges and I is the number of iterations until convergence
  *
+ * @deprecated As of JUNG 2.0 beta, replaced with {@link edu.uci.ics.jung.algorithms.scoring.PageRank}.
  * @author Scott White
  * @see "The Anatomy of a Large-Scale Hypertextual Web Search Engine by L. Page and S. Brin, 1999"
  */
