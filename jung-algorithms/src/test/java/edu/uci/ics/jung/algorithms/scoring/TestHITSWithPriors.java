@@ -17,6 +17,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import edu.uci.ics.jung.algorithms.importance.HITSWithPriors;
+import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
@@ -28,7 +29,7 @@ import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 public class TestHITSWithPriors extends TestCase {
 
 	DirectedGraph<Number,Number> graph;
-	Set<Number> priors;
+	Set<Number> roots;
 	
     public static Test suite() {
         return new TestSuite(TestHITSWithPriors.class);
@@ -47,11 +48,14 @@ public class TestHITSWithPriors extends TestCase {
     	graph.addEdge(j++, 3, 0);
     	graph.addEdge(j++, 2, 1);
 
-        priors = new HashSet<Number>();
-        priors.add(2);
+        roots = new HashSet<Number>();
+        roots.add(2);
     }
 
-    public void testAuthoritiesRankings() {
+    public void testRankings() {
+
+//        HITSWithPriors<Number,Number> ranker = 
+//            new HITSWithPriors<Number,Number>(graph, ScoringUtils.getHITSUniformRootPrior(roots));
 
 //        HITSWithPriors<Number,Number> ranker = new HITSWithPriors<Number,Number>(graph, true, 0.3, priors, null);
 //        ranker.setMaximumIterations(500);
