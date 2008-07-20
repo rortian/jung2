@@ -217,12 +217,12 @@ public class TestGraphs {
 		return g;
 	}
 
-    public static Graph<Integer, Number> getSmallGraph() {
-        Graph<Integer, Number> graph = 
-            new SparseMultigraph<Integer, Number>();
-        Integer[] v = new Integer[3];
+    public static Graph<String, Number> getSmallGraph() {
+        Graph<String, Number> graph = 
+            new SparseMultigraph<String, Number>();
+        String[] v = new String[3];
         for (int i = 0; i < 3; i++) {
-            v[i] = new Integer(i);
+            v[i] = String.valueOf(i);
             graph.addVertex(v[i]);
         }
         graph.addEdge(new Double(0), v[0], v[1], EdgeType.DIRECTED);
