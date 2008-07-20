@@ -23,15 +23,19 @@ import edu.uci.ics.jung.graph.Graph;
  * that is assigned to that vertex out of the portion that is assigned according
  * to random jumps.
  * 
+ * @see "Algorithms for Estimating Relative Importance in Graphs by Scott White and Padhraic Smyth, 2003"
  */
 public class HITSWithPriors<V, E> 
 	extends AbstractIterativeScorerWithPriors<V,E,HITS.Scores>
 {
-    protected double disappearing_hub;
-    protected double disappearing_auth;
+    /**
+     * The sum of the potential, at each step, associated with vertices with no outedges (authority)
+     * or no inedges (hub).
+     */
+    protected HITS.Scores disappearing_potential;
 
     /**
-     * Creates an instance for the specified graph, edge weighs, vertex prior probabilities,
+     * Creates an instance for the specified graph, edge weights, vertex prior probabilities,
      * and random jump probability (alpha).
      * @param g the input graph
      * @param edge_weights the edge weights 
@@ -43,11 +47,26 @@ public class HITSWithPriors<V, E>
             Transformer<V, HITS.Scores> vertex_priors, double alpha)
     {
         super(g, edge_weights, vertex_priors, alpha);
+        disappearing_potential = new HITS.Scores(0,0);
     }
 
     /**
+     * Creates an instance for the specified graph, edge weights, and
+     * vertex prior probabilities.  alpha defaults to 0.0.
+     * @param g the input graph
+     * @param edge_weights the edge weights 
+     * @param vertex_priors the prior probability for each vertex
+     */
+    public HITSWithPriors(Graph<V,E> g,
+            Transformer<E, ? extends Number> edge_weights,
+            Transformer<V, HITS.Scores> vertex_priors)
+    {
+        this(g, edge_weights, vertex_priors, 0.0);
+    }
+    
+    /**
      * Creates an instance for the specified graph, vertex priors, and random
-     * jump probability (alpha).
+     * jump probability (alpha).  The edge weights default to 1.0.
      * @param g the input graph
      * @param vertex_priors the prior probability for each vertex
      * @param alpha the probability of a random jump at each step
@@ -57,8 +76,20 @@ public class HITSWithPriors<V, E>
           Transformer<V, HITS.Scores> vertex_priors, double alpha)
     {
     	super(g, new ConstantTransformer(1.0), vertex_priors, alpha);
+        disappearing_potential = new HITS.Scores(0,0);
     }
 
+    /**
+     * Creates an instance for the specified graph and vertex priors.
+     * The edge weights default to 1.0, and alpha defaults to 0.0.
+     * @param g the input graph
+     * @param vertex_priors the prior probability for each vertex
+     */
+    public HITSWithPriors(Graph<V,E> g, Transformer<V, HITS.Scores> vertex_priors)
+    {
+        this(g, vertex_priors, 0.0);
+    }
+    
     /**
      * Updates the value for this vertex.
      */
@@ -81,32 +112,36 @@ public class HITSWithPriors<V, E>
         }
         
         // modify total_input according to alpha
-        auth = auth * (1 - alpha) + getAuthPrior(v) * alpha;
-        hub = hub * (1 - alpha) + getHubPrior(v) * alpha;
+        auth = auth * (1 - alpha) + getVertexPrior(v).authority * alpha;
+        hub = hub * (1 - alpha) + getVertexPrior(v).hub * alpha;
         setOutputValue(v, new HITS.Scores(hub, auth));
 
         return Math.max(Math.abs(getCurrentValue(v).hub - hub), 
                         Math.abs(getCurrentValue(v).authority - auth));
     }
 
+    /**
+     * Code which is executed after each step.  In this case, deals with the
+     * 'disappearing potential', normalizes the scores, and then calls
+     * <code>super.afterStep()</code>.
+     * @see #collectDisappearingPotential(Object)
+     */
     @Override
     protected void afterStep()
     {
-        if (disappearing_hub > 0 || disappearing_auth > 0)
+        if (disappearing_potential.hub > 0 || disappearing_potential.authority > 0)
         {
             for (V v : graph.getVertices())
             {
                 double new_hub = getOutputValue(v).hub + 
-                    (1 - alpha) * (disappearing_hub * getVertexPrior(v).hub);
+                    (1 - alpha) * (disappearing_potential.hub * getVertexPrior(v).hub);
                 double new_auth = getOutputValue(v).authority + 
-                    (1 - alpha) * (disappearing_hub * getVertexPrior(v).authority);
+                    (1 - alpha) * (disappearing_potential.authority * getVertexPrior(v).authority);
                 setOutputValue(v, new HITS.Scores(new_hub, new_auth));
             }
-            disappearing_hub = 0;
-            disappearing_auth = 0;
+            disappearing_potential.hub = 0;
+            disappearing_potential.authority = 0;
         }
-    	disappearing_hub = 0;
-    	disappearing_auth = 0; 
         
     	normalizeScores();
     	
@@ -146,9 +181,9 @@ public class HITSWithPriors<V, E>
 	 * no incoming edges, no outgoing edges, or both.  Vertices that have no incoming edges
 	 * do not directly contribute to the hub scores of other vertices; similarly, vertices
 	 * that have no outgoing edges do not directly contribute to the authority scores of
-	 * other vertices.  These values are collected and then distributed across all vertices
+	 * other vertices.  These values are collected at each step and then distributed across all vertices
 	 * as a part of the normalization process.  (This process is not required for, and does
-	 * not affect, the sum-of-squares-style normalization.) 
+	 * not affect, the 'sum-of-squares'-style normalization.) 
 	 */
     @Override
     protected void collectDisappearingPotential(V v)
@@ -156,27 +191,17 @@ public class HITSWithPriors<V, E>
         if (graph.outDegree(v) == 0)
         {
             if (isDisconnectedGraphOK())
-                disappearing_hub += getCurrentValue(v).authority;
+                disappearing_potential.hub += getCurrentValue(v).authority;
             else
                 throw new IllegalArgumentException("Outdegree of " + v + " must be > 0");
         }
         if (graph.inDegree(v) == 0)
         {
             if (isDisconnectedGraphOK())
-                disappearing_auth += getCurrentValue(v).hub;
+                disappearing_potential.authority += getCurrentValue(v).hub;
             else
                 throw new IllegalArgumentException("Indegree of " + v + " must be > 0");
         }
     }
 
-    protected double getHubPrior(V v)
-    {
-        return getVertexPrior(v).hub;
-    }
-    
-    protected double getAuthPrior(V v)
-    {
-        return getVertexPrior(v).authority;
-    }
-    
 }

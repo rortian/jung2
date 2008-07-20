@@ -21,8 +21,29 @@ import edu.uci.ics.jung.algorithms.scoring.util.UniformDegreeWeight;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
+ * Assigns scores to vertices according to their 'voltage' in an approximate 
+ * solution to the Kirchoff equations.  This is accomplished by tying "source"
+ * vertices to specified positive voltages, "sink" vertices to 0 V, and 
+ * iteratively updating the voltage of each other vertex to the (weighted) 
+ * average of the voltages of its neighbors.
  * 
- * @author Joshua O'Madadhain
+ * <p>The resultant voltages will all be in the range <code>[0, max]</code>
+ * where <code>max</code> is the largest voltage of any source vertex (in the
+ * absence of negative source voltages; see below).
+ * 
+ * <p>A few notes about this algorithm's interpretation of the graph data: 
+ * <ul>
+ * <li/>Higher edge weights are interpreted as indicative of greater 
+ * influence/effect than lower edge weights.  
+ * <li/>Negative edge weights (and negative "source" voltages) invalidate
+ * the interpretation of the resultant values as voltages.  However, this 
+ * algorithm will not reject graphs with negative edge weights or source voltages.
+ * <li/>Parallel edges are equivalent to a single edge whose weight is the 
+ * sum of the weights on the parallel edges.
+ * <li/>Current flows along undirected edges in both directions, 
+ * but only flows along directed edges in the direction of the edge.
+ * </ul>
+ * </p> 
  */
 public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         implements VertexScorer<V, Double>
@@ -31,8 +52,12 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
     protected Collection<V> sinks;
     
     /**
-     * @param g
-     * @param edge_weights
+     * Creates an instance with the specified graph, edge weights, source voltages,
+     * and sinks.
+     * @param g the input graph
+     * @param edge_weights the edge weights, representing conductivity
+     * @param source_voltages the (fixed) voltage for each source
+     * @param sinks the vertices whose voltages are tied to 0
      */
     public VoltageScorer(Graph<V, E> g, Transformer<E, ? extends Number> edge_weights, 
             Map<V, ? extends Number> source_voltages, Collection<V> sinks)
@@ -44,7 +69,12 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
     }
 
     /**
-     * @param g
+     * Creates an instance with the specified graph, source voltages,
+     * and sinks.  The outgoing edges for each vertex are assigned 
+     * weights that sum to 1.
+     * @param g the input graph
+     * @param source_voltages the (fixed) voltage for each source
+     * @param sinks the vertices whose voltages are tied to 0
      */
     public VoltageScorer(Graph<V, E> g, Map<V, ? extends Number> source_voltages, Collection<V> sinks)
     {
@@ -55,12 +85,29 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         initialize();
     }
     
+    /**
+     * Creates an instance with the specified graph, edge weights, source, and
+     * sink.  The source vertex voltage is tied to 1.
+     * @param g the input graph
+     * @param edge_weights the edge weights, representing conductivity
+     * @param source the vertex whose voltage is tied to 1
+     * @param sink the vertex whose voltage is tied to 0
+     */
     public VoltageScorer(Graph<V,E> g, Transformer<E, ? extends Number> edge_weights, V source, V sink)
     {
         this(g, edge_weights, Collections.singletonMap(source, 1.0), Collections.singletonList(sink));
         initialize();
     }
 
+    /**
+     * Creates an instance with the specified graph, edge weights, source, and
+     * sink.  The source vertex voltage is tied to 1.
+     * The outgoing edges for each vertex are assigned 
+     * weights that sum to 1.
+     * @param g the input graph
+     * @param source the vertex whose voltage is tied to 1
+     * @param sink the vertex whose voltage is tied to 0
+     */
     public VoltageScorer(Graph<V,E> g, V source, V sink)
     {
         this(g, Collections.singletonMap(source, 1.0), Collections.singletonList(sink));
@@ -68,7 +115,9 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
     }
 
     
-    
+    /**
+     * Initializes the state of this instance.
+     */
     @Override
     public void initialize()
     {
