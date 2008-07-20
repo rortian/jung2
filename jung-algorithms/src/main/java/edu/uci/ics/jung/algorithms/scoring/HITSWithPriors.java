@@ -51,20 +51,6 @@ public class HITSWithPriors<V, E>
     }
 
     /**
-     * Creates an instance for the specified graph, edge weights, and
-     * vertex prior probabilities.  alpha defaults to 0.0.
-     * @param g the input graph
-     * @param edge_weights the edge weights 
-     * @param vertex_priors the prior probability for each vertex
-     */
-    public HITSWithPriors(Graph<V,E> g,
-            Transformer<E, ? extends Number> edge_weights,
-            Transformer<V, HITS.Scores> vertex_priors)
-    {
-        this(g, edge_weights, vertex_priors, 0.0);
-    }
-    
-    /**
      * Creates an instance for the specified graph, vertex priors, and random
      * jump probability (alpha).  The edge weights default to 1.0.
      * @param g the input graph
@@ -79,17 +65,6 @@ public class HITSWithPriors<V, E>
         disappearing_potential = new HITS.Scores(0,0);
     }
 
-    /**
-     * Creates an instance for the specified graph and vertex priors.
-     * The edge weights default to 1.0, and alpha defaults to 0.0.
-     * @param g the input graph
-     * @param vertex_priors the prior probability for each vertex
-     */
-    public HITSWithPriors(Graph<V,E> g, Transformer<V, HITS.Scores> vertex_priors)
-    {
-        this(g, vertex_priors, 0.0);
-    }
-    
     /**
      * Updates the value for this vertex.
      */
