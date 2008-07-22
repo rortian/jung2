@@ -31,11 +31,11 @@ JUNG also provides a visualization framework that makes it easy to construct too
        <developer>
             <id>eflat</id>
             <name>Joshua</name>
-            <email>eflat@sf.net</email>
+            <email>e-flat@sf.net</email>
             <url>http://www.ics.uci.edu/~jmadden/</url>
-            <organization>UCI</organization>
-            <organizationUrl>http://www.ics.uci.edu</organizationUrl>
-            <timezone>-7</timezone>
+            <organization>Google</organization>
+            <organizationUrl>http://www.google.com</organizationUrl>
+            <timezone>-8</timezone>
             <roles>
                 <role>Owner</role>
                 <role>Developer</role>
@@ -47,9 +47,9 @@ JUNG also provides a visualization framework that makes it easy to construct too
             <name>Danyel</name>
             <email>offkey@sf.net</email>
             <url />
-            <organization>UCI</organization>
-            <organizationUrl>http://www.ics.uci.edu</organizationUrl>
-            <timezone>-7</timezone>
+            <organization>Microsoft Research</organization>
+            <organizationUrl>http://research.microsoft.com</organizationUrl>
+            <timezone>-8</timezone>
             <roles>
                 <role>Owner</role>
                 <role>Developer</role>
@@ -63,11 +63,12 @@ JUNG also provides a visualization framework that makes it easy to construct too
             <url />
             <organization>RABA</organization>
             <organizationUrl>http://www.raba.com</organizationUrl>
-            <timezone>-4</timezone>
+            <timezone>-5</timezone>
             <roles>
                 <role>Developer</role>
             </roles>
         </developer>
+      <!--  
       <developer>
             <id>jason</id>
             <name>Jason</name>
@@ -80,7 +81,7 @@ JUNG also provides a visualization framework that makes it easy to construct too
                 <role>Developer</role>
             </roles>
         </developer>
-
+      -->
     </developers>
     <mailingLists>
         <mailingList>
@@ -169,15 +170,16 @@ JUNG also provides a visualization framework that makes it easy to construct too
     <module>jung-algorithms</module>
     <module>jung-io</module>
 
-<!-- uncomment for if you have jai installed
+<!-- uncomment for if you have jai installed 
     <module>jung-jai</module>
     <module>jung-jai-samples</module>
 -->
-<!-- uncomment if you have java3d installed
+<!-- uncomment if you have java3d installed 
     <module>jung-3d</module>
     <module>jung-3d-demos</module>
 -->
-<!-- uncomment for swt
+
+<!-- uncomment for swt 
     <module>jung-swt-rendering</module>
     <module>jung-swt-samples</module>
     <module>jung-swt-visualization</module>
