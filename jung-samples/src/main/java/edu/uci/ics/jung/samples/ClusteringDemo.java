@@ -76,7 +76,7 @@ public class ClusteringDemo extends JApplet {
 
 	VisualizationViewer<Number,Number> vv;
 	
-	Factory<Graph<Number,Number>> graphFactory;
+//	Factory<Graph<Number,Number>> graphFactory;
 	
 	Map<Number,Paint> vertexPaints = 
 		LazyMap.<Number,Paint>decorate(new HashMap<Number,Paint>(),
@@ -319,7 +319,7 @@ public class ClusteringDemo extends JApplet {
 	private void groupCluster(AggregateLayout<Number,Number> layout, Set<Number> vertices) {
 		if(vertices.size() < layout.getGraph().getVertexCount()) {
 			Point2D center = layout.transform(vertices.iterator().next());
-			Graph<Number,Number> subGraph = graphFactory.create();
+			Graph<Number,Number> subGraph = SparseMultigraph.<Number,Number>getFactory().create();
 			for(Number v : vertices) {
 				subGraph.addVertex(v);
 			}
