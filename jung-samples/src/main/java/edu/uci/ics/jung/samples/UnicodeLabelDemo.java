@@ -144,14 +144,14 @@ public class UnicodeLabelDemo {
         Map<V,String> map = new HashMap<V,String>();
         Map<V,Icon> iconMap = new HashMap<V,Icon>();
         String[] labels = {
-                "\u0057\u0065\u006C\u0063\u006F\u006D\u0065\u0020\u0074\u006F\u0020Jung\u0021",               
-                "\u6B22\u8FCE\u4F7F\u7528\u0020\u0020Jung\u0021",
-                "\u0414\u043E\u0431\u0440\u043E\u0020\u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0422\u044A\u0020\u0432\u0020Jung\u0021",
-                "\u0042\u0069\u0065\u006E\u0076\u0065\u006E\u0075\u0065\u0020\u0061\u0075\u0020Jung\u0021",
-                "\u0057\u0069\u006C\u006B\u006F\u006D\u006D\u0065\u006E\u0020\u007A\u0075\u0020Jung\u0021",
-                "Jung\u3078\u3087\u3045\u3053\u305D\u0021",
-//                "\u0053\u00E9\u006A\u0061\u0020\u0042\u0065\u006D\u0076\u0069\u006E\u0064\u006F\u0020Jung\u0021",
-               "\u0042\u0069\u0065\u006E\u0076\u0065\u006E\u0069\u0064\u0061\u0020\u0061\u0020Jung\u0021"
+                "\u0057\u0065\u006C\u0063\u006F\u006D\u0065\u0020\u0074\u006F\u0020JUNG\u0021",               
+                "\u6B22\u8FCE\u4F7F\u7528\u0020\u0020JUNG\u0021",
+                "\u0414\u043E\u0431\u0440\u043E\u0020\u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0422\u044A\u0020\u0432\u0020JUNG\u0021",
+                "\u0042\u0069\u0065\u006E\u0076\u0065\u006E\u0075\u0065\u0020\u0061\u0075\u0020JUNG\u0021",
+                "\u0057\u0069\u006C\u006B\u006F\u006D\u006D\u0065\u006E\u0020\u007A\u0075\u0020JUNG\u0021",
+                "JUNG\u3078\u3087\u3045\u3053\u305D\u0021",
+//                "\u0053\u00E9\u006A\u0061\u0020\u0042\u0065\u006D\u0076\u0069\u006E\u0064\u006F\u0020JUNG\u0021",
+               "\u0042\u0069\u0065\u006E\u0076\u0065\u006E\u0069\u0064\u0061\u0020\u0061\u0020JUNG\u0021"
         };
         
         public UnicodeVertexStringer(V[] vertices) {
@@ -160,7 +160,7 @@ public class UnicodeLabelDemo {
             }
         }
         
-        /* (non-Javadoc)
+        /**
          * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
          */
         public String getLabel(V v) {
