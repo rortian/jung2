@@ -155,7 +155,7 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
         if (!delegate.containsVertex(vertex))
             return false;
         if (remove_subtrees)
-            for(V v : delegate.getSuccessors(vertex)) 
+            for(V v : new ArrayList<V>(delegate.getSuccessors(vertex))) 
                 removeVertex(v, true);
         return delegate.removeVertex(vertex);
 	}
