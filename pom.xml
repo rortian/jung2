@@ -289,6 +289,8 @@
 				<module>jung-graph-impl</module>
 				<module>jung-algorithms</module>
 				<module>jung-io</module>
+				<module>jung-visualization</module>
+				<module>jung-samples</module>
 				<module>jung-jai</module>
 				<module>jung-jai-samples</module>
 				<module>jung-3d</module>
