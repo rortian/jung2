@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jung.app</groupId>
 	<artifactId>app</artifactId>
 	<packaging>pom</packaging>
-	<version>2.0-alpha3-SNAPSHOT</version>
+	<version>2.0-alpha3</version>
 	<name>jung2</name>
 	<url>http://jung.sourceforge.net/site</url>
 	<licenses>
@@ -21,7 +18,7 @@
 		<developerConnection>
 			scm:cvs:ext:${cvsUserName}@jung.cvs.sourceforge.net:/cvsroot/jung:jung2
 		</developerConnection>
-		<tag>jung2-2_0-alpha2</tag>
+		<tag>jung2-2_0_alpha3</tag>
 	</scm>
 	<description>
 		JUNG the Java Universal Network/Graph Framework--is a software
