@@ -3,7 +3,7 @@
 	<groupId>jung.app</groupId>
 	<artifactId>app</artifactId>
 	<packaging>pom</packaging>
-	<version>2.0-alpha3</version>
+	<version>2.0-alpha4-SNAPSHOT</version>
 	<name>jung2</name>
 	<url>http://jung.sourceforge.net/site</url>
 	<licenses>
@@ -15,10 +15,8 @@
 	</licenses>
 	<scm>
 		<url>http://jung.cvs.sourceforge.net/jung/jung2</url>
-		<developerConnection>
-			scm:cvs:ext:${cvsUserName}@jung.cvs.sourceforge.net:/cvsroot/jung:jung2
-		</developerConnection>
-		<tag>jung2-2_0_alpha3</tag>
+		<developerConnection>scm:cvs:ext:tomnelson@jung.cvs.sourceforge.net:/cvsroot/jung:jung2</developerConnection>
+		<tag>jung2-2_0-alpha2</tag>
 	</scm>
 	<description>
 		JUNG the Java Universal Network/Graph Framework--is a software
