@@ -2,13 +2,13 @@
   <parent>
     <artifactId>app</artifactId>
     <groupId>jung.app</groupId>
-    <version>2.0-beta1</version>
+    <version>2.0-beta2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>jung</groupId>
   <artifactId>jung-3d-demos</artifactId>
   <name>jung-3d-demos</name>
-  <version>2.0-beta1</version>
+  <version>2.0-beta2-SNAPSHOT</version>
   <url>http://jung.sourceforge.net/site/jung-3d-demos</url>
   <description>
   Demo programs for java3d based graph rendering project
