@@ -24,7 +24,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>samples.graph.VertexImageShaperDemo</mainClass>
+              <mainClass>edu.uci.ics.jung.samples.VertexImageShaperDemo</mainClass>
               <addClasspath>true</addClasspath>
             </manifest>
           </archive>
