@@ -13,8 +13,22 @@
   <description>
   IO support classes for jung2
   </description>
+    <properties>
+        <java.source>1.5</java.source>
+        <java.target>1.5</java.target>
+        <junit.version>4.4</junit.version>
+        <woodstox.version>3.2.6</woodstox.version>
+    </properties>
   <build>
    	<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.source}</source>
+                    <target>${java.target}</target>
+                </configuration>
+            </plugin>
  	  <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -32,7 +46,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -62,5 +76,10 @@
       <version>4.01</version>
       <scope>compile</scope>
     </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>wstx-asl</artifactId>
+            <version>${woodstox.version}</version>
+        </dependency>
   </dependencies>
 </project>
