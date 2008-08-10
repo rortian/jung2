@@ -117,9 +117,9 @@ public class GraphMLWriter<V,E>
 		for (String key : graph_data.keySet())
 		{
 			Transformer<Hypergraph<V,E>, ?> t = graph_data.get(key).transformer;
-			String value = t.transform(graph).toString();
+			Object value = t.transform(graph);
 			if (value != null)
-				w.write(format("data", "key", key, value) + "\n");
+				w.write(format("data", "key", key, value.toString()) + "\n");
 		}
         
 		// write vertex information
@@ -168,7 +168,7 @@ public class GraphMLWriter<V,E>
 				Transformer<V, ?> t = vertex_data.get(key).transformer;
 				if (t != null)
 				{
-    				String value = t.transform(v).toString();
+    				Object value = t.transform(v);
     				if (value != null)
     				{
     					if (!closed)
@@ -176,7 +176,7 @@ public class GraphMLWriter<V,E>
     						w.write(v_string + ">\n");
     						closed = true;
     					}
-    					w.write(format("data", "key", key, value) + "\n");
+    					w.write(format("data", "key", key, value.toString()) + "\n");
     				}
 				}
 			}
@@ -234,7 +234,7 @@ public class GraphMLWriter<V,E>
 			for (String key : edge_data.keySet())
 			{
 				Transformer<E, ?> t = edge_data.get(key).transformer;
-				String value = t.transform(e).toString();
+				Object value = t.transform(e);
 				if (value != null)
 				{
 					if (!closed)
@@ -242,7 +242,7 @@ public class GraphMLWriter<V,E>
 						w.write(e_string + ">\n");
 						closed = true;
 					}
-					w.write(format("data", "key", key, value) + "\n");
+					w.write(format("data", "key", key, value.toString()) + "\n");
 				}
 			}
 			// if this is a hyperedge, write endpoints out if any
