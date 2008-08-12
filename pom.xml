@@ -214,13 +214,11 @@
 
     <!--  maven profiles are used to control what gets built. The default is to build the awt/swing version
           by specifying properties, you can build other versions:
-          mvn install -Dswt   - will build the swt version
           mvn install -Dj3d   - will build the java3d/jai version
           mvn install -Dall   - will build everything (CAUTION: This will result in a set of incompatible libraries)
     -->
 	<profiles>
 		<profile>
-		    <!--  CAUTION: this will build a set of incompatible libraries, as the awt and swt versions cannot be used together -->
 			<id>all</id>
 			<activation>
 				<property>
@@ -238,9 +236,6 @@
 				<module>jung-jai-samples</module>
 				<module>jung-3d</module>
 				<module>jung-3d-demos</module>
-				<module>jung-swt-rendering</module>
-				<module>jung-swt-samples</module>
-				<module>jung-swt-visualization</module>
 			</modules>
 		</profile>
 		<profile>
@@ -256,24 +251,6 @@
 				<module>jung-io</module>
 				<module>jung-visualization</module>
 				<module>jung-samples</module>
-			</modules>
-		</profile>
-		<profile>
-		<!-- build the swt version -->
-			<id>swt</id>
-			<activation>
-				<property>
-					<name>swt</name>
-				</property>
-			</activation>
-			<modules>
-				<module>jung-api</module>
-				<module>jung-graph-impl</module>
-				<module>jung-algorithms</module>
-				<module>jung-io</module>
-				<module>jung-swt-rendering</module>
-				<module>jung-swt-samples</module>
-				<module>jung-swt-visualization</module>
 			</modules>
 		</profile>
 		<profile>
