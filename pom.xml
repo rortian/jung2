@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>jung.app</groupId>
-	<artifactId>app</artifactId>
+	<groupId>net.sf.jung</groupId>
+	<artifactId>jung2</artifactId>
 	<packaging>pom</packaging>
 	<version>2.0-beta2-SNAPSHOT</version>
 	<name>jung2</name>
@@ -15,8 +15,8 @@
 	</licenses>
 	<scm>
 		<url>http://jung.cvs.sourceforge.net/jung/jung2</url>
-		<developerConnection>scm:cvs:ext:tomnelson@jung.cvs.sourceforge.net:/cvsroot/jung:jung2</developerConnection>
-		<tag>jung2-2_0-alpha2</tag>
+		<developerConnection>scm:cvs:ext:${cvsUserName}@jung.cvs.sourceforge.net:/cvsroot/jung:jung2</developerConnection>
+		<tag>${cvsTag}</tag>
 	</scm>
 	<description>
 		JUNG the Java Universal Network/Graph Framework--is a software
@@ -190,10 +190,15 @@
 	</reporting>
 
 	<distributionManagement>
+                <repository>
+                  <id>jung.sf.net</id>
+                  <name>sourceforge staging repo</name>
+                  <url>${sfRepoUrl}</url>
+                </repository>
 		<site>
 			<id>jung.sf.net</id>
 			<url>
-				scp://shell.sf.net/home/groups/j/ju/jung/htdocs/site
+				${sfSiteUrl}
 			</url>
 		</site>
 	</distributionManagement>
