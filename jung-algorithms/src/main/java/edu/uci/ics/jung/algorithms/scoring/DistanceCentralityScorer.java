@@ -11,6 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
@@ -96,6 +97,7 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
         this.averaging = averaging;
         this.ignore_missing = ignore_missing;
         this.ignore_self_distances = ignore_self_distances;
+        this.output = new HashMap<V, Double>();
     }
 
     /**
