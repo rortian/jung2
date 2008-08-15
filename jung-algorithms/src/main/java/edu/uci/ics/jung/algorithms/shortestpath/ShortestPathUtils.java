@@ -37,7 +37,7 @@ public class ShortestPathUtils
         if (incomingEdges.isEmpty() || incomingEdges.get(target) == null)
             return path;
         V current = target;
-        while (current != source)
+        while (!current.equals(source))
         {
             E incoming = incomingEdges.get(current);
             path.addFirst(incoming);
