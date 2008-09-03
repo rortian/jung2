@@ -61,7 +61,7 @@ public class EdgePredicateFilter<V, E> implements Filter<V, E>
         for (E e : g.getEdges())
         {
             if (edge_pred.evaluate(e))
-                g.addEdge(e, g.getIncidentVertices(e));
+                filtered.addEdge(e, g.getIncidentVertices(e));
         }
         
         return filtered;
