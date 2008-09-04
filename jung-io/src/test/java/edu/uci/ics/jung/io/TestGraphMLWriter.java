@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.Assert;
-import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 
 import org.apache.commons.collections15.Transformer;

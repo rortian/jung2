@@ -16,7 +16,6 @@ import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;

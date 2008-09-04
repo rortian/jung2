@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.uci.ics.jung.algorithms.cluster.WeakComponentClusterer;
-import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 import edu.uci.ics.jung.graph.Graph;
 
 
