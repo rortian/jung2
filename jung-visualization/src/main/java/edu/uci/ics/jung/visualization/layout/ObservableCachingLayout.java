@@ -23,6 +23,7 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.LayoutDecorator;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.util.Caching;
 import edu.uci.ics.jung.visualization.util.ChangeEventSupport;
@@ -66,6 +67,17 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
 		super.initialize();
 		fireStateChanged();
 	}
+	
+    /**
+     * @see edu.uci.ics.jung.algorithms.util.IterativeContext#done()
+     */
+    public boolean done() {
+    	if(delegate instanceof IterativeContext) {
+    		return ((IterativeContext)delegate).done();
+    	}
+    	return true;
+    }
+
 
 	/**
 	 * @param v
