@@ -144,7 +144,7 @@ public class PersistentLayoutImpl<V, E> extends ObservableCachingLayout<V,E>
      * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
      */
     public boolean done() {
-        return locked;
+        return super.done() || locked;
     }
 
     /*
