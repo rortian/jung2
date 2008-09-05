@@ -29,7 +29,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * are added at the lowest index available, if no index is specified.
  * 
  */
-public class OrderedKAryTree<V, E> implements Tree<V, E> 
+public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements Tree<V, E> 
 {
     protected Map<E, Pair<V>> edge_vpairs;
     protected Map<V, VertexData> vertex_data;
@@ -39,6 +39,7 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
     
     public OrderedKAryTree(int order)
     {
+    	super(EdgeType.DIRECTED);
     	this.order = order;
     }
   
@@ -241,9 +242,7 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
      */
     public boolean addEdge(E e, V v1, V v2, EdgeType edge_type) 
     {
-		if (edge_type != EdgeType.DIRECTED)
-			throw new IllegalArgumentException("EdgeType " + edge_type + 
-					" not legal for this graph type");
+    	this.validateEdgeType(edge_type);
     	return addEdge(e, v1, v2);
     }
   
@@ -255,25 +254,6 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
         if (!containsEdge(directed_edge))
             return null;
         return edge_vpairs.get(directed_edge).getSecond();
-    }
-  
-    /**
-     * @see edu.uci.ics.jung.graph.Graph#getEdgeType(java.lang.Object)
-     */
-    public EdgeType getEdgeType(E edge) 
-    {
-        if (containsEdge(edge))
-            return EdgeType.DIRECTED;
-        else
-            return null;
-    }
-  
-    /**
-     * @see edu.uci.ics.jung.graph.Graph#getEdges(edu.uci.ics.jung.graph.util.EdgeType)
-     */
-    public Collection<E> getEdges(EdgeType edgeType) 
-    {
-        return CollectionUtils.unmodifiableCollection(edge_vpairs.keySet());
     }
   
     /**
@@ -470,8 +450,9 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
      * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
      */
     @SuppressWarnings("unchecked")
-	public boolean addEdge(E edge, Collection<? extends V> vertices) 
+	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType edge_type) 
     {
+    	this.validateEdgeType(edge_type);
 		Pair<V> endpoints;
 		if(vertices instanceof Pair)
 			endpoints = (Pair<V>)vertices;
@@ -537,13 +518,6 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
     	return vertex_data.containsKey(vertex);
     }
   
-    /**
-     * @see edu.uci.ics.jung.graph.Hypergraph#degree(java.lang.Object)
-     */
-    public int degree(V vertex) 
-    {
-    	return getNeighbors(vertex).size();
-    }
   
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#findEdge(java.lang.Object, java.lang.Object)
@@ -725,25 +699,13 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
 		E edge = getParentEdge(vertex);
 		edge_vpairs.remove(edge);
 		E[] edges = vertex_data.get(vertex).child_edges;
-		if (edges == null)
+		if (edges != null)
 			for (int i = 0; i < edges.length; i++)
 				edge_vpairs.remove(edges[i]);
 		vertex_data.remove(vertex);
 		
 		return true;
     }
-
-    /**
-     * @see Hypergraph#addEdge(Object, Collection, EdgeType)
-     */
-	@SuppressWarnings("unchecked")
-	public boolean addEdge(E edge, Collection<? extends V> vertices,
-			EdgeType edge_type) {
-		if (edge_type != EdgeType.DIRECTED)
-			throw new IllegalArgumentException("EdgeType " + edge_type + 
-					" not legal for this graph type");
-		return addEdge(edge, vertices);
-	}
 	
 	protected class VertexData
 	{
@@ -758,10 +720,9 @@ public class OrderedKAryTree<V, E> implements Tree<V, E>
 		}
 	}
 
-    public int getEdgeCount(EdgeType edge_type)
-    {
-        if (edge_type == EdgeType.DIRECTED)
-            return edge_vpairs.size();
-        return 0;
-    }
+	@Override
+	public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) 
+	{
+		return addEdge(edge, endpoints.getFirst(), endpoints.getSecond(), edgeType);
+	}
 }

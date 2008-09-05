@@ -60,12 +60,6 @@ public class SparseGraph<V,E>
     }
     
     @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints)
-    {
-        return addEdge(edge, endpoints, EdgeType.UNDIRECTED);
-    }
-
-    @Override
     public E findEdge(V v1, V v2)
     {
         if (!containsVertex(v1) || !containsVertex(v2))
@@ -107,9 +101,6 @@ public class SparseGraph<V,E>
         E connection = findEdge(v1, v2);
         if (connection != null && getEdgeType(connection) == edgeType)
             return false;
-//            throw new IllegalArgumentException("This graph does not accept parallel edges; " + new_endpoints + 
-//                    " are already connected by " + connection); 
-        
 
         if (!containsVertex(v1))
             this.addVertex(v1);
@@ -180,16 +171,6 @@ public class SparseGraph<V,E>
         return Collections.unmodifiableCollection(succs);
     }
 
-    public boolean addEdge(E e, V v1, V v2)
-    {
-        return addEdge(e, new Pair<V>(v1, v2));
-    }
-
-    public boolean addEdge(E e, V v1, V v2, EdgeType edgeType)
-    {
-        return addEdge(e, new Pair<V>(v1, v2), edgeType);
-    }
-
     public Collection<E> getEdges(EdgeType edgeType)
     {
         if (edgeType == EdgeType.DIRECTED)
@@ -198,7 +179,6 @@ public class SparseGraph<V,E>
             return Collections.unmodifiableCollection(undirected_edges.keySet());
         else
             return null;
-//            return Collections.unmodifiableCollection(new ArrayList<E>(0));
     }
 
     public Pair<V> getEndpoints(E edge)
@@ -379,4 +359,8 @@ public class SparseGraph<V,E>
         return 0;
     }
 
+	public EdgeType getDefaultEdgeType() 
+	{
+		return EdgeType.UNDIRECTED;
+	}
 }

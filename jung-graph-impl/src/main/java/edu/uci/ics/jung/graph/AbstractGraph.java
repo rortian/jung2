@@ -19,26 +19,15 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
- * Abstract implementation of the <code>Graph</code> interface.  Designed to simplify implementation of
- * new graph classes.
+ * Abstract implementation of the <code>Graph</code> interface.  
+ * Designed to simplify implementation of new graph classes.
  * 
  * @author Joshua O'Madadhain
  */
 public abstract class AbstractGraph<V, E> implements Graph<V,E> {
-	@SuppressWarnings("unchecked")
-	public boolean addEdge(E edge, Collection<? extends V> vertices) {
-        if (vertices == null)
-            throw new IllegalArgumentException("'vertices' parameter must not be null");
-	    if (vertices.size() == 2)
-	        return addEdge(edge, 
-	                vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices));
-	    else if (vertices.size() == 1)
-	    {
-	        V vertex = vertices.iterator().next();
-	        return addEdge(edge, new Pair<V>(vertex, vertex));
-	    }
-	    else
-	        throw new IllegalArgumentException("Graph objects connect 1 or 2 vertices; vertices arg has " + vertices.size());
+	public boolean addEdge(E edge, Collection<? extends V> vertices) 
+	{
+		return addEdge(edge, vertices, this.getDefaultEdgeType());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -47,8 +36,8 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 	        throw new IllegalArgumentException("'vertices' parameter must not be null");
 	    if (vertices.size() == 2)
 	        return addEdge(edge, 
-	                vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices), 
-	                edgeType);
+	        			   vertices instanceof Pair ? (Pair<V>)vertices : new Pair<V>(vertices), 
+	        			   edgeType);
         else if (vertices.size() == 1)
         {
             V vertex = vertices.iterator().next();
@@ -58,7 +47,20 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
             throw new IllegalArgumentException("Graph objects connect 1 or 2 vertices; vertices arg has " + vertices.size());
 	}
 	
-	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints);
+	public boolean addEdge(E e, V v1, V v2)
+	{
+		return addEdge(e, v1, v2, this.getDefaultEdgeType());
+	}
+
+	public boolean addEdge(E e, V v1, V v2, EdgeType edge_type)
+	{
+		return addEdge(e, new Pair<V>(v1, v2), edge_type);
+	}
+	
+	public boolean addEdge(E edge, Pair<? extends V> endpoints)
+	{
+		return addEdge(edge, endpoints, this.getDefaultEdgeType());
+	}
 	
 	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType);
 
@@ -76,8 +78,8 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
             Pair<V> existing_endpoints = getEndpoints(edge);
             if (!existing_endpoints.equals(new_endpoints)) {
                 throw new IllegalArgumentException("edge " + edge + 
-                        " already exists in this graph with endpoints " + existing_endpoints + " and cannot be " +
-                        		"added with endpoints " + endpoints);
+                        " already exists in this graph with endpoints " + existing_endpoints + 
+                        " and cannot be added with endpoints " + endpoints);
             } else {
                 return null;
             }

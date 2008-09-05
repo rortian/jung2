@@ -42,7 +42,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 @SuppressWarnings("serial")
 public class UndirectedSparseMultigraph<V,E> 
-    extends AbstractGraph<V,E>
+    extends AbstractTypedGraph<V,E>
     implements UndirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
     
     public static <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
@@ -58,6 +58,7 @@ public class UndirectedSparseMultigraph<V,E>
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
     public UndirectedSparseMultigraph() {
+    	super(EdgeType.UNDIRECTED);
         vertices = new HashMap<V, Set<E>>();
         edges = new HashMap<E, Pair<V>>();
     }
@@ -107,23 +108,15 @@ public class UndirectedSparseMultigraph<V,E>
         return true;
     }
     
-    public boolean addEdge(E e, V v1, V v2) {
-        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
-    }
-
     public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
         return addEdge(edge, new Pair<V>(v1, v2), edgeType);
     }
     
     @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
-        if(edgeType != EdgeType.UNDIRECTED) 
-            throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
-        return addEdge(edge, endpoints);
-    }
-        
-    @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints) {
+    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edge_type) 
+    {
+    	validateEdgeType(edge_type);
+    	
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
         if (new_endpoints == null)
             return false;
@@ -221,21 +214,6 @@ public class UndirectedSparseMultigraph<V,E>
         return edges.get(edge);
     }
 
-    public EdgeType getEdgeType(E edge) {
-        if (containsEdge(edge))
-            return EdgeType.UNDIRECTED;
-        else
-            return null;
-    }
-
-    public Collection<E> getEdges(EdgeType edgeType) {
-        if (edgeType == EdgeType.UNDIRECTED)
-            return getEdges();
-        else
-            return null;
-//            return Collections.unmodifiableCollection(new ArrayList<E>());
-    }
-
     public V getDest(E directed_edge) {
         return null;
     }
@@ -260,10 +238,4 @@ public class UndirectedSparseMultigraph<V,E>
         return vertices.size();
     }
 
-    public int getEdgeCount(EdgeType edge_type)
-    {
-        if (edge_type == EdgeType.UNDIRECTED)
-            return edges.size();
-        return 0;
-    }
 }

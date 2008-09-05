@@ -54,28 +54,6 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 	}
 
 	/**
-	 * Add an edge to the tree, connecting v1, the parent and v2, the child.
-	 * v1 must already exist in the tree, and v2 must not already exist
-	 * the passed edge must be unique in the tree. 
-	 * 
-	 * @param e a unique edge to add
-	 * @param v1 the parent node
-	 * @param v2 the child node
-	 * @return true if this call mutates the underlying graph
-	 * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public boolean addEdge(E e, V v1, V v2) {
-		if(delegate.getVertices().contains(v1) == false) {
-			throw new IllegalArgumentException("Tree must already contain "+v1);
-		}
-		if(delegate.getVertices().contains(v2)) {
-			throw new IllegalArgumentException("Tree must not already contain "+v2);
-		}
-		return delegate.addEdge(e, v1, v2);
-	}
-
-	/**
 	 * Add vertex as a root of the tree
 	 * 
 	 * @param vertex the tree root to add

@@ -31,7 +31,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 @SuppressWarnings("serial")
 public class DirectedSparseMultigraph<V,E> 
-    extends AbstractGraph<V,E>
+    extends AbstractTypedGraph<V,E>
     implements DirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
 
 	public static <V,E> Factory<DirectedGraph<V,E>> getFactory() {
@@ -46,6 +46,7 @@ public class DirectedSparseMultigraph<V,E>
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
     public DirectedSparseMultigraph() {
+    	super(EdgeType.DIRECTED);
         vertices = new HashMap<V, Pair<Set<E>>>();
         edges = new HashMap<E, Pair<V>>();
     }
@@ -188,30 +189,9 @@ public class DirectedSparseMultigraph<V,E>
         return null;
     }
     
-    public boolean addEdge(E edge, V source, V dest) {
-        return addEdge(edge, source, dest, EdgeType.DIRECTED);
-    }
-
-    /**
-     * Adds <code>edge</code> to the graph.  Also adds 
-     * <code>source</code> and <code>dest</code> to the graph if they
-     * are not already present.  Returns <code>false</code> if 
-     * the specified edge (with the specified source and destination) are already
-     * in the graph.
-     */
-    public boolean addEdge(E edge, V source, V dest, EdgeType edgeType) {
-    	return addEdge(edge, new Pair<V>(source, dest), edgeType);
-    }
-
-	@Override
-  public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
-    	if(edgeType != EdgeType.DIRECTED) 
-            throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
-    	return addEdge(edge, endpoints);
-	}
-
-	@Override
-  public boolean addEdge(E edge, Pair<? extends V> endpoints) {
+	public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) 
+	{
+		this.validateEdgeType(edgeType);
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
         if (new_endpoints == null)
             return false;
@@ -262,20 +242,6 @@ public class DirectedSparseMultigraph<V,E>
         return edges.get(edge);
     }
 
-    public EdgeType getEdgeType(E edge) {
-        if (containsEdge(edge))
-            return EdgeType.DIRECTED;
-        else 
-            return null;
-    }
-
-	public Collection<E> getEdges(EdgeType edgeType) {
-        if (edgeType == EdgeType.DIRECTED)
-            return getEdges();
-        else
-            return null;
-	}
-
 	public int getEdgeCount() {
 		return edges.size();
 	}
@@ -283,11 +249,4 @@ public class DirectedSparseMultigraph<V,E>
 	public int getVertexCount() {
 		return vertices.size();
 	}
-
-    public int getEdgeCount(EdgeType edge_type)
-    {
-        if (edge_type == EdgeType.DIRECTED)
-            return edges.size();
-        return 0;
-    }
 }

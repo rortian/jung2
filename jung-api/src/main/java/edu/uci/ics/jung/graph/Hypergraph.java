@@ -329,6 +329,13 @@ public interface Hypergraph<V, E>
     EdgeType getEdgeType(E edge); 
     
     /**
+     * Returns the default edge type for this graph.
+     * 
+     * @return the default edge type for this graph
+     */
+    EdgeType getDefaultEdgeType();
+    
+    /**
      * Returns the collection of edges in this graph which are of type <code>edge_type</code>.
      * @param edge_type the type of edges to be returned
      * @return the collection of edges which are of type <code>edge_type</code>, or

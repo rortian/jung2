@@ -131,6 +131,7 @@ public class Graphs {
 	}
 	
 	
+	@SuppressWarnings("serial")
 	static abstract class SynchronizedAbstractGraph<V,E> implements Graph<V,E>, Serializable {
 		protected Graph<V,E> delegate;
 
@@ -141,6 +142,14 @@ public class Graphs {
 			this.delegate = delegate;
 		}
 
+		/**
+		 * @see edu.uci.ics.jung.graph.Graph#getDefaultEdgeType()
+		 */
+		public EdgeType getDefaultEdgeType()
+		{
+			return delegate.getDefaultEdgeType();
+		}
+		
 		/**
 		 * @see edu.uci.ics.jung.graph.Graph#addEdge(Object, Object, Object, EdgeType)
 		 */
@@ -534,6 +543,7 @@ public class Graphs {
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	static abstract class UnmodifiableAbstractGraph<V,E> implements Graph<V,E>, Serializable {
 		protected Graph<V,E> delegate;
 
@@ -545,6 +555,14 @@ public class Graphs {
 			this.delegate = delegate;
 		}
 
+		/**
+		 * @see edu.uci.ics.jung.graph.Graph#getDefaultEdgeType()
+		 */
+		public EdgeType getDefaultEdgeType()
+		{
+			return delegate.getDefaultEdgeType();
+		}
+		
 		/**
 		 * @see edu.uci.ics.jung.graph.Graph#addEdge(Object, Object, Object, EdgeType)
 		 */

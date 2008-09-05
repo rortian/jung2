@@ -28,7 +28,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * An implementation of <code>DirectedGraph</code> suitable for sparse graphs.
  */
 @SuppressWarnings("serial")
-public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
+public class DirectedSparseGraph<V,E> extends AbstractTypedGraph<V, E> implements
         DirectedGraph<V, E>, Serializable
 {
     public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
@@ -43,14 +43,17 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
                                                 // of neighboring vertices to incident edges
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
-    public DirectedSparseGraph() {
+    public DirectedSparseGraph() 
+    {
+    	super(EdgeType.DIRECTED);
         vertices = new HashMap<V, Pair<Map<V,E>>>();
         edges = new HashMap<E, Pair<V>>();
     }
     
     @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints)
+    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType)
     {
+    	this.validateEdgeType(edgeType);
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
         if (new_endpoints == null)
             return false;
@@ -74,14 +77,6 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         vertices.get(dest).getFirst().put(source, edge);
 
         return true;
-    }
-
-    @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType)
-    {
-        if(edgeType != EdgeType.DIRECTED) 
-            throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
-        return addEdge(edge, endpoints);
     }
 
     @Override
@@ -153,37 +148,11 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         return Collections.unmodifiableCollection(getSuccs_internal(vertex));
     }
 
-    public boolean addEdge(E e, V v1, V v2)
-    {
-        return addEdge(e, v1, v2, EdgeType.DIRECTED);
-    }
-
-    public boolean addEdge(E e, V v1, V v2, EdgeType edgeType)
-    {
-        return addEdge(e, new Pair<V>(v1, v2), edgeType);
-    }
-
-    public Collection<E> getEdges(EdgeType edgeType)
-    {
-        if (edgeType == EdgeType.DIRECTED)
-            return getEdges();
-        else
-            return null;
-    }
-
     public Pair<V> getEndpoints(E edge)
     {
         if (!containsEdge(edge))
             return null;
         return edges.get(edge);
-    }
-
-    public EdgeType getEdgeType(E edge)
-    {
-        if (containsEdge(edge))
-            return EdgeType.DIRECTED;
-        else
-            return null;
     }
 
     public V getSource(E directed_edge)
@@ -309,12 +278,5 @@ public class DirectedSparseGraph<V,E> extends AbstractGraph<V, E> implements
         
         edges.remove(edge);
         return true;
-    }
-
-    public int getEdgeCount(EdgeType edge_type)
-    {
-        if (edge_type == EdgeType.DIRECTED)
-            return edges.size();
-        return 0;
     }
 }

@@ -110,19 +110,6 @@ public class SparseMultigraph<V,E>
         return true;
     }
     
-    public boolean addEdge(E e, V v1, V v2) {
-        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
-    }
-    
-    public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
-    	return addEdge(edge, new Pair<V>(v1, v2), edgeType);
-    }
-
-    @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints) {
-    	return addEdge(edge, endpoints, EdgeType.UNDIRECTED);
-    }
-    
     @Override
     public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) {
 
@@ -318,4 +305,9 @@ public class SparseMultigraph<V,E>
     {
         return getEdges(edge_type).size();
     }
+
+	public EdgeType getDefaultEdgeType() 
+	{
+		return EdgeType.UNDIRECTED;
+	}
 }

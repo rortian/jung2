@@ -135,6 +135,14 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	}
 
 	/**
+	 * @see edu.uci.ics.jung.graph.Graph#getDefaultEdgeType()
+	 */
+	public EdgeType getDefaultEdgeType() 
+	{
+		return delegate.getDefaultEdgeType();
+	}
+	
+	/**
 	 * @see edu.uci.ics.jung.graph.Graph#getEndpoints(java.lang.Object)
 	 */
 	public Pair<V> getEndpoints(E edge) {

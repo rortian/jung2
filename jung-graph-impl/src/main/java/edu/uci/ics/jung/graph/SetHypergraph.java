@@ -29,7 +29,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * permits parallel edges.
  */
 @SuppressWarnings("serial")
-public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Serializable
+public class SetHypergraph<V,H> 
+	implements Hypergraph<V,H>, MultiGraph<V,H>, Serializable
 {
     protected Map<V, Set<H>> vertices; // Map of vertices to incident hyperedge sets
     protected Map<H, Set<V>> edges;    // Map of hyperedges to incident vertex sets
@@ -295,5 +296,10 @@ public class SetHypergraph<V,H> implements Hypergraph<V,H>, MultiGraph<V,H>, Ser
             return edges.keySet();
         return null;
     }
+
+	public EdgeType getDefaultEdgeType() 
+	{
+		return EdgeType.UNDIRECTED;
+	}
 
 }

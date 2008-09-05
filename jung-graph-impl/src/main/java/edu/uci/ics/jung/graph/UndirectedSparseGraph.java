@@ -28,7 +28,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * for sparse graphs.
  */
 @SuppressWarnings("serial")
-public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
+public class UndirectedSparseGraph<V, E> extends AbstractTypedGraph<V, E>
         implements UndirectedGraph<V, E>, Serializable
 {
 
@@ -45,13 +45,15 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
     public UndirectedSparseGraph() {
+    	super(EdgeType.UNDIRECTED);
         vertices = new HashMap<V, Map<V,E>>();
         edges = new HashMap<E, Pair<V>>();
     }
 
     @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints)
+    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType)
     {
+    	this.validateEdgeType(edgeType);
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);
         if (new_endpoints == null)
             return false;
@@ -61,7 +63,8 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         
         E connection = findEdge(v1, v2);
         if (connection != null)
-            throw new IllegalArgumentException("This graph does not accept parallel edges; " + new_endpoints + 
+            throw new IllegalArgumentException("This graph does not accept " +
+            		"parallel edges; " + new_endpoints + 
                     " are already connected by " + connection); 
         
         edges.put(edge, new_endpoints);
@@ -77,14 +80,6 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         vertices.get(v2).put(v1, edge);
 
         return true;
-    }
-
-    @Override
-    public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType)
-    {
-        if(edgeType != EdgeType.UNDIRECTED) 
-            throw new IllegalArgumentException("This graph does not accept edges of type " + edgeType);
-        return addEdge(edge, endpoints);
     }
 
     public Collection<E> getInEdges(V vertex)
@@ -130,35 +125,9 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
         return edge_collection;
     }
     
-    public boolean addEdge(E e, V v1, V v2)
-    {
-        return addEdge(e, v1, v2, EdgeType.UNDIRECTED);
-    }
-
-    public boolean addEdge(E e, V v1, V v2, EdgeType edgeType)
-    {
-        return addEdge(e, new Pair<V>(v1, v2), edgeType);
-    }
-
-    public Collection<E> getEdges(EdgeType edgeType)
-    {
-        if (edgeType == EdgeType.UNDIRECTED)
-            return getEdges();
-        else
-            return null;
-    }
-
     public Pair<V> getEndpoints(E edge)
     {
         return edges.get(edge);
-    }
-
-    public EdgeType getEdgeType(E edge)
-    {
-        if (containsEdge(edge))
-            return EdgeType.UNDIRECTED;
-        else
-            return null;
     }
 
     public V getSource(E directed_edge)
@@ -266,12 +235,5 @@ public class UndirectedSparseGraph<V, E> extends AbstractGraph<V, E>
 
         edges.remove(edge);
         return true;
-    }
-
-    public int getEdgeCount(EdgeType edge_type)
-    {
-        if (edge_type == EdgeType.UNDIRECTED)
-            return edges.size();
-        return 0;
     }
 }

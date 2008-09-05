@@ -12,7 +12,7 @@ package edu.uci.ics.jung.algorithms.generators.random;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -22,6 +22,7 @@ import org.apache.commons.collections15.Factory;
 
 import edu.uci.ics.jung.algorithms.generators.EvolvingGraphGenerator;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.MultiGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -78,8 +79,8 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
     protected List<V> vertex_index;
     protected int init_vertices;
     protected Map<V,Integer> index_vertex;
-    protected boolean directed;
-    protected boolean parallel;
+//    protected boolean directed;
+//    protected boolean parallel;
     protected Factory<Graph<V,E>> graphFactory;
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
@@ -96,41 +97,42 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
     public BarabasiAlbertGenerator(Factory<Graph<V,E>> graphFactory,
     		Factory<V> vertexFactory, Factory<E> edgeFactory, 
     		int init_vertices, int numEdgesToAttach, 
-            boolean directed, boolean parallel, int seed, Set<V> seedVertices)
+//            boolean directed, boolean parallel, 
+            int seed, Set<V> seedVertices)
     {
         assert init_vertices > 0 : "Number of initial unconnected 'seed' vertices " + 
                     "must be positive";
         assert numEdgesToAttach > 0 : "Number of edges to attach " +
                     "at each time step must be positive";
         
-        if(!parallel && init_vertices < numEdgesToAttach)
-            throw new IllegalArgumentException("If parallel edges disallowed, initial" +
-                    "number of vertices must be >= number of edges to attach at each time step");
+//        if(!parallel && init_vertices < numEdgesToAttach)
+//            throw new IllegalArgumentException("If parallel edges disallowed, initial" +
+//                    "number of vertices must be >= number of edges to attach at each time step");
         mNumEdgesToAttachPerStep = numEdgesToAttach;
         mRandom = new Random(seed);
         this.graphFactory = graphFactory;
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         this.init_vertices = init_vertices;
-        this.directed = directed;
-        this.parallel = parallel;
+//        this.directed = directed;
+//        this.parallel = parallel;
         initialize(seedVertices);
     }
     
-    /**
-     * Constructs a new instance of the generator, whose output will be an undirected graph.
-     * @param init_vertices     number of unconnected 'seed' vertices that the graph should start with
-     * @param numEdgesToAttach the number of edges that should be attached from the
-     * new vertex to pre-existing vertices at each time step
-     * @param seed  random number seed
-     */
-    public BarabasiAlbertGenerator(Factory<Graph<V,E>> graphFactory,
-    		Factory<V> vertexFactory, Factory<E> edgeFactory,
-    		int init_vertices, int numEdgesToAttach, int seed, 
-            Set<V> seedVertices) 
-    {
-        this(graphFactory, vertexFactory, edgeFactory, init_vertices, numEdgesToAttach, false, false, seed, seedVertices);
-    }
+//    /**
+//     * Constructs a new instance of the generator, whose output will be an undirected graph.
+//     * @param init_vertices     number of unconnected 'seed' vertices that the graph should start with
+//     * @param numEdgesToAttach the number of edges that should be attached from the
+//     * new vertex to pre-existing vertices at each time step
+//     * @param seed  random number seed
+//     */
+//    public BarabasiAlbertGenerator(Factory<Graph<V,E>> graphFactory,
+//    		Factory<V> vertexFactory, Factory<E> edgeFactory,
+//    		int init_vertices, int numEdgesToAttach, int seed, 
+//            Set<V> seedVertices) 
+//    {
+//        this(graphFactory, vertexFactory, edgeFactory, init_vertices, numEdgesToAttach, false, false, seed, seedVertices);
+//    }
 
     /**
      * Constructs a new instance of the generator, whose output will be an undirected graph,
@@ -162,8 +164,10 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
         mElapsedTimeSteps = 0;
     }
 
-    private E createRandomEdge(Collection<V> preexistingNodes,
-    		V newVertex, Map<E, Pair<V>> added_pairs) {
+//    private E createRandomEdge(Collection<V> preexistingNodes,
+//    		V newVertex, Map<E, Pair<V>> added_pairs) {
+    private void createRandomEdge(Collection<V> preexistingNodes,
+    		V newVertex, Set<Pair<V>> added_pairs) {
         V attach_point;
         boolean created_edge = false;
         Pair<V> endpoints;
@@ -175,12 +179,21 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
             // if parallel edges are not allowed, skip attach_point if <newVertex, attach_point>
             // already exists; note that because of the way edges are added, we only need to check
             // the list of candidate edges for duplicates.
-            if (!parallel && added_pairs.containsValue(endpoints))
-                continue;
-            
-            double degree = directed ? 
-            		mGraph.inDegree(attach_point) :
-            			mGraph.degree(attach_point);
+            if (!(mGraph instanceof MultiGraph))
+            {
+            	if (added_pairs.contains(endpoints))
+            		continue;
+            	if (mGraph.getDefaultEdgeType() == EdgeType.UNDIRECTED && 
+            		added_pairs.contains(new Pair<V>(attach_point, newVertex)))
+            		continue;
+            }
+//            if (!parallel && added_pairs.containsValue(endpoints))
+//                continue;
+
+            double degree = mGraph.inDegree(attach_point);
+//            double degree = directed ? 
+//            		mGraph.inDegree(attach_point) :
+//            			mGraph.degree(attach_point);
             
             // subtract 1 from numVertices because we don't want to count newVertex
             // (which has already been added to the graph, but not to vertex_index)
@@ -190,14 +203,17 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
         }
         while (!created_edge);
 
-        E to_add = edgeFactory.create();
-        added_pairs.put(to_add, endpoints);
+//        E to_add = edgeFactory.create();
+        added_pairs.add(endpoints);
         
-        if (directed == false) {
+//        added_pairs.put(to_add, endpoints);
+        
+        if (mGraph.getDefaultEdgeType() == EdgeType.UNDIRECTED) {
 
-            added_pairs.put(to_add, new Pair<V>(attach_point, newVertex));
+//            added_pairs.put(to_add, new Pair<V>(attach_point, newVertex));
+        	added_pairs.add(new Pair<V>(attach_point, newVertex));
         }
-        return to_add;
+//        return to_add;
     }
 
     public void evolveGraph(int numTimeSteps) {
@@ -217,15 +233,26 @@ public class BarabasiAlbertGenerator<V,E> implements EvolvingGraphGenerator<V,E>
         // generate and store the new edges; don't add them to the graph
         // yet because we don't want to bias the degree calculations
         // (all new edges in a timestep should be added in parallel)
-        List<E> edges = new LinkedList<E>();
-        HashMap<E, Pair<V>> added_pairs = 
-            new HashMap<E, Pair<V>>(mNumEdgesToAttachPerStep*3);
+//        List<E> edges = new LinkedList<E>();
+//        HashMap<E, Pair<V>> added_pairs = 
+//            new HashMap<E, Pair<V>>(mNumEdgesToAttachPerStep*3);
+        Set<Pair<V>> added_pairs = new HashSet<Pair<V>>(mNumEdgesToAttachPerStep*3);
+        
         for (int i = 0; i < mNumEdgesToAttachPerStep; i++) 
-            edges.add(createRandomEdge(preexistingNodes, newVertex, added_pairs));
+//            edges.add(createRandomEdge(preexistingNodes, newVertex, added_pairs));
+        	createRandomEdge(preexistingNodes, newVertex, added_pairs);
         
         // add edges to graph, now that we have them all
-        for(E edge : edges) {
-            mGraph.addEdge(edge, added_pairs.get(edge).getFirst(), added_pairs.get(edge).getSecond(), EdgeType.DIRECTED);
+//        for(E edge : edges) {
+//            mGraph.addEdge(edge, added_pairs.get(edge).getFirst(), added_pairs.get(edge).getSecond(), EdgeType.DIRECTED);
+//        }
+        for (Pair<V> pair : added_pairs)
+        {
+        	V v1 = pair.getFirst();
+        	V v2 = pair.getSecond();
+        	if (mGraph.getDefaultEdgeType() != EdgeType.UNDIRECTED || 
+        			!mGraph.isNeighbor(v1, v2))
+        		mGraph.addEdge(edgeFactory.create(), pair);
         }
         // now that we're done attaching edges to this new vertex, 
         // add it to the index
