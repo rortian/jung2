@@ -231,7 +231,8 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
      */
-	public boolean addEdge(E e, V parent, V child)
+	@Override
+  public boolean addEdge(E e, V parent, V child)
 	{
 		return addEdge(e, parent, child, -1);
 	}
@@ -240,6 +241,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object, edu.uci.ics.jung.graph.util.EdgeType)
      */
+    @Override
     public boolean addEdge(E e, V v1, V v2, EdgeType edge_type) 
     {
     	this.validateEdgeType(edge_type);
@@ -282,6 +284,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#getOpposite(java.lang.Object, java.lang.Object)
      */
+    @Override
     public V getOpposite(V vertex, E edge) 
     {
         if (!containsVertex(vertex) || !containsEdge(edge))
@@ -305,6 +308,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
      * @return 0 if <code>vertex</code> is the root, -1 if the vertex is 
      * not an element of this tree, and 1 otherwise
      */
+    @Override
     public int getPredecessorCount(V vertex) 
     {
         if (!containsVertex(vertex))
@@ -337,6 +341,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#getSuccessorCount(java.lang.Object)
      */
+    @Override
     public int getSuccessorCount(V vertex) 
     {
         return getChildCount(vertex);
@@ -353,6 +358,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#inDegree(java.lang.Object)
      */
+    @Override
     public int inDegree(V vertex) 
     {
         if (!containsVertex(vertex))
@@ -392,6 +398,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
      * 
      * @see edu.uci.ics.jung.graph.Graph#isPredecessor(java.lang.Object, java.lang.Object)
      */
+    @Override
     public boolean isPredecessor(V v1, V v2) 
     {
         if (!containsVertex(v2))
@@ -423,6 +430,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#isSuccessor(java.lang.Object, java.lang.Object)
      */
+    @Override
     public boolean isSuccessor(V v1, V v2) 
     {
         if (!containsVertex(v2))
@@ -435,6 +443,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Graph#outDegree(java.lang.Object)
      */
+    @Override
     public int outDegree(V vertex) 
     {
         E[] out_edges = vertex_data.get(vertex).child_edges;
@@ -449,6 +458,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#addEdge(java.lang.Object, java.util.Collection)
      */
+    @Override
     @SuppressWarnings("unchecked")
 	public boolean addEdge(E edge, Collection<? extends V> vertices, EdgeType edge_type) 
     {
@@ -485,6 +495,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#isIncident(java.lang.Object, java.lang.Object)
      */
+    @Override
     public boolean isIncident(V vertex, E edge) 
     {
         if (!containsVertex(vertex) || !containsEdge(edge))
@@ -495,6 +506,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#isNeighbor(java.lang.Object, java.lang.Object)
      */
+    @Override
     public boolean isNeighbor(V v1, V v2) 
     {
     	if (!containsVertex(v1) || !containsVertex(v2))
@@ -522,6 +534,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#findEdge(java.lang.Object, java.lang.Object)
      */
+    @Override
     public E findEdge(V v1, V v2) 
     {
     	VertexData v1_data = vertex_data.get(v1);
@@ -539,6 +552,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#findEdgeSet(java.lang.Object, java.lang.Object)
      */
+    @Override
     public Collection<E> findEdgeSet(V v1, V v2) 
     {
     	E edge = findEdge(v1, v2);
@@ -588,6 +602,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentCount(java.lang.Object)
      */
+    @Override
     public int getIncidentCount(E edge) 
     {
     	return 2;  // all tree edges have 2 incident vertices
@@ -618,6 +633,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#getIncidentVertices(java.lang.Object)
      */
+    @Override
     public Collection<V> getIncidentVertices(E edge) 
     {
     	return edge_vpairs.get(edge);
@@ -626,6 +642,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     /**
      * @see edu.uci.ics.jung.graph.Hypergraph#getNeighborCount(java.lang.Object)
      */
+    @Override
     public int getNeighborCount(V vertex) 
     {
     	return (vertex.equals(root) ? 0 : 1) + this.getChildCount(vertex);

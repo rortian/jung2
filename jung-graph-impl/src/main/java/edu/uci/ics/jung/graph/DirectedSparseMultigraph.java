@@ -189,7 +189,8 @@ public class DirectedSparseMultigraph<V,E>
         return null;
     }
     
-	public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) 
+	@Override
+  public boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType) 
 	{
 		this.validateEdgeType(edgeType);
         Pair<V> new_endpoints = getValidatedEndpoints(edge, endpoints);

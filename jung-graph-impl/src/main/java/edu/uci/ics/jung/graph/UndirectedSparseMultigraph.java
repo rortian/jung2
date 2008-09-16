@@ -108,6 +108,7 @@ public class UndirectedSparseMultigraph<V,E>
         return true;
     }
     
+    @Override
     public boolean addEdge(E edge, V v1, V v2, EdgeType edgeType) {
         return addEdge(edge, new Pair<V>(v1, v2), edgeType);
     }
