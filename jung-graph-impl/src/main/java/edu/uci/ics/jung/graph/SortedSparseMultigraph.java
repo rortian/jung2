@@ -11,16 +11,17 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import edu.uci.ics.jung.graph.util.Pair;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.comparators.ComparableComparator;
 
-import edu.uci.ics.jung.graph.util.Pair;
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * An implementation of <code>Graph</code> that is suitable for sparse graphs,
@@ -33,11 +34,15 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class SortedSparseMultigraph<V,E> 
     extends OrderedSparseMultigraph<V,E>
-    implements MultiGraph<V,E>, Serializable {
+    implements MultiGraph<V,E>, Serializable 
+{
 	
-	public static <V,E> Factory<Graph<V,E>> getFactory() { 
-		return new Factory<Graph<V,E>> () {
-			public Graph<V,E> create() {
+	public static <V,E> Factory<Graph<V,E>> getFactory() 
+	{ 
+		return new Factory<Graph<V,E>> () 
+		{
+			public Graph<V,E> create() 
+			{
 				return new SortedSparseMultigraph<V,E>();
 			}
 		};
@@ -70,15 +75,32 @@ public class SortedSparseMultigraph<V,E>
         this(new ComparableComparator(), new ComparableComparator());
     }
 
+    /**
+     * Provides a new {@code Comparator} to be used in sorting the vertices.
+     * @param vertex_comparator the comparator that defines the new ordering
+     */
+    public void setVertexComparator(Comparator<V> vertex_comparator)
+    {
+        this.vertex_comparator = vertex_comparator;
+        Map<V, Pair<Set<E>>> tmp_vertices = new TreeMap<V, Pair<Set<E>>>(vertex_comparator);
+        for (Map.Entry<V, Pair<Set<E>>> entry : vertices.entrySet())
+            tmp_vertices.put(entry.getKey(), entry.getValue());
+        this.vertices = tmp_vertices;
+    }
+    
     @Override
     public boolean addVertex(V vertex) {
         if(vertex == null) {
             throw new IllegalArgumentException("vertex may not be null");
         }
-        if (!containsVertex(vertex)) {
-            vertices.put(vertex, new Pair<Set<E>>(new TreeSet<E>(edge_comparator), new TreeSet<E>(edge_comparator)));
+        if (!containsVertex(vertex)) 
+        {
+            vertices.put(vertex, new Pair<Set<E>>(new TreeSet<E>(edge_comparator), 
+                new TreeSet<E>(edge_comparator)));
             return true;
-        } else {
+        } 
+        else 
+        {
         	return false;
         }
     }
