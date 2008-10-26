@@ -53,9 +53,6 @@ public class DirectionTransformer
             Factory<E> edge_factory, boolean create_new)
     {
         UndirectedGraph<V,E> out = graph_factory.create();
-//        if (out instanceof DirectedGraph)
-//            throw new IllegalArgumentException("Graph factory must create a graph that can accept " +
-//                    "directed edges");
         
         for (V v : graph.getVertices())
             out.addVertex(v);
@@ -70,7 +67,7 @@ public class DirectionTransformer
                 to_add = edge_factory.create();
             else
                 to_add = e;
-            graph.addEdge(to_add, v1, v2, EdgeType.UNDIRECTED);
+            out.addEdge(to_add, v1, v2, EdgeType.UNDIRECTED);
         }
         return out;
     }
@@ -96,9 +93,6 @@ public class DirectionTransformer
             Factory<E> edge_factory, boolean create_new)
     {
         DirectedGraph<V,E> out = graph_factory.create();
-//        if (out instanceof UndirectedGraph)
-//            throw new IllegalArgumentException("Graph factory must create a graph that can accept " +
-//            		"directed edges");
         
         for (V v : graph.getVertices())
             out.addVertex(v);
@@ -110,15 +104,15 @@ public class DirectionTransformer
             {
                 V v1 = endpoints.getFirst();
                 V v2 = endpoints.getSecond();
-                graph.addEdge(edge_factory.create(), v1, v2, EdgeType.DIRECTED);
-                graph.addEdge(edge_factory.create(), v2, v1, EdgeType.DIRECTED);
+                out.addEdge(edge_factory.create(), v1, v2, EdgeType.DIRECTED);
+                out.addEdge(edge_factory.create(), v2, v1, EdgeType.DIRECTED);
             }
             else // if the edge is directed, just add it 
             {
                 V source = graph.getSource(e);
                 V dest = graph.getDest(e);
                 E to_add = create_new ? edge_factory.create() : e;
-                graph.addEdge(to_add, source, dest, EdgeType.DIRECTED);
+                out.addEdge(to_add, source, dest, EdgeType.DIRECTED);
             }
                 
         }
