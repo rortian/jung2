@@ -12,7 +12,7 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * Computes the shortest path distances for graphs whose edges are not weighted (using BFS).
@@ -24,14 +24,14 @@ public class UnweightedShortestPath<V, E>
 {
 	private Map<V,Map<V,Number>> mDistanceMap;
 	private Map<V,Map<V,E>> mIncomingEdgeMap;
-	private Graph<V,E> mGraph;
+	private Hypergraph<V,E> mGraph;
     private Map<V, Number> distances = new HashMap<V,Number>();
 
 	/**
 	 * Constructs and initializes algorithm
 	 * @param g the graph
 	 */
-	public UnweightedShortestPath(Graph<V,E> g)
+	public UnweightedShortestPath(Hypergraph<V,E> g)
 	{
 		mDistanceMap = new HashMap<V,Map<V,Number>>();
 		mIncomingEdgeMap = new HashMap<V,Map<V,E>>();
@@ -97,18 +97,23 @@ public class UnweightedShortestPath<V, E>
             {
                 currentSourceSPMap.put(vertex, distanceVal);
                 int minDistance = distanceVal.intValue();
-                for(E incomingEdge : mGraph.getInEdges(vertex)) {
-
-                    V neighbor = mGraph.getOpposite(vertex, incomingEdge);
-
-                    Number predDistanceVal = distances.get(neighbor);
-
-                    int pred_distance = predDistanceVal.intValue();
-                    if (pred_distance < minDistance && pred_distance >= 0)
-                    {
-                        minDistance = predDistanceVal.intValue();
-                        currentSourceEdgeMap.put(vertex, incomingEdge);
-                    }
+                for(E incomingEdge : mGraph.getInEdges(vertex)) 
+                {
+                	for (V neighbor : mGraph.getIncidentVertices(incomingEdge))
+                	{
+                		if (neighbor.equals(vertex))
+                			continue;
+//	                    V neighbor = mGraph.getOpposite(vertex, incomingEdge);
+	
+	                    Number predDistanceVal = distances.get(neighbor);
+	
+	                    int pred_distance = predDistanceVal.intValue();
+	                    if (pred_distance < minDistance && pred_distance >= 0)
+	                    {
+	                        minDistance = predDistanceVal.intValue();
+	                        currentSourceEdgeMap.put(vertex, incomingEdge);
+	                    }
+                	}
                 }
             }
 		}

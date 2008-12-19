@@ -14,7 +14,6 @@ package edu.uci.ics.jung.algorithms.scoring;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
@@ -49,7 +48,7 @@ public class BarycenterScorer<V,E> extends DistanceCentralityScorer<V, E>
      * graph is unweighted. 
      * @param graph the input graph
      */
-    public BarycenterScorer(Graph<V,E> graph)
+    public BarycenterScorer(Hypergraph<V,E> graph)
     {
         super(graph, false);
     }

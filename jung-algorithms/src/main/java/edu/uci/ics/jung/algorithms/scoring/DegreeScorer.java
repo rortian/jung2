@@ -11,7 +11,7 @@
  */
 package edu.uci.ics.jung.algorithms.scoring;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * Assigns a score to each vertex equal to its degree.
@@ -23,13 +23,13 @@ public class DegreeScorer<V> implements VertexScorer<V,Integer>
 	/**
 	 * The graph for which scores are to be generated.
 	 */
-    protected Graph<V,?> graph;
+    protected Hypergraph<V,?> graph;
     
     /**
      * Creates an instance for the specified graph.
      * @param graph the input graph
      */
-    public DegreeScorer(Graph<V,?> graph)
+    public DegreeScorer(Hypergraph<V,?> graph)
     {
         this.graph = graph;
     }

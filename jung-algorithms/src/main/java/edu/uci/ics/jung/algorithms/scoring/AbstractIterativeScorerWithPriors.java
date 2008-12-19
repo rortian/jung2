@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.scoring;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * An abstract class for iterative random-walk-based vertex scoring algorithms 
@@ -47,7 +47,7 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
      * @param vertex_priors the prior probabilities of each vertex being 'jumped' to
      * @param alpha the probability of making a 'jump' at each step
      */
-    public AbstractIterativeScorerWithPriors(Graph<V,E> g,
+    public AbstractIterativeScorerWithPriors(Hypergraph<V,E> g,
             Transformer<E,? extends Number> edge_weights, 
             Transformer<V,? extends S> vertex_priors, double alpha)
     {
@@ -64,7 +64,7 @@ public abstract class AbstractIterativeScorerWithPriors<V,E,S> extends
      * @param vertex_priors the prior probabilities of each vertex being 'jumped' to
      * @param alpha the probability of making a 'jump' at each step
      */
-    public AbstractIterativeScorerWithPriors(Graph<V,E> g, 
+    public AbstractIterativeScorerWithPriors(Hypergraph<V,E> g, 
     		Transformer<V,? extends S> vertex_priors, double alpha)
     {
         super(g);

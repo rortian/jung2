@@ -13,7 +13,7 @@ package edu.uci.ics.jung.algorithms.scoring.util;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
@@ -30,9 +30,9 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 public class UniformDegreeWeight<V, E> implements
 		Transformer<VEPair<V, E>, Double> 
 {
-    private Graph<V, E> graph;
+    private Hypergraph<V, E> graph;
     
-    public UniformDegreeWeight(Graph<V, E> graph)
+    public UniformDegreeWeight(Hypergraph<V, E> graph)
     {
         this.graph = graph;
     }

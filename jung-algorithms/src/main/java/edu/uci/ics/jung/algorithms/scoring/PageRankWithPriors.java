@@ -14,7 +14,7 @@ package edu.uci.ics.jung.algorithms.scoring;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.scoring.util.UniformDegreeWeight;
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * A generalization of PageRank that permits non-uniformly-distributed random jumps.
@@ -32,7 +32,7 @@ public class PageRankWithPriors<V, E>
     /**
      * Maintains the amount of potential associated with vertices with no out-edges.
      */
-    protected double disappearing_potential;
+    protected double disappearing_potential = 0.0;
     
     /**
      * Creates an instance with the specified graph, edge weights, vertex priors, and 
@@ -42,7 +42,7 @@ public class PageRankWithPriors<V, E>
      * @param vertex_priors the prior probabilities for each vertex
      * @param alpha the probability of executing a 'random jump' at each step
      */
-    public PageRankWithPriors(Graph<V,E> graph, 
+    public PageRankWithPriors(Hypergraph<V,E> graph, 
     		Transformer<E, ? extends Number> edge_weights, 
             Transformer<V, Double> vertex_priors, double alpha)
     {
@@ -57,7 +57,7 @@ public class PageRankWithPriors<V, E>
      * @param vertex_priors the prior probabilities for each vertex
      * @param alpha the probability of executing a 'random jump' at each step
      */
-    public PageRankWithPriors(Graph<V,E> graph, 
+    public PageRankWithPriors(Hypergraph<V,E> graph, 
     		Transformer<V, Double> vertex_priors, double alpha)
     {
         super(graph, vertex_priors, alpha);
@@ -72,15 +72,27 @@ public class PageRankWithPriors<V, E>
     {
         collectDisappearingPotential(v);
         
-        double total_input = 0;
+        double v_input = 0;
         for (E e : graph.getInEdges(v))
         {
-            V w = graph.getOpposite(v, e);
-            total_input += (getCurrentValue(w) * getEdgeWeight(w,e).doubleValue());
+        	// For graphs, the code below is equivalent to 
+//          V w = graph.getOpposite(v, e);
+//          total_input += (getCurrentValue(w) * getEdgeWeight(w,e).doubleValue());
+        	// For hypergraphs, this divides the potential coming from w 
+        	// by the number of vertices in the connecting edge e.
+        	int incident_count = getAdjustedIncidentCount(e);
+        	for (V w : graph.getIncidentVertices(e)) 
+        	{
+        		if (!w.equals(v) || hyperedges_are_self_loops) 
+        			v_input += (getCurrentValue(w) * 
+        					getEdgeWeight(w,e).doubleValue() / incident_count);
+        	}
         }
         
         // modify total_input according to alpha
-        double new_value = total_input * (1 - alpha) + getVertexPrior(v) * alpha;
+        double new_value = alpha > 0 ? 
+        		v_input * (1 - alpha) + getVertexPrior(v) * alpha :
+        		v_input;
         setOutputValue(v, new_value);
         
         return Math.abs(getCurrentValue(v) - new_value);

@@ -19,7 +19,6 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
@@ -168,7 +167,7 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
      * @param ignore_self_distances	Specifies whether distances from a vertex
      * to itself should be included in its score.
      */
-    public DistanceCentralityScorer(Graph<V,E> graph, boolean averaging,
+    public DistanceCentralityScorer(Hypergraph<V,E> graph, boolean averaging,
             boolean ignore_missing, boolean ignore_self_distances)
     {
         this(graph, new UnweightedShortestPath<V,E>(graph), averaging, 
@@ -182,10 +181,9 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
      * @param averaging     Specifies whether the values returned is the sum of 
      * all v-distances or the mean v-distance.
      */
-    public DistanceCentralityScorer(Graph<V,E> graph, boolean averaging)
+    public DistanceCentralityScorer(Hypergraph<V,E> graph, boolean averaging)
     {
-        this(graph, new UnweightedShortestPath<V,E>(graph), averaging, true,
-        	true);
+        this(graph, new UnweightedShortestPath<V,E>(graph), averaging, true, true);
     }
 
 	/**

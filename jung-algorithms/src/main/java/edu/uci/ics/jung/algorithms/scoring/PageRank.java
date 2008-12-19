@@ -14,7 +14,7 @@ package edu.uci.ics.jung.algorithms.scoring;
 import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * Assigns scores to each vertex according to the PageRank algorithm.  
@@ -52,7 +52,7 @@ public class PageRank<V,E> extends PageRankWithPriors<V,E>
      * @param edge_weight the edge weights (transition probabilities)
      * @param alpha the probability of taking a random jump to an arbitrary vertex
      */
-    public PageRank(Graph<V,E> graph, Transformer<E, ? extends Number> edge_weight, double alpha)
+    public PageRank(Hypergraph<V,E> graph, Transformer<E, ? extends Number> edge_weight, double alpha)
     {
         super(graph, edge_weight, ScoringUtils.getUniformRootPrior(graph.getVertices()), alpha);
     }
@@ -63,7 +63,7 @@ public class PageRank<V,E> extends PageRankWithPriors<V,E>
      * @param graph the input graph
      * @param alpha the probability of taking a random jump to an arbitrary vertex
      */
-    public PageRank(Graph<V,E> graph, double alpha)
+    public PageRank(Hypergraph<V,E> graph, double alpha)
     {
         super(graph, ScoringUtils.getUniformRootPrior(graph.getVertices()), alpha);
     }

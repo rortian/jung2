@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * Labels each node in the graph according to the BFS distance from the start node(s). If nodes are unreachable, then
@@ -64,7 +64,7 @@ public class BFSDistanceLabeler<V, E> {
      * @param v the vertex whose distance is to be retrieved
      * @return the shortest distance from any node in the root set to v
      */
-    public int getDistance(Graph<V,E> g, V v) {
+    public int getDistance(Hypergraph<V,E> g, V v) {
         if (!g.getVertices().contains(v)) {
             throw new IllegalArgumentException("Vertex is not contained in the graph.");
         }
@@ -81,7 +81,7 @@ public class BFSDistanceLabeler<V, E> {
         return mPredecessorMap.get(v);
     }
 
-    protected void initialize(Graph<V,E> g, Set<V> rootSet) {
+    protected void initialize(Hypergraph<V,E> g, Set<V> rootSet) {
         mVerticesInOrderVisited = new ArrayList<V>();
         mUnvisitedVertices = new HashSet<V>();
         for(V currentVertex : g.getVertices()) {
@@ -103,7 +103,7 @@ public class BFSDistanceLabeler<V, E> {
         predecessors.add(predecessor);
     }
 
-    public void removeDecorations(Graph<V,E> g) {
+    public void removeDecorations(Hypergraph<V,E> g) {
         for(V v : g.getVertices()) {
             distanceDecorator.remove(v);
         }
@@ -116,7 +116,7 @@ public class BFSDistanceLabeler<V, E> {
      * @param graph the graph to label
      * @param rootSet the set of starting vertices to traverse from
      */
-    public void labelDistances(Graph<V,E> graph, Set<V> rootSet) {
+    public void labelDistances(Hypergraph<V,E> graph, Set<V> rootSet) {
 
         initialize(graph,rootSet);
 
@@ -146,7 +146,7 @@ public class BFSDistanceLabeler<V, E> {
      *  @param graph the graph to label
      * @param root the single starting vertex to traverse from
      */
-    public void labelDistances(Graph<V,E> graph, V root) {
+    public void labelDistances(Hypergraph<V,E> graph, V root) {
         Set<V> rootSet = new HashSet<V>();
         rootSet.add(root);
         labelDistances(graph,rootSet);

@@ -486,7 +486,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
         
         public Map.Entry<V,Number> getNextVertex()
         {
-            V v = unknownVertices.pop();
+            V v = unknownVertices.remove();
             Double dist = (Double)estimatedDistances.remove(v);
             distances.put(v, dist);
             return new BasicMapEntry<V,Number>(v, dist);

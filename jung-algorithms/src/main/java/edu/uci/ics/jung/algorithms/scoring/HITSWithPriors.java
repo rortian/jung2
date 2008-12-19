@@ -14,7 +14,7 @@ package edu.uci.ics.jung.algorithms.scoring;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * A generalization of HITS that permits non-uniformly-distributed random jumps.
@@ -42,7 +42,7 @@ public class HITSWithPriors<V, E>
      * @param vertex_priors the prior probability for each vertex
      * @param alpha the probability of a random jump at each step
      */
-    public HITSWithPriors(Graph<V,E> g,
+    public HITSWithPriors(Hypergraph<V,E> g,
             Transformer<E, ? extends Number> edge_weights,
             Transformer<V, HITS.Scores> vertex_priors, double alpha)
     {
@@ -58,7 +58,7 @@ public class HITSWithPriors<V, E>
      * @param alpha the probability of a random jump at each step
      */
     @SuppressWarnings("unchecked")
-    public HITSWithPriors(Graph<V,E> g, 
+    public HITSWithPriors(Hypergraph<V,E> g, 
           Transformer<V, HITS.Scores> vertex_priors, double alpha)
     {
     	super(g, new ConstantTransformer(1.0), vertex_priors, alpha);
@@ -72,27 +72,44 @@ public class HITSWithPriors<V, E>
     {
         collectDisappearingPotential(v);
         
-        double auth = 0;
+        double v_auth = 0;
         for (E e : graph.getInEdges(v))
         {
-            V w = graph.getOpposite(v, e);
-            auth += (getCurrentValue(w).hub * getEdgeWeight(w, e).doubleValue());
+        	int incident_count = getAdjustedIncidentCount(e);
+        	for (V w : graph.getIncidentVertices(e)) 
+        	{
+        		if (!w.equals(v) || hyperedges_are_self_loops) 
+        			v_auth += (getCurrentValue(w).hub * 
+        					getEdgeWeight(w,e).doubleValue() / incident_count);
+        	}
+//            V w = graph.getOpposite(v, e);
+//            auth += (getCurrentValue(w).hub * getEdgeWeight(w, e).doubleValue());
         }
         
-        double hub = 0;
+        double v_hub = 0;
         for (E e : graph.getOutEdges(v))
         {
-            V x = graph.getOpposite(v,e);
-            hub += (getCurrentValue(x).authority * getEdgeWeight(x, e).doubleValue()); 
+        	int incident_count = getAdjustedIncidentCount(e);
+        	for (V w : graph.getIncidentVertices(e)) 
+        	{
+        		if (!w.equals(v) || hyperedges_are_self_loops) 
+        			v_hub += (getCurrentValue(w).authority * 
+        					getEdgeWeight(w,e).doubleValue() / incident_count);
+        	}
+//            V x = graph.getOpposite(v,e);
+//            hub += (getCurrentValue(x).authority * getEdgeWeight(x, e).doubleValue()); 
         }
         
         // modify total_input according to alpha
-        auth = auth * (1 - alpha) + getVertexPrior(v).authority * alpha;
-        hub = hub * (1 - alpha) + getVertexPrior(v).hub * alpha;
-        setOutputValue(v, new HITS.Scores(hub, auth));
+        if (alpha > 0) 
+        {
+	        v_auth = v_auth * (1 - alpha) + getVertexPrior(v).authority * alpha;
+	        v_hub = v_hub * (1 - alpha) + getVertexPrior(v).hub * alpha;
+        }
+        setOutputValue(v, new HITS.Scores(v_hub, v_auth));
 
-        return Math.max(Math.abs(getCurrentValue(v).hub - hub), 
-                        Math.abs(getCurrentValue(v).authority - auth));
+        return Math.max(Math.abs(getCurrentValue(v).hub - v_hub), 
+                        Math.abs(getCurrentValue(v).authority - v_auth));
     }
 
     /**

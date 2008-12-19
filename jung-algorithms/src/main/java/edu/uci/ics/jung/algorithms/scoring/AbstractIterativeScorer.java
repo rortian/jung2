@@ -19,7 +19,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.algorithms.scoring.util.DelegateToEdgeTransformer;
 import edu.uci.ics.jung.algorithms.scoring.util.VEPair;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.Hypergraph;
 
 /**
  * An abstract class for algorithms that assign scores to vertices based on iterative methods.
@@ -44,7 +44,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     /**
      * The graph on which the calculations are to be made.
      */
-    protected Graph<V,E> graph;
+    protected Hypergraph<V,E> graph;
     
     /**
      * The total number of iterations used so far.
@@ -79,6 +79,9 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
      * Defaults to true.
      */
     private boolean accept_disconnected_graph;
+
+
+    protected boolean hyperedges_are_self_loops = false;
 
     /**
      * Sets the output value for this vertex.
@@ -130,7 +133,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
      * @param g the graph for which the instance is to be created
      * @param edge_weights the edge weights for this instance
      */
-    public AbstractIterativeScorer(Graph<V,E> g, Transformer<E, ? extends Number> edge_weights)
+    public AbstractIterativeScorer(Hypergraph<V,E> g, Transformer<E, ? extends Number> edge_weights)
     {
         this.graph = g;
         this.max_iterations = 100;
@@ -147,7 +150,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
      * by that subclass.
      * @param g the graph for which the instance is to be created
      */
-    public AbstractIterativeScorer(Graph<V,E> g)
+    public AbstractIterativeScorer(Hypergraph<V,E> g)
     {
     	this.graph = g;
         this.max_iterations = 100;
@@ -178,12 +181,13 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     }
     
     /**
-     * Returns true if the total number of iterations is greater than <code>max_iterations</code>
+     * Returns true if the total number of iterations is greater than or equal to 
+     * <code>max_iterations</code>
      * or if the maximum value change observed is less than <code>tolerance</code>.
      */
     public boolean done()
     {
-        return total_iterations > max_iterations || max_delta < tolerance;
+        return total_iterations >= max_iterations || max_delta < tolerance;
     }
 
     /**
@@ -233,10 +237,7 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
         if (!graph.containsVertex(v))
             throw new IllegalArgumentException("Vertex " + v + " not an element of this graph");
         
-        if (output_reversed)
-            return current_values.get(v);
-        else
-            return output.get(v);
+        return output.get(v);
     }
 
     /**
@@ -249,6 +250,15 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
         return max_iterations;
     }
 
+    /**
+     * Returns the number of iterations that this instance has used so far.
+     * @return the number of iterations that this instance has used so far
+     */
+    public int getIterations()
+    {
+    	return total_iterations;
+    }
+    
     /**
      * Sets the maximum number of times that <code>evaluate</code> will call <code>step</code>.
      * @param max_iterations the maximum 
@@ -332,5 +342,27 @@ public abstract class AbstractIterativeScorer<V,E,T> implements IterativeContext
     public boolean isDisconnectedGraphOK()
     {
         return this.accept_disconnected_graph;
+    }
+    
+    /**
+     * Specifies whether hyperedges are to be treated as self-loops.  If they
+     * are, then potential will flow along a hyperedge a vertex to itself, 
+     * just as it does to all other vertices incident to that hyperedge. 
+     * @param arg if {@code true}, hyperedges are treated as self-loops
+     */
+    public void setHyperedgesAreSelfLoops(boolean arg) 
+    {
+    	this.hyperedges_are_self_loops = arg;
+    }
+
+    /**
+     * Returns the effective number of vertices incident to this edge.  If
+     * the graph is a binary relation or if hyperedges are treated as self-loops,
+     * the value returned is {@code graph.getIncidentCount(e)}; otherwise it is
+     * {@code graph.getIncidentCount(e) - 1}.
+     */
+    protected int getAdjustedIncidentCount(E e) 
+    {
+        return graph.getIncidentCount(e) - (hyperedges_are_self_loops ? 0 : 1);
     }
 }
