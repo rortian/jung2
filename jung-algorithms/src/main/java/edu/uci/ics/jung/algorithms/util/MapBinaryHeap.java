@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.Vector;
 
 import org.apache.commons.collections15.IteratorUtils;
@@ -37,7 +38,7 @@ import org.apache.commons.collections15.IteratorUtils;
  */
 public class MapBinaryHeap<T>
     extends AbstractCollection<T> 
-    implements Collection<T>
+    implements Queue<T>
 {
 	private Vector<T> heap = new Vector<T>();            // holds the heap as an implicit binary tree
     private Map<T,Integer> object_indices = new HashMap<T,Integer>(); // maps each object in the heap to its index in the heap
@@ -128,30 +129,22 @@ public class MapBinaryHeap<T>
 	 * Returns the element at the top of the heap; does not
      * alter the heap.
 	 */
-	public T peek() throws NoSuchElementException
+	public T peek()
 	{
-        return heap.elementAt(TOP);
+		if (heap.size() > 0)
+			return heap.elementAt(TOP);
+		else
+			return null;
 	}
 
 	/**
 	 * Removes the element at the top of this heap, and returns it.
+	 * @deprecated Use {@link MapBinaryHeap#poll()} 
+	 * or {@link MapBinaryHeap#remove()} instead.
 	 */
 	public T pop() throws NoSuchElementException
 	{
-        T top = heap.elementAt(TOP);
-        if (top == null)
-        	return top;
-        
-        T bottom_elt = heap.lastElement();
-        heap.setElementAt(bottom_elt, TOP);
-        object_indices.put(bottom_elt, new Integer(TOP));
-        
-        heap.setSize(heap.size() - 1);  // remove the last element
-        if (heap.size() > 1)
-        	percolateDown(TOP);
-
-        object_indices.remove(top);
-        return top;
+		return this.remove();
 	}
 
     /**
@@ -352,5 +345,44 @@ public class MapBinaryHeap<T>
     {
         throw new UnsupportedOperationException();
     }
+
+	public T element() throws NoSuchElementException 
+	{
+		T top = this.peek();
+		if (top == null) 
+			throw new NoSuchElementException();
+		return top;
+	}
+
+	public boolean offer(T o) 
+	{
+		return add(o);
+	}
+
+	public T poll() 
+	{
+        T top = this.peek();
+        if (top != null)
+        {
+	        T bottom_elt = heap.lastElement();
+	        heap.setElementAt(bottom_elt, TOP);
+	        object_indices.put(bottom_elt, new Integer(TOP));
+	        
+	        heap.setSize(heap.size() - 1);  // remove the last element
+	        if (heap.size() > 1)
+	        	percolateDown(TOP);
+	
+	        object_indices.remove(top);
+        }
+        return top;
+	}
+
+	public T remove() 
+	{
+		T top = this.poll();
+		if (top == null)
+			throw new NoSuchElementException();
+		return top;
+	}
 
 }
