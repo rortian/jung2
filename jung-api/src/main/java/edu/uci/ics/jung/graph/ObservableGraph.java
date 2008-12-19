@@ -1,5 +1,6 @@
 package edu.uci.ics.jung.graph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -105,7 +106,14 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	 * @see edu.uci.ics.jung.graph.Hypergraph#removeVertex(java.lang.Object)
 	 */
 	@Override
-  public boolean removeVertex(V vertex) {
+	public boolean removeVertex(V vertex) {
+		// remove all incident edges first, so that the appropriate events will
+		// be fired (otherwise they'll be removed inside {@code delegate.removeVertex}
+		// and the events will not be fired)
+		Collection<E> incident_edges = new ArrayList<E>(delegate.getIncidentEdges(vertex));
+		for (E e : incident_edges) 
+			this.removeEdge(e);
+		
 		boolean state = delegate.removeVertex(vertex);
 		if(state) {
 			GraphEvent<V,E> evt = new GraphEvent.Vertex<V,E>(delegate, GraphEvent.Type.VERTEX_REMOVED, vertex);
