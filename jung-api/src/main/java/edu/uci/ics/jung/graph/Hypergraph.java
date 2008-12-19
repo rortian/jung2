@@ -350,4 +350,87 @@ public interface Hypergraph<V, E>
      * @return the number of edges of type <code>edge_type</code> in this graph
      */
     int getEdgeCount(EdgeType edge_type);
+    
+    /**
+     * Returns a <code>Collection</code> view of the incoming edges incident to <code>vertex</code>
+     * in this graph.
+     * @param vertex    the vertex whose incoming edges are to be returned
+     * @return  a <code>Collection</code> view of the incoming edges incident 
+     * to <code>vertex</code> in this graph
+     */
+    Collection<E> getInEdges(V vertex);
+    
+    /**
+     * Returns a <code>Collection</code> view of the outgoing edges incident to <code>vertex</code>
+     * in this graph.
+     * @param vertex    the vertex whose outgoing edges are to be returned
+     * @return  a <code>Collection</code> view of the outgoing edges incident 
+     * to <code>vertex</code> in this graph
+     */
+    Collection<E> getOutEdges(V vertex);
+    
+    /**
+     * Returns the number of incoming edges incident to <code>vertex</code>.
+     * Equivalent to <code>getInEdges(vertex).size()</code>.
+     * @param vertex    the vertex whose indegree is to be calculated
+     * @return  the number of incoming edges incident to <code>vertex</code>
+     */
+    int inDegree(V vertex);
+    
+    /**
+     * Returns the number of outgoing edges incident to <code>vertex</code>.
+     * Equivalent to <code>getOutEdges(vertex).size()</code>.
+     * @param vertex    the vertex whose outdegree is to be calculated
+     * @return  the number of outgoing edges incident to <code>vertex</code>
+     */
+    int outDegree(V vertex);
+    
+    /**
+     * If <code>directed_edge</code> is a directed edge in this graph, returns the source; 
+     * otherwise returns <code>null</code>. 
+     * The source of a directed edge <code>d</code> is defined to be the vertex for which  
+     * <code>d</code> is an outgoing edge.
+     * <code>directed_edge</code> is guaranteed to be a directed edge if 
+     * its <code>EdgeType</code> is <code>DIRECTED</code>. 
+     * @param directed_edge
+     * @return  the source of <code>directed_edge</code> if it is a directed edge in this graph, or <code>null</code> otherwise
+     */
+    V getSource(E directed_edge);
+
+    /**
+     * If <code>directed_edge</code> is a directed edge in this graph, returns the destination; 
+     * otherwise returns <code>null</code>. 
+     * The destination of a directed edge <code>d</code> is defined to be the vertex 
+     * incident to <code>d</code> for which  
+     * <code>d</code> is an incoming edge.
+     * <code>directed_edge</code> is guaranteed to be a directed edge if 
+     * its <code>EdgeType</code> is <code>DIRECTED</code>. 
+     * @param directed_edge
+     * @return  the destination of <code>directed_edge</code> if it is a directed edge in this graph, or <code>null</code> otherwise
+     */
+    V getDest(E directed_edge);
+
+    /**
+     * Returns a <code>Collection</code> view of the predecessors of <code>vertex</code> 
+     * in this graph.  A predecessor of <code>vertex</code> is defined as a vertex <code>v</code> 
+     * which is connected to 
+     * <code>vertex</code> by an edge <code>e</code>, where <code>e</code> is an outgoing edge of 
+     * <code>v</code> and an incoming edge of <code>vertex</code>.
+     * @param vertex    the vertex whose predecessors are to be returned
+     * @return  a <code>Collection</code> view of the predecessors of 
+     * <code>vertex</code> in this graph
+     */
+    Collection<V> getPredecessors(V vertex);
+    
+    /**
+     * Returns a <code>Collection</code> view of the successors of <code>vertex</code> 
+     * in this graph.  A successor of <code>vertex</code> is defined as a vertex <code>v</code> 
+     * which is connected to 
+     * <code>vertex</code> by an edge <code>e</code>, where <code>e</code> is an incoming edge of 
+     * <code>v</code> and an outgoing edge of <code>vertex</code>.
+     * @param vertex    the vertex whose predecessors are to be returned
+     * @return  a <code>Collection</code> view of the successors of 
+     * <code>vertex</code> in this graph
+     */
+    Collection<V> getSuccessors(V vertex);
 }

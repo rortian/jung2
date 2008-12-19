@@ -302,4 +302,43 @@ public class SetHypergraph<V,H>
 		return EdgeType.UNDIRECTED;
 	}
 
+	public Collection<H> getInEdges(V vertex) 
+	{
+		return getIncidentEdges(vertex);
+	}
+
+	public Collection<H> getOutEdges(V vertex) 
+	{
+		return getIncidentEdges(vertex);
+	}
+
+	public int inDegree(V vertex) 
+	{
+		return degree(vertex);
+	}
+
+	public int outDegree(V vertex) 
+	{
+		return degree(vertex);
+	}
+
+	public V getDest(H directed_edge) 
+	{
+		return null;
+	}
+
+	public V getSource(H directed_edge) 
+	{
+		return null;
+	}
+
+	public Collection<V> getPredecessors(V vertex) 
+	{
+		return getNeighbors(vertex);
+	}
+
+	public Collection<V> getSuccessors(V vertex) 
+	{
+		return getNeighbors(vertex);
+	}
 }
