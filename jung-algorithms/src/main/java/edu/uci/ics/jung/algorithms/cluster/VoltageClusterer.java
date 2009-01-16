@@ -11,6 +11,15 @@
  */
 package edu.uci.ics.jung.algorithms.cluster;
 
+import cern.jet.random.engine.DRand;
+import cern.jet.random.engine.RandomEngine;
+
+import edu.uci.ics.jung.algorithms.scoring.VoltageScorer;
+import edu.uci.ics.jung.algorithms.util.DiscreteDistribution;
+import edu.uci.ics.jung.algorithms.util.KMeansClusterer;
+import edu.uci.ics.jung.algorithms.util.KMeansClusterer.NotEnoughClustersException;
+import edu.uci.ics.jung.graph.Graph;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,18 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cern.jet.random.engine.DRand;
-import cern.jet.random.engine.RandomEngine;
-import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
-import edu.uci.ics.jung.algorithms.scoring.VoltageScorer;
-import edu.uci.ics.jung.algorithms.util.DiscreteDistribution;
-import edu.uci.ics.jung.algorithms.util.KMeansClusterer;
-import edu.uci.ics.jung.algorithms.util.KMeansClusterer.NotEnoughClustersException;
-import edu.uci.ics.jung.graph.Graph;
-
 /**
  * <p>Clusters vertices of a <code>Graph</code> based on their ranks as 
- * calculated by <code>VoltageRanker</code>.  This algorithm is based on,
+ * calculated by <code>VoltageScorer</code>.  This algorithm is based on,
  * but not identical with, the method described in the paper below.
  * The primary difference is that Wu and Huberman assume a priori that the clusters
  * are of approximately the same size, and therefore use a more complex 
@@ -45,7 +45,7 @@ import edu.uci.ics.jung.graph.Graph;
  * <ul>
  * <li/>first, generate a set of candidate clusters as follows:
  *      <ul>
- *      <li/>pick (widely separated) vertex pair, run VoltageRanker
+ *      <li/>pick (widely separated) vertex pair, run VoltageScorer
  *      <li/>group the vertices in two clusters according to their voltages
  *      <li/>store resulting candidate clusters
  *      </ul>
@@ -70,7 +70,7 @@ import edu.uci.ics.jung.graph.Graph;
  * 
  * @author Joshua O'Madadhain
  * @see "'Finding communities in linear time: a physics approach', Fang Wu and Bernardo Huberman, http://www.hpl.hp.com/research/idl/papers/linear/"
- * @see VoltageRanker
+ * @see VoltageScorer
  * @see KMeansClusterer
  */
 public class VoltageClusterer<V,E>
@@ -82,7 +82,7 @@ public class VoltageClusterer<V,E>
     
     /**
      * Creates an instance of a VoltageCluster with the specified parameters.
-     * These are mostly parameters that are passed directly to VoltageRanker
+     * These are mostly parameters that are passed directly to VoltageScorer
      * and KMeansClusterer.
      * 
      * @param num_candidates    the number of candidate clusters to create
@@ -131,7 +131,7 @@ public class VoltageClusterer<V,E>
     {
         // generate candidate clusters
         // repeat the following 'samples' times:
-        // * pick (widely separated) vertex pair, run VoltageRanker
+        // * pick (widely separated) vertex pair, run VoltageScorer
         // * use k-means to identify 2 communities in ranked graph
         // * store resulting candidate communities
         ArrayList<V> v_array = new ArrayList<V>(g.getVertices());
