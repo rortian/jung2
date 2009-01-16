@@ -63,13 +63,11 @@ public class TreeLayout<V,E> implements Layout<V,E> {
             }
         }
     }
-    private transient Set<V> allreadyDone = new HashSet<V>();
+    private transient Set<V> alreadyDone = new HashSet<V>();
 
     private int distX = DEFAULT_DISTX;
     private int distY = DEFAULT_DISTY;
     private transient Point m_currentPoint = new Point();
-
-    private Collection<V> roots;
 
     public TreeLayout(Forest<V,E> g) {
     	this(g, DEFAULT_DISTX, DEFAULT_DISTY);
@@ -82,15 +80,14 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     public TreeLayout(Forest<V,E> g, int distx, int disty) {
     	
     	this.graph = g;
-        this.roots = getRoots(g);
         this.distX = distx;
         this.distY = disty;
         buildTree();
     }
     
-    private Collection<V> getRoots(Forest<V,E> forest) {
+    private Collection<V> getRoots() {
     	Set<V> roots = new HashSet<V>();
-    	for(Tree<V,E> tree : forest.getTrees()) {
+    	for(Tree<V,E> tree : graph.getTrees()) {
     			roots.add(tree.getRoot());
     	}
     	return roots;
@@ -100,8 +97,9 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     	return size;
     }
 
-	void buildTree() {
+	private void buildTree() {
         this.m_currentPoint = new Point(0, 20);
+        Collection<V> roots = getRoots();
         if (roots.size() > 0 && graph != null) {
        		calculateDimensionX(roots);
        		for(V v : roots) {
@@ -116,10 +114,10 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         }
     }
 
-    void buildTree(V v, int x) {
+    private void buildTree(V v, int x) {
 
-        if (!allreadyDone.contains(v)) {
-            allreadyDone.add(v);
+        if (!alreadyDone.contains(v)) {
+            alreadyDone.add(v);
 
             //go one level further down
             this.m_currentPoint.y += this.distY;
@@ -143,6 +141,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
             this.m_currentPoint.y -= this.distY;
         }
     }
+    
     private int calculateDimensionX(V v) {
 
         int size = 0;
@@ -191,17 +190,14 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         return depth + 1;
     }
 
-//    /**
-//     * ?
-//     * 
-//     * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
-//     */
-//    public boolean incrementsAreDone() {
-//        return true;
-//    }
+    /**
+     * This method is not supported by this class.  The size of the layout
+     * is determined by the topology of the tree, and by the horizontal 
+     * and vertical spacing (optionally set by the constructor).
+     */
     public void setSize(Dimension size) {
-//    	this.size = size;
-//        buildTree();
+        throw new UnsupportedOperationException("Size of TreeLayout is set" +
+                " by vertex spacing in constructor");
     }
 
     private void setCurrentPositionFor(V vertex) {
