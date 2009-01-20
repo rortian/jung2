@@ -25,9 +25,4 @@ public interface EdgeScorer<E, S>
      * @return the algorithm's score for this edge
      */
     public S getEdgeScore(E e);
-    
-    /**
-     * Invokes the algorithm that assigns scores to edges.
-     */
-    public void evaluate();
 }
