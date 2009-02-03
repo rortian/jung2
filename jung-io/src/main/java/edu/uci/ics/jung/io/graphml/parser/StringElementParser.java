@@ -16,6 +16,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.ExceptionConverter;
 
@@ -24,10 +25,10 @@ import edu.uci.ics.jung.io.graphml.ExceptionConverter;
  *
  * @author Nathan Mittler - nathan.mittler@gmail.com
  */
-public class StringElementParser extends AbstractElementParser {
+public class StringElementParser<G extends Hypergraph<V,E>,V,E> extends AbstractElementParser<G,V,E> {
 
-    public StringElementParser(ElementParserRegistry registry) {
-        super(registry);
+    public StringElementParser(ParserContext<G,V,E> parserContext) {
+        super(parserContext);
     }
     
     public String parse(XMLEventReader xmlEventReader, StartElement start)

@@ -18,6 +18,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.*;
 
@@ -26,14 +27,10 @@ import edu.uci.ics.jung.io.graphml.*;
  *
  * @author Nathan Mittler - nathan.mittler@gmail.com
  */
-public class EdgeElementParser extends AbstractElementParser {
-
-    final private KeyMap keyMap;
+public class EdgeElementParser<G extends Hypergraph<V,E>,V,E> extends AbstractElementParser<G,V,E> {
     
-    public EdgeElementParser(ElementParserRegistry registry, KeyMap keyMap) {
-        super(registry);
-        
-        this.keyMap = keyMap;
+    public EdgeElementParser(ParserContext<G,V,E> parserContext) {
+        super(parserContext);
     }
     
     @SuppressWarnings("unchecked")
@@ -101,7 +98,7 @@ public class EdgeElementParser extends AbstractElementParser {
             }
             
             // Apply the keys to this object.
-            keyMap.applyKeys(edge);
+            applyKeys(edge);
 
             return edge;
             

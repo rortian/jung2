@@ -22,15 +22,25 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.After;
 
+import edu.uci.ics.jung.graph.Hypergraph;
+import edu.uci.ics.jung.io.graphml.DummyEdge;
+import edu.uci.ics.jung.io.graphml.DummyGraphObjectBase;
 import edu.uci.ics.jung.io.graphml.KeyMap;
+import edu.uci.ics.jung.io.graphml.DummyVertex;
 
 public abstract class AbstractParserTest {
 
-    private ElementParserRegistry registry;
+    
+    private ElementParserRegistry<Hypergraph<DummyVertex,DummyEdge>,DummyVertex,DummyEdge> registry;
 
     @Before
     public void setUp() throws Exception {
-        registry = new ElementParserRegistry(new KeyMap());
+        registry = new ElementParserRegistry<Hypergraph<DummyVertex,DummyEdge>,DummyVertex,DummyEdge>(
+                new KeyMap(), 
+                new DummyGraphObjectBase.UndirectedSparseGraphFactory(), 
+                new DummyVertex.Factory(), 
+                new DummyEdge.EdgeFactory(), 
+                new DummyEdge.HyperEdgeFactory());
     }
 
     @After

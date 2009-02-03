@@ -13,30 +13,36 @@ package edu.uci.ics.jung.io.graphml.parser;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
+import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.io.GraphIOException;
+import edu.uci.ics.jung.io.graphml.Metadata;
 
 /**
  * Base class for element parsers - provides some minimal functionality.
  * 
  * @author Nathan Mittler - nathan.mittler@gmail.com
  */
-public abstract class AbstractElementParser implements ElementParser {
+public abstract class AbstractElementParser<G extends Hypergraph<V,E>,V,E> implements ElementParser {
 
-    final private ElementParserRegistry parserRegistry;
-    protected AbstractElementParser(ElementParserRegistry parserRegistry) {
-        this.parserRegistry = parserRegistry;
+    final private ParserContext<G,V,E> parserContext;
+    protected AbstractElementParser(ParserContext<G,V,E> parserContext) {
+        this.parserContext = parserContext;
     }
     
-    public ElementParserRegistry getParserRegistry() {
-        return this.parserRegistry;
+    public ParserContext<G,V,E> getParserContext() {
+        return this.parserContext;
     }
     
     public ElementParser getParser(String localName) {
-        return parserRegistry.getParser(localName);
+        return parserContext.getElementParserRegistry().getParser(localName);
+    }
+    
+    public void applyKeys(Metadata metadata) {
+        getParserContext().getKeyMap().applyKeys(metadata);
     }
     
     public ElementParser getUnknownParser() {
-        return parserRegistry.getUnknownElementParser();
+        return parserContext.getElementParserRegistry().getUnknownElementParser();
     }
     
     protected void verifyMatch(StartElement start, EndElement end)

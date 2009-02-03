@@ -24,7 +24,7 @@ public class HyperEdgeMetadata extends AbstractMetadata {
 
     private String id;
     private String description;
-    private Object edgeObject;
+    private Object edge;
     final private List<EndpointMetadata> endpoints = new ArrayList<EndpointMetadata>();
     
     public String getId() {
@@ -51,12 +51,12 @@ public class HyperEdgeMetadata extends AbstractMetadata {
         return endpoints;
     }
 
-    public Object getEdgeObject() {
-        return edgeObject;
+    public Object getEdge() {
+        return edge;
     }
 
-    public void setEdgeObject(Object edgeObject) {
-        this.edgeObject = edgeObject;
+    public void setEdge(Object edge) {
+        this.edge = edge;
     }
 
     public MetadataType getMetadataType() {

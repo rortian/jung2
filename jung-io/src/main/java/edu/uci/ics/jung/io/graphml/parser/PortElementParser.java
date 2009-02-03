@@ -18,6 +18,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.*;
 
@@ -26,14 +27,10 @@ import edu.uci.ics.jung.io.graphml.*;
  *
  * @author Nathan Mittler - nathan.mittler@gmail.com
  */
-public class PortElementParser extends AbstractElementParser {
+public class PortElementParser<G extends Hypergraph<V,E>,V,E> extends AbstractElementParser<G,V,E> {
 
-    final private KeyMap keyMap;
-    
-    public PortElementParser(ElementParserRegistry registry, KeyMap keyMap) {
-        super(registry);
-        
-        this.keyMap = keyMap;
+    public PortElementParser(ParserContext<G,V,E> parserContext) {
+        super(parserContext);
     }
     
     @SuppressWarnings("unchecked")
@@ -92,7 +89,7 @@ public class PortElementParser extends AbstractElementParser {
             }
             
             // Apply the keys to this port.
-            keyMap.applyKeys(port);
+            applyKeys(port);
 
             return port;
             

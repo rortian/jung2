@@ -12,10 +12,6 @@ package edu.uci.ics.jung.io.graphml;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -25,10 +21,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.collections15.Transformer;
 
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.io.GraphReader;
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.parser.ElementParserRegistry;
@@ -67,27 +60,7 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
     protected Transformer<HyperEdgeMetadata, E> hyperEdgeTransformer;
     protected boolean initialized;
     final protected GraphMLDocument document = new GraphMLDocument();
-    final protected ElementParserRegistry parserRegistry = new ElementParserRegistry(
-            document.getKeyMap());
-
-    /**
-     * Constructs a GraphML reader using the given reader. The transformers must
-     * be supplied via the setXXX methods before a call to <code>init</code> or
-     * <code>readGraph</cods> is made.
-     *
-     * @param fileReader the reader for the input GraphML document. This must be
-     *                   non-null.
-     * @throws IllegalArgumentException thrown if the argument is null.
-     */
-    public GraphMLReader2(Reader fileReader) {
-
-        if (fileReader == null) {
-            throw new IllegalArgumentException(
-                    "Argument fileReader must be non-null");
-        }
-
-        this.fileReader = fileReader;
-    }
+    final protected ElementParserRegistry<G,V,E> parserRegistry;
 
     /**
      * Constructs a GraphML reader around the given reader. This constructor
@@ -114,11 +87,40 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
                           Transformer<EdgeMetadata, E> edgeTransformer,
                           Transformer<HyperEdgeMetadata, E> hyperEdgeTransformer) {
 
-        this(fileReader);
-        setGraphTransformer(graphTransformer);
-        setVertexTransformer(vertexTransformer);
-        setEdgeTransformer(edgeTransformer);
-        setHyperEdgeTransformer(hyperEdgeTransformer);
+        if (fileReader == null) {
+            throw new IllegalArgumentException(
+                    "Argument fileReader must be non-null");
+        }        
+        
+        if (graphTransformer == null) {
+            throw new IllegalArgumentException(
+            "Argument graphTransformer must be non-null");
+        }        
+
+        if (vertexTransformer == null) {
+            throw new IllegalArgumentException(
+                    "Argument vertexTransformer must be non-null");
+        }        
+        
+        if (edgeTransformer == null) {
+            throw new IllegalArgumentException(
+                    "Argument edgeTransformer must be non-null");
+        }        
+        
+        if (hyperEdgeTransformer == null) {
+            throw new IllegalArgumentException(
+                    "Argument hyperEdgeTransformer must be non-null");
+        }
+        
+        this.fileReader = fileReader;
+        this.graphTransformer = graphTransformer;
+        this.vertexTransformer = vertexTransformer;
+        this.edgeTransformer = edgeTransformer;
+        this.hyperEdgeTransformer = hyperEdgeTransformer;
+        
+        // Create the parser registry.
+        this.parserRegistry = new ElementParserRegistry<G,V,E>(document.getKeyMap(), 
+                graphTransformer, vertexTransformer, edgeTransformer, hyperEdgeTransformer);
     }
 
     /**
@@ -131,42 +133,12 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
     }
 
     /**
-     * Sets the transformer for graph objects.
-     *
-     * @param graphTransformer the graph transformer. This must be non-null.
-     * @throws IllegalArgumentException if the transformer is null.
-     */
-    public void setGraphTransformer(
-            Transformer<GraphMetadata, G> graphTransformer) {
-        if (graphTransformer == null) {
-            throw new IllegalArgumentException(
-                    "Argument graphTransformer must be non-null");
-        }
-        this.graphTransformer = graphTransformer;
-    }
-
-    /**
      * Gets the current transformer that is being used for vertex objects.
      *
      * @return the current transformer.
      */
     public Transformer<NodeMetadata, V> getVertexTransformer() {
         return vertexTransformer;
-    }
-
-    /**
-     * Sets the transformer for vertex objects.
-     *
-     * @param vertexTransformer the vertex transformer. This must be non-null.
-     * @throws IllegalArgumentException if the transformer is null.
-     */
-    public void setVertexTransformer(
-            Transformer<NodeMetadata, V> vertexTransformer) {
-        if (vertexTransformer == null) {
-            throw new IllegalArgumentException(
-                    "Argument vertexTransformer must be non-null");
-        }
-        this.vertexTransformer = vertexTransformer;
     }
 
     /**
@@ -179,41 +151,12 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
     }
 
     /**
-     * Sets the transformer for edge objects.
-     *
-     * @param edgeTransformer the edge transformer. This must be non-null.
-     * @throws IllegalArgumentException if the transformer is null.
-     */
-    public void setEdgeTransformer(Transformer<EdgeMetadata, E> edgeTransformer) {
-        if (edgeTransformer == null) {
-            throw new IllegalArgumentException(
-                    "Argument edgeTransformer must be non-null");
-        }
-        this.edgeTransformer = edgeTransformer;
-    }
-
-    /**
      * Gets the current transformer that is being used for hyperedge objects.
      *
      * @return the current transformer.
      */
     public Transformer<HyperEdgeMetadata, E> getHyperEdgeTransformer() {
         return hyperEdgeTransformer;
-    }
-
-    /**
-     * Sets the transformer for hyperedge objects.
-     *
-     * @param hyperEdgeTransformer the hyperedge transformer. This must be non-null.
-     * @throws IllegalArgumentException if the transformer is null.
-     */
-    public void setHyperEdgeTransformer(
-            Transformer<HyperEdgeMetadata, E> hyperEdgeTransformer) {
-        if (hyperEdgeTransformer == null) {
-            throw new IllegalArgumentException(
-                    "Argument hyperEdgeTransformer must be non-null");
-        }
-        this.hyperEdgeTransformer = hyperEdgeTransformer;
     }
 
     /**
@@ -230,23 +173,6 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
 
             if (!initialized) {
 
-                if (graphTransformer == null) {
-                    throw new IllegalStateException(
-                            "Property graphTransformer must be non-null");
-                }
-                if (vertexTransformer == null) {
-                    throw new IllegalStateException(
-                            "Property vertexTransformer must be non-null");
-                }
-                if (edgeTransformer == null) {
-                    throw new IllegalStateException(
-                            "Property edgeTransformer must be non-null");
-                }
-                if (hyperEdgeTransformer == null) {
-                    throw new IllegalStateException(
-                            "Property hyperEdgeTransformer must be non-null");
-                }
-
                 // Create the event reader.
                 XMLInputFactory factory = XMLInputFactory.newInstance();
                 xmlEventReader = factory.createXMLEventReader(fileReader);
@@ -256,8 +182,6 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
                 initialized = true;
             }
 
-        } catch (IllegalStateException e) {
-            throw new GraphIOException(e);
         } catch( Exception e ) {
             ExceptionConverter.convert(e);
         }
@@ -289,6 +213,10 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
         } finally {
             fileReader = null;
             xmlEventReader = null;
+            graphTransformer = null;
+            vertexTransformer = null;
+            edgeTransformer = null;
+            hyperEdgeTransformer = null;
         }
     }
 
@@ -308,6 +236,7 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
      *
      * @return the graph that was read if one was found, otherwise null.
      */
+    @SuppressWarnings("unchecked")
     public G readGraph() throws GraphIOException {
 
         try {
@@ -334,16 +263,15 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
 
                     } else if (GraphMLConstants.GRAPH_NAME.equals(name)) {
 
-                        // Parse the graph object.
+                        // Parse the graph.
                         GraphMetadata graph = (GraphMetadata) parserRegistry
                                 .getParser(name).parse(xmlEventReader, element);
 
                         // Add it to the graph metadata list.
                         document.getGraphMetadata().add(graph);
-
-                        // Create the graph from the graph metadta and
-                        // return it to the caller.
-                        return createGraph(graph);
+                        
+                        // Return the graph object.
+                        return (G)graph.getGraph();
 
                     } else if (GraphMLConstants.GRAPHML_NAME.equals(name)) {
                         // Ignore the graphML object.
@@ -365,173 +293,5 @@ public class GraphMLReader2<G extends Hypergraph<V, E>, V, E> implements
 
         // We didn't read anything from the document.
         throw new GraphIOException("Unable to read Graph from document - the document could be empty");
-    }
-
-    /**
-     * Creates a graph object from the given metadata. The metadata will receive
-     * the newly created graph objects.
-     *
-     * @param metadata the input metadata
-     * @return the new graph object
-     * @throws edu.uci.ics.jung.io.GraphIOException thrown if a problem occurred.
-     */
-    protected G createGraph(GraphMetadata metadata) throws GraphIOException {
-
-        try {
-
-            // Create the graph object
-            G graph = graphTransformer.transform(metadata);
-            if (graph == null) {
-                throw new GraphIOException(
-                        "Graph transformer returned invalid graph object");
-            }
-
-            // Save the graph object in the metadata.
-            metadata.setGraphObject(graph);
-
-            // Map the verticies by ID.
-            Map<String, V> idToVertexMap = new HashMap<String, V>();
-
-            // Process the node metadata.
-            List<NodeMetadata> nodeMetadata = metadata.getNodes();
-            for (NodeMetadata nmd : nodeMetadata) {
-
-                // Create the vertex
-                V v = createVertex(nmd);
-
-                // Add it to the graph.
-                graph.addVertex(v);
-
-                // Add it to the id-to-vertex map.
-                idToVertexMap.put(nmd.getId(), v);
-            }
-
-            // Process the edge metadata.
-            List<EdgeMetadata> edgeMetadata = metadata.getEdges();
-            for (EdgeMetadata emd : edgeMetadata) {
-
-                // Create the edge
-                E e = createEdge(emd);
-
-                // Get the verticies.
-                V source = idToVertexMap.get(emd.getSource());
-                V target = idToVertexMap.get(emd.getTarget());
-                if (source == null || target == null) {
-                    throw new GraphIOException(
-                            "edge references undefined source or target vertex. "
-                                    + "Source: " + emd.getSource()
-                                    + ", Target: " + emd.getTarget());
-                }
-
-                // Add it to the graph.
-                if (graph instanceof Graph) {
-                    ((Graph<V, E>) graph).addEdge(e, source, target, emd
-                            .isDirected() ? EdgeType.DIRECTED
-                            : EdgeType.UNDIRECTED);
-                } else {
-                    graph.addEdge(e, new Pair<V>(source, target));
-                }
-            }
-
-            // Process the hyperedge metadata.
-            List<HyperEdgeMetadata> hyperEdgeMetadata = metadata
-                    .getHyperEdges();
-            for (HyperEdgeMetadata hemd : hyperEdgeMetadata) {
-
-                // Create the edge
-                E e = createEdge(hemd);
-
-                // Add the verticies to a list.
-                List<V> verticies = new ArrayList<V>();
-                List<EndpointMetadata> endpoints = hemd.getEndpoints();
-                for (EndpointMetadata ep : endpoints) {
-                    V v = idToVertexMap.get(ep.getNode());
-                    if (v == null) {
-                        throw new GraphIOException(
-                                "hyperedge references undefined vertex: "
-                                        + ep.getNode());
-                    }
-                    verticies.add(v);
-                }
-
-                // Add it to the graph.
-                graph.addEdge(e, verticies);
-            }
-
-            return graph;
-
-        } catch (IllegalArgumentException e) {
-
-            // Thrown by the addEdge method if the node count is incorrect
-            // for the graph type.
-            throw new GraphIOException(e);
-        }
-    }
-
-    /**
-     * Creates a vertex object
-     *
-     * @param metadata the source metadata for the vertex
-     * @return the new vertex object
-     * @throws edu.uci.ics.jung.io.GraphIOException thrown if an error occurs.
-     */
-    protected V createVertex(NodeMetadata metadata) throws GraphIOException {
-
-        // Create the vertex object
-        V v = vertexTransformer.transform(metadata);
-        if (v == null) {
-            throw new GraphIOException(
-                    "Vertex transformer returned invalid vertex object");
-        }
-
-        // Save the vertex reference in the metadata object.
-        metadata.setVertex(v);
-
-        return v;
-    }
-
-    /**
-     * Creates an edge from the given metadata.
-     *
-     * @param metadata the source data for the edge.
-     * @return the new edge object
-     * @throws edu.uci.ics.jung.io.GraphIOException thrown if an error occurred.
-     */
-    protected E createEdge(EdgeMetadata metadata) throws GraphIOException {
-
-        // Create the vertex object
-        E e = edgeTransformer.transform(metadata);
-        if (e == null) {
-            throw new GraphIOException(
-                    "Edge transformer returned invalid edge object");
-        }
-
-        // Save the edge reference in the metadata object.
-        metadata.setEdgeObject(e);
-
-        return e;
-    }
-
-    /**
-     * Creates an edge from the given metadata.
-     *
-     * @param metadata the source data for the edge.
-     * @return the new edge object
-     * @throws edu.uci.ics.jung.io.GraphIOException thrown if an error occurred.
-     */
-    protected E createEdge(HyperEdgeMetadata metadata)
-            throws GraphIOException {
-
-        // Create the vertex object
-        E e = hyperEdgeTransformer.transform(metadata);
-        if (e == null) {
-            throw new GraphIOException(
-                    "Hyperedge transformer returned invalid edge object");
-        }
-
-        // Save the edge reference in the metadata object.
-        metadata.setEdgeObject(e);
-
-        return e;
     }    
 }

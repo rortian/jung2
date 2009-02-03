@@ -20,10 +20,10 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.EndpointMetadata;
 import edu.uci.ics.jung.io.graphml.GraphMLConstants;
-import edu.uci.ics.jung.io.graphml.KeyMap;
 import edu.uci.ics.jung.io.graphml.ExceptionConverter;
 import edu.uci.ics.jung.io.graphml.EndpointMetadata.EndpointType;
 
@@ -32,9 +32,7 @@ import edu.uci.ics.jung.io.graphml.EndpointMetadata.EndpointType;
  * 
  * @author Nathan Mittler - nathan.mittler@gmail.com
  */
-public class EndpointElementParser extends AbstractElementParser {
-
-    final private KeyMap keyMap;
+public class EndpointElementParser<G extends Hypergraph<V,E>,V,E> extends AbstractElementParser<G,V,E> {
     
     final static private Map<String, EndpointType> endpointTypeMap = new HashMap<String, EndpointType>();
     static {
@@ -43,10 +41,8 @@ public class EndpointElementParser extends AbstractElementParser {
         endpointTypeMap.put(GraphMLConstants.UNDIR_NAME, EndpointType.UNDIR);
     }
     
-    public EndpointElementParser(ElementParserRegistry registry, KeyMap keyMap) {
-        super(registry);
-        
-        this.keyMap = keyMap;
+    public EndpointElementParser(ParserContext<G,V,E> parserContext) {
+        super(parserContext);
     }
     
     @SuppressWarnings("unchecked")
@@ -111,7 +107,7 @@ public class EndpointElementParser extends AbstractElementParser {
             }
             
             // Apply the keys to this object.
-            keyMap.applyKeys(endpoint);
+            applyKeys(endpoint);
 
             return endpoint;
             

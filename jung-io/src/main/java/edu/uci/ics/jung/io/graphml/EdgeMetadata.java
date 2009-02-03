@@ -26,7 +26,7 @@ public class EdgeMetadata extends AbstractMetadata {
     private String sourcePort;
     private String targetPort;
     private String description;
-    private Object edgeObject;
+    private Object edge;
     
     public String getId() {
         return id;
@@ -97,13 +97,13 @@ public class EdgeMetadata extends AbstractMetadata {
         this.description = description;
     }
 
-    public Object getEdgeObject() {
-        return edgeObject;
+    public Object getEdge() {
+        return edge;
     }
 
 
-    public void setEdgeObject(Object edgeObject) {
-        this.edgeObject = edgeObject;
+    public void setEdge(Object edge) {
+        this.edge = edge;
     }
 
 
