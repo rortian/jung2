@@ -1,40 +1,23 @@
-/*
-* Copyright (c) 2003, the JUNG Project and the Regents of the University 
-* of California
-* All rights reserved.
-*
-* This software is open-source under the BSD license; see either
-* "license.txt" or
-* http://jung.sourceforge.net/license.txt for a description.
-*/
-package edu.uci.ics.jung.algorithms.importance;
+package edu.uci.ics.jung.algorithms.scoring;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import org.apache.commons.collections15.functors.MapTransformer;
+
+import edu.uci.ics.jung.algorithms.scoring.util.ScoringUtils;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
-
-/**
- * @author Scott White
- * @author Tom Nelson - adapted to jung2
- */
-public class TestKStepMarkov extends TestCase {
-    public final static String EDGE_WEIGHT = "edu.uci.ics.jung.edge_weight";
+public class TestKStepMarkov extends TestCase 
+{
 	DirectedGraph<Number,Number> mGraph;
     double[][] mTransitionMatrix;
     Map<Number,Number> edgeWeights = new HashMap<Number,Number>();
-
-    public static Test suite() {
-        return new TestSuite(TestKStepMarkov.class);
-    }
 
     @Override
     protected void setUp()
@@ -66,21 +49,22 @@ public class TestKStepMarkov extends TestCase {
         Set<Number> priors = new HashSet<Number>();
         priors.add(1);
         priors.add(2);
-        KStepMarkov<Number,Number> ranker = new KStepMarkov<Number,Number>(mGraph,priors,2,edgeWeights);
+        KStepMarkov<Number,Number> ranker = 
+        	new KStepMarkov<Number,Number>(mGraph, MapTransformer.getInstance(edgeWeights), 
+        			ScoringUtils.getUniformRootPrior(priors),2);
 //        ranker.evaluate();
-        System.out.println(ranker.getIterations());
+//        System.out.println(ranker.getIterations());
 
         for (int i = 0; i < 10; i++) 
         {
             System.out.println(ranker.getIterations());
 	        for (Number n : mGraph.getVertices())
-	        	System.out.println(n + ": " + ranker.getVertexRankScore(n));
-            
+	        	System.out.println(n + ": " + ranker.getVertexScore(n));
 	        ranker.step();
         }
-        
-        
-        List<Ranking<?>> rankings = ranker.getRankings();
-        System.out.println(rankings);
+//        List<Ranking<?>> rankings = ranker.getRankings();
+//        System.out.println("New version:");
+//        System.out.println(rankings);
     }
+
 }

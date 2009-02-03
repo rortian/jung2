@@ -55,9 +55,11 @@ public class TestPageRankWithPriors extends TestCase {
 //    	edgeWeights.put(edge, weight);
     }
 
-    public void testRanker() {
+    public void testGraphScoring() {
     	graph = new DirectedSparseMultigraph<Integer,Integer>();
 
+    	double[] expected_score = new double[]{0.1157, 0.2463, 0.4724, 0.1653};
+    	
     	for(int i=0; i<4; i++) {
     		graph.addVertex(i);
     	}
@@ -73,83 +75,17 @@ public class TestPageRankWithPriors extends TestCase {
         PageRankWithPriors<Integer, Integer> pr = 
             new PageRankWithPriors<Integer, Integer>(graph, ScoringUtils.getUniformRootPrior(priors), 0.3);
         pr.evaluate();
-        
-        Assert.assertEquals(pr.getVertexScore(0), 0.1157, pr.getTolerance());
-        Assert.assertEquals(pr.getVertexScore(1), 0.2463, pr.getTolerance());
-        Assert.assertEquals(pr.getVertexScore(2), 0.4724, pr.getTolerance());
-        Assert.assertEquals(pr.getVertexScore(3), 0.1653, pr.getTolerance());
-       
-//        PageRankWithPriors<Integer,Integer> ranker = 
-//        	new PageRankWithPriors<Integer,Integer>(graph,0.3,priors,null);
-//        ranker.setRemoveRankScoresOnFinalize(false);
-//        ranker.setMaximumIterations(500);
-//
-//        for (Integer v : graph.getVertices()) {
-//            double totalSum = 0;
-//            for (Integer e : graph.getOutEdges(v)) {
-//                Number weightVal = ranker.getEdgeWeight(e);//(Number) e.getUserDatum(ranker.getEdgeWeightKeyName());
-//                totalSum += weightVal.doubleValue();
-//            }
-//            Assert.assertTrue(NumericalPrecision.equal(1.0,totalSum,.0001));
-//
-//        }
-//
-//        ranker.evaluate();
-//        
-////        ranker.printRankings(true, true);
-//
-//        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(0),0.1157,.001));
-//        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(1),0.2463,.001));
-//        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(2),0.4724,.001));
-//        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(3),0.1653,.001));
 
+        double score_sum = 0;
+        for (int i = 0; i < graph.getVertexCount(); i++)
+        {
+        	double score = pr.getVertexScore(i);
+        	Assert.assertEquals(expected_score[i], score, pr.getTolerance());
+        	score_sum += score;
+        }
+        Assert.assertEquals(1.0, score_sum, pr.getTolerance() * graph.getVertexCount());
     }
 
-    // FIXME: this test doesn't actually test the specified method at all!
-//    public void test2() {
-//
-//        UndirectedGraph<Integer,Integer> graph = 
-//        	new UndirectedSparseMultigraph<Integer,Integer>();
-//        for(int i=0; i<10; i++) {
-//        	graph.addVertex(i);
-//        }
-//        graph.addEdge(edgeFactory.create(), 0, 1);
-//        graph.addEdge(edgeFactory.create(), 1, 2);
-//        graph.addEdge(edgeFactory.create(), 2, 3);
-//        graph.addEdge(edgeFactory.create(), 3, 0);
-//        graph.addEdge(edgeFactory.create(), 4, 5);
-//        graph.addEdge(edgeFactory.create(), 5, 6);
-//        graph.addEdge(edgeFactory.create(), 6, 7);
-//
-//        DirectedGraph<Integer,Integer> dg = new DirectedSparseMultigraph<Integer,Integer>();
-//        for(Integer v : graph.getVertices()) {
-//        	dg.addVertex(v);
-//        }
-//        for(Integer e : graph.getEdges()) {
-//        	Pair<Integer> ep = graph.getEndpoints(e);
-//        	dg.addEdge(e, ep.getFirst(), ep.getSecond());
-//        }
-//
-//        Set<Integer> priors = new HashSet<Integer>();
-//        priors.add(2);
-//        priors.add(3);
-//
-//        PageRankWithPriors<Integer,Integer> ranker = 
-//        	new PageRankWithPriors<Integer,Integer>(dg, 0.3, priors, null);
-//        ranker.setRemoveRankScoresOnFinalize(false);
-//        ranker.setMaximumIterations(500);
-//
-//        for (Integer v : dg.getVertices()) {
-//            double totalSum = 0;
-//            for (Integer e : graph.getOutEdges(v)) {
-//                Number weightVal = ranker.getEdgeWeight(e);
-//                totalSum += weightVal.doubleValue();
-//            }
-////            Assert.assertTrue(NumericalPrecision.equal(1.0,totalSum,.0001));
-//
-//        }
-//
-//        ranker.evaluate();
-//        //ranker.printRankings(true,true);
-//    }
+    public void testHypergraphScoring() {
+    }
 }

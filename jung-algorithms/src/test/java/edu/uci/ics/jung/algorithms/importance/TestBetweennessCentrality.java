@@ -59,6 +59,10 @@ public class TestBetweennessCentrality extends TestCase {
         bc.setRemoveRankScoresOnFinalize(false);
         bc.evaluate();
 
+//        System.out.println("ranking");
+//        for (int i = 0; i < 9; i++) 
+//        	System.out.println(String.format("%d: %f", i, bc.getVertexRankScore(i)));
+        
         Assert.assertEquals(bc.getVertexRankScore(0)/28.0,0.2142,.001);
         Assert.assertEquals(bc.getVertexRankScore(1)/28.0,0.2797,.001);
         Assert.assertEquals(bc.getVertexRankScore(2)/28.0,0.0892,.001);
