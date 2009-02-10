@@ -24,8 +24,9 @@ import org.apache.commons.collections15.functors.ConstantTransformer;
  * A utility class for generating <code>Shape</code>s for drawing vertices.  
  * The available shapes include rectangles, rounded rectangles, ellipses,
  * regular polygons, and regular stars.  The dimensions of the requested 
- * shapes are defined by the specified <code>VertexSizeFunction</code>
- * and <code>VertexAspectRatioFunction</code> implementations: the width
+ * shapes are defined by the specified vertex size function (specified by
+ * a <code>Transformer<V,Integer></code>) and vertex aspect ratio function 
+ * (specified by a <code>Transformer<V,Float></code>) implementations: the width
  * of the bounding box of the shape is given by the vertex size, and the
  * height is given by the size multiplied by the vertex's aspect ratio.
  *  
