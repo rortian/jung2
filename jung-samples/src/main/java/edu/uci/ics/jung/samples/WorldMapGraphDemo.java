@@ -141,10 +141,12 @@ public class WorldMapGraphDemo extends JApplet {
                     AffineTransform vat = 
                     	vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW).getTransform();
                     AffineTransform at = new AffineTransform();
+                    at.concatenate(g2d.getTransform());
                     at.concatenate(vat);
                     at.concatenate(lat);
                     g2d.setTransform(at);
-                    g.drawImage(icon.getImage(),0,0,icon.getIconWidth(),icon.getIconHeight(),vv);
+                    g.drawImage(icon.getImage(), 0, 0,
+                    		icon.getIconWidth(),icon.getIconHeight(),vv);
                     g2d.setTransform(oldXform);
                 }
                 public boolean useTransform() { return false; }
@@ -208,7 +210,6 @@ public class WorldMapGraphDemo extends JApplet {
         controls.add(minus);
         controls.add(reset);
         add(controls, BorderLayout.SOUTH);
-
     }
     
     /**
