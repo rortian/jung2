@@ -27,14 +27,14 @@ import org.apache.commons.collections15.map.LazyMap;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
- * Implements some of the dirty work of writing a layout algorithm, allowing
- * the user to express their major intent more simply. When writing a <tt>Layout</tt>,
- * there are many shared tasks: handling tracking locked nodes, applying
- * filters, and tracing nearby vertices. This package automates all of those.
+ * Abstract class for implementations of {@code Layout}.  It handles some of the
+ * basic functions: storing coordinates, maintaining the dimensions, initializing
+ * the locations, maintaining locked vertices.
  * 
  * @author Danyel Fisher, Scott White
  * @author Tom Nelson - converted to jung2
- * @param <V>
+ * @param <V> the vertex type
+ * @param <E> the edge type
  */
 abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 
@@ -62,6 +62,10 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	 * @param graph the graph for which the layout algorithm is to be created.
 	 */
 	protected AbstractLayout(Graph<V, E> graph) {
+	    if (graph == null) 
+	    {
+	        throw new IllegalArgumentException("Graph must be non-null");
+	    }
 		this.graph = graph;
 	}
 	
