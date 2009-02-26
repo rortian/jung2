@@ -61,14 +61,14 @@ public class FilterUtils
 					subgraph.addEdge(e, incident, graph.getEdgeType(e));
 			}
 		} 
-		catch (InstantiationException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IllegalAccessException e) 
-		{
-			e.printStackTrace();
-		}
+        catch (InstantiationException e)
+        {
+            throw new RuntimeException("Unable to create copy of existing graph: ", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Unable to create copy of existing graph: ", e);
+        }
 		return subgraph;
 	}
 	

@@ -23,9 +23,12 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
- * A filter used to extract the k-neighborhood around one or more root node(s)
+ * A filter used to extract the k-neighborhood around one or more root node(s).
+ * The k-neighborhood is defined as the subgraph induced by the set of 
+ * vertices that are k or fewer hops (unweighted shortest-path distance)
+ * away from the root node.
+ * 
  * @author Danyel Fisher
- *
  */
 public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 
@@ -35,7 +38,7 @@ public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 	private EdgeType edgeType;
 	
 	/**
-	 * Constructs a new instance of the filter
+	 * Constructs a new instance of the filter.
 	 * @param rootNodes the set of root nodes
 	 * @param radiusK the neighborhood radius around the root set
 	 * @param edgeType 0 for in/out edges, 1 for in-edges, 2  for out-edges
@@ -45,8 +48,9 @@ public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 		this.radiusK = radiusK;
 		this.edgeType = edgeType;
 	}
+	
 	/**
-	 * Constructs a new instance of the filter
+	 * Constructs a new instance of the filter.
 	 * @param rootNode the root node
 	 * @param radiusK the neighborhood radius around the root set
 	 * @param edgeType 0 for in/out edges, 1 for in-edges, 2  for out-edges
@@ -125,11 +129,15 @@ public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 					ug.addEdge(edge, endpoints.getFirst(), endpoints.getSecond());
 				}
 			}
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		} 
+        catch (InstantiationException e)
+        {
+            throw new RuntimeException("Unable to create copy of existing graph: ", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new RuntimeException("Unable to create copy of existing graph: ", e);
+        }
 		return ug;
 	}
 }
