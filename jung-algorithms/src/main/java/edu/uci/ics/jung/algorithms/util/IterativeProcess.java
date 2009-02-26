@@ -9,7 +9,6 @@
 */
 package edu.uci.ics.jung.algorithms.util;
 
-import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 
 
 /**
@@ -44,7 +43,7 @@ public abstract class IterativeProcess implements IterativeContext {
     /**
      * Desired precision.
      */
-    private double desiredPrecision = NumericalPrecision.defaultNumericalPrecision();
+    private double desiredPrecision = Double.MIN_VALUE;
     /**
      * Achieved precision.
      */
@@ -153,7 +152,7 @@ public abstract class IterativeProcess implements IterativeContext {
      * @param x double
      */
     public double relativePrecision(double epsilon, double x) {
-        return x > NumericalPrecision.defaultNumericalPrecision() ? epsilon / x: epsilon;
+        return x > desiredPrecision ? epsilon / x: epsilon;
     }
 
     /**
