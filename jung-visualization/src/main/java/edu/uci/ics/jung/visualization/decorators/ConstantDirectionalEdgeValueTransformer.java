@@ -40,7 +40,7 @@ public class ConstantDirectionalEdgeValueTransformer<V,E> implements Transformer
     }
     
     /**
-     * @see edu.uci.ics.jung.graph.decorators.NumberEdgeValue#getNumber(ArchetypeEdge)
+     * @see Transformer#transform(Object)
      */
     public Number transform(Context<Graph<V,E>,E> context) {
     	Graph<V,E> graph = context.graph;

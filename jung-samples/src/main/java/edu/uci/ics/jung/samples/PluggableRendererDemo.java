@@ -52,12 +52,14 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
+import org.apache.commons.collections15.functors.MapTransformer;
 
 import edu.uci.ics.jung.algorithms.generators.random.MixedRandomGraphGenerator;
-import edu.uci.ics.jung.algorithms.importance.VoltageRanker;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.scoring.VoltageScorer;
+import edu.uci.ics.jung.algorithms.scoring.util.VertexScoreTransformer;
 import edu.uci.ics.jung.algorithms.util.SelfLoopEdgePredicate;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
@@ -73,8 +75,7 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.AbstractVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.GradientEdgePaintTransformer;
-import edu.uci.ics.jung.visualization.decorators.NumberEdgeValueStringer;
-import edu.uci.ics.jung.visualization.decorators.NumberVertexValueStringer;
+import edu.uci.ics.jung.visualization.decorators.NumberFormattingTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.picking.PickedState;
@@ -193,16 +194,14 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected JCheckBox fill_edges;
     
 	protected JRadioButton no_gradient;
-//	protected JRadioButton gradient_absolute;
 	protected JRadioButton gradient_relative;
 
 	protected static final int GRADIENT_NONE = 0;
 	protected static final int GRADIENT_RELATIVE = 1;
-//	protected static final int GRADIENT_ABSOLUTE = 2;
 	protected static int gradient_level = GRADIENT_NONE;
 
-    protected SeedFillColor<Integer> seedFillColor;//vcf;
-    protected SeedDrawColor<Integer> seedDrawColor;//vcf;
+    protected SeedFillColor<Integer> seedFillColor;
+    protected SeedDrawColor<Integer> seedDrawColor;
     protected EdgeWeightStrokeFunction<Number> ewcs;
     protected VertexStrokeHighlight<Integer,Number> vsh;
     protected Transformer<Integer,String> vs;
@@ -210,7 +209,6 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected Transformer<Number,String> es;
     protected Transformer<Number,String> es_none;
     protected VertexFontTransformer<Integer> vff;
-//    protected VertexFontTransformer<Integer> vertexBold;
     protected EdgeFontTransformer<Number> eff;
     protected VertexShapeSizeAspect<Integer,Number> vssa;
     protected DirectionDisplayPredicate<Integer,Number> show_edge;
@@ -223,12 +221,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected final static Object TRANSPARENCY = "transparency";
     
     protected Map<Number,Number> edge_weight = new HashMap<Number,Number>();
-    protected Map<Integer,Number> voltages = new HashMap<Integer,Number>();
+    protected Transformer<Integer, Double> voltages;
     protected Map<Integer,Number> transparency = new HashMap<Integer,Number>();
     
     protected VisualizationViewer<Integer,Number> vv;
-    protected DefaultModalGraphMouse gm;
-//    protected Transformer affineTransformer;
+    protected DefaultModalGraphMouse<Integer, Number> gm;
     protected Set<Integer> seedVertices = new HashSet<Integer>();
     
     public void start()
@@ -307,14 +304,14 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         vv.setBackground(Color.white);
         GraphZoomScrollPane scrollPane = new GraphZoomScrollPane(vv);
         jp.add(scrollPane);
-        gm = new DefaultModalGraphMouse();
+        gm = new DefaultModalGraphMouse<Integer, Number>();
         vv.setGraphMouse(gm);
         gm.add(new PopupGraphMousePlugin());
 
         addBottomControls( jp );
         vssa.setScaling(true);
 
-        vv.setVertexToolTipTransformer(new VoltageTips());
+        vv.setVertexToolTipTransformer(new VoltageTips<Number>());
         vv.setToolTipText("<html><center>Use the mouse wheel to zoom<p>Click and Drag the mouse to pan<p>Shift-click and Drag to Rotate</center></html>");
         
 
@@ -348,14 +345,14 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         Graph<Integer,Number> g = 
         	MixedRandomGraphGenerator.<Integer,Number>generateMixedRandomGraph(graphFactory, vertexFactory, edgeFactory,
         		edge_weight, 20, false, seedVertices);
-        vs = new NumberVertexValueStringer<Integer>(voltages);
-        es = new NumberEdgeValueStringer<Number>(edge_weight);
+        vs = new NumberFormattingTransformer<Integer>(voltages);
+        es = new NumberFormattingTransformer<Number>(MapTransformer.getInstance(edge_weight));
         
         // collect the seeds used to define the random graph
 
         if (seedVertices.size() < 2)
             System.out.println("need at least 2 seeds (one source, one sink)");
-//        
+        
         // use these seeds as source and sink vertices, run VoltageRanker
         boolean source = true;
         Set<Integer> sources = new HashSet<Integer>();
@@ -368,10 +365,12 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
                 sinks.add(v);
             source = !source;
         }
-        VoltageRanker<Integer,Number> vr = 
-            new VoltageRanker<Integer,Number>(edge_weight, voltages, 100, 0.01);
-        vr.calculateVoltages(g, sources, sinks);
-
+        VoltageScorer<Integer, Number> voltage_scores = 
+            new VoltageScorer<Integer, Number>(g, 
+                    MapTransformer.getInstance(edge_weight), sources, sinks);
+        voltage_scores.evaluate();
+        voltages = new VertexScoreTransformer<Integer, Double>(voltage_scores);
+        
         Collection<Integer> verts = g.getVertices();
         
         // assign a transparency value of 0.9 to all vertices
@@ -1036,11 +1035,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         protected boolean stretch = false;
         protected boolean scale = false;
         protected boolean funny_shapes = false;
-        protected Map<V,Number> voltages;
+        protected Transformer<V,Double> voltages;
         protected Graph<V,E> graph;
 //        protected AffineTransform scaleTransform = new AffineTransform();
         
-        public VertexShapeSizeAspect(Graph<V,E> graphIn, Map<V,Number> voltagesIn)
+        public VertexShapeSizeAspect(Graph<V,E> graphIn, Transformer<V,Double> voltagesIn)
         {
         	this.graph = graphIn;
             this.voltages = voltagesIn;
@@ -1048,7 +1047,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
 
 				public Integer transform(V v) {
 		            if (scale)
-		                return (int)(voltages.get(v).doubleValue() * 30) + 20;
+		                return (int)(voltages.transform(v) * 30) + 20;
 		            else
 		                return 20;
 
@@ -1167,11 +1166,11 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         }
     }
     
-    public class VoltageTips<V,E>
-    	implements Transformer<V,String> {
+    public class VoltageTips<E>
+    	implements Transformer<Integer,String> {
         
-        public String transform(V vertex) {
-           return "Voltage:"+voltages.get(vertex);
+        public String transform(Integer vertex) {
+           return "Voltage:"+voltages.transform(vertex);
         }
     }
     

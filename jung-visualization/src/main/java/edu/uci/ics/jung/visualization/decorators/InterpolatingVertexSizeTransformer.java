@@ -24,11 +24,11 @@ public class InterpolatingVertexSizeTransformer<V> implements Transformer<V,Inte
 {
     protected double min;
     protected double max;
-    protected NumberVertexValue<V> nvv;
+    protected Transformer<V, ? extends Number> values;
     protected int min_size;
     protected int size_diff;
     
-    public InterpolatingVertexSizeTransformer(NumberVertexValue<V> nvv, 
+    public InterpolatingVertexSizeTransformer(Transformer<V, ? extends Number> values, 
             int min_size, int max_size)
     {
         super();
@@ -38,14 +38,14 @@ public class InterpolatingVertexSizeTransformer<V> implements Transformer<V,Inte
             throw new IllegalArgumentException("min_size must be <= max_size");
         this.min = 0;
         this.max = 0;
-        this.nvv = nvv;
+        this.values = values;
         setMinSize(min_size);
         setMaxSize(max_size);
     }
 
     public Integer transform(V v)
     {
-        Number n = nvv.getNumber(v);
+        Number n = values.transform(v);
         double value = min;
         if (n != null)
             value = n.doubleValue();
@@ -68,10 +68,5 @@ public class InterpolatingVertexSizeTransformer<V> implements Transformer<V,Inte
     public void setMaxSize(int max_size)
     {
         this.size_diff = max_size - this.min_size;
-    }
-    
-    public void setNumberVertexValue(NumberVertexValue<V> nvv)
-    {
-        this.nvv = nvv;
     }
 }
