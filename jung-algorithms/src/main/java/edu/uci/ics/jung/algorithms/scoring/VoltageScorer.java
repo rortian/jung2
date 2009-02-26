@@ -13,6 +13,7 @@ package edu.uci.ics.jung.algorithms.scoring;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections15.Transformer;
@@ -68,6 +69,48 @@ public class VoltageScorer<V, E> extends AbstractIterativeScorer<V, E, Double>
         initialize();
     }
 
+    /**
+     * Creates an instance with the specified graph, edge weights, source vertices
+     * (each of whose 'voltages' are tied to 1), and sinks.
+     * @param g the input graph
+     * @param edge_weights the edge weights, representing conductivity
+     * @param sources the vertices whose voltages are tied to 1
+     * @param sinks the vertices whose voltages are tied to 0
+     */
+    public VoltageScorer(Hypergraph<V, E> g, Transformer<E, ? extends Number> edge_weights, 
+            Collection<V> sources, Collection<V> sinks)
+    {
+        super(g, edge_weights);
+        
+        Map<V, Double> unit_voltages = new HashMap<V, Double>();
+        for(V v : sources) 
+            unit_voltages.put(v, new Double(1.0));
+        this.source_voltages = unit_voltages;
+        this.sinks = sinks;
+        initialize();
+    }
+
+    /**
+     * Creates an instance with the specified graph, source vertices
+     * (each of whose 'voltages' are tied to 1), and sinks.
+     * The outgoing edges for each vertex are assigned 
+     * weights that sum to 1.
+     * @param g the input graph
+     * @param sources the vertices whose voltages are tied to 1
+     * @param sinks the vertices whose voltages are tied to 0
+     */
+    public VoltageScorer(Hypergraph<V, E> g, Collection<V> sources, Collection<V> sinks)
+    {
+        super(g);
+        
+        Map<V, Double> unit_voltages = new HashMap<V, Double>();
+        for(V v : sources) 
+            unit_voltages.put(v, new Double(1.0));
+        this.source_voltages = unit_voltages;
+        this.sinks = sinks;
+        initialize();
+    }
+    
     /**
      * Creates an instance with the specified graph, source voltages,
      * and sinks.  The outgoing edges for each vertex are assigned 
