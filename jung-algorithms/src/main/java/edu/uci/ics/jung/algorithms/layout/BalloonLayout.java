@@ -27,8 +27,10 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
 
 /**
- * Implements the balloon layout for the supplied Tree
- * or Forest.
+ * A {@code Layout} implementation that assigns positions to {@code Tree} or 
+ * {@code Forest} vertices using associations with nested circles ("balloons").  
+ * A balloon is nested inside another balloon if the first balloon's subtree
+ * is a subtree of the second balloon's subtree.
  * 
  * @author Tom Nelson 
  *  

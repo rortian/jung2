@@ -28,17 +28,16 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 
 
 /**
- * Implements the EdmondsKarpMaxFlow algorithm for solving the maximum flow problem. After the algorithm is executed,
- * each edge is labeled with a MutableDouble value that indicates the flow along that edge.
- * <p>
- * The algorithm operates on the assumption that the user has provided a UserDatum value (with copy action either 
- * SHARED or CLONE, but not REMOVE) of type Number along
- * each edge indicating the capacity available.
+ * Implements the Edmonds-Karp maximum flow algorithm for solving the maximum flow problem. 
+ * After the algorithm is executed,
+ * the input {@code Map} is populated with a {@code Number} for each edge that indicates 
+ * the flow along that edge.
  * <p>
  * An example of using this algorithm is as follows:
  * <pre>
- * EdmondsKarpMaxFlow ek = new EdmondsKarpMaxFlow(graph,sourceVertex,"CAPACITY","FLOW");
- * ek.evaluate(); // This actually instructs the solver to compute the max flow
+ * EdmondsKarpMaxFlow ek = new EdmondsKarpMaxFlow(graph, source, sink, edge_capacities, edge_flows, 
+ * edge_factory);
+ * ek.evaluate(); // This instructs the class to compute the max flow
  * </pre>
  *
  * @see "Introduction to Algorithms by Cormen, Leiserson, Rivest, and Stein."
@@ -201,42 +200,37 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
     }
 
     /**
-     * Returns the max flow value
-     * @return int the value of the maximum flow from the source to the sink
+     * Returns the value of the maximum flow from the source to the sink.
      */
     public int getMaxFlow() {
         return mMaxFlow;
     }
 
     /**
-     * Retrieves the nodes lying on the side of the partition (partitioned using the
-     * min-cut) of the sink node
-     * @return the set of nodes in the sink partition class
+     * Returns the nodes which share the same partition (as defined by the min-cut edges)
+     * as the sink node.
      */
     public Set<V> getNodesInSinkPartition() {
         return mSinkPartitionNodes;
     }
 
     /**
-     * Retrieves the nodes lying on the side of the partition (partitioned using the
-     * min-cut) of the source node
-     * @return the set of nodes in the source partition class
+     * Returns the nodes which share the same partition (as defined by the min-cut edges)
+     * as the source node.
      */
     public Set<V> getNodesInSourcePartition() {
         return mSourcePartitionNodes;
     }
 
     /**
-     * Retrieve the min-cut edge set
-     * @return set of edges in the min cut set
+     * Returns the edges in the minimum cut.
      */
     public Set<E> getMinCutEdges() {
         return mMinCutEdges;
     }
 
     /**
-     * Retrieves the flow graph used to compute the max flow
-     * @return a copy of the flow graph
+     * Returns the graph for which the maximum flow is calculated.
      */
     public DirectedGraph<V,E> getFlowGraph() {
         return mFlowGraph;
@@ -254,7 +248,7 @@ public class EdmondsKarpMaxFlow<V,E> extends IterativeProcess {
             Number capacity = edgeCapacityTransformer.transform(edge);
 
             if (capacity == null) {
-                throw new IllegalArgumentException("Edge capacities must be provided in map passed to ctor");
+                throw new IllegalArgumentException("Edge capacities must be provided in Transformer passed to constructor");
             }
             residualCapacityMap.put(edge, capacity);
 

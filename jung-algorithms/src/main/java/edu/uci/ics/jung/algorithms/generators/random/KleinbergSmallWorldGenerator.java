@@ -28,7 +28,7 @@ import java.util.Random;
 
 /**
  * Graph generator that produces a random graph with small world properties. 
- * The underlying model is an nxn (optionally toroidal) lattice. Each node u 
+ * The underlying model is an mxn (optionally toroidal) lattice. Each node u 
  * has four local connections, one to each of its neighbors, and
  * in addition one long range connection to some node v where v is chosen randomly according to
  * probability proportional to d^-alpha where d is the lattice distance between u and v and alpha

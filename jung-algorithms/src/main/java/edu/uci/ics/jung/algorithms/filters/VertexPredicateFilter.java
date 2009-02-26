@@ -49,11 +49,11 @@ public class VertexPredicateFilter<V,E> implements Filter<V,E>
         }
         catch (InstantiationException e)
         {
-            throw new RuntimeException("Unable to create copy of existing graph", e);
+            throw new RuntimeException("Unable to create copy of existing graph: ", e);
         }
         catch (IllegalAccessException e)
         {
-            throw new RuntimeException("Unable to create copy of existing graph", e);
+            throw new RuntimeException("Unable to create copy of existing graph: ", e);
         }
 
         for (V v : g.getVertices())

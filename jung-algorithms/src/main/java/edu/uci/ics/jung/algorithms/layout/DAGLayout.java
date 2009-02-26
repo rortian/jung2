@@ -6,19 +6,10 @@
  * This software is open-source under the BSD license; see either
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
- */
-/*
+ * 
  * Created on Dec 4, 2003
  */
 package edu.uci.ics.jung.algorithms.layout;
-
-/**
- * @author danyelf
- */
-/*
- * Created on 4/12/2003
- *  
- */
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -29,21 +20,32 @@ import java.util.Map;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
- * @author John Yesberg
- * 
- * DAGLayout is a layout algorithm which is suitable for tree-like directed
+ * An implementation of {@code Layout} suitable for tree-like directed
  * acyclic graphs. Parts of it will probably not terminate if the graph is
  * cyclic! The layout will result in directed edges pointing generally upwards.
  * Any vertices with no successors are considered to be level 0, and tend
  * towards the top of the layout. Any vertex has a level one greater than the
  * maximum level of all its successors.
  * 
- * Note: had to make minor access changes to SpringLayout to make this work.
- * FORCE_CONSTANT, LengthFunction, SpringVertexData, and SpringEdgeData were
- * all made "protected".
+ * 
+ * @author John Yesberg
  */
 public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
+    /**
+     * Each vertex has a minimumLevel. Any vertex with no successors has
+     * minimumLevel of zero. The minimumLevel of any vertex must be strictly
+     * greater than the minimumLevel of its parents. (Vertex A is a parent of
+     * Vertex B iff there is an edge from B to A.) Typically, a vertex will
+     * have a minimumLevel which is one greater than the minimumLevel of its
+     * parent's. However, if the vertex has two parents, its minimumLevel will
+     * be one greater than the maximum of the parents'. We need to calculate
+     * the minimumLevel for each vertex. When we layout the graph, vertices
+     * cannot be drawn any higher than the minimumLevel. The graphHeight of a
+     * graph is the greatest minimumLevel that is used. We will modify the
+     * SpringLayout calculations so that nodes cannot move above their assigned
+     * minimumLevel.
+     */
 	private Map<V,Number> minLevels = new HashMap<V,Number>();
 	// Simpler than the "pair" technique.
 	static int graphHeight;
@@ -52,7 +54,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	// How much space do we allow for additional floating at the bottom.
 	final double LEVELATTRACTIONRATE = 0.8;
 
-	/*
+	/**
 	 * A bunch of parameters to help work out when to stop quivering.
 	 * 
 	 * If the MeanSquareVel(ocity) ever gets below the MSV_THRESHOLD, then we
@@ -65,38 +67,21 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	boolean stoppingIncrements = false;
 	int incrementsLeft;
 	final int COOL_DOWN_INCREMENTS = 200;
-	/*
-	 * @param g
-	 */
+	
 	public DAGLayout(Graph<V,E> g) {
 		super(g);
 	}
 
-	/*
-	 * Each vertex has a minimumLevel. Any vertex with no successors has
-	 * minimumLevel of zero. The minimumLevel of any vertex must be strictly
-	 * greater than the minimumLevel of its parents. (Vertex A is a parent of
-	 * Vertex B iff there is an edge from B to A.) Typically, a vertex will
-	 * have a minimumLevel which is one greater than the minimumLevel of its
-	 * parent's. However, if the vertex has two parents, its minimumLevel will
-	 * be one greater than the maximum of the parents'. We need to calculate
-	 * the minimumLevel for each vertex. When we layout the graph, vertices
-	 * cannot be drawn any higher than the minimumLevel. The graphHeight of a
-	 * graph is the greatest minimumLevel that is used. We will modify the
-	 * SpringLayout calculations so that nodes cannot move above their assigned
-	 * minimumLevel.
-	 */
 
 	/**
 	 * setRoot calculates the level of each vertex in the graph. Level 0 is
 	 * allocated to any vertex with no successors. Level n+1 is allocated to
 	 * any vertex whose successors' maximum level is n.
 	 */
-
 	public void setRoot(Graph<V,E> g) {
 		numRoots = 0;
 		for(V v : g.getVertices()) {
-			Collection<V> successors = getGraph().getSuccessors(v);//v.getSuccessors();
+			Collection<V> successors = getGraph().getSuccessors(v);
 			if (successors.size() == 0) {
 				setRoot(v);
 				numRoots++;
@@ -107,11 +92,9 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	/**
 	 * Set vertex v to be level 0.
 	 */
-
 	public void setRoot(V v) {
 		minLevels.put(v, new Integer(0));
-		//
-		// Iterate through now, setting all the levels.
+		// set all the levels.
 		propagateMinimumLevel(v);
 	}
 
@@ -122,7 +105,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * 
 	 * @param v
 	 */
-
 	public void propagateMinimumLevel(V v) {
 		int level = minLevels.get(v).intValue();
 		for(V child : getGraph().getPredecessors(v)) {
@@ -160,9 +142,6 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 		coord.setLocation(x,y);
 	}
 
-    /* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
-	 */
 	@Override
 	public void setSize(Dimension size) {
 		super.setSize(size);
@@ -170,6 +149,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			initializeLocation(v,transform(v),getSize());
 		}
 	}
+	
 	/**
 	 * Had to override this one as well, to ensure that setRoot() is called.
 	 */
@@ -368,5 +348,4 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			v2D.edgedy += -dy;
 		}
 	}
-
 }

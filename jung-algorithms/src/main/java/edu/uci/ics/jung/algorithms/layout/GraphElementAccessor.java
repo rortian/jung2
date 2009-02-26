@@ -21,9 +21,9 @@ import java.util.Collection;
 public interface GraphElementAccessor<V, E>
 {
     /**
-     * Returns a <code>Vertex</code> which is associated with the 
+     * Returns a vertex which is associated with the 
      * location <code>(x,y)</code>.  This is typically determined
-     * with respect to the <code>Vertex</code>'s location as specified
+     * with respect to the vertex's location as specified
      * by a <code>Layout</code>.
      */
     V getVertex(Layout<V,E> layout, double x, double y);
@@ -31,10 +31,10 @@ public interface GraphElementAccessor<V, E>
     Collection<V> getVertices(Layout<V,E> layout, Shape rectangle);
 
     /**
-     * Returns an <code>Edge</code> which is associated with the 
+     * Returns an edge which is associated with the 
      * location <code>(x,y)</code>.  This is typically determined
-     * with respect to the <code>Edge</code>'s location as specified
-     * by a Layout.
+     * with respect to the edge's location as specified
+     * by a {@code Layout}.
      */
     E getEdge(Layout<V,E> layout, double x, double y);
 

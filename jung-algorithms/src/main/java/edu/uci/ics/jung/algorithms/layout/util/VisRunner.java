@@ -13,9 +13,9 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 
 /**
  * 
- * implementation of a relaxer thread for layouts.
- * extracted from the VisualizationModel in previous
- * versions of jung
+ * Implementation of a relaxer thread for layouts.
+ * Extracted from the {@code VisualizationModel} in previous
+ * versions of JUNG.
  * 
  * @author Tom Nelson - tomnelson@dev.java.net
  *

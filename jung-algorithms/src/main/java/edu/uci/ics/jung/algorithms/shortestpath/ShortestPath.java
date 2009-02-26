@@ -20,7 +20,7 @@ import java.util.Map;
 public interface ShortestPath<V, E>
 {
     /**
-     * <p>Returns a <code>LinkedHashMap</code> which maps each vertex 
+     * <p>Returns a <code>Map</code> which maps each vertex 
      * in the graph (including the <code>source</code> vertex) 
      * to the last edge on the shortest path from the 
      * <code>source</code> vertex.

@@ -22,14 +22,15 @@ import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
- * Allows multiple layouts to be combined and manipulated
+ * A {@code Layout} implementation that combines 
+ * multiple other layouts so that they may be manipulated
  * as one layout. The relaxer thread will step each layout
  * in sequence.
  * 
  * @author Tom Nelson - tomnelson@dev.java.net
  *
- * @param <V>
- * @param <E>
+ * @param <V> the vertex type
+ * @param <E> the edge type
  */
 public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 

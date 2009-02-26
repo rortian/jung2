@@ -22,7 +22,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 /**
  * 
  * Generates a mixed-mode random graph based on the output of <code>BarabasiAlbertGenerator</code>.
- * Primarily intended for providing heterogenous sample graph for visualization testing, etc.
+ * Primarily intended for providing a heterogeneous sample graph for visualization testing, etc.
  *  
  */
 public class MixedRandomGraphGenerator {
