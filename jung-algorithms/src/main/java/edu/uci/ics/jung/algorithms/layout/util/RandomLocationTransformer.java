@@ -9,7 +9,7 @@
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
  */
-package edu.uci.ics.jung.algorithms.util;
+package edu.uci.ics.jung.algorithms.layout.util;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -23,7 +23,7 @@ import org.apache.commons.collections15.Transformer;
  * the bounds of the Dimension property.
  * This is used as the backing Transformer for the LazyMap
  * for many Layouts,
- * and provides a random location for unmapped vertex keys
+ * and provides a random location for unmapped vertices
  * the first time they are accessed.
  * 
  * @author Tom Nelson
