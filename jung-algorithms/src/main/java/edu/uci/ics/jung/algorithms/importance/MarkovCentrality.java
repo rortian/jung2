@@ -9,17 +9,18 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections15.BidiMap;
+import org.apache.commons.collections15.functors.MapTransformer;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
+import edu.uci.ics.jung.algorithms.scoring.PageRank;
 import edu.uci.ics.jung.algorithms.util.Indexer;
 import edu.uci.ics.jung.graph.DirectedGraph;
 
@@ -105,13 +106,11 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
      */
     private DoubleMatrix1D getStationaryDistribution() {
         DoubleMatrix1D piVector = new DenseDoubleMatrix1D(getVertexCount());
-        PageRank<V,E> pageRank = new PageRank<V,E>((DirectedGraph<V,E>)getGraph(), 0, getEdgeWeights());
+        PageRank<V,E> pageRank = new PageRank<V,E>((DirectedGraph<V,E>)getGraph(), MapTransformer.getInstance(getEdgeWeights()), 0);
         pageRank.evaluate();
-        List<Ranking<?>> rankings = pageRank.getRankings();
-
-        for (Ranking<?> rank : rankings) {
-            piVector.set(mIndexer.get(rank.getRanked()), rank.rankScore);
-        }
+        
+        for (V v : getGraph().getVertices())
+            piVector.set(mIndexer.get(v), pageRank.getVertexScore(v));
         return piVector;
     }
 
