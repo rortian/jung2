@@ -35,6 +35,9 @@ import edu.uci.ics.jung.graph.Hypergraph;
  * 
  * By default, the 'cumulative' flag is set to false.
  * 
+ * NOTE: THIS CLASS IS NOT YET COMPLETE.  USE AT YOUR OWN RISK.  (The original behavior
+ * is captured by the version still available in {@code algorithms.importance}.)
+ * 
  * @see "Algorithms for Estimating Relative Importance in Graphs by Scott White and Padhraic Smyth, 2003"
  * @see PageRank
  * @see PageRankWithPriors
