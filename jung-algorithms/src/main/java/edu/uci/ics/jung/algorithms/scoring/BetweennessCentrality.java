@@ -28,7 +28,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
 
 /**
- *
+ * Computes betweenness centrality for each vertex and edge in the graph.
+ * 
+ * @see "Ulrik Brandes: A Faster Algorithm for Betweenness Centrality. Journal of Mathematical Sociology 25(2):163-177, 2001."
  */
 public class BetweennessCentrality<V, E> 
 	implements VertexScorer<V, Double>, EdgeScorer<E, Double> 
@@ -38,6 +40,11 @@ public class BetweennessCentrality<V, E>
 	protected Map<E, Double> edge_scores;
 	protected Map<V, BetweennessData> vertex_data;
 		
+	/**
+	 * Calculates betweenness scores based on the all-pairs unweighted shortest paths
+	 * in the graph.
+	 * @param graph the graph for which the scores are to be calculated
+	 */
 	@SuppressWarnings("unchecked")
 	public BetweennessCentrality(Graph<V, E> graph) 
 	{
@@ -45,6 +52,15 @@ public class BetweennessCentrality<V, E>
 		computeBetweenness(new LinkedList<V>(), new ConstantTransformer(1));
 	}
 
+	/**
+	 * Calculates betweenness scores based on the all-pairs weighted shortest paths in the
+	 * graph.
+	 * 
+	 * <p>NOTE: This version of the algorithm may not work correctly on all graphs; we're still
+	 * working out the bugs.  Use at your own risk.
+	 * @param graph the graph for which the scores are to be calculated
+	 * @param edge_weights the edge weights to be used in the path length calculations
+	 */
 	public BetweennessCentrality(Graph<V, E> graph, 
 			Transformer<E, ? extends Number> edge_weights) 
 	{
