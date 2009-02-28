@@ -19,7 +19,6 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.collections15.Factory;
 
-import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 
@@ -77,13 +76,10 @@ public class TestWeightedNIPaths extends TestCase {
         	new WeightedNIPaths<String,Number>(graph, vertexFactory, edgeFactory, 2.0,3,priors);
         ranker.evaluate();
 
-//        ranker.printRankings(true,true);
-        
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(0).rankScore,0.277787,.0001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(1).rankScore,0.222222,.0001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(2).rankScore,0.166676,.0001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(3).rankScore,0.166676,.0001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getRankings().get(4).rankScore,0.166676,.0001));
-
+        Assert.assertEquals(ranker.getRankings().get(0).rankScore,0.277787,.0001);
+        Assert.assertEquals(ranker.getRankings().get(1).rankScore,0.222222,.0001);
+        Assert.assertEquals(ranker.getRankings().get(2).rankScore,0.166676,.0001);
+        Assert.assertEquals(ranker.getRankings().get(3).rankScore,0.166676,.0001);
+        Assert.assertEquals(ranker.getRankings().get(4).rankScore,0.166676,.0001);
     }
 }

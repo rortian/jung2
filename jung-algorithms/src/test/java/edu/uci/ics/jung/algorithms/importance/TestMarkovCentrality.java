@@ -9,17 +9,15 @@
 */
 package edu.uci.ics.jung.algorithms.importance;
 
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import java.util.HashSet;
+import java.util.Set;
+
 import junit.framework.Assert;
-import edu.uci.ics.jung.algorithms.importance.MarkovCentrality;
-import edu.uci.ics.jung.algorithms.util.NumericalPrecision;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * @author Scott White
@@ -56,12 +54,10 @@ public class TestMarkovCentrality extends TestCase {
         ranker.setMaximumIterations(500);
 
         ranker.evaluate();
-//        ranker.printRankings(true, true);
 
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(0),0.1764,.001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(1),0.3529,.001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(2),0.2352,.001));
-        Assert.assertTrue(NumericalPrecision.equal(ranker.getVertexRankScore(3),0.2352,.001));
-
+        Assert.assertEquals(ranker.getVertexRankScore(0),0.1764,.001);
+        Assert.assertEquals(ranker.getVertexRankScore(1),0.3529,.001);
+        Assert.assertEquals(ranker.getVertexRankScore(2),0.2352,.001);
+        Assert.assertEquals(ranker.getVertexRankScore(3),0.2352,.001);
     }
 }
