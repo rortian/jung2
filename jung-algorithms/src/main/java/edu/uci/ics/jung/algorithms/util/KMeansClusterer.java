@@ -104,13 +104,14 @@ public class KMeansClusterer<T>
     @SuppressWarnings("unchecked")
     public Collection<Map<T, double[]>> cluster(Map<T, double[]> object_locations, int num_clusters)
     {
+        if (object_locations == null || object_locations.isEmpty())
+            throw new IllegalArgumentException("'objects' must be non-empty");
+        
         if (num_clusters < 2 || num_clusters > object_locations.size())
             throw new IllegalArgumentException("number of clusters " + 
                 "must be >= 2 and <= number of objects (" + 
                 object_locations.size() + ")");
         
-        if (object_locations == null || object_locations.isEmpty())
-            throw new IllegalArgumentException("'objects' must be non-empty");
 
         Set<double[]> centroids = new HashSet<double[]>();
         
@@ -223,6 +224,7 @@ public class KMeansClusterer<T>
      *  
      * @author Joshua O'Madadhain
      */
+    @SuppressWarnings("serial")
     public static class NotEnoughClustersException extends RuntimeException
     {
         @Override
