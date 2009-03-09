@@ -53,25 +53,23 @@ public class TestEdmondsKarpMaxFlow extends TestCase {
         Number w = new Integer(4);
         g.addVertex(w);
         
-        EdmondsKarpMaxFlow<Number,Number> ek = null;
-        
         try
         {
-            ek = new EdmondsKarpMaxFlow<Number,Number>(g, source, source, null, null, null);
+            new EdmondsKarpMaxFlow<Number,Number>(g, source, source, null, null, null);
             fail("source and sink vertices not distinct");
         }
         catch (IllegalArgumentException iae) {}
 
         try
         {
-            ek = new EdmondsKarpMaxFlow<Number,Number>(h, source, w, null, null, null);
+            new EdmondsKarpMaxFlow<Number,Number>(h, source, w, null, null, null);
             fail("source and sink vertices not both part of specified graph");
         }
         catch (IllegalArgumentException iae) {}
 
         try
         {
-            ek = new EdmondsKarpMaxFlow<Number,Number>(g, source, v, null, null, null);
+            new EdmondsKarpMaxFlow<Number,Number>(g, source, v, null, null, null);
             fail("source and sink vertices not both part of specified graph");
         }
         catch (IllegalArgumentException iae) {}

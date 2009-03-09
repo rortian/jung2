@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.Before;
-import org.junit.After;
 
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.EdgeMetadata;
@@ -27,16 +25,6 @@ import edu.uci.ics.jung.io.graphml.NodeMetadata;
 import edu.uci.ics.jung.io.graphml.GraphMetadata.EdgeDefault;
 
 public class TestGraphElementParser extends AbstractParserTest {
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
 
     @Test(expected= GraphIOException.class)
     public void testNoEdgeDefault() throws Exception {

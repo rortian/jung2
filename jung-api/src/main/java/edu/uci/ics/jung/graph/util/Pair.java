@@ -24,6 +24,7 @@ import java.util.Iterator;
  * object in the tuple is mutable, then it can be changed with the usual bad
  * effects.
  */
+@SuppressWarnings("serial")
 public final class Pair<T> implements Collection<T>, Serializable
 {
     private T first;

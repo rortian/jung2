@@ -56,6 +56,7 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
         this.warpDescriptor = new WarpDescriptor();
     }
     
+    @Override
     public void paintIconForVertex(RenderContext<V,E> rc, V v, Layout<V,E> layout) {
 
         GraphicsDecorator g = rc.getGraphicsContext();
@@ -160,10 +161,10 @@ public class TransformingImageVertexIconRenderer<V,E> extends BasicVertexRendere
                 break;
             }
         }
-        Point2D pt1 = (Point2D)quadList.remove(0);
-        Point2D pt2 = (Point2D)quadList.remove(0);
-        Point2D pt3 = (Point2D)quadList.remove(0);
-        Point2D pt4 = (Point2D)quadList.remove(0);
+        Point2D pt1 = quadList.remove(0);
+        Point2D pt2 = quadList.remove(0);
+        Point2D pt3 = quadList.remove(0);
+        Point2D pt4 = quadList.remove(0);
         
         quadx1 = pt1.getX()-imagex1;
         quady1 = pt1.getY()-imagey1;

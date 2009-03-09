@@ -451,21 +451,24 @@ public class Graphs {
         
 	}
 	
-	static class SynchronizedGraph<V,E> extends SynchronizedAbstractGraph<V,E> implements Serializable {
+	@SuppressWarnings("serial")
+    static class SynchronizedGraph<V,E> extends SynchronizedAbstractGraph<V,E> implements Serializable {
 		
 		private SynchronizedGraph(Graph<V,E> delegate) {
 			super(delegate);
 		}
 	}
 	
-	static class SynchronizedUndirectedGraph<V,E> extends SynchronizedAbstractGraph<V,E> 
+	@SuppressWarnings("serial")
+    static class SynchronizedUndirectedGraph<V,E> extends SynchronizedAbstractGraph<V,E> 
 		implements UndirectedGraph<V,E>, Serializable {
 		private SynchronizedUndirectedGraph(UndirectedGraph<V,E> delegate) {
 			super(delegate);
 		}
 	}
 	
-	static class SynchronizedDirectedGraph<V,E> extends SynchronizedAbstractGraph<V,E> 
+	@SuppressWarnings("serial")
+    static class SynchronizedDirectedGraph<V,E> extends SynchronizedAbstractGraph<V,E> 
 		implements DirectedGraph<V,E>, Serializable {
 		
 		private SynchronizedDirectedGraph(DirectedGraph<V,E> delegate) {
@@ -493,7 +496,8 @@ public class Graphs {
 		}
 	}
 	
-	static class SynchronizedTree<V,E> extends SynchronizedForest<V,E> implements Tree<V,E> {
+	@SuppressWarnings("serial")
+    static class SynchronizedTree<V,E> extends SynchronizedForest<V,E> implements Tree<V,E> {
 
 		public SynchronizedTree(Tree<V, E> delegate) {
 			super(delegate);
@@ -532,7 +536,8 @@ public class Graphs {
         }
 	}
 	
-	static class SynchronizedForest<V,E> extends SynchronizedDirectedGraph<V,E> implements Forest<V,E> {
+	@SuppressWarnings("serial")
+    static class SynchronizedForest<V,E> extends SynchronizedDirectedGraph<V,E> implements Forest<V,E> {
 
 		public SynchronizedForest(Forest<V, E> delegate) {
 			super(delegate);
@@ -863,13 +868,15 @@ public class Graphs {
 		}
 	}
 	
-	static class UnmodifiableGraph<V,E> extends UnmodifiableAbstractGraph<V,E> implements Serializable {
+	@SuppressWarnings("serial")
+    static class UnmodifiableGraph<V,E> extends UnmodifiableAbstractGraph<V,E> implements Serializable {
 		private UnmodifiableGraph(Graph<V,E> delegate) {
 			super(delegate);
 		}
 	}
 	
-	static class UnmodifiableDirectedGraph<V,E> extends UnmodifiableAbstractGraph<V,E> 
+	@SuppressWarnings("serial")
+    static class UnmodifiableDirectedGraph<V,E> extends UnmodifiableAbstractGraph<V,E> 
 		implements DirectedGraph<V,E>, Serializable {
 		private UnmodifiableDirectedGraph(DirectedGraph<V,E> delegate) {
 			super(delegate);
@@ -896,14 +903,16 @@ public class Graphs {
 		}
 	}
 	
-	static class UnmodifiableUndirectedGraph<V,E> extends UnmodifiableAbstractGraph<V,E> 
+	@SuppressWarnings("serial")
+    static class UnmodifiableUndirectedGraph<V,E> extends UnmodifiableAbstractGraph<V,E> 
 		implements UndirectedGraph<V,E>, Serializable {
 		private UnmodifiableUndirectedGraph(UndirectedGraph<V,E> delegate) {
 			super(delegate);
 		}
 	}
 	
-	static class UnmodifiableForest<V,E> extends UnmodifiableGraph<V,E>
+	@SuppressWarnings("serial")
+    static class UnmodifiableForest<V,E> extends UnmodifiableGraph<V,E>
 		implements Forest<V,E>, Serializable {
 		private UnmodifiableForest(Forest<V,E> delegate) {
 			super(delegate);
@@ -914,7 +923,8 @@ public class Graphs {
 		}
 	}
 	
-	static class UnmodifiableTree<V,E> extends UnmodifiableForest<V,E>
+	@SuppressWarnings("serial")
+    static class UnmodifiableTree<V,E> extends UnmodifiableForest<V,E>
 	     implements Tree<V,E>, Serializable {
 		private UnmodifiableTree(Tree<V,E> delegate) {
 			super(delegate);

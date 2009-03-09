@@ -106,7 +106,8 @@ public class MarkovCentrality<V,E> extends RelativeAuthorityRanker<V,E> {
      */
     private DoubleMatrix1D getStationaryDistribution() {
         DoubleMatrix1D piVector = new DenseDoubleMatrix1D(getVertexCount());
-        PageRank<V,E> pageRank = new PageRank<V,E>((DirectedGraph<V,E>)getGraph(), MapTransformer.getInstance(getEdgeWeights()), 0);
+        PageRank<V,E> pageRank = new PageRank<V,E>(getGraph(), 
+                MapTransformer.getInstance(getEdgeWeights()), 0);
         pageRank.evaluate();
         
         for (V v : getGraph().getVertices())

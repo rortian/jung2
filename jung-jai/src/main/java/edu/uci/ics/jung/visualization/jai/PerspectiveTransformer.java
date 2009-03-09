@@ -46,6 +46,7 @@ public class PerspectiveTransformer extends MutableTransformerDecorator implemen
     		this.perspectiveTransform = perspectiveTransform;
    }
     
+    @Override
     public void setToIdentity() {
         this.perspectiveTransform.setToIdentity();
     }
@@ -64,6 +65,7 @@ public class PerspectiveTransformer extends MutableTransformerDecorator implemen
     /**
      * override base class transform to project the perspective effect
      */
+    @Override
     public Point2D transform(Point2D graphPoint) {
         if(graphPoint == null) return null;
         Point2D p2 = super.transform(graphPoint);
@@ -73,6 +75,7 @@ public class PerspectiveTransformer extends MutableTransformerDecorator implemen
     /**
      * override base class to un-project the perspective effect
      */
+    @Override
     public Point2D inverseTransform(Point2D viewPoint) {
         Point2D p2 = createInverse().transform(viewPoint, null);
         return super.inverseTransform(p2);

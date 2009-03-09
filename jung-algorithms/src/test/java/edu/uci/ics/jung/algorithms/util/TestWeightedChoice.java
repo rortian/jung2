@@ -26,11 +26,8 @@ public class TestWeightedChoice extends TestCase
 	private Map<String, Double> item_weights = new HashMap<String, Double>();
 	private Map<String, Integer> item_counts = new HashMap<String, Integer>();
 	
-	public void setUp() 
-	{
-	}
-	
-	public void tearDown()
+	@Override
+    public void tearDown()
 	{
 		item_weights.clear();
 		item_counts.clear();

@@ -184,7 +184,8 @@ public class WeightedChoice<T>
 			this.weight = weight;
 		}
 		
-		public String toString()
+		@Override
+        public String toString()
 		{
 			return String.format("[L:%s, H:%s, %.3f]", light, heavy, weight);
 		}

@@ -53,6 +53,7 @@ public class PerspectiveShapeTransformer extends PerspectiveTransformer
      * @param shape a shape to transform
      * @return a GeneralPath for the transformed shape
      */
+    @Override
     public Shape transform(Shape shape) {
         return transform(shape, 0);
     }
@@ -104,6 +105,7 @@ public class PerspectiveShapeTransformer extends PerspectiveTransformer
         return newPath;
     }
     
+    @Override
     public Shape inverseTransform(Shape shape) {
         GeneralPath newPath = new GeneralPath();
         float[] coords = new float[6];

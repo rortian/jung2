@@ -11,24 +11,12 @@
 package edu.uci.ics.jung.io.graphml.parser;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.After;
 import org.junit.Test;
 
 import edu.uci.ics.jung.io.GraphIOException;
 import edu.uci.ics.jung.io.graphml.PortMetadata;
 
 public class TestPortElementParser extends AbstractParserTest {
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
 
     @Test(expected= GraphIOException.class)
     public void testNoName() throws Exception {

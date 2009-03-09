@@ -142,7 +142,8 @@ public class MapBinaryHeap<T>
 	 * @deprecated Use {@link MapBinaryHeap#poll()} 
 	 * or {@link MapBinaryHeap#remove()} instead.
 	 */
-	public T pop() throws NoSuchElementException
+	@Deprecated
+    public T pop() throws NoSuchElementException
 	{
 		return this.remove();
 	}

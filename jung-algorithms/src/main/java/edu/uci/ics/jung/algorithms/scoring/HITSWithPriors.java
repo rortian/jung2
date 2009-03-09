@@ -68,6 +68,7 @@ public class HITSWithPriors<V, E>
     /**
      * Updates the value for this vertex.
      */
+    @Override
     protected double update(V v)
     {
         collectDisappearingPotential(v);

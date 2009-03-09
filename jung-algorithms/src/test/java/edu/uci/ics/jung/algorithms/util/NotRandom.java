@@ -31,7 +31,8 @@ public class NotRandom extends Random
 	/**
 	 * Returns the post-incremented value of the internal counter modulo n.
 	 */
-	public int nextInt(int n)
+	@Override
+    public int nextInt(int n)
 	{
 		return i++ % n;
 	}
@@ -40,7 +41,8 @@ public class NotRandom extends Random
 	 * Returns the post-incremented value of the internal counter modulo 
 	 * {@code size}, divided by {@code size}.
 	 */
-	public double nextDouble()
+	@Override
+    public double nextDouble()
 	{
 		return (d++ % size) / (double)size; 
 	}
@@ -49,7 +51,8 @@ public class NotRandom extends Random
 	 * Returns the post-incremented value of the internal counter modulo 
 	 * {@code size}, divided by {@code size}.
 	 */
-	public float nextFloat()
+	@Override
+    public float nextFloat()
 	{
 		return (d++ % size) / (float)size; 
 	}

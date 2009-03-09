@@ -106,7 +106,7 @@ public class TestGraphMLReader extends TestCase
         Map<String, GraphMLMetadata<Number>> vertex_metadata = 
         	gmlreader.getVertexMetadata();
         Transformer<Number, String> name = 
-        	(Transformer<Number, String>)vertex_metadata.get("name").transformer;
+        	vertex_metadata.get("name").transformer;
         Assert.assertEquals(name.transform(joe), "Joe");
         Assert.assertEquals(name.transform(bob), "Bob");
         Assert.assertEquals(name.transform(sue), "Sue");
@@ -164,7 +164,7 @@ public class TestGraphMLReader extends TestCase
         // test vertex colors
 //        Transformer<Number, String> vertex_color = vertex_data.get("d0");
         Transformer<Number, String> vertex_color = 
-        	(Transformer<Number, String>)vertex_metadata.get("d0").transformer;
+        	vertex_metadata.get("d0").transformer;
         Assert.assertEquals(vertex_color.transform(0), "green");
         Assert.assertEquals(vertex_color.transform(1), "yellow");
         Assert.assertEquals(vertex_color.transform(2), "blue");
@@ -175,7 +175,7 @@ public class TestGraphMLReader extends TestCase
         // test edge weights
 //        Transformer<Number, String> edge_weight = edge_data.get("d1");
         Transformer<Number, String> edge_weight = 
-        	(Transformer<Number, String>)edge_metadata.get("d1").transformer;
+        	edge_metadata.get("d1").transformer;
         Assert.assertEquals(edge_weight.transform(0), "1.0");
         Assert.assertEquals(edge_weight.transform(1), "1.0");
         Assert.assertEquals(edge_weight.transform(2), "2.0");

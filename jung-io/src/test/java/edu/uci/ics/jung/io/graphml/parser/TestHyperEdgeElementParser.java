@@ -12,22 +12,10 @@ package edu.uci.ics.jung.io.graphml.parser;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.Before;
-import org.junit.After;
 
 import edu.uci.ics.jung.io.graphml.HyperEdgeMetadata;
 
 public class TestHyperEdgeElementParser extends AbstractParserTest {
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
 
     @Test
     public void testEmpty() throws Exception {

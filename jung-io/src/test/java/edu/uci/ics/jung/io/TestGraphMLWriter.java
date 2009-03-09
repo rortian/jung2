@@ -16,8 +16,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -35,6 +37,7 @@ import edu.uci.ics.jung.graph.util.TestGraphs;
 
 public class TestGraphMLWriter extends TestCase
 {
+    @SuppressWarnings("unchecked")
     public void testBasicWrite() throws IOException, ParserConfigurationException, SAXException
     {
         Graph<String, Number> g = TestGraphs.createTestGraph(true);
@@ -70,7 +73,7 @@ public class TestGraphMLWriter extends TestCase
         Map<String, GraphMLMetadata<Object>> edge_metadata = 
         	gmlr.getEdgeMetadata();
         Transformer<Object, String> edge_weight2 = 
-        	(Transformer<Object, String>)edge_metadata.get("weight").transformer;
+        	edge_metadata.get("weight").transformer;
         validateTopology(g, g2, edge_weight, edge_weight2);
         
         // TODO: delete graph file when done
@@ -104,7 +107,7 @@ public class TestGraphMLWriter extends TestCase
         Map<String, GraphMLMetadata<Object>> edge_metadata = 
             gmlr.getEdgeMetadata();
         Transformer<Object, String> edge_weight2 = 
-            (Transformer<Object, String>)edge_metadata.get("weight").transformer;
+            edge_metadata.get("weight").transformer;
         validateTopology(g, g2, edge_weight, edge_weight2);
         
         // TODO: delete graph file when done
@@ -122,12 +125,10 @@ public class TestGraphMLWriter extends TestCase
         Collections.sort(g2_vertices);
         Assert.assertEquals(g_vertices, g2_vertices);
 
-        List g_edges = new ArrayList();
+        Set<String> g_edges = new HashSet<String>();
         for (Number n : g.getEdges())
             g_edges.add(String.valueOf(n));
-        List g2_edges = new ArrayList(g2.getEdges());
-        Collections.sort(g_edges); 
-        Collections.sort(g2_edges);
+        Set<Object> g2_edges = new HashSet<Object>(g2.getEdges());
         Assert.assertEquals(g_edges, g2_edges);
         
         for (T v : g2.getVertices())
@@ -136,13 +137,11 @@ public class TestGraphMLWriter extends TestCase
             {
                 Assert.assertEquals(g.isNeighbor(v, w), 
                         g2.isNeighbor(v, w));
-                List e = new ArrayList();
+                Set<String> e = new HashSet<String>();
                 for (Number n : g.findEdgeSet(v, w))
                     e.add(String.valueOf(n));
-                List e2 = new ArrayList(g2.findEdgeSet(v, w));
+                Set<Object> e2 = new HashSet<Object>(g2.findEdgeSet(v, w));
                 Assert.assertEquals(e.size(), e2.size());
-                Collections.sort(e);
-                Collections.sort(e2);
                 Assert.assertEquals(e, e2);
             }
         }

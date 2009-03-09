@@ -20,6 +20,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <V>
  * @param <E>
  */
+@SuppressWarnings("unchecked")
 public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Graph<V,E>> {
 	
 	protected Factory<? extends Graph<V,E>> treeFactory;

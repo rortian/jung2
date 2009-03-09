@@ -344,7 +344,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         	{
             	SettableTransformer<T, String> st = 
             		(SettableTransformer<T, String>)gmlm.transformer;
-        		st.set(current_elt, (String)gmlm.default_value);
+        		st.set(current_elt, gmlm.default_value);
         	}
         }
         
@@ -712,7 +712,7 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
             throw new SAXNotSupportedException("edge attribute list missing " +
             		"'target': " + atts.toString());
         V target = vertex_ids.getKey(target_id);
-        if (source == null)
+        if (target == null)
             throw new SAXNotSupportedException("specified 'target' attribute " +
             		"\"" + target_id + "\" does not match any node ID");
         

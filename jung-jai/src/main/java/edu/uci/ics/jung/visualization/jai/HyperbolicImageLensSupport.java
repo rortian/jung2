@@ -44,8 +44,8 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
     protected Renderer<V,E> renderer;
     protected Renderer<V,E> transformingRenderer;
     protected GraphElementAccessor<V,E> pickSupport;
-    protected Renderer.Edge savedEdgeRenderer;
-    protected Renderer.Edge reshapingEdgeRenderer;
+    protected Renderer.Edge<V,E> savedEdgeRenderer;
+    protected Renderer.Edge<V,E> reshapingEdgeRenderer;
 
     static final String instructions = 
         "<html><center>Mouse-Drag the Lens center to move it<p>"+
