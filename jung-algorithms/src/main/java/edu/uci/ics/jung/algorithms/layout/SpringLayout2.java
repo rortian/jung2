@@ -19,8 +19,8 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
@@ -64,7 +64,7 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
      * length function.
      */
     public SpringLayout2(Graph<V,E> g) {
-        this(g, UNITLENGTHFUNCTION);
+        this(g, UnitLengthFunction.<E>getInstance(30));
     }
 
     /**
@@ -170,14 +170,9 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     	}
     }
 
-    /* ------------------------- */
-
     protected void calcEdgeLength(SpringEdgeData<E> sed, LengthFunction<E> f) {
         sed.length = f.getLength(sed.e);
     }
-
-    /* ------------------------- */
-
 
     /**
      * Relaxation step. Moves all nodes a smidge.
@@ -203,7 +198,6 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     	moveNodes();
     	currentIteration++;
     	testAverageDeltas();
-//    	this.fireStateChanged();
     }
     
     private void testAverageDeltas() {
@@ -221,7 +215,6 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     }
 
     protected V getAVertex(E e) {
-    	
         return getGraph().getIncidentVertices(e).iterator().next();
     }
 
@@ -288,15 +281,14 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
                 if(p == null || p2 == null) continue;
                 double vx = p.getX() - p2.getX();
                 double vy = p.getY() - p2.getY();
-//                double distance = vx * vx + vy * vy;
                 double distanceSq = p.distanceSq(p2);
                 if (distanceSq == 0) {
                     dx += Math.random();
                     dy += Math.random();
                 } else if (distanceSq < repulsion_range) {// * repulsion_range) {
                     double factor = 1;
-                    dx += factor * vx / distanceSq;//Math.pow(distance, 2);
-                    dy += factor * vy / distanceSq;//Math.pow(distance, 2);
+                    dx += factor * vx / distanceSq;
+                    dy += factor * vy / distanceSq;
                 }
             }
             double dlen = dx * dx + dy * dy;
@@ -312,7 +304,6 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     }
 
     protected void moveNodes() {
-
         synchronized (getSize()) {
             try {
                 for (V v : getGraph().getVertices()) {
@@ -374,11 +365,8 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     	return springEdgeData.get(e).length;
     }
 
-    /* ---------------Length Function------------------ */
-
     /**
-     * If the edge is weighted, then override this method to show what the
-     * visualized length is.
+     * Specifies a default length for each edge.
      * 
      * @author Danyel Fisher
      */
@@ -388,12 +376,17 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     }
 
     /**
-     * Returns all edges as the same length: the input value
+     * An implementation of {@code LengthFunction} that assigns the same 
+     * constructor-specified length to all edges.
      * @author danyelf
      */
     public static final class UnitLengthFunction<E> implements LengthFunction<E> {
 
         int length;
+
+        public static <E> LengthFunction<E> getInstance(int length) {
+            return new UnitLengthFunction<E>(length);
+        }
 
         public UnitLengthFunction(int length) {
             this.length = length;
@@ -404,19 +397,10 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
         }
     }
 
-    public static final LengthFunction UNITLENGTHFUNCTION = new UnitLengthFunction(
-            30);
-
-    /* ---------------User Data------------------ */
-
     protected static class SpringVertexData {
-
         public double edgedx;
-
         public double edgedy;
-
         public double repulsiondx;
-
         public double repulsiondy;
 
         public SpringVertexData() {
@@ -442,8 +426,6 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
         double length;
     }
 
-    /* ---------------Resize handler------------------ */
-
     public class SpringDimensionChecker extends ComponentAdapter {
 
         @Override
@@ -467,8 +449,5 @@ public class SpringLayout2<V, E> extends AbstractLayout<V,E> implements Iterativ
     }
 
 	public void reset() {
-		// no counter, do nothing.
-//		locations.clear();
-//		initialize();
 	}
 }

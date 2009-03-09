@@ -18,14 +18,16 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
- * Implements the Fruchterman-Reingold algorithm for node layout.
+ * Implements the Fruchterman-Reingold force-directed algorithm for node layout.
  * 
+ * @see "Fruchterman and Reingold, 'Graph Drawing by Force-directed Placement'"
+ * @see http://i11www.ilkd.uni-karlsruhe.de/teaching/SS_04/visualisierung/papers/fruchterman91graph.pdf
  * @author Scott White, Yan-Biao Boey, Danyel Fisher
  */
 public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeContext {
@@ -64,9 +66,6 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         max_dimension = Math.max(d.height, d.width);
     }
     
-    /* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
-	 */
 	@Override
 	public void setSize(Dimension size) {
 		if(initialized == false) {

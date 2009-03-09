@@ -17,14 +17,17 @@ import java.util.Map;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.map.LazyMap;
 
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 
 /**
- * an attempt to optimize the FRLayout algorithm
- * Implements the Fruchterman-Reingold algorithm for node layout.
+ * Implements the Fruchterman-Reingold force-directed algorithm for node layout.
+ * This is an experimental attempt at optimizing {@code FRLayout}.
+ * 
+ * @see "Fruchterman and Reingold, 'Graph Drawing by Force-directed Placement'"
+ * @see http://i11www.ilkd.uni-karlsruhe.de/teaching/SS_04/visualisierung/papers/fruchterman91graph.pdf
  * 
  * @author Tom Nelson
  * @author Scott White, Yan-Biao Boey, Danyel Fisher

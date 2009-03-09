@@ -19,8 +19,8 @@ import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
@@ -58,7 +58,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
      * length function.
      */
     public SpringLayout(Graph<V,E> g) {
-        this(g, UNITLENGTHFUNCTION);
+        this(g, UnitLengthFunction.<E>getInstance(30));
     }
 
     /**
@@ -82,9 +82,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
         return stretch;
     }
     
-    /* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
-	 */
 	@Override
 	public void setSize(Dimension size) {
 		if(initialized == false)
@@ -165,13 +162,9 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     	}
     }
 
-    /* ------------------------- */
-
     protected void calcEdgeLength(SpringEdgeData<E> sed, LengthFunction<E> f) {
         sed.length = f.getLength(sed.e);
     }
-
-    /* ------------------------- */
 
 
     /**
@@ -196,7 +189,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     	relaxEdges();
     	calculateRepulsion();
     	moveNodes();
-//    	this.fireStateChanged();
     }
 
     protected V getAVertex(E e) {
@@ -340,11 +332,8 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     	return springEdgeData.get(e).length;
     }
 
-    /* ---------------Length Function------------------ */
-
     /**
-     * If the edge is weighted, then override this method to show what the
-     * visualized length is.
+     * Specifies a default length for each edge.
      * 
      * @author Danyel Fisher
      */
@@ -354,12 +343,17 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     }
 
     /**
-     * Returns all edges as the same length: the input value
+     * An implementation of {@code LengthFunction} that assigns the same 
+     * constructor-specified length to all edges.
      * @author danyelf
      */
     public static final class UnitLengthFunction<E> implements LengthFunction<E> {
 
         int length;
+        
+        public static <E> LengthFunction<E> getInstance(int length) {
+            return new UnitLengthFunction<E>(length);
+        }
 
         public UnitLengthFunction(int length) {
             this.length = length;
@@ -370,23 +364,11 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
         }
     }
 
-    public static final LengthFunction UNITLENGTHFUNCTION = new UnitLengthFunction(
-            30);
-
-    /* ---------------User Data------------------ */
-
     protected static class SpringVertexData {
-
         public double edgedx;
-
         public double edgedy;
-
         public double repulsiondx;
-
         public double repulsiondy;
-
-        public SpringVertexData() {
-        }
 
         /** movement speed, x */
         public double dx;
@@ -407,8 +389,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 
         double length;
     }
-
-    /* ---------------Resize handler------------------ */
 
     public class SpringDimensionChecker extends ComponentAdapter {
 
@@ -433,8 +413,5 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     }
 
 	public void reset() {
-		// no counter, do nothing.
-//		locations.clear();
-//		initialize();
 	}
 }

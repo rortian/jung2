@@ -17,11 +17,11 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.algorithms.util.RandomLocationTransformer;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
@@ -124,7 +124,8 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
 		return false;
 	}
 
-	public void initialize() {
+	@SuppressWarnings("unchecked")
+    public void initialize() {
     	currentIteration = 0;
     	Graph<V,E> graph = getGraph();
     	Dimension d = getSize();
