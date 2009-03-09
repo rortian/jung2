@@ -271,7 +271,7 @@ public abstract class AbstractModalGraphMouse extends PluggableGraphMouse
      * @since 1.4
      */
     public ItemListener[] getItemListeners() {
-        return (ItemListener[])listenerList.getListeners(ItemListener.class);
+        return listenerList.getListeners(ItemListener.class);
     }
     
     public Object[] getSelectedObjects() {

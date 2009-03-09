@@ -64,7 +64,8 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * create the plugins, and load the plugins for TRANSFORMING mode
 	 *
 	 */
-	protected void loadPlugins() {
+	@Override
+    protected void loadPlugins() {
 		pickingPlugin = new PickingGraphMousePlugin<V,E>();
 		animatedPickingPlugin = new AnimatedPickingGraphMousePlugin<V,E>();
 		translatingPlugin = new TranslatingGraphMousePlugin(InputEvent.BUTTON1_MASK);
@@ -82,7 +83,8 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	/**
 	 * setter for the Mode.
 	 */
-	public void setMode(Mode mode) {
+	@Override
+    public void setMode(Mode mode) {
 		if(this.mode != mode) {
 			fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED,
 					this.mode, ItemEvent.DESELECTED));
@@ -102,10 +104,9 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, mode, ItemEvent.SELECTED));
 		}
 	}
-	/* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#setPickingMode()
-	 */
-	protected void setPickingMode() {
+	
+	@Override
+    protected void setPickingMode() {
 		remove(translatingPlugin);
 		remove(rotatingPlugin);
 		remove(shearingPlugin);
@@ -117,10 +118,8 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 		add(popupEditingPlugin);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.control.ModalGraphMouse#setTransformingMode()
-	 */
-	protected void setTransformingMode() {
+	@Override
+    protected void setTransformingMode() {
 		remove(pickingPlugin);
 		remove(animatedPickingPlugin);
 		remove(editingPlugin);
@@ -158,9 +157,10 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 
 
 	/**
-	 * @return Returns the modeBox.
+	 * @return the modeBox.
 	 */
-	public JComboBox getModeComboBox() {
+	@Override
+    public JComboBox getModeComboBox() {
 		if(modeBox == null) {
 			modeBox = new JComboBox(new Mode[]{Mode.TRANSFORMING, Mode.PICKING, Mode.EDITING, Mode.ANNOTATING});
 			modeBox.addItemListener(getModeListener());
@@ -174,7 +174,8 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	 * the mode
 	 * @return the menu
 	 */
-	public JMenu getModeMenu() {
+	@Override
+    public JMenu getModeMenu() {
 		if(modeMenu == null) {
 			modeMenu = new JMenu();// {
 			Icon icon = BasicIconFactory.getMenuArrowIcon();
@@ -253,7 +254,8 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			this.graphMouse = graphMouse;
 		}
 		
-		public void keyTyped(KeyEvent event) {
+		@Override
+        public void keyTyped(KeyEvent event) {
 			char keyChar = event.getKeyChar();
 			if(keyChar == t) {
 				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -274,7 +276,7 @@ public class EditingModalGraphMouse<V,E> extends AbstractModalGraphMouse
 	/**
 	 * @return the annotatingPlugin
 	 */
-	public AnnotatingGraphMousePlugin getAnnotatingPlugin() {
+	public AnnotatingGraphMousePlugin<V, E> getAnnotatingPlugin() {
 		return annotatingPlugin;
 	}
 

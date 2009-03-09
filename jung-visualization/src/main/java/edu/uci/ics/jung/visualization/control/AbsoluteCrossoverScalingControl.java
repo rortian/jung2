@@ -30,7 +30,7 @@ public class AbsoluteCrossoverScalingControl extends CrossoverScalingControl
      * scale to the absolute value passed as 'amount'.
      * 
      */
-    public void scale(VisualizationViewer vv, float amount, Point2D at) {
+    public void scale(VisualizationViewer<?,?> vv, float amount, Point2D at) {
         MutableTransformer layoutTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
         MutableTransformer viewTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
         double modelScale = layoutTransformer.getScale();

@@ -71,6 +71,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * 
      * @param c set the foreground color to this value
      */
+    @Override
     public void setForeground(Color c) {
         super.setForeground(c); 
     }
@@ -81,6 +82,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      *
      * @param c set the background color to this value
      */
+    @Override
     public void setBackground(Color c) {
         super.setBackground(c); 
     }
@@ -93,6 +95,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      *
      * @see JComponent#updateUI
      */
+    @Override
     public void updateUI() {
         super.updateUI(); 
         setForeground(null);
@@ -140,6 +143,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     public boolean isOpaque() { 
         Color back = getBackground();
         Component p = getParent(); 
@@ -157,6 +161,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     public void validate() {}
 
     /**
@@ -164,6 +169,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     public void revalidate() {}
 
     /**
@@ -171,6 +177,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     public void repaint(long tm, int x, int y, int width, int height) {}
 
     /**
@@ -178,6 +185,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     public void repaint(Rectangle r) { }
 
     /**
@@ -185,6 +193,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {	
         // Strings get interned...
         if (propertyName=="text") {
@@ -197,6 +206,7 @@ public class DefaultEdgeLabelRenderer extends JLabel implements
      * See the <a href="#override">Implementation Note</a> 
      * for more information.
      */
+    @Override
     public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) { }
 
     /**

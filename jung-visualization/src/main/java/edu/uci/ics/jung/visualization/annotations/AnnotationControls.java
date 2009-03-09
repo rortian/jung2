@@ -43,6 +43,7 @@ public class AnnotationControls<V,E> {
 		this.annotatingPlugin = annotatingPlugin;
 	}
 	
+    @SuppressWarnings("serial")
     public JComboBox getShapeBox() {
     	JComboBox shapeBox = new JComboBox(
     			new Shape[] {

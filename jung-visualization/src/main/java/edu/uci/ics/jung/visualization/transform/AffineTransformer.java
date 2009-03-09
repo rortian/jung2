@@ -263,6 +263,7 @@ public class AffineTransformer implements BidirectionalTransformer, ShapeTransfo
         return rotation;
     }
 
+    @Override
     public String toString() {
         return "Transformer using "+transform;
     }

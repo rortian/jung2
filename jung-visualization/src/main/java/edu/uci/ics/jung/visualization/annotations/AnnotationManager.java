@@ -38,10 +38,10 @@ public class AnnotationManager {
 	protected AnnotationPaintable lowerAnnotationPaintable;
 	protected AnnotationPaintable upperAnnotationPaintable;
 	
-	protected RenderContext rc;
+	protected RenderContext<?,?> rc;
 	protected AffineTransformer transformer;
 
-	public AnnotationManager(RenderContext rc) {
+	public AnnotationManager(RenderContext<?,?> rc) {
 		this.rc = rc;
 		this.lowerAnnotationPaintable = new AnnotationPaintable(rc, annotationRenderer);
 		this.upperAnnotationPaintable = new AnnotationPaintable(rc, annotationRenderer);
@@ -65,7 +65,7 @@ public class AnnotationManager {
 		return null;
 	}
 	
-	public void add(Annotation.Layer layer, Annotation annotation) {
+	public void add(Annotation.Layer layer, Annotation<?> annotation) {
 		if(layer == Annotation.Layer.LOWER) {
 			this.lowerAnnotationPaintable.add(annotation);
 		}
@@ -74,7 +74,7 @@ public class AnnotationManager {
 		}
 	}
 	
-	public void remove(Annotation annotation) {
+	public void remove(Annotation<?> annotation) {
 		this.lowerAnnotationPaintable.remove(annotation);
 		this.upperAnnotationPaintable.remove(annotation);
 	}
@@ -87,13 +87,15 @@ public class AnnotationManager {
 		return upperAnnotationPaintable;
 	}
 	
-	public Annotation getAnnotation(Point2D p) {
+	@SuppressWarnings("unchecked")
+    public Annotation getAnnotation(Point2D p) {
 		Set<Annotation> annotations = new HashSet<Annotation>(lowerAnnotationPaintable.getAnnotations());
 		annotations.addAll(upperAnnotationPaintable.getAnnotations());
 		return getAnnotation(p, annotations);
 	}
 	
-	public Annotation getAnnotation(Point2D p, Collection<Annotation> annotations) {
+	@SuppressWarnings("unchecked")
+    public Annotation getAnnotation(Point2D p, Collection<Annotation> annotations) {
 		double closestDistance = Double.MAX_VALUE;
 		Annotation closestAnnotation = null;
 		for(Annotation annotation : annotations) {
@@ -144,7 +146,7 @@ public class AnnotationManager {
 		return closestAnnotation;
 	}
 	
-	public Component prepareRenderer(RenderContext rc, AnnotationRenderer annotationRenderer, Object value) {
+	public Component prepareRenderer(RenderContext<?,?> rc, AnnotationRenderer annotationRenderer, Object value) {
 		return annotationRenderer.getAnnotationRendererComponent(rc.getScreenDevice(), value);
 	}
 

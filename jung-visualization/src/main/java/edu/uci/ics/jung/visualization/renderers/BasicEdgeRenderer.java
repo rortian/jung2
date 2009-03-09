@@ -73,6 +73,7 @@ public class BasicEdgeRenderer<V,E> implements Renderer.Edge<V,E> {
      * is scaled in the x-direction so that its width is equal to the distance between
      * <code>(x1,y1)</code> and <code>(x2,y2)</code>.
      */
+    @SuppressWarnings("unchecked")
     protected void drawSimpleEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e) {
         
         GraphicsDecorator g = rc.getGraphicsContext();

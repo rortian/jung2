@@ -70,10 +70,11 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
     }
     
     /**
-     * overrided to be more flexible, and pass events with
+     * Overridden to be more flexible, and pass events with
      * key combinations. The default responds to both ButtonOne
      * and ButtonOne+Shift
      */
+    @Override
     public boolean checkModifiers(MouseEvent e) {
         return (e.getModifiers() & modifiers) != 0;
     }
@@ -143,7 +144,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
                 final V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
                 if(vertex != null && startVertex != null) {
                     Graph<V,E> graph = 
-                    	(Graph<V,E>)vv.getGraphLayout().getGraph();
+                    	vv.getGraphLayout().getGraph();
                         graph.addEdge(edgeFactory.create(),
                         		startVertex, vertex, edgeIsDirected);
                     vv.repaint();
@@ -161,6 +162,7 @@ public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin imple
      * If startVertex is non-null, stretch an edge shape between
      * startVertex and the mouse pointer to simulate edge creation
      */
+    @SuppressWarnings("unchecked")
     public void mouseDragged(MouseEvent e) {
         if(checkModifiers(e)) {
             if(startVertex != null) {

@@ -39,13 +39,14 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  */
 public class AnnotationPaintable implements Paintable {
 	
-	protected Set<Annotation> annotations = new HashSet<Annotation>();
+	@SuppressWarnings("unchecked")
+    protected Set<Annotation> annotations = new HashSet<Annotation>();
     protected AnnotationRenderer annotationRenderer;
 
-	protected RenderContext rc;
+	protected RenderContext<?,?> rc;
 	protected AffineTransformer transformer;
 	
-	public AnnotationPaintable(RenderContext rc, AnnotationRenderer annotationRenderer) {
+	public AnnotationPaintable(RenderContext<?,?> rc, AnnotationRenderer annotationRenderer) {
 		this.rc = rc;
 		this.annotationRenderer = annotationRenderer;
 		MutableTransformer mt = rc.getMultiLayerTransformer().getTransformer(Layer.LAYOUT);
@@ -56,22 +57,26 @@ public class AnnotationPaintable implements Paintable {
 		}
 	}
 	
-	public void add(Annotation annotation) {
+	@SuppressWarnings("unchecked")
+    public void add(Annotation annotation) {
 		annotations.add(annotation);
 	}
 	
-	public void remove(Annotation annotation) {
+	@SuppressWarnings("unchecked")
+    public void remove(Annotation annotation) {
 		annotations.remove(annotation);
 	}
 	
     /**
 	 * @return the annotations
 	 */
-	public Set<Annotation> getAnnotations() {
+	@SuppressWarnings("unchecked")
+    public Set<Annotation> getAnnotations() {
 		return Collections.unmodifiableSet(annotations);
 	}
 
-	public void paint(Graphics g) {
+	@SuppressWarnings("unchecked")
+    public void paint(Graphics g) {
     	Graphics2D g2d = (Graphics2D)g;
         Color oldColor = g.getColor();
         for(Annotation annotation : annotations) {
@@ -117,7 +122,7 @@ public class AnnotationPaintable implements Paintable {
         g.setColor(oldColor);
     }
     
-	public Component prepareRenderer(RenderContext rc, AnnotationRenderer annotationRenderer, Object value) {
+	public Component prepareRenderer(RenderContext<?,?> rc, AnnotationRenderer annotationRenderer, Object value) {
 		return annotationRenderer.getAnnotationRendererComponent(rc.getScreenDevice(), value);
 	}
 

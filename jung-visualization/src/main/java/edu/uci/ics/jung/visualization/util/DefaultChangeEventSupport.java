@@ -41,26 +41,16 @@ public class DefaultChangeEventSupport implements ChangeEventSupport {
         this.eventSource = eventSource;
     }
 
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.utils.ChangeEventSupport#addChangeListener(javax.swing.event.ChangeListener)
-     */
     public void addChangeListener(ChangeListener l) {
         listenerList.add(ChangeListener.class, l);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.utils.ChangeEventSupport#removeChangeListener(javax.swing.event.ChangeListener)
-     */
     public void removeChangeListener(ChangeListener l) {
         listenerList.remove(ChangeListener.class, l);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.utils.ChangeEventSupport#getChangeListeners()
-     */
     public ChangeListener[] getChangeListeners() {
-        return (ChangeListener[])(listenerList.getListeners(
-            ChangeListener.class));
+        return listenerList.getListeners(ChangeListener.class);
     }
 
     /**

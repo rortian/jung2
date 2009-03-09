@@ -212,7 +212,8 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
         
-        final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse<Number, Number> graphMouse = 
+            new DefaultModalGraphMouse<Number, Number>();
 
         vv.setGraphMouse(graphMouse);
         
@@ -390,12 +391,9 @@ public class PerspectiveVertexImageShaperDemo extends JApplet {
             this.map = map;
         }
         
-        /* (non-Javadoc)
-         * @see edu.uci.ics.jung.graph.decorators.VertexStringer#getLabel(edu.uci.ics.jung.graph.Vertex)
-         */
         public String transform(Object v) {
             if(isEnabled()) {
-                return (String)map.get(v);
+                return map.get(v);
             } else {
                 return "";
             }

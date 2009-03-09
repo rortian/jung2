@@ -56,7 +56,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
 	 * @param e the event
 	 */
 	public void mousePressed(MouseEvent e) {
-	    VisualizationViewer vv = (VisualizationViewer)e.getSource();
+	    VisualizationViewer<?,?> vv = (VisualizationViewer<?,?>)e.getSource();
 	    boolean accepted = checkModifiers(e);
 	    down = e.getPoint();
 	    if(accepted) {
@@ -69,7 +69,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
      * default cursor
 	 */
     public void mouseReleased(MouseEvent e) {
-        VisualizationViewer vv = (VisualizationViewer)e.getSource();
+        VisualizationViewer<?,?> vv = (VisualizationViewer<?,?>)e.getSource();
         down = null;
         vv.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
@@ -80,7 +80,7 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
      * @param e the event
 	 */
     public void mouseDragged(MouseEvent e) {
-        VisualizationViewer vv = (VisualizationViewer)e.getSource();
+        VisualizationViewer<?,?> vv = (VisualizationViewer<?,?>)e.getSource();
         boolean accepted = checkModifiers(e);
         if(accepted) {
             MutableTransformer viewTransformer = vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.VIEW);
@@ -104,22 +104,14 @@ public class ViewTranslatingGraphMousePlugin extends AbstractGraphMousePlugin
     }
 
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 
     public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
     }
 }

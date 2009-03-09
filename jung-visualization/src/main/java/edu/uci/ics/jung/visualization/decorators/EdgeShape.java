@@ -44,6 +44,7 @@ public class EdgeShape<V,E>  {
      * for self-loop edges where parallel instances will not
      * overlay each other.
      */
+    @SuppressWarnings("unchecked")
     protected static Loop loop = new Loop();
     
     /**
@@ -51,8 +52,10 @@ public class EdgeShape<V,E>  {
      * for self-loop edges where parallel instances overlay each
      * other
      */
+    @SuppressWarnings("unchecked")
     protected static SimpleLoop simpleLoop = new SimpleLoop();
     
+    @SuppressWarnings("unchecked")
     protected static Box box = new Box();
 
     /**

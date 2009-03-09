@@ -226,7 +226,8 @@ public class HyperbolicVertexImageShaperDemo extends JApplet {
         final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
         content.add(panel);
         
-        final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse<Number, Number> graphMouse = 
+            new DefaultModalGraphMouse<Number, Number>();
         vv.setGraphMouse(graphMouse);
         
         

@@ -20,6 +20,6 @@ public interface ScalingControl {
      * @param amount how much to adjust scale by
      * @param at where to adjust scale from
      */
-    void scale(VisualizationServer vv, float amount, Point2D at);
+    void scale(VisualizationServer<?,?> vv, float amount, Point2D at);
 
 }

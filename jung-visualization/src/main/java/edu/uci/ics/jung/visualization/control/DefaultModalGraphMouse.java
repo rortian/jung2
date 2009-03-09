@@ -66,6 +66,7 @@ public class DefaultModalGraphMouse<V,E> extends AbstractModalGraphMouse
      * create the plugins, and load the plugins for TRANSFORMING mode
      *
      */
+    @Override
     protected void loadPlugins() {
         pickingPlugin = new PickingGraphMousePlugin<V,E>();
         animatedPickingPlugin = new AnimatedPickingGraphMousePlugin<V,E>();
@@ -93,7 +94,8 @@ public class DefaultModalGraphMouse<V,E> extends AbstractModalGraphMouse
 			this.graphMouse = graphMouse;
 		}
 		
-		public void keyTyped(KeyEvent event) {
+		@Override
+        public void keyTyped(KeyEvent event) {
 			char keyChar = event.getKeyChar();
 			if(keyChar == t) {
 				((Component)event.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));

@@ -10,6 +10,7 @@
 package edu.uci.ics.jung.visualization;
 
 import java.awt.Graphics;
+import java.awt.RenderingHints.Key;
 import java.awt.geom.Point2D;
 import java.util.Map;
 
@@ -146,12 +147,12 @@ public interface VisualizationServer<V, E> {
     /**
      * @return Returns the renderingHints.
      */
-    Map getRenderingHints();
+    Map<Key, Object> getRenderingHints();
 
     /**
      * @param renderingHints The renderingHints to set.
      */
-    void setRenderingHints(Map renderingHints);
+    void setRenderingHints(Map<Key, Object> renderingHints);
 
     /**
      * @param paintable The paintable to add.

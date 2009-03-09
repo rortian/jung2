@@ -147,7 +147,8 @@ public class PerspectiveTransformerDemo extends JApplet {
         /**
          * the regular graph mouse for the normal view
          */
-        final DefaultModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final DefaultModalGraphMouse<Number, Number> graphMouse = 
+            new DefaultModalGraphMouse<Number, Number>();
 
         vv.setGraphMouse(graphMouse);
         

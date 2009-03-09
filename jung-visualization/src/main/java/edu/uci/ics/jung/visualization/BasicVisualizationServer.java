@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
@@ -75,7 +76,7 @@ public class BasicVisualizationServer<V, E> extends JPanel
 	 * rendering hints used in drawing. Anti-aliasing is on
 	 * by default
 	 */
-	protected Map renderingHints = new HashMap();
+	protected Map<Key, Object> renderingHints = new HashMap<Key, Object>();
 		
 	/**
 	 * holds the state of which vertices of the graph are
@@ -187,17 +188,13 @@ public class BasicVisualizationServer<V, E> extends JPanel
         renderContext.getMultiLayerTransformer().addChangeListener(this);
 	}
 	
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setDoubleBuffered(boolean)
-     */
-	public void setDoubleBuffered(boolean doubleBuffered) {
+	@Override
+    public void setDoubleBuffered(boolean doubleBuffered) {
 	    this.doubleBuffered = doubleBuffered;
 	}
 	
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#isDoubleBuffered()
-     */
-	public boolean isDoubleBuffered() {
+	@Override
+    public boolean isDoubleBuffered() {
 	    return doubleBuffered;
 	}
 	
@@ -286,17 +283,12 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		}
     }
 	
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getGraphLayout()
-     */
 	public Layout<V,E> getGraphLayout() {
 	        return model.getGraphLayout();
 	}
 	
-	/* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setVisible(boolean)
-     */
-	public void setVisible(boolean aFlag) {
+	@Override
+    public void setVisible(boolean aFlag) {
 		super.setVisible(aFlag);
 		if(aFlag == true) {
 			Dimension d = this.getSize();
@@ -307,20 +299,16 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		}
 	}
 
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getRenderingHints()
-     */
-    public Map getRenderingHints() {
+    public Map<Key, Object> getRenderingHints() {
         return renderingHints;
     }
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setRenderingHints(java.util.Map)
-     */
-    public void setRenderingHints(Map renderingHints) {
+    
+    public void setRenderingHints(Map<Key, Object> renderingHints) {
         this.renderingHints = renderingHints;
     }
     
-	protected void paintComponent(Graphics g) {
+	@Override
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
 		Graphics2D g2d = (Graphics2D)g;
@@ -410,7 +398,8 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		 * create a new offscreen image for the graph
 		 * whenever the window is resied
 		 */
-		public void componentResized(ComponentEvent e) {
+		@Override
+        public void componentResized(ComponentEvent e) {
 		    Dimension d = vv.getSize();
 		    if(d.width <= 0 || d.height <= 0) return;
 		    checkOffscreenImage(d);
@@ -418,9 +407,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
 		}
 	}
 
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#addPreRenderPaintable(edu.uci.ics.jung.visualization.BasicPaintable)
-     */
     public void addPreRenderPaintable(Paintable paintable) {
         if(preRenderers == null) {
             preRenderers = new ArrayList<Paintable>();
@@ -428,9 +414,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
         preRenderers.add(paintable);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#addPreRenderPaintable(edu.uci.ics.jung.visualization.BasicPaintable)
-     */
     public void prependPreRenderPaintable(Paintable paintable) {
         if(preRenderers == null) {
             preRenderers = new ArrayList<Paintable>();
@@ -438,18 +421,12 @@ public class BasicVisualizationServer<V, E> extends JPanel
         preRenderers.add(0,paintable);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#removePreRenderPaintable(edu.uci.ics.jung.visualization.BasicPaintable)
-     */
     public void removePreRenderPaintable(Paintable paintable) {
         if(preRenderers != null) {
             preRenderers.remove(paintable);
         }
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#addPostRenderPaintable(edu.uci.ics.jung.visualization.BasicVisualizationServer.Paintable)
-     */
     public void addPostRenderPaintable(Paintable paintable) {
         if(postRenderers == null) {
             postRenderers = new ArrayList<Paintable>();
@@ -457,9 +434,6 @@ public class BasicVisualizationServer<V, E> extends JPanel
         postRenderers.add(paintable);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#addPostRenderPaintable(edu.uci.ics.jung.visualization.BasicVisualizationServer.Paintable)
-     */
     public void prependPostRenderPaintable(Paintable paintable) {
         if(postRenderers == null) {
             postRenderers = new ArrayList<Paintable>();
@@ -467,58 +441,36 @@ public class BasicVisualizationServer<V, E> extends JPanel
         postRenderers.add(0,paintable);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#removePostRenderPaintable(edu.uci.ics.jung.visualization.BasicVisualizationServer.Paintable)
-     */
-   public void removePostRenderPaintable(Paintable paintable) {
+    public void removePostRenderPaintable(Paintable paintable) {
         if(postRenderers != null) {
             postRenderers.remove(paintable);
         }
     }
 
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#addChangeListener(javax.swing.event.ChangeListener)
-     */
     public void addChangeListener(ChangeListener l) {
         changeSupport.addChangeListener(l);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#removeChangeListener(javax.swing.event.ChangeListener)
-     */
     public void removeChangeListener(ChangeListener l) {
         changeSupport.removeChangeListener(l);
     }
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getChangeListeners()
-     */
     public ChangeListener[] getChangeListeners() {
         return changeSupport.getChangeListeners();
     }
 
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#fireStateChanged()
-     */
     public void fireStateChanged() {
         changeSupport.fireStateChanged();
     }   
     
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getPickedVertexState()
-     */
     public PickedState<V> getPickedVertexState() {
         return pickedVertexState;
     }
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#getPickedEdgeState()
-     */
+
     public PickedState<E> getPickedEdgeState() {
         return pickedEdgeState;
     }
-    /* (non-Javadoc)
-     * @see edu.uci.ics.jung.visualization.VisualizationServer#setPickedVertexState(edu.uci.ics.jung.visualization.picking.PickedState)
-     */
+    
     public void setPickedVertexState(PickedState<V> pickedVertexState) {
         if(pickEventListener != null && this.pickedVertexState != null) {
             this.pickedVertexState.removeItemListener(pickEventListener);
