@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003, the JUNG Project and the Regents of the University 
+ * Copyright (c) 2003, the JUNG Project and the Regents of the University
  * of California
  * All rights reserved.
  *
@@ -20,26 +20,23 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
-
-import cern.jet.random.engine.DRand;
-import cern.jet.random.engine.RandomEngine;
-import edu.uci.ics.jung.algorithms.util.DiscreteDistribution;
 
 
 
 /**
- * Groups items into a specified number of clusters, based on their 
- * proximity in d-dimensional space, using the k-means algorithm. 
- *  
+ * Groups items into a specified number of clusters, based on their
+ * proximity in d-dimensional space, using the k-means algorithm.
+ *
  * @author Joshua O'Madadhain
  */
-public class KMeansClusterer<T> 
+public class KMeansClusterer<T>
 {
     protected int max_iterations;
     protected double convergence_threshold;
-    protected RandomEngine rand = new DRand();
-    
+    protected Random rand;
+
     /**
      * Creates an instance whose termination conditions are set according
      * to the parameters.  Calls to <code>cluster</code> will terminate
@@ -50,12 +47,13 @@ public class KMeansClusterer<T>
      * since the previous iteration
      * </ul>
      */
-    public KMeansClusterer(int max_iterations, double convergence_threshold) 
+    public KMeansClusterer(int max_iterations, double convergence_threshold)
     {
         this.max_iterations = max_iterations;
         this.convergence_threshold = convergence_threshold;
+        this.rand = new Random();
     }
-    
+
     /**
      * Creates an instance with max iterations of 100 and convergence threshold
      * of 0.001.
@@ -64,7 +62,7 @@ public class KMeansClusterer<T>
     {
         this(100, 0.001);
     }
-    
+
     public int getMaxIterations()
     {
         return max_iterations;
@@ -74,7 +72,7 @@ public class KMeansClusterer<T>
     {
         if (max_iterations < 0)
             throw new IllegalArgumentException("max iterations must be >= 0");
-        
+
         this.max_iterations = max_iterations;
     }
 
@@ -86,17 +84,17 @@ public class KMeansClusterer<T>
     public void setConvergenceThreshold(double convergence_threshold)
     {
         if (convergence_threshold <= 0)
-            throw new IllegalArgumentException("convergence threshold " + 
+            throw new IllegalArgumentException("convergence threshold " +
                 "must be > 0");
-        
+
         this.convergence_threshold = convergence_threshold;
     }
 
     /**
      * Returns a <code>Collection</code> of clusters, where each cluster is
      * represented as a <code>Map</code> of <code>Objects</code> to locations
-     * in d-dimensional space. 
-     * @param object_locations  a map of the Objects to cluster, to  
+     * in d-dimensional space.
+     * @param object_locations  a map of the Objects to cluster, to
      * <code>double</code> arrays that specify their locations in d-dimensional space.
      * @param num_clusters  the number of clusters to create
      * @throws NotEnoughClustersException
@@ -106,18 +104,18 @@ public class KMeansClusterer<T>
     {
         if (object_locations == null || object_locations.isEmpty())
             throw new IllegalArgumentException("'objects' must be non-empty");
-        
+
         if (num_clusters < 2 || num_clusters > object_locations.size())
-            throw new IllegalArgumentException("number of clusters " + 
-                "must be >= 2 and <= number of objects (" + 
+            throw new IllegalArgumentException("number of clusters " +
+                "must be >= 2 and <= number of objects (" +
                 object_locations.size() + ")");
-        
+
 
         Set<double[]> centroids = new HashSet<double[]>();
-        
+
         Object[] obj_array = object_locations.keySet().toArray();
         Set<T> tried = new HashSet<T>();
-        
+
         // create the specified number of clusters
         while (centroids.size() < num_clusters && tried.size() < object_locations.size())
         {
@@ -133,14 +131,14 @@ public class KMeansClusterer<T>
             if (!duplicate)
                 centroids.add(mean_value);
         }
-        
+
         if (tried.size() >= object_locations.size())
             throw new NotEnoughClustersException();
-        
+
         // put items in their initial clusters
         Map<double[], Map<T, double[]>> clusterMap = assignToClusters(object_locations, centroids);
-        
-        // keep reconstituting clusters until either 
+
+        // keep reconstituting clusters until either
         // (a) membership is stable, or
         // (b) number of iterations passes max_iterations, or
         // (c) max movement of any centroid is <= convergence_threshold
@@ -156,13 +154,13 @@ public class KMeansClusterer<T>
                 double[] centroid = entry.getKey();
                 Map<T, double[]> elements = entry.getValue();
                 ArrayList<double[]> locations = new ArrayList<double[]>(elements.values());
-                
+
                 double[] mean = DiscreteDistribution.mean(locations);
-                max_movement = Math.max(max_movement, 
+                max_movement = Math.max(max_movement,
                     Math.sqrt(DiscreteDistribution.squaredError(centroid, mean)));
                 new_centroids.add(mean);
             }
-            
+
             // TODO: check membership of clusters: have they changed?
 
             // regenerate cluster membership based on means
@@ -183,7 +181,7 @@ public class KMeansClusterer<T>
         Map<double[], Map<T, double[]>> clusterMap = new HashMap<double[], Map<T, double[]>>();
         for (double[] centroid : centroids)
             clusterMap.put(centroid, new HashMap<T, double[]>());
-        
+
         for (Map.Entry<T, double[]> object_location : object_locations.entrySet())
         {
             T object = object_location.getKey();
@@ -193,7 +191,7 @@ public class KMeansClusterer<T>
             Iterator<double[]> c_iter = centroids.iterator();
             double[] closest = c_iter.next();
             double distance = DiscreteDistribution.squaredError(location, closest);
-            
+
             while (c_iter.hasNext())
             {
                 double[] centroid = c_iter.next();
@@ -206,22 +204,22 @@ public class KMeansClusterer<T>
             }
             clusterMap.get(closest).put(object, location);
         }
-        
+
         return clusterMap;
     }
-    
+
     public void setSeed(int random_seed)
     {
-        this.rand = new DRand(random_seed);
+        this.rand = new Random(random_seed);
     }
-    
+
     /**
      * An exception that indicates that the specified data points cannot be
      * clustered into the number of clusters requested by the user.
-     * This will happen if and only if there are fewer distinct points than 
-     * requested clusters.  (If there are fewer total data points than 
+     * This will happen if and only if there are fewer distinct points than
+     * requested clusters.  (If there are fewer total data points than
      * requested clusters, <code>IllegalArgumentException</code> will be thrown.)
-     *  
+     *
      * @author Joshua O'Madadhain
      */
     @SuppressWarnings("serial")

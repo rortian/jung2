@@ -1,18 +1,15 @@
 /*
- * Copyright (c) 2004, the JUNG Project and the Regents of the University 
+ * Copyright (c) 2004, the JUNG Project and the Regents of the University
  * of California
  * All rights reserved.
  *
  * This software is open-source under the BSD license; see either
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
- * 
+ *
  * Created on Aug 12, 2004
  */
 package edu.uci.ics.jung.algorithms.cluster;
-
-import cern.jet.random.engine.DRand;
-import cern.jet.random.engine.RandomEngine;
 
 import edu.uci.ics.jung.algorithms.scoring.VoltageScorer;
 import edu.uci.ics.jung.algorithms.util.DiscreteDistribution;
@@ -30,17 +27,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
- * <p>Clusters vertices of a <code>Graph</code> based on their ranks as 
+ * <p>Clusters vertices of a <code>Graph</code> based on their ranks as
  * calculated by <code>VoltageScorer</code>.  This algorithm is based on,
  * but not identical with, the method described in the paper below.
  * The primary difference is that Wu and Huberman assume a priori that the clusters
- * are of approximately the same size, and therefore use a more complex 
- * method than k-means (which is used here) for determining cluster 
+ * are of approximately the same size, and therefore use a more complex
+ * method than k-means (which is used here) for determining cluster
  * membership based on co-occurrence data.</p>
- * 
+ *
  * <p>The algorithm proceeds as follows:
  * <ul>
  * <li/>first, generate a set of candidate clusters as follows:
@@ -62,12 +60,12 @@ import java.util.Set;
  * <li/>finally, remaining unassigned vertices are assigned to the kth ("garbage")
  * cluster.
  * </ul></p>
- * 
+ *
  * <p><b>NOTE</b>: Depending on how the co-occurrence data splits the data into
  * clusters, the number of clusters returned by this algorithm may be less than the
- * number of clusters requested.  The number of clusters will never be more than 
+ * number of clusters requested.  The number of clusters will never be more than
  * the number requested, however.</p>
- * 
+ *
  * @author Joshua O'Madadhain
  * @see "'Finding communities in linear time: a physics approach', Fang Wu and Bernardo Huberman, http://www.hpl.hp.com/research/idl/papers/linear/"
  * @see VoltageScorer
@@ -77,14 +75,14 @@ public class VoltageClusterer<V,E>
 {
     protected int num_candidates;
     protected KMeansClusterer<V> kmc;
-    protected RandomEngine rand;
+    protected Random rand;
     protected Graph<V,E> g;
-    
+
     /**
      * Creates an instance of a VoltageCluster with the specified parameters.
      * These are mostly parameters that are passed directly to VoltageScorer
      * and KMeansClusterer.
-     * 
+     *
      * @param num_candidates    the number of candidate clusters to create
      */
     public VoltageClusterer(Graph<V,E> g, int num_candidates)
@@ -94,15 +92,15 @@ public class VoltageClusterer<V,E>
 
         this.num_candidates = num_candidates;
         this.kmc = new KMeansClusterer<V>();
-        rand = new DRand();
+        rand = new Random();
         this.g = g;
     }
 
     protected void setRandomSeed(int random_seed)
     {
-        rand = new DRand(random_seed);
+        rand = new Random(random_seed);
     }
-    
+
     /**
      * Returns a community (cluster) centered around <code>v</code>.
      * @param v the vertex whose community we wish to discover
@@ -113,7 +111,7 @@ public class VoltageClusterer<V,E>
     }
 
     /**
-     * Clusters the vertices of <code>g</code> into 
+     * Clusters the vertices of <code>g</code> into
      * <code>num_clusters</code> clusters, based on their connectivity.
      * @param num_clusters  the number of clusters to identify
      */
@@ -121,7 +119,7 @@ public class VoltageClusterer<V,E>
     {
         return cluster_internal(null, num_clusters);
     }
-    
+
     /**
      * Does the work of <code>getCommunity</code> and <code>cluster</code>.
      * @param origin the vertex around which clustering is to be done
@@ -137,7 +135,7 @@ public class VoltageClusterer<V,E>
         ArrayList<V> v_array = new ArrayList<V>(g.getVertices());
 
         LinkedList<Set<V>> candidates = new LinkedList<Set<V>>();
-        
+
         for (int j = 0; j < num_candidates; j++)
         {
             V source;
@@ -146,55 +144,55 @@ public class VoltageClusterer<V,E>
             else
                 source = origin;
             V target = null;
-            do 
+            do
             {
                 target = v_array.get((int)(rand.nextDouble() * v_array.size()));
             }
             while (source == target);
             VoltageScorer<V,E> vs = new VoltageScorer<V,E>(g, source, target);
             vs.evaluate();
-            
+
             Map<V, double[]> voltage_ranks = new HashMap<V, double[]>();
             for (V v : g.getVertices())
                 voltage_ranks.put(v, new double[] {vs.getVertexScore(v)});
-            
+
 //            addOneCandidateCluster(candidates, voltage_ranks);
             addTwoCandidateClusters(candidates, voltage_ranks);
         }
-        
+
         // repeat the following k-1 times:
-        // * pick a vertex v as a cluster seed 
+        // * pick a vertex v as a cluster seed
         //   (Wu/Huberman: most frequent vertex in candidates)
-        // * calculate co-occurrence (in candidate clusters) 
+        // * calculate co-occurrence (in candidate clusters)
         //   of this vertex with all others
-        // * use k-means to separate co-occurrence counts into high/low; 
+        // * use k-means to separate co-occurrence counts into high/low;
         //   high vertices are a cluster
         // * remove v's vertices from candidate clusters
-        
+
         Collection<Set<V>> clusters = new LinkedList<Set<V>>();
         Set<V> remaining = new HashSet<V>(g.getVertices());
-        
+
         List<V> seed_candidates = getSeedCandidates(candidates);
         int seed_index = 0;
-        
+
         for (int j = 0; j < (num_clusters - 1); j++)
         {
             if (remaining.isEmpty())
                 break;
-                
+
             V seed;
             if (seed_index == 0 && origin != null)
                 seed = origin;
             else
             {
-                do { seed = seed_candidates.get(seed_index++); } 
+                do { seed = seed_candidates.get(seed_index++); }
                 while (!remaining.contains(seed));
             }
-            
+
             Map<V, double[]> occur_counts = getObjectCounts(candidates, seed);
             if (occur_counts.size() < 2)
                 break;
-            
+
             // now that we have the counts, cluster them...
             try
             {
@@ -210,7 +208,7 @@ public class VoltageClusterer<V,E>
                     new_cluster = cluster1.keySet();
                 else
                     new_cluster = cluster2.keySet();
-                
+
                 // ...remove the elements of new_cluster from each candidate...
                 for (Set<V> cluster : candidates)
                     cluster.removeAll(new_cluster);
@@ -223,16 +221,16 @@ public class VoltageClusterer<V,E>
                 break;
             }
         }
-        
+
         // identify remaining vertices (if any) as a 'garbage' cluster
         if (!remaining.isEmpty())
             clusters.add(remaining);
-        
+
         return clusters;
     }
 
     /**
-     * Do k-means with three intervals and pick the 
+     * Do k-means with three intervals and pick the
      * smaller two clusters (presumed to be on the ends); this is closer to the Wu-Huberman method.
      * @param candidates
      * @param voltage_ranks
@@ -252,7 +250,7 @@ public class VoltageClusterer<V,E>
                 candidates.add(clusters.get(2).keySet());
             }
             else if (!b01 && b12)
-            {                    
+            {
                 candidates.add(clusters.get(0).keySet());
                 candidates.add(clusters.get(2).keySet());
             }
@@ -292,7 +290,7 @@ public class VoltageClusterer<V,E>
             // no valid candidates, continue
         }
     }
-    
+
     /**
      * Returns an array of cluster seeds, ranked in decreasing order
      * of number of appearances in the specified collection of candidate
@@ -304,12 +302,12 @@ public class VoltageClusterer<V,E>
         final Map<V, double[]> occur_counts = getObjectCounts(candidates, null);
 
         ArrayList<V> occurrences = new ArrayList<V>(occur_counts.keySet());
-        Collections.sort(occurrences, new MapValueArrayComparator(occur_counts)); 
-        
+        Collections.sort(occurrences, new MapValueArrayComparator(occur_counts));
+
         System.out.println("occurrences: ");
         for (int i = 0; i < occurrences.size(); i++)
             System.out.println(occur_counts.get(occurrences.get(i))[0]);
-        
+
         return occurrences;
     }
 
@@ -318,7 +316,7 @@ public class VoltageClusterer<V,E>
         Map<V, double[]> occur_counts = new HashMap<V, double[]>();
         for (V v : g.getVertices())
             occur_counts.put(v, new double[]{0});
-        
+
         for (Set<V> candidate : candidates)
         {
             if (seed == null)
@@ -339,14 +337,14 @@ public class VoltageClusterer<V,E>
             for (V v : occur_counts.keySet())
                 System.out.println(occur_counts.get(v)[0]);
         }
-        
+
         return occur_counts;
     }
-    
+
     protected class MapValueArrayComparator implements Comparator<V>
     {
         private Map<V, double[]> map;
-        
+
         public MapValueArrayComparator(Map<V, double[]> map)
         {
             this.map = map;
@@ -362,7 +360,7 @@ public class VoltageClusterer<V,E>
                 return -1;
             return 0;
         }
-        
+
     }
 
 }
