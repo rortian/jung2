@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003, the JUNG Project and the Regents of the University 
+ * Copyright (c) 2003, the JUNG Project and the Regents of the University
  * of California
  * All rights reserved.
  *
@@ -12,6 +12,16 @@
  *
  */
 package edu.uci.ics.jung.io;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.impl.SparseDoubleMatrix2D;
+
+import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
+import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedGraph;
+
+import org.apache.commons.collections15.Factory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -23,27 +33,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.collections15.Factory;
-
-import cern.colt.list.DoubleArrayList;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.impl.SparseDoubleMatrix2D;
-import corejava.Format;
-import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedGraph;
-
 /**
  * Basic I/O handler for ascii matrix files. An ascii matrix is simply
  * a square matrix where 0 values for cell (i,j) indicates no edge exists between
  * vertex i and vertex j and non-zero values indicates there is an edge. If
  * a non-null weight key is specified then it will be used to treat the non-zero
  * values as a weight stored in the edges' user data keyed off the specified weight key value.
- * <p>  
+ * <p>
  * When loading a graph from a file, a symmetric graph will result in the construction of
  * an undirected sparse graph while a non-symmetric graph will result in the construction of
- * a directed sparse graph. 
+ * a directed sparse graph.
  * <p>
  * For example the following ascii matrix when loaded using the code:<br><code>
  * MatrixFile mf = new MatrixFile(null); <br>
@@ -72,7 +71,7 @@ import edu.uci.ics.jung.graph.UndirectedGraph;
  */
 public class MatrixFile<V,E> implements GraphFile<V,E> {
 	private Map<E,Number> mWeightKey;
-	
+
 	Factory<UndirectedGraph<V,E>> undirectedGraphFactory;
 	Factory<DirectedGraph<V,E>> directedGraphFactory;
 	Factory<V> vertexFactory;
@@ -83,8 +82,8 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 	 * attempt to use that key to store and retreive weights from the edges'
 	 * UserData.
 	 */
-	public MatrixFile(Map<E, Number> weightKey, Factory<UndirectedGraph<V, E>> undirectedGraphFactory, 
-			Factory<DirectedGraph<V, E>> directedGraphFactory, 
+	public MatrixFile(Map<E, Number> weightKey, Factory<UndirectedGraph<V, E>> undirectedGraphFactory,
+			Factory<DirectedGraph<V, E>> directedGraphFactory,
 			Factory<V> vertexFactory, Factory<E> edgeFactory) {
 
 		mWeightKey = weightKey;
@@ -117,14 +116,14 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 
 	private DoubleMatrix2D createMatrixFromFile(BufferedReader reader)
 		throws IOException, ParseException {
-		List<DoubleArrayList> rows = new ArrayList<DoubleArrayList>();
+		List<List<Double>> rows = new ArrayList<List<Double>>();
 		String currentLine = null;
 		while ((currentLine = reader.readLine()) != null) {
 			StringTokenizer tokenizer = new StringTokenizer(currentLine);
 			if (tokenizer.countTokens() == 0) {
 				break;
 			}
-			DoubleArrayList currentRow = new DoubleArrayList();
+			List<Double> currentRow = new ArrayList<Double>();
 			while (tokenizer.hasMoreTokens()) {
 				String token = tokenizer.nextToken();
 				currentRow.add(Double.parseDouble(token));
@@ -134,7 +133,7 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 		int size = rows.size();
 		DoubleMatrix2D matrix = new SparseDoubleMatrix2D(size, size);
 		for (int i = 0; i < size; i++) {
-			DoubleArrayList currentRow = rows.get(i);
+			List<Double> currentRow = rows.get(i);
 			if (currentRow.size() != size) {
 				throw new ParseException(
 					"Matrix must have the same number of rows as columns",
@@ -144,13 +143,13 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 				double currentVal = currentRow.get(j);
 				if (currentVal != 0) {
 					matrix.setQuick(i, j, currentVal);
-				}					
+				}
 			}
 		}
 		return matrix;
 	}
-	
-	/** 
+
+	/**
 	 * Loads a graph from a file.
 	 * @see edu.uci.ics.jung.io.GraphFile#load(java.lang.String)
 	 */
@@ -166,8 +165,8 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 			throw new RuntimeException("Error in loading file " + filename, ioe);
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Saves a graph to a file
 	 * @see edu.uci.ics.jung.io.GraphFile#save(edu.uci.ics.jung.graph.Graph, java.lang.String)
 	 */
@@ -177,10 +176,9 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 				new BufferedWriter(new FileWriter(filename));
 			DoubleMatrix2D matrix = GraphMatrixOperations.<V,E>graphToSparseMatrix(graph,
 					mWeightKey);
-			Format labelFormat = new Format("%4.2f");
 			for (int i=0;i<matrix.rows();i++) {
 				for (int j=0;j<matrix.columns();j++) {
-					writer.write(labelFormat.format(matrix.getQuick(i,j)) + " ");				
+					writer.write(String.format("%4.2f ", matrix.getQuick(i,j)));
 				}
 				writer.write("\n");
 			}
