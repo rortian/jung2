@@ -1,11 +1,19 @@
 /*
  * Copyright (c) 2003, the JUNG Project and the Regents of the University of
  * California All rights reserved.
- * 
+ *
  * This software is open-source under the BSD license; see either "license.txt"
  * or http://jung.sourceforge.net/license.txt for a description.
  */
 package edu.uci.ics.jung.algorithms.layout;
+
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
+
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -13,21 +21,11 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
-
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
-import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.Pair;
-
 /**
  * Implements the Fruchterman-Reingold force-directed algorithm for node layout.
- * 
+ *
  * @see "Fruchterman and Reingold, 'Graph Drawing by Force-directed Placement'"
- * @see http://i11www.ilkd.uni-karlsruhe.de/teaching/SS_04/visualisierung/papers/fruchterman91graph.pdf
+ * @see "http://i11www.ilkd.uni-karlsruhe.de/teaching/SS_04/visualisierung/papers/fruchterman91graph.pdf"
  * @author Scott White, Yan-Biao Boey, Danyel Fisher
  */
 public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeContext {
@@ -39,33 +37,33 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     private int currentIteration;
 
     private int mMaxIterations = 700;
-    
-    private Map<V, FRVertexData> frVertexData = 
+
+    private Map<V, FRVertexData> frVertexData =
     	LazyMap.decorate(new HashMap<V,FRVertexData>(), new Factory<FRVertexData>() {
     		public FRVertexData create() {
     			return new FRVertexData();
     		}});
 
     private double attraction_multiplier = 0.75;
-    
+
     private double attraction_constant;
-    
+
     private double repulsion_multiplier = 0.75;
-    
+
     private double repulsion_constant;
-    
+
     private double max_dimension;
-    
+
     public FRLayout(Graph<V, E> g) {
         super(g);
     }
-    
+
     public FRLayout(Graph<V, E> g, Dimension d) {
         super(g, new RandomLocationTransformer<V>(d), d);
         initialize();
         max_dimension = Math.max(d.height, d.width);
     }
-    
+
 	@Override
 	public void setSize(Dimension size) {
 		if(initialized == false) {
@@ -78,15 +76,15 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 	public void setAttractionMultiplier(double attraction) {
         this.attraction_multiplier = attraction;
     }
-    
+
     public void setRepulsionMultiplier(double repulsion) {
         this.repulsion_multiplier = repulsion;
     }
-    
+
 	public void reset() {
 		doInit();
 	}
-    
+
     public void initialize() {
     	doInit();
     }
@@ -98,7 +96,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
     		currentIteration = 0;
     		temperature = d.getWidth() / 10;
 
-    		forceConstant = 
+    		forceConstant =
     			Math
     			.sqrt(d.getHeight()
     					* d.getWidth()
@@ -122,10 +120,9 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
          * Calculate repulsion
          */
         while(true) {
-            
+
             try {
                 for(V v1 : getGraph().getVertices()) {
-//                    if (isLocked(v1)) continue;
                     calcRepulsion(v1);
                 }
                 break;
@@ -138,7 +135,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         while(true) {
             try {
                 for(E e : getGraph().getEdges()) {
-                    
+
                     calcAttraction(e);
                 }
                 break;
@@ -147,34 +144,31 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 
 
         while(true) {
-            try {    
+            try {
                 for(V v : getGraph().getVertices()) {
                     if (isLocked(v)) continue;
                     calcPositions(v);
-//                    fireStateChanged();
                 }
                 break;
             } catch(ConcurrentModificationException cme) {}
         }
         cool();
-//        fireStateChanged();
     }
 
     public synchronized void calcPositions(V v) {
         FRVertexData fvd = getFRData(v);
         if(fvd == null) return;
         Point2D xyd = transform(v);
-        double deltaLength = Math.max(EPSILON, Math.sqrt(fvd.disp
-                .zDotProduct(fvd.disp)));
+        double deltaLength = Math.max(EPSILON, fvd.norm());
 
-        double newXDisp = fvd.getXDisp() / deltaLength
+        double newXDisp = fvd.getX() / deltaLength
                 * Math.min(deltaLength, temperature);
 
-        if (Double.isNaN(newXDisp)) { 
+        if (Double.isNaN(newXDisp)) {
         	throw new IllegalArgumentException(
                 "Unexpected mathematical result in FRLayout:calcPositions [xdisp]"); }
 
-        double newYDisp = fvd.getYDisp() / deltaLength
+        double newYDisp = fvd.getY() / deltaLength
                 * Math.min(deltaLength, temperature);
         xyd.setLocation(xyd.getX()+newXDisp, xyd.getY()+newYDisp);
 
@@ -204,7 +198,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         V v2 = endpoints.getSecond();
         boolean v1_locked = isLocked(v1);
         boolean v2_locked = isLocked(v2);
-        
+
         if(v1_locked && v2_locked) {
         	// both locked, do nothing
         	return;
@@ -227,18 +221,19 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         double dy = (yDelta / deltaLength) * force;
         if(v1_locked == false) {
         	FRVertexData fvd1 = getFRData(v1);
-        	fvd1.decrementDisp(dx, dy);
+        	fvd1.offset(-dx, -dy);
         }
         if(v2_locked == false) {
         	FRVertexData fvd2 = getFRData(v2);
-        	fvd2.incrementDisp(dx, dy);
+        	fvd2.offset(dx, dy);
         }
     }
 
     public void calcRepulsion(V v1) {
         FRVertexData fvd1 = getFRData(v1);
-        if(fvd1 == null) return;
-        fvd1.setDisp(0, 0);
+        if(fvd1 == null)
+            return;
+        fvd1.setLocation(0, 0);
 
         try {
             for(V v2 : getGraph().getVertices()) {
@@ -250,16 +245,16 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
                     if(p1 == null || p2 == null) continue;
                     double xDelta = p1.getX() - p2.getX();
                     double yDelta = p1.getY() - p2.getY();
-                    
+
                     double deltaLength = Math.max(EPSILON, Math
                             .sqrt((xDelta * xDelta) + (yDelta * yDelta)));
-                    
+
                     double force = (repulsion_constant * repulsion_constant) / deltaLength;
-                    
+
                     if (Double.isNaN(force)) { throw new RuntimeException(
                     "Unexpected mathematical result in FRLayout:calcPositions [repulsion]"); }
-                    
-                    fvd1.incrementDisp((xDelta / deltaLength) * force,
+
+                    fvd1.offset((xDelta / deltaLength) * force,
                             (yDelta / deltaLength) * force);
                 }
             }
@@ -292,46 +287,24 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
      * <tt>MAX_ITERATIONS</tt>.
      */
     public boolean done() {
-        if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension) 
-        { 
-            return true; 
-        } 
+        if (currentIteration > mMaxIterations || temperature < 1.0/max_dimension)
+        {
+            return true;
+        }
         return false;
     }
 
-    public static class FRVertexData {
-
-        private DoubleMatrix1D disp;
-
-        public FRVertexData() {
-            initialize();
+    public static class FRVertexData extends Point2D.Double
+    {
+        public void offset(double x, double y)
+        {
+            this.x += x;
+            this.y += y;
         }
 
-        public void initialize() {
-            disp = new DenseDoubleMatrix1D(2);
-        }
-
-        public double getXDisp() {
-            return disp.get(0);
-        }
-
-        public double getYDisp() {
-            return disp.get(1);
-        }
-
-        public void setDisp(double x, double y) {
-            disp.set(0, x);
-            disp.set(1, y);
-        }
-
-        public void incrementDisp(double x, double y) {
-            disp.set(0, disp.get(0) + x);
-            disp.set(1, disp.get(1) + y);
-        }
-
-        public void decrementDisp(double x, double y) {
-            disp.set(0, disp.get(0) - x);
-            disp.set(1, disp.get(1) - y);
+        public double norm()
+        {
+            return Math.sqrt(x*x + y*y);
         }
      }
 }

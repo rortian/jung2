@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2003, the JUNG Project and the Regents of the University 
+* Copyright (c) 2003, the JUNG Project and the Regents of the University
 * of California
 * All rights reserved.
 *
@@ -9,6 +9,13 @@
 */
 package edu.uci.ics.jung.algorithms.layout;
 
+import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.Graph;
+
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.map.LazyMap;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,24 +24,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.map.LazyMap;
-
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
-import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.Graph;
-
 /**
  * Implements a self-organizing map layout algorithm, based on Meyer's
  * self-organizing graph methods.
- * 
+ *
  * @author Yan Biao Boey
  */
 public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeContext {
 
-	Map<V, ISOMVertexData> isomVertexData = 
+	Map<V, ISOMVertexData> isomVertexData =
 		LazyMap.decorate(new HashMap<V, ISOMVertexData>(),
 				new Factory<ISOMVertexData>() {
 					public ISOMVertexData create() {
@@ -51,15 +49,15 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 	private double adaption;
 	private double initialAdaption;
 	private double minAdaption;
-    
-    protected GraphElementAccessor<V,E> elementAccessor = 
+
+    protected GraphElementAccessor<V,E> elementAccessor =
     	new RadiusGraphElementAccessor<V,E>();
 
 	private double coolingFactor;
 
 	private List<V> queue = new ArrayList<V>();
 	private String status = null;
-	
+
 	/**
 	 * Returns the current number of epochs and execution status, as a string.
 	 */
@@ -98,7 +96,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 
 		//delay = 100;
 	}
-	
+
 
 	/**
 	* Advances the current positions of the graph elements.
@@ -117,13 +115,9 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		}
 	}
 
-	ISOMVertexData tempISOM;
-	Point2D tempXYD;
-
 	private synchronized void adjust() {
 		//Generate random position in graph space
-		tempISOM = new ISOMVertexData();
-		tempXYD = new Point2D.Double();
+		Point2D tempXYD = new Point2D.Double();
 
 		// creates a new XY data location
         tempXYD.setLocation(10 + Math.random() * getSize().getWidth(),
@@ -142,7 +136,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		        break;
 		    } catch(ConcurrentModificationException cme) {}
         }
-		adjustVertex(winner);
+		adjustVertex(winner, tempXYD);
 	}
 
 	private synchronized void updateParameters() {
@@ -156,7 +150,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		}
 	}
 
-	private synchronized void adjustVertex(V v) {
+	private synchronized void adjustVertex(V v, Point2D tempXYD) {
 		queue.clear();
 		ISOMVertexData ivd = getISOMVertexData(v);
 		ivd.distance = 0;
@@ -172,19 +166,14 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 			double dx = tempXYD.getX() - currXYData.getX();
 			double dy = tempXYD.getY() - currXYData.getY();
 			double factor = adaption / Math.pow(2, currData.distance);
-			
+
 			currXYData.setLocation(currXYData.getX()+(factor*dx), currXYData.getY()+(factor*dy));
-//			currXYData.addX(factor * dx);
-//			currXYData.addY(factor * dy);
 
 			if (currData.distance < radius) {
 			    Collection<V> s = getGraph().getNeighbors(current);
-			    	//current.getNeighbors();
 			    while(true) {
 			        try {
 			        	for(V child : s) {
-//			            for (Iterator iter = s.iterator(); iter.hasNext();) {
-//			                Vertex child = (Vertex) iter.next();
 			                ISOMVertexData childData = getISOMVertexData(child);
 			                if (childData != null && !childData.visited) {
 			                    childData.visited = true;
@@ -215,7 +204,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 	 * Returns <code>true</code> if the vertex positions are no longer being
 	 * updated.  Currently <code>ISOMLayout</code> stops updating vertex
 	 * positions after a certain number of iterations have taken place.
-	 * @return <code>true</code> if the vertex position updates have stopped, 
+	 * @return <code>true</code> if the vertex position updates have stopped,
 	 * <code>false</code> otherwise
 	 */
 	public boolean done() {
@@ -223,43 +212,12 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 	}
 
 	public static class ISOMVertexData {
-		public DoubleMatrix1D disp;
-
 		int distance;
 		boolean visited;
 
 		public ISOMVertexData() {
-			initialize();
-		}
-
-		public void initialize() {
-			disp = new DenseDoubleMatrix1D(2);
-
-			distance = 0;
-			visited = false;
-		}
-
-		public double getXDisp() {
-			return disp.get(0);
-		}
-
-		public double getYDisp() {
-			return disp.get(1);
-		}
-
-		public void setDisp(double x, double y) {
-			disp.set(0, x);
-			disp.set(1, y);
-		}
-
-		public void incrementDisp(double x, double y) {
-			disp.set(0, disp.get(0) + x);
-			disp.set(1, disp.get(1) + y);
-		}
-
-		public void decrementDisp(double x, double y) {
-			disp.set(0, disp.get(0) - x);
-			disp.set(1, disp.get(1) - y);
+		    distance = 0;
+		    visited = false;
 		}
 	}
 
