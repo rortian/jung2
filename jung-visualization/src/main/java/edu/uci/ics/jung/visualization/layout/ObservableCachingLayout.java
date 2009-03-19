@@ -48,12 +48,13 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
     public ObservableCachingLayout(Layout<V, E> delegate) {
     	super(delegate);
     	this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), 
-    			new ChainedTransformer(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
+    			new ChainedTransformer<V, Point2D>(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
     }
     
     /**
      * @see edu.uci.ics.jung.algorithms.layout.Layout#step()
      */
+    @Override
     public void step() {
     	super.step();
     	fireStateChanged();
@@ -63,7 +64,8 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
 	 * 
 	 * @see edu.uci.ics.jung.algorithms.layout.Layout#initialize()
 	 */
-	public void initialize() {
+	@Override
+    public void initialize() {
 		super.initialize();
 		fireStateChanged();
 	}
@@ -71,6 +73,7 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
     /**
      * @see edu.uci.ics.jung.algorithms.util.IterativeContext#done()
      */
+    @Override
     public boolean done() {
     	if(delegate instanceof IterativeContext) {
     		return ((IterativeContext)delegate).done();
@@ -84,7 +87,8 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
 	 * @param location
 	 * @see edu.uci.ics.jung.algorithms.layout.Layout#setLocation(java.lang.Object, java.awt.geom.Point2D)
 	 */
-	public void setLocation(V v, Point2D location) {
+	@Override
+    public void setLocation(V v, Point2D location) {
 		super.setLocation(v, location);
 		fireStateChanged();
 	}
@@ -105,6 +109,7 @@ public class ObservableCachingLayout<V, E> extends LayoutDecorator<V,E> implemen
         changeSupport.fireStateChanged();
     }
     
+    @Override
     public void setGraph(Graph<V, E> graph) {
         delegate.setGraph(graph);
     }

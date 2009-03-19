@@ -40,9 +40,10 @@ public class CachingLayout<V, E> extends LayoutDecorator<V,E> implements Caching
     public CachingLayout(Layout<V, E> delegate) {
     	super(delegate);
     	this.locationMap = LazyMap.<V,Point2D>decorate(new HashMap<V,Point2D>(), 
-    			new ChainedTransformer(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
+    			new ChainedTransformer<V, Point2D>(new Transformer[]{delegate, CloneTransformer.<Point2D>getInstance()}));
     }
     
+    @Override
     public void setGraph(Graph<V, E> graph) {
         delegate.setGraph(graph);
     }

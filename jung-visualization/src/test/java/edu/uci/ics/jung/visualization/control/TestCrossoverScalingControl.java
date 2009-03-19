@@ -16,7 +16,8 @@ public class TestCrossoverScalingControl extends TestCase {
 	float crossover;
 	float scale;
 	
-	public void setUp() {
+	@Override
+    public void setUp() {
 		sc = new CrossoverScalingControl();
 		vv = new BasicVisualizationServer(new FRLayout(new SparseGraph()));
 	}
