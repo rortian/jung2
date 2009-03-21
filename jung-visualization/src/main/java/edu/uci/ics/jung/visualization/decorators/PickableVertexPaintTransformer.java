@@ -24,7 +24,6 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
  */
 public class PickableVertexPaintTransformer<V> implements Transformer<V,Paint> {
 
-//    protected Paint draw_paint;
     protected Paint fill_paint;
     protected Paint picked_paint;
     protected PickedInfo<V> pi;
@@ -37,21 +36,14 @@ public class PickableVertexPaintTransformer<V> implements Transformer<V,Paint> {
      * @param picked_paint  <code>Paint</code> used to fill picked vertex shapes
      */
     public PickableVertexPaintTransformer(PickedInfo<V> pi, 
-//    		Paint draw_paint, 
     		Paint fill_paint, Paint picked_paint)
     {
         if (pi == null)
             throw new IllegalArgumentException("PickedInfo instance must be non-null");
         this.pi = pi;
-//        this.draw_paint = draw_paint;
         this.fill_paint = fill_paint;
         this.picked_paint = picked_paint;
     }
-
-//    public Paint getDrawPaint(V v)
-//    {
-//        return draw_paint;
-//    }
 
     public Paint transform(V v)
     {
