@@ -28,6 +28,10 @@ public interface GraphElementAccessor<V, E>
      */
     V getVertex(Layout<V,E> layout, double x, double y);
     
+    /**
+     * Returns the vertices contained within {@code rectangle} relative
+     * to {@code layout}.
+     */
     Collection<V> getVertices(Layout<V,E> layout, Shape rectangle);
 
     /**
