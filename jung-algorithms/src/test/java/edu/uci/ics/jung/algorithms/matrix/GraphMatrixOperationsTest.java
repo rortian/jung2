@@ -98,9 +98,7 @@ public class GraphMatrixOperationsTest extends TestCase
             m.setQuick(edges[i][0] - 1, edges[i][1] - 1, edges[i][2]);
         
         Graph<String,String> g2 = GraphMatrixOperations.<String,String>matrixToGraph(m, 
-        		undirectedGraphFactory, directedGraphFactory,
-        		vertexFactory, edgeFactory,
-        		weights);
+        		directedGraphFactory, vertexFactory, edgeFactory, weights);
         
         DoubleMatrix2D m2 = GraphMatrixOperations.graphToSparseMatrix(g2, weights);
         
@@ -117,9 +115,7 @@ public class GraphMatrixOperationsTest extends TestCase
         }
         
         Graph<String, String> g2 = GraphMatrixOperations.<String,String>matrixToGraph(m, 
-        		undirectedGraphFactory, directedGraphFactory,
-        		vertexFactory, edgeFactory,
-        		weights);
+        		undirectedGraphFactory, vertexFactory, edgeFactory,	weights);
         
         DoubleMatrix2D m2 = GraphMatrixOperations.graphToSparseMatrix(g2, weights);
         

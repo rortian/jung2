@@ -6,10 +6,10 @@
  */
 package edu.uci.ics.jung.algorithms.matrix;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections15.BidiMap;
 import org.apache.commons.collections15.Factory;
@@ -21,10 +21,8 @@ import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import cern.colt.matrix.linalg.Algebra;
 import edu.uci.ics.jung.algorithms.util.ConstantMap;
 import edu.uci.ics.jung.algorithms.util.Indexer;
-import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
 
 
 /**
@@ -33,9 +31,6 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * <p>
  * These implementations are efficient on sparse graphs, but may not be the best
  * implementations for very dense graphs.
- * <P>
- * Anticipated additions to this class: methods for taking products and inverses
- * of graphs.
  * 
  * @author Joshua O'Madadhain
  * @see MatrixElementOperations
@@ -98,19 +93,26 @@ public class GraphMatrixOperations
     }
 
     /**
-     * Creates a graph from a square (weighted) adjacency matrix. If 
-     * <code>nev</code> is non-null then
-     * the weight is stored as a Double as specified by the implementation
-     * of <code>nev</code>.   If the matrix is symmetric, then the graph will
-     * be constructed as a sparse undirected graph; otherwise, 
-     * it will be constructed as a sparse directed graph.
+     * Creates a graph from a square (weighted) adjacency matrix.  If 
+     * <code>nev</code> is non-null then it will be used to store the edge weights.
+     * 
+     * <p>Notes on implementation: 
+     * <ul>
+     * <li>The matrix indices will be mapped onto vertices in the order in which the
+     * vertex factory generates the vertices.  This means the user is responsible
+     * <li>The type of edges created (directed or undirected) depends
+     * entirely on the graph factory supplied, regardless of whether the 
+     * matrix is symmetric or not.  The Colt {@code Property.isSymmetric} 
+     * method may be used to find out whether the matrix
+     * is symmetric prior to making this call.
+     * <li>The matrix supplied need not be square.  If it is not square, then 
+     * the 
      * 
      * @return a representation of <code>matrix</code> as a JUNG
      *         <code>Graph</code>
      */
     public static <V,E> Graph<V,E> matrixToGraph(DoubleMatrix2D matrix, 
-    		Factory<UndirectedGraph<V,E>> undirectedGraphFactory,
-    		Factory<DirectedGraph<V,E>> directedGraphFactory,
+    		Factory<? extends Graph<V,E>> graphFactory,
     		Factory<V> vertexFactory, Factory<E> edgeFactory, 
     		Map<E,Number> nev)
     {
@@ -119,30 +121,17 @@ public class GraphMatrixOperations
             throw new IllegalArgumentException("Matrix must be square.");
         }
         int size = matrix.rows();
-        boolean isSymmetric = true;
-        outer: for (int i = 0; i < size; i++)
+
+        Graph<V,E> graph = graphFactory.create();
+        
+        List<V> vertices = new ArrayList<V>(size);
+        for(int i = 0; i < size; i++) 
         {
-            for (int j = 0; j < size; j++)
-            {
-                if (matrix.getQuick(i, j) != matrix.getQuick(j, i))
-                {
-                    isSymmetric = false;
-                    break outer;
-                }
-            }
-        }
-        
-        Graph<V,E> graph;
-        if (isSymmetric)
-            graph = undirectedGraphFactory.create();
-        else
-            graph = directedGraphFactory.create();
-        
-        for(int i=0; i<size; i++) {
-        	graph.addVertex(vertexFactory.create());
+            V vertex = vertexFactory.create();
+            vertices.add(vertex);
+        	graph.addVertex(vertex);
         }
 
-        BidiMap<V,Integer> indexer = Indexer.<V>create(graph.getVertices());
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -150,19 +139,8 @@ public class GraphMatrixOperations
                 double value = matrix.getQuick(i, j);
                 if (value != 0)
                 {
-                    V vI = indexer.getKey(i);
-                    V vJ = indexer.getKey(j);
                     E e = edgeFactory.create();
-                    if (isSymmetric)
-                    {
-                        if (i <= j) {
-                        	graph.addEdge(e, vI, vJ);
-                        }
-                    }
-                    else
-                    {
-                    	graph.addEdge(e, vI, vJ, EdgeType.DIRECTED);
-                    }
+                    graph.addEdge(e, vertices.get(i), vertices.get(j));
                     if (e != null && nev != null)
                         nev.put(e, value);
                 }
@@ -171,77 +149,29 @@ public class GraphMatrixOperations
         return graph;
     }
     
-    /**
-     * Creates a graph from a square (weighted) adjacency matrix.  
-     * If the weight key is non-null then
-     * the weight is stored as a Double in the given edge's user data under the
-     * specified key name.  If the matrix is symmetric, then the graph will
-     * be constructed as a sparse undirected graph; otherwise 
-     * it will be constructed as a sparse directed graph.
-     * 
-     * @param weightKey the user data key to use to store or retrieve the edge weights
-     * @return a representation of <code>matrix</code> as a JUNG <code>Graph</code>
-     */
-    public static <V,E> Graph<V,E> matrixToGraph(DoubleMatrix2D matrix, 
-    		Factory<UndirectedGraph<V,E>> undirectedGraphFactory,
-    		Factory<DirectedGraph<V,E>> directedGraphFactory,
-    		Factory<V> vertexFactory, Factory<E> edgeFactory, 
-    		String weightKey)
-    {
-        if (weightKey == null)
-            return GraphMatrixOperations.<V,E>matrixToGraph(matrix, 
-            		undirectedGraphFactory, directedGraphFactory,
-            		vertexFactory, edgeFactory, 
-            		(Map<E,Number>)null);
-        else
-        {
-            Map<E,Number> nev = new HashMap<E,Number>();
-            return GraphMatrixOperations.<V,E>matrixToGraph(matrix, 
-               		undirectedGraphFactory, directedGraphFactory,
-            		vertexFactory, edgeFactory, 
-            		nev);
-        }
-    }
-
-    
     
     /**
      * Creates a graph from a square (weighted) adjacency matrix.
-     * Equivalent to <code>matrixToGraph(matrix, (NumberEdgeValue)null)</code>.
      *  
      * @return a representation of <code>matrix</code> as a JUNG <code>Graph</code>
-     * 
      */
     public static <V,E> Graph<V,E> matrixToGraph(DoubleMatrix2D matrix,
-    		Factory<UndirectedGraph<V,E>> undirectedGraphFactory,
-    		Factory<DirectedGraph<V,E>> directedGraphFactory,
-    		Factory<V> vertexFactory, Factory<E> edgeFactory
-    		)
+    		Factory<? extends Graph<V,E>> graphFactory,
+    		Factory<V> vertexFactory, Factory<E> edgeFactory)
     {
         return GraphMatrixOperations.<V,E>matrixToGraph(matrix, 
-           		undirectedGraphFactory, directedGraphFactory,
-        		vertexFactory, edgeFactory, 
-        		(Map<E,Number>)null);
+                graphFactory, vertexFactory, edgeFactory, null);
     }
     
     /**
-     * Returns a SparseDoubleMatrix2D which represents the edge weights of the
-     * input Graph.
-     * 
-     * @return SparseDoubleMatrix2D
+     * Returns an unweighted (0-1) adjacency matrix based on the specified graph.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     * @param g the graph to convert to a matrix
      */
-//    public static <V,E> SparseDoubleMatrix2D graphToSparseMatrix(Graph<V,E> g,
-//            Map<E,Number> edgeWeightKey)
-//    {
-//        if (edgeWeightKey == null)
-//            return GraphMatrixOperations.<V,E>graphToSparseMatrix(g);
-//        else
-//            return GraphMatrixOperations.<V,E>graphToSparseMatrix(g, edgeWeightKey);
-//    }
-    
     public static <V,E> SparseDoubleMatrix2D graphToSparseMatrix(Graph<V,E> g)
     {
-        return graphToSparseMatrix(g, new ConstantMap<E,Number>(1));
+        return graphToSparseMatrix(g, null);
     }
     
     /**
@@ -285,6 +215,11 @@ public class GraphMatrixOperations
      * Returns a diagonal matrix whose diagonal entries contain the degree for
      * the corresponding node.
      * 
+     * <p>NOTE: the vertices will be traversed in the order given by the graph's vertex 
+     * collection.  If you want to be assured of a particular ordering, use a graph 
+     * implementation that guarantees such an ordering (see the implementations with {@code Ordered}
+     * or {@code Sorted} in their name).
+     * 
      * @return SparseDoubleMatrix2D
      */
     public static <V,E> SparseDoubleMatrix2D createVertexDegreeDiagonalMatrix(Graph<V,E> graph)
@@ -292,11 +227,11 @@ public class GraphMatrixOperations
         int numVertices = graph.getVertexCount();
         SparseDoubleMatrix2D matrix = new SparseDoubleMatrix2D(numVertices,
                 numVertices);
-        BidiMap<V,Integer> indexer = Indexer.<V>create(graph.getVertices());
+        int i = 0;
         for (V v : graph.getVertices())
         {
-        	int vi = indexer.get(v);
-            matrix.set(vi,vi, graph.degree(v));
+            matrix.set(i, i, graph.degree(v));
+            i++;
         }
         return matrix;
     }
@@ -353,20 +288,20 @@ public class GraphMatrixOperations
 
     /**
      * Converts a Map of (Vertex, Double) pairs to a DoubleMatrix1D.
+     * 
+     * <p>Note: the vertices will appear in the output array in the order given
+     * by {@code map}'s iterator.  If you want a particular ordering, use a {@code Map}
+     * implementation that provides such an ordering ({@code SortedMap, LinkedHashMap}, etc.).
      */
-    public static <V,E> DoubleMatrix1D mapTo1DMatrix(Map<V,Number> map)
+    public static <V> DoubleMatrix1D mapTo1DMatrix(Map<V,Number> map)
     {
         int numVertices = map.size();
         DoubleMatrix1D vector = new DenseDoubleMatrix1D(numVertices);
-        Set<V> vertices = map.keySet();
-        BidiMap<V,Integer> indexer = Indexer.<V>create(vertices);
-        for (V v : vertices)
+        int i = 0;
+        for (V v : map.keySet())
         {
-            int v_id = indexer.get(v);
-            if (v_id < 0 || v_id > numVertices)
-                throw new IllegalArgumentException("Vertex ID not "
-                        + "supported by mapTo1DMatrix: outside range [0,n-1]");
-            vector.set(v_id, map.get(v).doubleValue());
+            vector.set(i, map.get(v).doubleValue());
+            i++;
         }
         return vector;
     }
