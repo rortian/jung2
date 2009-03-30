@@ -32,6 +32,11 @@ public class UndirectedSparseGraph<V, E> extends AbstractTypedGraph<V, E>
         implements UndirectedGraph<V, E>, Serializable
 {
 
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
     public static <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
         return new Factory<UndirectedGraph<V,E>> () {
 
@@ -44,6 +49,9 @@ public class UndirectedSparseGraph<V, E> extends AbstractTypedGraph<V, E>
     protected Map<V, Map<V,E>> vertices; // Map of vertices to adjacency maps of vertices to incident edges
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
+    /**
+     * Creates an instance.
+     */
     public UndirectedSparseGraph() {
     	super(EdgeType.UNDIRECTED);
         vertices = new HashMap<V, Map<V,E>>();
@@ -61,11 +69,8 @@ public class UndirectedSparseGraph<V, E> extends AbstractTypedGraph<V, E>
         V v1 = new_endpoints.getFirst();
         V v2 = new_endpoints.getSecond();
         
-        E connection = findEdge(v1, v2);
-        if (connection != null)
-            throw new IllegalArgumentException("This graph does not accept " +
-            		"parallel edges; " + new_endpoints + 
-                    " are already connected by " + connection); 
+        if (findEdge(v1, v2) != null)
+            return false;
         
         edges.put(edge, new_endpoints);
 
