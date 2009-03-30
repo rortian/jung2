@@ -24,7 +24,12 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, Serializable {
 	
-	public static final <V,E> Factory<Tree<V,E>> getFactory() {
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
+    public static final <V,E> Factory<Tree<V,E>> getFactory() {
 		return new Factory<Tree<V,E>> () {
 			public Tree<V,E> create() {
 				return new DelegateTree<V,E>(new DirectedSparseMultigraph<V,E>());
@@ -35,6 +40,9 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
 	protected V root;
     protected Map<V, Integer> vertex_depths;
     
+    /**
+     * Creates an instance.
+     */
     public DelegateTree() {
     	this(DirectedSparseMultigraph.<V,E>getFactory());
     }
@@ -312,10 +320,6 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>,
         if (!delegate.containsVertex(v))
             return false;
 		return getParent(v) == null;
-	}
-
-	public Collection<V> getRoots() {
-		return Collections.singleton(getRoot());
 	}
 
 	@Override
