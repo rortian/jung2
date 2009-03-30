@@ -57,11 +57,21 @@ public abstract class AbstractGraph<V, E> implements Graph<V,E> {
 		return addEdge(e, new Pair<V>(v1, v2), edge_type);
 	}
 	
+	/**
+	 * Adds {@code edge} to this graph with the specified {@code endpoints},
+	 * with the default edge type.
+	 * @return {@code} true iff the graph was modified as a result of this call
+	 */
 	public boolean addEdge(E edge, Pair<? extends V> endpoints)
 	{
 		return addEdge(edge, endpoints, this.getDefaultEdgeType());
 	}
 	
+    /**
+     * Adds {@code edge} to this graph with the specified {@code endpoints}
+     * and {@code EdgeType}.
+     * @return {@code} true iff the graph was modified as a result of this call
+     */
 	public abstract boolean addEdge(E edge, Pair<? extends V> endpoints, EdgeType edgeType);
 
     protected Pair<V> getValidatedEndpoints(E edge, Pair<? extends V> endpoints)

@@ -37,6 +37,10 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 	protected Layout<V,E> delegate;
 	protected Map<Layout<V,E>,Point2D> layouts = new HashMap<Layout<V,E>,Point2D>();
 
+	/**
+	 * Creates an instance backed by the specified {@code delegate}.
+	 * @param delegate
+	 */
 	public AggregateLayout(Layout<V, E> delegate) {
 		this.delegate = delegate;
 	}
@@ -74,10 +78,16 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 		return layouts.get(layout);
 	}
 	
+	/**
+	 * Removes {@code layout} from this instance.
+	 */
 	public void remove(Layout<V,E> layout) {
 		layouts.remove(layout);
 	}
 	
+	/**
+	 * Removes all layouts from this instance.
+	 */
 	public void removeAll() {
 		layouts.clear();
 	}
@@ -204,6 +214,9 @@ public class AggregateLayout<V, E> implements Layout<V,E>, IterativeContext {
 		delegate.setSize(d);
 	}
 	
+	/**
+	 * Returns a map from each {@code Layout} instance to its center point.
+	 */
 	public Map<Layout<V,E>,Point2D> getLayouts() {
 		return layouts;
 	}

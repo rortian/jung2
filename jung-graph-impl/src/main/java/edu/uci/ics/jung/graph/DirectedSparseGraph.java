@@ -31,7 +31,12 @@ import edu.uci.ics.jung.graph.util.Pair;
 public class DirectedSparseGraph<V,E> extends AbstractTypedGraph<V, E> implements
         DirectedGraph<V, E>, Serializable
 {
-    public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
+   public static final <V,E> Factory<DirectedGraph<V,E>> getFactory() {
         return new Factory<DirectedGraph<V,E>> () {
             public DirectedGraph<V,E> create() {
                 return new DirectedSparseGraph<V,E>();
@@ -43,6 +48,9 @@ public class DirectedSparseGraph<V,E> extends AbstractTypedGraph<V, E> implement
                                                 // of neighboring vertices to incident edges
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
+    /**
+     * Creates an instance.
+     */
     public DirectedSparseGraph() 
     {
     	super(EdgeType.DIRECTED);

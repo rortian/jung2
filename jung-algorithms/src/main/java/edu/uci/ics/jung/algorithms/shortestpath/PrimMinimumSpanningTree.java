@@ -17,24 +17,25 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * @author Tom Nelson - tomnelson@dev.java.net
  *
- * @param <V>
- * @param <E>
+ * @param <V> the vertex type
+ * @param <E> the edge type
  */
 @SuppressWarnings("unchecked")
 public class PrimMinimumSpanningTree<V,E> implements Transformer<Graph<V,E>,Graph<V,E>> {
 	
 	protected Factory<? extends Graph<V,E>> treeFactory;
-	protected Transformer<E,Double> weights = 
-		new ConstantTransformer(1.0);
+	protected Transformer<E,Double> weights; 
 	
+	/**
+	 * Creates an instance which generates a minimum spanning tree assuming constant edge weights.
+	 */
 	public PrimMinimumSpanningTree(Factory<? extends Graph<V,E>> factory) {
-		this(factory, null);
+		this(factory, new ConstantTransformer(1.0));
 	}
 
-	/**
-	 * @param factory
-	 * @param weights
-	 */
+    /**
+     * Creates an instance which generates a minimum spanning tree using the input edge weights.
+     */
 	public PrimMinimumSpanningTree(Factory<? extends Graph<V,E>> factory, 
 			Transformer<E, Double> weights) {
 		this.treeFactory = factory;

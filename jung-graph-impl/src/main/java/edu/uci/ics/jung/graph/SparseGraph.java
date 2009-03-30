@@ -33,6 +33,11 @@ public class SparseGraph<V,E>
     extends AbstractGraph<V,E> 
     implements Graph<V,E>, Serializable
 {
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
     public static <V,E> Factory<Graph<V,E>> getFactory() 
     { 
         return new Factory<Graph<V,E>> () 
@@ -52,6 +57,9 @@ public class SparseGraph<V,E>
     protected Map<E, Pair<V>> directed_edges;    // Map of directed edges to incident vertex sets
     protected Map<E, Pair<V>> undirected_edges;    // Map of undirected edges to incident vertex sets
     
+    /**
+     * Creates an instance.
+     */
     public SparseGraph()
     {
         vertex_maps = new HashMap<V, Map<V,E>[]>();
