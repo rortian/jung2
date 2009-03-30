@@ -21,9 +21,16 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
 @SuppressWarnings("serial")
 public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E>, Serializable {
 	
+	/**
+	 * Creates an instance backed by a new {@code DirectedSparseGraph} instance.
+	 */
 	public DelegateForest() {
 		this(new DirectedSparseGraph<V,E>());
 	}
+	
+	/**
+	 * Creates an instance backed by the input {@code DirectedGraph} i
+	 */
 	public DelegateForest(DirectedGraph<V,E> delegate) {
 		super(delegate);
 	}
@@ -237,6 +244,11 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 		return getChildren(v).size() == 0;
 	}
 
+	/**
+	 * Returns the children of the specified vertex
+	 * @param v
+	 * @return
+	 */
 	public Collection<V> getChildren(V v) {
 		return delegate.getSuccessors(v);
 	}
@@ -266,6 +278,9 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 		return addEdge(edge, pair.getFirst(), pair.getSecond());
 	}
 	
+	/**
+	 * Returns the root of each tree of this forest as a {@code Collection}.
+	 */
 	public Collection<V> getRoots() {
 		Collection<V> roots = new HashSet<V>();
 		for(V v : delegate.getVertices()) {
@@ -287,8 +302,30 @@ public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V
 		return trees;
 	}
 	
+	/**
+	 * Adds {@code tree} to this graph as an element of this forest.
+	 * 
+	 * @param tree the tree to add to this forest as a component
+	 */
 	public void addTree(Tree<V,E> tree) {
 		TreeUtils.addSubTree(this, tree, null, null);
 	}
+
+    public int getChildCount(V vertex)
+    {
+        return delegate.getSuccessorCount(vertex);
+    }
+
+    public Collection<E> getChildEdges(V vertex)
+    {
+        return delegate.getOutEdges(vertex);
+    }
+
+    public E getParentEdge(V vertex)
+    {
+        if (isRoot(vertex))
+            return null;
+        return delegate.getInEdges(vertex).iterator().next();
+    }
 
 }

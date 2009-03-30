@@ -20,13 +20,23 @@ public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 	List<GraphEventListener<V,E>> listenerList = 
 		Collections.synchronizedList(new LinkedList<GraphEventListener<V,E>>());
 
+    /**
+     * Creates a new instance based on the provided {@code delegate}.
+     */
 	public ObservableGraph(Graph<V, E> delegate) {
 		super(delegate);
 	}
+	
+	/**
+	 * Adds {@code l} as a listener to this graph.
+	 */
 	public void addGraphEventListener(GraphEventListener<V,E> l) {
 		listenerList.add(l);
 	}
 
+    /**
+     * Removes {@code l} as a listener to this graph.
+     */
 	public void removeGraphEventListener(GraphEventListener<V,E> l) {
 		listenerList.remove(l);
 	}

@@ -40,6 +40,11 @@ public class DefaultParallelEdgeIndexFunction<V,E> implements EdgeIndexFunction<
     private DefaultParallelEdgeIndexFunction() {
     }
     
+    /**
+     * Returns an instance of this class.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     */
     public static <V,E> DefaultParallelEdgeIndexFunction<V,E> getInstance() {
         return new DefaultParallelEdgeIndexFunction<V,E>();
     }

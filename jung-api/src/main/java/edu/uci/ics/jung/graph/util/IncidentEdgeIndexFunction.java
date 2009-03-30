@@ -31,6 +31,11 @@ public class IncidentEdgeIndexFunction<V,E> implements EdgeIndexFunction<V,E>
     private IncidentEdgeIndexFunction() {
     }
     
+    /**
+     * Returns an instance of this type.
+     * @param <V> the vertex type
+     * @param <E> the edge type
+     */
     public static <V,E> IncidentEdgeIndexFunction<V,E> getInstance() {
         return new IncidentEdgeIndexFunction<V,E>();
     }

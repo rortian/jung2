@@ -15,6 +15,10 @@ public class GraphDecorator<V,E> implements Graph<V,E> {
 	
 	protected Graph<V,E> delegate;
 
+    /**
+     * Creates a new instance based on the provided {@code delegate}.
+     * @param delegate
+     */
 	public GraphDecorator(Graph<V, E> delegate) {
 		this.delegate = delegate;
 	}

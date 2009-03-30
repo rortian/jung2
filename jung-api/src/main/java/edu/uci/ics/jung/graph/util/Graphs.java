@@ -499,6 +499,10 @@ public class Graphs {
 	@SuppressWarnings("serial")
     static class SynchronizedTree<V,E> extends SynchronizedForest<V,E> implements Tree<V,E> {
 
+		/**
+		 * Creates a new instance based on the provided {@code delegate}.
+		 * @param delegate
+		 */
 		public SynchronizedTree(Tree<V, E> delegate) {
 			super(delegate);
 		}
@@ -514,31 +518,15 @@ public class Graphs {
 		public synchronized V getRoot() {
 			return ((Tree<V,E>)delegate).getRoot();
 		}
-
-        public Collection<E> getChildEdges(V vertex) {
-            return getOutEdges(vertex);
-        }
-    
-        public Collection<V> getChildren(V vertex) {
-            return getSuccessors(vertex);
-        }
-    
-        public V getParent(V vertex) {
-            return getPredecessors(vertex).iterator().next();
-        }
-    
-        public E getParentEdge(V vertex) {
-            return getInEdges(vertex).iterator().next();
-        }
-
-        public int getChildCount(V vertex) {
-            return getSuccessorCount(vertex);
-        }
 	}
 	
 	@SuppressWarnings("serial")
     static class SynchronizedForest<V,E> extends SynchronizedDirectedGraph<V,E> implements Forest<V,E> {
 
+        /**
+         * Creates a new instance based on the provided {@code delegate}.
+         * @param delegate
+         */
 		public SynchronizedForest(Forest<V, E> delegate) {
 			super(delegate);
 		}
@@ -546,6 +534,31 @@ public class Graphs {
 		public synchronized Collection<Tree<V, E>> getTrees() {
 			return ((Forest<V,E>)delegate).getTrees();
 		}
+
+        public int getChildCount(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getChildCount(vertex);
+        }
+
+        public Collection<E> getChildEdges(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getChildEdges(vertex);
+        }
+
+        public Collection<V> getChildren(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getChildren(vertex);
+        }
+
+        public V getParent(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getParent(vertex);
+        }
+
+        public E getParentEdge(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getParentEdge(vertex);
+        }
 	}
 	
 	@SuppressWarnings("serial")
@@ -921,6 +934,31 @@ public class Graphs {
 		public Collection<Tree<V, E>> getTrees() {
 			return ((Forest<V,E>)delegate).getTrees();
 		}
+
+        public int getChildCount(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getChildCount(vertex);
+        }
+
+        public Collection<E> getChildEdges(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getChildEdges(vertex);
+        }
+
+        public Collection<V> getChildren(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getChildren(vertex);
+        }
+
+        public V getParent(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getParent(vertex);
+        }
+
+        public E getParentEdge(V vertex)
+        {
+            return ((Forest<V,E>)delegate).getParentEdge(vertex);
+        }
 	}
 	
 	@SuppressWarnings("serial")
@@ -946,26 +984,6 @@ public class Graphs {
     	public Collection<Tree<V, E>> getTrees() {
 			return ((Tree<V,E>)delegate).getTrees();
 		}
-		
-        public Collection<E> getChildEdges(V vertex) {
-          return getOutEdges(vertex);
-        }
-  
-        public Collection<V> getChildren(V vertex) {
-            return getSuccessors(vertex);
-        }
-    
-        public V getParent(V vertex) {
-            return getPredecessors(vertex).iterator().next();
-        }
-    
-        public E getParentEdge(V vertex) {
-            return getInEdges(vertex).iterator().next();
-        }
-
-        public int getChildCount(V vertex) {
-            return getSuccessorCount(vertex);
-        }
 	}
 
 }
