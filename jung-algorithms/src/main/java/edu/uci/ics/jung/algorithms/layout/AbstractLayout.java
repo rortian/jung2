@@ -12,7 +12,6 @@ package edu.uci.ics.jung.algorithms.layout;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
-import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -139,10 +138,6 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
         return dontmove.contains(v);
     }
     
-    public Collection<V> getVertices() {
-    	return getGraph().getVertices();
-    }
-    
     @SuppressWarnings("unchecked")
     public void setInitializer(Transformer<V,Point2D> initializer) {
 		Transformer<V, ? extends Object> chain = 
@@ -231,13 +226,18 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
 	}
 
 	/**
-	 * Adds the vertex to the DontMove list
+	 * Locks {@code v} in place if {@code state} is {@code true}, otherwise unlocks it.
 	 */
 	public void lock(V v, boolean state) {
-		if(state == true) dontmove.add(v);
-		else dontmove.remove(v);
+		if(state == true) 
+		    dontmove.add(v);
+		else 
+		    dontmove.remove(v);
 	}
 	
+	/**
+	 * Locks all vertices in place if {@code lock} is {@code true}, otherwise unlocks all vertices.
+	 */
 	public void lock(boolean lock) {
 		for(V v : graph.getVertices()) {
 			lock(v, lock);
