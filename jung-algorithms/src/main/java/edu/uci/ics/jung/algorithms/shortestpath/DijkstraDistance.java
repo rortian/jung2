@@ -262,6 +262,10 @@ public class DijkstraDistance<V,E> implements Distance<V>
     }
     
 
+    /**
+     * Returns a {@code Map} from each element {@code t} of {@code targets} to the 
+     * shortest-path distance from {@code source} to {@code t}. 
+     */
     public Map<V,Number> getDistanceMap(V source, Collection<V> targets)
     {
        if (g.containsVertex(source) == false)
@@ -442,7 +446,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
     {
         private Map<V,Number> distances;
         
-        public VertexComparator(Map<V,Number> distances)
+        protected VertexComparator(Map<V,Number> distances)
         {
             this.distances = distances;
         }
@@ -463,13 +467,13 @@ public class DijkstraDistance<V,E> implements Distance<V>
      */
     protected class SourceData
     {
-        public LinkedHashMap<V,Number> distances;
-        public Map<V,Number> estimatedDistances;
-        public MapBinaryHeap<V> unknownVertices;
-        public boolean reached_max = false;
-        public double dist_reached = 0;
+        protected LinkedHashMap<V,Number> distances;
+        protected Map<V,Number> estimatedDistances;
+        protected MapBinaryHeap<V> unknownVertices;
+        protected boolean reached_max = false;
+        protected double dist_reached = 0;
 
-        public SourceData(V source)
+        protected SourceData(V source)
         {
             distances = new LinkedHashMap<V,Number>();
             estimatedDistances = new HashMap<V,Number>();
@@ -484,7 +488,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
             dist_reached = 0;
         }
         
-        public Map.Entry<V,Number> getNextVertex()
+        protected Map.Entry<V,Number> getNextVertex()
         {
             V v = unknownVertices.remove();
             Double dist = (Double)estimatedDistances.remove(v);
@@ -492,13 +496,13 @@ public class DijkstraDistance<V,E> implements Distance<V>
             return new BasicMapEntry<V,Number>(v, dist);
         }
         
-        public void update(V dest, E tentative_edge, double new_dist)
+        protected void update(V dest, E tentative_edge, double new_dist)
         {
             estimatedDistances.put(dest, new Double(new_dist));
             unknownVertices.update(dest);
         }
         
-        public void createRecord(V w, E e, double new_dist)
+        protected void createRecord(V w, E e, double new_dist)
         {
             estimatedDistances.put(w, new Double(new_dist));
             unknownVertices.add(w);
