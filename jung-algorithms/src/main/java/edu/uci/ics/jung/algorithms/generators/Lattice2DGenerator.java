@@ -10,19 +10,22 @@
 
 package edu.uci.ics.jung.algorithms.generators;
 
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.Graph;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.collections15.Factory;
 
-import java.util.ArrayList;
-import java.util.List;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 
 /**
  * Simple generator of an m x n lattice where each vertex
  * is incident with each of its neighbors (to the left, right, up, and down).
  * May be toroidal, in which case the vertices on the edges are connected to
  * their counterparts on the opposite edges as well.
+ * 
+ * <p>If the graph factory supplied has a default edge type of {@code EdgeType.DIRECTED},
+ * then edges will be created in both directions between adjacent vertices.
  * 
  * @author Joshua O'Madadhain
  */
@@ -39,9 +42,14 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
     // FIXME: needs unit tests
     
     /**
-     * Constructs an instance of the lattice generator
-     * @param latticeSize the size of the lattice, n, thus creating an n x n lattice.
-     * @param isToroidal whether the lattice wraps around or not
+     * Constructs a generator of square lattices of size {@code latticeSize} 
+     * with the specified parameters.
+     * 
+     * @param graph_factory used to create the {@code Graph} for the lattice
+     * @param vertex_factory used to create the lattice vertices
+     * @param edge_factory used to create the lattice edges
+     * @param latticeSize the number of rows and columns of the lattice
+     * @param isToroidal if true, the created lattice wraps from top to bottom and left to right
      */
     public Lattice2DGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int latticeSize, boolean isToroidal)
@@ -49,6 +57,17 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
         this(graph_factory, vertex_factory, edge_factory, latticeSize, latticeSize, isToroidal);
     }
 
+    /**
+     * Creates a generator of {@code row_count} x {@code col_count} lattices 
+     * with the specified parameters.
+     * 
+     * @param graph_factory used to create the {@code Graph} for the lattice
+     * @param vertex_factory used to create the lattice vertices
+     * @param edge_factory used to create the lattice edges
+     * @param row_count the number of rows in the lattice
+     * @param col_count the number of columns in the lattice
+     * @param isToroidal if true, the created lattice wraps from top to bottom and left to right
+     */
     public Lattice2DGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int row_count, int col_count, boolean isToroidal)
     {
@@ -96,7 +115,7 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
                 graph.addEdge(edge_factory.create(), getVertex(i,j), getVertex(i, j+1));
 
         // if the graph is directed, fill in the edges going the other direction...
-        if (graph instanceof DirectedGraph)
+        if (graph.getDefaultEdgeType() == EdgeType.DIRECTED)
         {
             // up
             for (int i = start; i < row_count; i++)
