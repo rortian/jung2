@@ -25,13 +25,13 @@ import edu.uci.ics.jung.graph.Hypergraph;
  * Assigns scores to vertices based on their distances to each other vertex 
  * in the graph.
  * 
- * NOTE: This class optionally normalizes its results based on the value of its
+ * This class optionally normalizes its results based on the value of its
  * 'averaging' constructor parameter.  If it is <code>true</code>, 
- * then the value returned for vertex v is the
- * _average_ distance from v to all other vertices; 
+ * then the value returned for vertex v is 1 / (_average_ distance from v to all other vertices); 
  * this is sometimes called <i>closeness centrality</i>.
- * If it is <code>false</code>, then the value returned is the _total_ distance from
- * v to all other vertices; this is sometimes referred to as <i>barycenter centrality</i>.
+ * If it is <code>false</code>, then the value returned is 1 / (_total_ distance from
+ * v to all other vertices); this is sometimes referred to as <i>barycenter centrality</i>.
+ * (If the average/total distance is 0, the value returned is {@code Double.POSITIVE_INFINITY}.)
  * 
  * @see BarycenterScorer
  * @see ClosenessCentrality
@@ -233,7 +233,7 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 		if (averaging)
 		    value /= distance.getDistanceMap(v).size();
 		
-	    output.put(v, value);
+	    output.put(v, value == 0 ? Double.POSITIVE_INFINITY : 1.0 / value);
 		   
 		return value;
 	}
