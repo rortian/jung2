@@ -44,17 +44,28 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
 
     // FIXME: needs unit tests
     
-   /**
-    * Constructs the small world graph generator.
-    * @param latticeSize the lattice size (length of row or column dimension)
-    * @param clusteringExponent the clustering exponent parameter (somewhere around 2 is a good choice)
-    */
+    /**
+     * Creates 
+     * @param graph_factory
+     * @param vertex_factory
+     * @param edge_factory
+     * @param latticeSize
+     * @param clusteringExponent
+     */
     public KleinbergSmallWorldGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int latticeSize, double clusteringExponent) 
     {
         this(graph_factory, vertex_factory, edge_factory, latticeSize, latticeSize, clusteringExponent);
     }
 
+    /**
+     * @param graph_factory
+     * @param vertex_factory
+     * @param edge_factory
+     * @param row_count
+     * @param col_count
+     * @param clusteringExponent
+     */
     public KleinbergSmallWorldGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int row_count, int col_count, double clusteringExponent) 
     {
@@ -63,6 +74,15 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
         initialize();
     }
 
+    /**
+     * @param graph_factory
+     * @param vertex_factory
+     * @param edge_factory
+     * @param row_count
+     * @param col_count
+     * @param clusteringExponent
+     * @param isToroidal
+     */
     public KleinbergSmallWorldGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int row_count, int col_count, double clusteringExponent, 
             boolean isToroidal) 
@@ -90,6 +110,10 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
         this.random = random;
     }
     
+    /**
+     * Sets the seed of the internal random number generator.  May be used to provide repeatable
+     * experiments.
+     */
     public void setRandomSeed(long seed) 
     {
         random.setSeed(seed);

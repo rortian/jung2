@@ -345,7 +345,7 @@ public class VoltageClusterer<V,E>
     {
         private Map<V, double[]> map;
 
-        public MapValueArrayComparator(Map<V, double[]> map)
+        protected MapValueArrayComparator(Map<V, double[]> map)
         {
             this.map = map;
         }
