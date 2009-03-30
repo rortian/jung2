@@ -16,9 +16,7 @@ import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 
 import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
-import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedGraph;
 
 import org.apache.commons.collections15.Factory;
 
@@ -27,7 +25,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,8 +69,7 @@ import java.util.StringTokenizer;
 public class MatrixFile<V,E> implements GraphFile<V,E> {
 	private Map<E,Number> mWeightKey;
 
-	Factory<UndirectedGraph<V,E>> undirectedGraphFactory;
-	Factory<DirectedGraph<V,E>> directedGraphFactory;
+	Factory<? extends Graph<V,E>> graphFactory;
 	Factory<V> vertexFactory;
 	Factory<E> edgeFactory;
 
@@ -82,13 +78,11 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 	 * attempt to use that key to store and retreive weights from the edges'
 	 * UserData.
 	 */
-	public MatrixFile(Map<E, Number> weightKey, Factory<UndirectedGraph<V, E>> undirectedGraphFactory,
-			Factory<DirectedGraph<V, E>> directedGraphFactory,
+	public MatrixFile(Map<E, Number> weightKey, Factory<? extends Graph<V, E>> graphFactory,
 			Factory<V> vertexFactory, Factory<E> edgeFactory) {
 
 		mWeightKey = weightKey;
-		this.undirectedGraphFactory = undirectedGraphFactory;
-		this.directedGraphFactory = directedGraphFactory;
+		this.graphFactory = graphFactory;
 		this.vertexFactory = vertexFactory;
 		this.edgeFactory = edgeFactory;
 	}
@@ -97,25 +91,19 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 	 * Loads a graph from an input reader
 	 * @param reader the input reader
 	 * @return the graph
+	 * @throws IOException
 	 */
-	public Graph<V,E> load(BufferedReader reader) {
+	public Graph<V,E> load(BufferedReader reader) throws IOException {
 		Graph<V,E> graph = null;
-		try {
 			DoubleMatrix2D matrix = createMatrixFromFile(reader);
 			graph = GraphMatrixOperations.<V,E>matrixToGraph(matrix,
-		    		undirectedGraphFactory,
-		    		directedGraphFactory,
-		    		vertexFactory, edgeFactory, mWeightKey);
-		} catch (Exception e) {
-			throw new RuntimeException(
-				"Fatal exception calling MatrixFile.load(...)",
-				e);
-		}
+		    		graphFactory, vertexFactory, edgeFactory);
 		return graph;
 	}
 
 	private DoubleMatrix2D createMatrixFromFile(BufferedReader reader)
-		throws IOException, ParseException {
+		throws IOException
+	{
 		List<List<Double>> rows = new ArrayList<List<Double>>();
 		String currentLine = null;
 		while ((currentLine = reader.readLine()) != null) {
@@ -135,9 +123,8 @@ public class MatrixFile<V,E> implements GraphFile<V,E> {
 		for (int i = 0; i < size; i++) {
 			List<Double> currentRow = rows.get(i);
 			if (currentRow.size() != size) {
-				throw new ParseException(
-					"Matrix must have the same number of rows as columns",
-					0);
+				throw new IllegalArgumentException(
+					"Matrix must have the same number of rows as columns");
 			}
 			for (int j = 0; j < size; j++) {
 				double currentVal = currentRow.get(j);

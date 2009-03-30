@@ -26,13 +26,13 @@ import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
  *
  */
 public class TestMatrixFile extends TestCase {
-	
+
 	Factory<UndirectedGraph<Number, Number>> undirectedGraphFactory;
 	Factory<DirectedGraph<Number, Number>> directedGraphFactory;
 	Factory<Number> vertexFactory;
 	Factory<Number> edgeFactory;
 	Map<Number,Number> weights;
-	
+
     @Override
     protected void setUp() {
     	undirectedGraphFactory = new Factory<UndirectedGraph<Number,Number>>() {
@@ -90,7 +90,8 @@ public class TestMatrixFile extends TestCase {
 	}
 
 	public void testUnweightedLoadSave() {
-		MatrixFile<Number,Number> mf = new MatrixFile<Number,Number>(null, undirectedGraphFactory, directedGraphFactory, vertexFactory, edgeFactory);
+		MatrixFile<Number,Number> mf = new MatrixFile<Number,Number>(null,
+		    directedGraphFactory, vertexFactory, edgeFactory);
 		DirectedGraph<Number,Number> dg = createSimpleDirectedGraph();
 		String filename = "testMatrixLoadSaveUW.mat";
 		mf.save(dg, filename);
@@ -100,9 +101,10 @@ public class TestMatrixFile extends TestCase {
 		File file = new File(filename);
 		file.delete();
 	}
-	
+
 	public void testWeightedLoadSave() {
-		MatrixFile<Number,Number> mf = new MatrixFile<Number,Number>(weights, undirectedGraphFactory, directedGraphFactory, vertexFactory, edgeFactory);
+		MatrixFile<Number,Number> mf = new MatrixFile<Number,Number>(weights,
+		    directedGraphFactory, vertexFactory, edgeFactory);
 		DirectedGraph<Number,Number> dg = createSimpleDirectedGraph();
 		String filename = "testMatrixLoadSaveW.mat";
 		mf.save(dg, filename);
