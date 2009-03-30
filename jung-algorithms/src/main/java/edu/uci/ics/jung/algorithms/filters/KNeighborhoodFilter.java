@@ -32,6 +32,9 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 
+	/**
+	 * The type of edge to follow for defining the neighborhood.
+	 */
 	public static enum EdgeType { IN_OUT, IN, OUT }
 	private Set<V> rootNodes;
 	private int radiusK;
@@ -60,10 +63,6 @@ public class KNeighborhoodFilter<V,E> implements Filter<V,E> {
 		this.rootNodes.add(rootNode);
 		this.radiusK = radiusK;
 		this.edgeType = edgeType;
-	}
-	
-	public String getName() {
-		return "KNeighborhood(" + radiusK + "," + edgeType + ")";
 	}
 	
 	/**
