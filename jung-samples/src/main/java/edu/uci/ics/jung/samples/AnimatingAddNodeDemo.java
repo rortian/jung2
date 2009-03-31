@@ -1,35 +1,19 @@
 /*
  * Copyright (c) 2003, the JUNG Project and the Regents of the University of
  * California All rights reserved.
- * 
+ *
  * This software is open-source under the BSD license; see either "license.txt"
  * or http://jung.sourceforge.net/license.txt for a description.
- * 
+ *
  */
 
 
 package edu.uci.ics.jung.samples;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JRootPane;
-
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
-import edu.uci.ics.jung.algorithms.layout.SpringLayout.LengthFunction;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
@@ -46,15 +30,32 @@ import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.util.Animator;
 
+import org.apache.commons.collections15.functors.ConstantTransformer;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JRootPane;
+
 /**
  * A variation of AddNodeDemo that animates transitions between graph states.
- * 
+ *
  * @author Tom Nelson
  */
 public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 
     /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5345319851341875800L;
 
@@ -65,14 +66,14 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
     private AbstractLayout<Number,Number> layout = null;
 
     Timer timer;
-    
+
     boolean done;
 
     protected JButton switchLayout;
 
-    public static final LengthFunction<Number> UNITLENGTHFUNCTION = new SpringLayout.UnitLengthFunction<Number>(
-            100);
+    public static final int EDGE_LENGTH = 100;
 
+    @Override
     public void init() {
 
         //create a graph
@@ -83,7 +84,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 
 			public void handleGraphEvent(GraphEvent<Number, Number> evt) {
 				System.err.println("got "+evt);
-				
+
 			}});
         this.g = og;
         //create a graphdraw
@@ -95,7 +96,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 
 		Layout<Number,Number> staticLayout =
 			new StaticLayout<Number,Number>(g, layout);
-        
+
         vv = new VisualizationViewer<Number,Number>(staticLayout, new Dimension(600,600));
 
         JRootPane rp = this.getRootPane();
@@ -106,11 +107,11 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
         getContentPane().setFont(new Font("Serif", Font.PLAIN, 12));
 
         vv.setGraphMouse(new DefaultModalGraphMouse<Number,Number>());
-        
+
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.CNTR);
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<Number>());
         vv.setForeground(Color.white);
-        
+
         vv.addComponentListener(new ComponentAdapter() {
 
 			/**
@@ -122,17 +123,18 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 				System.err.println("resized");
 				layout.setSize(arg0.getComponent().getSize());
 			}});
-        
+
         getContentPane().add(vv);
         switchLayout = new JButton("Switch to SpringLayout");
         switchLayout.addActionListener(new ActionListener() {
 
+            @SuppressWarnings("unchecked")
             public void actionPerformed(ActionEvent ae) {
             	Dimension d = vv.getSize();//new Dimension(600,600);
                 if (switchLayout.getText().indexOf("Spring") > 0) {
                     switchLayout.setText("Switch to FRLayout");
-                    layout = 
-                    	new SpringLayout<Number,Number>(g, UNITLENGTHFUNCTION);
+                    layout =
+                    	new SpringLayout<Number,Number>(g, new ConstantTransformer(EDGE_LENGTH));
                     layout.setSize(d);
             		Relaxer relaxer = new VisRunner((IterativeContext)layout);
             		relaxer.stop();
@@ -173,6 +175,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
         timer = new Timer();
     }
 
+    @Override
     public void start() {
         validate();
         //set timer so applet will change
@@ -210,7 +213,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
                 v_prev = v1;
 
                 layout.initialize();
-                
+
         		Relaxer relaxer = new VisRunner((IterativeContext)layout);
         		relaxer.stop();
         		relaxer.prerelax();
@@ -223,7 +226,7 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 				animator.start();
 //				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
 				vv.repaint();
-                
+
             } else {
             	done = true;
             }
@@ -233,16 +236,17 @@ public class AnimatingAddNodeDemo extends javax.swing.JApplet {
 
         }
     }
-    
+
     class RemindTask extends TimerTask {
 
+        @Override
         public void run() {
             process();
             if(done) cancel();
 
         }
     }
-    
+
     public static void main(String[] args) {
     	AnimatingAddNodeDemo and = new AnimatingAddNodeDemo();
     	JFrame frame = new JFrame();

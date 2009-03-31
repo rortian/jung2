@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2003, the JUNG Project and the Regents of the University 
+ * Copyright (c) 2003, the JUNG Project and the Regents of the University
  * of California
  * All rights reserved.
  *
  * This software is open-source under the BSD license; see either
  * "license.txt" or
  * http://jung.sourceforge.net/license.txt for a description.
- * 
+ *
  * Created on Dec 4, 2003
  */
 package edu.uci.ics.jung.algorithms.layout;
@@ -26,8 +26,8 @@ import edu.uci.ics.jung.graph.Graph;
  * Any vertices with no successors are considered to be level 0, and tend
  * towards the top of the layout. Any vertex has a level one greater than the
  * maximum level of all its successors.
- * 
- * 
+ *
+ *
  * @author John Yesberg
  */
 public class DAGLayout<V, E> extends SpringLayout<V,E> {
@@ -56,7 +56,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 
 	/**
 	 * A bunch of parameters to help work out when to stop quivering.
-	 * 
+	 *
 	 * If the MeanSquareVel(ocity) ever gets below the MSV_THRESHOLD, then we
 	 * will start a final cool-down phase of COOL_DOWN_INCREMENT increments. If
 	 * the MeanSquareVel ever exceeds the threshold, we will exit the cool down
@@ -67,7 +67,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	boolean stoppingIncrements = false;
 	int incrementsLeft;
 	final int COOL_DOWN_INCREMENTS = 200;
-	
+
 	public DAGLayout(Graph<V,E> g) {
 		super(g);
 	}
@@ -102,7 +102,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	 * A recursive method for allocating the level for each vertex. Ensures
 	 * that all predecessors of v have a level which is at least one greater
 	 * than the level of v.
-	 * 
+	 *
 	 * @param v
 	 */
 	public void propagateMinimumLevel(V v) {
@@ -126,7 +126,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	/**
 	 * Sets random locations for a vertex within the dimensions of the space.
 	 * This overrides the method in AbstractLayout
-	 * 
+	 *
 	 * @param coord
 	 * @param d
 	 */
@@ -149,21 +149,13 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			initializeLocation(v,transform(v),getSize());
 		}
 	}
-	
+
 	/**
 	 * Had to override this one as well, to ensure that setRoot() is called.
 	 */
 	@Override
 	public void initialize() {
 		super.initialize();
-		for(E e : getGraph().getEdges()) {
-			SpringEdgeData<E> sed = getSpringEdgeData(e);
-			if (sed == null) {
-				sed = new SpringEdgeData<E>(e);
-				springEdgeData.put(e, sed);
-			}
-			calcEdgeLength(sed, lengthFunction);
-		}
 		setRoot(getGraph());
 	}
 
@@ -183,7 +175,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			for(V v : getGraph().getVertices()) {
 				if (isLocked(v))
 					continue;
-				SpringLayout.SpringVertexData vd = getSpringVertexData(v);
+				SpringLayout.SpringVertexData vd = springVertexData.get(v);
 				Point2D xyd = transform(v);
 
 				int width = getSize().width;
@@ -287,7 +279,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	/**
 	 * Overridden relaxEdges. This one reduces the effect of edges between
 	 * greatly different levels.
-	 *  
+	 *
 	 */
 	@Override
 	protected void relaxEdges() {
@@ -308,8 +300,9 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			int level2 =
 				minLevels.get(v2).intValue();
 
-			double desiredLen = getLength(e);
 			// desiredLen *= Math.pow( 1.1, (v1.degree() + v2.degree()) );
+//          double desiredLen = getLength(e);
+			double desiredLen = lengthFunction.transform(e);
 
 			// round from zero, if needed [zero would be Bad.].
 			len = (len == 0) ? .0001 : len;
@@ -321,7 +314,7 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			// System.out.println("Desired : " + getLength( e ));
 			double f = force_multiplier * (desiredLen - len) / len;
 
-			f = f * Math.pow(stretch / 100.0, 
+			f = f * Math.pow(stretch / 100.0,
 					(getGraph().degree(v1) + getGraph().degree(v2) -2));
 
 			// JY addition. If this is an edge which stretches a long way,
@@ -336,11 +329,11 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 			double dx = f * vx;
 			double dy = f * vy;
 			SpringVertexData v1D, v2D;
-			v1D = getSpringVertexData(v1);
-			v2D = getSpringVertexData(v2);
+			v1D = springVertexData.get(v1);
+			v2D = springVertexData.get(v2);
 
-			SpringEdgeData<E> sed = getSpringEdgeData(e);
-			sed.f = f;
+//			SpringEdgeData<E> sed = getSpringEdgeData(e);
+//			sed.f = f;
 
 			v1D.edgedx += dx;
 			v1D.edgedy += dy;
