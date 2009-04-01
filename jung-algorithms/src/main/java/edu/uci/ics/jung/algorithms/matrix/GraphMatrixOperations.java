@@ -124,14 +124,13 @@ public class GraphMatrixOperations
 
         Graph<V,E> graph = graphFactory.create();
         
-        List<V> vertices = new ArrayList<V>(size);
         for(int i = 0; i < size; i++) 
         {
             V vertex = vertexFactory.create();
-            vertices.add(vertex);
         	graph.addVertex(vertex);
         }
 
+        List<V> vertices = new ArrayList<V>(graph.getVertices());
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -140,12 +139,16 @@ public class GraphMatrixOperations
                 if (value != 0)
                 {
                     E e = edgeFactory.create();
-                    graph.addEdge(e, vertices.get(i), vertices.get(j));
-                    if (e != null && nev != null)
-                        nev.put(e, value);
+                    if (graph.addEdge(e, vertices.get(i), vertices.get(j)))
+                    {
+                        if (e != null && nev != null)
+                            nev.put(e, value);
+                    }
                 }
             }
         }
+        
+        
         return graph;
     }
     

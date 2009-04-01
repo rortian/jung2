@@ -16,11 +16,13 @@ import org.apache.commons.collections15.Factory;
 import cern.colt.matrix.DoubleMatrix2D;
 import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import edu.uci.ics.jung.graph.DirectedGraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 /**
  * 
@@ -56,17 +58,17 @@ public class GraphMatrixOperationsTest extends TestCase
     {
     	undirectedGraphFactory = new Factory<UndirectedGraph<String,String>>() {
     		public UndirectedGraph<String,String> create() {
-    			return new UndirectedSparseMultigraph<String,String>();
+    			return new UndirectedSparseGraph<String,String>();
     		}
     	};
     	directedGraphFactory = new Factory<DirectedGraph<String,String>>() {
     		public DirectedGraph<String,String> create() {
-    			return new DirectedSparseMultigraph<String,String>();
+    			return new DirectedSparseGraph<String,String>();
     		}
     	};
     	graphFactory = new Factory<Graph<String,String>>() {
     		public Graph<String,String> create() {
-    			return new SparseMultigraph<String,String>();
+    			return new SparseGraph<String,String>();
     		}
     	};
     	vertexFactory = new Factory<String>() {
