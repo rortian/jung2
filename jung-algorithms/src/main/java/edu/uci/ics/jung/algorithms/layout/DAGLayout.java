@@ -68,10 +68,12 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	int incrementsLeft;
 	final int COOL_DOWN_INCREMENTS = 200;
 
+	/**
+	 * Creates an instance for the specified graph.
+	 */
 	public DAGLayout(Graph<V,E> g) {
 		super(g);
 	}
-
 
 	/**
 	 * setRoot calculates the level of each vertex in the graph. Level 0 is

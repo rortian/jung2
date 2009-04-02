@@ -43,8 +43,8 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
      */
 	private Set<V> dontmove = new HashSet<V>();
 
-	private Dimension size;
-	private Graph<V, E> graph;
+	protected Dimension size;
+	protected Graph<V, E> graph;
 	protected boolean initialized;
     
     protected Map<V, Point2D> locations = 

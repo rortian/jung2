@@ -23,6 +23,14 @@ import java.util.Map;
 
 /**
  * Implements the Fruchterman-Reingold force-directed algorithm for node layout.
+ * 
+ * <p>Behavior is determined by the following settable parameters:
+ * <ul>
+ * <li/>attraction multiplier: how much edges try to keep their vertices together
+ * <li/>repulsion multiplier: how much vertices try to push each other apart
+ * <li/>maximum iterations: how many iterations this algorithm will use before stopping
+ * </ul>
+ * Each of these defaults to 0.75.
  *
  * @see "Fruchterman and Reingold, 'Graph Drawing by Force-directed Placement'"
  * @see "http://i11www.ilkd.uni-karlsruhe.de/teaching/SS_04/visualisierung/papers/fruchterman91graph.pdf"
@@ -54,10 +62,16 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
 
     private double max_dimension;
 
+    /**
+     * Creates an instance for the specified graph.
+     */
     public FRLayout(Graph<V, E> g) {
         super(g);
     }
 
+    /**
+     * Creates an instance of size {@code d} for the specified graph.
+     */
     public FRLayout(Graph<V, E> g, Dimension d) {
         super(g, new RandomLocationTransformer<V>(d), d);
         initialize();
@@ -73,10 +87,16 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         max_dimension = Math.max(size.height, size.width);
 	}
 
+	/**
+	 * Sets the attraction multiplier.
+	 */
 	public void setAttractionMultiplier(double attraction) {
         this.attraction_multiplier = attraction;
     }
 
+	/**
+	 * Sets the repulsion multiplier.
+	 */
     public void setRepulsionMultiplier(double repulsion) {
         this.repulsion_multiplier = repulsion;
     }
@@ -155,7 +175,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         cool();
     }
 
-    public synchronized void calcPositions(V v) {
+    protected synchronized void calcPositions(V v) {
         FRVertexData fvd = getFRData(v);
         if(fvd == null) return;
         Point2D xyd = transform(v);
@@ -192,7 +212,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         xyd.setLocation(newXPos, newYPos);
     }
 
-    public void calcAttraction(E e) {
+    protected void calcAttraction(E e) {
     	Pair<V> endpoints = getGraph().getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
@@ -229,7 +249,7 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         }
     }
 
-    public void calcRepulsion(V v1) {
+    protected void calcRepulsion(V v1) {
         FRVertexData fvd1 = getFRData(v1);
         if(fvd1 == null)
             return;
@@ -267,11 +287,14 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         temperature *= (1.0 - currentIteration / (double) mMaxIterations);
     }
 
+    /**
+     * Sets the maximum number of iterations.
+     */
     public void setMaxIterations(int maxIterations) {
         mMaxIterations = maxIterations;
     }
 
-    public FRVertexData getFRData(V v) {
+    protected FRVertexData getFRData(V v) {
         return frVertexData.get(v);
     }
 
@@ -294,15 +317,15 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         return false;
     }
 
-    public static class FRVertexData extends Point2D.Double
+    protected static class FRVertexData extends Point2D.Double
     {
-        public void offset(double x, double y)
+        protected void offset(double x, double y)
         {
             this.x += x;
             this.y += y;
         }
 
-        public double norm()
+        protected double norm()
         {
             return Math.sqrt(x*x + y*y);
         }

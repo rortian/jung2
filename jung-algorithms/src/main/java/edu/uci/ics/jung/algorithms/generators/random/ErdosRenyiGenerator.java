@@ -79,6 +79,10 @@ public class ErdosRenyiGenerator<V,E> implements GraphGenerator<V,E> {
         return g;
     }
 
+    /**
+     * Sets the seed of the internal random number generator to {@code seed}.
+     * Enables consistent behavior.
+     */
     public void setSeed(long seed) {
         mRandom.setSeed(seed);
     }

@@ -145,8 +145,6 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     }
 
     public void initialize() {
-    	Graph<V,E> graph = getGraph();
-    	Dimension d = getSize();
     }
 
     /**
@@ -297,19 +295,22 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     }
 
     protected static class SpringVertexData {
-        public double edgedx;
-        public double edgedy;
-        public double repulsiondx;
-        public double repulsiondy;
+        protected double edgedx;
+        protected double edgedy;
+        protected double repulsiondx;
+        protected double repulsiondy;
 
         /** movement speed, x */
-        public double dx;
+        protected double dx;
 
         /** movement speed, y */
-        public double dy;
+        protected double dy;
     }
 
 
+    /**
+     * Used for changing the size of the layout in response to a component's size.
+     */
     public class SpringDimensionChecker extends ComponentAdapter {
         @Override
         public void componentResized(ComponentEvent e) {

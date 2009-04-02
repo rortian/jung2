@@ -26,9 +26,16 @@ import java.util.Set;
 
 
 /**
- * Groups items into a specified number of clusters, based on their
- * proximity in d-dimensional space, using the k-means algorithm.
- *
+ * Groups items into a specified number of clusters, based on their proximity in
+ * d-dimensional space, using the k-means algorithm. Calls to
+ * <code>cluster</code> will terminate when either of the two following
+ * conditions is true:
+ * <ul>
+ * <li/>the number of iterations is &gt; <code>max_iterations</code> 
+ * <li/>none of the centroids has moved as much as <code>convergence_threshold</code>
+ * since the previous iteration
+ * </ul>
+ * 
  * @author Joshua O'Madadhain
  */
 public class KMeansClusterer<T>
@@ -39,13 +46,7 @@ public class KMeansClusterer<T>
 
     /**
      * Creates an instance whose termination conditions are set according
-     * to the parameters.  Calls to <code>cluster</code> will terminate
-     * when either of the two following conditions is true:
-     * <ul>
-     * <li/>the number of iterations is &gt; <code>max_iterations</code>
-     * <li/>none of the centroids has moved as much as <code>convergence_threshold</code>
-     * since the previous iteration
-     * </ul>
+     * to the parameters.  
      */
     public KMeansClusterer(int max_iterations, double convergence_threshold)
     {
@@ -63,11 +64,17 @@ public class KMeansClusterer<T>
         this(100, 0.001);
     }
 
+    /**
+     * Returns the maximum number of iterations.
+     */
     public int getMaxIterations()
     {
         return max_iterations;
     }
 
+    /**
+     * Sets the maximum number of iterations.
+     */
     public void setMaxIterations(int max_iterations)
     {
         if (max_iterations < 0)
@@ -76,11 +83,18 @@ public class KMeansClusterer<T>
         this.max_iterations = max_iterations;
     }
 
+    /**
+     * Returns the convergence threshold.
+     */
     public double getConvergenceThreshold()
     {
         return convergence_threshold;
     }
 
+    /**
+     * Sets the convergence threshold.
+     * @param convergence_threshold
+     */
     public void setConvergenceThreshold(double convergence_threshold)
     {
         if (convergence_threshold <= 0)
@@ -208,6 +222,10 @@ public class KMeansClusterer<T>
         return clusterMap;
     }
 
+    /**
+     * Sets the seed used by the internal random number generator.
+     * Enables consistent outputs.
+     */
     public void setSeed(int random_seed)
     {
         this.rand = new Random(random_seed);

@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,17 +59,22 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
     
     private Collection<V> roots;
 
+    /**
+     * Creates an instance based on the input forest.
+     */
     public BalloonLayout(Forest<V,E> g) {
     	
     	this.graph = g;
         this.roots = getRoots(g);
     }
     
+    /**
+     * Creates an instance based on the input graph.
+     */
     public BalloonLayout(Tree<V,E> g)
     {
         this.graph = g;
-        this.roots = new ArrayList<V>(1);
-        roots.add(g.getRoot());
+        this.roots = Collections.singletonList(g.getRoot());
     }
     
     private Collection<V> getRoots(Graph<V,E> graph) {
@@ -171,10 +177,17 @@ public class BalloonLayout<V,E> implements Layout<V,E> {
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 	}
 	
+	/**
+	 * Returns the center of this layout's area.
+	 */
 	public Point2D getCenter() {
 		return new Point2D.Double(size.getWidth()/2,size.getHeight()/2);
 	}
 	
+	/**
+	 * Returns the coordinates of {@code v}'s parent, or the
+	 * center of this layout's area if it's a root.
+	 */
 	public Point2D getCenter(V v) {
 		// return the cartesian coords of the parent
 		V parent = getParent(v);

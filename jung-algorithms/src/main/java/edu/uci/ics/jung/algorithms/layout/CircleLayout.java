@@ -45,14 +45,24 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 					return new CircleVertexData();
 				}});	
 
+	/**
+	 * Creates an instance for the specified graph.
+	 */
 	public CircleLayout(Graph<V,E> g) {
 		super(g);
 	}
 
+	/**
+	 * Returns the radius of the circle.
+	 */
 	public double getRadius() {
 		return radius;
 	}
 
+	/**
+	 * Sets the radius of the circle.  Must be called before
+	 * {@code initialize()} is called.
+	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
 	}
@@ -73,11 +83,9 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
      */
 	public void setVertexOrder(List<V> vertex_list)
 	{
-	    if (vertex_list.size() != getGraph().getVertexCount()) 
-	    {
+	    if (!vertex_list.containsAll(getGraph().getVertices())) 
 	        throw new IllegalArgumentException("Supplied list must include " +
 	        		"all vertices of the graph");
-	    }
 	    this.vertex_ordered_list = vertex_list;
 	}
 	
@@ -118,18 +126,18 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 		}
 	}
 
-	public CircleVertexData getCircleData(V v) {
+	protected CircleVertexData getCircleData(V v) {
 		return circleVertexDataMap.get(v);
 	}
 
-	public static class CircleVertexData {
+	protected static class CircleVertexData {
 		private double angle;
 
-		public double getAngle() {
+		protected double getAngle() {
 			return angle;
 		}
 
-		public void setAngle(double angle) {
+		protected void setAngle(double angle) {
 			this.angle = angle;
 		}
 
