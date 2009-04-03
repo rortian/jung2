@@ -24,7 +24,17 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * Implements the Fruchterman-Reingold force-directed algorithm for node layout.
- * This is an experimental attempt at optimizing {@code FRLayout}.
+ * This is an experimental attempt at optimizing {@code FRLayout}; if it is successful
+ * it will be folded back into {@code FRLayout} (and this class will disappear).
+ * 
+ * <p>Behavior is determined by the following settable parameters:
+ * <ul>
+ * <li/>attraction multiplier: how much edges try to keep their vertices together
+ * <li/>repulsion multiplier: how much vertices try to push each other apart
+ * <li/>maximum iterations: how many iterations this algorithm will use before stopping
+ * </ul>
+ * Each of the first two defaults to 0.75; the maximum number of iterations defaults to 700.
+
  * 
  * @see "Fruchterman and Reingold, 'Graph Drawing by Force-directed Placement'"
  * @see http://i11www.ilkd.uni-karlsruhe.de/teaching/SS_04/visualisierung/papers/fruchterman91graph.pdf
@@ -62,19 +72,22 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     
     private boolean checked = false;
     
+    /**
+     * Creates an instance for the specified graph.
+     */
     public FRLayout2(Graph<V, E> g) {
         super(g);
     }
     
+    /**
+     * Creates an instance of size {@code d} for the specified graph.
+     */
     public FRLayout2(Graph<V, E> g, Dimension d) {
         super(g, new RandomLocationTransformer<V>(d), d);
         max_dimension = Math.max(d.height, d.width);
         initialize();
     }
     
-    /* (non-Javadoc)
-	 * @see edu.uci.ics.jung.visualization.layout.AbstractLayout#setSize(java.awt.Dimension)
-	 */
 	@Override
 	public void setSize(Dimension size) {
 		if(initialized == false) 
@@ -85,10 +98,16 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         max_dimension = Math.max(size.height, size.width);
 	}
 
+    /**
+     * Sets the attraction multiplier.
+     */
 	public void setAttractionMultiplier(double attraction) {
         this.attraction_multiplier = attraction;
     }
     
+    /**
+     * Sets the repulsion multiplier.
+     */
     public void setRepulsionMultiplier(double repulsion) {
         this.repulsion_multiplier = repulsion;
     }
@@ -166,7 +185,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         cool();
     }
 
-    public synchronized void calcPositions(V v) {
+    protected synchronized void calcPositions(V v) {
         Point2D fvd = this.frVertexData.get(v);
         if(fvd == null) return;
         Point2D xyd = transform(v);
@@ -190,7 +209,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
 
     }
 
-    public void calcAttraction(E e) {
+    protected void calcAttraction(E e) {
     	Pair<V> endpoints = getGraph().getEndpoints(e);
         V v1 = endpoints.getFirst();
         V v2 = endpoints.getSecond();
@@ -233,7 +252,7 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
     }
     }
 
-    public void calcRepulsion(V v1) {
+    protected void calcRepulsion(V v1) {
         Point2D fvd1 = frVertexData.get(v1);
         if(fvd1 == null) return;
         fvd1.setLocation(0, 0);
@@ -279,6 +298,9 @@ public class FRLayout2<V, E> extends AbstractLayout<V, E> implements IterativeCo
         temperature *= (1.0 - currentIteration / (double) maxIterations);
     }
 
+    /**
+     * Sets the maximum number of iterations.
+     */
     public void setMaxIterations(int maxIterations) {
         this.maxIterations = maxIterations;
     }

@@ -12,29 +12,50 @@ package edu.uci.ics.jung.algorithms.layout;
 import java.awt.geom.Point2D;
 
 /**
- * allows creation of points in polar coordinates.
- * also allows conversions between polar and cartesian
- * coordinates.
+ * Represents a point in polar coordinates: distance and angle from the origin.
+ * Includes conversions between polar and Cartesian
+ * coordinates (Point2D).
  * 
  * @author Tom Nelson - tomnelson@dev.java.net
- *
  */
-public class PolarPoint {
-//extends Point2D.Double {
+public class PolarPoint 
+{
 	double theta;
 	double radius;
 	
+	/**
+	 * Creates a new instance with radius and angle each 0.
+	 */
 	public PolarPoint() {
 		this(0,0);
 	}
+
+	/**
+	 * Creates a new instance with radius {@code radius} and angle {@code theta}.
+	 */
 	public PolarPoint(double theta, double radius) {
 		this.theta = theta;
 		this.radius = radius;
-//		super(theta, radius);
 	}
+	
+	/**
+	 * Returns the angle for this point.
+	 */
 	public double getTheta() { return theta; }
+
+	/**
+	 * Returns the radius for this point.
+	 */
 	public double getRadius() { return radius; }
+	
+	/**
+	 * Sets the angle for this point to {@code theta}.
+	 */
 	public void setTheta(double theta) { this.theta = theta; }
+	
+	/**
+	 * Sets the radius for this point to {@code theta}.
+	 */
 	public void setRadius(double radius) { this.radius = radius; }
 
 	/**
@@ -68,14 +89,15 @@ public class PolarPoint {
 	}
 	
 	@Override
-  public String toString() {
-		String superString = super.toString();
-		return superString.replace("Point2D", "PolarPoint2D");
+	public String toString() {
+	    return "PolarPoint[" + radius + "," + theta +"]";
 	}
 	
+	/**
+	 * Sets the angle and radius of this point to those of {@code p}.
+	 */
 	public void setLocation(PolarPoint p) {
 		this.theta = p.getTheta();
 		this.radius = p.getRadius();
 	}
-
 }

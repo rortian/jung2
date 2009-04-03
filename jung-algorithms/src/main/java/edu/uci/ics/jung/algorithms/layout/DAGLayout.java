@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * An implementation of {@code Layout} suitable for tree-like directed
@@ -286,9 +287,9 @@ public class DAGLayout<V, E> extends SpringLayout<V,E> {
 	@Override
 	protected void relaxEdges() {
 		for(E e : getGraph().getEdges()) {
-
-			V v1 = getAVertex(e);
-			V v2 = getGraph().getOpposite(v1, e);//e.getOpposite(v1);
+		    Pair<V> endpoints = getGraph().getEndpoints(e);
+			V v1 = endpoints.getFirst();
+			V v2 = endpoints.getSecond();
 
 			Point2D p1 = transform(v1);
 			Point2D p2 = transform(v2);

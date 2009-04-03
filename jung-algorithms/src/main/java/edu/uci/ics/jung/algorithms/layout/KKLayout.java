@@ -73,11 +73,17 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
      */
     private double disconnected_multiplier = 0.5;
     
+	/**
+	 * Creates an instance for the specified graph.
+	 */
 	public KKLayout(Graph<V,E> g) 
     {
         this(g, new UnweightedShortestPath<V,E>(g));
 	}
 
+	/**
+	 * Creates an instance for the specified graph and distance metric.
+	 */
     public KKLayout(Graph<V,E> g, Distance<V> distance){
         super(g);
         this.distance = distance;
@@ -99,10 +105,16 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
         this.disconnected_multiplier = disconnected_multiplier;
     }
     
+    /**
+     * Returns a string with information about the current status of the algorithm.
+     */
 	public String getStatus() {
 		return status + this.getSize();
 	}
 
+	/**
+	 * Sets the maximum number of iterations.
+	 */
     public void setMaxIterations(int maxIterations) {
         this.maxIterations = maxIterations;
     }
@@ -127,13 +139,11 @@ public class KKLayout<V,E> extends AbstractLayout<V,E> implements IterativeConte
 	@SuppressWarnings("unchecked")
     public void initialize() {
     	currentIteration = 0;
-    	Graph<V,E> graph = getGraph();
-    	Dimension d = getSize();
 
-    	if(graph != null && d != null) {
+    	if(graph != null && size != null) {
 
-        	double height = d.getHeight();
-    		double width = d.getWidth();
+        	double height = size.getHeight();
+    		double width = size.getWidth();
 
     		int n = graph.getVertexCount();
     		dm = new double[n][n];

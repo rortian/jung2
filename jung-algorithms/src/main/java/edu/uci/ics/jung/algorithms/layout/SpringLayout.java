@@ -10,6 +10,7 @@ package edu.uci.ics.jung.algorithms.layout;
 import edu.uci.ics.jung.algorithms.layout.util.RandomLocationTransformer;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.util.Pair;
 
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
@@ -37,10 +38,10 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 
     protected double stretch = 0.70;
     protected Transformer<E, Integer> lengthFunction;
-    protected int repulsion_range = 100;
+    protected int repulsion_range_sq = 100 * 100;
     protected double force_multiplier = 1.0 / 3.0;
 
-    Map<V, SpringVertexData> springVertexData =
+    protected Map<V, SpringVertexData> springVertexData =
     	LazyMap.decorate(new HashMap<V, SpringVertexData>(),
     			new Factory<SpringVertexData>() {
 					public SpringVertexData create() {
@@ -109,7 +110,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
      * @see #setRepulsionRange(int)
      */
     public int getRepulsionRange() {
-        return repulsion_range;
+        return (int)(Math.sqrt(repulsion_range_sq));
     }
 
     /**
@@ -119,7 +120,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
      * @param range
      */
     public void setRepulsionRange(int range) {
-        this.repulsion_range = range;
+        this.repulsion_range_sq = range * range;
     }
 
     /**
@@ -171,17 +172,12 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     	moveNodes();
     }
 
-    protected V getAVertex(E e) {
-
-        return getGraph().getIncidentVertices(e).iterator().next();
-    }
-
     protected void relaxEdges() {
     	try {
     		for(E e : getGraph().getEdges()) {
-
-    			V v1 = getAVertex(e);
-    			V v2 = getGraph().getOpposite(v1, e);
+    		    Pair<V> endpoints = getGraph().getEndpoints(e);
+    			V v1 = endpoints.getFirst();
+    			V v2 = endpoints.getSecond();
 
     			Point2D p1 = transform(v1);
     			Point2D p2 = transform(v2);
@@ -233,14 +229,14 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
                 if(p == null || p2 == null) continue;
                 double vx = p.getX() - p2.getX();
                 double vy = p.getY() - p2.getY();
-                double distance = vx * vx + vy * vy;
-                if (distance == 0) {
+                double distanceSq = p.distanceSq(p2);
+                if (distanceSq == 0) {
                     dx += Math.random();
                     dy += Math.random();
-                } else if (distance < repulsion_range * repulsion_range) {
+                } else if (distanceSq < repulsion_range_sq) {
                     double factor = 1;
-                    dx += factor * vx / Math.pow(distance, 2);
-                    dy += factor * vy / Math.pow(distance, 2);
+                    dx += factor * vx / distanceSq;
+                    dy += factor * vy / distanceSq;
                 }
             }
             double dlen = dx * dx + dy * dy;

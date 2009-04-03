@@ -29,21 +29,22 @@ public abstract class LayoutDecorator<V, E> implements Layout<V, E>, IterativeCo
     
     protected Layout<V, E> delegate;
     
+    /**
+     * Creates an instance backed by the specified delegate layout.
+     */
     public LayoutDecorator(Layout<V, E> delegate) {
         this.delegate = delegate;
     }
 
     /**
-     * getter for the delegate
-     * @return the delegate
+     * Returns the backing (delegate) layout.
      */
     public Layout<V,E> getDelegate() {
         return delegate;
     }
 
     /**
-     * setter for the delegate
-     * @param delegate the new delegate
+     * Sets the backing (delegate) layout.
      */
     public void setDelegate(Layout<V,E> delegate) {
         this.delegate = delegate;

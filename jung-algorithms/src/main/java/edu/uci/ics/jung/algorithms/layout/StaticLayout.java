@@ -33,18 +33,31 @@ import edu.uci.ics.jung.graph.Graph;
  */
 public class StaticLayout<V, E> extends AbstractLayout<V,E> {
 	
+    /**
+     * Creates an instance for the specified graph, locations, and size.
+     */
     public StaticLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer, Dimension size) {
         super(graph, initializer, size);
     }
     
+    /**
+     * Creates an instance for the specified graph and locations, with default size.
+     */
     public StaticLayout(Graph<V,E> graph, Transformer<V,Point2D> initializer) {
         super(graph, initializer);
     }
     
+    /**
+     * Creates an instance for the specified graph and default size; vertex locations
+     * are randomly assigned.
+     */
     public StaticLayout(Graph<V,E> graph) {
     	super(graph);
     }
     
+    /**
+     * Creates an instance for the specified graph and size.
+     */
     public StaticLayout(Graph<V,E> graph, Dimension size) {
     	super(graph, size);
     }

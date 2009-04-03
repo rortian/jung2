@@ -14,6 +14,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -28,8 +29,8 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Tree;
 
 /**
+ * A radial layout for Tree or Forest graphs.
  * 
- * a radial layout for Tree or Forest graphs
  * @author Tom Nelson 
  *  
  */
@@ -45,7 +46,15 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 					public Point2D transform(V arg0) {
 						return new Point2D.Double();
 					}});
+
+    /**
+     * The default X distance (50).
+     */
     public static int DEFAULT_DISTX = 50;
+    
+    /**
+     * The default Y distance (50).
+     */
     public static int DEFAULT_DISTY = 50;
     
     protected Map<V,PolarPoint> polarLocations =
@@ -55,7 +64,7 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 						return new PolarPoint();
 					}});
 
-    public List<V> getAtomics(V p) {
+    protected List<V> getAtomics(V p) {
         List<V> v = new ArrayList<V>();
         getAtomics(p, v);
         return v;
@@ -71,7 +80,7 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
         }
     }
     
-    private transient Set<V> allreadyDone = new HashSet<V>();
+    private transient Set<V> alreadyDone = new HashSet<V>();
 
     private int distX = DEFAULT_DISTX;
     private int distY = DEFAULT_DISTY;
@@ -79,29 +88,35 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 
     private Collection<V> roots;
 
+    /**
+     * Creates an instance for the specified graph with default X and Y distances of 50.
+     */
     public RadialTreeLayout(Forest<V,E> g) {
     	this(g, DEFAULT_DISTX, DEFAULT_DISTY);
     }
 
+    /**
+     * Creates an instance for the specified graph and X distance with
+     * default Y distance.
+     * @param g
+     * @param distx
+     */
     public RadialTreeLayout(Forest<V,E> g, int distx) {
         this(g, distx, DEFAULT_DISTY);
     }
 
+    /**
+     * Creates an instance for the specified graph, X distance, and Y distance.
+     */
     public RadialTreeLayout(Forest<V,E> g, int distx, int disty) {
     	
     	this.graph = g;
-        this.roots = getRoots(g);
+    	if (g instanceof Tree)
+    	    this.roots = Collections.<V>singletonList(((Tree<V,E>)g).getRoot());
+    	else
+    	    this.roots = getRoots(g);
         this.distX = distx;
         this.distY = disty;
-    }
-    
-    public RadialTreeLayout(Tree<V,E> g)
-    {
-        this.graph = g;
-        this.roots = new ArrayList<V>(1);
-        roots.add(g.getRoot());
-        this.distX = DEFAULT_DISTX;
-        this.distY = DEFAULT_DISTY;
     }
     
     private Collection<V> getRoots(Graph<V,E> graph) {
@@ -112,10 +127,6 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
     		}
     	}
     	return roots;
-    }
-
-    public Dimension getCurrentSize() {
-    	return size;
     }
 
 	void buildTree() {
@@ -137,8 +148,8 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 
     void buildTree(V v, int x) {
 
-        if (!allreadyDone.contains(v)) {
-            allreadyDone.add(v);
+        if (!alreadyDone.contains(v)) {
+            alreadyDone.add(v);
 
             //go one level further down
             this.m_currentPoint.y += this.distY;
@@ -196,7 +207,7 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
     	return size;
     }
     
-    public int getDepth(V v) {
+    protected int getDepth(V v) {
         int depth = 0;
         for (V c : graph.getSuccessors(v)) {
             if (graph.getSuccessors(c).size() == 0) {
@@ -208,14 +219,6 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
         return depth + 1;
     }
 
-//    /**
-//     * ?
-//     * 
-//     * @see edu.uci.ics.jung.visualization.Layout#incrementsAreDone()
-//     */
-//    public boolean incrementsAreDone() {
-//        return true;
-//    }
     public void setSize(Dimension size) {
     	this.size = size;
         buildTree();
@@ -254,6 +257,9 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 	}
 	
+	/**
+	 * Returns the center of this layout's area.
+	 */
 	public Point2D getCenter() {
 		return new Point2D.Double(size.getWidth()/2,size.getHeight()/2);
 	}
@@ -265,6 +271,9 @@ public class RadialTreeLayout<V,E> implements Layout<V,E> {
 			polarLocations.get(v).setLocation(newLocation);
 	}
 	
+	/**
+	 * Returns the map from vertices to their locations in polar coordinates.
+	 */
 	public Map<V,PolarPoint> getPolarLocations() {
 		return polarLocations;
 	}

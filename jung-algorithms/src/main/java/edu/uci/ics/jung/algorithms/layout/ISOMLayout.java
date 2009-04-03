@@ -188,7 +188,7 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		}
 	}
 
-	public ISOMVertexData getISOMVertexData(V v) {
+	protected ISOMVertexData getISOMVertexData(V v) {
 		return isomVertexData.get(v);
 	}
 
@@ -211,11 +211,11 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		return epoch >= maxEpoch;
 	}
 
-	public static class ISOMVertexData {
+	protected static class ISOMVertexData {
 		int distance;
 		boolean visited;
 
-		public ISOMVertexData() {
+		protected ISOMVertexData() {
 		    distance = 0;
 		    visited = false;
 		}
