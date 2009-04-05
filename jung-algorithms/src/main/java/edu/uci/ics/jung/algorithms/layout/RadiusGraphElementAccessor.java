@@ -27,6 +27,9 @@ import edu.uci.ics.jung.graph.Graph;
  * provides the same picking options that were available in
  * previous versions of AbstractLayout.
  * 
+ * <p>No element will be returned that is farther away than the specified 
+ * maximum distance.
+ * 
  * @author Tom Nelson
  * @author Joshua O'Madadhain
  */
@@ -34,10 +37,16 @@ public class RadiusGraphElementAccessor<V, E> implements GraphElementAccessor<V,
     
     protected double maxDistance;
     
+    /**
+     * Creates an instance with an effectively infinite default maximum distance.
+     */
     public RadiusGraphElementAccessor() {
         this(Math.sqrt(Double.MAX_VALUE - 1000));
     }
     
+    /**
+     * Creates an instance with the specified default maximum distance.
+     */
     public RadiusGraphElementAccessor(double maxDistance) {
         this.maxDistance = maxDistance;
     }

@@ -45,6 +45,9 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 public class PajekNetWriter<V,E>
 {
+    /**
+     * Creates a new instance.
+     */
     public PajekNetWriter()
     {
     }

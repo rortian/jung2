@@ -142,6 +142,8 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
     }
     
     /**
+     * Returns the graph created by parsing the specified file, as created
+     * by the specified factory.
      * @throws IOException
      */
     public G load(String filename, Factory<? extends G> graph_factory) throws IOException
@@ -149,13 +151,25 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         return load(new FileReader(filename), graph_factory.create());
     }
     
+    /**
+     * Returns the graph created by parsing the specified reader, as created
+     * by the specified factory.
+     * @throws IOException
+     */
     public G load(Reader reader, Factory<? extends G> graph_factory) throws IOException
     {
         return load(reader, graph_factory.create());
     }
 
+    /**
+     * Returns the graph created by parsing the specified file, by populating the
+     * specified graph.
+     * @throws IOException
+     */
     public G load(String filename, G g) throws IOException
     {
+        if (g == null)
+            throw new IllegalArgumentException("Graph provided must be non-null");
         return load(new FileReader(filename), g);
     }
     
@@ -163,14 +177,13 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
      * Populates the graph <code>g</code> with the graph represented by the
      * Pajek-format data supplied by <code>reader</code>.  Stores edge weights,
      * if any, according to <code>nev</code> (if non-null).
-     * Any existing vertices/edges of <code>g</code>, if any, are unaffected.
-     * The edge data are filtered according to <code>g</code>'s constraints, if any; thus, if 
+     * 
+     * <p>Any existing vertices/edges of <code>g</code>, if any, are unaffected.
+     * 
+     * <p>The edge data are filtered according to <code>g</code>'s constraints, if any; thus, if 
      * <code>g</code> only accepts directed edges, any undirected edges in the 
      * input are ignored.
-     * Vertices are created with the generator <code>vg</code>.  The user is responsible
-     * for supplying a generator whose output is compatible with this graph and its contents;
-     * users that don't want to deal with this issue may use a <code>TypedVertexGenerator</code>
-     * or call <code>load(reader, g, nev)</code> for a default generator.
+     * 
      * @throws IOException
      */
     public G load(Reader reader, G g) throws IOException
@@ -417,7 +430,7 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
     protected static class StartsWithPredicate implements Predicate<String> {
         private String tag;
         
-        public StartsWithPredicate(String s) {
+        protected StartsWithPredicate(String s) {
             this.tag = s;
         }
         
@@ -439,7 +452,7 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
         
         protected ListTagPred() {}
         
-        public static ListTagPred getInstance()
+        protected static ListTagPred getInstance()
         {
             if (instance == null)
                 instance = new ListTagPred();
@@ -459,28 +472,40 @@ public class PajekNetReader<G extends Graph<V,E>,V,E>
 		return vertex_locations;
 	}
 
+	/**
+	 * Provides a transformer which will be used to write out the vertex locations.
+	 */
 	public void setVertexLocationTransformer(SettableTransformer<V, Point2D> vertex_locations)
 	{
 	    this.vertex_locations = vertex_locations;
 	}
 	
 	/**
-	 * @return the vertexLabeller
+	 * Returns a transformer from vertices to their labels.
 	 */
 	public SettableTransformer<V, String> getVertexLabeller() {
 		return vertex_labels;
 	}
 	
+	/**
+	 * Provides a transformer which will be used to write out the vertex labels.
+	 */
 	public void setVertexLabeller(SettableTransformer<V, String> vertex_labels)
 	{
 	    this.vertex_labels = vertex_labels;
 	}
     
+	/**
+	 * Returns a transformer from edges to their weights.
+	 */
 	public SettableTransformer<E, Number> getEdgeWeightTransformer() 
 	{
 	    return edge_weights;
 	}
 	
+	/**
+	 * Provides a transformer which will be used to write out edge weights.
+	 */
 	public void setEdgeWeightTransformer(SettableTransformer<E, Number> edge_weights)
 	{
 	    this.edge_weights = edge_weights;

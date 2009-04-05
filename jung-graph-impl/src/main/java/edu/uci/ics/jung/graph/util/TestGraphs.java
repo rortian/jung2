@@ -217,6 +217,9 @@ public class TestGraphs {
 		return g;
 	}
 
+    /**
+     * Returns a small graph with directed and undirected edges, and parallel edges.
+     */
     public static Graph<String, Number> getSmallGraph() {
         Graph<String, Number> graph = 
             new SparseMultigraph<String, Number>();

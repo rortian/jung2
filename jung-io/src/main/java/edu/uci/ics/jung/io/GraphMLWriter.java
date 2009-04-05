@@ -322,7 +322,6 @@ public class GraphMLWriter<V,E>
 	}
 
 
-
 	/**
 	 * Provides an ID that will be used to identify an edge in the output file.
 	 * If any edge ID is missing, no ID will be written out for the
@@ -335,21 +334,33 @@ public class GraphMLWriter<V,E>
 		this.edge_ids = edge_ids;
 	}
 
+	/**
+	 * Provides a map from data type name to graph data.
+	 */
 	public void setGraphData(Map<String, GraphMLMetadata<Hypergraph<V,E>>> graph_map)
 	{
 		graph_data = graph_map;
 	}
 	
+    /**
+     * Provides a map from data type name to vertex data.
+     */
 	public void setVertexData(Map<String, GraphMLMetadata<V>> vertex_map)
 	{
 		vertex_data = vertex_map;
 	}
 	
+    /**
+     * Provides a map from data type name to edge data.
+     */
 	public void setEdgeData(Map<String, GraphMLMetadata<E>> edge_map)
 	{
 		edge_data = edge_map;
 	}
 	
+	/**
+	 * Adds a new graph data specification.
+	 */
 	public void addGraphData(String id, String description, String default_value,
 			Transformer<Hypergraph<V,E>, String> graph_transformer)
 	{
@@ -359,6 +370,9 @@ public class GraphMLWriter<V,E>
 				default_value, graph_transformer));
 	}
 	
+    /**
+     * Adds a new vertex data specification.
+     */
 	public void addVertexData(String id, String description, String default_value,
 			Transformer<V, String> vertex_transformer)
 	{
@@ -368,6 +382,9 @@ public class GraphMLWriter<V,E>
 				vertex_transformer));
 	}
 
+    /**
+     * Adds a new edge data specification.
+     */
 	public void addEdgeData(String id, String description, String default_value,
 			Transformer<E, String> edge_transformer)
 	{
@@ -377,19 +394,27 @@ public class GraphMLWriter<V,E>
 				edge_transformer));
 	}
 
+	/**
+	 * Provides vertex descriptions.
+	 */
 	public void setVertexDescriptions(Transformer<V, String> vertex_desc) 
 	{
 		this.vertex_desc = vertex_desc;
 	}
 
+    /**
+     * Provides edge descriptions.
+     */
 	public void setEdgeDescriptions(Transformer<E, String> edge_desc) 
 	{
 		this.edge_desc = edge_desc;
 	}
 
+    /**
+     * Provides graph descriptions.
+     */
 	public void setGraphDescriptions(Transformer<Hypergraph<V,E>, String> graph_desc) 
 	{
 		this.graph_desc = graph_desc;
 	}
-	
 }

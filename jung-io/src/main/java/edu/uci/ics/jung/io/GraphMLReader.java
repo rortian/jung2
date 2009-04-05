@@ -150,6 +150,11 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     	this(null, null);
     }
 
+    /**
+     * Returns a list of the graphs parsed from the specified reader, as created by
+     * the specified factory.
+     * @throws IOException
+     */
     public List<G> loadMultiple(Reader reader, Factory<G> graph_factory)
         throws IOException
     {
@@ -161,13 +166,19 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         return graphs;
     }
 
+    /**
+     * Returns a list of the graphs parsed from the specified file, as created by
+     * the specified factory.
+     * @throws IOException
+     */
     public List<G> loadMultiple(String filename, Factory<G> graph_factory) throws IOException
     {
         return loadMultiple(new FileReader(filename), graph_factory);
     }
 
     /**
-     * @see edu.uci.ics.jung.io.GraphMLReader#load(Reader, Hypergraph)
+     * Populates the specified graph with the data parsed from the reader.
+     * @throws IOException
      */
     public void load(Reader reader, G g) throws IOException
     {
@@ -179,6 +190,10 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
         parse(reader);
     }
 
+    /**
+     * Populates the specified graph with the data parsed from the specified file.
+     * @throws IOException
+     */
     public void load(String filename, G g) throws IOException
     {
         load(new FileReader(filename), g);
@@ -739,41 +754,67 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
             this.current_graph.addEdge(e, new Pair<V>(source, target));
     }
 
+    /**
+     * Returns a bidirectional map relating vertices and IDs.
+     */
     public BidiMap<V, String> getVertexIDs()
     {
         return vertex_ids;
     }
 
+    /**
+     * Returns a bidirectional map relating edges and IDs.
+     * This is not guaranteed to always be populated (edge IDs are not
+     * required in GraphML files.
+     */
     public BidiMap<E, String> getEdgeIDs()
     {
         return edge_ids;
     }
 
+    /**
+     * Returns a map from graph type name to type metadata.
+     */
     public Map<String, GraphMLMetadata<G>> getGraphMetadata()
     {
     	return graph_metadata;
     }
 
+    /**
+     * Returns a map from vertex type name to type metadata.
+     */
     public Map<String, GraphMLMetadata<V>> getVertexMetadata()
     {
     	return vertex_metadata;
     }
 
+    /**
+     * Returns a map from edge type name to type metadata.
+     */
     public Map<String, GraphMLMetadata<E>> getEdgeMetadata()
     {
     	return edge_metadata;
     }
 
+    /**
+     * Returns a map from graphs to graph descriptions.
+     */
     public Map<G, String> getGraphDescriptions()
     {
         return graph_desc;
     }
 
+    /**
+     * Returns a map from vertices to vertex descriptions.
+     */
     public Map<V, String> getVertexDescriptions()
     {
         return vertex_desc;
     }
 
+    /**
+     * Returns a map from edges to edge descriptions.
+     */
     public Map<E, String> getEdgeDescriptions()
     {
         return edge_desc;
