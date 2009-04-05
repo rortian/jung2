@@ -84,7 +84,6 @@ public class MinimumSpanningForest2<V,E> {
 		Set<Set<V>> component_vertices = wcc.transform(graph);
 		Collection<Graph<V,E>> components = 
 			FilterUtils.createAllInducedSubgraphs(component_vertices, graph);
-//		wcgc.transform(graph);
 		
 		for(Graph<V,E> component : components) {
 			PrimMinimumSpanningTree<V,E> mst = 
@@ -96,6 +95,9 @@ public class MinimumSpanningForest2<V,E> {
 		}
 	}
 	
+	/**
+	 * Returns the generated forest.
+	 */
 	public Forest<V,E> getForest() {
 		return forest;
 	}

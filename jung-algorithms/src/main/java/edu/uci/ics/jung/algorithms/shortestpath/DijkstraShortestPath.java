@@ -235,10 +235,10 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      */
     protected class SourcePathData extends SourceData
     {
-        public Map<V,E> tentativeIncomingEdges;
-		public LinkedHashMap<V,E> incomingEdges;
+        protected Map<V,E> tentativeIncomingEdges;
+		protected LinkedHashMap<V,E> incomingEdges;
 
-		public SourcePathData(V source)
+		protected SourcePathData(V source)
 		{
             super(source);
             incomingEdges = new LinkedHashMap<V,E>();

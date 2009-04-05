@@ -34,15 +34,15 @@ public class MinimumSpanningForest<V,E> {
 	 * Creates a Forest from the supplied Graph and supplied Factory, which
 	 * is used to create a new, empty Forest. If non-null, the supplied root
 	 * will be used as the root of the tree/forest. If the supplied root is
-	 * null, or not present in the Graph, then an arbitary Graph vertex
+	 * null, or not present in the Graph, then an arbitrary Graph vertex
 	 * will be selected as the root.
 	 * If the Minimum Spanning Tree does not include all vertices of the
 	 * Graph, then a leftover vertex is selected as a root, and another
 	 * tree is created.
-	 * @param graph
-	 * @param factory
-	 * @param root
-	 * @param weights
+	 * @param graph the input graph
+	 * @param factory the factory to use to create the new forest
+	 * @param root the vertex of the graph to be used as the root of the forest 
+	 * @param weights edge weights
 	 */
 	public MinimumSpanningForest(Graph<V, E> graph, Factory<Forest<V,E>> factory, 
 			V root, Map<E, Double> weights) {
@@ -110,7 +110,9 @@ public class MinimumSpanningForest<V,E> {
         updateForest(forest.getVertices(), unfinishedEdges);
     }
 	
-	
+	/**
+	 * Returns the generated forest.
+	 */
 	public Forest<V,E> getForest() {
 		return forest;
 	}
