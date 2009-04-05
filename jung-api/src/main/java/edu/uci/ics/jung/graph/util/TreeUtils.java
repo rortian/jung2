@@ -14,14 +14,29 @@ package edu.uci.ics.jung.graph.util;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Tree;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Contains static methods for operating on instances of <code>Tree</code>.
  */
 public class TreeUtils 
 {
-	
+	/**
+	 * Returns the roots of this forest.
+	 * @param <V> the vertex type
+	 * @param <E> the edge type
+	 */
+	public static <V,E> List<V> getRoots(Forest<V,E> forest) 
+	{
+        List<V> roots = new ArrayList<V>();
+        for(Tree<V,E> tree : forest.getTrees()) {
+            roots.add(tree.getRoot());
+        }
+        return roots;
+	}
+    
     /**
      * Returns the subtree of <code>tree</code> which is rooted at <code>root</code> as a <code>Forest<V,E></code>.
      * The tree returned is an independent entity, although it uses the same vertex and edge objects.
