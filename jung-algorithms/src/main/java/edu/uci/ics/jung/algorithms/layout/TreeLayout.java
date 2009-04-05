@@ -12,11 +12,9 @@ package edu.uci.ics.jung.algorithms.layout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,7 +23,7 @@ import org.apache.commons.collections15.map.LazyMap;
 
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.graph.util.TreeUtils;
 
 /**
  * @author Karlheinz Toni
@@ -35,8 +33,8 @@ import edu.uci.ics.jung.graph.Tree;
 
 public class TreeLayout<V,E> implements Layout<V,E> {
 
-	private Dimension size = new Dimension(600,600);
-	private Forest<V,E> graph;
+	protected Dimension size = new Dimension(600,600);
+	protected Forest<V,E> graph;
 	protected Map<V,Integer> basePositions = new HashMap<V,Integer>();
 
     protected Map<V, Point2D> locations = 
@@ -45,61 +43,63 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 					public Point2D transform(V arg0) {
 						return new Point2D.Double();
 					}});
+    
+    protected transient Set<V> alreadyDone = new HashSet<V>();
+
+    /**
+     * The default horizontal vertex spacing.  Initialized to 50.
+     */
     public static int DEFAULT_DISTX = 50;
+    
+    /**
+     * The default vertical vertex spacing.  Initialized to 50.
+     */
     public static int DEFAULT_DISTY = 50;
     
-    public List<V> getAtomics(V p) {
-        List<V> v = new ArrayList<V>();
-        getAtomics(p, v);
-        return v;
-    }
+    /**
+     * The horizontal vertex spacing.  Defaults to {@code DEFAULT_XDIST}.
+     */
+    protected int distX = 50;
+    
+    /**
+     * The vertical vertex spacing.  Defaults to {@code DEFAULT_YDIST}.
+     */
+    protected int distY = 50;
+    
+    protected transient Point m_currentPoint = new Point();
 
-    private void getAtomics(V p, List<V> v) {
-        for (V c : graph.getSuccessors(p)) {
-            if (graph.getSuccessors(c).size() == 0) {
-                v.add(c);
-            } else {
-                getAtomics(c, v);
-            }
-        }
-    }
-    private transient Set<V> alreadyDone = new HashSet<V>();
-
-    private int distX = DEFAULT_DISTX;
-    private int distY = DEFAULT_DISTY;
-    private transient Point m_currentPoint = new Point();
-
+    /**
+     * Creates an instance for the specified graph with default X and Y distances.
+     */
     public TreeLayout(Forest<V,E> g) {
     	this(g, DEFAULT_DISTX, DEFAULT_DISTY);
     }
 
+    /**
+     * Creates an instance for the specified graph and X distance with
+     * default Y distance.
+     */
     public TreeLayout(Forest<V,E> g, int distx) {
         this(g, distx, DEFAULT_DISTY);
     }
 
+    /**
+     * Creates an instance for the specified graph, X distance, and Y distance.
+     */
     public TreeLayout(Forest<V,E> g, int distx, int disty) {
-    	
+        if (g == null)
+            throw new IllegalArgumentException("Graph must be non-null");
+        if (distx < 1 || disty < 1)
+            throw new IllegalArgumentException("X and Y distances must each be positive");
     	this.graph = g;
         this.distX = distx;
         this.distY = disty;
         buildTree();
     }
     
-    private Collection<V> getRoots() {
-    	Set<V> roots = new HashSet<V>();
-    	for(Tree<V,E> tree : graph.getTrees()) {
-    			roots.add(tree.getRoot());
-    	}
-    	return roots;
-    }
-
-    public Dimension getCurrentSize() {
-    	return size;
-    }
-
-	private void buildTree() {
+	protected void buildTree() {
         this.m_currentPoint = new Point(0, 20);
-        Collection<V> roots = getRoots();
+        Collection<V> roots = TreeUtils.getRoots(graph);
         if (roots.size() > 0 && graph != null) {
        		calculateDimensionX(roots);
        		for(V v : roots) {
@@ -114,7 +114,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
         }
     }
 
-    private void buildTree(V v, int x) {
+    protected void buildTree(V v, int x) {
 
         if (!alreadyDone.contains(v)) {
             alreadyDone.add(v);
@@ -176,20 +176,6 @@ public class TreeLayout<V,E> implements Layout<V,E> {
     	return size;
     }
     
-    public int getDepth(V v) {
-        int depth = 0;
-        for (V c : graph.getSuccessors(v)) {
-
-            if (graph.getSuccessors(c).size() == 0) {
-                depth = 0;
-            } else {
-                depth = Math.max(depth, getDepth(c));
-            }
-        }
-
-        return depth + 1;
-    }
-
     /**
      * This method is not supported by this class.  The size of the layout
      * is determined by the topology of the tree, and by the horizontal 
@@ -200,7 +186,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
                 " by vertex spacing in constructor");
     }
 
-    private void setCurrentPositionFor(V vertex) {
+    protected void setCurrentPositionFor(V vertex) {
     	int x = m_currentPoint.x;
     	int y = m_currentPoint.y;
     	if(x < 0) size.width -= x;
@@ -249,25 +235,18 @@ public class TreeLayout<V,E> implements Layout<V,E> {
 	public void setInitializer(Transformer<V, Point2D> initializer) {
 	}
 	
+    /**
+     * Returns the center of this layout's area.
+     */
 	public Point2D getCenter() {
 		return new Point2D.Double(size.getWidth()/2,size.getHeight()/2);
 	}
 
 	public void setLocation(V v, Point2D location) {
-			locations.get(v).setLocation(location);
+		locations.get(v).setLocation(location);
 	}
 	
 	public Point2D transform(V v) {
-			return locations.get(v);
+		return locations.get(v);
 	}
-	
-//	private Point2D getMaxXY() {
-//		double maxx = 0;
-//		double maxy = 0;
-//		for(Point2D p : locations.values()) {
-//			maxx = Math.max(maxx, p.getX());
-//			maxy = Math.max(maxy, p.getY());
-//		}
-//		return new Point2D.Double(maxx,maxy);
-//	}
 }
