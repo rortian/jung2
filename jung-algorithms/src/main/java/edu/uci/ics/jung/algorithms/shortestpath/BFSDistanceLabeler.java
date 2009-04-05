@@ -11,6 +11,7 @@ package edu.uci.ics.jung.algorithms.shortestpath;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -103,12 +104,6 @@ public class BFSDistanceLabeler<V, E> {
         predecessors.add(predecessor);
     }
 
-    public void removeDecorations(Hypergraph<V,E> g) {
-        for(V v : g.getVertices()) {
-            distanceDecorator.remove(v);
-        }
-    }
-
     /**
      * Computes the distances of all the node from the starting root nodes. If there is more than one root node
      * the minimum distance from each root node is used as the designated distance to a given node. Also keeps track
@@ -147,10 +142,7 @@ public class BFSDistanceLabeler<V, E> {
      * @param root the single starting vertex to traverse from
      */
     public void labelDistances(Hypergraph<V,E> graph, V root) {
-        Set<V> rootSet = new HashSet<V>();
-        rootSet.add(root);
-        labelDistances(graph,rootSet);
-
+        labelDistances(graph, Collections.singleton(root));
     }
 
     private void visitNewVertex(V predecessor, V neighbor, int distance, List<V> newList) {
@@ -167,6 +159,10 @@ public class BFSDistanceLabeler<V, E> {
         }
     }
 
+    /**
+     * Returns a map from vertices to minimum distances from the original source(s).
+     * Must be called after {@code labelDistances} in order to contain valid data.
+     */
     public Map<V, Number> getDistanceDecorator() {
         return distanceDecorator;
     }
