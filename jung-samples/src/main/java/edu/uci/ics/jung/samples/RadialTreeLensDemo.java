@@ -78,6 +78,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class RadialTreeLensDemo extends JApplet {
 	
 	Forest<String,Integer> graph;
@@ -163,7 +164,7 @@ public class RadialTreeLensDemo extends JApplet {
         vv.getRenderContext().setEdgeDrawPaintTransformer(new PickableEdgePaintTransformer<Integer>(pes, Color.black, Color.cyan));
         vv.setBackground(Color.white);
         
-        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
         final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeTransformer();
@@ -171,7 +172,7 @@ public class RadialTreeLensDemo extends JApplet {
         	new ConstantTransformer(new Rectangle2D.Float(-10,-10,20,20));
 
         // add a listener for ToolTips
-        vv.setVertexToolTipTransformer(new ToStringLabeller());
+        vv.setVertexToolTipTransformer(new ToStringLabeller<String>());
         
         Container content = getContentPane();
         GraphZoomScrollPane gzsp = new GraphZoomScrollPane(vv);

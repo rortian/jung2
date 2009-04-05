@@ -31,13 +31,17 @@ public class BasicTransformer implements MultiLayerTransformer,
     protected MutableTransformer layoutTransformer =
         new MutableAffineTransformer(new AffineTransform());
 
+    /**
+     * Creates an instance and notifies the view and layout transformers to listen to
+     * changes published by this instance.
+     */
     public BasicTransformer() {
 		super();
 		viewTransformer.addChangeListener(this);
 		layoutTransformer.addChangeListener(this);
 	}
 
-    /* (non-Javadoc)
+    /**
 	 * @see edu.uci.ics.jung.visualization.MultiLayerTransformer#setViewTransformer(edu.uci.ics.jung.visualization.transform.MutableTransformer)
 	 */
     protected void setViewTransformer(MutableTransformer transformer) {
