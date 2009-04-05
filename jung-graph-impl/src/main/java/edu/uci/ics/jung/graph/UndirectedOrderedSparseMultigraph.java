@@ -32,6 +32,11 @@ public class UndirectedOrderedSparseMultigraph<V,E>
     extends UndirectedSparseMultigraph<V,E>
     implements UndirectedGraph<V,E>, Serializable {
 	
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
 	public static <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
 		return new Factory<UndirectedGraph<V,E>> () {
 			public UndirectedGraph<V,E> create() {
@@ -40,6 +45,9 @@ public class UndirectedOrderedSparseMultigraph<V,E>
 		};
 	}
 
+	/**
+	 * Creates a new instance.
+	 */
     public UndirectedOrderedSparseMultigraph() {
         vertices = new LinkedHashMap<V, Set<E>>();
         edges = new LinkedHashMap<E, Pair<V>>();

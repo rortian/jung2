@@ -66,5 +66,8 @@ public interface MatrixElementOperations<E>
      */
     public Number computePathData(E e1, E e2);
     
-    Map<E,Number> getEdgeData();
+    /**
+     * Returns a map from edges to values.
+     */
+    public Map<E,Number> getEdgeData();
 }

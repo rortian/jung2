@@ -45,6 +45,11 @@ public class UndirectedSparseMultigraph<V,E>
     extends AbstractTypedGraph<V,E>
     implements UndirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
     
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
     public static <V,E> Factory<UndirectedGraph<V,E>> getFactory() {
         return new Factory<UndirectedGraph<V,E>> () {
 
@@ -57,6 +62,9 @@ public class UndirectedSparseMultigraph<V,E>
     protected Map<V, Set<E>> vertices; // Map of vertices to adjacency sets
     protected Map<E, Pair<V>> edges;    // Map of edges to incident vertex sets
 
+    /**
+     * Creates a new instance.
+     */
     public UndirectedSparseMultigraph() {
     	super(EdgeType.UNDIRECTED);
         vertices = new HashMap<V, Set<E>>();

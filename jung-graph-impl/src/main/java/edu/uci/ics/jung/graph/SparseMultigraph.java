@@ -33,6 +33,11 @@ public class SparseMultigraph<V,E>
     extends AbstractGraph<V,E>
     implements MultiGraph<V,E>, Serializable {
 	
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
 	public static <V,E> Factory<Graph<V,E>> getFactory() { 
 		return new Factory<Graph<V,E>> () {
 			public Graph<V,E> create() {
@@ -47,6 +52,9 @@ public class SparseMultigraph<V,E>
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
     protected Set<E> directedEdges;
 
+    /**
+     * Creates a new instance.
+     */
     public SparseMultigraph()
     {
         vertices = new HashMap<V, Pair<Set<E>>>();

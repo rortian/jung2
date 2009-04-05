@@ -117,9 +117,19 @@ public class HITS<V,E> extends HITSWithPriors<V,E>
      */
     public static class Scores
     {
+    	/**
+    	 * The hub score for a vertex.
+    	 */
     	public double hub;
+    	
+    	/**
+    	 * The authority score for a vertex.
+    	 */
     	public double authority;
     	
+    	/**
+    	 * Creates an instance with the specified hub and authority score.
+    	 */
     	public Scores(double hub, double authority)
     	{
     		this.hub = hub;

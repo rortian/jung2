@@ -92,6 +92,10 @@ public class VertexPartitionCollapser<V,E,CV,CE>
         return collapsed;
     }
     
+    /**
+     * Returns a transformer from vertex sets in the original graph to collapsed vertices
+     * in the transformed graph.
+     */
     public Transformer<Set<V>, CV> getSetToCollapsedVertexTransformer()
     {
         return MapTransformer.getInstance(set_collapsedv);

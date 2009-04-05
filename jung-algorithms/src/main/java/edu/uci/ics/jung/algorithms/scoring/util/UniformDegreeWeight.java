@@ -32,6 +32,9 @@ public class UniformDegreeWeight<V, E> implements
 {
     private Hypergraph<V, E> graph;
     
+    /**
+     * Creates an instance for the specified graph.
+     */
     public UniformDegreeWeight(Hypergraph<V, E> graph)
     {
         this.graph = graph;

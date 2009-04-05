@@ -33,6 +33,11 @@ public class OrderedSparseMultigraph<V,E>
     extends SparseMultigraph<V,E>
     implements MultiGraph<V,E>, Serializable {
 	
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
 	public static <V,E> Factory<Graph<V,E>> getFactory() { 
 		return new Factory<Graph<V,E>> () {
 			public Graph<V,E> create() {
@@ -41,6 +46,9 @@ public class OrderedSparseMultigraph<V,E>
 		};
 	}
 
+    /**
+     * Creates a new instance.
+     */
     public OrderedSparseMultigraph()
     {
         vertices = new LinkedHashMap<V, Pair<Set<E>>>();

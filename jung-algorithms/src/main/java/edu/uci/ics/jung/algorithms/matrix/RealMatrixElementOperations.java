@@ -23,6 +23,9 @@ public class RealMatrixElementOperations<E> implements MatrixElementOperations<E
 {
     private Map<E,Number> edgeData = new HashMap<E,Number>();
 
+    /**
+     * Creates an instance using the specified edge values.
+     */
     public RealMatrixElementOperations(Map<E,Number> edgeData)
     {
         this.edgeData = edgeData;

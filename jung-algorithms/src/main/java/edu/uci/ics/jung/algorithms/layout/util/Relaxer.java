@@ -9,36 +9,35 @@ package edu.uci.ics.jung.algorithms.layout.util;
 public interface Relaxer {
 	
 	/**
-	 * execute a loop of steps in a new Thread
-	 * firing an event after each step
-	 *
+	 * Execute a loop of steps in a new Thread,
+	 * firing an event after each step.
 	 */
 	void relax();
 	
 	/**
-	 * execute a loop of steps in the calling
-	 * thread, firing no events
-	 *
+	 * Execute a loop of steps in the calling
+	 * thread, firing no events.
 	 */
 	void prerelax();
 	
 	/**
-	 * make the relaxer thread wait
-	 *
+	 * Make the relaxer thread wait.
 	 */
 	void pause();
 	
 	/**
-	 * make the relaxer thread resume
+	 * Make the relaxer thread resume.
 	 *
 	 */
 	void resume();
 	
 	/**
-	 * set flags to stop the relaxer thread
-	 *
+	 * Set flags to stop the relaxer thread.
 	 */
 	void stop();
 
+	/**
+	 * Sets the sleep time.
+	 */
 	void setSleepTime(long i);
 }

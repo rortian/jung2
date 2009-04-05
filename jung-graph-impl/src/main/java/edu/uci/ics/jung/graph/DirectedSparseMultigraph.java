@@ -34,6 +34,11 @@ public class DirectedSparseMultigraph<V,E>
     extends AbstractTypedGraph<V,E>
     implements DirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
 
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
 	public static <V,E> Factory<DirectedGraph<V,E>> getFactory() {
 		return new Factory<DirectedGraph<V,E>> () {
 			public DirectedGraph<V,E> create() {
@@ -45,6 +50,9 @@ public class DirectedSparseMultigraph<V,E>
 	protected Map<V, Pair<Set<E>>> vertices; // Map of vertices to Pair of adjacency sets {incoming, outgoing}
     protected Map<E, Pair<V>> edges;            // Map of edges to incident vertex pairs
 
+    /**
+     * Creates a new instance.
+     */
     public DirectedSparseMultigraph() {
     	super(EdgeType.DIRECTED);
         vertices = new HashMap<V, Pair<Set<E>>>();

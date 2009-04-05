@@ -36,7 +36,11 @@ public class SortedSparseMultigraph<V,E>
     extends OrderedSparseMultigraph<V,E>
     implements MultiGraph<V,E>, Serializable 
 {
-	
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
 	public static <V,E> Factory<Graph<V,E>> getFactory() 
 	{ 
 		return new Factory<Graph<V,E>> () 
@@ -60,6 +64,10 @@ public class SortedSparseMultigraph<V,E>
      */
     protected Comparator<E> edge_comparator;
     
+    /**
+     * Creates a new instance which sorts its vertices and edges according to the 
+     * specified {@code Comparator}s.
+     */
     public SortedSparseMultigraph(Comparator<V> vertex_comparator, Comparator<E> edge_comparator)
     {
         this.vertex_comparator = vertex_comparator;
@@ -69,6 +77,10 @@ public class SortedSparseMultigraph<V,E>
         directedEdges = new TreeSet<E>(edge_comparator);
     }
     
+    /**
+     * Creates a new instance which sorts its vertices and edges according to 
+     * their natural ordering.
+     */
     @SuppressWarnings("unchecked")
     public SortedSparseMultigraph()
     {

@@ -33,6 +33,11 @@ public class DirectedOrderedSparseMultigraph<V,E>
     extends DirectedSparseMultigraph<V,E>
     implements DirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
 
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
 	public static <V,E> Factory<DirectedGraph<V,E>> getFactory() {
 		return new Factory<DirectedGraph<V,E>> () {
 			public DirectedGraph<V,E> create() {
@@ -41,6 +46,9 @@ public class DirectedOrderedSparseMultigraph<V,E>
 		};
 	}
 
+    /**
+     * Creates a new instance.
+     */
     public DirectedOrderedSparseMultigraph() {
         vertices = new LinkedHashMap<V, Pair<Set<E>>>();
         edges = new LinkedHashMap<E, Pair<V>>();

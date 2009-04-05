@@ -15,6 +15,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 
 import org.apache.commons.collections15.CollectionUtils;
+import org.apache.commons.collections15.Factory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +39,22 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     protected V root;
     protected int order;
     
+    /**
+     * Returns a {@code Factory} that creates an instance of this graph type.
+     * @param <V> the vertex type for the graph factory
+     * @param <E> the edge type for the graph factory
+     */
+    public static <V,E> Factory<DirectedGraph<V,E>> getFactory(final int order) {
+        return new Factory<DirectedGraph<V,E>> () {
+            public DirectedGraph<V,E> create() {
+                return new OrderedKAryTree<V,E>(order);
+            }
+        };
+    }
+    
+    /**
+     * Creates a new instance with the specified order (maximum number of children).
+     */
     public OrderedKAryTree(int order)
     {
     	super(EdgeType.DIRECTED);

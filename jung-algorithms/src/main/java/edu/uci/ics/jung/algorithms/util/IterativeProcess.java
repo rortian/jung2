@@ -129,10 +129,6 @@ public abstract class IterativeProcess implements IterativeContext {
         return precision < desiredPrecision;
     }
     
-    public String getStatus() {
-    	return "Precision = "+precision+", desiredPrecision = "+desiredPrecision;
-    }
-    
     public boolean done() {
     	return hasConverged();
     }
@@ -143,6 +139,9 @@ public abstract class IterativeProcess implements IterativeContext {
     protected void initializeIterations() {
     }
 
+    /**
+     * 
+     */
     public void reset() {
     }
 

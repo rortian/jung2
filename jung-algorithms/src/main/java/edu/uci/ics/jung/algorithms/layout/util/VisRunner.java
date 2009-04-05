@@ -34,6 +34,9 @@ public class VisRunner implements Relaxer, Runnable {
 	protected long sleepTime = 100L;
 
 	
+	/**
+	 * Creates an instance for the specified process.
+	 */
 	public VisRunner(IterativeContext process) {
 		this.process = process;
 	}
@@ -74,6 +77,9 @@ public class VisRunner implements Relaxer, Runnable {
 		thread.start();
 	}
 	
+	/**
+	 * Used for synchronization.
+	 */
 	public Object pauseObject = new String("PAUSE OBJECT");
 
 	public void resume() {

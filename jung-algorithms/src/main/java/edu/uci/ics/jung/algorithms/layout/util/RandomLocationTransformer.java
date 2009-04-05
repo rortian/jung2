@@ -35,10 +35,19 @@ public class RandomLocationTransformer<V> implements Transformer<V,Point2D> {
 	Dimension d;
 	Random random;
     
+    /**
+     * Creates an instance with the specified size which uses the current time 
+     * as the random seed.
+     */
     public RandomLocationTransformer(Dimension d) {
     	this(d, new Date().getTime());
     }
     
+    /**
+     * Creates an instance with the specified dimension and random seed.
+     * @param d
+     * @param seed
+     */
     public RandomLocationTransformer(final Dimension d, long seed) {
     	this.d = d;
     	this.random = new Random(seed);

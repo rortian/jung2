@@ -38,11 +38,17 @@ public class VEPair<V, E>
         this.e = e;
     }
     
+    /**
+     * Returns the vertex of this pair.
+     */
     public V getV()
     {
         return v;
     }
     
+    /**
+     * Returns the edge of this pair.
+     */
     public E getE()
     {
         return e;
