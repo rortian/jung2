@@ -67,6 +67,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ShapeTransformer;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class SatelliteViewDemo<V, E> extends JApplet {
 
     static final String instructions = 

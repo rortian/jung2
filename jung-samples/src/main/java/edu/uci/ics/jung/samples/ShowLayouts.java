@@ -58,6 +58,7 @@ import edu.uci.ics.jung.visualization.util.Animator;
  * @author Danyel Fisher
  * @author Joshua O'Madadhain
  */
+@SuppressWarnings("serial")
 public class ShowLayouts extends JApplet {
     protected static Graph<? extends Object, ? extends Object>[] g_array;
     protected static int graph_index;

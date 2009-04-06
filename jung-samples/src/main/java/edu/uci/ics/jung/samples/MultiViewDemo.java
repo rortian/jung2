@@ -63,6 +63,7 @@ import edu.uci.ics.jung.visualization.picking.ShapePickSupport;
  * @author Tom Nelson 
  * 
  */
+@SuppressWarnings("serial")
 public class MultiViewDemo extends JApplet {
 
     /**

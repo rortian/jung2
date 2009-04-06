@@ -71,6 +71,7 @@ import edu.uci.ics.jung.visualization.util.Animator;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class BalloonLayoutDemo extends JApplet {
 
     /**

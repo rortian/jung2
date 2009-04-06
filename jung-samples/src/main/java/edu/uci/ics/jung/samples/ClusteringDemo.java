@@ -72,6 +72,7 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
  * Fruchtermain-Rheingold layout and provide a slider so that the user can adjust the clustering granularity.
  * @author Scott White
  */
+@SuppressWarnings("serial")
 public class ClusteringDemo extends JApplet {
 
 	VisualizationViewer<Number,Number> vv;

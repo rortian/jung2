@@ -67,6 +67,7 @@ import edu.uci.ics.jung.visualization.util.Animator;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class L2RTreeLayoutDemo extends JApplet {
 
     /**

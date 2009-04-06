@@ -69,6 +69,7 @@ import edu.uci.ics.jung.visualization.subLayout.TreeCollapser;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class TreeCollapseDemo extends JApplet {
 
     /**

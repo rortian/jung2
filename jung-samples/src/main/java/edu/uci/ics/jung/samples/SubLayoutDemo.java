@@ -68,6 +68,7 @@ import edu.uci.ics.jung.visualization.picking.PickedState;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class SubLayoutDemo extends JApplet {
 
     String instructions =

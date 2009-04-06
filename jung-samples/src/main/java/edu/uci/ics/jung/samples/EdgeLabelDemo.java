@@ -94,7 +94,8 @@ public class EdgeLabelDemo extends JApplet {
      * demo the label positioning features
      * 
      */
-    public EdgeLabelDemo() {
+    @SuppressWarnings("serial")
+	public EdgeLabelDemo() {
         
         // create a simple graph for the demo
         graph = new SparseMultigraph<Integer,Number>();

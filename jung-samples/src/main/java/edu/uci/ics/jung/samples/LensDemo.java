@@ -86,6 +86,7 @@ import edu.uci.ics.jung.visualization.transform.shape.ViewLensSupport;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class LensDemo extends JApplet {
 
     /**
@@ -194,9 +195,9 @@ public class LensDemo extends JApplet {
             new LayoutLensSupport<String,Number>(vv, new MagnifyTransformer(vv, 
             		vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT)),
                     new ModalLensGraphMouse(new LensMagnificationGraphMousePlugin(1.f, 6.f, .2f)));
-        hyperbolicLayoutSupport.getLensTransformer().setEllipse(hyperbolicViewSupport.getLensTransformer().getEllipse());
-        magnifyViewSupport.getLensTransformer().setEllipse(hyperbolicLayoutSupport.getLensTransformer().getEllipse());
-        magnifyLayoutSupport.getLensTransformer().setEllipse(magnifyViewSupport.getLensTransformer().getEllipse());
+        hyperbolicLayoutSupport.getLensTransformer().setLensShape(hyperbolicViewSupport.getLensTransformer().getLensShape());
+        magnifyViewSupport.getLensTransformer().setLensShape(hyperbolicLayoutSupport.getLensTransformer().getLensShape());
+        magnifyLayoutSupport.getLensTransformer().setLensShape(magnifyViewSupport.getLensTransformer().getLensShape());
         
         final ScalingControl scaler = new CrossoverScalingControl();
 

@@ -50,6 +50,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class AnnotationsDemo<V, E> extends JApplet {
 
     static final String instructions = 

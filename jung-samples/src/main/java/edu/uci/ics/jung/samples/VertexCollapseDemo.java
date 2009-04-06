@@ -66,6 +66,7 @@ import edu.uci.ics.jung.visualization.util.PredicatedParallelEdgeIndexFunction;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class VertexCollapseDemo extends JApplet {
 
     String instructions =

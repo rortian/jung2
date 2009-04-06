@@ -168,6 +168,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
  * 
  * @author Danyel Fisher, Joshua O'Madadhain, Tom Nelson
  */
+@SuppressWarnings("serial")
 public class PluggableRendererDemo extends JApplet implements ActionListener 
 {
     protected JCheckBox v_color;
@@ -392,7 +393,8 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     /**
      * @param jp    panel to which controls will be added
      */
-    protected void addBottomControls(final JPanel jp) 
+    @SuppressWarnings("serial")
+	protected void addBottomControls(final JPanel jp) 
     {
         final JPanel control_panel = new JPanel();
         jp.add(control_panel, BorderLayout.EAST);

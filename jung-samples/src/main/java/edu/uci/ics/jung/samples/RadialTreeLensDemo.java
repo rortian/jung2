@@ -22,9 +22,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -38,18 +36,15 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.TransformerUtils;
-import org.apache.commons.collections15.functors.ConstantTransformer;
 
 import edu.uci.ics.jung.algorithms.layout.PolarPoint;
 import edu.uci.ics.jung.algorithms.layout.RadialTreeLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
+import edu.uci.ics.jung.graph.DelegateForest;
+import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Forest;
-import edu.uci.ics.jung.graph.DelegateForest;
-import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
@@ -150,9 +145,6 @@ public class RadialTreeLensDemo extends JApplet {
         radialLayout.setSize(new Dimension(600,600));
 
         Dimension preferredSize = new Dimension(600,600);
-        Map<String,Point2D> map = new HashMap<String,Point2D>();
-        Transformer<String,Point2D> vlf =
-        	TransformerUtils.mapTransformer(map);
         
         final VisualizationModel<String,Integer> visualizationModel = 
             new DefaultVisualizationModel<String,Integer>(radialLayout, preferredSize);
@@ -167,10 +159,6 @@ public class RadialTreeLensDemo extends JApplet {
         vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<String>());
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
         
-        final Transformer<String,Shape> ovals = vv.getRenderContext().getVertexShapeTransformer();
-        final Transformer<String,Shape> squares = 
-        	new ConstantTransformer(new Rectangle2D.Float(-10,-10,20,20));
-
         // add a listener for ToolTips
         vv.setVertexToolTipTransformer(new ToStringLabeller<String>());
         

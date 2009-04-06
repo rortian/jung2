@@ -48,6 +48,7 @@ import edu.uci.ics.jung.visualization.transform.MutableTransformer;
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class TwoModelDemo extends JApplet {
 
      /**

@@ -56,6 +56,7 @@ import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsideP
  * @author Tom Nelson
  * 
  */
+@SuppressWarnings("serial")
 public class WorldMapGraphDemo extends JApplet {
 
     /**
