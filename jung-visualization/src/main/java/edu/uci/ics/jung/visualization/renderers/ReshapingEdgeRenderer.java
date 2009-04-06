@@ -14,12 +14,12 @@ import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 
 import javax.swing.JComponent;
 
@@ -74,8 +74,8 @@ public class ReshapingEdgeRenderer<V,E> extends BasicEdgeRenderer<V,E>
         MutableTransformer transformer = rc.getMultiLayerTransformer().getTransformer(Layer.VIEW);
         if(transformer instanceof LensTransformer) {
             LensTransformer ht = (LensTransformer)transformer;
-            Ellipse2D hyperEllipse = ht.getEllipse();
-            if(hyperEllipse.contains(x1,y1) || hyperEllipse.contains(x2,y2)) {
+            RectangularShape lensShape = ht.getLensShape();
+            if(lensShape.contains(x1,y1) || lensShape.contains(x2,y2)) {
                 flatness = .05f;
             }
         }

@@ -14,7 +14,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.RectangularShape;
 
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
@@ -80,12 +80,12 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
      */
     public static class Lens implements Paintable {
         LensTransformer lensTransformer;
-        Ellipse2D ellipse;
+        RectangularShape lensShape;
         Paint paint = Color.decode("0xdddddd");
         
         public Lens(LensTransformer lensTransformer) {
             this.lensTransformer = lensTransformer;
-            this.ellipse = lensTransformer.getEllipse();
+            this.lensShape = lensTransformer.getLensShape();
         }
         
         /**
@@ -110,7 +110,7 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
             
             Graphics2D g2d = (Graphics2D)g;
             g2d.setPaint(paint);
-            g2d.fill(ellipse);
+            g2d.fill(lensShape);
         }
 
         public boolean useTransform() {
@@ -126,12 +126,12 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
      */
     public static class LensControls  implements Paintable {
         LensTransformer lensTransformer;
-        Ellipse2D ellipse;
+        RectangularShape lensShape;
         Paint paint = Color.gray;
         
         public LensControls(LensTransformer lensTransformer) {
             this.lensTransformer = lensTransformer;
-            this.ellipse = lensTransformer.getEllipse();
+            this.lensShape = lensTransformer.getLensShape();
         }
         
         /**
@@ -156,9 +156,9 @@ public abstract class AbstractLensSupport<V,E> implements LensSupport {
             
             Graphics2D g2d = (Graphics2D)g;
             g2d.setPaint(paint);
-            g2d.draw(ellipse);
-            int centerX = (int)Math.round(ellipse.getCenterX());
-            int centerY = (int)Math.round(ellipse.getCenterY());
+            g2d.draw(lensShape);
+            int centerX = (int)Math.round(lensShape.getCenterX());
+            int centerY = (int)Math.round(lensShape.getCenterY());
             g.drawOval(centerX-10, centerY-10, 20, 20);
         }
 

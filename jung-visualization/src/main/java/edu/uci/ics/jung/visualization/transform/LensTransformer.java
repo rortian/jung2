@@ -17,6 +17,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 
 /**
  * LensTransformer wraps a MutableAffineTransformer and modifies
@@ -37,18 +38,10 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     /**
      * the area affected by the transform
      */
-    protected Ellipse2D ellipse = new Ellipse2D.Float();
+    protected RectangularShape lensShape = new Ellipse2D.Float();
     
     protected float magnification = 0.7f;
     
-    /**
-     * create an instance, setting values from the passed component
-     * and registering to listen for size changes on the component
-     * @param component
-     */
-//    public LensTransformer(Component component) {
-//        this(component, new MutableAffineTransformer());
-//    }
     /**
      * create an instance with a possibly shared transform
      * @param component
@@ -66,14 +59,13 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @param component
      */
     private void setComponent(Component component) {
-//    	this.viewTransformer = (ViewTransformer)component;
         Dimension d = component.getSize();
         if(d.width <= 0 || d.height <= 0) {
             d = component.getPreferredSize();
         }
         float ewidth = d.width/1.5f;
         float eheight = d.height/1.5f;
-        ellipse.setFrame(d.width/2-ewidth/2, d.height/2-eheight/2, ewidth, eheight);
+        lensShape.setFrame(d.width/2-ewidth/2, d.height/2-eheight/2, ewidth, eheight);
     }
     
     /**
@@ -92,15 +84,15 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @return Returns the viewCenter.
      */
     public Point2D getViewCenter() {
-        return new Point2D.Double(ellipse.getCenterX(), ellipse.getCenterY());
+        return new Point2D.Double(lensShape.getCenterX(), lensShape.getCenterY());
     }
     /**
      * @param viewCenter The viewCenter to set.
      */
     public void setViewCenter(Point2D viewCenter) {
-        double width = ellipse.getWidth();
-        double height = ellipse.getHeight();
-        ellipse.setFrame(viewCenter.getX()-width/2,
+        double width = lensShape.getWidth();
+        double height = lensShape.getHeight();
+        lensShape.setFrame(viewCenter.getX()-width/2,
                 viewCenter.getY()-height/2,
                 width, height);
     }
@@ -109,16 +101,16 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @return Returns the viewRadius.
      */
     public double getViewRadius() {
-        return ellipse.getHeight()/2;
+        return lensShape.getHeight()/2;
     }
     /**
      * @param viewRadius The viewRadius to set.
      */
     public void setViewRadius(double viewRadius) {
-        double x = ellipse.getCenterX();
-        double y = ellipse.getCenterY();
+        double x = lensShape.getCenterX();
+        double y = lensShape.getCenterY();
         double viewRatio = getRatio();
-        ellipse.setFrame(x-viewRadius/viewRatio,
+        lensShape.setFrame(x-viewRadius/viewRatio,
                 y-viewRadius,
                 2*viewRadius/viewRatio,
                 2*viewRadius);
@@ -128,14 +120,14 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
      * @return Returns the ratio.
      */
     public double getRatio() {
-        return ellipse.getHeight()/ellipse.getWidth();
+        return lensShape.getHeight()/lensShape.getWidth();
     }
     
-    public void setEllipse(Ellipse2D ellipse) {
-        this.ellipse = ellipse;
+    public void setLensShape(RectangularShape ellipse) {
+        this.lensShape = ellipse;
     }
-    public Ellipse2D getEllipse() {
-        return ellipse;
+    public RectangularShape getLensShape() {
+        return lensShape;
     }
     public void setToIdentity() {
         this.delegate.setToIdentity();
@@ -162,8 +154,8 @@ public abstract class LensTransformer extends MutableTransformerDecorator implem
     
     public double getDistanceFromCenter(Point2D p) {
     	
-        double dx = ellipse.getCenterX()-p.getX();
-        double dy = ellipse.getCenterY()-p.getY();
+        double dx = lensShape.getCenterX()-p.getX();
+        double dy = lensShape.getCenterY()-p.getY();
         dx *= getRatio();
         return Math.sqrt(dx*dx + dy*dy);
     }
