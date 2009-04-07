@@ -194,7 +194,8 @@ public class GraphEditorDemo extends JApplet implements Printable {
                 JOptionPane.showMessageDialog(vv, instructions);
             }});
 
-        AnnotationControls annotationControls = new AnnotationControls(graphMouse.getAnnotatingPlugin());
+        AnnotationControls<Number,Number> annotationControls = 
+        	new AnnotationControls<Number,Number>(graphMouse.getAnnotatingPlugin());
         JPanel controls = new JPanel();
         controls.add(plus);
         controls.add(minus);
