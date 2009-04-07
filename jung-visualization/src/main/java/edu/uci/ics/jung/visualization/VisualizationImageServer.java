@@ -20,7 +20,14 @@ import java.util.Map;
 
 import edu.uci.ics.jung.algorithms.layout.Layout;
 
-
+/**
+ * A class that could be used on the server side of a thin-client application. It creates the jung
+ * visualization, then produces an image of it.
+ * @author tom
+ *
+ * @param <V>
+ * @param <E>
+ */
 @SuppressWarnings("serial")
 public class VisualizationImageServer<V,E> extends BasicVisualizationServer<V,E> {
 

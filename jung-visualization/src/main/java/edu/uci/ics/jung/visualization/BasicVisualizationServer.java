@@ -49,6 +49,8 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
 /**
  * A class that maintains many of the details necessary for creating 
  * visualizations of graphs.
+ * This is the old VisualizationViewer without tooltips and mouse behaviors. Its purpose is
+ * to be a base class that can also be used on the server side of a multi-tiered application.
  * 
  * @author Joshua O'Madadhain
  * @author Tom Nelson
@@ -56,8 +58,7 @@ import edu.uci.ics.jung.visualization.util.DefaultChangeEventSupport;
  */
 @SuppressWarnings("serial")
 public class BasicVisualizationServer<V, E> extends JPanel 
-                implements //Transformer, LayoutTransformer, ViewTransformer, 
-                ChangeListener, ChangeEventSupport, VisualizationServer<V, E>{
+                implements ChangeListener, ChangeEventSupport, VisualizationServer<V, E>{
 
     protected ChangeEventSupport changeSupport =
         new DefaultChangeEventSupport(this);
