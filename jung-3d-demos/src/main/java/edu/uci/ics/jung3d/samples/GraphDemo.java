@@ -13,7 +13,7 @@
  *  limitations under the License.
  *
  */
-package samples.graph;
+package edu.uci.ics.jung3d.samples;
 
 /**
  * 

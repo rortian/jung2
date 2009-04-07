@@ -6,7 +6,7 @@
  * or http://jung.sourceforge.net/license.txt for a description.
  * 
  */
-package samples.graph.jai;
+package edu.uci.ics.jung.jai.samples;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
