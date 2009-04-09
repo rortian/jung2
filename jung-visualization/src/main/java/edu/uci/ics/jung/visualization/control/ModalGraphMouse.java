@@ -30,14 +30,6 @@ public interface ModalGraphMouse extends GraphMouse {
     ItemListener getModeListener();
     
     /**
-     *  The Mode class implements the typesafe enum pattern.
-     *  This pattern is fully described in Joshua Bloch's book
-     *  Effective Java Programming Language Guide, Item 21.
-     *
-     *  Created: Sun Aug 28 10:25:16 2005
-     *
-     *  @author Tom Nelson
-     *  @version 1.0
      */
     enum Mode { TRANSFORMING, PICKING, ANNOTATING, EDITING }
     
