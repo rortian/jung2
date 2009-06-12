@@ -79,6 +79,9 @@ import edu.uci.ics.jung.visualization.decorators.NumberFormattingTransformer;
 import edu.uci.ics.jung.visualization.decorators.PickableEdgePaintTransformer;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import edu.uci.ics.jung.visualization.renderers.BasicEdgeArrowRenderingSupport;
+import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
+import edu.uci.ics.jung.visualization.renderers.CenterEdgeArrowRenderingSupport;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 
@@ -176,6 +179,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
     protected JCheckBox v_stroke;
     protected JCheckBox e_uarrow_pred;
     protected JCheckBox e_darrow_pred;
+    protected JCheckBox e_arrow_centered;
     protected JCheckBox v_shape;
     protected JCheckBox v_size;
     protected JCheckBox v_aspect;
@@ -494,10 +498,13 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         e_darrow_pred = new JCheckBox("directed");
         e_darrow_pred.addActionListener(this);
         e_darrow_pred.setSelected(true);
+        e_arrow_centered = new JCheckBox("centered");
+        e_arrow_centered.addActionListener(this);
         JPanel arrow_panel = new JPanel(new GridLayout(1,0));
         arrow_panel.setBorder(BorderFactory.createTitledBorder("Show arrows"));
         arrow_panel.add(e_uarrow_pred);
         arrow_panel.add(e_darrow_pred);
+        arrow_panel.add(e_arrow_centered);
         
         e_show_d = new JCheckBox("directed");
         e_show_d.addActionListener(this);
@@ -642,6 +649,17 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         else if (source == e_darrow_pred)
         {
             show_arrow.showDirected(source.isSelected());
+        }
+        else if (source == e_arrow_centered)
+        {
+        	if(source.isSelected()) 
+        	{
+        		vv.getRenderer().getEdgeRenderer().setEdgeArrowRenderingSupport(new CenterEdgeArrowRenderingSupport());
+        	} 
+        	else
+        	{
+        		vv.getRenderer().getEdgeRenderer().setEdgeArrowRenderingSupport(new BasicEdgeArrowRenderingSupport());
+        	}
         }
         else if (source == font)
         {

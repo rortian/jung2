@@ -27,7 +27,6 @@ public class BasicRenderer<V,E> implements Renderer<V, E> {
     Renderer.Vertex<V,E> vertexRenderer = new BasicVertexRenderer<V,E>();
     Renderer.VertexLabel<V,E> vertexLabelRenderer = new BasicVertexLabelRenderer<V,E>();
     Renderer.Edge<V,E> edgeRenderer = new BasicEdgeRenderer<V,E>();
-    	//new BasicEdgeAndLabelRenderer<V,E>();
     Renderer.EdgeLabel<V,E> edgeLabelRenderer = new BasicEdgeLabelRenderer<V,E>();
     
 	public void render(RenderContext<V, E> renderContext, Layout<V, E> layout) {

@@ -44,8 +44,12 @@ public interface Renderer<V,E> {
     
 	interface Edge<V,E> {
 		void paintEdge(RenderContext<V,E> rc, Layout<V,E> layout, E e);
+		EdgeArrowRenderingSupport getEdgeArrowRenderingSupport();
+		void setEdgeArrowRenderingSupport(EdgeArrowRenderingSupport edgeArrowRenderingSupport);
 		class NOOP implements Edge {
 			public void paintEdge(RenderContext rc, Layout layout, Object e) {}
+			public EdgeArrowRenderingSupport getEdgeArrowRenderingSupport(){return null;}
+			public void setEdgeArrowRenderingSupport(EdgeArrowRenderingSupport edgeArrowRenderingSupport){}
 		}
 	}
 	

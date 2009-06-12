@@ -53,6 +53,7 @@ public class ViewLensSupport<V,E> extends AbstractLensSupport<V,E>
         this.lensGraphicsDecorator = new TransformingFlatnessGraphics(lensTransformer);
         this.savedEdgeRenderer = vv.getRenderer().getEdgeRenderer();
         this.reshapingEdgeRenderer = new ReshapingEdgeRenderer<V,E>();
+        this.reshapingEdgeRenderer.setEdgeArrowRenderingSupport(savedEdgeRenderer.getEdgeArrowRenderingSupport());
 
     }
     public void activate() {

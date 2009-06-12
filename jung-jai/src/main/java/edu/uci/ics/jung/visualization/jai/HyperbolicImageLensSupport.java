@@ -74,6 +74,7 @@ public class HyperbolicImageLensSupport<V,E> extends AbstractLensSupport<V,E> {
         this.lensTransformer = lensTransformer;
         this.savedEdgeRenderer = vv.getRenderer().getEdgeRenderer();
         this.reshapingEdgeRenderer = new ReshapingEdgeRenderer<V,E>();
+        this.reshapingEdgeRenderer.setEdgeArrowRenderingSupport(savedEdgeRenderer.getEdgeArrowRenderingSupport());
 
         Dimension d = vv.getSize();
 //        if(d.width == 0 || d.height == 0) {
