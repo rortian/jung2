@@ -140,6 +140,9 @@ abstract public class AbstractLayout<V, E> implements Layout<V,E> {
     
     @SuppressWarnings("unchecked")
     public void setInitializer(Transformer<V,Point2D> initializer) {
+    	if(this.equals(initializer)) {
+    		throw new IllegalArgumentException("Layout cannot be initialized with itself");
+    	}
 		Transformer<V, ? extends Object> chain = 
 			ChainedTransformer.getInstance(initializer, CloneTransformer.getInstance());
     	this.locations = LazyMap.decorate(new HashMap<V,Point2D>(), (Transformer<V, Point2D>)chain);
