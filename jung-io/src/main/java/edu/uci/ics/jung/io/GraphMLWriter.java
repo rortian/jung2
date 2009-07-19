@@ -111,7 +111,7 @@ public class GraphMLWriter<V,E>
         // write graph description, if any
 		String desc = graph_desc.transform(graph);
 		if (desc != null)
-			w.write("<desc>" + desc + "</desc>\n");
+			bw.write("<desc>" + desc + "</desc>\n");
 		
 		// write graph data out if any
 		for (String key : graph_data.keySet())
@@ -119,7 +119,7 @@ public class GraphMLWriter<V,E>
 			Transformer<Hypergraph<V,E>, ?> t = graph_data.get(key).transformer;
 			Object value = t.transform(graph);
 			if (value != null)
-				w.write(format("data", "key", key, value.toString()) + "\n");
+				bw.write(format("data", "key", key, value.toString()) + "\n");
 		}
         
 		// write vertex information

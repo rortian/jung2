@@ -102,7 +102,7 @@ public class MinimumSpanningForest<V,E> {
         this.graph = graph;
         this.forest = forest;
         this.weights = LazyMap.decorate(new HashMap<E,Double>(),
-                new ConstantTransformer(1));
+                new ConstantTransformer(1.0));
         Set<E> unfinishedEdges = new HashSet<E>(graph.getEdges());
         if(graph.getVertices().contains(root)) {
             this.forest.addVertex(root);

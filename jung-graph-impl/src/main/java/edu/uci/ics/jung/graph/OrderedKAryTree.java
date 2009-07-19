@@ -11,17 +11,18 @@
  */
 package edu.uci.ics.jung.graph;
 
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
-
-import org.apache.commons.collections15.CollectionUtils;
-import org.apache.commons.collections15.Factory;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections15.CollectionUtils;
+import org.apache.commons.collections15.Factory;
+
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * An implementation of <code>Tree</code> in which each vertex has
@@ -65,17 +66,18 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     }
   
     /**
+     * Returns the number of children that {@code vertex} has.  
      * @see edu.uci.ics.jung.graph.Tree#getChildCount(java.lang.Object)
      */
     public int getChildCount(V vertex) {
         if (!containsVertex(vertex)) 
             return 0;
-        E[] edges = vertex_data.get(vertex).child_edges;
+        List<E> edges = vertex_data.get(vertex).child_edges;
         if (edges == null)
         	return 0;
         int count = 0;
-        for (int i = 0; i < edges.length; i++)
-            count += edges[i] == null ? 0 : 1;
+        for (E edge : edges)
+            count += edge == null ? 0 : 1;
     
         return count;
     }
@@ -90,10 +92,10 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     {
         if (!containsVertex(vertex)) 
         	return null;
-        E[] edges = vertex_data.get(vertex).child_edges;
+        List<E> edges = vertex_data.get(vertex).child_edges;
         if (edges == null)
         	return null;
-        return edges[index];
+        return edges.get(index);
     }
 
     /**
@@ -103,28 +105,28 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     {
         if (!containsVertex(vertex)) 
         	return null;
-        E[] edge_array = vertex_data.get(vertex).child_edges;
-        if (edge_array == null)
-        	return Collections.emptySet();
-        Collection<E> edges = new ArrayList<E>(order);
-        for (int i = 0; i < edge_array.length; i++) 
-            if (edge_array[i] != null) edges.add(edge_array[i]);
-        return CollectionUtils.unmodifiableCollection(edges);
+        List<E> edges = vertex_data.get(vertex).child_edges;
+        return edges == null ? Collections.<E>emptySet() : 
+            CollectionUtils.unmodifiableCollection(edges);
     }
   
     /**
+     * Returns an ordered list of {@code vertex}'s child vertices.
+     * If there is no child in position i, then the list will contain
+     * {@code null} in position i.  If {@code vertex} has no children
+     * then the empty set will be returned.
      * @see edu.uci.ics.jung.graph.Tree#getChildren(java.lang.Object)
      */
     public Collection<V> getChildren(V vertex) 
     {
         if (!containsVertex(vertex)) 
             return null;
-        E[] edges = vertex_data.get(vertex).child_edges;
+        List<E> edges = vertex_data.get(vertex).child_edges;
         if (edges == null)
         	return Collections.emptySet();
         Collection<V> children = new ArrayList<V>(order);
-        for (int i = 0; i < edges.length; i++) 
-          if (edges[i] != null) children.add(this.getOpposite(vertex, edges[i]));
+        for (E edge : edges)
+            children.add(this.getOpposite(vertex, edge));
         return CollectionUtils.unmodifiableCollection(children);
     }
   
@@ -212,9 +214,8 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     				"include child: " + child);
 		if (parent.equals(child))
 			throw new IllegalArgumentException("Input vertices must be distinct");
-		if (index >= order)
-		    throw new IllegalArgumentException("'index' must be < the order " +
-		            "of this tree");
+		if (index < 0 || index >= order)
+		    throw new IllegalArgumentException("'index' must be in [0, [order-1]]");
     	
     	Pair<V> endpoints = new Pair<V>(parent, child);
     	if (containsEdge(e))
@@ -225,27 +226,23 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     			return false;
 
     	VertexData parent_data = vertex_data.get(parent);
-    	E[] outedges = parent_data.child_edges;
+    	List<E> outedges = parent_data.child_edges;
     	
     	if (outedges == null)
-    	{
-            Class<?> type = e.getClass().getComponentType();
-            outedges = (E[])java.lang.reflect.Array.newInstance(type, order);
-            parent_data.child_edges = outedges;
-    	}
+    	    outedges = new ArrayList<E>(this.order);
 
     	boolean edge_placed = false;
     	if (index >= 0)
-    		if (outedges[index] != null)
+    		if (outedges.get(index) != null)
         		throw new IllegalArgumentException("Parent " + parent + 
         				" already has a child at index " + index + " in this tree");
     		else
-    			outedges[index] = e;
-    	for (int i = 0; i < outedges.length; i++)
+    			outedges.set(index, e);
+    	for (int i = 0; i < order; i++)
     	{
-    		if (outedges[i] == null)
+    		if (outedges.get(i) == null)
     		{
-    			outedges[i] = e;
+    			outedges.set(i, e);
     			edge_placed = true;
     			break;
     		}
@@ -486,12 +483,12 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     {
         if (!containsVertex(vertex))
             return 0;
-        E[] out_edges = vertex_data.get(vertex).child_edges;
+        List<E> out_edges = vertex_data.get(vertex).child_edges;
         if (out_edges == null)
         	return 0;
         int degree = 0;
-        for (int i = 0; i < out_edges.length; i++)
-        	degree += (out_edges[i] == null) ? 0 : 1;
+        for (E e : out_edges)
+        	degree += (e == null) ? 0 : 1;
         return degree;
     }
   
@@ -589,12 +586,12 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     	VertexData v1_data = vertex_data.get(v1);
     	if (edge_vpairs.get(v1_data.parent_edge).getFirst().equals(v2))
     		return v1_data.parent_edge;
-    	E[] edges = v1_data.child_edges;
+    	List<E> edges = v1_data.child_edges;
     	if (edges == null)
     		return null;
-    	for (int i = 0; i < edges.length; i++)
-    		if (edge_vpairs.get(edges[i]).getSecond().equals(v2))
-    			return edges[i];
+    	for (E edge : edges)
+    		if (edge != null && edge_vpairs.get(edge).getSecond().equals(v2))
+    			return edge;
     	return null;
     }
   
@@ -622,14 +619,15 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
      */
     public V getChild(V vertex, int index)
     {
+        if (index < 0 || index >= order)
+            throw new ArrayIndexOutOfBoundsException(index + " is not in [0, order-1]");
         if (!containsVertex(vertex))
             return null;
-        E[] edges = vertex_data.get(vertex).child_edges;
+        List<E> edges = vertex_data.get(vertex).child_edges;
         if (edges == null)
         	return null;
-        if (edges[index] == null)
-        	return null;
-        return edge_vpairs.get(edges[index]).getSecond();
+        E edge = edges.get(index);
+        return edge == null ? null : edge_vpairs.get(edge).getSecond();
     }
     
     /**
@@ -670,9 +668,9 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     		edges.add(v_data.parent_edge);
     	if (v_data.child_edges != null)
     	{
-    		for (int i = 0; i < v_data.child_edges.length; i++)
-    			if (v_data.child_edges[i] != null)
-    				edges.add(v_data.child_edges[i]);
+    		for (E edge : v_data.child_edges)
+    			if (edge != null)
+    				edges.add(edge);
     	}
     	if (edges.isEmpty())
     		return Collections.emptySet();
@@ -712,10 +710,9 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
     		vertices.add(edge_vpairs.get(v_data.parent_edge).getFirst());
     	if (v_data.child_edges != null)
     	{
-    		for (int i = 0; i < v_data.child_edges.length; i++)
-    			if (v_data.child_edges[i] != null)
-    				vertices.add(
-    						edge_vpairs.get(v_data.child_edges[i]).getSecond());
+    		for (E edge : v_data.child_edges)
+    			if (edge != null)
+    				vertices.add(edge_vpairs.get(edge).getSecond());
     	}
     	if (vertices.isEmpty())
     		return Collections.emptySet();
@@ -764,12 +761,12 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
 		for(V v : getChildren(vertex))
 			removeVertex(v);
 
-		E edge = getParentEdge(vertex);
-		edge_vpairs.remove(edge);
-		E[] edges = vertex_data.get(vertex).child_edges;
+		E parent_edge = getParentEdge(vertex);
+		edge_vpairs.remove(parent_edge);
+		List<E> edges = vertex_data.get(vertex).child_edges;
 		if (edges != null)
-			for (int i = 0; i < edges.length; i++)
-				edge_vpairs.remove(edges[i]);
+			for (E edge : edges)
+				edge_vpairs.remove(edge);
 		vertex_data.remove(vertex);
 		
 		return true;
@@ -777,7 +774,7 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
 	
 	protected class VertexData
 	{
-		E[] child_edges;
+	    List<E> child_edges;
 		E parent_edge;
 		int depth;
 		

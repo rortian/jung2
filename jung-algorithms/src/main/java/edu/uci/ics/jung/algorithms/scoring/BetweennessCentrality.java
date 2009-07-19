@@ -101,8 +101,8 @@ public class BetweennessCentrality<V, E>
 			for (V s : graph.getVertices()) 
 				this.vertex_data.put(s, new BetweennessData());
 
-			if (v.equals(new Integer(0)))
-				System.out.println("pause");
+//			if (v.equals(new Integer(0)))
+//				System.out.println("pause");
 			
             vertex_data.get(v).numSPs = 1;
             vertex_data.get(v).distance = 0;
