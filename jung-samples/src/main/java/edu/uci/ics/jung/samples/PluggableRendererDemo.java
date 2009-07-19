@@ -350,7 +350,6 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
         Graph<Integer,Number> g = 
         	MixedRandomGraphGenerator.<Integer,Number>generateMixedRandomGraph(graphFactory, vertexFactory, edgeFactory,
         		edge_weight, 20, false, seedVertices);
-        vs = new NumberFormattingTransformer<Integer>(voltages);
         es = new NumberFormattingTransformer<Number>(MapTransformer.getInstance(edge_weight));
         
         // collect the seeds used to define the random graph
@@ -375,6 +374,7 @@ public class PluggableRendererDemo extends JApplet implements ActionListener
                     MapTransformer.getInstance(edge_weight), sources, sinks);
         voltage_scores.evaluate();
         voltages = new VertexScoreTransformer<Integer, Double>(voltage_scores);
+        vs = new NumberFormattingTransformer<Integer>(voltages);
         
         Collection<Integer> verts = g.getVertices();
         
