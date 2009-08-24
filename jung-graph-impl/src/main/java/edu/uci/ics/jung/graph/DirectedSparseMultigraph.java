@@ -190,6 +190,8 @@ public class DirectedSparseMultigraph<V,E>
 
     @Override
     public E findEdge(V v1, V v2) {
+        if (!containsVertex(v1) || !containsVertex(v2))
+            return null;
         for (E edge : getOutgoing_internal(v1))
             if (this.getDest(edge).equals(v2))
                 return edge;
