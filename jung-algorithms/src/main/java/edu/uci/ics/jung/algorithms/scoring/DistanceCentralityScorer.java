@@ -49,7 +49,8 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
     protected Distance<V> distance;
     
     /**
-     * The storage for the output results.
+     * The cache for the output results.  Null encodes "not yet calculated",
+     * < 0 encodes "no such distance exists".
      */
     protected Map<V, Double> output;
     
@@ -187,7 +188,8 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
     }
 
 	/**
-	 * Calculates the score for the specified vertex.
+	 * Calculates the score for the specified vertex.  Returns {@code null} if 
+	 * there are missing distances and such are not ignored by this instance.
 	 */
 	public Double getVertexScore(V v) 
 	{
@@ -199,13 +201,17 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 	        return value;
 	    }
 	    
+	    Map<V, Number> v_distances = new HashMap<V, Number>(distance.getDistanceMap(v));
+	    if (ignore_self_distances)
+	        v_distances.remove(v);
+	    
 		// if we don't ignore missing distances and there aren't enough
-		// distances, output null
+		// distances, output null (shortcut)
 		if (!ignore_missing)
 		{
-			int n = graph.getVertexCount();
-			n -= ignore_self_distances ? 1 : 0;
-			if (distance.getDistanceMap(v).size() < n) 
+			int num_dests = graph.getVertexCount() - 
+			    (ignore_self_distances ? 1 : 0);
+			if (v_distances.size() != num_dests) 
 			{
 				output.put(v, -1.0);
 				return null;
@@ -217,7 +223,7 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 		{
 			if (w.equals(v) && ignore_self_distances)
 				continue;
-			Number w_distance = distance.getDistance(v, w);
+			Number w_distance = v_distances.get(w);
 			if (w_distance == null)
 				if (ignore_missing)
 					continue;
@@ -231,11 +237,10 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 		}
 		value = sum;
 		if (averaging)
-		    value /= distance.getDistanceMap(v).size();
+		    value /= v_distances.size();
 		
 	    output.put(v, value == 0 ? Double.POSITIVE_INFINITY : 1.0 / value);
 		   
 		return value;
 	}
-    
 }
