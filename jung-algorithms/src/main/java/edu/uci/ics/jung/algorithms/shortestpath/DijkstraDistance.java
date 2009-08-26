@@ -136,8 +136,9 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * of priority):
      * <ul>
      * <li> the distance to the specified target (if any) has been found
-     * <li/> no more vertices are reachable 
-     * <li> the specified # of distances have been found
+     * <li> no more vertices are reachable 
+     * <li> the specified # of distances have been found, or the maximum distance 
+     * desired has been exceeded
      * <li> all distances have been found
      * </ul>
      * 
@@ -163,8 +164,8 @@ public class DijkstraDistance<V,E> implements Distance<V>
         // if we already have all the distances we need, 
         // terminate
         if (sd.reached_max ||
-                (targets != null && to_get.isEmpty()) ||
-                (sd.distances.size() >= numDests))
+            (targets != null && to_get.isEmpty()) ||
+            (sd.distances.size() >= numDests))
         {
             return sd.distances;
         }
@@ -173,10 +174,21 @@ public class DijkstraDistance<V,E> implements Distance<V>
         {
             Map.Entry<V,Number> p = sd.getNextVertex();
             V v = p.getKey();
-            double v_dist = ((Double)p.getValue()).doubleValue();
-            sd.dist_reached = v_dist;
+            double v_dist = p.getValue().doubleValue();
             to_get.remove(v);
-            if ((sd.dist_reached >= this.max_distance) || (sd.distances.size() >= max_targets))
+            if (v_dist > this.max_distance) 
+            {
+                // we're done; put this vertex back in so that we're not including
+                // a distance beyond what we specified
+                sd.estimatedDistances.put(v, v_dist);
+                sd.unknownVertices.add(v);
+                sd.distances.remove(v);
+                sd.reached_max = true;
+                break;
+            }
+            sd.dist_reached = v_dist;
+
+            if (sd.distances.size() >= this.max_targets)
             {
                 sd.reached_max = true;
                 break;
@@ -205,10 +217,6 @@ public class DijkstraDistance<V,E> implements Distance<V>
                     }
                 }
             }
-//            // if we have calculated the distance to the target, stop
-//            if (v == target)
-//                break;
-
         }
         return sd.distances;
     }
@@ -498,13 +506,13 @@ public class DijkstraDistance<V,E> implements Distance<V>
         
         protected void update(V dest, E tentative_edge, double new_dist)
         {
-            estimatedDistances.put(dest, new Double(new_dist));
+            estimatedDistances.put(dest, new_dist);
             unknownVertices.update(dest);
         }
         
         protected void createRecord(V w, E e, double new_dist)
         {
-            estimatedDistances.put(w, new Double(new_dist));
+            estimatedDistances.put(w, new_dist);
             unknownVertices.add(w);
         }
     }
