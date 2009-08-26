@@ -263,6 +263,14 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
         }
         
         @Override
+        public void restoreVertex(V v, double dist)
+        {
+            super.restoreVertex(v, dist);
+            E incoming = incomingEdges.get(v);
+            tentativeIncomingEdges.put(v, incoming);
+        }
+        
+        @Override
         public void createRecord(V w, E e, double new_dist)
         {
             super.createRecord(w, e, new_dist);

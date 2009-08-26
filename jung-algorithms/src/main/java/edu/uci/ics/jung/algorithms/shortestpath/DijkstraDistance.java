@@ -180,9 +180,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
             {
                 // we're done; put this vertex back in so that we're not including
                 // a distance beyond what we specified
-                sd.estimatedDistances.put(v, v_dist);
-                sd.unknownVertices.add(v);
-                sd.distances.remove(v);
+                sd.restoreVertex(v, v_dist);
                 sd.reached_max = true;
                 break;
             }
@@ -514,6 +512,13 @@ public class DijkstraDistance<V,E> implements Distance<V>
         {
             estimatedDistances.put(w, new_dist);
             unknownVertices.add(w);
+        }
+        
+        protected void restoreVertex(V v, double dist) 
+        {
+            estimatedDistances.put(v, dist);
+            unknownVertices.add(v);
+            distances.remove(v);
         }
     }
 }
