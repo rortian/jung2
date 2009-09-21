@@ -1,5 +1,6 @@
 package edu.uci.ics.jung.graph;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -11,7 +12,8 @@ import edu.uci.ics.jung.graph.util.Pair;
  * additional behavior (such as synchronization or unmodifiability) to an existing
  * instance.
  */
-public class GraphDecorator<V,E> implements Graph<V,E> {
+@SuppressWarnings("serial")
+public class GraphDecorator<V,E> implements Graph<V,E>, Serializable {
 	
 	protected Graph<V,E> delegate;
 

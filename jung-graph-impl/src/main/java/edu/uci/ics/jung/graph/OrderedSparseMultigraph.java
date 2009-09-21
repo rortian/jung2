@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -31,7 +30,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class OrderedSparseMultigraph<V,E> 
     extends SparseMultigraph<V,E>
-    implements MultiGraph<V,E>, Serializable {
+    implements MultiGraph<V,E> {
 	
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.

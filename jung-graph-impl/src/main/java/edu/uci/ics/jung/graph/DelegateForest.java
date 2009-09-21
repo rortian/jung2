@@ -1,6 +1,5 @@
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,8 +18,8 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
  * @param <E> the edge type
  */
 @SuppressWarnings("serial")
-public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E>, Serializable {
-
+public class DelegateForest<V,E> extends GraphDecorator<V,E> implements Forest<V,E> 
+{
 	/**
 	 * Creates an instance backed by a new {@code DirectedSparseGraph} instance.
 	 */

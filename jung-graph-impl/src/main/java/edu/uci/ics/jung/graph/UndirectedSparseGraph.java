@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +28,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  */
 @SuppressWarnings("serial")
 public class UndirectedSparseGraph<V, E> extends AbstractTypedGraph<V, E>
-        implements UndirectedGraph<V, E>, Serializable
+        implements UndirectedGraph<V, E>
 {
 
     /**

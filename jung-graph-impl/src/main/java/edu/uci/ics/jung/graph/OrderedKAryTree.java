@@ -32,6 +32,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * are added at the lowest index available, if no index is specified.
  * 
  */
+@SuppressWarnings("serial")
 public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements Tree<V, E> 
 {
     protected Map<E, Pair<V>> edge_vpairs;

@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +30,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class SparseGraph<V,E> 
     extends AbstractGraph<V,E> 
-    implements Graph<V,E>, Serializable
+    implements Graph<V,E>
 {
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.

@@ -22,7 +22,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,8 +42,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class UndirectedSparseMultigraph<V,E> 
     extends AbstractTypedGraph<V,E>
-    implements UndirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
-    
+    implements UndirectedGraph<V,E>, MultiGraph<V,E>
+{
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.
      * @param <V> the vertex type for the graph factory

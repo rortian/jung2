@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -31,8 +30,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class DirectedOrderedSparseMultigraph<V,E> 
     extends DirectedSparseMultigraph<V,E>
-    implements DirectedGraph<V,E>, MultiGraph<V,E>, Serializable {
-
+    implements DirectedGraph<V,E>, MultiGraph<V,E> 
+{
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.
      * @param <V> the vertex type for the graph factory

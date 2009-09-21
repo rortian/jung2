@@ -11,7 +11,6 @@
  */
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,7 +29,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 @SuppressWarnings("serial")
 public class UndirectedOrderedSparseMultigraph<V,E> 
     extends UndirectedSparseMultigraph<V,E>
-    implements UndirectedGraph<V,E>, Serializable {
+    implements UndirectedGraph<V,E> {
 	
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.

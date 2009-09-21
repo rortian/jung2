@@ -1,6 +1,5 @@
 package edu.uci.ics.jung.graph;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,8 +21,8 @@ import edu.uci.ics.jung.graph.util.Pair;
  * @param <E> the edge type
  */
 @SuppressWarnings("serial")
-public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>, Serializable {
-	
+public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>
+{
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.
      * @param <V> the vertex type for the graph factory

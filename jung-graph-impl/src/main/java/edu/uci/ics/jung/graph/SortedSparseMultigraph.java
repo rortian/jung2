@@ -11,17 +11,16 @@
  */
 package edu.uci.ics.jung.graph;
 
-import edu.uci.ics.jung.graph.util.Pair;
-
-import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.comparators.ComparableComparator;
-
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import org.apache.commons.collections15.Factory;
+import org.apache.commons.collections15.comparators.ComparableComparator;
+
+import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * An implementation of <code>Graph</code> that is suitable for sparse graphs,
@@ -34,7 +33,7 @@ import java.util.TreeSet;
 @SuppressWarnings("serial")
 public class SortedSparseMultigraph<V,E> 
     extends OrderedSparseMultigraph<V,E>
-    implements MultiGraph<V,E>, Serializable 
+    implements MultiGraph<V,E> 
 {
     /**
      * Returns a {@code Factory} that creates an instance of this graph type.

@@ -11,6 +11,7 @@
  */
 package edu.uci.ics.jung.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +25,8 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * @author Joshua O'Madadhain
  */
-public abstract class AbstractGraph<V, E> implements Graph<V,E> {
+public abstract class AbstractGraph<V, E> implements Graph<V,E>, Serializable 
+{
 	public boolean addEdge(E edge, Collection<? extends V> vertices) 
 	{
 		return addEdge(edge, vertices, this.getDefaultEdgeType());
