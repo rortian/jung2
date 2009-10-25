@@ -202,7 +202,6 @@ public class OrderedKAryTree<V, E> extends AbstractTypedGraph<V, E> implements T
      * 
      * @see edu.uci.ics.jung.graph.Graph#addEdge(java.lang.Object, java.lang.Object, java.lang.Object)
      */
-    @SuppressWarnings("unchecked")
 	public boolean addEdge(E e, V parent, V child, int index) 
     {
         if (e == null || child == null || parent == null)
