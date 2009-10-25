@@ -25,6 +25,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * 
  * @author Joshua O'Madadhain
  */
+@SuppressWarnings("serial")
 public abstract class AbstractGraph<V, E> implements Graph<V,E>, Serializable 
 {
 	public boolean addEdge(E edge, Collection<? extends V> vertices) 

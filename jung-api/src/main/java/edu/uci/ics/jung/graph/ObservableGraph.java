@@ -15,6 +15,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * 
  * @author Joshua O'Madadhain
  */
+@SuppressWarnings("serial")
 public class ObservableGraph<V,E> extends GraphDecorator<V,E> {
 
 	List<GraphEventListener<V,E>> listenerList = 

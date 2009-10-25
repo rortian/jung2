@@ -20,6 +20,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  * An abstract class for graphs whose edges all have the same {@code EdgeType}.
  * Intended to simplify the implementation of such graph classes.
  */
+@SuppressWarnings("serial")
 public abstract class AbstractTypedGraph<V,E> extends AbstractGraph<V, E> 
 {
 	/**
