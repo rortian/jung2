@@ -239,8 +239,11 @@ public class DistanceCentralityScorer<V,E> implements VertexScorer<V, Double>
 		if (averaging)
 		    value /= v_distances.size();
 		
-	    output.put(v, value == 0 ? Double.POSITIVE_INFINITY : 1.0 / value);
+		double score = value == 0 ? 
+			Double.POSITIVE_INFINITY : 
+			1.0 / value;
+	    output.put(v, score);
 		   
-		return value;
+		return score;
 	}
 }

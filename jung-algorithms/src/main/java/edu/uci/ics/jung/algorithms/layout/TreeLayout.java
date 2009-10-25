@@ -104,7 +104,7 @@ public class TreeLayout<V,E> implements Layout<V,E> {
        		calculateDimensionX(roots);
        		for(V v : roots) {
         		calculateDimensionX(v);
-        		m_currentPoint.x += this.basePositions.get(v)/2 + 50;
+        		m_currentPoint.x += this.basePositions.get(v)/2 + this.distX;
         		buildTree(v, this.m_currentPoint.x);
         	}
         }

@@ -73,8 +73,12 @@ public class RadialTreeLayout<V,E> extends TreeLayout<V,E> {
         Point2D pv = new Point2D.Double(location.getX() - c.getX(), 
                 location.getY() - c.getY());
         PolarPoint newLocation = PolarPoint.cartesianToPolar(pv);
-        polarLocations.get(v).setLocation(newLocation);
-    }
+        PolarPoint currentLocation = polarLocations.get(v);
+        if (currentLocation == null)
+        	polarLocations.put(v, newLocation);
+        else
+        	currentLocation.setLocation(newLocation);
+     }
 	
 	/**
 	 * Returns the map from vertices to their locations in polar coordinates.
@@ -85,12 +89,12 @@ public class RadialTreeLayout<V,E> extends TreeLayout<V,E> {
 
 	@Override
     public Point2D transform(V v) {
-			PolarPoint pp = polarLocations.get(v);
-			double centerX = getSize().getWidth()/2;
-			double centerY = getSize().getHeight()/2;
-			Point2D cartesian = PolarPoint.polarToCartesian(pp);
-			cartesian.setLocation(cartesian.getX()+centerX,cartesian.getY()+centerY);
-			return cartesian;
+		PolarPoint pp = polarLocations.get(v);
+		double centerX = getSize().getWidth()/2;
+		double centerY = getSize().getHeight()/2;
+		Point2D cartesian = PolarPoint.polarToCartesian(pp);
+		cartesian.setLocation(cartesian.getX()+centerX,cartesian.getY()+centerY);
+		return cartesian;
 	}
 	
 	private Point2D getMaxXY() {
@@ -114,7 +118,7 @@ public class RadialTreeLayout<V,E> extends TreeLayout<V,E> {
 		for(Map.Entry<V, Point2D> entry : locations.entrySet()) {
 			V v = entry.getKey();
 			Point2D p = entry.getValue();
-			PolarPoint polarPoint = new PolarPoint(p.getX()*theta, (p.getY()-50)*deltaRadius);
+			PolarPoint polarPoint = new PolarPoint(p.getX()*theta, (p.getY() - this.distY)*deltaRadius);
 			polarLocations.put(v, polarPoint);
 		}
 	}
