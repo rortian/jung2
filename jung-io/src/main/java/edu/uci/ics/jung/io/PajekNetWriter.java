@@ -124,7 +124,6 @@ public class PajekNetWriter<V,E>
      * and vertex locations may be specified by <code>vld</code> (defaults
      * to no locations if null). 
      */
-    @SuppressWarnings("unchecked")
 	public void save(Graph<V,E> graph, Writer w, Transformer<V,String> vs, 
 	        Transformer<E,Number> nev, Transformer<V,Point2D> vld) throws IOException
     {
@@ -195,7 +194,6 @@ public class PajekNetWriter<V,E>
         {
             int source_id = id.indexOf(graph.getEndpoints(e).getFirst()) + 1;
             int target_id = id.indexOf(graph.getEndpoints(e).getSecond()) + 1;
-//            float weight = nev.get(e).floatValue();
             float weight = nev.transform(e).floatValue();
             writer.write(source_id + " " + target_id + " " + weight);
             writer.newLine();
@@ -212,7 +210,6 @@ public class PajekNetWriter<V,E>
             Pair<V> endpoints = graph.getEndpoints(e);
             int v1_id = id.indexOf(endpoints.getFirst()) + 1;
             int v2_id = id.indexOf(endpoints.getSecond()) + 1;
-//            float weight = nev.get(e).floatValue();
             float weight = nev.transform(e).floatValue();
             writer.write(v1_id + " " + v2_id + " " + weight);
             writer.newLine();

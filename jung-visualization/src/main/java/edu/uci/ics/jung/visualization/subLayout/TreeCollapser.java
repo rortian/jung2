@@ -17,7 +17,8 @@ import edu.uci.ics.jung.graph.util.TreeUtils;
 
 public class TreeCollapser  {
     
-    public void collapse(Layout layout, Forest tree, Object subRoot) throws InstantiationException, IllegalAccessException {
+    @SuppressWarnings("unchecked")
+	public void collapse(Layout layout, Forest tree, Object subRoot) throws InstantiationException, IllegalAccessException {
         
     	// get a sub tree from subRoot
     	Forest subTree = TreeUtils.getSubTree(tree, subRoot);
@@ -37,7 +38,8 @@ public class TreeCollapser  {
     	layout.setLocation(subTree, (Point2D)layout.transform(subRoot));
     }
     
-    public void expand(Forest tree, Forest subTree) {
+    @SuppressWarnings("unchecked")
+	public void expand(Forest tree, Forest subTree) {
 
     	Object parent = null;
     	Object edge = null;

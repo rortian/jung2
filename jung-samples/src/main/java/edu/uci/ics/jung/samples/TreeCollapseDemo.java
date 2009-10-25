@@ -117,13 +117,15 @@ public class TreeCollapseDemo extends JApplet {
     String root;
 
     TreeLayout<String,Integer> layout;
-    FRLayout layout1;
+    @SuppressWarnings("unchecked")
+	FRLayout layout1;
 
     TreeCollapser collapser;
 
     RadialTreeLayout<String,Integer> radialLayout;
 
-    public TreeCollapseDemo() {
+    @SuppressWarnings("unchecked")
+	public TreeCollapseDemo() {
 
         // create a simple graph for the demo
         graph = new DelegateForest<String,Integer>();
@@ -271,9 +273,8 @@ public class TreeCollapseDemo extends JApplet {
 			for(double d : depths) {
 				ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d, 
 						center.getX()+d, center.getY()+d);
-				Shape shape
-= vv.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).
-transform(ellipse);
+				Shape shape = vv.getRenderContext().
+						getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
 				g2d.draw(shape);
 			}
 		}
@@ -333,7 +334,8 @@ transform(ellipse);
         ClusterVertexShapeFunction() {
             setSizeTransformer(new ClusterVertexSizeFunction<V>(20));
         }
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public Shape transform(V v) {
             if(v instanceof Graph) {
                 int size = ((Graph)v).getVertexCount();
