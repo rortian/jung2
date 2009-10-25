@@ -87,7 +87,7 @@ public class MinimumSpanningForest2<V,E> {
 		
 		for(Graph<V,E> component : components) {
 			PrimMinimumSpanningTree<V,E> mst = 
-				new PrimMinimumSpanningTree<V,E>(treeFactory, weights);
+				new PrimMinimumSpanningTree<V,E>(treeFactory, this.weights);
 			Graph<V,E> subTree = mst.transform(component);
 			if(subTree instanceof Tree) {
 				TreeUtils.addSubTree(forest, (Tree<V,E>)subTree, null, null);
