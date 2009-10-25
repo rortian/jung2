@@ -217,8 +217,8 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>
 	}
 
 	/**
-	 * returns an ordered list of the nodes beginning at the root
-	 * and ending at the passed child node, including all intermediate
+	 * Returns an ordered list of the nodes beginning at the root
+	 * and ending at {@code vertex}, including all intermediate
 	 * nodes.
 	 * @param vertex the last node in the path from the root
 	 * @return an ordered list of the nodes from root to child
@@ -226,14 +226,18 @@ public class DelegateTree<V,E> extends GraphDecorator<V,E> implements Tree<V,E>
 	public List<V> getPath(V vertex) {
         if (!delegate.containsVertex(vertex))
             return null;
-		List<V> list = new ArrayList<V>();
-		list.add(vertex);
+		List<V> vertex_to_root = new ArrayList<V>();
+		vertex_to_root.add(vertex);
 		V parent = getParent(vertex);
 		while(parent != null) {
-			list.add(list.size(), parent);
+			vertex_to_root.add(parent);
 			parent = getParent(parent);
 		}
-		return list;
+		// reverse list so that it goes from root to child
+		List<V> root_to_vertex = new ArrayList<V>(vertex_to_root.size());
+		for (int i = vertex_to_root.size() - 1; i >= 0; i--)
+			root_to_vertex.add(vertex_to_root.get(i));
+		return root_to_vertex;
 	}
 
 	/**
