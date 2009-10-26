@@ -96,6 +96,8 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
 
     protected List<G> graphs;
 
+    protected StringBuilder current_text = new StringBuilder();
+    
     /**
      * Creates a <code>GraphMLReader</code> instance with the specified
      * vertex and edge factories.
@@ -395,100 +397,9 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     @Override
     public void characters(char[] ch, int start, int length) throws SAXNotSupportedException
     {
-        String text = new String(ch, start, length);
-
-        switch (this.current_states.getFirst())
-        {
-            case DESC:
-                switch (this.current_states.get(1)) // go back one
-                {
-                    case GRAPH:
-                        graph_desc.put(current_graph, text);
-                        break;
-                    case VERTEX:
-                    case ENDPOINT:
-                        vertex_desc.put(current_vertex, text);
-                        break;
-                    case EDGE:
-                    case HYPEREDGE:
-                        edge_desc.put(current_edge, text);
-                        break;
-                    case DATA:
-                        switch (key_type)
-                        {
-                        	case GRAPH:
-                        		graph_metadata.get(current_key).description = text;
-                        		break;
-                        	case VERTEX:
-                        		vertex_metadata.get(current_key).description = text;
-                        		break;
-                        	case EDGE:
-                        		edge_metadata.get(current_key).description = text;
-                        		break;
-                        	case ALL:
-                        		graph_metadata.get(current_key).description = text;
-                        		vertex_metadata.get(current_key).description = text;
-                        		edge_metadata.get(current_key).description = text;
-                        		break;
-                        	default:
-                        		throw new SAXNotSupportedException("Invalid key type" +
-                        				" specified for default: " + key_type);
-                        }
-
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case DATA:
-                switch (this.current_states.get(1))
-                {
-                    case GRAPH:
-                    	addDatum(graph_metadata, current_graph, text);
-                        break;
-                    case VERTEX:
-                    case ENDPOINT:
-                    	addDatum(vertex_metadata, current_vertex, text);
-                        break;
-                    case EDGE:
-                    case HYPEREDGE:
-                    	addDatum(edge_metadata, current_edge, text);
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case DEFAULT_KEY:
-                if (this.current_states.get(1) != TagState.KEY)
-                    throw new SAXNotSupportedException("'default' only defined in context of 'key' tag: " +
-                            "stack: " + current_states.toString());
-
-                switch (key_type)
-                {
-                	case GRAPH:
-                		graph_metadata.get(current_key).default_value = text;
-                		break;
-                	case VERTEX:
-                		vertex_metadata.get(current_key).default_value = text;
-                		break;
-                	case EDGE:
-                		edge_metadata.get(current_key).default_value = text;
-                		break;
-                	case ALL:
-                		graph_metadata.get(current_key).default_value = text;
-                		vertex_metadata.get(current_key).default_value = text;
-                		edge_metadata.get(current_key).default_value = text;
-                		break;
-                	default:
-                		throw new SAXNotSupportedException("Invalid key type" +
-                				" specified for default: " + key_type);
-                }
-
-                break;
-            default:
-                break;
-        }
+        this.current_text.append(new String(ch, start, length));
     }
+
 
     protected <T>void addDatum(Map<String, GraphMLMetadata<T>> metadata,
     		T current_elt, String text) throws SAXNotSupportedException
@@ -507,6 +418,9 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
     @Override
     public void endElement(String uri, String name, String qName) throws SAXNotSupportedException
     {
+        String text = current_text.toString().trim();
+        current_text.setLength(0);
+        
         String tag = qName.toLowerCase();
         TagState state = tag_state.get(tag);
         if (state == null)
@@ -536,10 +450,6 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 current_edge = null;
                 break;
 
-            case DATA:
-                this.key_type = KeyType.NONE;
-                break;
-
             case GRAPH:
                 current_graph = null;
                 break;
@@ -548,6 +458,93 @@ public class GraphMLReader<G extends Hypergraph<V,E>, V, E> extends DefaultHandl
                 current_key = null;
                 break;
 
+            case DESC:
+                switch (this.current_states.get(1)) // go back one
+                {
+                    case GRAPH:
+                        graph_desc.put(current_graph, text);
+                        break;
+                    case VERTEX:
+                    case ENDPOINT:
+                        vertex_desc.put(current_vertex, text);
+                        break;
+                    case EDGE:
+                    case HYPEREDGE:
+                        edge_desc.put(current_edge, text);
+                        break;
+                    case DATA:
+                        switch (key_type)
+                        {
+                            case GRAPH:
+                                graph_metadata.get(current_key).description = text;
+                                break;
+                            case VERTEX:
+                                vertex_metadata.get(current_key).description = text;
+                                break;
+                            case EDGE:
+                                edge_metadata.get(current_key).description = text;
+                                break;
+                            case ALL:
+                                graph_metadata.get(current_key).description = text;
+                                vertex_metadata.get(current_key).description = text;
+                                edge_metadata.get(current_key).description = text;
+                                break;
+                            default:
+                                throw new SAXNotSupportedException("Invalid key type" +
+                                        " specified for default: " + key_type);
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case DATA:
+                this.key_type = KeyType.NONE;
+                switch (this.current_states.get(1))
+                {
+                    case GRAPH:
+                        addDatum(graph_metadata, current_graph, text);
+                        break;
+                    case VERTEX:
+                    case ENDPOINT:
+                        addDatum(vertex_metadata, current_vertex, text);
+                        break;
+                    case EDGE:
+                    case HYPEREDGE:
+                        addDatum(edge_metadata, current_edge, text);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case DEFAULT_KEY:
+                if (this.current_states.get(1) != TagState.KEY)
+                    throw new SAXNotSupportedException("'default' only defined in context of 'key' tag: " +
+                            "stack: " + current_states.toString());
+
+                switch (key_type)
+                {
+                    case GRAPH:
+                        graph_metadata.get(current_key).default_value = text;
+                        break;
+                    case VERTEX:
+                        vertex_metadata.get(current_key).default_value = text;
+                        break;
+                    case EDGE:
+                        edge_metadata.get(current_key).default_value = text;
+                        break;
+                    case ALL:
+                        graph_metadata.get(current_key).default_value = text;
+                        vertex_metadata.get(current_key).default_value = text;
+                        edge_metadata.get(current_key).default_value = text;
+                        break;
+                    default:
+                        throw new SAXNotSupportedException("Invalid key type" +
+                                " specified for default: " + key_type);
+                }
+
+                break;
             default:
                 break;
         }
