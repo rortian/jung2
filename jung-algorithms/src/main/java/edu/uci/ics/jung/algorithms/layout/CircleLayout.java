@@ -73,7 +73,8 @@ public class CircleLayout<V, E> extends AbstractLayout<V,E> {
 	 */
 	public void setVertexOrder(Comparator<V> comparator)
 	{
-	    vertex_ordered_list = new ArrayList<V>(getGraph().getVertexCount());
+	    if (vertex_ordered_list == null)
+	        vertex_ordered_list = new ArrayList<V>(getGraph().getVertices());
 	    Collections.sort(vertex_ordered_list, comparator);
 	}
 
