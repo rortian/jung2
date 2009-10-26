@@ -47,7 +47,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * @param nev   the class responsible for returning weights for edges
      * @param cached    specifies whether the results are to be cached
      */
-    public DijkstraShortestPath(Graph<V,E> g, Transformer<E,Number> nev, boolean cached)
+    public DijkstraShortestPath(Graph<V,E> g, Transformer<E, ? extends Number> nev, boolean cached)
     {
         super(g, nev, cached);
     }
@@ -60,7 +60,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * @param g     the graph on which distances will be calculated
      * @param nev   the class responsible for returning weights for edges
      */
-    public DijkstraShortestPath(Graph<V,E> g, Transformer<E,Number> nev)
+    public DijkstraShortestPath(Graph<V,E> g, Transformer<E, ? extends Number> nev)
     {
         super(g, nev);
     }
