@@ -34,7 +34,7 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
     protected int row_count;
     protected int col_count;
     protected boolean is_toroidal;
-    protected Factory<Graph<V, E>> graph_factory;
+    protected Factory<? extends Graph<V, E>> graph_factory;
     protected Factory<V> vertex_factory;
     protected Factory<E> edge_factory;
     private List<V> v_array;
@@ -51,7 +51,7 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
      * @param latticeSize the number of rows and columns of the lattice
      * @param isToroidal if true, the created lattice wraps from top to bottom and left to right
      */
-    public Lattice2DGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
+    public Lattice2DGenerator(Factory<? extends Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int latticeSize, boolean isToroidal)
     {
         this(graph_factory, vertex_factory, edge_factory, latticeSize, latticeSize, isToroidal);
@@ -68,7 +68,7 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
      * @param col_count the number of columns in the lattice
      * @param isToroidal if true, the created lattice wraps from top to bottom and left to right
      */
-    public Lattice2DGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
+    public Lattice2DGenerator(Factory<? extends Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int row_count, int col_count, boolean isToroidal)
     {
         if (row_count < 2 || col_count < 2)
@@ -106,12 +106,12 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
         
         // fill in edges
         // down
-        for (int i = 0; i <= end_row; i++)
+        for (int i = 0; i < end_row; i++)
             for (int j = 0; j < col_count; j++)
                 graph.addEdge(edge_factory.create(), getVertex(i,j), getVertex(i+1, j));
         // right
-        for (int i = 0; i <= row_count; i++)
-            for (int j = 0; j <= end_col; j++)
+        for (int i = 0; i < row_count; i++)
+            for (int j = 0; j < end_col; j++)
                 graph.addEdge(edge_factory.create(), getVertex(i,j), getVertex(i, j+1));
 
         // if the graph is directed, fill in the edges going the other direction...
