@@ -52,7 +52,7 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
      * @param latticeSize
      * @param clusteringExponent
      */
-    public KleinbergSmallWorldGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
+    public KleinbergSmallWorldGenerator(Factory<? extends Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int latticeSize, double clusteringExponent) 
     {
         this(graph_factory, vertex_factory, edge_factory, latticeSize, latticeSize, clusteringExponent);
@@ -66,7 +66,7 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
      * @param col_count
      * @param clusteringExponent
      */
-    public KleinbergSmallWorldGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
+    public KleinbergSmallWorldGenerator(Factory<? extends Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int row_count, int col_count, double clusteringExponent) 
     {
         super(graph_factory, vertex_factory, edge_factory, row_count, col_count, true);
@@ -83,7 +83,7 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
      * @param clusteringExponent
      * @param isToroidal
      */
-    public KleinbergSmallWorldGenerator(Factory<Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
+    public KleinbergSmallWorldGenerator(Factory<? extends Graph<V,E>> graph_factory, Factory<V> vertex_factory, 
             Factory<E> edge_factory, int row_count, int col_count, double clusteringExponent, 
             boolean isToroidal) 
     {
@@ -131,17 +131,19 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
         
         // define maximum distance for any vertex
         int max_distance = is_toroidal ?
-                (int)(Math.ceil((row_count - 1)/2) + Math.ceil((col_count - 1)/2)) :
+                (int)(Math.ceil((row_count - 1)/2.0) + Math.ceil((col_count - 1)/2.0)) :
                 (row_count - 1) + (col_count - 1);
 
         Map<Direction, Boolean> direction_ok = new EnumMap<Direction, Boolean>(Direction.class);
-                
                 
         // create distribution for distances
         Map<Integer, Double> distance_weights = new HashMap<Integer, Double>();
         for (int i = 2; i <= max_distance; i++)
             distance_weights.put(i, Math.pow(i, -clustering_exponent));
-        WeightedChoice<Integer> weighted_choice = new WeightedChoice<Integer>(distance_weights);
+        // FIXME: There's problably some O(1) way to do this, involving picking a valid direction, figuring
+        // a limit on "local left/right" based on that, and then picking a random split (go direction A
+        // for k units, go left/right from A for distance_i-k units).
+        WeightedChoice<Integer> weighted_choice = new WeightedChoice<Integer>(distance_weights, random);
                 
         // Add long range connections
         for (int i = 0; i < graph.getVertexCount(); i++)
@@ -163,7 +165,7 @@ public class KleinbergSmallWorldGenerator<V, E> extends Lattice2DGenerator<V, E>
             do
             {
                 distance_i = weighted_choice.nextItem();
-            } while (distance_i < max_distance_i);
+            } while (distance_i > max_distance_i);
 
             // random walk away from this vertex
             Point2D location = new Point2D.Float(row, col);
