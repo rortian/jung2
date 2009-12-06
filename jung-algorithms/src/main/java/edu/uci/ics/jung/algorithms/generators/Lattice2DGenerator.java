@@ -122,8 +122,8 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
                 for (int j = 0; j < col_count; j++)
                     graph.addEdge(edge_factory.create(), getVertex(i,j), getVertex(i-1, j));
             // left
-            for (int i = 0; i <= row_count; i++)
-                for (int j = start; j <= end_col; j++)
+            for (int i = 0; i < row_count; i++)
+                for (int j = start; j < col_count; j++)
                     graph.addEdge(edge_factory.create(), getVertex(i,j), getVertex(i, j-1));
         }
         
@@ -132,7 +132,13 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
     
     protected int getIndex(int i, int j)
     {
-        return ((i % row_count) * col_count) + (j % col_count);
+        return ((mod(i, row_count)) * col_count) + (mod(j, col_count));
+    }
+
+    protected int mod(int i, int modulus) 
+    {
+        int i_mod = i % modulus;
+        return i_mod >= 0 ? i_mod : i_mod + modulus;
     }
     
     /**
