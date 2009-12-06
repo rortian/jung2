@@ -93,14 +93,14 @@ public class WeightedChoice<T>
 				throw new IllegalArgumentException("Weights must be > 0");
 			sum += value;
 		}
-		double mean_weight = sum / item_weights.size();
+        double bucket_weight = 1.0 / item_weights.size();
 		
 		Queue<ItemPair> light_weights = new LinkedList<ItemPair>();
 		Queue<ItemPair> heavy_weights = new LinkedList<ItemPair>();
 		for (Map.Entry<T, ? extends Number> entry : item_weights.entrySet())
 		{
 			double value = entry.getValue().doubleValue() / sum;
-			enqueueItem(entry.getKey(), value, mean_weight, light_weights, heavy_weights);
+			enqueueItem(entry.getKey(), value, bucket_weight, light_weights, heavy_weights);
 		}
 		
 		// repeat until both queues empty
@@ -122,9 +122,9 @@ public class WeightedChoice<T>
 				// put the 'left over' weight from the heavy item--what wasn't
 				// needed to make up the difference between the light weight and
 				// 1/n--back in the appropriate queue
-				double new_weight = heavy_item.weight - (mean_weight - light_weight);
+				double new_weight = heavy_item.weight - (bucket_weight - light_weight);
 				if (new_weight > threshold)
-					enqueueItem(heavy, new_weight, mean_weight, light_weights, heavy_weights);
+					enqueueItem(heavy, new_weight, bucket_weight, light_weights, heavy_weights);
 			}
 			light_weight *= item_count;
 			
