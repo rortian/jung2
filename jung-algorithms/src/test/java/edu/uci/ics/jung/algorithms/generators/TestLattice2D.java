@@ -15,10 +15,10 @@ import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 public class TestLattice2D extends TestCase {
 	
-	Factory<UndirectedGraph<String,Number>> undirectedGraphFactory;
-    Factory<DirectedGraph<String,Number>> directedGraphFactory;
-	Factory<String> vertexFactory;
-	Factory<Number> edgeFactory;
+	protected Factory<UndirectedGraph<String,Number>> undirectedGraphFactory;
+    protected Factory<DirectedGraph<String,Number>> directedGraphFactory;
+	protected Factory<String> vertexFactory;
+	protected Factory<Number> edgeFactory;
 
 	@Override
 	protected void setUp() {
@@ -52,9 +52,7 @@ public class TestLattice2D extends TestCase {
 	{
 	    try
 	    {
-	        new Lattice2DGenerator<String,Number>(
-	                undirectedGraphFactory, vertexFactory, edgeFactory,
-	                1, false);
+	        generate(1, 0, 0);
 	        fail("Did not reject lattice of size < 2");
 	    }
 	    catch (IllegalArgumentException iae) {}
@@ -64,16 +62,25 @@ public class TestLattice2D extends TestCase {
 		for (int i = 3; i <= 10; i++) {
 		    for (int j = 0; j < 2; j++) {
 		        for (int k = 0; k < 2; k++) {
-        			Lattice2DGenerator<String,Number> generator = 
-        				new Lattice2DGenerator<String,Number>(
-        				        k == 0 ? undirectedGraphFactory : directedGraphFactory, 
-        				        vertexFactory, edgeFactory,
-        				        i, j == 0 ? true : false); // toroidal?
+        			Lattice2DGenerator<String,Number> generator = generate(i, j, k);
     			    Graph<String,Number> graph = generator.create();
                     Assert.assertEquals(i*i, graph.getVertexCount());
-                    Assert.assertEquals(2*i*(i-j)*(k+1), graph.getEdgeCount());
+                    checkEdgeCount(i, j, k, graph);
 		        }
 		    }
 		}
+	}
+	
+	protected Lattice2DGenerator<String, Number> generate(int i, int j, int k)
+	{
+	    return new Lattice2DGenerator<String,Number>(
+                k == 0 ? undirectedGraphFactory : directedGraphFactory, 
+                vertexFactory, edgeFactory,
+                i, j == 0 ? true : false); // toroidal?
+	}
+	
+	protected void checkEdgeCount(int i, int j, int k, Graph<String, Number> graph) 
+	{
+        Assert.assertEquals(2*i*(i-j)*(k+1), graph.getEdgeCount());
 	}
 }
