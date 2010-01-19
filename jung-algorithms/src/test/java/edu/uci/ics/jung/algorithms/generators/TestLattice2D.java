@@ -65,7 +65,7 @@ public class TestLattice2D extends TestCase {
         			Lattice2DGenerator<String,Number> generator = generate(i, j, k);
     			    Graph<String,Number> graph = generator.create();
                     Assert.assertEquals(i*i, graph.getVertexCount());
-                    checkEdgeCount(i, j, k, graph);
+                    checkEdgeCount(generator, graph);
 		        }
 		    }
 		}
@@ -79,8 +79,8 @@ public class TestLattice2D extends TestCase {
                 i, j == 0 ? true : false); // toroidal?
 	}
 	
-	protected void checkEdgeCount(int i, int j, int k, Graph<String, Number> graph) 
+	protected void checkEdgeCount(Lattice2DGenerator generator, Graph<String, Number> graph) 
 	{
-        Assert.assertEquals(2*i*(i-j)*(k+1), graph.getEdgeCount());
+        Assert.assertEquals(generator.getGridEdgeCount(), graph.getEdgeCount());
 	}
 }

@@ -34,13 +34,12 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
     protected int row_count;
     protected int col_count;
     protected boolean is_toroidal;
+    protected boolean is_directed;
     protected Factory<? extends Graph<V, E>> graph_factory;
     protected Factory<V> vertex_factory;
     protected Factory<E> edge_factory;
     private List<V> v_array;
 
-    // FIXME: needs unit tests
-    
     /**
      * Constructs a generator of square lattices of size {@code latticeSize} 
      * with the specified parameters.
@@ -82,6 +81,7 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
         this.graph_factory = graph_factory;
         this.vertex_factory = vertex_factory;
         this.edge_factory = edge_factory;
+        this.is_directed = (graph_factory.create().getDefaultEdgeType() == EdgeType.DIRECTED);
     }
     
     /**
@@ -128,6 +128,19 @@ public class Lattice2DGenerator<V,E> implements GraphGenerator<V,E>
         }
         
         return graph;
+    }
+
+    /**
+     * Returns the number of edges found in a lattice of this generator's specifications.
+     * (This is useful for subclasses that may modify the generated graphs to add more edges.)
+     */
+    public int getGridEdgeCount()
+    {
+        int boundary_adjustment = (is_toroidal ? 0 : 1);
+        int vertical_edge_count = col_count * (row_count - boundary_adjustment);
+        int horizontal_edge_count = row_count * (col_count - boundary_adjustment);
+        
+        return (vertical_edge_count + horizontal_edge_count) * (is_directed ? 2 : 1);
     }
     
     protected int getIndex(int i, int j)

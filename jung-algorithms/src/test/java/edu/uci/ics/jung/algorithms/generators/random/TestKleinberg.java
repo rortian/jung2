@@ -2,19 +2,18 @@ package edu.uci.ics.jung.algorithms.generators.random;
 
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
-
-import org.apache.commons.collections15.Factory;
-
 import edu.uci.ics.jung.algorithms.generators.Lattice2DGenerator;
 import edu.uci.ics.jung.algorithms.generators.TestLattice2D;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.UndirectedGraph;
-import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 
 
+/**
+ * 
+ * @author Joshua O'Madadhain
+ */
 public class TestKleinberg extends TestLattice2D {
 	
+    @Override
     protected Lattice2DGenerator<String, Number> generate(int i, int j, int k)
     {
         return new KleinbergSmallWorldGenerator<String,Number>(
@@ -26,8 +25,11 @@ public class TestKleinberg extends TestLattice2D {
                 j == 0 ? true : false); // toroidal?
     }
     
-    protected void checkEdgeCount(int i, int j, int k, Graph<String, Number> graph) 
+    @Override
+    protected void checkEdgeCount(Lattice2DGenerator generator, Graph<String, Number> graph) 
     {
-        Assert.assertEquals(2*i*(i-j)*(k+1) + graph.getVertexCount(), graph.getEdgeCount());
+        Assert.assertEquals(generator.getGridEdgeCount() +
+                ((KleinbergSmallWorldGenerator)generator).getConnectionCount() * graph.getVertexCount(), 
+                graph.getEdgeCount());
     }
 }
