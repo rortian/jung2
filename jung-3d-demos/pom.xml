@@ -20,7 +20,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>samples.graph.GraphDemo</mainClass>
+              <mainClass>edu.uci.ics.jung.samples.GraphDemo</mainClass>
               <addClasspath>true</addClasspath>
             </manifest>
           </archive>

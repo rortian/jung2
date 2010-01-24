@@ -20,7 +20,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>samples.graph.jai.HyperbolicVertexImageShaperDemo</mainClass>
+              <mainClass>edu.uci.ics.jung.samples.HyperbolicVertexImageShaperDemo</mainClass>
               <addClasspath>true</addClasspath>
             </manifest>
           </archive>
