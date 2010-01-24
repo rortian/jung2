@@ -16,7 +16,7 @@ Download and install maven2 from maven.apache.org
 
 http://maven.apache.org/download.html
 
-At time of writing, the latest version was maven-2.0.4
+At time of writing, the latest version was maven-2.2.1
 
 Install the downloaded maven2 (there are installation instructions
 here: http://maven.apache.org/download.html#Installation)
@@ -63,91 +63,27 @@ eventually succeed.
 Once all the files are cached in your local maven
 repository, the build process will be faster.
 
-Jung2 uses a generics-enabled version of the jakarta
-commons-collections library. The name of that library is:
-
-  collections-generic-4.01.jar
-
-When maven fails to build jung2 because it could not find
-that jar file, maven will provide you with the command
-to install the file in your local repository.
-
-First, download the collections-generic project from
-sourceforge:
-
-http://sourceforge.net/project/showfiles.php?group_id=139125
-
-Download either the tar.gz or the zip file, and inflate the
-file someplace.
-
-The maven command to place the needed jar file in your 
-local repository looks like this:
-
-mvn install:install-file -DgroupId=collections-generic \
- -DartifactId=collections-generic -Dversion=4.01 \
- -Dpackaging=jar -Dfile=/path/to/file/collections-generic-4.01.jar
-
-Once you have done that, the build should complete successfully.
-
-
-
 
 ***********  Prepare Jung2 for Eclipse  **********************
 
 To prepare jung2 for eclipse, run the following maven
 command:
 
-    mvn eclipse:eclipse
+    mvn eclipse:m2eclipse
 
 which will generate the .classpath and .project files for eclipse.
 
-The .classpath file will make reference to a M2_REPO variable,
-which you must define in eclipse, so that M2_REPO points to
-your local repository. You can do that in eclipse by bringing
-up project properties and adding the variable M2_HOME, or you
-can run the following command to have maven set the variable
-for you:
 
-    mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo 
-    
-If that does not work, you'll need to open one of the projects properties
-and use the 'add variables' button in the 'libraries' tab.
+To load jung2 in eclipse, use File -> Import -> General -> Maven Projects
+and set the Root Directory to your jung2 directory. You should be able to
+import all of the sub-projects, plus there sill be a jung2 project 
+containing the root pom.xml file
 
 
-To load jung2 in eclipse, you need to overcome an
-eclipse limitation: Eclipse projects cannot contain
-subprojects. (Jung2 contains 6 sub-projects).
-The common work-around is to make eclipse think that
-each sub-project is a top-level project.
 
-The most common way to proceed is as follows:
-
-Add each subproject (jung-api, jung-graph-impl, jung-visualization, 
-jung-algorithms, jung-samples, jung-io) as a top-level project in eclipse, each 
-with its own classpath dependencies. 
-
-One approach is to use the eclipse feature for importing existing projects
-AFTER mvn eclipse:eclipse has been run as shown above.
-Simply point the eclipse import project file chooser to the jung2 directory,
-then check off the list of subprojects that are shown. You can import
-all of the subprojects at once this way.
-
-Another approach is to manually add each subproject as follows:
-In the 'New Project' dialog, select 'Java Project', then
-'Create project from existing source'. Create the new project to point 
-to where you downloaded jung2 and its subprojects.
-For example, you would create a new project from the existing
-source in '/where/it/is/jung2/jung-api'
-and name that project 'jung-api'.
-
-Because you previously ran mvn eclipse:eclipse at the jung2 directory
+Because you previously ran mvn eclipse:m2eclipse at the jung2 directory
 level, then the projects will already reference the other
 projects they depend on (instead of the jar from those projects).
-
-You do not want to use jung2 (the parent project) as the eclipse project,
-as each eclipse project can have only one classpath, and you would then
-have difficulty maintaining the correct dependencies between the
-sub-projects.
 
 
 
@@ -179,10 +115,7 @@ of the maven build process.
 (***  Special cvs checkout instructions using eclipse  ***)
 
 If you are unable to use cvs from the command prompt, you may check
-out jung2 using eclipse, HOWEVER, because of the above stated limitation
-that eclipse cannot manage nested projects, you must use the following
-trick:
-
+out jung2 using eclipse.
 Create a new workspace that you will be using only to check out the
 project. You will not be using this workspace to work on the project.
 Let's call the new workspace $HOME/checkout_base.
@@ -191,7 +124,7 @@ Next, open a command prompt console and change directory to the
 newly created $HOME/checkout_base/jung2.
 Execute this command:
 
-  mvn eclipse:eclipse
+  mvn eclipse:m2eclipse
 
 That will build the eclipse artifacts
 
