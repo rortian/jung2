@@ -19,166 +19,150 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 /**
- * A plugin that can create vertices, undirected edges, and directed edges using
- * mouse gestures.
+ * A plugin that can create vertices, undirected edges, and directed edges
+ * using mouse gestures.
+ * 
+ * vertexSupport and edgeSupport member classes are responsible for actually
+ * creating the new graph elements, and for repainting the view when changes
+ * were made.
  * 
  * @author Tom Nelson
- * 
+ *
  */
-public class EditingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
-		implements MouseListener, MouseMotionListener {
+public class EditingGraphMousePlugin<V,E> extends AbstractGraphMousePlugin implements
+    MouseListener, MouseMotionListener {
+    
+	protected VertexSupport<V,E> vertexSupport;
+	protected EdgeSupport<V,E> edgeSupport;
+	private boolean creatingAnEdge;
+    
+    public EditingGraphMousePlugin(Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(MouseEvent.BUTTON1_MASK, vertexFactory, edgeFactory);
+    }
 
-	protected V startVertex;
-	protected Point2D down;
-	protected EdgeEffects<V, E> edgeEffects;
-	protected EdgeType edgeIsDirected;
-	protected Factory<V> vertexFactory;
-	protected Factory<E> edgeFactory;
-
-	public EditingGraphMousePlugin(Factory<V> vertexFactory,
-			Factory<E> edgeFactory) {
-		this(MouseEvent.BUTTON1_MASK, vertexFactory, edgeFactory);
-	}
-
-	/**
-	 * create instance and prepare shapes for visual effects
-	 * 
-	 * @param modifiers
-	 */
-	public EditingGraphMousePlugin(int modifiers, Factory<V> vertexFactory,
-			Factory<E> edgeFactory) {
-		super(modifiers);
-		this.vertexFactory = vertexFactory;
-		this.edgeFactory = edgeFactory;
+    /**
+     * create instance and prepare shapes for visual effects
+     * @param modifiers
+     */
+    public EditingGraphMousePlugin(int modifiers, Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        super(modifiers);
 		this.cursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-		this.edgeEffects = new CubicCurveEdgeEffects<V, E>();
-	}
+		this.vertexSupport = new SimpleVertexSupport<V,E>(vertexFactory);
+		this.edgeSupport = new SimpleEdgeSupport<V,E>(edgeFactory);
+    }
+    
+    /**
+     * Overridden to be more flexible, and pass events with
+     * key combinations. The default responds to both ButtonOne
+     * and ButtonOne+Shift
+     */
+    @Override
+    public boolean checkModifiers(MouseEvent e) {
+        return (e.getModifiers() & modifiers) != 0;
+    }
 
-	/**
-	 * Overridden to be more flexible, and pass events with key combinations.
-	 * The default responds to both ButtonOne and ButtonOne+Shift
-	 */
-	@Override
-	public boolean checkModifiers(MouseEvent e) {
-		return (e.getModifiers() & modifiers) != 0;
-	}
-
-	/**
-	 * If the mouse is pressed in an empty area, create a new vertex there. If
-	 * the mouse is pressed on an existing vertex, prepare to create an edge
-	 * from that vertex to another
-	 */
-	@SuppressWarnings("unchecked")
+    /**
+     * If the mouse is pressed in an empty area, create a new vertex there.
+     * If the mouse is pressed on an existing vertex, prepare to create
+     * an edge from that vertex to another
+     */
+    @SuppressWarnings("unchecked")
 	public void mousePressed(MouseEvent e) {
-		if (checkModifiers(e)) {
-			final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e
-					.getSource();
-			final Point2D p = e.getPoint();
-			GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
-			if (pickSupport != null) {
-				Graph<V, E> graph = vv.getModel().getGraphLayout().getGraph();
-				// set default edge type
-				if (graph instanceof DirectedGraph) {
-					edgeIsDirected = EdgeType.DIRECTED;
-				} else {
-					edgeIsDirected = EdgeType.UNDIRECTED;
-				}
-
-				final V vertex = pickSupport.getVertex(vv.getModel()
-						.getGraphLayout(), p.getX(), p.getY());
-				if (vertex != null) { // get ready to make an edge
-					startVertex = vertex;
-					down = e.getPoint();
-					edgeEffects.startEdgeEffects(down, down, vv);
-					if ((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0
-							&& vv.getModel().getGraphLayout().getGraph() instanceof UndirectedGraph == false) {
-						edgeIsDirected = EdgeType.DIRECTED;
-					}
-					if (edgeIsDirected == EdgeType.DIRECTED) {
-						edgeEffects.startArrowEffects(down, e.getPoint(), vv);
-					}
-				} else { // make a new vertex
-
-					V newVertex = vertexFactory.create();
-					Layout<V, E> layout = vv.getModel().getGraphLayout();
-					graph.addVertex(newVertex);
-					layout.setLocation(newVertex, vv.getRenderContext()
-							.getMultiLayerTransformer().inverseTransform(
-									e.getPoint()));
-				}
-			}
-			vv.repaint();
-		}
-	}
-
-	/**
-	 * If startVertex is non-null, and the mouse is released over an existing
-	 * vertex, create an undirected edge from startVertex to the vertex under
-	 * the mouse pointer. If shift was also pressed, create a directed edge
-	 * instead.
-	 */
-	@SuppressWarnings("unchecked")
+        if(checkModifiers(e)) {
+            final VisualizationViewer<V,E> vv =
+                (VisualizationViewer<V,E>)e.getSource();
+            final Point2D p = e.getPoint();
+            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+            if(pickSupport != null) {
+            	
+                final V vertex = pickSupport.getVertex(vv.getModel().getGraphLayout(), p.getX(), p.getY());
+                if(vertex != null) { // get ready to make an edge
+                	this.creatingAnEdge = true;
+                	Graph<V,E> graph = vv.getModel().getGraphLayout().getGraph();
+                	// set default edge type
+                	EdgeType edgeType = (graph instanceof DirectedGraph) ?
+                			EdgeType.DIRECTED : EdgeType.UNDIRECTED;
+                    if((e.getModifiers() & MouseEvent.SHIFT_MASK) != 0
+                    		&& graph instanceof UndirectedGraph == false) {
+                        edgeType = EdgeType.DIRECTED;
+                    }
+                    edgeSupport.startEdgeCreate(vv, vertex, e.getPoint(), edgeType);
+                } else { // make a new vertex
+                	this.creatingAnEdge = false;
+                	vertexSupport.startVertexCreate(vv, e.getPoint());
+                }
+            }
+        }
+    }
+    
+    /**
+     * If startVertex is non-null, and the mouse is released over an
+     * existing vertex, create an undirected edge from startVertex to
+     * the vertex under the mouse pointer. If shift was also pressed,
+     * create a directed edge instead.
+     */
+    @SuppressWarnings("unchecked")
 	public void mouseReleased(MouseEvent e) {
-		if (checkModifiers(e)) {
-			final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e
-					.getSource();
-			final Point2D p = e.getPoint();
-			Layout<V, E> layout = vv.getModel().getGraphLayout();
-			GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
-			if (pickSupport != null) {
-				final V vertex = pickSupport.getVertex(layout, p.getX(), p
-						.getY());
-				if (vertex != null && startVertex != null) {
-					Graph<V, E> graph = vv.getGraphLayout().getGraph();
-					graph.addEdge(edgeFactory.create(), startVertex, vertex,
-							edgeIsDirected);
-					vv.repaint();
-				}
-			}
-			startVertex = null;
-			down = null;
-			edgeIsDirected = EdgeType.UNDIRECTED;
-			edgeEffects.endEdgeEffects(vv);
-			edgeEffects.endArrowEffects(vv);
-		}
+        if(checkModifiers(e)) {
+            final VisualizationViewer<V,E> vv =
+                (VisualizationViewer<V,E>)e.getSource();
+            final Point2D p = e.getPoint();
+            Layout<V,E> layout = vv.getGraphLayout();
+            GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+            if(pickSupport != null) {
+                 if(creatingAnEdge) {
+                    V vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
+                    edgeSupport.endEdgeCreate(vv, vertex);
+                } else {
+                    vertexSupport.endVertexCreate(vv, e.getPoint());
+                }
+            }
+        }
+    }
+
+    /**
+     * If startVertex is non-null, stretch an edge shape between
+     * startVertex and the mouse pointer to simulate edge creation
+     */
+    @SuppressWarnings("unchecked")
+    public void mouseDragged(MouseEvent e) {
+        if(checkModifiers(e)) {
+            VisualizationViewer<V,E> vv =
+                (VisualizationViewer<V,E>)e.getSource();
+            if(creatingAnEdge) {
+            	edgeSupport.midEdgeCreate(vv, e.getPoint());
+            } else {
+            	vertexSupport.midVertexCreate(vv, e.getPoint());
+            }
+        }
+    }
+    
+    public void mouseClicked(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+        JComponent c = (JComponent)e.getSource();
+        c.setCursor(cursor);
+    }
+    public void mouseExited(MouseEvent e) {
+        JComponent c = (JComponent)e.getSource();
+        c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+    public void mouseMoved(MouseEvent e) {}
+
+	public VertexSupport<V,E> getVertexSupport() {
+		return vertexSupport;
 	}
 
-	/**
-	 * If startVertex is non-null, stretch an edge shape between startVertex and
-	 * the mouse pointer to simulate edge creation
-	 */
-	@SuppressWarnings("unchecked")
-	public void mouseDragged(MouseEvent e) {
-		if (checkModifiers(e)) {
-			if (startVertex != null) {
-				edgeEffects.transformEdgeShape(down, e.getPoint());
-				if (edgeIsDirected == EdgeType.DIRECTED) {
-					edgeEffects.transformArrowShape(down, e.getPoint());
-				}
-			}
-			VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e
-					.getSource();
-			vv.repaint();
-		}
+	public void setVertexSupport(VertexSupport<V,E> vertexSupport) {
+		this.vertexSupport = vertexSupport;
 	}
 
-	public void setEdgeEffects(EdgeEffects<V, E> edgeEffects) {
-		this.edgeEffects = edgeEffects;
+	public EdgeSupport<V, E> getEdgeSupport() {
+		return edgeSupport;
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	public void setEdgeSupport(EdgeSupport<V, E> edgeSupport) {
+		this.edgeSupport = edgeSupport;
 	}
-
-	public void mouseEntered(MouseEvent e) {
-		JComponent c = (JComponent) e.getSource();
-		c.setCursor(cursor);
-	}
-
-	public void mouseExited(MouseEvent e) {
-		JComponent c = (JComponent) e.getSource();
-		c.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	public void mouseMoved(MouseEvent e) {
-	}
+    
+    
 }
