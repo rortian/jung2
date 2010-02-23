@@ -31,14 +31,13 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
     
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
-    protected JPopupMenu popup = new JPopupMenu();
 
     public EditingPopupGraphMousePlugin(Factory<V> vertexFactory, Factory<E> edgeFactory) {
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
     }
     
-	@SuppressWarnings({ "unchecked", "serial", "serial" })
+	@SuppressWarnings({ "unchecked", "serial" })
 	protected void handlePopup(MouseEvent e) {
         final VisualizationViewer<V,E> vv =
             (VisualizationViewer<V,E>)e.getSource();
@@ -53,7 +52,8 @@ public class EditingPopupGraphMousePlugin<V,E> extends AbstractPopupGraphMousePl
             final E edge = pickSupport.getEdge(layout, ivp.getX(), ivp.getY());
             final PickedState<V> pickedVertexState = vv.getPickedVertexState();
             final PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
-            
+            JPopupMenu popup = new JPopupMenu();
+
             if(vertex != null) {
             	Set<V> picked = pickedVertexState.getPicked();
             	if(picked.size() > 0) {
