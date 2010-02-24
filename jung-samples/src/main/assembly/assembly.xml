@@ -1,7 +1,7 @@
 <assembly>
   <id>dependencies</id>
   <formats>
-    <format>tar</format>
+    <format>zip</format>
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
   <dependencySets>
