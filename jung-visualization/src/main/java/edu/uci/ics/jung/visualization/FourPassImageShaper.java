@@ -18,6 +18,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -133,12 +134,10 @@ public class FourPassImageShaper {
      */
     private static Point2D detectLine(Point2D p1, Point2D p2, Point2D p, 
             Line2D line, GeneralPath path) {
-        if(p2 == null) {
-            p2 = p;
-            line.setLine(p1,p2);
-        }
+    	
         // check for line
-        else if(line.ptLineDistSq(p) < 1) { // its on the line
+        // if p is on the line that extends thru p1 and p2
+    	if(line.ptLineDistSq(p) == 0) { // p is on the line p1,p2
             // make it p2
             p2.setLocation(p);
         } else { // its not on the current line
@@ -157,26 +156,37 @@ public class FourPassImageShaper {
      */
     private static Shape leftEdge(BufferedImage image) {
         GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(image.getWidth()-1, 0);
+        Point2D p1 = null;//new Point2D.Float(image.getWidth()-1, 0);
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
         Point2D p = new Point2D.Float();
-        path.moveTo(image.getWidth()-1, 0);
-        
+        int foundPointY = -1;
         for(int i=0; i<image.getHeight(); i++) {
-            p.setLocation(image.getWidth()-1, i);
             // go until we reach an opaque point, then stop
             for(int j=0; j<image.getWidth(); j++) {
                 if((image.getRGB(j,i) & 0xff000000) != 0) {
                     // this is a point I want
-                    p.setLocation(j,i);
+                    p = new Point2D.Float(j,i);
+                    foundPointY = i;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(foundPointY >= 0) {
+            	if(p2 == null) {
+            		// this is the first point found. project line to right edge
+            		p1 = new Point2D.Float(image.getWidth()-1, foundPointY);
+            		path.moveTo((float)p1.getX(), (float)p1.getY());
+            		p2 = new Point2D.Float();
+            		p2.setLocation(p);
+            	} else {
+            		p2 = detectLine(p1, p2, p, line, path);
+            	}
+            }
         }
-        p.setLocation(image.getWidth()-1, image.getHeight()-1);
-        detectLine(p1, p2, p, line, path);
+        path.lineTo((float)p.getX(), (float)p.getY());
+        if(foundPointY >= 0) {
+        	path.lineTo(image.getWidth()-1, foundPointY);
+        }
         path.closePath();
         return path;
     }
@@ -190,24 +200,37 @@ public class FourPassImageShaper {
      */
     private static Shape bottomEdge(BufferedImage image) {
         GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(0, 0);
+        Point2D p1 = null;//new Point2D.Float(0, 0);
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
         Point2D p = new Point2D.Float();
-        path.moveTo(0, 0);
+        int foundPointX = -1;
         for(int i=0; i<image.getWidth(); i++) {
-            p.setLocation(i, 0);
             for(int j=image.getHeight()-1; j>=0; j--) {
                 if((image.getRGB(i,j) & 0xff000000) != 0) {
                     // this is a point I want
                     p.setLocation(i,j);
+                    foundPointX = i;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(foundPointX >= 0) {
+            	if(p2 == null) {
+            		// this is the first point found. project line to top edge
+            		p1 = new Point2D.Float(foundPointX, 0);
+            		// path starts here
+            		path.moveTo((float)p1.getX(), (float)p1.getY());
+            		p2 = new Point2D.Float();
+            		p2.setLocation(p);
+            	} else {
+            		p2 = detectLine(p1, p2, p, line, path);
+            	}
+            }
         }
-        p.setLocation(image.getWidth()-1, 0);
-        detectLine(p1, p2, p, line, path);
+        path.lineTo((float)p.getX(), (float)p.getY());
+        if(foundPointX >= 0) {
+        	path.lineTo(foundPointX, 0);
+        }
         path.closePath();
         return path;
     }
@@ -221,25 +244,38 @@ public class FourPassImageShaper {
      */
     private static Shape rightEdge(BufferedImage image) {
         GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(0, image.getHeight()-1);
+        Point2D p1 = null;//new Point2D.Float(0, image.getHeight()-1);
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
         Point2D p = new Point2D.Float();
-        path.moveTo(0, image.getHeight()-1);
+        int foundPointY = -1;
         
         for(int i=image.getHeight()-1; i>=0; i--) {
-            p.setLocation(0, i);
             for(int j=image.getWidth()-1; j>=0; j--) {
                 if((image.getRGB(j,i) & 0xff000000) != 0) {
                     // this is a point I want
                     p.setLocation(j,i);
+                    foundPointY = i;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(foundPointY >= 0) {
+            	if(p2 == null) {
+            		// this is the first point found. project line to top edge
+            		p1 = new Point2D.Float(0, foundPointY);
+            		// path starts here
+            		path.moveTo((float)p1.getX(), (float)p1.getY());
+            		p2 = new Point2D.Float();
+            		p2.setLocation(p);
+            	} else {
+            		p2 = detectLine(p1, p2, p, line, path);
+            	}
+            }
         }
-        p.setLocation(0, 0);
-        detectLine(p1, p2, p,line, path);
+        path.lineTo((float)p.getX(), (float)p.getY());
+        if(foundPointY >= 0) {
+        	path.lineTo(0, foundPointY);
+        }
         path.closePath();
         return path;
     }
@@ -253,26 +289,55 @@ public class FourPassImageShaper {
      */
     private static Shape topEdge(BufferedImage image) {
         GeneralPath path = new GeneralPath();
-        Point2D p1 = new Point2D.Float(image.getWidth()-1, image.getHeight()-1);
+        Point2D p1 = null;//new Point2D.Float(image.getWidth()-1, image.getHeight()-1);
         Point2D p2 = null;
         Line2D line = new Line2D.Float();
         Point2D p = new Point2D.Float();
-        path.moveTo(image.getWidth()-1, image.getHeight()-1);
+        int foundPointX = -1;
         
         for(int i=image.getWidth()-1; i>=0; i--) {
-            p.setLocation(i, image.getHeight()-1);
             for(int j=0; j<image.getHeight(); j++) {
                 if((image.getRGB(i,j) & 0xff000000) != 0) {
                     // this is a point I want
                     p.setLocation(i,j);
+                    foundPointX = i;
                     break;
                 }
             }
-            p2 = detectLine(p1, p2, p, line, path);
+            if(foundPointX >= 0) {
+            	if(p2 == null) {
+            		// this is the first point found. project line to top edge
+            		p1 = new Point2D.Float(foundPointX, image.getHeight()-1);
+            		// path starts here
+            		path.moveTo((float)p1.getX(), (float)p1.getY());
+            		p2 = new Point2D.Float();
+            		p2.setLocation(p);
+            	} else {
+            		p2 = detectLine(p1, p2, p, line, path);
+            	}
+            }
         }
-        p.setLocation(0, image.getHeight()-1);
-        detectLine(p1, p2, p, line, path);
+        path.lineTo((float)p.getX(), (float)p.getY());
+        if(foundPointX >= 0) {
+        	path.lineTo(foundPointX, image.getHeight()-1);
+        }
         path.closePath();
         return path;
+    }
+    
+    static private void showPath(String label, GeneralPath path) {
+		float[] seg = new float[6];
+		System.err.println(label);
+		for (PathIterator i = path.getPathIterator(null, 1); !i.isDone(); i
+				.next()) {
+			int ret = i.currentSegment(seg);
+			if (ret == PathIterator.SEG_MOVETO) {
+				System.err.println("move to "+seg[0]+","+seg[1]);
+			} else if (ret == PathIterator.SEG_LINETO) {
+				System.err.println("line to "+seg[0]+","+seg[1]);
+			} else if(ret == PathIterator.SEG_CLOSE) {
+				System.err.println("done");
+			}
+		}
     }
 }
