@@ -201,7 +201,7 @@ public class DijkstraShortestPath<V,E> extends DijkstraDistance<V,E> implements 
      * @see #getIncomingEdgeMap(Object)
      * @see #getPath(Object,Object)
      * @param source    the vertex from which distances are measured
-     * @param numDests  the number of vertics for which to measure distances
+     * @param numDests  the number of vertices for which to measure distances
      */
 	public LinkedHashMap<V,E> getIncomingEdgeMap(V source, int numDests)
 	{

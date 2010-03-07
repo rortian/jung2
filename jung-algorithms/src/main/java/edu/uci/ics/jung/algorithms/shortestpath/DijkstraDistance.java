@@ -110,7 +110,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param g     the graph on which distances will be calculated
      */ 
     @SuppressWarnings("unchecked")
-    public DijkstraDistance(Graph<V,E> g) {
+    public DijkstraDistance(Hypergraph<V,E> g) {
         this(g, new ConstantTransformer(1), true);
     }
 
@@ -123,7 +123,7 @@ public class DijkstraDistance<V,E> implements Distance<V>
      * @param cached    specifies whether the results are to be cached
      */ 
     @SuppressWarnings("unchecked")
-    public DijkstraDistance(Graph<V,E> g, boolean cached) {
+    public DijkstraDistance(Hypergraph<V,E> g, boolean cached) {
         this(g, new ConstantTransformer(1), cached);
     }
     
