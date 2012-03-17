@@ -159,7 +159,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
 
     		try {
     			for(E e : graph.getEdges()) {
-    				SpringEdgeData<E> sed = getSpringData(e);
+    				SpringEdgeData<E> sed = getSpringEdgeData(e);
     				calcEdgeLength(sed, lengthFunction);
     			}
     		} catch(ConcurrentModificationException cme) {
@@ -224,7 +224,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
     			double vz = p1.z - p2.z;
     			double len = Math.sqrt(vx * vx + vy * vy + vz * vz);
 
-    			SpringEdgeData<E> sed = getSpringData(e);
+    			SpringEdgeData<E> sed = getSpringEdgeData(e);
     			if (sed == null) {
     				continue;
     			}
@@ -356,7 +356,7 @@ public class SpringLayout<V, E> extends AbstractLayout<V,E> implements Iterative
         return springVertexData.get(v);
     }
 
-    public SpringEdgeData<E> getSpringData(E e) {
+    public SpringEdgeData<E> getSpringEdgeData(E e) {
             return springEdgeData.get(e);
     }
 
