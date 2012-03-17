@@ -187,7 +187,7 @@ public abstract class AbstractLayout<V, E> implements Layout<V,E> {
 	 */
 	public double getX(V v) {
         assert getCoordinates(v) != null : "Cannot getX for an unmapped vertex "+v;
-        return getCoordinates(v).getX();
+        return getCoordinates(v).x;
 	}
 
 	/**
@@ -197,16 +197,26 @@ public abstract class AbstractLayout<V, E> implements Layout<V,E> {
 	 */
 	public double getY(V v) {
         assert getCoordinates(v) != null : "Cannot getY for an unmapped vertex "+v;
-        return getCoordinates(v).getY();
+        return getCoordinates(v).y;
+	}
+        
+        /**
+	 * Returns the z coordinate of the vertex from the Coordinates object.
+	 * In most cases you will be better off calling getLocation(Vertex v)
+	 * @see edu.uci.ics.jung.visualization.layout.Layout#getX(edu.uci.ics.jung.graph.Vertex)
+	 */
+	public double getZ(V v) {
+        assert getCoordinates(v) != null : "Cannot getZ for an unmapped vertex "+v;
+        return getCoordinates(v).z;
 	}
 	
     /**
      * @param v a Vertex of interest
      * @return the location point of the supplied vertex
      */
-//	public Point3f getLocation(V v) {
-//	    return getCoordinates(v);
-//	}
+	public Point3f getLocation(V v) {
+	    return getCoordinates(v);
+	}
 
 	/**
 	 * @param v
@@ -215,7 +225,7 @@ public abstract class AbstractLayout<V, E> implements Layout<V,E> {
 	 */
 	protected void offsetVertex(V v, float xOffset, float yOffset, float zOffset) {
 		Point3f c = getCoordinates(v);
-        c.set(c.getX()+xOffset, c.getY()+yOffset, c.getZ()+zOffset);
+        c.set(c.x+xOffset, c.y+yOffset, c.z+zOffset);
 		setLocation(v, c);
 	}
 

@@ -165,14 +165,14 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 			ISOMVertexData currData = getISOMVertexData(current);
 			Point3f currXYData = transform(current);
 
-			double dx = tempXYD.getX() - currXYData.getX();
-			double dy = tempXYD.getY() - currXYData.getY();
-			double dz = tempXYD.getZ() - currXYData.getZ();
+			double dx = tempXYD.x - currXYData.x;
+			double dy = tempXYD.y - currXYData.y;
+			double dz = tempXYD.z - currXYData.z;
 			double factor = adaption / Math.pow(2, currData.distance);
 			
-			currXYData.set((float)(currXYData.getX()+(factor*dx)), 
-					(float)(currXYData.getY()+(factor*dy)),
-					(float)(currXYData.getZ()+(factor*dz)));
+			currXYData.set((float)(currXYData.x+(factor*dx)), 
+					(float)(currXYData.y+(factor*dy)),
+					(float)(currXYData.z+(factor*dz)));
 //			currXYData.addX(factor * dx);
 //			currXYData.addY(factor * dy);
 
@@ -236,15 +236,15 @@ public class ISOMLayout<V, E> extends AbstractLayout<V,E> implements IterativeCo
 		}
 
 		public double getXDisp() {
-			return disp.getX();
+			return disp.x;
 		}
 
 		public double getYDisp() {
-			return disp.getY();
+			return disp.y;
 		}
 
 		public double getZDisp() {
-			return disp.getZ();
+			return disp.z;
 		}
 
 		public void setDisp(double x, double y, double z) {

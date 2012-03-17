@@ -56,7 +56,7 @@ import javax.vecmath.Vector3f;
 		 
 		 // translate so end is at p0
 		 Transform3D p0tx = new Transform3D();
-		 p0tx.setTranslation(new Vector3f(p0.getX(),p0.getY(),p0.getZ()));
+		 p0tx.setTranslation(new Vector3f(p0.x,p0.y,p0.z));
 
 		 // scale so length is dist p0,p1
 		 Transform3D scaletx = new Transform3D();
@@ -64,7 +64,7 @@ import javax.vecmath.Vector3f;
 
 		 Vector3f yunit = new Vector3f(0,1,0);
 		 
-		 Vector3f v = new Vector3f(p1.getX()-p0.getX(), p1.getY()-p0.getY(), p1.getZ()-p0.getZ());
+		 Vector3f v = new Vector3f(p1.x-p0.x, p1.y-p0.y, p1.z-p0.z);
 		 
 		 Vector3f cross = new Vector3f();
 		 cross.cross(yunit, v);
@@ -72,11 +72,11 @@ import javax.vecmath.Vector3f;
 		 float angle = yunit.angle(v);
 		 
 		 Transform3D rot = new Transform3D();
-		 rot.setRotation(new AxisAngle4f(cross.getX(),cross.getY(),cross.getZ(),angle));
+		 rot.setRotation(new AxisAngle4f(cross.x,cross.y,cross.z,angle));
 		 tx.mul(rot);
 
 		 tx.mul(scaletx);
-		 tx.setTranslation(new Vector3f(p0.getX(),p0.getY(),p0.getZ()));
+		 tx.setTranslation(new Vector3f(p0.x,p0.y,p0.z));
 
 		 try {
 			 setTransform(tx);

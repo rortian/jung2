@@ -207,9 +207,9 @@ public class FRLayout<V, E> extends AbstractLayout<V, E> implements IterativeCon
         }
             
         
-        xyd.set((float)Math.min(Math.max(xyd.getX(), min_pos[0]), max_pos[0]), 
-                (float)Math.min(Math.max(xyd.getY(), min_pos[1]), max_pos[1]),
-                (float)Math.min(Math.max(xyd.getZ(), min_pos[2]), max_pos[2]));
+        xyd.set((float)Math.min(Math.max(xyd.x, min_pos[0]), max_pos[0]), 
+                (float)Math.min(Math.max(xyd.y, min_pos[1]), max_pos[1]),
+                (float)Math.min(Math.max(xyd.z, min_pos[2]), max_pos[2]));
         
 //        double newXPos = xyd.getX();
 //        if (newXPos < min) {

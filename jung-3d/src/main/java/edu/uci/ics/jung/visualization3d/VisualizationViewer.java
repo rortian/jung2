@@ -360,7 +360,7 @@ public class VisualizationViewer<V,E> extends JPanel {
 			public void stateChanged(ChangeEvent e) {
 				for(V v : vertexMap.keySet()) {
 					Point3f p = VisualizationViewer.this.layout.transform(v);
-					Vector3f pv = new Vector3f(p.getX(), p.getY(), p.getZ());
+					Vector3f pv = new Vector3f(p.x, p.y, p.z);
 					Transform3D tx = new Transform3D();
 					tx.setTranslation(pv);
 					vertexMap.get(v).setTransform(tx);
